@@ -57,9 +57,9 @@ Design style: Telegram-inspired dark theme with flat design (November 2025 updat
 ### Data Model
 
 **Core Entities**
-- `TourType`: Excursion types with pricing (fullPrice, discountedPrice)
+- `TourType`: Excursion types with pricing (fullPrice, discountedPrice), article numbers (articleNumber), and seasonal availability (isEnabled)
 - `Excursion`: Tour instance with participant counts, date/time, expenses, and additional services
-- `AdditionalService`: Extra services that can be added to excursions
+- `AdditionalService`: Extra services that can be added to excursions, with article numbers (articleNumber) and seasonal availability (isEnabled)
 - `Expense`: Individual expense items within an excursion
 - `Transaction`: Standalone income/expense entries
 - `Manager`: User accounts with active/inactive status
@@ -104,7 +104,7 @@ Design style: Telegram-inspired dark theme with flat design (November 2025 updat
 
 **SettingsScreen** - User profile, logout, navigation to TicketPrices and AdminPanel
 
-**TicketPricesScreen** - Configure pricing for tour types and additional services
+**TicketPricesScreen** - Full price list management with add/edit/delete capabilities for tour types and additional services, article number assignment, and seasonal enable/disable toggle (e.g., summer-only or winter-only excursions)
 
 **AdminPanelScreen** - Manage manager accounts (toggle active status, delete managers)
 

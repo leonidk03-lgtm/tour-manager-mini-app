@@ -5,12 +5,16 @@ export interface TourType {
   name: string;
   fullPrice: number;
   discountedPrice: number;
+  articleNumber: string;
+  isEnabled: boolean;
 }
 
 export interface AdditionalService {
   id: string;
   name: string;
   price: number;
+  articleNumber: string;
+  isEnabled: boolean;
 }
 
 export interface Expense {
@@ -59,9 +63,13 @@ export interface Activity {
 
 interface DataContextType {
   tourTypes: TourType[];
-  setTourTypes: (types: TourType[]) => void;
+  addTourType: (tourType: TourType) => void;
+  updateTourType: (id: string, tourType: TourType) => void;
+  deleteTourType: (id: string) => void;
   additionalServices: AdditionalService[];
-  setAdditionalServices: (services: AdditionalService[]) => void;
+  addAdditionalService: (service: AdditionalService) => void;
+  updateAdditionalService: (id: string, service: AdditionalService) => void;
+  deleteAdditionalService: (id: string) => void;
   excursions: Excursion[];
   addExcursion: (excursion: Excursion) => void;
   updateExcursion: (id: string, excursion: Excursion) => void;
@@ -81,21 +89,21 @@ interface DataContextType {
 const DataContext = createContext<DataContextType | undefined>(undefined);
 
 const defaultTourTypes: TourType[] = [
-  { id: "1", name: "Болгар", fullPrice: 3000, discountedPrice: 2800 },
-  { id: "2", name: "Йошкар-Ола", fullPrice: 2900, discountedPrice: 2700 },
-  { id: "3", name: "Свияжск", fullPrice: 2100, discountedPrice: 2000 },
-  { id: "4", name: "Свияжск + Раифа", fullPrice: 2400, discountedPrice: 2200 },
-  { id: "5", name: "Голубые озера", fullPrice: 1200, discountedPrice: 1100 },
-  { id: "6", name: "Речка 13:30", fullPrice: 1200, discountedPrice: 1100 },
-  { id: "7", name: "Речка 15:30", fullPrice: 1200, discountedPrice: 1100 },
-  { id: "8", name: "Речка 17:30", fullPrice: 1200, discountedPrice: 1100 },
-  { id: "9", name: "Вечерняя", fullPrice: 1100, discountedPrice: 1000 },
-  { id: "10", name: "Вечерняя с колесом", fullPrice: 1500, discountedPrice: 1400 },
+  { id: "1", name: "Болгар", fullPrice: 3000, discountedPrice: 2800, articleNumber: "EXC-001", isEnabled: true },
+  { id: "2", name: "Йошкар-Ола", fullPrice: 2900, discountedPrice: 2700, articleNumber: "EXC-002", isEnabled: true },
+  { id: "3", name: "Свияжск", fullPrice: 2100, discountedPrice: 2000, articleNumber: "EXC-003", isEnabled: true },
+  { id: "4", name: "Свияжск + Раифа", fullPrice: 2400, discountedPrice: 2200, articleNumber: "EXC-004", isEnabled: true },
+  { id: "5", name: "Голубые озера", fullPrice: 1200, discountedPrice: 1100, articleNumber: "EXC-005", isEnabled: false },
+  { id: "6", name: "Речка 13:30", fullPrice: 1200, discountedPrice: 1100, articleNumber: "EXC-006", isEnabled: false },
+  { id: "7", name: "Речка 15:30", fullPrice: 1200, discountedPrice: 1100, articleNumber: "EXC-007", isEnabled: false },
+  { id: "8", name: "Речка 17:30", fullPrice: 1200, discountedPrice: 1100, articleNumber: "EXC-008", isEnabled: false },
+  { id: "9", name: "Вечерняя", fullPrice: 1100, discountedPrice: 1000, articleNumber: "EXC-009", isEnabled: true },
+  { id: "10", name: "Вечерняя с колесом", fullPrice: 1500, discountedPrice: 1400, articleNumber: "EXC-010", isEnabled: true },
 ];
 
 const defaultServices: AdditionalService[] = [
-  { id: "1", name: "Теплоход", price: 400 },
-  { id: "2", name: "Колесо обозрения", price: 400 },
+  { id: "1", name: "Теплоход", price: 400, articleNumber: "SRV-001", isEnabled: false },
+  { id: "2", name: "Колесо обозрения", price: 400, articleNumber: "SRV-002", isEnabled: true },
 ];
 
 const mockExcursions: Excursion[] = [
@@ -267,13 +275,41 @@ export function DataProvider({ children }: { children: ReactNode }) {
     setManagers((prev) => prev.filter((m) => m.id !== id));
   };
 
+  const addTourType = (tourType: TourType) => {
+    setTourTypes((prev) => [...prev, tourType]);
+  };
+
+  const updateTourType = (id: string, tourType: TourType) => {
+    setTourTypes((prev) => prev.map((t) => (t.id === id ? tourType : t)));
+  };
+
+  const deleteTourType = (id: string) => {
+    setTourTypes((prev) => prev.filter((t) => t.id !== id));
+  };
+
+  const addAdditionalService = (service: AdditionalService) => {
+    setAdditionalServices((prev) => [...prev, service]);
+  };
+
+  const updateAdditionalService = (id: string, service: AdditionalService) => {
+    setAdditionalServices((prev) => prev.map((s) => (s.id === id ? service : s)));
+  };
+
+  const deleteAdditionalService = (id: string) => {
+    setAdditionalServices((prev) => prev.filter((s) => s.id !== id));
+  };
+
   return (
     <DataContext.Provider
       value={{
         tourTypes,
-        setTourTypes,
+        addTourType,
+        updateTourType,
+        deleteTourType,
         additionalServices,
-        setAdditionalServices,
+        addAdditionalService,
+        updateAdditionalService,
+        deleteAdditionalService,
         excursions,
         addExcursion,
         updateExcursion,

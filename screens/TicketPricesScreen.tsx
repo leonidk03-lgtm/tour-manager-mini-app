@@ -1,34 +1,107 @@
 import { useState } from "react";
-import { View, StyleSheet, TextInput, Pressable, Alert } from "react-native";
+import { View, StyleSheet, Pressable, Alert, Switch } from "react-native";
 import { Feather } from "@expo/vector-icons";
 import { ThemedText } from "@/components/ThemedText";
 import { ThemedView } from "@/components/ThemedView";
 import { ScreenScrollView } from "@/components/ScreenScrollView";
+import { TourTypeModal } from "@/components/TourTypeModal";
+import { ServiceModal } from "@/components/ServiceModal";
 import { Spacing, BorderRadius } from "@/constants/theme";
 import { useTheme } from "@/hooks/useTheme";
 import { useData, TourType, AdditionalService } from "@/contexts/DataContext";
 
 export default function TicketPricesScreen() {
   const { theme } = useTheme();
-  const { tourTypes, setTourTypes, additionalServices, setAdditionalServices } = useData();
-  const [editingId, setEditingId] = useState<string | null>(null);
+  const {
+    tourTypes,
+    addTourType,
+    updateTourType,
+    deleteTourType,
+    additionalServices,
+    addAdditionalService,
+    updateAdditionalService,
+    deleteAdditionalService,
+  } = useData();
 
-  const handleSaveTourType = (id: string, fullPrice: string, discountedPrice: string) => {
-    const full = parseInt(fullPrice, 10);
-    const discounted = parseInt(discountedPrice, 10);
+  const [tourModalVisible, setTourModalVisible] = useState(false);
+  const [serviceModalVisible, setServiceModalVisible] = useState(false);
+  const [editingTour, setEditingTour] = useState<TourType | undefined>();
+  const [editingService, setEditingService] = useState<AdditionalService | undefined>();
 
-    if (isNaN(full) || isNaN(discounted) || full <= 0 || discounted <= 0) {
-      Alert.alert("Ошибка", "Введите корректные цены");
-      return;
+  const handleAddTour = () => {
+    setEditingTour(undefined);
+    setTourModalVisible(true);
+  };
+
+  const handleEditTour = (tour: TourType) => {
+    setEditingTour(tour);
+    setTourModalVisible(true);
+  };
+
+  const handleSaveTour = (tour: TourType) => {
+    if (editingTour) {
+      updateTourType(tour.id, tour);
+      Alert.alert("Сохранено", "Экскурсия успешно обновлена");
+    } else {
+      addTourType(tour);
+      Alert.alert("Успешно", "Экскурсия добавлена");
     }
+  };
 
-    setTourTypes(
-      tourTypes.map((t) =>
-        t.id === id ? { ...t, fullPrice: full, discountedPrice: discounted } : t
-      )
-    );
-    setEditingId(null);
-    Alert.alert("Сохранено", "Цены успешно обновлены");
+  const handleDeleteTour = (id: string) => {
+    Alert.alert("Удалить экскурсию?", "Это действие нельзя отменить", [
+      { text: "Отмена", style: "cancel" },
+      {
+        text: "Удалить",
+        style: "destructive",
+        onPress: () => {
+          deleteTourType(id);
+          Alert.alert("Удалено", "Экскурсия удалена");
+        },
+      },
+    ]);
+  };
+
+  const handleToggleTour = (tour: TourType) => {
+    updateTourType(tour.id, { ...tour, isEnabled: !tour.isEnabled });
+  };
+
+  const handleAddService = () => {
+    setEditingService(undefined);
+    setServiceModalVisible(true);
+  };
+
+  const handleEditService = (service: AdditionalService) => {
+    setEditingService(service);
+    setServiceModalVisible(true);
+  };
+
+  const handleSaveService = (service: AdditionalService) => {
+    if (editingService) {
+      updateAdditionalService(service.id, service);
+      Alert.alert("Сохранено", "Услуга успешно обновлена");
+    } else {
+      addAdditionalService(service);
+      Alert.alert("Успешно", "Услуга добавлена");
+    }
+  };
+
+  const handleDeleteService = (id: string) => {
+    Alert.alert("Удалить услугу?", "Это действие нельзя отменить", [
+      { text: "Отмена", style: "cancel" },
+      {
+        text: "Удалить",
+        style: "destructive",
+        onPress: () => {
+          deleteAdditionalService(id);
+          Alert.alert("Удалено", "Услуга удалена");
+        },
+      },
+    ]);
+  };
+
+  const handleToggleService = (service: AdditionalService) => {
+    updateAdditionalService(service.id, { ...service, isEnabled: !service.isEnabled });
   };
 
   return (
@@ -37,123 +110,175 @@ export default function TicketPricesScreen() {
         <View style={styles.section}>
           <View style={styles.sectionHeader}>
             <ThemedText style={styles.sectionTitle}>Типы экскурсий</ThemedText>
+            <Pressable
+              onPress={handleAddTour}
+              style={({ pressed }) => [
+                styles.addButton,
+                { backgroundColor: theme.primary, opacity: pressed ? 0.7 : 1 },
+              ]}
+            >
+              <Feather name="plus" size={20} color="#FFFFFF" />
+              <ThemedText style={styles.addButtonText}>Добавить</ThemedText>
+            </Pressable>
           </View>
-          <View style={styles.pricesList}>
-            {tourTypes.map((tourType) => {
-              const isEditing = editingId === tourType.id;
-              const [fullPrice, setFullPrice] = useState(tourType.fullPrice.toString());
-              const [discountedPrice, setDiscountedPrice] = useState(
-                tourType.discountedPrice.toString()
-              );
 
-              return (
-                <ThemedView
-                  key={tourType.id}
-                  style={[
-                    styles.priceCard,
-                    {
-                      borderColor: theme.border,
-                      borderRadius: BorderRadius.sm,
-                    },
-                  ]}
-                >
-                  <View style={styles.priceCardHeader}>
-                    <ThemedText style={styles.tourTypeName}>{tourType.name}</ThemedText>
-                    {!isEditing ? (
-                      <Pressable
-                        onPress={() => setEditingId(tourType.id)}
-                        style={({ pressed }) => ({ opacity: pressed ? 0.7 : 1 })}
-                      >
-                        <Feather name="edit" size={20} color={theme.primary} />
-                      </Pressable>
-                    ) : (
-                      <Pressable
-                        onPress={() => handleSaveTourType(tourType.id, fullPrice, discountedPrice)}
-                        style={({ pressed }) => ({ opacity: pressed ? 0.7 : 1 })}
-                      >
-                        <Feather name="check" size={20} color={theme.success} />
-                      </Pressable>
-                    )}
+          <View style={styles.list}>
+            {tourTypes.map((tourType) => (
+              <ThemedView
+                key={tourType.id}
+                style={[
+                  styles.card,
+                  {
+                    borderColor: theme.border,
+                    borderRadius: BorderRadius.sm,
+                    opacity: tourType.isEnabled ? 1 : 0.5,
+                  },
+                ]}
+              >
+                <View style={styles.cardHeader}>
+                  <View style={{ flex: 1 }}>
+                    <ThemedText style={styles.cardTitle}>{tourType.name}</ThemedText>
+                    <ThemedText style={[styles.articleNumber, { color: theme.textSecondary }]}>
+                      {tourType.articleNumber}
+                    </ThemedText>
                   </View>
-                  <View style={styles.pricesGrid}>
-                    <View style={styles.priceItem}>
-                      <ThemedText style={[styles.priceLabel, { color: theme.textSecondary }]}>
-                        Полная цена
-                      </ThemedText>
-                      {isEditing ? (
-                        <TextInput
-                          style={[
-                            styles.priceInput,
-                            {
-                              borderColor: theme.inputBorder,
-                              color: theme.text,
-                              backgroundColor: theme.backgroundSecondary,
-                            },
-                          ]}
-                          keyboardType="numeric"
-                          value={fullPrice}
-                          onChangeText={setFullPrice}
-                        />
-                      ) : (
-                        <ThemedText style={styles.priceValue}>{tourType.fullPrice} ₽</ThemedText>
-                      )}
-                    </View>
-                    <View style={styles.priceItem}>
-                      <ThemedText style={[styles.priceLabel, { color: theme.textSecondary }]}>
-                        Льготная цена
-                      </ThemedText>
-                      {isEditing ? (
-                        <TextInput
-                          style={[
-                            styles.priceInput,
-                            {
-                              borderColor: theme.inputBorder,
-                              color: theme.text,
-                              backgroundColor: theme.backgroundSecondary,
-                            },
-                          ]}
-                          keyboardType="numeric"
-                          value={discountedPrice}
-                          onChangeText={setDiscountedPrice}
-                        />
-                      ) : (
-                        <ThemedText style={styles.priceValue}>
-                          {tourType.discountedPrice} ₽
-                        </ThemedText>
-                      )}
-                    </View>
+                  <Switch
+                    value={tourType.isEnabled}
+                    onValueChange={() => handleToggleTour(tourType)}
+                    trackColor={{ false: theme.divider, true: theme.primary }}
+                    thumbColor={theme.backgroundDefault}
+                  />
+                </View>
+
+                <View style={styles.pricesRow}>
+                  <View style={styles.priceItem}>
+                    <ThemedText style={[styles.priceLabel, { color: theme.textSecondary }]}>
+                      Полная
+                    </ThemedText>
+                    <ThemedText style={styles.priceValue}>{tourType.fullPrice} ₽</ThemedText>
                   </View>
-                </ThemedView>
-              );
-            })}
+                  <View style={styles.priceItem}>
+                    <ThemedText style={[styles.priceLabel, { color: theme.textSecondary }]}>
+                      Льготная
+                    </ThemedText>
+                    <ThemedText style={styles.priceValue}>{tourType.discountedPrice} ₽</ThemedText>
+                  </View>
+                </View>
+
+                <View style={styles.cardActions}>
+                  <Pressable
+                    onPress={() => handleEditTour(tourType)}
+                    style={({ pressed }) => [styles.actionButton, { opacity: pressed ? 0.7 : 1 }]}
+                  >
+                    <Feather name="edit-2" size={18} color={theme.primary} />
+                    <ThemedText style={[styles.actionButtonText, { color: theme.primary }]}>
+                      Редактировать
+                    </ThemedText>
+                  </Pressable>
+                  <Pressable
+                    onPress={() => handleDeleteTour(tourType.id)}
+                    style={({ pressed }) => [styles.actionButton, { opacity: pressed ? 0.7 : 1 }]}
+                  >
+                    <Feather name="trash-2" size={18} color={theme.error} />
+                    <ThemedText style={[styles.actionButtonText, { color: theme.error }]}>
+                      Удалить
+                    </ThemedText>
+                  </Pressable>
+                </View>
+              </ThemedView>
+            ))}
           </View>
         </View>
 
         <View style={styles.section}>
           <View style={styles.sectionHeader}>
             <ThemedText style={styles.sectionTitle}>Дополнительные услуги</ThemedText>
+            <Pressable
+              onPress={handleAddService}
+              style={({ pressed }) => [
+                styles.addButton,
+                { backgroundColor: theme.primary, opacity: pressed ? 0.7 : 1 },
+              ]}
+            >
+              <Feather name="plus" size={20} color="#FFFFFF" />
+              <ThemedText style={styles.addButtonText}>Добавить</ThemedText>
+            </Pressable>
           </View>
-          <View style={styles.pricesList}>
+
+          <View style={styles.list}>
             {additionalServices.map((service) => (
               <ThemedView
                 key={service.id}
                 style={[
-                  styles.serviceCard,
+                  styles.card,
                   {
                     borderColor: theme.border,
                     borderRadius: BorderRadius.sm,
+                    opacity: service.isEnabled ? 1 : 0.5,
                   },
                 ]}
               >
-                <View style={styles.serviceInfo}>
-                  <ThemedText style={styles.serviceName}>{service.name}</ThemedText>
-                  <ThemedText style={styles.servicePrice}>{service.price} ₽</ThemedText>
+                <View style={styles.cardHeader}>
+                  <View style={{ flex: 1 }}>
+                    <ThemedText style={styles.cardTitle}>{service.name}</ThemedText>
+                    <ThemedText style={[styles.articleNumber, { color: theme.textSecondary }]}>
+                      {service.articleNumber}
+                    </ThemedText>
+                  </View>
+                  <Switch
+                    value={service.isEnabled}
+                    onValueChange={() => handleToggleService(service)}
+                    trackColor={{ false: theme.divider, true: theme.primary }}
+                    thumbColor={theme.backgroundDefault}
+                  />
+                </View>
+
+                <View style={styles.servicePrice}>
+                  <ThemedText style={[styles.priceLabel, { color: theme.textSecondary }]}>
+                    Цена
+                  </ThemedText>
+                  <ThemedText style={styles.priceValue}>{service.price} ₽</ThemedText>
+                </View>
+
+                <View style={styles.cardActions}>
+                  <Pressable
+                    onPress={() => handleEditService(service)}
+                    style={({ pressed }) => [styles.actionButton, { opacity: pressed ? 0.7 : 1 }]}
+                  >
+                    <Feather name="edit-2" size={18} color={theme.primary} />
+                    <ThemedText style={[styles.actionButtonText, { color: theme.primary }]}>
+                      Редактировать
+                    </ThemedText>
+                  </Pressable>
+                  <Pressable
+                    onPress={() => handleDeleteService(service.id)}
+                    style={({ pressed }) => [styles.actionButton, { opacity: pressed ? 0.7 : 1 }]}
+                  >
+                    <Feather name="trash-2" size={18} color={theme.error} />
+                    <ThemedText style={[styles.actionButtonText, { color: theme.error }]}>
+                      Удалить
+                    </ThemedText>
+                  </Pressable>
                 </View>
               </ThemedView>
             ))}
           </View>
         </View>
       </View>
+
+      <TourTypeModal
+        visible={tourModalVisible}
+        onClose={() => setTourModalVisible(false)}
+        onSave={handleSaveTour}
+        tourType={editingTour}
+      />
+
+      <ServiceModal
+        visible={serviceModalVisible}
+        onClose={() => setServiceModalVisible(false)}
+        onSave={handleSaveService}
+        service={editingService}
+      />
     </ScreenScrollView>
   );
 }
@@ -174,24 +299,42 @@ const styles = StyleSheet.create({
     fontSize: 20,
     fontWeight: "600",
   },
-  pricesList: {
+  addButton: {
+    flexDirection: "row",
+    alignItems: "center",
+    gap: Spacing.xs,
+    paddingVertical: Spacing.sm,
+    paddingHorizontal: Spacing.md,
+    borderRadius: BorderRadius.sm,
+  },
+  addButtonText: {
+    color: "#FFFFFF",
+    fontSize: 14,
+    fontWeight: "600",
+  },
+  list: {
     gap: Spacing.md,
   },
-  priceCard: {
+  card: {
     padding: Spacing.lg,
     borderWidth: 1,
     gap: Spacing.md,
   },
-  priceCardHeader: {
+  cardHeader: {
     flexDirection: "row",
     justifyContent: "space-between",
     alignItems: "center",
+    gap: Spacing.md,
   },
-  tourTypeName: {
+  cardTitle: {
     fontSize: 18,
     fontWeight: "600",
   },
-  pricesGrid: {
+  articleNumber: {
+    fontSize: 13,
+    marginTop: 2,
+  },
+  pricesRow: {
     flexDirection: "row",
     gap: Spacing.md,
   },
@@ -199,39 +342,30 @@ const styles = StyleSheet.create({
     flex: 1,
     gap: Spacing.xs,
   },
+  servicePrice: {
+    gap: Spacing.xs,
+  },
   priceLabel: {
-    fontSize: 14,
+    fontSize: 13,
   },
   priceValue: {
     fontSize: 16,
     fontWeight: "600",
   },
-  priceInput: {
-    borderWidth: 1,
-    borderRadius: BorderRadius.xs,
-    padding: Spacing.sm,
-    fontSize: 16,
-    fontWeight: "600",
-  },
-  serviceCard: {
+  cardActions: {
     flexDirection: "row",
-    justifyContent: "space-between",
-    alignItems: "center",
-    padding: Spacing.lg,
-    borderWidth: 1,
+    gap: Spacing.lg,
+    paddingTop: Spacing.sm,
+    borderTopWidth: 1,
+    borderTopColor: "rgba(255, 255, 255, 0.05)",
   },
-  serviceInfo: {
+  actionButton: {
     flexDirection: "row",
-    justifyContent: "space-between",
     alignItems: "center",
-    flex: 1,
+    gap: Spacing.xs,
   },
-  serviceName: {
-    fontSize: 16,
+  actionButtonText: {
+    fontSize: 14,
     fontWeight: "500",
-  },
-  servicePrice: {
-    fontSize: 16,
-    fontWeight: "600",
   },
 });
