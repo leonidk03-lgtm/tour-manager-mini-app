@@ -2,11 +2,12 @@
 
 ## Overview
 
-TourManager is a React Native mobile application designed for managing tour excursions and financial reporting. The app targets tour managers and administrators in the Russian market, providing tools to track excursions, manage finances, configure pricing, and oversee manager accounts. Built with Expo for cross-platform deployment (iOS, Android, Web), the application features a modern glassmorphic UI with comprehensive data management capabilities.
+TourManager is a React Native mobile application designed for managing tour excursions and financial reporting. The app targets tour managers and administrators in the Russian market, providing tools to track excursions, manage finances, configure pricing, and oversee manager accounts. Built with Expo for cross-platform deployment (iOS, Android, Web), the application features a clean Telegram-inspired UI with comprehensive data management capabilities.
 
 ## User Preferences
 
 Preferred communication style: Simple, everyday language.
+Design style: Telegram-inspired dark theme with flat design (November 2025 update)
 
 ## System Architecture
 
@@ -25,8 +26,8 @@ Preferred communication style: Simple, everyday language.
 - Modal-based flows for adding/editing excursions and transactions
 
 **UI/UX Design Patterns**
-- Glassmorphic design system using `expo-glass-effect`
-- Gradient backgrounds via `expo-linear-gradient`
+- Telegram-inspired flat design with dark theme (#0E1621 background)
+- Minimalist UI with focus on content and readability  
 - Reanimated 4.1 for performant animations with spring physics
 - Gesture Handler for native-quality touch interactions
 - Keyboard Controller for proper keyboard handling on forms
@@ -39,11 +40,12 @@ Preferred communication style: Simple, everyday language.
 - In-memory data storage (no persistence layer currently implemented)
 
 **Theming System**
-- Light/dark mode support using system color scheme
+- Dark-first design (Telegram-style) with light theme support
 - Centralized theme constants with semantic color tokens
 - Elevation-based color system (backgroundRoot, backgroundDefault, backgroundSecondary, backgroundTertiary)
-- Glass effect variations for different UI depths
-- Custom typography scale (h1-h4, body, small, link)
+- Flat design - no glassmorphic effects, no gradients, no heavy shadows
+- Custom typography scale (h1-h3, body, bodySecondary, caption, small, link)
+- Telegram blue (#2AABEE) as primary accent color
 
 **Component Architecture**
 - Themed components (`ThemedText`, `ThemedView`) for consistent styling

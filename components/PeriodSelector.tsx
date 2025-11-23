@@ -26,29 +26,29 @@ export function PeriodSelector({ selectedPeriod, onPeriodChange }: PeriodSelecto
           <Pressable
             key={period.value}
             onPress={() => onPeriodChange(period.value)}
-            style={({ pressed }) => ({ opacity: pressed ? 0.7 : 1, flex: 1 })}
+            style={({ pressed }) => [
+              styles.button,
+              {
+                backgroundColor: isSelected
+                  ? theme.primary
+                  : pressed
+                  ? theme.backgroundSecondary
+                  : "transparent",
+                borderRadius: BorderRadius.lg,
+              },
+            ]}
           >
-            <ThemedView
+            <ThemedText
               style={[
-                styles.button,
+                styles.buttonText,
                 {
-                  backgroundColor: isSelected ? theme.primary : theme.backgroundDefault,
-                  borderColor: theme.border,
-                  borderRadius: BorderRadius.xs,
+                  color: isSelected ? theme.buttonText : theme.text,
+                  fontWeight: isSelected ? "600" : "400",
                 },
               ]}
             >
-              <ThemedText
-                style={[
-                  styles.buttonText,
-                  {
-                    color: isSelected ? theme.buttonText : theme.text,
-                  },
-                ]}
-              >
-                {period.label}
-              </ThemedText>
-            </ThemedView>
+              {period.label}
+            </ThemedText>
           </Pressable>
         );
       })}
@@ -59,16 +59,16 @@ export function PeriodSelector({ selectedPeriod, onPeriodChange }: PeriodSelecto
 const styles = StyleSheet.create({
   container: {
     flexDirection: "row",
-    gap: Spacing.sm,
+    gap: Spacing.xs,
   },
   button: {
-    paddingVertical: Spacing.md,
-    paddingHorizontal: Spacing.lg,
-    borderWidth: 1,
+    flex: 1,
+    paddingVertical: Spacing.sm,
+    paddingHorizontal: Spacing.md,
     alignItems: "center",
+    justifyContent: "center",
   },
   buttonText: {
     fontSize: 14,
-    fontWeight: "500",
   },
 });

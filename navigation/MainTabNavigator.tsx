@@ -1,14 +1,13 @@
 import React from "react";
 import { createBottomTabNavigator } from "@react-navigation/bottom-tabs";
 import { Feather } from "@expo/vector-icons";
-import { GlassView } from "expo-glass-effect";
-import { StyleSheet } from "react-native";
+import { View, StyleSheet } from "react-native";
 import DashboardStackNavigator from "@/navigation/DashboardStackNavigator";
 import ExcursionsStackNavigator from "@/navigation/ExcursionsStackNavigator";
 import FinancesStackNavigator from "@/navigation/FinancesStackNavigator";
 import SettingsStackNavigator from "@/navigation/SettingsStackNavigator";
 import { useTheme } from "@/hooks/useTheme";
-import { BorderRadius, Spacing } from "@/constants/theme";
+import { Spacing } from "@/constants/theme";
 
 export type MainTabParamList = {
   DashboardTab: undefined;
@@ -29,32 +28,11 @@ export default function MainTabNavigator() {
         tabBarActiveTintColor: theme.tabIconSelected,
         tabBarInactiveTintColor: theme.tabIconDefault,
         tabBarStyle: {
-          position: "absolute",
-          backgroundColor: "transparent",
-          borderTopWidth: 0,
+          backgroundColor: theme.backgroundDefault,
+          borderTopWidth: 1,
+          borderTopColor: theme.divider,
           elevation: 0,
-          height: 88,
-          paddingBottom: Spacing.xl,
-          paddingTop: Spacing.sm,
-          marginHorizontal: Spacing.lg,
-          marginBottom: Spacing.md,
-          borderRadius: BorderRadius.xl,
-          overflow: "hidden",
         },
-        tabBarBackground: () => (
-          <GlassView
-            glassEffectStyle={isDark ? "regular" : "clear"}
-            tintColor={isDark ? theme.glassTint : theme.glassMist}
-            style={[
-              StyleSheet.absoluteFill,
-              {
-                borderRadius: BorderRadius.xl,
-                borderWidth: 1,
-                borderColor: theme.glassStroke,
-              },
-            ]}
-          />
-        ),
         headerShown: false,
       }}
     >

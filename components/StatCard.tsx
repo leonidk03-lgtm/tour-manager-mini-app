@@ -1,5 +1,4 @@
-import { StyleSheet, Pressable, View, Platform } from "react-native";
-import { GlassView } from "expo-glass-effect";
+import { StyleSheet, Pressable, View } from "react-native";
 import { ThemedText } from "@/components/ThemedText";
 import { Spacing, BorderRadius } from "@/constants/theme";
 import { useTheme } from "@/hooks/useTheme";
@@ -12,7 +11,7 @@ interface StatCardProps {
 }
 
 export function StatCard({ title, value, color = "default", onPress }: StatCardProps) {
-  const { theme, isDark } = useTheme();
+  const { theme } = useTheme();
 
   const getColor = () => {
     switch (color) {
@@ -30,64 +29,39 @@ export function StatCard({ title, value, color = "default", onPress }: StatCardP
   const content = (
     <View
       style={[
-        styles.cardWrapper,
+        styles.card,
         {
+          backgroundColor: theme.backgroundDefault,
           borderRadius: BorderRadius.md,
-          shadowColor: theme.glassShadow,
-          shadowOffset: { width: 0, height: 2 },
-          shadowOpacity: 0.1,
-          shadowRadius: 8,
-          elevation: 3,
         },
       ]}
     >
-      <GlassView
-        glassEffectStyle={isDark ? "regular" : "clear"}
-        tintColor={isDark ? theme.glassVeil : theme.glassMist}
+      <ThemedText
         style={[
-          styles.card,
+          styles.title,
           {
-            borderRadius: BorderRadius.md,
-            borderWidth: 1,
-            borderColor: theme.glassStroke,
+            color: theme.textSecondary,
           },
         ]}
       >
-        <View
-          style={[
-            styles.highlightLine,
-            {
-              backgroundColor: theme.glassHighlight,
-            },
-          ]}
-        />
-        <ThemedText
-          style={[
-            styles.title,
-            {
-              color: theme.textSecondary,
-            },
-          ]}
-        >
-          {title}
-        </ThemedText>
-        <ThemedText
-          style={[
-            styles.value,
-            {
-              color: getColor(),
-            },
-          ]}
-        >
-          {value}
-        </ThemedText>
-      </GlassView>
+        {title}
+      </ThemedText>
+      <ThemedText
+        style={[
+          styles.value,
+          {
+            color: getColor(),
+          },
+        ]}
+      >
+        {value}
+      </ThemedText>
     </View>
   );
 
   if (onPress) {
     return (
-      <Pressable onPress={onPress} style={({ pressed }) => ({ opacity: pressed ? 0.95 : 1 })}>
+      <Pressable onPress={onPress} style={({ pressed }) => ({ opacity: pressed ? 0.7 : 1 })}>
         {content}
       </Pressable>
     );
@@ -97,27 +71,21 @@ export function StatCard({ title, value, color = "default", onPress }: StatCardP
 }
 
 const styles = StyleSheet.create({
-  cardWrapper: {
-    overflow: "visible",
-  },
   card: {
     padding: Spacing.lg,
-    gap: Spacing.sm,
-    overflow: "hidden",
-  },
-  highlightLine: {
-    position: "absolute",
-    top: 0,
-    left: 0,
-    right: 0,
-    height: 1,
-    opacity: 0.6,
+    gap: Spacing.md,
+    minHeight: 90,
+    justifyContent: "space-between",
   },
   title: {
-    fontSize: 14,
+    fontSize: 13,
+    fontWeight: "400",
+    textTransform: "uppercase",
+    letterSpacing: 0.5,
   },
   value: {
-    fontSize: 24,
+    fontSize: 28,
     fontWeight: "700",
+    lineHeight: 34,
   },
 });

@@ -42,8 +42,6 @@ export function ThemedText({
         return Typography.h2;
       case "h3":
         return Typography.h3;
-      case "h4":
-        return Typography.h4;
       case "body":
         return Typography.body;
       case "small":
