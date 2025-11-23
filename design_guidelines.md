@@ -1,250 +1,376 @@
 # Design Guidelines: Tour Excursion Reporting App
+## Telegram-inspired Design
 
-## Architecture Decisions
+## Design Philosophy
+This application follows Telegram's design principles: clean, efficient, and focused on content. The interface prioritizes readability, quick access to information, and minimal visual noise.
 
-### Authentication
-**Auth Required** - The application explicitly mentions manager accounts and an admin panel.
+## Visual Style
 
-**Implementation:**
-- Use email/password authentication (SSO less common for business tools in Russian market)
-- Include Apple Sign-In for iOS compliance
-- Mock auth flow with local state for prototype
-- User roles: Admin and Manager
-- Login screen with email/password fields
-- Include "Forgot Password?" link (placeholder)
-- Privacy policy & terms links (placeholder URLs)
-- Account screen with:
-  - User profile (avatar, name, role badge)
-  - Log out (with confirmation alert: "Вы уверены, что хотите выйти?")
-  - Delete account (Admin panel only, double confirmation)
+### Design Principles
+- **Flat Design**: No gradients, no glassmorphic effects, no heavy shadows
+- **Content First**: UI elements don't compete with content
+- **Clarity**: Clear hierarchy, readable text, intuitive interactions
+- **Efficiency**: Quick access to all features, minimal taps needed
+- **Dark Theme**: Primary dark theme similar to Telegram Night mode
 
-### Navigation
-**Tab Navigation** with 4 tabs + FAB:
+### Color Palette
 
-1. **Dashboard** (Главная) - Overview statistics
-2. **Excursions** (Экскурсии) - List of all tours
-3. **[FAB] Add Tour** - Floating action button for creating new excursion entry
-4. **Finances** (Финансы) - Additional expenses/income management
-5. **Settings** (Настройки) - App settings, admin panel access
+**Dark Theme (Primary):**
+- Background Root: `#0E1621` (Deep dark blue-gray, main app background)
+- Background Default: `#1C2733` (Card background, slightly lighter)
+- Background Secondary: `#2B3641` (Elevated elements, hover states)
+- Background Tertiary: `#3A4651` (Input fields, subtle elements)
+- Divider: `#2B3641` (Subtle separators between items)
 
-**Navigation Stack:**
-- Each tab has its own stack
-- Admin panel accessed from Settings (Admin users only)
-- Modals for: Add/Edit Excursion, Add Expense/Income, Ticket Price Configuration
+**Text Colors:**
+- Primary Text: `#FFFFFF` (Main content, headings)
+- Secondary Text: `#8E8E93` (Descriptions, captions, timestamps)
+- Tertiary Text: `#6D6D72` (Placeholders, disabled text)
+
+**Accent Colors:**
+- Primary (Telegram Blue): `#2AABEE` (Links, active states, buttons)
+- Success (Green): `#34C759` (Profit, positive values, success states)
+- Error (Red): `#FF3B30` (Loss, negative values, delete actions)
+- Warning (Orange): `#FF9500` (Warnings, pending states)
+
+**Badge/Indicator Colors:**
+- Unread Badge: `#2AABEE` (Blue circle with white text)
+- Active Status: `#34C759` (Green dot)
+
+### Typography
+
+**Font Families:**
+- iOS: SF Pro Text / SF Pro Display (system default)
+- Android: Roboto (system default)
+- Web: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, system-ui
+
+**Type Scale:**
+- H1 (Screen Titles): 28pt, Bold, #FFFFFF
+- H2 (Section Headers): 22pt, Semibold, #FFFFFF  
+- H3 (Card Titles): 17pt, Semibold, #FFFFFF
+- Body (Main Text): 17pt, Regular, #FFFFFF
+- Body Secondary: 15pt, Regular, #8E8E93
+- Caption (Timestamps): 13pt, Regular, #8E8E93
+- Small: 11pt, Regular, #6D6D72
+
+**Number Formatting:**
+- Use tabular figures for currency and numbers
+- Format: 10 000 ₽ (space as thousands separator)
+- Negative numbers: -500 ₽ (no parentheses)
+
+### Layout & Spacing
+
+**Spacing Scale:**
+- XXS: 2pt
+- XS: 4pt
+- SM: 8pt
+- MD: 12pt
+- LG: 16pt
+- XL: 20pt
+- 2XL: 24pt
+- 3XL: 32pt
+
+**Screen Insets:**
+- Top (with header): Spacing.XL (20pt)
+- Top (with transparent header): headerHeight + Spacing.XL
+- Bottom (with tab bar): tabBarHeight + Spacing.XL
+- Bottom (no tab bar): insets.bottom + Spacing.XL
+- Horizontal: Spacing.LG (16pt)
+
+**Component Spacing:**
+- Between sections: Spacing.3XL (32pt)
+- Between cards in list: 0pt (cards touch with dividers)
+- Card internal padding: Spacing.LG (16pt)
+- List item height: 76pt minimum
+
+### Components
+
+#### Cards & Lists
+
+**List Items (Telegram Style):**
+```
+┌──────────────────────────────────────┐
+│ [Icon]  Title                  Time  │
+│         Subtitle/Description         │
+│         Secondary info         Badge │
+└──────────────────────────────────────┘
+```
+- No background color (transparent)
+- 1pt divider at bottom (#2B3641)
+- Padding: 12pt vertical, 16pt horizontal
+- Press feedback: Background changes to #1C2733
+- Icon/Avatar: 48x48pt circle on left
+- Content: fills middle space
+- Right accessories: time, badges, chevron
+
+**Cards (for summaries, stats):**
+- Background: #1C2733
+- Border radius: 12pt
+- Padding: 16pt
+- No shadow
+- No border
+- Margin bottom: 12pt
+
+**Section Headers:**
+- Text: 13pt, Semibold, #8E8E93, uppercase
+- Padding: 20pt top, 16pt horizontal, 8pt bottom
+- Background: transparent
+
+#### Buttons
+
+**Primary Button:**
+- Background: #2AABEE
+- Text: #FFFFFF, 17pt, Semibold
+- Height: 50pt
+- Border radius: 10pt
+- Press opacity: 0.7
+- No shadow
+
+**Secondary Button:**
+- Background: transparent
+- Text: #2AABEE, 17pt, Semibold
+- Height: 50pt
+- Border radius: 10pt
+- Press opacity: 0.5
+
+**Destructive Button:**
+- Background: transparent
+- Text: #FF3B30, 17pt, Semibold
+- Height: 50pt
+- Press opacity: 0.5
+
+**Icon Button:**
+- Size: 44x44pt (minimum touch target)
+- Icon size: 24pt
+- Color: #2AABEE or #FFFFFF
+- Press opacity: 0.5
+
+#### Input Fields
+
+**Text Input:**
+- Background: #1C2733
+- Border: none
+- Border radius: 10pt
+- Padding: 12pt
+- Text: 17pt, Regular, #FFFFFF
+- Placeholder: 17pt, Regular, #6D6D72
+- Focus state: subtle border #2AABEE (1pt)
+
+**Date/Time Picker:**
+- Use native pickers with dark theme
+- Trigger button styled as text input
+
+#### Navigation
+
+**Bottom Tab Bar:**
+- Background: #1C2733
+- Height: 50pt + safe area bottom
+- Border top: 0.5pt solid #2B3641
+- Items spacing: evenly distributed
+- Active item:
+  - Icon: #2AABEE
+  - Label: #2AABEE, 10pt, Medium
+- Inactive item:
+  - Icon: #8E8E93
+  - Label: #8E8E93, 10pt, Regular
+
+**Top Header:**
+- Background: #0E1621
+- Height: 44pt + safe area top
+- Title: 17pt, Semibold, #FFFFFF, centered
+- Back button: chevron + text, #2AABEE
+- Right button: icon or text, #2AABEE
+
+**Search Bar:**
+- Background: #1C2733
+- Border radius: 10pt
+- Height: 36pt
+- Icon: search icon, #8E8E93
+- Placeholder: #6D6D72
+- Text: #FFFFFF
+
+#### Icons & Badges
+
+**Icons:**
+- Use Feather icons from @expo/vector-icons
+- Default size: 24pt
+- Colors: #FFFFFF (primary), #8E8E93 (secondary), #2AABEE (accent)
+
+**Badge (unread counter):**
+- Background: #2AABEE
+- Text: white, 12pt, Medium
+- Min size: 20x20pt
+- Padding: 2pt horizontal
+- Border radius: 10pt (fully rounded)
+
+**Status Indicators:**
+- Active: 8pt circle, #34C759
+- Inactive: 8pt circle, #8E8E93
+
+### Interaction Patterns
+
+**Feedback:**
+- Press: opacity 0.7 for buttons, background #1C2733 for list items
+- Pull to refresh: native spinner with #2AABEE
+- Loading: spinner in center, #2AABEE
+- Success: brief toast at bottom (3 seconds)
+- Error: alert dialog or inline message
+
+**Gestures:**
+- Swipe left to delete: reveals red delete button
+- Pull down to refresh: on Dashboard and lists
+- Tap: standard action
+- Long press: context menu (if needed)
+
+**Animations:**
+- Keep subtle and fast (200-300ms)
+- Use native spring physics where appropriate
+- Prefer fade and slide over complex animations
+
+**Modals:**
+- Full screen on mobile
+- Slide up from bottom animation
+- Close via swipe down or cancel button
+- Header with title and cancel/save buttons
 
 ## Screen Specifications
 
-### 1. Dashboard Screen (Главная)
-**Purpose:** Display financial overview and key metrics for selected period
+### 1. Dashboard (Главная)
 
 **Layout:**
-- Header: Custom with date range picker (left: calendar icon, center: date display, right: filter icon)
-- Scrollable content
-- Top inset: headerHeight + Spacing.xl
-- Bottom inset: tabBarHeight + Spacing.xl
+- Scrollable list of sections
+- No custom header - standard navigation
 
 **Components:**
-- Period selector cards (День, Неделя, Месяц)
-- Summary cards: Total Revenue, Total Expenses, Net Profit
-- Small chart showing profit trend (simple bar/line chart)
-- Quick stats: Number of tours, Average profit per tour
-- Recent excursions list (last 5)
+1. Period selector (horizontal scroll, pills):
+   - Options: День, Неделя, Месяц
+   - Active: #2AABEE background, white text
+   - Inactive: transparent, #8E8E93 text
 
-### 2. Excursions List Screen (Экскурсии)
-**Purpose:** Browse and manage all excursion entries
+2. Summary cards (3 cards in section):
+   - Card style as defined above
+   - Each shows: Label (secondary text), Value (large primary text), Icon
+   - Revenue: green icon
+   - Expenses: red icon  
+   - Profit: blue icon if positive, red if negative
+
+3. Manager Activities section:
+   - Section header: "Действия менеджеров"
+   - List items (Telegram style):
+     - Icon left (based on action type)
+     - Manager name + action text
+     - Timestamp (right, top)
+   - Last 10 activities shown
+
+### 2. Excursions List (Экскурсии)
 
 **Layout:**
-- Header: Default with search bar and filter button (right)
-- List view (FlatList)
-- Top inset: Spacing.xl
-- Bottom inset: tabBarHeight + Spacing.xl
+- Search bar at top
+- Date filter input
+- List of excursions grouped by date
 
 **Components:**
-- Search bar in header
-- Date grouping headers (styled as cards)
-- Excursion cards showing:
-  - Tour name and time
-  - Participant counts (icons with numbers)
-  - Revenue, Expenses, Profit (color-coded: profit green, loss red)
+- Date headers (section headers)
+- Excursion list items:
+  - Tour name (17pt, semibold, white)
+  - Time + participant counts (15pt, secondary)
+  - Revenue/Expenses/Profit row (13pt):
+    - Revenue: white
+    - Expenses: white  
+    - Profit: green if positive, red if negative
+  - Divider between items
   - Tap to view details
-- Empty state: "Нет экскурсий за выбранный период"
 
-### 3. Add/Edit Excursion Screen (Modal)
-**Purpose:** Input excursion data
+### 3. Add Excursion (Modal)
 
 **Layout:**
-- Header: Custom with "Отмена" (left) and "Сохранить" (right) buttons
+- Full screen modal
+- Header with "Отмена" and "Сохранить"
 - Scrollable form
-- Top inset: headerHeight + Spacing.xl
-- Bottom inset: insets.bottom + Spacing.xl
 
 **Components:**
-- Tour name dropdown/autocomplete (with saved tour types)
-- Date picker (calendar icon)
-- Time picker
-- Participant inputs:
-  - Full price (Полная оплата)
-  - Discounted (Льготная)
-  - Free (Бесплатные)
-  - Tour package (По туру)
-  - Each with +/- steppers
-- Additional services section:
-  - Checkboxes for: Теплоход, Колесо обозрения, etc.
-  - Quantity adjusters
-- Expenses section:
-  - Multiple expense line items
-  - "Добавить расход" button
-  - Type: Экскурсовод, Предоплата, Прочее
-  - Amount input
+- Form sections with headers
+- Input fields (text inputs, pickers)
+- Participant inputs: plain text inputs, no steppers
+- Expenses list with add button
+- Additional services checkboxes
 
-### 4. Excursion Detail Screen
-**Purpose:** View complete excursion breakdown
+### 4. Finances (Финансы)
 
 **Layout:**
-- Header: Default with "Edit" button (right)
-- Scrollable content
-- Top inset: Spacing.xl
-- Bottom inset: tabBarHeight + Spacing.xl
+- Tabs at top: Доходы / Расходы
+- Date filter
+- List of transactions
 
 **Components:**
-- Tour header card (name, date, time)
-- Participants breakdown table
-- Revenue calculation card
-- Expenses list
-- Net profit summary (prominent, color-coded)
+- Tab selector (2 pills):
+  - Active: #2AABEE background
+  - Inactive: transparent
+- Transaction list items:
+  - Description (17pt, white)
+  - Amount + date (15pt, secondary)
+  - Divider
+- FAB for adding transactions
 
-### 5. Finances Screen (Финансы)
-**Purpose:** Manage additional expenses and income not tied to specific tours
+### 5. Settings (Настройки)
 
 **Layout:**
-- Header: Default with "Add" button (right)
-- List view with tabs: Расходы (Expenses) / Доходы (Income)
-- Top inset: Spacing.xl
-- Bottom inset: tabBarHeight + Spacing.xl
+- List of sections with items
 
 **Components:**
-- Transaction list cards showing:
-  - Description (e.g., "Вильдану", "Поступление от партнера")
-  - Amount
-  - Date
-  - Type badge
-- Summary at top: Total additional expenses, Total additional income
+- User profile section:
+  - Avatar (64pt circle)
+  - Name (17pt, semibold)
+  - Role badge
+- Settings items (Telegram list style):
+  - Label left
+  - Chevron right
+  - Tap to navigate
+- Log out button (destructive)
 
-### 6. Settings Screen
-**Purpose:** App configuration and admin tools
+### 6. Ticket Prices
 
 **Layout:**
-- Header: Default
-- Scrollable list
-- Top inset: Spacing.xl
-- Bottom inset: tabBarHeight + Spacing.xl
+- List of tour types and additional services
+- Add button in header
 
 **Components:**
-- User profile card (avatar, name, role)
-- Ticket Prices section → navigates to price configuration
-- Admin Panel (visible only to admins)
-- App preferences (notifications, theme)
-- About app
-- Log out button
+- Tour type cards:
+  - Name
+  - Price inputs (full, discounted)
+- Additional service cards:
+  - Name  
+  - Price input
+- Save button at bottom
 
-### 7. Admin Panel Screen
-**Purpose:** Manage manager accounts
+### 7. Admin Panel
 
 **Layout:**
-- Header: Default with "Add Manager" button (right)
-- List view
-- Top inset: Spacing.xl
-- Bottom inset: tabBarHeight + Spacing.xl
+- List of managers
 
 **Components:**
-- Manager list cards showing:
-  - Avatar and name
-  - Email
-  - Status (Active/Inactive toggle)
-  - Action buttons: Edit, Delete
-- Add/Edit manager form (modal)
+- Manager list items:
+  - Avatar + name
+  - Email (secondary)
+  - Active/inactive toggle
+  - Chevron to details
 
-### 8. Ticket Price Configuration Screen
-**Purpose:** Set and manage pricing for tour types
+## Implementation Notes
 
-**Layout:**
-- Header: Default with "Save" button (right)
-- Scrollable form
-- Top inset: Spacing.xl
-- Bottom inset: tabBarHeight + Spacing.xl
+### Component Reuse
+- Use ThemedText and ThemedView for consistent theming
+- Create reusable ListItem component for Telegram-style list items
+- Create reusable Card component for summary cards
+- Remove glass effects and gradients from all components
 
-**Components:**
-- Tour type cards with price inputs:
-  - Full price (Полная цена)
-  - Discounted price (Льготная цена)
-- Additional services pricing section
-- "Add New Tour Type" button
+### Colors in Code
+- Update constants/theme.ts with new color palette
+- Remove all glassmorphic effects
+- Remove expo-glass-effect and expo-blur usage
+- Use flat colors only
 
-## Design System
-
-### Color Palette
-**Primary:** #2563EB (Blue - trust, professionalism)
-**Secondary:** #10B981 (Green - profit, success)
-**Error:** #EF4444 (Red - loss, warnings)
-**Warning:** #F59E0B (Orange)
-**Background:** #F9FAFB (Light gray)
-**Surface:** #FFFFFF
-**Text Primary:** #111827
-**Text Secondary:** #6B7280
-**Border:** #E5E7EB
-
-### Typography
-- Headings: SF Pro Display (iOS) / Roboto (Android), Bold, 24-28pt
-- Subheadings: Medium, 18-20pt
-- Body: Regular, 16pt
-- Caption: Regular, 14pt
-- Numbers/Currency: Tabular figures, Medium weight for emphasis
-
-### Visual Design
-- Use system icons (Feather icons from @expo/vector-icons) for:
-  - Navigation: home, list, plus-circle, dollar-sign, settings
-  - Actions: edit, trash-2, save, x, check
-  - Data: users, calendar, clock, trending-up
-- Floating Action Button (Add Tour):
-  - Position: bottom-right, 16pt from edge
-  - Size: 56x56pt
-  - Icon: plus
-  - Color: Primary blue
-  - Shadow: shadowOffset {width: 0, height: 2}, shadowOpacity: 0.10, shadowRadius: 2
-- Cards:
-  - Background: Surface white
-  - Border radius: 12pt
-  - Padding: 16pt
-  - No drop shadow, use subtle border (#E5E7EB)
-- Input fields:
-  - Border: 1pt solid #E5E7EB
-  - Border radius: 8pt
-  - Focus state: Primary blue border
-  - Padding: 12pt
-- Buttons:
-  - Primary: Filled primary color, white text
-  - Secondary: Outlined primary color
-  - Height: 48pt
-  - Border radius: 8pt
-  - Press feedback: opacity 0.7
-
-### Interaction Design
-- All touchable elements have opacity feedback (0.7) on press
-- Swipe actions on list items: swipe left to delete (confirmation required)
-- Pull-to-refresh on Dashboard and Excursions list
-- Date picker: native iOS/Android picker
-- Currency inputs: numeric keyboard with automatic formatting (add ₽ symbol)
-- Form validation: inline error messages below invalid fields
-- Success confirmations: brief toast notifications at bottom
-- Deletion confirmations: alert dialogs with "Отмена" and "Удалить"
-
-### Accessibility
-- Minimum touch target: 44x44pt
-- Color contrast ratio: 4.5:1 for text, 3:1 for UI components
-- Support for Russian localization
-- Currency always displayed with ₽ symbol
-- Numbers formatted with space thousands separator (10 000₽)
-- Profit/loss color-coded but also labeled with text
-- Form labels always visible (not placeholder-only)
-- VoiceOver/TalkBack support for all interactive elements
-- Semantic headings for screen readers
+### Testing
+- Test in dark mode only (primary theme)
+- Ensure text contrast meets accessibility standards
+- Test on both iOS and Android
+- Verify touch targets are minimum 44x44pt
