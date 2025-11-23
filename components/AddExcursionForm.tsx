@@ -25,7 +25,9 @@ export function AddExcursionForm({ excursion, onSave, onCancel }: AddExcursionFo
   const { theme } = useTheme();
   const { tourTypes, additionalServices } = useData();
 
-  const [selectedTourType, setSelectedTourType] = useState(excursion?.tourTypeId || tourTypes[0]?.id || "");
+  const [selectedTourType, setSelectedTourType] = useState(
+    excursion?.tourTypeId || tourTypes.find((t) => t.isEnabled)?.id || ""
+  );
   const [date, setDate] = useState(excursion?.date || new Date().toISOString().split("T")[0]);
   const [time, setTime] = useState(excursion?.time || "09:00");
   const [fullPrice, setFullPrice] = useState(excursion ? excursion.fullPriceCount.toString() : "");
@@ -89,6 +91,12 @@ export function AddExcursionForm({ excursion, onSave, onCancel }: AddExcursionFo
       return;
     }
 
+    const selectedTour = tourTypes.find((t) => t.id === selectedTourType);
+    if (!selectedTour || !selectedTour.isEnabled) {
+      Alert.alert("Ошибка", "Выбранный тип тура недоступен");
+      return;
+    }
+
     if (!date || !time) {
       Alert.alert("Ошибка", "Укажите дату и время");
       return;
@@ -123,7 +131,7 @@ export function AddExcursionForm({ excursion, onSave, onCancel }: AddExcursionFo
             onValueChange={(value: string) => setSelectedTourType(value)}
             style={[styles.picker, { color: theme.text }]}
           >
-            {tourTypes.map((tour) => (
+            {tourTypes.filter((tour) => tour.isEnabled).map((tour) => (
               <Picker.Item key={tour.id} label={tour.name} value={tour.id} />
             ))}
           </Picker>

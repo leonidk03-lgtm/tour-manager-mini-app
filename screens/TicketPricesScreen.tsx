@@ -221,9 +221,6 @@ export default function TicketPricesScreen() {
                 <View style={styles.cardHeader}>
                   <View style={{ flex: 1 }}>
                     <ThemedText style={styles.cardTitle}>{service.name}</ThemedText>
-                    <ThemedText style={[styles.articleNumber, { color: theme.textSecondary }]}>
-                      {service.articleNumber}
-                    </ThemedText>
                   </View>
                   <Switch
                     value={service.isEnabled}

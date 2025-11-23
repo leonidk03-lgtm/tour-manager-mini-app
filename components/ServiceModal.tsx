@@ -16,16 +16,13 @@ interface ServiceModalProps {
 
 export function ServiceModal({ visible, onClose, onSave, service }: ServiceModalProps) {
   const { theme } = useTheme();
-  const { additionalServices } = useData();
   const [name, setName] = useState("");
-  const [articleNumber, setArticleNumber] = useState("");
   const [price, setPrice] = useState("");
   const [isEnabled, setIsEnabled] = useState(true);
 
   useEffect(() => {
     if (visible) {
       setName(service?.name || "");
-      setArticleNumber(service?.articleNumber || "");
       setPrice(service?.price.toString() || "");
       setIsEnabled(service?.isEnabled ?? true);
     }
@@ -34,18 +31,6 @@ export function ServiceModal({ visible, onClose, onSave, service }: ServiceModal
   const handleSave = () => {
     if (!name.trim()) {
       Alert.alert("Ошибка", "Введите название услуги");
-      return;
-    }
-    if (!articleNumber.trim()) {
-      Alert.alert("Ошибка", "Введите артикул");
-      return;
-    }
-
-    const isDuplicateArticle = additionalServices.some(
-      (s) => s.articleNumber === articleNumber.trim() && s.id !== service?.id
-    );
-    if (isDuplicateArticle) {
-      Alert.alert("Ошибка", "Услуга с таким артикулом уже существует");
       return;
     }
 
@@ -59,7 +44,6 @@ export function ServiceModal({ visible, onClose, onSave, service }: ServiceModal
     const newService: AdditionalService = {
       id: service?.id || Date.now().toString(),
       name: name.trim(),
-      articleNumber: articleNumber.trim(),
       price: priceValue,
       isEnabled,
     };
@@ -100,24 +84,6 @@ export function ServiceModal({ visible, onClose, onSave, service }: ServiceModal
                 value={name}
                 onChangeText={setName}
                 placeholder="Например: Теплоход"
-                placeholderTextColor={theme.textSecondary}
-              />
-            </View>
-
-            <View style={styles.inputGroup}>
-              <ThemedText style={[styles.label, { color: theme.textSecondary }]}>Артикул</ThemedText>
-              <TextInput
-                style={[
-                  styles.input,
-                  {
-                    borderColor: theme.inputBorder,
-                    color: theme.text,
-                    backgroundColor: theme.backgroundSecondary,
-                  },
-                ]}
-                value={articleNumber}
-                onChangeText={setArticleNumber}
-                placeholder="Например: SRV-001"
                 placeholderTextColor={theme.textSecondary}
               />
             </View>

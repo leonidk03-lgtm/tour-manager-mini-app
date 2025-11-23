@@ -13,7 +13,6 @@ export interface AdditionalService {
   id: string;
   name: string;
   price: number;
-  articleNumber: string;
   isEnabled: boolean;
 }
 
@@ -102,8 +101,8 @@ const defaultTourTypes: TourType[] = [
 ];
 
 const defaultServices: AdditionalService[] = [
-  { id: "1", name: "Теплоход", price: 400, articleNumber: "SRV-001", isEnabled: false },
-  { id: "2", name: "Колесо обозрения", price: 400, articleNumber: "SRV-002", isEnabled: true },
+  { id: "1", name: "Теплоход", price: 400, isEnabled: false },
+  { id: "2", name: "Колесо обозрения", price: 400, isEnabled: true },
 ];
 
 const mockExcursions: Excursion[] = [
