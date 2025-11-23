@@ -32,6 +32,17 @@ export default function MainTabNavigator() {
           borderTopWidth: 1,
           borderTopColor: theme.divider,
           elevation: 0,
+          height: 50,
+          paddingBottom: 0,
+          paddingTop: 0,
+        },
+        tabBarLabelStyle: {
+          fontSize: 10,
+          marginTop: -4,
+          marginBottom: 4,
+        },
+        tabBarIconStyle: {
+          marginTop: 4,
         },
         headerShown: false,
       }}
@@ -42,7 +53,7 @@ export default function MainTabNavigator() {
         options={{
           title: "Главная",
           tabBarIcon: ({ color, size }) => (
-            <Feather name="pie-chart" size={24} color={color} />
+            <Feather name="pie-chart" size={22} color={color} />
           ),
         }}
       />
@@ -52,7 +63,7 @@ export default function MainTabNavigator() {
         options={{
           title: "Экскурсии",
           tabBarIcon: ({ color, size }) => (
-            <Feather name="map" size={24} color={color} />
+            <Feather name="map" size={22} color={color} />
           ),
         }}
       />
@@ -62,7 +73,7 @@ export default function MainTabNavigator() {
         options={{
           title: "Финансы",
           tabBarIcon: ({ color, size }) => (
-            <Feather name="trending-up" size={24} color={color} />
+            <Feather name="trending-up" size={22} color={color} />
           ),
         }}
       />
@@ -72,7 +83,7 @@ export default function MainTabNavigator() {
         options={{
           title: "Настройки",
           tabBarIcon: ({ color, size }) => (
-            <Feather name="sliders" size={24} color={color} />
+            <Feather name="sliders" size={22} color={color} />
           ),
         }}
       />
