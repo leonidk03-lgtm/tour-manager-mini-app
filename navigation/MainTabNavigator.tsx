@@ -1,13 +1,14 @@
 import React from "react";
 import { createBottomTabNavigator } from "@react-navigation/bottom-tabs";
 import { Feather } from "@expo/vector-icons";
-import { View, StyleSheet } from "react-native";
+import { View, StyleSheet, Platform } from "react-native";
+import { BlurView } from "expo-blur";
 import DashboardStackNavigator from "@/navigation/DashboardStackNavigator";
 import ExcursionsStackNavigator from "@/navigation/ExcursionsStackNavigator";
 import FinancesStackNavigator from "@/navigation/FinancesStackNavigator";
 import SettingsStackNavigator from "@/navigation/SettingsStackNavigator";
 import { useTheme } from "@/hooks/useTheme";
-import { Spacing } from "@/constants/theme";
+import { Spacing, BorderRadius } from "@/constants/theme";
 
 export type MainTabParamList = {
   DashboardTab: undefined;
@@ -28,21 +29,32 @@ export default function MainTabNavigator() {
         tabBarActiveTintColor: theme.tabIconSelected,
         tabBarInactiveTintColor: theme.tabIconDefault,
         tabBarStyle: {
-          backgroundColor: theme.backgroundDefault,
-          borderTopWidth: 1,
-          borderTopColor: theme.divider,
+          position: "absolute",
+          backgroundColor: "transparent",
+          borderTopWidth: 0,
           elevation: 0,
-          height: 50,
-          paddingBottom: 0,
-          paddingTop: 0,
+          height: 70,
+          paddingBottom: 8,
+          paddingTop: 8,
+          marginHorizontal: Spacing.lg,
+          marginBottom: Spacing.md,
+          borderRadius: BorderRadius.xl,
+          overflow: "hidden",
         },
+        tabBarBackground: () => (
+          <BlurView
+            intensity={100}
+            tint="dark"
+            style={StyleSheet.absoluteFill}
+          />
+        ),
         tabBarLabelStyle: {
           fontSize: 10,
-          marginTop: -4,
-          marginBottom: 4,
+          marginTop: -2,
+          marginBottom: 2,
         },
         tabBarIconStyle: {
-          marginTop: 4,
+          marginTop: 2,
         },
         headerShown: false,
       }}
