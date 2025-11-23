@@ -1,26 +1,34 @@
-import { View, StyleSheet, Pressable, Alert } from "react-native";
+import { View, StyleSheet, Pressable, Alert, Modal } from "react-native";
 import { Feather } from "@expo/vector-icons";
 import { useRoute, useNavigation } from "@react-navigation/native";
 import { ThemedText } from "@/components/ThemedText";
 import { ThemedView } from "@/components/ThemedView";
 import { ScreenScrollView } from "@/components/ScreenScrollView";
+import { AddExcursionForm } from "@/components/AddExcursionForm";
 import { Spacing, BorderRadius } from "@/constants/theme";
 import { useTheme } from "@/hooks/useTheme";
-import { useData } from "@/contexts/DataContext";
+import { useData, Excursion as ExcursionType } from "@/contexts/DataContext";
 import {
   calculateExcursionRevenue,
   calculateExcursionExpenses,
   calculateExcursionProfit,
   formatCurrency,
 } from "@/utils/calculations";
-import { useLayoutEffect } from "react";
+import { useLayoutEffect, useState } from "react";
+
+const parseLocalDate = (dateString: string): Date => {
+  const [year, month, day] = dateString.split('-').map(Number);
+  return new Date(year, month - 1, day);
+};
 
 export default function ExcursionDetailScreen() {
   const { theme } = useTheme();
   const route = useRoute();
   const navigation = useNavigation();
   const { excursionId } = route.params as { excursionId: string };
-  const { excursions, tourTypes, additionalServices, deleteExcursion } = useData();
+  const { excursions, tourTypes, additionalServices, deleteExcursion, updateExcursion } = useData();
+  const [showEditModal, setShowEditModal] = useState(false);
+  const [editKey, setEditKey] = useState(0);
 
   const excursion = excursions.find((e) => e.id === excursionId);
   const tourType = tourTypes.find((t) => t.id === excursion?.tourTypeId);
@@ -41,7 +49,13 @@ export default function ExcursionDetailScreen() {
   }, [navigation]);
 
   const handleEdit = () => {
-    Alert.alert("Редактирование", "Функция редактирования будет доступна в следующей версии");
+    setEditKey((prev) => prev + 1);
+    setShowEditModal(true);
+  };
+
+  const handleSaveEdit = (updatedExcursion: ExcursionType) => {
+    updateExcursion(excursionId, updatedExcursion);
+    setShowEditModal(false);
   };
 
   const handleDelete = () => {
@@ -89,7 +103,7 @@ export default function ExcursionDetailScreen() {
             <View style={styles.infoRow}>
               <Feather name="calendar" size={16} color={theme.textSecondary} />
               <ThemedText style={[styles.infoText, { color: theme.textSecondary }]}>
-                {new Date(excursion.date).toLocaleDateString("ru-RU", {
+                {parseLocalDate(excursion.date).toLocaleDateString("ru-RU", {
                   weekday: "long",
                   year: "numeric",
                   month: "long",
@@ -235,6 +249,15 @@ export default function ExcursionDetailScreen() {
           </ThemedText>
         </ThemedView>
       </View>
+
+      <Modal visible={showEditModal} animationType="slide" presentationStyle="pageSheet">
+        <AddExcursionForm
+          key={editKey}
+          excursion={excursion}
+          onSave={handleSaveEdit}
+          onCancel={() => setShowEditModal(false)}
+        />
+      </Modal>
     </ScreenScrollView>
   );
 }
