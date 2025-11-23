@@ -6,8 +6,7 @@ import { ThemedView } from "@/components/ThemedView";
 import { ScreenScrollView } from "@/components/ScreenScrollView";
 import { StatCard } from "@/components/StatCard";
 import { PeriodSelector } from "@/components/PeriodSelector";
-import { ExcursionCard } from "@/components/ExcursionCard";
-import { Spacing } from "@/constants/theme";
+import { Spacing, BorderRadius } from "@/constants/theme";
 import { useTheme } from "@/hooks/useTheme";
 import { useData } from "@/contexts/DataContext";
 import {
@@ -27,7 +26,7 @@ import { MainTabParamList } from "@/navigation/MainTabNavigator";
 export default function DashboardScreen() {
   const { theme } = useTheme();
   const navigation = useNavigation<NavigationProp<MainTabParamList>>();
-  const { excursions, tourTypes, additionalServices, transactions } = useData();
+  const { excursions, tourTypes, additionalServices, transactions, activities } = useData();
   const [selectedPeriod, setSelectedPeriod] = useState<"day" | "week" | "month">("day");
   const [referenceDate] = useState(new Date());
   const [refreshing, setRefreshing] = useState(false);
@@ -52,7 +51,7 @@ export default function DashboardScreen() {
   );
   const netProfit = totalRevenue - totalExpenses + additionalIncome - additionalExpenses;
 
-  const recentExcursions = filteredExcursions.slice(0, 5);
+  const recentActivities = activities.slice(0, 10);
 
   return (
     <ScreenScrollView
@@ -106,42 +105,66 @@ export default function DashboardScreen() {
 
         <View style={styles.section}>
           <View style={styles.sectionHeader}>
-            <ThemedText style={styles.sectionTitle}>Последние экскурсии</ThemedText>
+            <ThemedText style={styles.sectionTitle}>Действия менеджеров</ThemedText>
           </View>
-          {recentExcursions.length > 0 ? (
-            <View style={styles.excursionsList}>
-              {recentExcursions.map((excursion) => {
-                const tourType = tourTypes.find((t) => t.id === excursion.tourTypeId);
-                if (!tourType) return null;
-                const revenue = calculateExcursionRevenue(excursion, tourType, additionalServices);
-                const expenses = calculateExcursionExpenses(excursion);
-                const profit = calculateExcursionProfit(excursion, tourType, additionalServices);
-
-                return (
-                  <ExcursionCard
-                    key={excursion.id}
-                    excursion={excursion}
-                    tourTypeName={tourType.name}
-                    revenue={revenue}
-                    expenses={expenses}
-                    profit={profit}
-                    onPress={() => {
-                      (navigation as any).navigate("ExcursionsTab", {
-                        screen: "ExcursionDetail",
-                        params: { excursionId: excursion.id },
-                      });
-                    }}
-                  />
-                );
-              })}
+          {recentActivities.length > 0 ? (
+            <View style={styles.activitiesList}>
+              {recentActivities.map((activity) => (
+                <ThemedView
+                  key={activity.id}
+                  style={[
+                    styles.activityCard,
+                    {
+                      backgroundColor: theme.backgroundSecondary,
+                      borderRadius: BorderRadius.sm,
+                    },
+                  ]}
+                >
+                  <View style={styles.activityIcon}>
+                    <Feather
+                      name={
+                        activity.type === "excursion_added"
+                          ? "plus-circle"
+                          : activity.type === "excursion_deleted"
+                          ? "minus-circle"
+                          : activity.type === "transaction_added"
+                          ? "dollar-sign"
+                          : "x-circle"
+                      }
+                      size={20}
+                      color={
+                        activity.type.includes("added") ? theme.success : theme.error
+                      }
+                    />
+                  </View>
+                  <View style={styles.activityContent}>
+                    <ThemedText style={styles.activityText}>
+                      <ThemedText style={[styles.activityManager, { color: theme.primary }]}>
+                        {activity.managerName}
+                      </ThemedText>
+                      {" "}
+                      {activity.description}
+                    </ThemedText>
+                    <ThemedText style={[styles.activityDate, { color: theme.textSecondary }]}>
+                      {new Date(activity.timestamp).toLocaleString("ru-RU", {
+                        day: "2-digit",
+                        month: "2-digit",
+                        year: "numeric",
+                        hour: "2-digit",
+                        minute: "2-digit",
+                      })}
+                    </ThemedText>
+                  </View>
+                </ThemedView>
+              ))}
             </View>
           ) : (
             <ThemedView
               style={[styles.emptyState, { borderColor: theme.border, backgroundColor: theme.backgroundSecondary }]}
             >
-              <Feather name="calendar" size={48} color={theme.textSecondary} />
+              <Feather name="activity" size={48} color={theme.textSecondary} />
               <ThemedText style={[styles.emptyText, { color: theme.textSecondary }]}>
-                Нет экскурсий за выбранный период
+                Нет действий
               </ThemedText>
             </ThemedView>
           )}
@@ -194,8 +217,31 @@ const styles = StyleSheet.create({
     fontSize: 20,
     fontWeight: "600",
   },
-  excursionsList: {
+  activitiesList: {
+    gap: Spacing.sm,
+  },
+  activityCard: {
+    flexDirection: "row",
+    padding: Spacing.lg,
     gap: Spacing.md,
+    alignItems: "flex-start",
+  },
+  activityIcon: {
+    marginTop: Spacing.xs,
+  },
+  activityContent: {
+    flex: 1,
+    gap: Spacing.xs,
+  },
+  activityText: {
+    fontSize: 15,
+    lineHeight: 20,
+  },
+  activityManager: {
+    fontWeight: "600",
+  },
+  activityDate: {
+    fontSize: 13,
   },
   emptyState: {
     padding: Spacing["3xl"],

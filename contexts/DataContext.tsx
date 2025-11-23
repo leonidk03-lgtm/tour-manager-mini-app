@@ -48,6 +48,15 @@ export interface Manager {
   isActive: boolean;
 }
 
+export interface Activity {
+  id: string;
+  type: "excursion_added" | "transaction_added" | "excursion_deleted" | "transaction_deleted";
+  managerName: string;
+  description: string;
+  date: string;
+  timestamp: string;
+}
+
 interface DataContextType {
   tourTypes: TourType[];
   setTourTypes: (types: TourType[]) => void;
@@ -66,6 +75,7 @@ interface DataContextType {
   deleteManager: (id: string) => void;
   currentUser: { role: "admin" | "manager"; name: string } | null;
   setCurrentUser: (user: { role: "admin" | "manager"; name: string } | null) => void;
+  activities: Activity[];
 }
 
 const DataContext = createContext<DataContextType | undefined>(undefined);
@@ -173,9 +183,22 @@ export function DataProvider({ children }: { children: ReactNode }) {
     role: "admin",
     name: "Администратор",
   });
+  const [activities, setActivities] = useState<Activity[]>([]);
 
   const addExcursion = (excursion: Excursion) => {
     setExcursions((prev) => [...prev, excursion]);
+    if (currentUser) {
+      const tourType = tourTypes.find((t) => t.id === excursion.tourTypeId);
+      const activity: Activity = {
+        id: Date.now().toString() + "_excursion",
+        type: "excursion_added",
+        managerName: currentUser.name,
+        description: `добавил экскурсию ${tourType?.name || ""}`,
+        date: excursion.date,
+        timestamp: new Date().toISOString(),
+      };
+      setActivities((prev) => [activity, ...prev]);
+    }
   };
 
   const updateExcursion = (id: string, excursion: Excursion) => {
@@ -183,15 +206,53 @@ export function DataProvider({ children }: { children: ReactNode }) {
   };
 
   const deleteExcursion = (id: string) => {
+    const excursion = excursions.find((e) => e.id === id);
     setExcursions((prev) => prev.filter((e) => e.id !== id));
+    if (currentUser && excursion) {
+      const tourType = tourTypes.find((t) => t.id === excursion.tourTypeId);
+      const activity: Activity = {
+        id: Date.now().toString() + "_excursion_del",
+        type: "excursion_deleted",
+        managerName: currentUser.name,
+        description: `удалил экскурсию ${tourType?.name || ""}`,
+        date: excursion.date,
+        timestamp: new Date().toISOString(),
+      };
+      setActivities((prev) => [activity, ...prev]);
+    }
   };
 
   const addTransaction = (transaction: Transaction) => {
     setTransactions((prev) => [...prev, transaction]);
+    if (currentUser) {
+      const typeText = transaction.type === "income" ? "доход" : "расход";
+      const activity: Activity = {
+        id: Date.now().toString() + "_transaction",
+        type: "transaction_added",
+        managerName: currentUser.name,
+        description: `добавил ${typeText} "${transaction.description}"`,
+        date: transaction.date,
+        timestamp: new Date().toISOString(),
+      };
+      setActivities((prev) => [activity, ...prev]);
+    }
   };
 
   const deleteTransaction = (id: string) => {
+    const transaction = transactions.find((t) => t.id === id);
     setTransactions((prev) => prev.filter((t) => t.id !== id));
+    if (currentUser && transaction) {
+      const typeText = transaction.type === "income" ? "доход" : "расход";
+      const activity: Activity = {
+        id: Date.now().toString() + "_transaction_del",
+        type: "transaction_deleted",
+        managerName: currentUser.name,
+        description: `удалил ${typeText} "${transaction.description}"`,
+        date: transaction.date,
+        timestamp: new Date().toISOString(),
+      };
+      setActivities((prev) => [activity, ...prev]);
+    }
   };
 
   const addManager = (manager: Manager) => {
@@ -226,6 +287,7 @@ export function DataProvider({ children }: { children: ReactNode }) {
         deleteManager,
         currentUser,
         setCurrentUser,
+        activities,
       }}
     >
       {children}
