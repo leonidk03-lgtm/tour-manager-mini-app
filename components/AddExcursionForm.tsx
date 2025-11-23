@@ -28,36 +28,21 @@ export function AddExcursionForm({ excursion, onSave, onCancel }: AddExcursionFo
   const [selectedTourType, setSelectedTourType] = useState(excursion?.tourTypeId || tourTypes[0]?.id || "");
   const [date, setDate] = useState(excursion?.date || new Date().toISOString().split("T")[0]);
   const [time, setTime] = useState(excursion?.time || "09:00");
-  const [fullPrice, setFullPrice] = useState(excursion?.fullPriceCount.toString() || "0");
-  const [discounted, setDiscounted] = useState(excursion?.discountedCount.toString() || "0");
-  const [free, setFree] = useState(excursion?.freeCount.toString() || "0");
-  const [tourPackage, setTourPackage] = useState(excursion?.tourPackageCount.toString() || "0");
+  const [fullPrice, setFullPrice] = useState(excursion ? excursion.fullPriceCount.toString() : "");
+  const [discounted, setDiscounted] = useState(excursion ? excursion.discountedCount.toString() : "");
+  const [free, setFree] = useState(excursion ? excursion.freeCount.toString() : "");
+  const [tourPackage, setTourPackage] = useState(excursion ? excursion.tourPackageCount.toString() : "");
   
   const [selectedServices, setSelectedServices] = useState<{ serviceId: string; count: number }[]>(
     excursion?.additionalServices || []
   );
   
   const [expenses, setExpenses] = useState<Expense[]>(
-    excursion?.expenses || []
+    excursion?.expenses || [
+      { id: "guide-default", type: "Экскурсовод", amount: 0, description: "" },
+      { id: "prepay-default", type: "Предоплата", amount: 0, description: "" },
+    ]
   );
-
-  const handleIncrement = (
-    value: string,
-    setter: React.Dispatch<React.SetStateAction<string>>
-  ) => {
-    const num = parseInt(value, 10) || 0;
-    setter((num + 1).toString());
-  };
-
-  const handleDecrement = (
-    value: string,
-    setter: React.Dispatch<React.SetStateAction<string>>
-  ) => {
-    const num = parseInt(value, 10) || 0;
-    if (num > 0) {
-      setter((num - 1).toString());
-    }
-  };
 
   const toggleService = (serviceId: string) => {
     const exists = selectedServices.find((s) => s.serviceId === serviceId);
@@ -176,29 +161,16 @@ export function AddExcursionForm({ excursion, onSave, onCancel }: AddExcursionFo
           { label: "Бесплатные", value: free, setter: setFree },
           { label: "По туру", value: tourPackage, setter: setTourPackage },
         ].map((item, index) => (
-          <View key={index} style={styles.stepperRow}>
-            <ThemedText style={styles.stepperLabel}>{item.label}</ThemedText>
-            <View style={styles.stepperControls}>
-              <Pressable
-                onPress={() => handleDecrement(item.value, item.setter)}
-                style={[styles.stepperButton, { backgroundColor: theme.backgroundSecondary }]}
-              >
-                <Feather name="minus" size={20} color={theme.text} />
-              </Pressable>
-              <TextInput
-                style={[styles.stepperInput, { borderColor: theme.inputBorder, color: theme.text, backgroundColor: theme.backgroundDefault }]}
-                value={item.value}
-                onChangeText={item.setter}
-                keyboardType="numeric"
-                textAlign="center"
-              />
-              <Pressable
-                onPress={() => handleIncrement(item.value, item.setter)}
-                style={[styles.stepperButton, { backgroundColor: theme.backgroundSecondary }]}
-              >
-                <Feather name="plus" size={20} color={theme.text} />
-              </Pressable>
-            </View>
+          <View key={index} style={styles.inputRow}>
+            <ThemedText style={styles.inputLabel}>{item.label}</ThemedText>
+            <TextInput
+              style={[styles.input, styles.numericInput, { borderColor: theme.inputBorder, color: theme.text, backgroundColor: theme.backgroundDefault }]}
+              value={item.value}
+              onChangeText={item.setter}
+              keyboardType="numeric"
+              placeholder="0"
+              placeholderTextColor={theme.textSecondary}
+            />
           </View>
         ))}
       </View>
@@ -349,6 +321,21 @@ const styles = StyleSheet.create({
     paddingVertical: Spacing.sm,
     fontSize: Typography.body.fontSize,
     height: 48,
+  },
+  inputRow: {
+    flexDirection: "row",
+    justifyContent: "space-between",
+    alignItems: "center",
+    marginBottom: Spacing.md,
+  },
+  inputLabel: {
+    fontSize: Typography.body.fontSize,
+    fontWeight: "500",
+    flex: 1,
+  },
+  numericInput: {
+    width: 100,
+    textAlign: "center" as const,
   },
   stepperRow: {
     flexDirection: "row",
