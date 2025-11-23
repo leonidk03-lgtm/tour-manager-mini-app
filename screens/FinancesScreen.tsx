@@ -1,0 +1,403 @@
+import { useState } from "react";
+import { View, StyleSheet, Pressable, Modal, TextInput, Alert } from "react-native";
+import { Feather } from "@expo/vector-icons";
+import { ThemedText } from "@/components/ThemedText";
+import { ThemedView } from "@/components/ThemedView";
+import { ScreenScrollView } from "@/components/ScreenScrollView";
+import { ScreenKeyboardAwareScrollView } from "@/components/ScreenKeyboardAwareScrollView";
+import { StatCard } from "@/components/StatCard";
+import { Spacing, BorderRadius } from "@/constants/theme";
+import { useTheme } from "@/hooks/useTheme";
+import { useData, Transaction } from "@/contexts/DataContext";
+import { formatCurrency, calculateAdditionalTransactionsTotal } from "@/utils/calculations";
+
+export default function FinancesScreen() {
+  const { theme } = useTheme();
+  const { transactions, addTransaction, deleteTransaction } = useData();
+  const [activeTab, setActiveTab] = useState<"expense" | "income">("expense");
+  const [showAddModal, setShowAddModal] = useState(false);
+  const [formType, setFormType] = useState<"income" | "expense">("expense");
+  const [formDescription, setFormDescription] = useState("");
+  const [formAmount, setFormAmount] = useState("");
+
+  const totalExpenses = calculateAdditionalTransactionsTotal(transactions, "expense");
+  const totalIncome = calculateAdditionalTransactionsTotal(transactions, "income");
+
+  const filteredTransactions = transactions
+    .filter((t) => t.type === activeTab)
+    .sort((a, b) => b.date.localeCompare(a.date));
+
+  const handleAddTransaction = () => {
+    if (!formDescription || !formAmount) {
+      Alert.alert("Ошибка", "Заполните все поля");
+      return;
+    }
+
+    const amount = parseInt(formAmount, 10);
+    if (isNaN(amount) || amount <= 0) {
+      Alert.alert("Ошибка", "Введите корректную сумму");
+      return;
+    }
+
+    const newTransaction: Transaction = {
+      id: Date.now().toString(),
+      type: formType,
+      amount,
+      description: formDescription,
+      date: new Date().toISOString().split("T")[0],
+    };
+
+    addTransaction(newTransaction);
+    setShowAddModal(false);
+    setFormDescription("");
+    setFormAmount("");
+  };
+
+  const handleDeleteTransaction = (id: string) => {
+    Alert.alert("Удалить запись?", "Это действие нельзя будет отменить", [
+      { text: "Отмена", style: "cancel" },
+      {
+        text: "Удалить",
+        style: "destructive",
+        onPress: () => deleteTransaction(id),
+      },
+    ]);
+  };
+
+  return (
+    <>
+      <ScreenScrollView>
+        <View style={styles.container}>
+          <View style={styles.section}>
+            <View style={styles.statsGrid}>
+              <StatCard title="Доп. расходы" value={formatCurrency(totalExpenses)} color="error" />
+              <StatCard title="Доп. доходы" value={formatCurrency(totalIncome)} color="success" />
+            </View>
+          </View>
+
+          <View style={styles.section}>
+            <View style={styles.tabs}>
+              <Pressable
+                onPress={() => setActiveTab("expense")}
+                style={({ pressed }) => ({ opacity: pressed ? 0.7 : 1, flex: 1 })}
+              >
+                <ThemedView
+                  style={[
+                    styles.tab,
+                    {
+                      backgroundColor:
+                        activeTab === "expense" ? theme.primary : theme.backgroundDefault,
+                      borderColor: theme.border,
+                      borderRadius: BorderRadius.xs,
+                    },
+                  ]}
+                >
+                  <ThemedText
+                    style={[
+                      styles.tabText,
+                      {
+                        color: activeTab === "expense" ? theme.buttonText : theme.text,
+                      },
+                    ]}
+                  >
+                    Расходы
+                  </ThemedText>
+                </ThemedView>
+              </Pressable>
+              <Pressable
+                onPress={() => setActiveTab("income")}
+                style={({ pressed }) => ({ opacity: pressed ? 0.7 : 1, flex: 1 })}
+              >
+                <ThemedView
+                  style={[
+                    styles.tab,
+                    {
+                      backgroundColor:
+                        activeTab === "income" ? theme.primary : theme.backgroundDefault,
+                      borderColor: theme.border,
+                      borderRadius: BorderRadius.xs,
+                    },
+                  ]}
+                >
+                  <ThemedText
+                    style={[
+                      styles.tabText,
+                      {
+                        color: activeTab === "income" ? theme.buttonText : theme.text,
+                      },
+                    ]}
+                  >
+                    Доходы
+                  </ThemedText>
+                </ThemedView>
+              </Pressable>
+            </View>
+          </View>
+
+          {filteredTransactions.length > 0 ? (
+            <View style={styles.section}>
+              <View style={styles.transactionsList}>
+                {filteredTransactions.map((transaction) => (
+                  <ThemedView
+                    key={transaction.id}
+                    style={[
+                      styles.transactionCard,
+                      {
+                        borderColor: theme.border,
+                        borderRadius: BorderRadius.sm,
+                      },
+                    ]}
+                  >
+                    <View style={styles.transactionMain}>
+                      <View style={styles.transactionInfo}>
+                        <ThemedText style={styles.transactionDescription}>
+                          {transaction.description}
+                        </ThemedText>
+                        <ThemedText style={[styles.transactionDate, { color: theme.textSecondary }]}>
+                          {new Date(transaction.date).toLocaleDateString("ru-RU")}
+                        </ThemedText>
+                      </View>
+                      <ThemedText
+                        style={[
+                          styles.transactionAmount,
+                          {
+                            color: transaction.type === "income" ? theme.success : theme.error,
+                          },
+                        ]}
+                      >
+                        {transaction.type === "income" ? "+" : "-"}
+                        {formatCurrency(transaction.amount)}
+                      </ThemedText>
+                    </View>
+                    <Pressable
+                      onPress={() => handleDeleteTransaction(transaction.id)}
+                      style={({ pressed }) => ({
+                        opacity: pressed ? 0.7 : 1,
+                        padding: Spacing.sm,
+                      })}
+                    >
+                      <Feather name="trash-2" size={18} color={theme.error} />
+                    </Pressable>
+                  </ThemedView>
+                ))}
+              </View>
+            </View>
+          ) : (
+            <ThemedView
+              style={[
+                styles.emptyState,
+                {
+                  borderColor: theme.border,
+                  backgroundColor: theme.backgroundSecondary,
+                  borderRadius: BorderRadius.sm,
+                },
+              ]}
+            >
+              <Feather name="inbox" size={48} color={theme.textSecondary} />
+              <ThemedText style={[styles.emptyText, { color: theme.textSecondary }]}>
+                Нет записей
+              </ThemedText>
+            </ThemedView>
+          )}
+        </View>
+      </ScreenScrollView>
+
+      <Pressable
+        style={({ pressed }) => [
+          styles.fab,
+          {
+            backgroundColor: theme.primary,
+            opacity: pressed ? 0.7 : 1,
+          },
+        ]}
+        onPress={() => {
+          setFormType(activeTab);
+          setShowAddModal(true);
+        }}
+      >
+        <Feather name="plus" size={24} color={theme.buttonText} />
+      </Pressable>
+
+      <Modal visible={showAddModal} animationType="slide" presentationStyle="pageSheet">
+        <ThemedView style={[styles.modalContainer, { backgroundColor: theme.backgroundRoot }]}>
+          <View style={[styles.modalHeader, { borderBottomColor: theme.border }]}>
+            <Pressable
+              onPress={() => {
+                setShowAddModal(false);
+                setFormDescription("");
+                setFormAmount("");
+              }}
+              style={styles.modalButton}
+            >
+              <ThemedText style={{ color: theme.primary }}>Отмена</ThemedText>
+            </Pressable>
+            <ThemedText style={styles.modalTitle}>
+              {formType === "expense" ? "Новый расход" : "Новый доход"}
+            </ThemedText>
+            <Pressable onPress={handleAddTransaction} style={styles.modalButton}>
+              <ThemedText style={{ color: theme.primary, fontWeight: "600" }}>Сохранить</ThemedText>
+            </Pressable>
+          </View>
+          <ScreenKeyboardAwareScrollView>
+            <View style={styles.modalContent}>
+              <View style={styles.formGroup}>
+                <ThemedText style={styles.label}>Описание</ThemedText>
+                <TextInput
+                  style={[
+                    styles.input,
+                    {
+                      borderColor: theme.inputBorder,
+                      color: theme.text,
+                      backgroundColor: theme.backgroundDefault,
+                    },
+                  ]}
+                  placeholder="Например: Вильдану"
+                  placeholderTextColor={theme.textSecondary}
+                  value={formDescription}
+                  onChangeText={setFormDescription}
+                />
+              </View>
+              <View style={styles.formGroup}>
+                <ThemedText style={styles.label}>Сумма (₽)</ThemedText>
+                <TextInput
+                  style={[
+                    styles.input,
+                    {
+                      borderColor: theme.inputBorder,
+                      color: theme.text,
+                      backgroundColor: theme.backgroundDefault,
+                    },
+                  ]}
+                  placeholder="0"
+                  placeholderTextColor={theme.textSecondary}
+                  keyboardType="numeric"
+                  value={formAmount}
+                  onChangeText={setFormAmount}
+                />
+              </View>
+            </View>
+          </ScreenKeyboardAwareScrollView>
+        </ThemedView>
+      </Modal>
+    </>
+  );
+}
+
+const styles = StyleSheet.create({
+  container: {
+    gap: Spacing["2xl"],
+  },
+  section: {
+    gap: Spacing.md,
+  },
+  statsGrid: {
+    flexDirection: "row",
+    gap: Spacing.md,
+  },
+  tabs: {
+    flexDirection: "row",
+    gap: Spacing.sm,
+  },
+  tab: {
+    paddingVertical: Spacing.md,
+    paddingHorizontal: Spacing.lg,
+    borderWidth: 1,
+    alignItems: "center",
+  },
+  tabText: {
+    fontSize: 14,
+    fontWeight: "500",
+  },
+  transactionsList: {
+    gap: Spacing.md,
+  },
+  transactionCard: {
+    flexDirection: "row",
+    alignItems: "center",
+    justifyContent: "space-between",
+    padding: Spacing.lg,
+    borderWidth: 1,
+  },
+  transactionMain: {
+    flex: 1,
+    flexDirection: "row",
+    justifyContent: "space-between",
+    alignItems: "center",
+    marginRight: Spacing.md,
+  },
+  transactionInfo: {
+    flex: 1,
+    gap: Spacing.xs,
+  },
+  transactionDescription: {
+    fontSize: 16,
+    fontWeight: "500",
+  },
+  transactionDate: {
+    fontSize: 14,
+  },
+  transactionAmount: {
+    fontSize: 16,
+    fontWeight: "700",
+  },
+  emptyState: {
+    padding: Spacing["3xl"],
+    alignItems: "center",
+    gap: Spacing.lg,
+    borderWidth: 1,
+  },
+  emptyText: {
+    fontSize: 16,
+    textAlign: "center",
+  },
+  fab: {
+    position: "absolute",
+    bottom: 16 + 49 + Spacing.xl,
+    right: 16,
+    width: 56,
+    height: 56,
+    borderRadius: 28,
+    alignItems: "center",
+    justifyContent: "center",
+    shadowColor: "#000",
+    shadowOffset: { width: 0, height: 2 },
+    shadowOpacity: 0.1,
+    shadowRadius: 2,
+    elevation: 4,
+  },
+  modalContainer: {
+    flex: 1,
+  },
+  modalHeader: {
+    flexDirection: "row",
+    justifyContent: "space-between",
+    alignItems: "center",
+    paddingHorizontal: Spacing.lg,
+    paddingVertical: Spacing.md,
+    borderBottomWidth: 1,
+  },
+  modalButton: {
+    minWidth: 70,
+  },
+  modalTitle: {
+    fontSize: 17,
+    fontWeight: "600",
+  },
+  modalContent: {
+    padding: Spacing.lg,
+    gap: Spacing.lg,
+  },
+  formGroup: {
+    gap: Spacing.sm,
+  },
+  label: {
+    fontSize: 14,
+    fontWeight: "500",
+  },
+  input: {
+    borderWidth: 1,
+    borderRadius: BorderRadius.xs,
+    padding: Spacing.md,
+    fontSize: 16,
+  },
+});
