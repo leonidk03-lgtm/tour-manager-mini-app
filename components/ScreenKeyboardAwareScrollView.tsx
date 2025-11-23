@@ -1,4 +1,5 @@
-import { Platform, StyleSheet } from "react-native";
+import { Platform, StyleSheet, View } from "react-native";
+import { LinearGradient } from "expo-linear-gradient";
 import {
   KeyboardAwareScrollView,
   KeyboardAwareScrollViewProps,
@@ -6,7 +7,7 @@ import {
 
 import { useTheme } from "@/hooks/useTheme";
 import { useScreenInsets } from "@/hooks/useScreenInsets";
-import { Spacing } from "@/constants/theme";
+import { Spacing, Gradients } from "@/constants/theme";
 import { ScreenScrollView } from "./ScreenScrollView";
 
 export function ScreenKeyboardAwareScrollView({
@@ -16,8 +17,9 @@ export function ScreenKeyboardAwareScrollView({
   keyboardShouldPersistTaps = "handled",
   ...scrollViewProps
 }: KeyboardAwareScrollViewProps) {
-  const { theme } = useTheme();
+  const { theme, isDark } = useTheme();
   const { paddingTop, paddingBottom, scrollInsetBottom } = useScreenInsets();
+  const gradients = isDark ? Gradients.dark : Gradients.light;
 
   /**
    * KeyboardAwareScrollView isn't compatible with web (it relies on native APIs), so the code falls back to ScreenScrollView on web to avoid runtime errors.
@@ -36,32 +38,40 @@ export function ScreenKeyboardAwareScrollView({
   }
 
   return (
-    <KeyboardAwareScrollView
-      style={[
-        styles.container,
-        { backgroundColor: theme.backgroundRoot },
-        style,
-      ]}
-      contentContainerStyle={[
-        {
-          paddingTop,
-          paddingBottom,
-        },
-        styles.contentContainer,
-        contentContainerStyle,
-      ]}
-      scrollIndicatorInsets={{ bottom: scrollInsetBottom }}
-      keyboardShouldPersistTaps={keyboardShouldPersistTaps}
-      {...scrollViewProps}
-    >
-      {children}
-    </KeyboardAwareScrollView>
+    <View style={styles.wrapper}>
+      <LinearGradient
+        colors={[gradients.backgroundStart, gradients.backgroundEnd]}
+        start={{ x: 0, y: 0 }}
+        end={{ x: 1, y: 1 }}
+        style={StyleSheet.absoluteFill}
+      />
+      <KeyboardAwareScrollView
+        style={[styles.container, style]}
+        contentContainerStyle={[
+          {
+            paddingTop,
+            paddingBottom,
+          },
+          styles.contentContainer,
+          contentContainerStyle,
+        ]}
+        scrollIndicatorInsets={{ bottom: scrollInsetBottom }}
+        keyboardShouldPersistTaps={keyboardShouldPersistTaps}
+        {...scrollViewProps}
+      >
+        {children}
+      </KeyboardAwareScrollView>
+    </View>
   );
 }
 
 const styles = StyleSheet.create({
+  wrapper: {
+    flex: 1,
+  },
   container: {
     flex: 1,
+    backgroundColor: "transparent",
   },
   contentContainer: {
     paddingHorizontal: Spacing.xl,
