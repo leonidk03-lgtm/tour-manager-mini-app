@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useState, useMemo } from "react";
 import { View, StyleSheet, Pressable, TextInput, Modal } from "react-native";
 import { Feather } from "@expo/vector-icons";
 import { ThemedText } from "@/components/ThemedText";
@@ -6,9 +6,10 @@ import { ThemedView } from "@/components/ThemedView";
 import { ScreenScrollView } from "@/components/ScreenScrollView";
 import { ExcursionCard } from "@/components/ExcursionCard";
 import { PeriodSelector } from "@/components/PeriodSelector";
+import { AddExcursionForm } from "@/components/AddExcursionForm";
 import { Spacing, BorderRadius } from "@/constants/theme";
 import { useTheme } from "@/hooks/useTheme";
-import { useData } from "@/contexts/DataContext";
+import { useData, Excursion } from "@/contexts/DataContext";
 import {
   getDateRangeForPeriod,
   filterExcursionsByDateRange,
@@ -19,17 +20,35 @@ import {
 import { useNavigation, NavigationProp } from "@react-navigation/native";
 import { ExcursionsStackParamList } from "@/navigation/ExcursionsStackNavigator";
 
+const parseLocalDate = (dateString: string): Date => {
+  const [year, month, day] = dateString.split('-').map(Number);
+  return new Date(year, month - 1, day);
+};
+
 export default function ExcursionsListScreen() {
   const { theme } = useTheme();
   const navigation = useNavigation<NavigationProp<ExcursionsStackParamList>>();
-  const { excursions, tourTypes, additionalServices } = useData();
+  const { excursions, tourTypes, additionalServices, addExcursion } = useData();
   const [selectedPeriod, setSelectedPeriod] = useState<"day" | "week" | "month">("day");
-  const [referenceDate] = useState(new Date());
+  const [referenceDate, setReferenceDate] = useState(new Date());
   const [searchQuery, setSearchQuery] = useState("");
   const [showAddModal, setShowAddModal] = useState(false);
 
-  const { startDate, endDate } = getDateRangeForPeriod(selectedPeriod, referenceDate);
-  const filteredExcursions = filterExcursionsByDateRange(excursions, startDate, endDate);
+  const handleSaveExcursion = (excursion: Excursion) => {
+    addExcursion(excursion);
+    setReferenceDate(parseLocalDate(excursion.date));
+    setTimeout(() => setShowAddModal(false), 100);
+  };
+
+  const { startDate, endDate } = useMemo(
+    () => getDateRangeForPeriod(selectedPeriod, referenceDate),
+    [selectedPeriod, referenceDate]
+  );
+  
+  const filteredExcursions = useMemo(
+    () => filterExcursionsByDateRange(excursions, startDate, endDate),
+    [excursions, startDate, endDate]
+  );
 
   const searchedExcursions = searchQuery
     ? filteredExcursions.filter((exc) => {
@@ -98,7 +117,7 @@ export default function ExcursionsListScreen() {
                       ]}
                     >
                       <ThemedText style={styles.dateText}>
-                        {new Date(date).toLocaleDateString("ru-RU", {
+                        {parseLocalDate(date).toLocaleDateString("ru-RU", {
                           weekday: "long",
                           year: "numeric",
                           month: "long",
@@ -178,21 +197,12 @@ export default function ExcursionsListScreen() {
       <Modal visible={showAddModal} animationType="slide" presentationStyle="pageSheet">
         <ThemedView style={[styles.modalContainer, { backgroundColor: theme.backgroundRoot }]}>
           <View style={[styles.modalHeader, { borderBottomColor: theme.border }]}>
-            <Pressable onPress={() => setShowAddModal(false)} style={styles.modalButton}>
-              <ThemedText style={{ color: theme.primary }}>Отмена</ThemedText>
-            </Pressable>
             <ThemedText style={styles.modalTitle}>Новая экскурсия</ThemedText>
-            <Pressable onPress={() => setShowAddModal(false)} style={styles.modalButton}>
-              <ThemedText style={{ color: theme.primary }}>Сохранить</ThemedText>
-            </Pressable>
           </View>
-          <ScreenScrollView>
-            <View style={styles.modalContent}>
-              <ThemedText style={[styles.emptyText, { color: theme.textSecondary }]}>
-                Форма добавления экскурсии будет здесь
-              </ThemedText>
-            </View>
-          </ScreenScrollView>
+          <AddExcursionForm
+            onSave={handleSaveExcursion}
+            onCancel={() => setShowAddModal(false)}
+          />
         </ThemedView>
       </Modal>
     </>
@@ -260,21 +270,13 @@ const styles = StyleSheet.create({
     flex: 1,
   },
   modalHeader: {
-    flexDirection: "row",
-    justifyContent: "space-between",
     alignItems: "center",
     paddingHorizontal: Spacing.lg,
     paddingVertical: Spacing.md,
     borderBottomWidth: 1,
   },
-  modalButton: {
-    minWidth: 70,
-  },
   modalTitle: {
     fontSize: 17,
     fontWeight: "600",
-  },
-  modalContent: {
-    padding: Spacing.lg,
   },
 });
