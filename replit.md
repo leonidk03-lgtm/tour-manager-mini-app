@@ -59,7 +59,7 @@ Design style: Telegram-inspired dark theme with flat design (November 2025 updat
 **Core Entities**
 - `TourType`: Excursion types with pricing (fullPrice, discountedPrice), article numbers (articleNumber), and seasonal availability (isEnabled)
 - `Excursion`: Tour instance with participant counts, date/time, expenses, and additional services
-- `AdditionalService`: Extra services that can be added to excursions, with article numbers (articleNumber) and seasonal availability (isEnabled)
+- `AdditionalService`: Extra services that can be added to excursions, with seasonal availability (isEnabled)
 - `Expense`: Individual expense items within an excursion
 - `Transaction`: Standalone income/expense entries
 - `Manager`: User accounts with active/inactive status
@@ -104,7 +104,9 @@ Design style: Telegram-inspired dark theme with flat design (November 2025 updat
 
 **SettingsScreen** - User profile, logout, navigation to TicketPrices and AdminPanel
 
-**TicketPricesScreen** - Full price list management with add/edit/delete capabilities for tour types and additional services, article number assignment, and seasonal enable/disable toggle (e.g., summer-only or winter-only excursions)
+**TicketPricesScreen** - Full price list management with add/edit/delete capabilities for tour types and additional services, article number assignment for tour types, and seasonal enable/disable toggle (e.g., summer-only or winter-only excursions). Additional services do not have article numbers.
+
+**AddExcursionForm** - Form for creating/editing excursions with tour type selection. Only enabled (isEnabled: true) tour types are shown in the picker dropdown. The form validates that selected tour type is enabled before allowing save.
 
 **AdminPanelScreen** - Manage manager accounts (toggle active status, delete managers)
 
