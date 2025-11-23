@@ -15,20 +15,22 @@ export default function FinancesScreen() {
   const { theme } = useTheme();
   const { transactions, addTransaction, deleteTransaction } = useData();
   const [activeTab, setActiveTab] = useState<"expense" | "income">("expense");
+  const [selectedDate, setSelectedDate] = useState(new Date().toISOString().split("T")[0]);
   const [showAddModal, setShowAddModal] = useState(false);
   const [formType, setFormType] = useState<"income" | "expense">("expense");
   const [formDescription, setFormDescription] = useState("");
   const [formAmount, setFormAmount] = useState("");
+  const [formDate, setFormDate] = useState(new Date().toISOString().split("T")[0]);
 
   const totalExpenses = calculateAdditionalTransactionsTotal(transactions, "expense");
   const totalIncome = calculateAdditionalTransactionsTotal(transactions, "income");
 
   const filteredTransactions = transactions
-    .filter((t) => t.type === activeTab)
+    .filter((t) => t.type === activeTab && t.date === selectedDate)
     .sort((a, b) => b.date.localeCompare(a.date));
 
   const handleAddTransaction = () => {
-    if (!formDescription || !formAmount) {
+    if (!formDescription || !formAmount || !formDate) {
       Alert.alert("Ошибка", "Заполните все поля");
       return;
     }
@@ -44,13 +46,15 @@ export default function FinancesScreen() {
       type: formType,
       amount,
       description: formDescription,
-      date: new Date().toISOString().split("T")[0],
+      date: formDate,
     };
 
     addTransaction(newTransaction);
+    setSelectedDate(formDate);
     setShowAddModal(false);
     setFormDescription("");
     setFormAmount("");
+    setFormDate(new Date().toISOString().split("T")[0]);
   };
 
   const handleDeleteTransaction = (id: string) => {
@@ -73,6 +77,32 @@ export default function FinancesScreen() {
               <StatCard title="Доп. расходы" value={formatCurrency(totalExpenses)} color="error" />
               <StatCard title="Доп. доходы" value={formatCurrency(totalIncome)} color="success" />
             </View>
+          </View>
+
+          <View style={styles.section}>
+            <ThemedView
+              style={[
+                styles.dateFilter,
+                {
+                  backgroundColor: theme.backgroundSecondary,
+                  borderRadius: BorderRadius.xs,
+                },
+              ]}
+            >
+              <Feather name="calendar" size={20} color={theme.textSecondary} />
+              <TextInput
+                style={[
+                  styles.dateInput,
+                  {
+                    color: theme.text,
+                  },
+                ]}
+                placeholder="2025-11-23"
+                placeholderTextColor={theme.textSecondary}
+                value={selectedDate}
+                onChangeText={setSelectedDate}
+              />
+            </ThemedView>
           </View>
 
           <View style={styles.section}>
@@ -226,6 +256,7 @@ export default function FinancesScreen() {
                 setShowAddModal(false);
                 setFormDescription("");
                 setFormAmount("");
+                setFormDate(new Date().toISOString().split("T")[0]);
               }}
               style={styles.modalButton}
             >
@@ -275,6 +306,23 @@ export default function FinancesScreen() {
                   onChangeText={setFormAmount}
                 />
               </View>
+              <View style={styles.formGroup}>
+                <ThemedText style={styles.label}>Дата</ThemedText>
+                <TextInput
+                  style={[
+                    styles.input,
+                    {
+                      borderColor: theme.inputBorder,
+                      color: theme.text,
+                      backgroundColor: theme.backgroundDefault,
+                    },
+                  ]}
+                  placeholder="2025-11-23"
+                  placeholderTextColor={theme.textSecondary}
+                  value={formDate}
+                  onChangeText={setFormDate}
+                />
+              </View>
             </View>
           </ScreenKeyboardAwareScrollView>
         </ThemedView>
@@ -293,6 +341,17 @@ const styles = StyleSheet.create({
   statsGrid: {
     flexDirection: "row",
     gap: Spacing.md,
+  },
+  dateFilter: {
+    flexDirection: "row",
+    alignItems: "center",
+    paddingHorizontal: Spacing.lg,
+    paddingVertical: Spacing.md,
+    gap: Spacing.sm,
+  },
+  dateInput: {
+    flex: 1,
+    fontSize: 16,
   },
   tabs: {
     flexDirection: "row",
