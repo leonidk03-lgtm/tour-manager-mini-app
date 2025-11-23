@@ -5,14 +5,11 @@ import { ThemedText } from "@/components/ThemedText";
 import { ThemedView } from "@/components/ThemedView";
 import { ScreenScrollView } from "@/components/ScreenScrollView";
 import { ExcursionCard } from "@/components/ExcursionCard";
-import { PeriodSelector } from "@/components/PeriodSelector";
 import { AddExcursionForm } from "@/components/AddExcursionForm";
 import { Spacing, BorderRadius } from "@/constants/theme";
 import { useTheme } from "@/hooks/useTheme";
 import { useData, Excursion } from "@/contexts/DataContext";
 import {
-  getDateRangeForPeriod,
-  filterExcursionsByDateRange,
   calculateExcursionRevenue,
   calculateExcursionExpenses,
   calculateExcursionProfit,
@@ -29,25 +26,19 @@ export default function ExcursionsListScreen() {
   const { theme } = useTheme();
   const navigation = useNavigation<NavigationProp<ExcursionsStackParamList>>();
   const { excursions, tourTypes, additionalServices, addExcursion } = useData();
-  const [selectedPeriod, setSelectedPeriod] = useState<"day" | "week" | "month">("day");
-  const [referenceDate, setReferenceDate] = useState(new Date());
+  const [selectedDate, setSelectedDate] = useState(new Date().toISOString().split("T")[0]);
   const [searchQuery, setSearchQuery] = useState("");
   const [showAddModal, setShowAddModal] = useState(false);
 
   const handleSaveExcursion = (excursion: Excursion) => {
     addExcursion(excursion);
-    setReferenceDate(parseLocalDate(excursion.date));
+    setSelectedDate(excursion.date);
     setTimeout(() => setShowAddModal(false), 100);
   };
-
-  const { startDate, endDate } = useMemo(
-    () => getDateRangeForPeriod(selectedPeriod, referenceDate),
-    [selectedPeriod, referenceDate]
-  );
   
   const filteredExcursions = useMemo(
-    () => filterExcursionsByDateRange(excursions, startDate, endDate),
-    [excursions, startDate, endDate]
+    () => excursions.filter((exc) => exc.date === selectedDate),
+    [excursions, selectedDate]
   );
 
   const searchedExcursions = searchQuery
@@ -97,7 +88,29 @@ export default function ExcursionsListScreen() {
           </View>
 
           <View style={styles.section}>
-            <PeriodSelector selectedPeriod={selectedPeriod} onPeriodChange={setSelectedPeriod} />
+            <ThemedView
+              style={[
+                styles.dateFilter,
+                {
+                  backgroundColor: theme.backgroundSecondary,
+                  borderRadius: BorderRadius.xs,
+                },
+              ]}
+            >
+              <Feather name="calendar" size={20} color={theme.textSecondary} />
+              <TextInput
+                style={[
+                  styles.dateInput,
+                  {
+                    color: theme.text,
+                  },
+                ]}
+                placeholder="2025-11-23"
+                placeholderTextColor={theme.textSecondary}
+                value={selectedDate}
+                onChangeText={setSelectedDate}
+              />
+            </ThemedView>
           </View>
 
           {Object.keys(groupedByDate).length > 0 ? (
@@ -224,6 +237,17 @@ const styles = StyleSheet.create({
     gap: Spacing.sm,
   },
   searchInput: {
+    flex: 1,
+    fontSize: 16,
+  },
+  dateFilter: {
+    flexDirection: "row",
+    alignItems: "center",
+    paddingHorizontal: Spacing.lg,
+    paddingVertical: Spacing.md,
+    gap: Spacing.sm,
+  },
+  dateInput: {
     flex: 1,
     fontSize: 16,
   },
