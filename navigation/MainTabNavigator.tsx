@@ -1,13 +1,14 @@
 import React from "react";
 import { createBottomTabNavigator } from "@react-navigation/bottom-tabs";
 import { Feather } from "@expo/vector-icons";
-import { BlurView } from "expo-blur";
-import { Platform, StyleSheet } from "react-native";
+import { GlassView } from "expo-glass-effect";
+import { StyleSheet } from "react-native";
 import DashboardStackNavigator from "@/navigation/DashboardStackNavigator";
 import ExcursionsStackNavigator from "@/navigation/ExcursionsStackNavigator";
 import FinancesStackNavigator from "@/navigation/FinancesStackNavigator";
 import SettingsStackNavigator from "@/navigation/SettingsStackNavigator";
 import { useTheme } from "@/hooks/useTheme";
+import { BorderRadius, Spacing } from "@/constants/theme";
 
 export type MainTabParamList = {
   DashboardTab: undefined;
@@ -29,21 +30,31 @@ export default function MainTabNavigator() {
         tabBarInactiveTintColor: theme.tabIconDefault,
         tabBarStyle: {
           position: "absolute",
-          backgroundColor: Platform.select({
-            ios: "transparent",
-            android: theme.backgroundRoot,
-          }),
+          backgroundColor: "transparent",
           borderTopWidth: 0,
           elevation: 0,
+          height: 88,
+          paddingBottom: Spacing.xl,
+          paddingTop: Spacing.sm,
+          marginHorizontal: Spacing.lg,
+          marginBottom: Spacing.md,
+          borderRadius: BorderRadius.xl,
+          overflow: "hidden",
         },
-        tabBarBackground: () =>
-          Platform.OS === "ios" ? (
-            <BlurView
-              intensity={100}
-              tint={isDark ? "dark" : "light"}
-              style={StyleSheet.absoluteFill}
-            />
-          ) : null,
+        tabBarBackground: () => (
+          <GlassView
+            glassEffectStyle={isDark ? "regular" : "clear"}
+            tintColor={isDark ? theme.glassTint : theme.glassMist}
+            style={[
+              StyleSheet.absoluteFill,
+              {
+                borderRadius: BorderRadius.xl,
+                borderWidth: 1,
+                borderColor: theme.glassStroke,
+              },
+            ]}
+          />
+        ),
         headerShown: false,
       }}
     >
@@ -53,7 +64,7 @@ export default function MainTabNavigator() {
         options={{
           title: "Главная",
           tabBarIcon: ({ color, size }) => (
-            <Feather name="home" size={size} color={color} />
+            <Feather name="pie-chart" size={24} color={color} />
           ),
         }}
       />
@@ -63,7 +74,7 @@ export default function MainTabNavigator() {
         options={{
           title: "Экскурсии",
           tabBarIcon: ({ color, size }) => (
-            <Feather name="list" size={size} color={color} />
+            <Feather name="map" size={24} color={color} />
           ),
         }}
       />
@@ -73,7 +84,7 @@ export default function MainTabNavigator() {
         options={{
           title: "Финансы",
           tabBarIcon: ({ color, size }) => (
-            <Feather name="dollar-sign" size={size} color={color} />
+            <Feather name="trending-up" size={24} color={color} />
           ),
         }}
       />
@@ -83,7 +94,7 @@ export default function MainTabNavigator() {
         options={{
           title: "Настройки",
           tabBarIcon: ({ color, size }) => (
-            <Feather name="settings" size={size} color={color} />
+            <Feather name="sliders" size={24} color={color} />
           ),
         }}
       />

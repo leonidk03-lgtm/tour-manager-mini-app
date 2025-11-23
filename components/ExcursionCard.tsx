@@ -1,7 +1,7 @@
 import { View, StyleSheet, Pressable } from "react-native";
 import { Feather } from "@expo/vector-icons";
+import { GlassView } from "expo-glass-effect";
 import { ThemedText } from "@/components/ThemedText";
-import { ThemedView } from "@/components/ThemedView";
 import { Spacing, BorderRadius } from "@/constants/theme";
 import { useTheme } from "@/hooks/useTheme";
 import { Excursion } from "@/contexts/DataContext";
@@ -24,21 +24,37 @@ export function ExcursionCard({
   profit,
   onPress,
 }: ExcursionCardProps) {
-  const { theme } = useTheme();
+  const { theme, isDark } = useTheme();
   const totalParticipants =
     excursion.fullPriceCount + excursion.discountedCount + excursion.freeCount;
 
   return (
-    <Pressable onPress={onPress} style={({ pressed }) => ({ opacity: pressed ? 0.7 : 1 })}>
-      <ThemedView
+    <Pressable onPress={onPress} style={({ pressed }) => ({ opacity: pressed ? 0.95 : 1 })}>
+      <View
         style={[
-          styles.card,
+          styles.cardWrapper,
           {
-            borderColor: theme.border,
-            borderRadius: BorderRadius.sm,
+            borderRadius: BorderRadius.md,
+            shadowColor: theme.glassShadow,
+            shadowOffset: { width: 0, height: 2 },
+            shadowOpacity: 0.1,
+            shadowRadius: 8,
+            elevation: 3,
           },
         ]}
       >
+        <GlassView
+          glassEffectStyle={isDark ? "regular" : "clear"}
+          tintColor={isDark ? theme.glassVeil : theme.glassMist}
+          style={[
+            styles.card,
+            {
+              borderRadius: BorderRadius.md,
+              borderWidth: 1,
+              borderColor: theme.glassStroke,
+            },
+          ]}
+        >
         <View style={styles.header}>
           <View style={styles.headerLeft}>
             <ThemedText style={styles.tourName}>{tourTypeName}</ThemedText>
@@ -91,16 +107,36 @@ export function ExcursionCard({
             </ThemedText>
           </View>
         </View>
-      </ThemedView>
+        <View
+          style={[
+            styles.highlightLine,
+            {
+              backgroundColor: theme.glassHighlight,
+            },
+          ]}
+        />
+      </GlassView>
+      </View>
     </Pressable>
   );
 }
 
 const styles = StyleSheet.create({
+  cardWrapper: {
+    overflow: "visible",
+  },
   card: {
     padding: Spacing.lg,
-    borderWidth: 1,
     gap: Spacing.md,
+    overflow: "hidden",
+  },
+  highlightLine: {
+    position: "absolute",
+    top: 0,
+    left: 0,
+    right: 0,
+    height: 1,
+    opacity: 0.6,
   },
   header: {
     flexDirection: "row",
