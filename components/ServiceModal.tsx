@@ -165,7 +165,7 @@ const styles = StyleSheet.create({
     justifyContent: "flex-end",
   },
   modalWrapper: {
-    maxHeight: "90%",
+    width: "100%",
   },
   modal: {
     borderTopLeftRadius: BorderRadius.lg,
