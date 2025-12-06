@@ -357,7 +357,7 @@ export function AddExcursionForm({ excursion, onSave, onCancel }: AddExcursionFo
               </Pressable>
               <TextInput
                 style={[styles.expenseAmountInput, { borderColor: theme.inputBorder, color: theme.text, backgroundColor: theme.backgroundDefault }]}
-                value={expense.amount.toString()}
+                value={Number(expense.amount) === 0 ? "" : expense.amount.toString()}
                 onChangeText={(value) => updateExpense(expense.id, "amount", value)}
                 keyboardType="numeric"
                 placeholder="Сумма"
