@@ -1,5 +1,5 @@
 import { useState, useEffect } from "react";
-import { View, Modal, StyleSheet, TextInput, Pressable, Alert, Switch, ScrollView } from "react-native";
+import { View, Modal, StyleSheet, TextInput, Pressable, Alert, Switch, KeyboardAvoidingView, Platform, ScrollView } from "react-native";
 import { Feather } from "@expo/vector-icons";
 import { ThemedText } from "@/components/ThemedText";
 import { ThemedView } from "@/components/ThemedView";
@@ -90,7 +90,10 @@ export function TourTypeModal({ visible, onClose, onSave, tourType }: TourTypeMo
 
   return (
     <Modal visible={visible} animationType="slide" transparent onRequestClose={handleClose}>
-      <View style={styles.overlay}>
+      <KeyboardAvoidingView 
+        style={styles.overlay} 
+        behavior={Platform.OS === "ios" ? "padding" : "height"}
+      >
         <ThemedView style={[styles.modal, { backgroundColor: theme.backgroundDefault }]}>
           <View style={styles.header}>
             <ThemedText style={styles.title}>
@@ -101,7 +104,7 @@ export function TourTypeModal({ visible, onClose, onSave, tourType }: TourTypeMo
             </Pressable>
           </View>
 
-          <View style={styles.content}>
+          <ScrollView style={styles.scrollContent} contentContainerStyle={styles.content} keyboardShouldPersistTaps="handled">
             <View style={styles.inputGroup}>
               <ThemedText style={[styles.label, { color: theme.textSecondary }]}>Название</ThemedText>
               <TextInput
@@ -247,7 +250,7 @@ export function TourTypeModal({ visible, onClose, onSave, tourType }: TourTypeMo
                 </View>
               </View>
             ) : null}
-          </View>
+          </ScrollView>
 
           <View style={styles.actions}>
             <Pressable
@@ -266,7 +269,7 @@ export function TourTypeModal({ visible, onClose, onSave, tourType }: TourTypeMo
             </Pressable>
           </View>
         </ThemedView>
-      </View>
+      </KeyboardAvoidingView>
     </Modal>
   );
 }
@@ -294,9 +297,13 @@ const styles = StyleSheet.create({
     fontSize: 20,
     fontWeight: "600",
   },
+  scrollContent: {
+    flex: 1,
+  },
   content: {
     paddingHorizontal: Spacing.lg,
     gap: Spacing.lg,
+    paddingBottom: Spacing.lg,
   },
   inputGroup: {
     gap: Spacing.xs,

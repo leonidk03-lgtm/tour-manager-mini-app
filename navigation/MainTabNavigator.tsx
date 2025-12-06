@@ -9,6 +9,7 @@ import FinancesStackNavigator from "@/navigation/FinancesStackNavigator";
 import DispatchingStackNavigator from "@/navigation/DispatchingStackNavigator";
 import SettingsStackNavigator from "@/navigation/SettingsStackNavigator";
 import { useTheme } from "@/hooks/useTheme";
+import { useAuth } from "@/contexts/AuthContext";
 import { Spacing, BorderRadius } from "@/constants/theme";
 
 export type MainTabParamList = {
@@ -23,10 +24,11 @@ const Tab = createBottomTabNavigator<MainTabParamList>();
 
 export default function MainTabNavigator() {
   const { theme, isDark } = useTheme();
+  const { isAdmin } = useAuth();
 
   return (
     <Tab.Navigator
-      initialRouteName="DashboardTab"
+      initialRouteName={isAdmin ? "DashboardTab" : "ExcursionsTab"}
       screenOptions={{
         tabBarActiveTintColor: theme.tabIconSelected,
         tabBarInactiveTintColor: theme.tabIconDefault,
@@ -61,16 +63,18 @@ export default function MainTabNavigator() {
         headerShown: false,
       }}
     >
-      <Tab.Screen
-        name="DashboardTab"
-        component={DashboardStackNavigator}
-        options={{
-          title: "Главная",
-          tabBarIcon: ({ color, size }) => (
-            <Feather name="pie-chart" size={22} color={color} />
-          ),
-        }}
-      />
+      {isAdmin ? (
+        <Tab.Screen
+          name="DashboardTab"
+          component={DashboardStackNavigator}
+          options={{
+            title: "Главная",
+            tabBarIcon: ({ color, size }) => (
+              <Feather name="pie-chart" size={22} color={color} />
+            ),
+          }}
+        />
+      ) : null}
       <Tab.Screen
         name="ExcursionsTab"
         component={ExcursionsStackNavigator}

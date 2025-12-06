@@ -244,12 +244,16 @@ export default function ExcursionsListScreen() {
                           <ThemedText style={[styles.groupStatText, { color: theme.textSecondary }]}>
                             {stats.totalParticipants} чел.
                           </ThemedText>
-                          <ThemedText style={[styles.groupStatText, { color: theme.success }]}>
-                            +{stats.totalRevenue.toLocaleString()} р.
-                          </ThemedText>
-                          <ThemedText style={[styles.groupStatText, { color: stats.totalProfit >= 0 ? theme.success : theme.error }]}>
-                            = {stats.totalProfit.toLocaleString()} р.
-                          </ThemedText>
+                          {isAdmin ? (
+                            <>
+                              <ThemedText style={[styles.groupStatText, { color: theme.success }]}>
+                                +{stats.totalRevenue.toLocaleString()} р.
+                              </ThemedText>
+                              <ThemedText style={[styles.groupStatText, { color: stats.totalProfit >= 0 ? theme.success : theme.error }]}>
+                                = {stats.totalProfit.toLocaleString()} р.
+                              </ThemedText>
+                            </>
+                          ) : null}
                         </View>
                       </View>
                       <Feather 

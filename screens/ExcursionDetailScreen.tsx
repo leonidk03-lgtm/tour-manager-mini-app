@@ -267,22 +267,24 @@ export default function ExcursionDetailScreen() {
           </View>
         </ThemedView>
 
-        <ThemedView
-          style={[
-            styles.profitCard,
-            {
-              backgroundColor: profit >= 0 ? theme.success : theme.error,
-              borderRadius: BorderRadius.sm,
-            },
-          ]}
-        >
-          <ThemedText style={[styles.profitLabel, { color: "#FFFFFF" }]}>
-            Чистая прибыль
-          </ThemedText>
-          <ThemedText style={[styles.profitValue, { color: "#FFFFFF" }]}>
-            {formatCurrency(profit)}
-          </ThemedText>
-        </ThemedView>
+        {isAdmin ? (
+          <ThemedView
+            style={[
+              styles.profitCard,
+              {
+                backgroundColor: profit >= 0 ? theme.success : theme.error,
+                borderRadius: BorderRadius.sm,
+              },
+            ]}
+          >
+            <ThemedText style={[styles.profitLabel, { color: "#FFFFFF" }]}>
+              Чистая прибыль
+            </ThemedText>
+            <ThemedText style={[styles.profitValue, { color: "#FFFFFF" }]}>
+              {formatCurrency(profit)}
+            </ThemedText>
+          </ThemedView>
+        ) : null}
       </View>
 
       <Modal visible={showEditModal} animationType="slide" presentationStyle="pageSheet">
