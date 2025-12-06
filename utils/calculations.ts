@@ -43,6 +43,13 @@ export function filterExcursionsByDateRange(
   return excursions.filter((exc) => exc.date >= startDate && exc.date <= endDate);
 }
 
+function formatLocalDate(date: Date): string {
+  const year = date.getFullYear();
+  const month = String(date.getMonth() + 1).padStart(2, "0");
+  const day = String(date.getDate()).padStart(2, "0");
+  return `${year}-${month}-${day}`;
+}
+
 export function getDateRangeForPeriod(period: "day" | "week" | "month", referenceDate: Date): {
   startDate: string;
   endDate: string;
@@ -51,7 +58,7 @@ export function getDateRangeForPeriod(period: "day" | "week" | "month", referenc
   date.setHours(0, 0, 0, 0);
 
   if (period === "day") {
-    const dateStr = date.toISOString().split("T")[0];
+    const dateStr = formatLocalDate(date);
     return { startDate: dateStr, endDate: dateStr };
   }
 
@@ -63,16 +70,16 @@ export function getDateRangeForPeriod(period: "day" | "week" | "month", referenc
     const sunday = new Date(monday);
     sunday.setDate(monday.getDate() + 6);
     return {
-      startDate: monday.toISOString().split("T")[0],
-      endDate: sunday.toISOString().split("T")[0],
+      startDate: formatLocalDate(monday),
+      endDate: formatLocalDate(sunday),
     };
   }
 
   const firstDay = new Date(date.getFullYear(), date.getMonth(), 1);
   const lastDay = new Date(date.getFullYear(), date.getMonth() + 1, 0);
   return {
-    startDate: firstDay.toISOString().split("T")[0],
-    endDate: lastDay.toISOString().split("T")[0],
+    startDate: formatLocalDate(firstDay),
+    endDate: formatLocalDate(lastDay),
   };
 }
 
