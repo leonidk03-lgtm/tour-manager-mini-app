@@ -64,6 +64,8 @@ Design style: Telegram-inspired dark theme with flat design (November 2025 updat
 - `Expense`: Individual expense items within an excursion
 - `Transaction`: Standalone income/expense entries
 - `Manager`: User accounts with active/inactive status
+- `RadioGuideKit`: Radio guide equipment bags with bagNumber, receiverCount, status (available/issued/maintenance)
+- `RadioGuideAssignment`: Equipment issue/return records with kitId, guideName, busNumber, receiversIssued, receiversReturned
 
 **Data Relationships**
 - Excursions reference TourTypes by ID
@@ -119,6 +121,13 @@ Design style: Telegram-inspired dark theme with flat design (November 2025 updat
 - Only enabled (isEnabled: true) tour types shown; validates before save
 
 **AdminPanelScreen** - Manage manager accounts (toggle active status, delete managers)
+
+**RadioGuidesScreen** - Radio guide equipment management:
+- View all radio guide bags (kits) with bag number, receiver count, and status
+- Issue equipment to guides (with guide name, optional bus number, receivers issued)
+- Return equipment with tracking of receivers returned vs issued (loss detection)
+- Admins: add/edit/delete kits
+- Managers: can issue and return equipment (not add/edit/delete kits)
 
 ### Platform-Specific Considerations
 
