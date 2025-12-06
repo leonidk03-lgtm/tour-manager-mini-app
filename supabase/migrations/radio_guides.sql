@@ -20,7 +20,7 @@ CREATE TABLE IF NOT EXISTS radio_guide_assignments (
     receivers_returned INTEGER,
     issued_at TIMESTAMPTZ NOT NULL DEFAULT NOW(),
     returned_at TIMESTAMPTZ,
-    manager_id UUID NOT NULL REFERENCES managers(id),
+    manager_id UUID NOT NULL REFERENCES profiles(id),
     manager_name VARCHAR(255) NOT NULL,
     return_notes TEXT,
     created_at TIMESTAMPTZ DEFAULT NOW()
@@ -38,45 +38,37 @@ CREATE INDEX IF NOT EXISTS idx_radio_guide_assignments_returned_at ON radio_guid
 ALTER TABLE radio_guide_kits ENABLE ROW LEVEL SECURITY;
 ALTER TABLE radio_guide_assignments ENABLE ROW LEVEL SECURITY;
 
--- Политики для radio_guide_kits (все авторизованные пользователи могут читать, только админы управляют)
+-- Политики для radio_guide_kits (все авторизованные пользователи могут читать)
 CREATE POLICY "radio_guide_kits_select_all" ON radio_guide_kits
     FOR SELECT TO authenticated USING (true);
 
+-- Админы могут добавлять сумки
 CREATE POLICY "radio_guide_kits_insert_admin" ON radio_guide_kits
     FOR INSERT TO authenticated
     WITH CHECK (
         EXISTS (
-            SELECT 1 FROM managers 
-            WHERE managers.id = auth.uid() 
-            AND managers.role = 'admin'
+            SELECT 1 FROM profiles 
+            WHERE profiles.id = auth.uid() 
+            AND profiles.role = 'admin'
         )
     );
 
-CREATE POLICY "radio_guide_kits_update_admin" ON radio_guide_kits
+-- Все авторизованные пользователи могут обновлять статус (для выдачи/приёма)
+CREATE POLICY "radio_guide_kits_update_all" ON radio_guide_kits
     FOR UPDATE TO authenticated
-    USING (
-        EXISTS (
-            SELECT 1 FROM managers 
-            WHERE managers.id = auth.uid() 
-            AND managers.role = 'admin'
-        )
-    );
+    USING (true)
+    WITH CHECK (true);
 
+-- Только админы могут удалять сумки
 CREATE POLICY "radio_guide_kits_delete_admin" ON radio_guide_kits
     FOR DELETE TO authenticated
     USING (
         EXISTS (
-            SELECT 1 FROM managers 
-            WHERE managers.id = auth.uid() 
-            AND managers.role = 'admin'
+            SELECT 1 FROM profiles 
+            WHERE profiles.id = auth.uid() 
+            AND profiles.role = 'admin'
         )
     );
-
--- Дополнительная политика: любой менеджер может обновлять статус сумки (для выдачи/приёма)
-CREATE POLICY "radio_guide_kits_update_status_managers" ON radio_guide_kits
-    FOR UPDATE TO authenticated
-    USING (true)
-    WITH CHECK (true);
 
 -- Политики для radio_guide_assignments (все могут читать и создавать/обновлять)
 CREATE POLICY "radio_guide_assignments_select_all" ON radio_guide_assignments
