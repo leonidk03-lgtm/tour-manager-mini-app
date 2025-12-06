@@ -66,11 +66,12 @@ export default function FinancesScreen() {
     });
   };
 
-  const totalExpenses = calculateAdditionalTransactionsTotal(transactions, "expense");
-  const totalIncome = calculateAdditionalTransactionsTotal(transactions, "income");
+  const transactionsForSelectedDate = transactions.filter((t) => t.date === selectedDate);
+  const totalExpenses = calculateAdditionalTransactionsTotal(transactionsForSelectedDate, "expense");
+  const totalIncome = calculateAdditionalTransactionsTotal(transactionsForSelectedDate, "income");
 
-  const filteredTransactions = transactions
-    .filter((t) => t.type === activeTab && t.date === selectedDate)
+  const filteredTransactions = transactionsForSelectedDate
+    .filter((t) => t.type === activeTab)
     .sort((a, b) => b.date.localeCompare(a.date));
 
   const handleAddTransaction = () => {
