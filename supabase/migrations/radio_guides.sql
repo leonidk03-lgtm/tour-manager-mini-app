@@ -35,6 +35,19 @@ CREATE INDEX IF NOT EXISTS idx_radio_guide_assignments_issued_at ON radio_guide_
 ALTER TABLE radio_guide_kits ENABLE ROW LEVEL SECURITY;
 ALTER TABLE radio_guide_assignments ENABLE ROW LEVEL SECURITY;
 
+-- Удаляем старые политики если существуют
+DROP POLICY IF EXISTS "radio_guide_kits_select_all" ON radio_guide_kits;
+DROP POLICY IF EXISTS "radio_guide_kits_insert_all" ON radio_guide_kits;
+DROP POLICY IF EXISTS "radio_guide_kits_update_all" ON radio_guide_kits;
+DROP POLICY IF EXISTS "radio_guide_kits_delete_all" ON radio_guide_kits;
+DROP POLICY IF EXISTS "radio_guide_kits_all" ON radio_guide_kits;
+
+DROP POLICY IF EXISTS "radio_guide_assignments_select_all" ON radio_guide_assignments;
+DROP POLICY IF EXISTS "radio_guide_assignments_insert_all" ON radio_guide_assignments;
+DROP POLICY IF EXISTS "radio_guide_assignments_update_all" ON radio_guide_assignments;
+DROP POLICY IF EXISTS "radio_guide_assignments_delete_all" ON radio_guide_assignments;
+DROP POLICY IF EXISTS "radio_guide_assignments_all" ON radio_guide_assignments;
+
 -- Policies - все авторизованные пользователи могут все
 CREATE POLICY "radio_guide_kits_all" ON radio_guide_kits 
     FOR ALL TO authenticated 
