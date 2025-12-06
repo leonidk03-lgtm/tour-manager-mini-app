@@ -1,11 +1,10 @@
 import { useState, useEffect, useRef } from "react";
-import { View, StyleSheet, TextInput, Pressable, Platform, Modal, ScrollView } from "react-native";
+import { View, StyleSheet, TextInput, Pressable, Platform, Modal } from "react-native";
 import { WebView } from "react-native-webview";
 import { Feather } from "@expo/vector-icons";
 import { useSafeAreaInsets } from "react-native-safe-area-context";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import { BlurView } from "expo-blur";
-import { KeyboardAwareScrollView } from "react-native-keyboard-controller";
 import { ThemedText } from "@/components/ThemedText";
 import { ThemedView } from "@/components/ThemedView";
 import { useTheme } from "@/hooks/useTheme";
@@ -23,20 +22,21 @@ export default function DispatchingScreen() {
   const [calcPrevValue, setCalcPrevValue] = useState<number | null>(null);
   const [calcOperation, setCalcOperation] = useState<string | null>(null);
   const [calcWaitingForOperand, setCalcWaitingForOperand] = useState(false);
-  const [isKeyboardVisible, setIsKeyboardVisible] = useState(false);
   const saveTimeoutRef = useRef<ReturnType<typeof setTimeout> | null>(null);
+  const notesRef = useRef(notes);
 
   useEffect(() => {
     loadNotes();
   }, []);
 
   useEffect(() => {
+    notesRef.current = notes;
     if (saveTimeoutRef.current) {
       clearTimeout(saveTimeoutRef.current);
     }
     saveTimeoutRef.current = setTimeout(() => {
-      saveNotes(notes);
-    }, 500);
+      saveNotes(notesRef.current);
+    }, 1000);
 
     return () => {
       if (saveTimeoutRef.current) {
@@ -134,34 +134,31 @@ export default function DispatchingScreen() {
     </Pressable>
   );
 
-  const NotesContent = () => (
-    <View style={[styles.notesContainer, { backgroundColor: theme.backgroundDefault }]}>
-      <View style={styles.notesHeader}>
-        <Feather name="edit-3" size={18} color={theme.textSecondary} />
-        <ThemedText style={[styles.notesTitle, { color: theme.textSecondary }]}>Заметки</ThemedText>
-      </View>
-      <TextInput
-        style={[
-          styles.notesInput,
-          {
-            backgroundColor: theme.backgroundSecondary,
-            color: theme.text,
-          },
-        ]}
-        value={notes}
-        onChangeText={setNotes}
-        onFocus={() => setIsKeyboardVisible(true)}
-        onBlur={() => setIsKeyboardVisible(false)}
-        placeholder="Введите заметки..."
-        placeholderTextColor={theme.textSecondary}
-        multiline
-        textAlignVertical="top"
-      />
-    </View>
-  );
-
   return (
     <ThemedView style={[styles.container, { backgroundColor: theme.backgroundRoot }]}>
+      <View style={[styles.notesSection, { backgroundColor: theme.backgroundDefault }]}>
+        <View style={styles.notesHeader}>
+          <Feather name="edit-3" size={18} color={theme.textSecondary} />
+          <ThemedText style={[styles.notesTitle, { color: theme.textSecondary }]}>Заметки</ThemedText>
+        </View>
+        <TextInput
+          style={[
+            styles.notesInput,
+            {
+              backgroundColor: theme.backgroundSecondary,
+              color: theme.text,
+            },
+          ]}
+          value={notes}
+          onChangeText={setNotes}
+          placeholder="Введите заметки..."
+          placeholderTextColor={theme.textSecondary}
+          multiline
+          textAlignVertical="top"
+          blurOnSubmit={false}
+        />
+      </View>
+
       <View style={styles.webViewContainer}>
         {Platform.OS === "web" ? (
           <View style={[styles.webFallback, { backgroundColor: theme.backgroundDefault }]}>
@@ -181,33 +178,14 @@ export default function DispatchingScreen() {
         )}
       </View>
 
-      {Platform.OS === "web" ? (
-        <ScrollView 
-          style={styles.notesScrollContainer}
-          contentContainerStyle={{ paddingBottom: insets.bottom + 100 }}
-        >
-          <NotesContent />
-        </ScrollView>
-      ) : (
-        <KeyboardAwareScrollView
-          style={styles.notesScrollContainer}
-          contentContainerStyle={{ paddingBottom: insets.bottom + 100 }}
-          keyboardShouldPersistTaps="handled"
-        >
-          <NotesContent />
-        </KeyboardAwareScrollView>
-      )}
-
-      {!isKeyboardVisible ? (
-        <Pressable
-          style={[styles.fab, { bottom: insets.bottom + 90 }]}
-          onPress={() => setShowCalculator(true)}
-        >
-          <BlurView intensity={100} tint="dark" style={styles.fabBlur}>
-            <Feather name="percent" size={24} color="#FFFFFF" />
-          </BlurView>
-        </Pressable>
-      ) : null}
+      <Pressable
+        style={[styles.fab, { bottom: insets.bottom + 90 }]}
+        onPress={() => setShowCalculator(true)}
+      >
+        <BlurView intensity={100} tint="dark" style={styles.fabBlur}>
+          <Feather name="percent" size={24} color="#FFFFFF" />
+        </BlurView>
+      </Pressable>
 
       <Modal
         visible={showCalculator}
@@ -271,10 +249,29 @@ const styles = StyleSheet.create({
   container: {
     flex: 1,
   },
-  webViewContainer: {
-    flex: 1,
+  notesSection: {
+    height: 140,
+    padding: Spacing.md,
     borderBottomWidth: 1,
     borderBottomColor: "rgba(255,255,255,0.1)",
+  },
+  notesHeader: {
+    flexDirection: "row",
+    alignItems: "center",
+    marginBottom: Spacing.sm,
+  },
+  notesTitle: {
+    marginLeft: Spacing.sm,
+    ...Typography.bodySecondary,
+  },
+  notesInput: {
+    flex: 1,
+    borderRadius: BorderRadius.md,
+    padding: Spacing.md,
+    ...Typography.body,
+  },
+  webViewContainer: {
+    flex: 1,
   },
   webView: {
     flex: 1,
@@ -288,29 +285,6 @@ const styles = StyleSheet.create({
   webFallbackText: {
     marginTop: Spacing.md,
     textAlign: "center",
-    ...Typography.body,
-  },
-  notesScrollContainer: {
-    flex: 1,
-  },
-  notesContainer: {
-    flex: 1,
-    padding: Spacing.md,
-  },
-  notesHeader: {
-    flexDirection: "row",
-    alignItems: "center",
-    marginBottom: Spacing.sm,
-  },
-  notesTitle: {
-    marginLeft: Spacing.sm,
-    ...Typography.bodySecondary,
-  },
-  notesInput: {
-    flex: 1,
-    minHeight: 120,
-    borderRadius: BorderRadius.md,
-    padding: Spacing.md,
     ...Typography.body,
   },
   fab: {
