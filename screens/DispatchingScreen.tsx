@@ -1,5 +1,5 @@
 import { useState, useEffect, useRef } from "react";
-import { View, StyleSheet, TextInput, Pressable, Platform, Modal, FlatList, Alert } from "react-native";
+import { View, StyleSheet, TextInput, Pressable, Platform, Modal, FlatList, Alert, Dimensions } from "react-native";
 import { WebView } from "react-native-webview";
 import { Feather } from "@expo/vector-icons";
 import { useSafeAreaInsets } from "react-native-safe-area-context";
@@ -25,6 +25,7 @@ export default function DispatchingScreen() {
   const [notes, setNotes] = useState<Note[]>([]);
   const [currentNote, setCurrentNote] = useState("");
   const [showNotesList, setShowNotesList] = useState(false);
+  const [showFullscreenNote, setShowFullscreenNote] = useState(false);
   const [editingNote, setEditingNote] = useState<Note | null>(null);
   const [showCalculator, setShowCalculator] = useState(false);
   const [calcDisplay, setCalcDisplay] = useState("0");
@@ -85,6 +86,7 @@ export default function DispatchingScreen() {
     setNotes(updatedNotes);
     saveNotes(updatedNotes);
     setCurrentNote("");
+    setShowFullscreenNote(false);
   };
 
   const handleDeleteNote = (noteId: string) => {
@@ -111,6 +113,19 @@ export default function DispatchingScreen() {
   const handleCancelEdit = () => {
     setEditingNote(null);
     setCurrentNote("");
+    setShowFullscreenNote(false);
+  };
+
+  const formatCalcDisplay = (value: string): string => {
+    const num = parseFloat(value);
+    if (isNaN(num)) return value;
+    if (Number.isInteger(num) && value.length > 12) {
+      return num.toExponential(6);
+    }
+    if (value.length > 15) {
+      return num.toPrecision(10);
+    }
+    return value;
   };
 
   const handleCalcDigit = (digit: string) => {
@@ -118,7 +133,9 @@ export default function DispatchingScreen() {
       setCalcDisplay(digit);
       setCalcWaitingForOperand(false);
     } else {
-      setCalcDisplay(calcDisplay === "0" ? digit : calcDisplay + digit);
+      if (calcDisplay.length < 15) {
+        setCalcDisplay(calcDisplay === "0" ? digit : calcDisplay + digit);
+      }
     }
   };
 
@@ -211,7 +228,13 @@ export default function DispatchingScreen() {
           </View>
           <View style={styles.notesHeaderRight}>
             <Pressable
-              style={[styles.notesListButton, { backgroundColor: theme.backgroundSecondary }]}
+              style={[styles.headerButton, { backgroundColor: theme.backgroundSecondary }]}
+              onPress={() => setShowFullscreenNote(true)}
+            >
+              <Feather name="maximize-2" size={18} color={theme.text} />
+            </Pressable>
+            <Pressable
+              style={[styles.headerButton, { backgroundColor: theme.backgroundSecondary }]}
               onPress={() => setShowNotesList(true)}
             >
               <Feather name="list" size={18} color={theme.text} />
@@ -289,6 +312,61 @@ export default function DispatchingScreen() {
       </Pressable>
 
       <Modal
+        visible={showFullscreenNote}
+        animationType="slide"
+        onRequestClose={() => setShowFullscreenNote(false)}
+      >
+        <ThemedView style={[styles.fullscreenContainer, { paddingTop: insets.top, paddingBottom: insets.bottom }]}>
+          <View style={styles.fullscreenHeader}>
+            <Pressable onPress={() => setShowFullscreenNote(false)}>
+              <Feather name="x" size={24} color={theme.text} />
+            </Pressable>
+            <ThemedText style={styles.fullscreenTitle}>
+              {editingNote ? "Редактирование" : "Новая заметка"}
+            </ThemedText>
+            <Pressable onPress={handleSaveNote}>
+              <Feather name="check" size={24} color={theme.primary} />
+            </Pressable>
+          </View>
+          <TextInput
+            style={[
+              styles.fullscreenInput,
+              {
+                backgroundColor: theme.backgroundSecondary,
+                color: theme.text,
+              },
+            ]}
+            value={currentNote}
+            onChangeText={setCurrentNote}
+            placeholder="Введите текст заметки..."
+            placeholderTextColor={theme.textSecondary}
+            multiline
+            textAlignVertical="top"
+            autoFocus
+          />
+          <View style={styles.fullscreenActions}>
+            {editingNote ? (
+              <Pressable
+                style={[styles.cancelButton, { backgroundColor: theme.backgroundSecondary, flex: 1 }]}
+                onPress={handleCancelEdit}
+              >
+                <ThemedText style={{ color: theme.text }}>Отмена</ThemedText>
+              </Pressable>
+            ) : null}
+            <Pressable
+              style={[styles.saveButton, { backgroundColor: theme.primary, flex: 1 }]}
+              onPress={handleSaveNote}
+            >
+              <Feather name="save" size={16} color="#FFFFFF" />
+              <ThemedText style={styles.saveButtonText}>
+                {editingNote ? "Обновить" : "Сохранить"}
+              </ThemedText>
+            </Pressable>
+          </View>
+        </ThemedView>
+      </Modal>
+
+      <Modal
         visible={showNotesList}
         transparent
         animationType="slide"
@@ -331,7 +409,7 @@ export default function DispatchingScreen() {
         animationType="fade"
         onRequestClose={() => setShowCalculator(false)}
       >
-        <Pressable style={styles.modalBackdrop} onPress={() => setShowCalculator(false)}>
+        <Pressable style={styles.calcModalBackdrop} onPress={() => setShowCalculator(false)}>
           <Pressable style={[styles.calculatorContainer, { backgroundColor: theme.backgroundDefault }]} onPress={(e) => e.stopPropagation()}>
             <View style={styles.calcHeader}>
               <ThemedText style={styles.calcTitle}>Калькулятор</ThemedText>
@@ -341,8 +419,8 @@ export default function DispatchingScreen() {
             </View>
 
             <View style={[styles.calcDisplay, { backgroundColor: theme.backgroundSecondary }]}>
-              <ThemedText style={styles.calcDisplayText} numberOfLines={1} adjustsFontSizeToFit>
-                {calcDisplay}
+              <ThemedText style={styles.calcDisplayText} numberOfLines={1} adjustsFontSizeToFit minimumFontScale={0.5}>
+                {formatCalcDisplay(calcDisplay)}
               </ThemedText>
             </View>
 
@@ -388,7 +466,7 @@ const styles = StyleSheet.create({
     flex: 1,
   },
   notesSection: {
-    height: 220,
+    height: 280,
     padding: Spacing.md,
     borderBottomWidth: 1,
     borderBottomColor: "rgba(255,255,255,0.1)",
@@ -406,12 +484,13 @@ const styles = StyleSheet.create({
   notesHeaderRight: {
     flexDirection: "row",
     alignItems: "center",
+    gap: Spacing.sm,
   },
   notesTitle: {
     marginLeft: Spacing.sm,
     ...Typography.bodySecondary,
   },
-  notesListButton: {
+  headerButton: {
     flexDirection: "row",
     alignItems: "center",
     paddingHorizontal: Spacing.md,
@@ -446,6 +525,7 @@ const styles = StyleSheet.create({
   saveButton: {
     flexDirection: "row",
     alignItems: "center",
+    justifyContent: "center",
     paddingHorizontal: Spacing.lg,
     paddingVertical: Spacing.sm,
     borderRadius: BorderRadius.md,
@@ -456,6 +536,8 @@ const styles = StyleSheet.create({
     fontWeight: "600",
   },
   cancelButton: {
+    alignItems: "center",
+    justifyContent: "center",
     paddingHorizontal: Spacing.lg,
     paddingVertical: Spacing.sm,
     borderRadius: BorderRadius.md,
@@ -490,10 +572,41 @@ const styles = StyleSheet.create({
     justifyContent: "center",
     alignItems: "center",
   },
+  fullscreenContainer: {
+    flex: 1,
+    padding: Spacing.lg,
+  },
+  fullscreenHeader: {
+    flexDirection: "row",
+    justifyContent: "space-between",
+    alignItems: "center",
+    marginBottom: Spacing.lg,
+  },
+  fullscreenTitle: {
+    ...Typography.h3,
+  },
+  fullscreenInput: {
+    flex: 1,
+    borderRadius: BorderRadius.md,
+    padding: Spacing.lg,
+    ...Typography.body,
+    fontSize: 18,
+  },
+  fullscreenActions: {
+    flexDirection: "row",
+    marginTop: Spacing.lg,
+    gap: Spacing.md,
+  },
   modalBackdrop: {
     flex: 1,
     backgroundColor: "rgba(0,0,0,0.6)",
     justifyContent: "flex-end",
+  },
+  calcModalBackdrop: {
+    flex: 1,
+    backgroundColor: "rgba(0,0,0,0.6)",
+    justifyContent: "center",
+    alignItems: "center",
   },
   notesListContainer: {
     height: "70%",
@@ -542,12 +655,9 @@ const styles = StyleSheet.create({
     ...Typography.body,
   },
   calculatorContainer: {
-    width: 320,
+    width: 300,
     borderRadius: BorderRadius.xl,
     padding: Spacing.lg,
-    alignSelf: "center",
-    marginBottom: "auto",
-    marginTop: "auto",
   },
   calcHeader: {
     flexDirection: "row",
@@ -559,21 +669,23 @@ const styles = StyleSheet.create({
     ...Typography.h3,
   },
   calcDisplay: {
-    padding: Spacing.lg,
+    padding: Spacing.md,
     borderRadius: BorderRadius.md,
     marginBottom: Spacing.md,
     alignItems: "flex-end",
+    minHeight: 70,
+    justifyContent: "center",
   },
   calcDisplayText: {
-    fontSize: 36,
+    fontSize: 32,
     fontWeight: "600",
   },
   calcGrid: {
-    gap: Spacing.sm,
+    gap: Spacing.xs,
   },
   calcRow: {
     flexDirection: "row",
-    gap: Spacing.sm,
+    gap: Spacing.xs,
   },
   calcButton: {
     flex: 1,
@@ -581,9 +693,10 @@ const styles = StyleSheet.create({
     borderRadius: BorderRadius.md,
     justifyContent: "center",
     alignItems: "center",
+    maxHeight: 60,
   },
   calcButtonText: {
-    fontSize: 24,
+    fontSize: 22,
     fontWeight: "600",
   },
 });
