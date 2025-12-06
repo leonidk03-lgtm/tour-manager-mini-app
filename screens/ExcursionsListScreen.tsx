@@ -31,6 +31,7 @@ export default function ExcursionsListScreen() {
   const [searchQuery, setSearchQuery] = useState("");
   const [showAddModal, setShowAddModal] = useState(false);
   const [showDatePicker, setShowDatePicker] = useState(false);
+  const [expandedGroups, setExpandedGroups] = useState<Set<string>>(new Set());
   
   const dateValue = parseLocalDate(selectedDate);
   
@@ -43,6 +44,7 @@ export default function ExcursionsListScreen() {
       const month = String(date.getMonth() + 1).padStart(2, "0");
       const day = String(date.getDate()).padStart(2, "0");
       setSelectedDate(`${year}-${month}-${day}`);
+      setExpandedGroups(new Set());
     }
   };
   
@@ -61,6 +63,18 @@ export default function ExcursionsListScreen() {
     setTimeout(() => setShowAddModal(false), 100);
   };
   
+  const toggleGroup = (tourTypeId: string) => {
+    setExpandedGroups((prev) => {
+      const next = new Set(prev);
+      if (next.has(tourTypeId)) {
+        next.delete(tourTypeId);
+      } else {
+        next.add(tourTypeId);
+      }
+      return next;
+    });
+  };
+  
   const filteredExcursions = useMemo(
     () => excursions.filter((exc) => exc.date === selectedDate),
     [excursions, selectedDate]
@@ -73,14 +87,33 @@ export default function ExcursionsListScreen() {
       })
     : filteredExcursions;
 
-  const groupedByDate = searchedExcursions.reduce((groups, exc) => {
-    const date = exc.date;
-    if (!groups[date]) {
-      groups[date] = [];
-    }
-    groups[date].push(exc);
+  const groupedByTourType = useMemo(() => {
+    const groups: Record<string, Excursion[]> = {};
+    searchedExcursions.forEach((exc) => {
+      if (!groups[exc.tourTypeId]) {
+        groups[exc.tourTypeId] = [];
+      }
+      groups[exc.tourTypeId].push(exc);
+    });
     return groups;
-  }, {} as Record<string, typeof searchedExcursions>);
+  }, [searchedExcursions]);
+  
+  const getGroupStats = (excursionList: Excursion[]) => {
+    let totalRevenue = 0;
+    let totalExpenses = 0;
+    let totalParticipants = 0;
+    
+    excursionList.forEach((exc) => {
+      const tourType = tourTypes.find((t) => t.id === exc.tourTypeId);
+      if (tourType) {
+        totalRevenue += calculateExcursionRevenue(exc, tourType, additionalServices);
+        totalExpenses += calculateExcursionExpenses(exc);
+        totalParticipants += exc.fullPriceCount + exc.discountedCount + exc.freeCount + exc.tourPackageCount;
+      }
+    });
+    
+    return { totalRevenue, totalExpenses, totalProfit: totalRevenue - totalExpenses, totalParticipants };
+  };
 
   return (
     <>
@@ -166,66 +199,91 @@ export default function ExcursionsListScreen() {
             ) : null}
           </View>
 
-          {Object.keys(groupedByDate).length > 0 ? (
+          {Object.keys(groupedByTourType).length > 0 ? (
             <View style={styles.section}>
-              {Object.keys(groupedByDate)
-                .sort()
-                .reverse()
-                .map((date) => (
-                  <View key={date} style={styles.dateGroup}>
-                    <ThemedView
+              {Object.keys(groupedByTourType).map((tourTypeId) => {
+                const tourType = tourTypes.find((t) => t.id === tourTypeId);
+                if (!tourType) return null;
+                
+                const excursionList = groupedByTourType[tourTypeId];
+                const isExpanded = expandedGroups.has(tourTypeId);
+                const stats = getGroupStats(excursionList);
+                const count = excursionList.length;
+                
+                return (
+                  <View key={tourTypeId} style={styles.tourGroup}>
+                    <Pressable
+                      onPress={() => toggleGroup(tourTypeId)}
                       style={[
-                        styles.dateHeader,
+                        styles.groupHeader,
                         {
                           backgroundColor: theme.backgroundSecondary,
-                          borderRadius: BorderRadius.xs,
+                          borderRadius: BorderRadius.sm,
                         },
                       ]}
                     >
-                      <ThemedText style={styles.dateText}>
-                        {parseLocalDate(date).toLocaleDateString("ru-RU", {
-                          weekday: "long",
-                          year: "numeric",
-                          month: "long",
-                          day: "numeric",
-                        })}
-                      </ThemedText>
-                    </ThemedView>
-                    <View style={styles.excursionsList}>
-                      {groupedByDate[date].map((excursion) => {
-                        const tourType = tourTypes.find((t) => t.id === excursion.tourTypeId);
-                        if (!tourType) return null;
-                        const revenue = calculateExcursionRevenue(
-                          excursion,
-                          tourType,
-                          additionalServices
-                        );
-                        const expenses = calculateExcursionExpenses(excursion);
-                        const profit = calculateExcursionProfit(
-                          excursion,
-                          tourType,
-                          additionalServices
-                        );
+                      <View style={styles.groupHeaderContent}>
+                        <View style={styles.groupTitleRow}>
+                          <ThemedText style={styles.groupTitle}>{tourType.name}</ThemedText>
+                          <View style={[styles.countBadge, { backgroundColor: theme.primary }]}>
+                            <ThemedText style={styles.countText}>{count}</ThemedText>
+                          </View>
+                        </View>
+                        <View style={styles.groupStats}>
+                          <ThemedText style={[styles.groupStatText, { color: theme.textSecondary }]}>
+                            {stats.totalParticipants} чел.
+                          </ThemedText>
+                          <ThemedText style={[styles.groupStatText, { color: theme.success }]}>
+                            +{stats.totalRevenue.toLocaleString()} р.
+                          </ThemedText>
+                          <ThemedText style={[styles.groupStatText, { color: stats.totalProfit >= 0 ? theme.success : theme.error }]}>
+                            = {stats.totalProfit.toLocaleString()} р.
+                          </ThemedText>
+                        </View>
+                      </View>
+                      <Feather 
+                        name={isExpanded ? "chevron-up" : "chevron-down"} 
+                        size={24} 
+                        color={theme.textSecondary} 
+                      />
+                    </Pressable>
+                    
+                    {isExpanded ? (
+                      <View style={styles.excursionsList}>
+                        {excursionList.map((excursion) => {
+                          const revenue = calculateExcursionRevenue(
+                            excursion,
+                            tourType,
+                            additionalServices
+                          );
+                          const expenses = calculateExcursionExpenses(excursion);
+                          const profit = calculateExcursionProfit(
+                            excursion,
+                            tourType,
+                            additionalServices
+                          );
 
-                        return (
-                          <ExcursionCard
-                            key={excursion.id}
-                            excursion={excursion}
-                            tourTypeName={tourType.name}
-                            revenue={revenue}
-                            expenses={expenses}
-                            profit={profit}
-                            onPress={() => {
-                              navigation.navigate("ExcursionDetail", {
-                                excursionId: excursion.id,
-                              });
-                            }}
-                          />
-                        );
-                      })}
-                    </View>
+                          return (
+                            <ExcursionCard
+                              key={excursion.id}
+                              excursion={excursion}
+                              tourTypeName={tourType.name}
+                              revenue={revenue}
+                              expenses={expenses}
+                              profit={profit}
+                              onPress={() => {
+                                navigation.navigate("ExcursionDetail", {
+                                  excursionId: excursion.id,
+                                });
+                              }}
+                            />
+                          );
+                        })}
+                      </View>
+                    ) : null}
                   </View>
-                ))}
+                );
+              })}
             </View>
           ) : (
             <ThemedView
@@ -376,5 +434,45 @@ const styles = StyleSheet.create({
     justifyContent: "space-between",
     alignItems: "center",
     marginBottom: Spacing.md,
+  },
+  tourGroup: {
+    gap: Spacing.sm,
+  },
+  groupHeader: {
+    flexDirection: "row",
+    alignItems: "center",
+    padding: Spacing.lg,
+  },
+  groupHeaderContent: {
+    flex: 1,
+    gap: Spacing.xs,
+  },
+  groupTitleRow: {
+    flexDirection: "row",
+    alignItems: "center",
+    gap: Spacing.sm,
+  },
+  groupTitle: {
+    fontSize: 16,
+    fontWeight: "600",
+  },
+  countBadge: {
+    paddingHorizontal: Spacing.sm,
+    paddingVertical: 2,
+    borderRadius: 12,
+    minWidth: 24,
+    alignItems: "center",
+  },
+  countText: {
+    fontSize: 12,
+    fontWeight: "600",
+    color: "#fff",
+  },
+  groupStats: {
+    flexDirection: "row",
+    gap: Spacing.md,
+  },
+  groupStatText: {
+    fontSize: 13,
   },
 });
