@@ -1,6 +1,7 @@
 import { useState } from "react";
-import { View, StyleSheet, Pressable, Modal, TextInput, Alert } from "react-native";
+import { View, StyleSheet, Pressable, Modal, TextInput, Alert, Platform } from "react-native";
 import { Feather } from "@expo/vector-icons";
+import DateTimePicker from "@react-native-community/datetimepicker";
 import { ThemedText } from "@/components/ThemedText";
 import { ThemedView } from "@/components/ThemedView";
 import { ScreenScrollView } from "@/components/ScreenScrollView";
@@ -10,6 +11,11 @@ import { Spacing, BorderRadius } from "@/constants/theme";
 import { useTheme } from "@/hooks/useTheme";
 import { useData, Transaction } from "@/contexts/DataContext";
 import { formatCurrency, calculateAdditionalTransactionsTotal } from "@/utils/calculations";
+
+const parseLocalDate = (dateString: string): Date => {
+  const [year, month, day] = dateString.split('-').map(Number);
+  return new Date(year, month - 1, day);
+};
 
 export default function FinancesScreen() {
   const { theme } = useTheme();
@@ -21,6 +27,44 @@ export default function FinancesScreen() {
   const [formDescription, setFormDescription] = useState("");
   const [formAmount, setFormAmount] = useState("");
   const [formDate, setFormDate] = useState(new Date().toISOString().split("T")[0]);
+  const [showFilterDatePicker, setShowFilterDatePicker] = useState(false);
+  const [showFormDatePicker, setShowFormDatePicker] = useState(false);
+  
+  const filterDateValue = parseLocalDate(selectedDate);
+  const formDateValue = parseLocalDate(formDate);
+  
+  const handleFilterDateChange = (event: any, date?: Date) => {
+    if (Platform.OS === "android") {
+      setShowFilterDatePicker(false);
+    }
+    if (date) {
+      const year = date.getFullYear();
+      const month = String(date.getMonth() + 1).padStart(2, "0");
+      const day = String(date.getDate()).padStart(2, "0");
+      setSelectedDate(`${year}-${month}-${day}`);
+    }
+  };
+  
+  const handleFormDateChange = (event: any, date?: Date) => {
+    if (Platform.OS === "android") {
+      setShowFormDatePicker(false);
+    }
+    if (date) {
+      const year = date.getFullYear();
+      const month = String(date.getMonth() + 1).padStart(2, "0");
+      const day = String(date.getDate()).padStart(2, "0");
+      setFormDate(`${year}-${month}-${day}`);
+    }
+  };
+  
+  const formatDisplayDate = (dateStr: string) => {
+    const d = parseLocalDate(dateStr);
+    return d.toLocaleDateString("ru-RU", {
+      day: "2-digit",
+      month: "2-digit",
+      year: "numeric",
+    });
+  };
 
   const totalExpenses = calculateAdditionalTransactionsTotal(transactions, "expense");
   const totalIncome = calculateAdditionalTransactionsTotal(transactions, "income");
@@ -80,7 +124,8 @@ export default function FinancesScreen() {
           </View>
 
           <View style={styles.section}>
-            <ThemedView
+            <Pressable
+              onPress={() => setShowFilterDatePicker(true)}
               style={[
                 styles.dateFilter,
                 {
@@ -90,19 +135,46 @@ export default function FinancesScreen() {
               ]}
             >
               <Feather name="calendar" size={20} color={theme.textSecondary} />
-              <TextInput
-                style={[
-                  styles.dateInput,
-                  {
-                    color: theme.text,
-                  },
-                ]}
-                placeholder="2025-11-23"
-                placeholderTextColor={theme.textSecondary}
-                value={selectedDate}
-                onChangeText={setSelectedDate}
-              />
-            </ThemedView>
+              <ThemedText style={[styles.dateInput, { color: theme.text }]}>
+                {formatDisplayDate(selectedDate)}
+              </ThemedText>
+            </Pressable>
+            {showFilterDatePicker ? (
+              Platform.OS === "ios" ? (
+                <Modal
+                  visible={showFilterDatePicker}
+                  transparent
+                  animationType="fade"
+                  onRequestClose={() => setShowFilterDatePicker(false)}
+                >
+                  <View style={styles.dateModalOverlay}>
+                    <Pressable style={styles.dateModalBackdrop} onPress={() => setShowFilterDatePicker(false)} />
+                    <ThemedView style={[styles.datePickerModal, { backgroundColor: theme.backgroundDefault }]}>
+                      <View style={styles.datePickerHeader}>
+                        <ThemedText style={styles.datePickerTitle}>Выберите дату</ThemedText>
+                        <Pressable onPress={() => setShowFilterDatePicker(false)}>
+                          <ThemedText style={{ color: theme.primary, fontWeight: "600" }}>Готово</ThemedText>
+                        </Pressable>
+                      </View>
+                      <DateTimePicker
+                        value={filterDateValue}
+                        mode="date"
+                        display="spinner"
+                        onChange={handleFilterDateChange}
+                        locale="ru"
+                      />
+                    </ThemedView>
+                  </View>
+                </Modal>
+              ) : (
+                <DateTimePicker
+                  value={filterDateValue}
+                  mode="date"
+                  display="default"
+                  onChange={handleFilterDateChange}
+                />
+              )
+            ) : null}
           </View>
 
           <View style={styles.section}>
@@ -308,20 +380,57 @@ export default function FinancesScreen() {
               </View>
               <View style={styles.formGroup}>
                 <ThemedText style={styles.label}>Дата</ThemedText>
-                <TextInput
+                <Pressable
+                  onPress={() => setShowFormDatePicker(true)}
                   style={[
-                    styles.input,
+                    styles.dateButton,
                     {
                       borderColor: theme.inputBorder,
-                      color: theme.text,
                       backgroundColor: theme.backgroundDefault,
                     },
                   ]}
-                  placeholder="2025-11-23"
-                  placeholderTextColor={theme.textSecondary}
-                  value={formDate}
-                  onChangeText={setFormDate}
-                />
+                >
+                  <Feather name="calendar" size={20} color={theme.textSecondary} style={{ marginRight: Spacing.sm }} />
+                  <ThemedText style={{ color: theme.text, fontSize: 16 }}>
+                    {formatDisplayDate(formDate)}
+                  </ThemedText>
+                </Pressable>
+                {showFormDatePicker ? (
+                  Platform.OS === "ios" ? (
+                    <Modal
+                      visible={showFormDatePicker}
+                      transparent
+                      animationType="fade"
+                      onRequestClose={() => setShowFormDatePicker(false)}
+                    >
+                      <View style={styles.dateModalOverlay}>
+                        <Pressable style={styles.dateModalBackdrop} onPress={() => setShowFormDatePicker(false)} />
+                        <ThemedView style={[styles.datePickerModal, { backgroundColor: theme.backgroundDefault }]}>
+                          <View style={styles.datePickerHeader}>
+                            <ThemedText style={styles.datePickerTitle}>Выберите дату</ThemedText>
+                            <Pressable onPress={() => setShowFormDatePicker(false)}>
+                              <ThemedText style={{ color: theme.primary, fontWeight: "600" }}>Готово</ThemedText>
+                            </Pressable>
+                          </View>
+                          <DateTimePicker
+                            value={formDateValue}
+                            mode="date"
+                            display="spinner"
+                            onChange={handleFormDateChange}
+                            locale="ru"
+                          />
+                        </ThemedView>
+                      </View>
+                    </Modal>
+                  ) : (
+                    <DateTimePicker
+                      value={formDateValue}
+                      mode="date"
+                      display="default"
+                      onChange={handleFormDateChange}
+                    />
+                  )
+                ) : null}
               </View>
             </View>
           </ScreenKeyboardAwareScrollView>
@@ -458,5 +567,37 @@ const styles = StyleSheet.create({
     borderRadius: BorderRadius.xs,
     padding: Spacing.md,
     fontSize: 16,
+  },
+  dateButton: {
+    flexDirection: "row",
+    alignItems: "center",
+    borderWidth: 1,
+    borderRadius: BorderRadius.xs,
+    padding: Spacing.md,
+  },
+  dateModalOverlay: {
+    flex: 1,
+    justifyContent: "center",
+    alignItems: "center",
+  },
+  dateModalBackdrop: {
+    ...StyleSheet.absoluteFillObject,
+    backgroundColor: "rgba(0,0,0,0.5)",
+  },
+  datePickerModal: {
+    borderRadius: BorderRadius.md,
+    padding: Spacing.lg,
+    width: "90%",
+    maxWidth: 360,
+  },
+  datePickerHeader: {
+    flexDirection: "row",
+    justifyContent: "space-between",
+    alignItems: "center",
+    marginBottom: Spacing.md,
+  },
+  datePickerTitle: {
+    fontSize: 17,
+    fontWeight: "600",
   },
 });

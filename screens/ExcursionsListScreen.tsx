@@ -1,6 +1,7 @@
 import { useState, useMemo } from "react";
-import { View, StyleSheet, Pressable, TextInput, Modal } from "react-native";
+import { View, StyleSheet, Pressable, TextInput, Modal, Platform } from "react-native";
 import { Feather } from "@expo/vector-icons";
+import DateTimePicker from "@react-native-community/datetimepicker";
 import { ThemedText } from "@/components/ThemedText";
 import { ThemedView } from "@/components/ThemedView";
 import { ScreenScrollView } from "@/components/ScreenScrollView";
@@ -29,6 +30,30 @@ export default function ExcursionsListScreen() {
   const [selectedDate, setSelectedDate] = useState(new Date().toISOString().split("T")[0]);
   const [searchQuery, setSearchQuery] = useState("");
   const [showAddModal, setShowAddModal] = useState(false);
+  const [showDatePicker, setShowDatePicker] = useState(false);
+  
+  const dateValue = parseLocalDate(selectedDate);
+  
+  const handleDateChange = (event: any, date?: Date) => {
+    if (Platform.OS === "android") {
+      setShowDatePicker(false);
+    }
+    if (date) {
+      const year = date.getFullYear();
+      const month = String(date.getMonth() + 1).padStart(2, "0");
+      const day = String(date.getDate()).padStart(2, "0");
+      setSelectedDate(`${year}-${month}-${day}`);
+    }
+  };
+  
+  const formatDisplayDate = (dateStr: string) => {
+    const d = parseLocalDate(dateStr);
+    return d.toLocaleDateString("ru-RU", {
+      day: "2-digit",
+      month: "2-digit",
+      year: "numeric",
+    });
+  };
 
   const handleSaveExcursion = (excursion: Excursion) => {
     addExcursion(excursion);
@@ -88,7 +113,8 @@ export default function ExcursionsListScreen() {
           </View>
 
           <View style={styles.section}>
-            <ThemedView
+            <Pressable
+              onPress={() => setShowDatePicker(true)}
               style={[
                 styles.dateFilter,
                 {
@@ -98,19 +124,46 @@ export default function ExcursionsListScreen() {
               ]}
             >
               <Feather name="calendar" size={20} color={theme.textSecondary} />
-              <TextInput
-                style={[
-                  styles.dateInput,
-                  {
-                    color: theme.text,
-                  },
-                ]}
-                placeholder="2025-11-23"
-                placeholderTextColor={theme.textSecondary}
-                value={selectedDate}
-                onChangeText={setSelectedDate}
-              />
-            </ThemedView>
+              <ThemedText style={[styles.dateInput, { color: theme.text }]}>
+                {formatDisplayDate(selectedDate)}
+              </ThemedText>
+            </Pressable>
+            {showDatePicker ? (
+              Platform.OS === "ios" ? (
+                <Modal
+                  visible={showDatePicker}
+                  transparent
+                  animationType="fade"
+                  onRequestClose={() => setShowDatePicker(false)}
+                >
+                  <View style={styles.modalOverlay}>
+                    <Pressable style={styles.modalBackdrop} onPress={() => setShowDatePicker(false)} />
+                    <ThemedView style={[styles.datePickerModal, { backgroundColor: theme.backgroundDefault }]}>
+                      <View style={styles.datePickerHeader}>
+                        <ThemedText style={styles.modalTitle}>Выберите дату</ThemedText>
+                        <Pressable onPress={() => setShowDatePicker(false)}>
+                          <ThemedText style={{ color: theme.primary, fontWeight: "600" }}>Готово</ThemedText>
+                        </Pressable>
+                      </View>
+                      <DateTimePicker
+                        value={dateValue}
+                        mode="date"
+                        display="spinner"
+                        onChange={handleDateChange}
+                        locale="ru"
+                      />
+                    </ThemedView>
+                  </View>
+                </Modal>
+              ) : (
+                <DateTimePicker
+                  value={dateValue}
+                  mode="date"
+                  display="default"
+                  onChange={handleDateChange}
+                />
+              )
+            ) : null}
           </View>
 
           {Object.keys(groupedByDate).length > 0 ? (
@@ -302,5 +355,26 @@ const styles = StyleSheet.create({
   modalTitle: {
     fontSize: 17,
     fontWeight: "600",
+  },
+  modalOverlay: {
+    flex: 1,
+    justifyContent: "center",
+    alignItems: "center",
+  },
+  modalBackdrop: {
+    ...StyleSheet.absoluteFillObject,
+    backgroundColor: "rgba(0,0,0,0.5)",
+  },
+  datePickerModal: {
+    borderRadius: BorderRadius.md,
+    padding: Spacing.lg,
+    width: "90%",
+    maxWidth: 360,
+  },
+  datePickerHeader: {
+    flexDirection: "row",
+    justifyContent: "space-between",
+    alignItems: "center",
+    marginBottom: Spacing.md,
   },
 });

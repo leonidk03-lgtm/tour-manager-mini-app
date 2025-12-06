@@ -1,6 +1,7 @@
 import { useState } from "react";
-import { View, StyleSheet, RefreshControl } from "react-native";
+import { View, StyleSheet, RefreshControl, Pressable, Modal, Platform } from "react-native";
 import { Feather } from "@expo/vector-icons";
+import DateTimePicker from "@react-native-community/datetimepicker";
 import { ThemedText } from "@/components/ThemedText";
 import { ThemedView } from "@/components/ThemedView";
 import { ScreenScrollView } from "@/components/ScreenScrollView";
@@ -28,8 +29,26 @@ export default function DashboardScreen() {
   const navigation = useNavigation<NavigationProp<MainTabParamList>>();
   const { excursions, tourTypes, additionalServices, transactions, activities } = useData();
   const [selectedPeriod, setSelectedPeriod] = useState<"day" | "week" | "month">("day");
-  const [referenceDate] = useState(new Date());
+  const [referenceDate, setReferenceDate] = useState(new Date());
   const [refreshing, setRefreshing] = useState(false);
+  const [showDatePicker, setShowDatePicker] = useState(false);
+  
+  const handleDateChange = (event: any, date?: Date) => {
+    if (Platform.OS === "android") {
+      setShowDatePicker(false);
+    }
+    if (date) {
+      setReferenceDate(date);
+    }
+  };
+  
+  const formatDisplayDate = (date: Date) => {
+    return date.toLocaleDateString("ru-RU", {
+      day: "2-digit",
+      month: "2-digit",
+      year: "numeric",
+    });
+  };
 
   const onRefresh = () => {
     setRefreshing(true);
@@ -60,6 +79,57 @@ export default function DashboardScreen() {
       <View style={styles.container}>
         <View style={styles.section}>
           <PeriodSelector selectedPeriod={selectedPeriod} onPeriodChange={setSelectedPeriod} />
+          <Pressable
+            onPress={() => setShowDatePicker(true)}
+            style={[
+              styles.dateFilter,
+              {
+                backgroundColor: theme.backgroundSecondary,
+                borderRadius: BorderRadius.xs,
+              },
+            ]}
+          >
+            <Feather name="calendar" size={20} color={theme.textSecondary} />
+            <ThemedText style={[styles.dateText, { color: theme.text }]}>
+              {formatDisplayDate(referenceDate)}
+            </ThemedText>
+          </Pressable>
+          {showDatePicker ? (
+            Platform.OS === "ios" ? (
+              <Modal
+                visible={showDatePicker}
+                transparent
+                animationType="fade"
+                onRequestClose={() => setShowDatePicker(false)}
+              >
+                <View style={styles.modalOverlay}>
+                  <Pressable style={styles.modalBackdrop} onPress={() => setShowDatePicker(false)} />
+                  <ThemedView style={[styles.datePickerModal, { backgroundColor: theme.backgroundDefault }]}>
+                    <View style={styles.datePickerHeader}>
+                      <ThemedText style={styles.modalTitle}>Выберите дату</ThemedText>
+                      <Pressable onPress={() => setShowDatePicker(false)}>
+                        <ThemedText style={{ color: theme.primary, fontWeight: "600" }}>Готово</ThemedText>
+                      </Pressable>
+                    </View>
+                    <DateTimePicker
+                      value={referenceDate}
+                      mode="date"
+                      display="spinner"
+                      onChange={handleDateChange}
+                      locale="ru"
+                    />
+                  </ThemedView>
+                </View>
+              </Modal>
+            ) : (
+              <DateTimePicker
+                value={referenceDate}
+                mode="date"
+                display="default"
+                onChange={handleDateChange}
+              />
+            )
+          ) : null}
         </View>
 
         <View style={styles.section}>
@@ -253,5 +323,41 @@ const styles = StyleSheet.create({
   emptyText: {
     fontSize: 16,
     textAlign: "center",
+  },
+  dateFilter: {
+    flexDirection: "row",
+    alignItems: "center",
+    paddingHorizontal: Spacing.lg,
+    paddingVertical: Spacing.md,
+    gap: Spacing.sm,
+  },
+  dateText: {
+    flex: 1,
+    fontSize: 16,
+  },
+  modalOverlay: {
+    flex: 1,
+    justifyContent: "center",
+    alignItems: "center",
+  },
+  modalBackdrop: {
+    ...StyleSheet.absoluteFillObject,
+    backgroundColor: "rgba(0,0,0,0.5)",
+  },
+  datePickerModal: {
+    borderRadius: BorderRadius.md,
+    padding: Spacing.lg,
+    width: "90%",
+    maxWidth: 360,
+  },
+  datePickerHeader: {
+    flexDirection: "row",
+    justifyContent: "space-between",
+    alignItems: "center",
+    marginBottom: Spacing.md,
+  },
+  modalTitle: {
+    fontSize: 17,
+    fontWeight: "600",
   },
 });
