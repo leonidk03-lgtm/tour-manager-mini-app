@@ -78,19 +78,15 @@ export function AddExcursionForm({ excursion, onSave, onCancel }: AddExcursionFo
     if (exists) {
       setSelectedServices((prev) => prev.filter((s) => s.serviceId !== serviceId));
     } else {
-      setSelectedServices((prev) => [...prev, { serviceId, count: 1 }]);
+      setSelectedServices((prev) => [...prev, { serviceId, count: 0 }]);
     }
   };
 
   const updateServiceCount = (serviceId: string, countStr: string) => {
-    const count = parseInt(countStr, 10) || 0;
-    if (count <= 0) {
-      setSelectedServices((prev) => prev.filter((s) => s.serviceId !== serviceId));
-    } else {
-      setSelectedServices((prev) =>
-        prev.map((s) => (s.serviceId === serviceId ? { ...s, count } : s))
-      );
-    }
+    const count = countStr === "" ? 0 : parseInt(countStr, 10) || 0;
+    setSelectedServices((prev) =>
+      prev.map((s) => (s.serviceId === serviceId ? { ...s, count } : s))
+    );
   };
 
   const addExpense = () => {
@@ -329,10 +325,10 @@ export function AddExcursionForm({ excursion, onSave, onCancel }: AddExcursionFo
               {selected ? (
                 <TextInput
                   style={[styles.serviceCountInput, { borderColor: theme.inputBorder, color: theme.text, backgroundColor: theme.backgroundDefault }]}
-                  value={selected.count.toString()}
+                  value={selected.count === 0 ? "" : selected.count.toString()}
                   onChangeText={(text) => updateServiceCount(service.id, text)}
                   keyboardType="numeric"
-                  placeholder="0"
+                  placeholder="Кол-во"
                   placeholderTextColor={theme.textSecondary}
                 />
               ) : null}
