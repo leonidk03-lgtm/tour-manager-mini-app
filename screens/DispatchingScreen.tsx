@@ -1,5 +1,5 @@
 import { useState, useEffect, useRef } from "react";
-import { View, StyleSheet, TextInput, Pressable, Platform, Modal } from "react-native";
+import { View, StyleSheet, TextInput, Pressable, Platform, Modal, FlatList, Alert } from "react-native";
 import { WebView } from "react-native-webview";
 import { Feather } from "@expo/vector-icons";
 import { useSafeAreaInsets } from "react-native-safe-area-context";
@@ -11,57 +11,106 @@ import { useTheme } from "@/hooks/useTheme";
 import { Spacing, BorderRadius, Typography } from "@/constants/theme";
 
 const DATABASE_URL = "http://turburo-kazan.ru/managers/zapis-na-ekskursiyu.php?arrFilter_ff%5BNAME%5D=&arrFilter_DATE_ACTIVE_FROM_1=&arrFilter_DATE_ACTIVE_FROM_2=&arrFilter_pf%5BTYPE%5D=&arrFilter_pf%5BGOSTINICI%5D=&arrFilter_CREATED_BY=&sort=date_ex&USER_REMEMBER=Y&set_filter=Показать&set_filter=Y";
-const NOTES_STORAGE_KEY = "@dispatching_notes";
+const NOTES_STORAGE_KEY = "@dispatching_notes_list";
+
+interface Note {
+  id: string;
+  text: string;
+  createdAt: string;
+}
 
 export default function DispatchingScreen() {
   const { theme } = useTheme();
   const insets = useSafeAreaInsets();
-  const [notes, setNotes] = useState("");
+  const [notes, setNotes] = useState<Note[]>([]);
+  const [currentNote, setCurrentNote] = useState("");
+  const [showNotesList, setShowNotesList] = useState(false);
+  const [editingNote, setEditingNote] = useState<Note | null>(null);
   const [showCalculator, setShowCalculator] = useState(false);
   const [calcDisplay, setCalcDisplay] = useState("0");
   const [calcPrevValue, setCalcPrevValue] = useState<number | null>(null);
   const [calcOperation, setCalcOperation] = useState<string | null>(null);
   const [calcWaitingForOperand, setCalcWaitingForOperand] = useState(false);
-  const saveTimeoutRef = useRef<ReturnType<typeof setTimeout> | null>(null);
-  const notesRef = useRef(notes);
 
   useEffect(() => {
     loadNotes();
   }, []);
 
-  useEffect(() => {
-    notesRef.current = notes;
-    if (saveTimeoutRef.current) {
-      clearTimeout(saveTimeoutRef.current);
-    }
-    saveTimeoutRef.current = setTimeout(() => {
-      saveNotes(notesRef.current);
-    }, 1000);
-
-    return () => {
-      if (saveTimeoutRef.current) {
-        clearTimeout(saveTimeoutRef.current);
-      }
-    };
-  }, [notes]);
-
   const loadNotes = async () => {
     try {
       const savedNotes = await AsyncStorage.getItem(NOTES_STORAGE_KEY);
       if (savedNotes !== null) {
-        setNotes(savedNotes);
+        setNotes(JSON.parse(savedNotes));
       }
     } catch (error) {
       console.error("Failed to load notes:", error);
     }
   };
 
-  const saveNotes = async (text: string) => {
+  const saveNotes = async (notesList: Note[]) => {
     try {
-      await AsyncStorage.setItem(NOTES_STORAGE_KEY, text);
+      await AsyncStorage.setItem(NOTES_STORAGE_KEY, JSON.stringify(notesList));
     } catch (error) {
       console.error("Failed to save notes:", error);
     }
+  };
+
+  const handleSaveNote = () => {
+    if (!currentNote.trim()) {
+      Alert.alert("Внимание", "Введите текст заметки");
+      return;
+    }
+
+    let updatedNotes: Note[];
+    if (editingNote) {
+      updatedNotes = notes.map((n) =>
+        n.id === editingNote.id ? { ...n, text: currentNote.trim() } : n
+      );
+      setEditingNote(null);
+    } else {
+      const newNote: Note = {
+        id: Date.now().toString(),
+        text: currentNote.trim(),
+        createdAt: new Date().toLocaleDateString("ru-RU", {
+          day: "2-digit",
+          month: "2-digit",
+          year: "numeric",
+          hour: "2-digit",
+          minute: "2-digit",
+        }),
+      };
+      updatedNotes = [newNote, ...notes];
+    }
+
+    setNotes(updatedNotes);
+    saveNotes(updatedNotes);
+    setCurrentNote("");
+  };
+
+  const handleDeleteNote = (noteId: string) => {
+    Alert.alert("Удалить заметку?", "Это действие нельзя отменить", [
+      { text: "Отмена", style: "cancel" },
+      {
+        text: "Удалить",
+        style: "destructive",
+        onPress: () => {
+          const updatedNotes = notes.filter((n) => n.id !== noteId);
+          setNotes(updatedNotes);
+          saveNotes(updatedNotes);
+        },
+      },
+    ]);
+  };
+
+  const handleEditNote = (note: Note) => {
+    setEditingNote(note);
+    setCurrentNote(note.text);
+    setShowNotesList(false);
+  };
+
+  const handleCancelEdit = () => {
+    setEditingNote(null);
+    setCurrentNote("");
   };
 
   const handleCalcDigit = (digit: string) => {
@@ -134,12 +183,45 @@ export default function DispatchingScreen() {
     </Pressable>
   );
 
+  const renderNoteItem = ({ item }: { item: Note }) => (
+    <View style={[styles.noteItem, { backgroundColor: theme.backgroundSecondary }]}>
+      <Pressable style={styles.noteContent} onPress={() => handleEditNote(item)}>
+        <ThemedText style={styles.noteText} numberOfLines={2}>
+          {item.text}
+        </ThemedText>
+        <ThemedText style={[styles.noteDate, { color: theme.textSecondary }]}>
+          {item.createdAt}
+        </ThemedText>
+      </Pressable>
+      <Pressable style={styles.noteDeleteButton} onPress={() => handleDeleteNote(item.id)}>
+        <Feather name="trash-2" size={18} color={theme.error} />
+      </Pressable>
+    </View>
+  );
+
   return (
     <ThemedView style={[styles.container, { backgroundColor: theme.backgroundRoot }]}>
       <View style={[styles.notesSection, { backgroundColor: theme.backgroundDefault }]}>
         <View style={styles.notesHeader}>
-          <Feather name="edit-3" size={18} color={theme.textSecondary} />
-          <ThemedText style={[styles.notesTitle, { color: theme.textSecondary }]}>Заметки</ThemedText>
+          <View style={styles.notesHeaderLeft}>
+            <Feather name="edit-3" size={18} color={theme.textSecondary} />
+            <ThemedText style={[styles.notesTitle, { color: theme.textSecondary }]}>
+              {editingNote ? "Редактирование" : "Новая заметка"}
+            </ThemedText>
+          </View>
+          <View style={styles.notesHeaderRight}>
+            <Pressable
+              style={[styles.notesListButton, { backgroundColor: theme.backgroundSecondary }]}
+              onPress={() => setShowNotesList(true)}
+            >
+              <Feather name="list" size={18} color={theme.text} />
+              {notes.length > 0 ? (
+                <View style={[styles.notesBadge, { backgroundColor: theme.primary }]}>
+                  <ThemedText style={styles.notesBadgeText}>{notes.length}</ThemedText>
+                </View>
+              ) : null}
+            </Pressable>
+          </View>
         </View>
         <TextInput
           style={[
@@ -149,14 +231,33 @@ export default function DispatchingScreen() {
               color: theme.text,
             },
           ]}
-          value={notes}
-          onChangeText={setNotes}
-          placeholder="Введите заметки..."
+          value={currentNote}
+          onChangeText={setCurrentNote}
+          placeholder="Введите текст заметки..."
           placeholderTextColor={theme.textSecondary}
           multiline
           textAlignVertical="top"
           blurOnSubmit={false}
         />
+        <View style={styles.notesActions}>
+          {editingNote ? (
+            <Pressable
+              style={[styles.cancelButton, { backgroundColor: theme.backgroundSecondary }]}
+              onPress={handleCancelEdit}
+            >
+              <ThemedText style={{ color: theme.text }}>Отмена</ThemedText>
+            </Pressable>
+          ) : null}
+          <Pressable
+            style={[styles.saveButton, { backgroundColor: theme.primary }]}
+            onPress={handleSaveNote}
+          >
+            <Feather name="save" size={16} color="#FFFFFF" />
+            <ThemedText style={styles.saveButtonText}>
+              {editingNote ? "Обновить" : "Сохранить"}
+            </ThemedText>
+          </Pressable>
+        </View>
       </View>
 
       <View style={styles.webViewContainer}>
@@ -186,6 +287,43 @@ export default function DispatchingScreen() {
           <Feather name="percent" size={24} color="#FFFFFF" />
         </BlurView>
       </Pressable>
+
+      <Modal
+        visible={showNotesList}
+        transparent
+        animationType="slide"
+        onRequestClose={() => setShowNotesList(false)}
+      >
+        <Pressable style={styles.modalBackdrop} onPress={() => setShowNotesList(false)}>
+          <Pressable
+            style={[styles.notesListContainer, { backgroundColor: theme.backgroundDefault }]}
+            onPress={(e) => e.stopPropagation()}
+          >
+            <View style={styles.notesListHeader}>
+              <ThemedText style={styles.notesListTitle}>Сохраненные заметки</ThemedText>
+              <Pressable onPress={() => setShowNotesList(false)}>
+                <Feather name="x" size={24} color={theme.text} />
+              </Pressable>
+            </View>
+            {notes.length === 0 ? (
+              <View style={styles.emptyNotes}>
+                <Feather name="file-text" size={48} color={theme.textSecondary} />
+                <ThemedText style={[styles.emptyNotesText, { color: theme.textSecondary }]}>
+                  Нет сохраненных заметок
+                </ThemedText>
+              </View>
+            ) : (
+              <FlatList
+                data={notes}
+                renderItem={renderNoteItem}
+                keyExtractor={(item) => item.id}
+                contentContainerStyle={styles.notesList}
+                showsVerticalScrollIndicator={false}
+              />
+            )}
+          </Pressable>
+        </Pressable>
+      </Modal>
 
       <Modal
         visible={showCalculator}
@@ -250,7 +388,7 @@ const styles = StyleSheet.create({
     flex: 1,
   },
   notesSection: {
-    height: 140,
+    height: 220,
     padding: Spacing.md,
     borderBottomWidth: 1,
     borderBottomColor: "rgba(255,255,255,0.1)",
@@ -258,17 +396,69 @@ const styles = StyleSheet.create({
   notesHeader: {
     flexDirection: "row",
     alignItems: "center",
+    justifyContent: "space-between",
     marginBottom: Spacing.sm,
+  },
+  notesHeaderLeft: {
+    flexDirection: "row",
+    alignItems: "center",
+  },
+  notesHeaderRight: {
+    flexDirection: "row",
+    alignItems: "center",
   },
   notesTitle: {
     marginLeft: Spacing.sm,
     ...Typography.bodySecondary,
+  },
+  notesListButton: {
+    flexDirection: "row",
+    alignItems: "center",
+    paddingHorizontal: Spacing.md,
+    paddingVertical: Spacing.sm,
+    borderRadius: BorderRadius.md,
+  },
+  notesBadge: {
+    marginLeft: Spacing.xs,
+    paddingHorizontal: 6,
+    paddingVertical: 2,
+    borderRadius: 10,
+    minWidth: 20,
+    alignItems: "center",
+  },
+  notesBadgeText: {
+    color: "#FFFFFF",
+    fontSize: 12,
+    fontWeight: "600",
   },
   notesInput: {
     flex: 1,
     borderRadius: BorderRadius.md,
     padding: Spacing.md,
     ...Typography.body,
+  },
+  notesActions: {
+    flexDirection: "row",
+    justifyContent: "flex-end",
+    marginTop: Spacing.sm,
+    gap: Spacing.sm,
+  },
+  saveButton: {
+    flexDirection: "row",
+    alignItems: "center",
+    paddingHorizontal: Spacing.lg,
+    paddingVertical: Spacing.sm,
+    borderRadius: BorderRadius.md,
+    gap: Spacing.xs,
+  },
+  saveButtonText: {
+    color: "#FFFFFF",
+    fontWeight: "600",
+  },
+  cancelButton: {
+    paddingHorizontal: Spacing.lg,
+    paddingVertical: Spacing.sm,
+    borderRadius: BorderRadius.md,
   },
   webViewContainer: {
     flex: 1,
@@ -303,13 +493,61 @@ const styles = StyleSheet.create({
   modalBackdrop: {
     flex: 1,
     backgroundColor: "rgba(0,0,0,0.6)",
+    justifyContent: "flex-end",
+  },
+  notesListContainer: {
+    height: "70%",
+    borderTopLeftRadius: BorderRadius.xl,
+    borderTopRightRadius: BorderRadius.xl,
+    padding: Spacing.lg,
+  },
+  notesListHeader: {
+    flexDirection: "row",
+    justifyContent: "space-between",
+    alignItems: "center",
+    marginBottom: Spacing.lg,
+  },
+  notesListTitle: {
+    ...Typography.h3,
+  },
+  notesList: {
+    gap: Spacing.sm,
+  },
+  noteItem: {
+    flexDirection: "row",
+    alignItems: "center",
+    borderRadius: BorderRadius.md,
+    padding: Spacing.md,
+  },
+  noteContent: {
+    flex: 1,
+  },
+  noteText: {
+    ...Typography.body,
+    marginBottom: Spacing.xs,
+  },
+  noteDate: {
+    ...Typography.caption,
+  },
+  noteDeleteButton: {
+    padding: Spacing.sm,
+  },
+  emptyNotes: {
+    flex: 1,
     justifyContent: "center",
     alignItems: "center",
+  },
+  emptyNotesText: {
+    marginTop: Spacing.md,
+    ...Typography.body,
   },
   calculatorContainer: {
     width: 320,
     borderRadius: BorderRadius.xl,
     padding: Spacing.lg,
+    alignSelf: "center",
+    marginBottom: "auto",
+    marginTop: "auto",
   },
   calcHeader: {
     flexDirection: "row",
