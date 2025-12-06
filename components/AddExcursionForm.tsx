@@ -295,47 +295,59 @@ export function AddExcursionForm({ excursion, onSave, onCancel }: AddExcursionFo
         </View>
       </View>
 
-      <View style={styles.section}>
-        <ThemedText style={styles.sectionTitle}>Дополнительные услуги</ThemedText>
-        {additionalServices.filter((s) => s.isEnabled).map((service) => {
-          const selected = selectedServices.find((s) => s.serviceId === service.id);
-          const isNegativePrice = service.price < 0;
-          return (
-            <View key={service.id} style={styles.serviceRow}>
-              <Pressable
-                onPress={() => toggleService(service.id)}
-                style={styles.checkboxRow}
-              >
-                <View
-                  style={[
-                    styles.checkbox,
-                    { borderColor: theme.inputBorder },
-                    selected && { backgroundColor: isNegativePrice ? theme.error : theme.primary },
-                  ]}
-                >
-                  {selected ? <Feather name="check" size={16} color="#fff" /> : null}
+      {(() => {
+        const currentTourType = tourTypes.find((t) => t.id === selectedTourType);
+        const applicableIds = currentTourType?.applicableServiceIds || [];
+        const availableServices = additionalServices.filter(
+          (s) => s.isEnabled && applicableIds.includes(s.id)
+        );
+        
+        if (availableServices.length === 0) return null;
+        
+        return (
+          <View style={styles.section}>
+            <ThemedText style={styles.sectionTitle}>Дополнительные услуги</ThemedText>
+            {availableServices.map((service) => {
+              const selected = selectedServices.find((s) => s.serviceId === service.id);
+              const isNegativePrice = service.price < 0;
+              return (
+                <View key={service.id} style={styles.serviceRow}>
+                  <Pressable
+                    onPress={() => toggleService(service.id)}
+                    style={styles.checkboxRow}
+                  >
+                    <View
+                      style={[
+                        styles.checkbox,
+                        { borderColor: theme.inputBorder },
+                        selected && { backgroundColor: isNegativePrice ? theme.error : theme.primary },
+                      ]}
+                    >
+                      {selected ? <Feather name="check" size={16} color="#fff" /> : null}
+                    </View>
+                    <View style={styles.serviceLabelContainer}>
+                      <ThemedText style={styles.serviceLabel}>{service.name}</ThemedText>
+                      <ThemedText style={[styles.servicePrice, { color: isNegativePrice ? theme.error : theme.success }]}>
+                        {isNegativePrice ? service.price : `+${service.price}`} р.
+                      </ThemedText>
+                    </View>
+                  </Pressable>
+                  {selected ? (
+                    <TextInput
+                      style={[styles.serviceCountInput, { borderColor: theme.inputBorder, color: theme.text, backgroundColor: theme.backgroundDefault }]}
+                      value={selected.count === 0 ? "" : selected.count.toString()}
+                      onChangeText={(text) => updateServiceCount(service.id, text)}
+                      keyboardType="numeric"
+                      placeholder="Кол-во"
+                      placeholderTextColor={theme.textSecondary}
+                    />
+                  ) : null}
                 </View>
-                <View style={styles.serviceLabelContainer}>
-                  <ThemedText style={styles.serviceLabel}>{service.name}</ThemedText>
-                  <ThemedText style={[styles.servicePrice, { color: isNegativePrice ? theme.error : theme.success }]}>
-                    {isNegativePrice ? service.price : `+${service.price}`} р.
-                  </ThemedText>
-                </View>
-              </Pressable>
-              {selected ? (
-                <TextInput
-                  style={[styles.serviceCountInput, { borderColor: theme.inputBorder, color: theme.text, backgroundColor: theme.backgroundDefault }]}
-                  value={selected.count === 0 ? "" : selected.count.toString()}
-                  onChangeText={(text) => updateServiceCount(service.id, text)}
-                  keyboardType="numeric"
-                  placeholder="Кол-во"
-                  placeholderTextColor={theme.textSecondary}
-                />
-              ) : null}
-            </View>
-          );
-        })}
-      </View>
+              );
+            })}
+          </View>
+        );
+      })()}
 
       <View style={styles.section}>
         <View style={styles.sectionHeader}>

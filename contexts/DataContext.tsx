@@ -7,6 +7,7 @@ export interface TourType {
   discountedPrice: number;
   articleNumber: string;
   isEnabled: boolean;
+  applicableServiceIds: string[];
 }
 
 export interface AdditionalService {
@@ -88,16 +89,16 @@ interface DataContextType {
 const DataContext = createContext<DataContextType | undefined>(undefined);
 
 const defaultTourTypes: TourType[] = [
-  { id: "1", name: "Болгар", fullPrice: 3000, discountedPrice: 2800, articleNumber: "EXC-001", isEnabled: true },
-  { id: "2", name: "Йошкар-Ола", fullPrice: 2900, discountedPrice: 2700, articleNumber: "EXC-002", isEnabled: true },
-  { id: "3", name: "Свияжск", fullPrice: 2100, discountedPrice: 2000, articleNumber: "EXC-003", isEnabled: true },
-  { id: "4", name: "Свияжск + Раифа", fullPrice: 2400, discountedPrice: 2200, articleNumber: "EXC-004", isEnabled: true },
-  { id: "5", name: "Голубые озера", fullPrice: 1200, discountedPrice: 1100, articleNumber: "EXC-005", isEnabled: false },
-  { id: "6", name: "Речка 13:30", fullPrice: 1200, discountedPrice: 1100, articleNumber: "EXC-006", isEnabled: false },
-  { id: "7", name: "Речка 15:30", fullPrice: 1200, discountedPrice: 1100, articleNumber: "EXC-007", isEnabled: false },
-  { id: "8", name: "Речка 17:30", fullPrice: 1200, discountedPrice: 1100, articleNumber: "EXC-008", isEnabled: false },
-  { id: "9", name: "Вечерняя", fullPrice: 1100, discountedPrice: 1000, articleNumber: "EXC-009", isEnabled: true },
-  { id: "10", name: "Вечерняя с колесом", fullPrice: 1500, discountedPrice: 1400, articleNumber: "EXC-010", isEnabled: true },
+  { id: "1", name: "Болгар", fullPrice: 3000, discountedPrice: 2800, articleNumber: "EXC-001", isEnabled: true, applicableServiceIds: ["1"] },
+  { id: "2", name: "Йошкар-Ола", fullPrice: 2900, discountedPrice: 2700, articleNumber: "EXC-002", isEnabled: true, applicableServiceIds: [] },
+  { id: "3", name: "Свияжск", fullPrice: 2100, discountedPrice: 2000, articleNumber: "EXC-003", isEnabled: true, applicableServiceIds: ["1"] },
+  { id: "4", name: "Свияжск + Раифа", fullPrice: 2400, discountedPrice: 2200, articleNumber: "EXC-004", isEnabled: true, applicableServiceIds: ["1"] },
+  { id: "5", name: "Голубые озера", fullPrice: 1200, discountedPrice: 1100, articleNumber: "EXC-005", isEnabled: false, applicableServiceIds: [] },
+  { id: "6", name: "Речка 13:30", fullPrice: 1200, discountedPrice: 1100, articleNumber: "EXC-006", isEnabled: false, applicableServiceIds: [] },
+  { id: "7", name: "Речка 15:30", fullPrice: 1200, discountedPrice: 1100, articleNumber: "EXC-007", isEnabled: false, applicableServiceIds: [] },
+  { id: "8", name: "Речка 17:30", fullPrice: 1200, discountedPrice: 1100, articleNumber: "EXC-008", isEnabled: false, applicableServiceIds: [] },
+  { id: "9", name: "Вечерняя", fullPrice: 1100, discountedPrice: 1000, articleNumber: "EXC-009", isEnabled: true, applicableServiceIds: ["2"] },
+  { id: "10", name: "Вечерняя с колесом", fullPrice: 1500, discountedPrice: 1400, articleNumber: "EXC-010", isEnabled: true, applicableServiceIds: ["2"] },
 ];
 
 const defaultServices: AdditionalService[] = [

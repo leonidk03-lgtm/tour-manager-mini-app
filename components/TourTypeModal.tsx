@@ -1,5 +1,5 @@
 import { useState, useEffect } from "react";
-import { View, Modal, StyleSheet, TextInput, Pressable, Alert, Switch } from "react-native";
+import { View, Modal, StyleSheet, TextInput, Pressable, Alert, Switch, ScrollView } from "react-native";
 import { Feather } from "@expo/vector-icons";
 import { ThemedText } from "@/components/ThemedText";
 import { ThemedView } from "@/components/ThemedView";
@@ -16,12 +16,13 @@ interface TourTypeModalProps {
 
 export function TourTypeModal({ visible, onClose, onSave, tourType }: TourTypeModalProps) {
   const { theme } = useTheme();
-  const { tourTypes } = useData();
+  const { tourTypes, additionalServices } = useData();
   const [name, setName] = useState("");
   const [articleNumber, setArticleNumber] = useState("");
   const [fullPrice, setFullPrice] = useState("");
   const [discountedPrice, setDiscountedPrice] = useState("");
   const [isEnabled, setIsEnabled] = useState(true);
+  const [selectedServiceIds, setSelectedServiceIds] = useState<string[]>([]);
 
   useEffect(() => {
     if (visible) {
@@ -30,8 +31,15 @@ export function TourTypeModal({ visible, onClose, onSave, tourType }: TourTypeMo
       setFullPrice(tourType?.fullPrice.toString() || "");
       setDiscountedPrice(tourType?.discountedPrice.toString() || "");
       setIsEnabled(tourType?.isEnabled ?? true);
+      setSelectedServiceIds(tourType?.applicableServiceIds || []);
     }
   }, [visible, tourType]);
+
+  const toggleService = (serviceId: string) => {
+    setSelectedServiceIds((prev) =>
+      prev.includes(serviceId) ? prev.filter((id) => id !== serviceId) : [...prev, serviceId]
+    );
+  };
 
   const handleSave = () => {
     if (!name.trim()) {
@@ -66,6 +74,7 @@ export function TourTypeModal({ visible, onClose, onSave, tourType }: TourTypeMo
       fullPrice: full,
       discountedPrice: discounted,
       isEnabled,
+      applicableServiceIds: selectedServiceIds,
     };
 
     onSave(newTourType);
@@ -184,6 +193,42 @@ export function TourTypeModal({ visible, onClose, onSave, tourType }: TourTypeMo
                 thumbColor={theme.backgroundDefault}
               />
             </View>
+
+            {additionalServices.length > 0 ? (
+              <View style={styles.servicesSection}>
+                <ThemedText style={[styles.label, { color: theme.textSecondary }]}>
+                  Доступные услуги
+                </ThemedText>
+                <View style={styles.servicesList}>
+                  {additionalServices.map((service) => {
+                    const isSelected = selectedServiceIds.includes(service.id);
+                    return (
+                      <Pressable
+                        key={service.id}
+                        onPress={() => toggleService(service.id)}
+                        style={[
+                          styles.serviceItem,
+                          {
+                            backgroundColor: isSelected ? theme.primary + "20" : theme.backgroundSecondary,
+                            borderColor: isSelected ? theme.primary : theme.border,
+                          },
+                        ]}
+                      >
+                        <Feather
+                          name={isSelected ? "check-square" : "square"}
+                          size={20}
+                          color={isSelected ? theme.primary : theme.textSecondary}
+                        />
+                        <ThemedText style={styles.serviceName}>{service.name}</ThemedText>
+                        <ThemedText style={[styles.servicePrice, { color: theme.textSecondary }]}>
+                          {service.price} р.
+                        </ThemedText>
+                      </Pressable>
+                    );
+                  })}
+                </View>
+              </View>
+            ) : null}
           </View>
 
           <View style={styles.actions}>
@@ -290,5 +335,26 @@ const styles = StyleSheet.create({
     fontSize: 16,
     fontWeight: "600",
     color: "#FFFFFF",
+  },
+  servicesSection: {
+    gap: Spacing.sm,
+  },
+  servicesList: {
+    gap: Spacing.xs,
+  },
+  serviceItem: {
+    flexDirection: "row",
+    alignItems: "center",
+    padding: Spacing.md,
+    borderRadius: BorderRadius.sm,
+    borderWidth: 1,
+    gap: Spacing.sm,
+  },
+  serviceName: {
+    flex: 1,
+    fontSize: 15,
+  },
+  servicePrice: {
+    fontSize: 14,
   },
 });
