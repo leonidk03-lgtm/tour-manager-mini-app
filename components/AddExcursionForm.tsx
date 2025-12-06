@@ -29,7 +29,6 @@ export function AddExcursionForm({ excursion, onSave, onCancel }: AddExcursionFo
     excursion?.tourTypeId || tourTypes.find((t) => t.isEnabled)?.id || ""
   );
   const [date, setDate] = useState(excursion?.date || new Date().toISOString().split("T")[0]);
-  const [time, setTime] = useState(excursion?.time || "09:00");
   const [fullPrice, setFullPrice] = useState(excursion ? excursion.fullPriceCount.toString() : "");
   const [discounted, setDiscounted] = useState(excursion ? excursion.discountedCount.toString() : "");
   const [free, setFree] = useState(excursion ? excursion.freeCount.toString() : "");
@@ -97,8 +96,8 @@ export function AddExcursionForm({ excursion, onSave, onCancel }: AddExcursionFo
       return;
     }
 
-    if (!date || !time) {
-      Alert.alert("Ошибка", "Укажите дату и время");
+    if (!date) {
+      Alert.alert("Ошибка", "Укажите дату");
       return;
     }
 
@@ -106,7 +105,7 @@ export function AddExcursionForm({ excursion, onSave, onCancel }: AddExcursionFo
       id: excursion?.id || Date.now().toString(),
       tourTypeId: selectedTourType,
       date,
-      time,
+      time: excursion?.time || "",
       fullPriceCount: parseInt(fullPrice, 10) || 0,
       discountedCount: parseInt(discounted, 10) || 0,
       freeCount: parseInt(free, 10) || 0,
@@ -138,27 +137,15 @@ export function AddExcursionForm({ excursion, onSave, onCancel }: AddExcursionFo
         </View>
       </View>
 
-      <View style={styles.row}>
-        <View style={styles.halfWidth}>
-          <ThemedText style={styles.label}>Дата</ThemedText>
-          <TextInput
-            style={[styles.input, { borderColor: theme.inputBorder, color: theme.text, backgroundColor: theme.backgroundDefault }]}
-            value={date}
-            onChangeText={setDate}
-            placeholder="2025-11-23"
-            placeholderTextColor={theme.textSecondary}
-          />
-        </View>
-        <View style={styles.halfWidth}>
-          <ThemedText style={styles.label}>Время</ThemedText>
-          <TextInput
-            style={[styles.input, { borderColor: theme.inputBorder, color: theme.text, backgroundColor: theme.backgroundDefault }]}
-            value={time}
-            onChangeText={setTime}
-            placeholder="09:00"
-            placeholderTextColor={theme.textSecondary}
-          />
-        </View>
+      <View style={styles.section}>
+        <ThemedText style={styles.label}>Дата</ThemedText>
+        <TextInput
+          style={[styles.input, { borderColor: theme.inputBorder, color: theme.text, backgroundColor: theme.backgroundDefault }]}
+          value={date}
+          onChangeText={setDate}
+          placeholder="2025-11-23"
+          placeholderTextColor={theme.textSecondary}
+        />
       </View>
 
       <View style={styles.section}>
