@@ -22,6 +22,7 @@ export function TourTypeModal({ visible, onClose, onSave, tourType }: TourTypeMo
   const [fullPrice, setFullPrice] = useState("");
   const [discountedPrice, setDiscountedPrice] = useState("");
   const [isEnabled, setIsEnabled] = useState(true);
+  const [hasRadioGuides, setHasRadioGuides] = useState(false);
   const [selectedServiceIds, setSelectedServiceIds] = useState<string[]>([]);
 
   useEffect(() => {
@@ -31,6 +32,7 @@ export function TourTypeModal({ visible, onClose, onSave, tourType }: TourTypeMo
       setFullPrice(tourType?.fullPrice.toString() || "");
       setDiscountedPrice(tourType?.discountedPrice.toString() || "");
       setIsEnabled(tourType?.isEnabled ?? true);
+      setHasRadioGuides(tourType?.hasRadioGuides ?? false);
       setSelectedServiceIds(tourType?.applicableServiceIds || []);
     }
   }, [visible, tourType]);
@@ -75,6 +77,7 @@ export function TourTypeModal({ visible, onClose, onSave, tourType }: TourTypeMo
       discountedPrice: discounted,
       isEnabled,
       applicableServiceIds: selectedServiceIds,
+      hasRadioGuides,
     };
 
     onSave(newTourType);
@@ -189,6 +192,21 @@ export function TourTypeModal({ visible, onClose, onSave, tourType }: TourTypeMo
               <Switch
                 value={isEnabled}
                 onValueChange={setIsEnabled}
+                trackColor={{ false: theme.divider, true: theme.primary }}
+                thumbColor={theme.backgroundDefault}
+              />
+            </View>
+
+            <View style={styles.switchRow}>
+              <View style={{ flex: 1 }}>
+                <ThemedText style={styles.switchLabel}>Радиогиды</ThemedText>
+                <ThemedText style={[styles.switchDescription, { color: theme.textSecondary }]}>
+                  Включите для экскурсий с радиогидами
+                </ThemedText>
+              </View>
+              <Switch
+                value={hasRadioGuides}
+                onValueChange={setHasRadioGuides}
                 trackColor={{ false: theme.divider, true: theme.primary }}
                 thumbColor={theme.backgroundDefault}
               />
