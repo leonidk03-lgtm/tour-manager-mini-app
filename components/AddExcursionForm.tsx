@@ -168,6 +168,28 @@ export function AddExcursionForm({ excursion, onSave, onCancel }: AddExcursionFo
 
   const expenseTypes = ["Экскурсовод", "Предоплата", "Прочее"];
 
+  if (enabledTourTypes.length === 0) {
+    return (
+      <ScreenKeyboardAwareScrollView contentContainerStyle={styles.content}>
+        <ThemedView style={[styles.emptyState, { backgroundColor: theme.backgroundSecondary }]}>
+          <Feather name="alert-circle" size={48} color={theme.textSecondary} />
+          <ThemedText style={[styles.emptyStateText, { color: theme.textSecondary }]}>
+            Нет доступных типов туров
+          </ThemedText>
+          <ThemedText style={[styles.emptyStateHint, { color: theme.textSecondary }]}>
+            Добавьте типы туров в настройках (Цены на билеты)
+          </ThemedText>
+          <Pressable
+            onPress={onCancel}
+            style={[styles.cancelButton, { backgroundColor: theme.backgroundDefault, borderColor: theme.border }]}
+          >
+            <ThemedText style={{ color: theme.text }}>Закрыть</ThemedText>
+          </Pressable>
+        </ThemedView>
+      </ScreenKeyboardAwareScrollView>
+    );
+  }
+
   return (
     <ScreenKeyboardAwareScrollView contentContainerStyle={styles.content}>
       <View style={styles.section}>
@@ -662,7 +684,9 @@ const styles = StyleSheet.create({
     justifyContent: "center",
     alignItems: "center",
   },
-  cancelButton: {},
+  cancelButton: {
+    borderWidth: 1,
+  },
   saveButton: {},
   buttonText: {
     fontSize: Typography.body.fontSize,
@@ -670,5 +694,24 @@ const styles = StyleSheet.create({
   },
   saveButtonText: {
     color: "#fff",
+  },
+  emptyState: {
+    flex: 1,
+    justifyContent: "center",
+    alignItems: "center",
+    padding: Spacing.xl,
+    borderRadius: BorderRadius.lg,
+    marginTop: Spacing.xl,
+  },
+  emptyStateText: {
+    fontSize: Typography.h3.fontSize,
+    fontWeight: "600",
+    marginTop: Spacing.md,
+    textAlign: "center",
+  },
+  emptyStateHint: {
+    fontSize: Typography.body.fontSize,
+    marginTop: Spacing.sm,
+    textAlign: "center",
   },
 });

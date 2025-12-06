@@ -278,3 +278,24 @@ CREATE TRIGGER update_excursions_updated_at
 CREATE TRIGGER update_transactions_updated_at
   BEFORE UPDATE ON transactions
   FOR EACH ROW EXECUTE FUNCTION update_updated_at();
+
+-- Seed data for tour_types (run only once)
+INSERT INTO tour_types (name, article_number, full_price, discounted_price, is_enabled)
+VALUES 
+  ('Обзорная экскурсия по городу', 'ART-001', 1500, 1200, true),
+  ('Экскурсия в Эрмитаж', 'ART-002', 2500, 2000, true),
+  ('Речная прогулка по Неве', 'ART-003', 1000, 800, true),
+  ('Ночная экскурсия', 'ART-004', 2000, 1600, true),
+  ('Загородная экскурсия в Петергоф', 'ART-005', 3500, 2800, true),
+  ('Пешеходная экскурсия по центру', 'ART-006', 800, 600, true)
+ON CONFLICT DO NOTHING;
+
+-- Seed data for additional_services (run only once)
+INSERT INTO additional_services (name, price, is_enabled)
+VALUES 
+  ('Аудиогид', 300, true),
+  ('Радиогид', 200, true),
+  ('Обед в ресторане', 1500, true),
+  ('Фотосессия', 500, true),
+  ('Сувенирный набор', 400, true)
+ON CONFLICT DO NOTHING;
