@@ -174,19 +174,6 @@ export default function DashboardScreen() {
               </View>
             </ThemedView>
           </View>
-          <ThemedView style={[styles.quickStatItem, { borderColor: theme.border }]}>
-            <Feather name="trending-up" size={20} color={theme.success} />
-            <View style={styles.quickStatText}>
-              <ThemedText style={[styles.quickStatValue, { color: theme.text }]}>
-                {filteredExcursions.length > 0
-                  ? formatCurrency(Math.round(netProfit / filteredExcursions.length))
-                  : "0 ₽"}
-              </ThemedText>
-              <ThemedText style={[styles.quickStatLabel, { color: theme.textSecondary }]}>
-                Средняя прибыль
-              </ThemedText>
-            </View>
-          </ThemedView>
         </View>
 
         <View style={styles.section}>
