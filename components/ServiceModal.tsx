@@ -170,7 +170,6 @@ const styles = StyleSheet.create({
     borderTopLeftRadius: BorderRadius.lg,
     borderTopRightRadius: BorderRadius.lg,
     paddingBottom: Spacing["2xl"],
-    maxHeight: "90%",
   },
   header: {
     flexDirection: "row",
@@ -184,7 +183,9 @@ const styles = StyleSheet.create({
     fontWeight: "600",
   },
   scrollContent: {
-    flex: 1,
+    flexGrow: 0,
+    flexShrink: 1,
+    maxHeight: 400,
   },
   content: {
     paddingHorizontal: Spacing.lg,
