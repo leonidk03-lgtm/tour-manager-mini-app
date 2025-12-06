@@ -43,6 +43,7 @@ export default function RadioGuidesScreen() {
   const [receiversIssued, setReceiversIssued] = useState("");
   const [receiversReturned, setReceiversReturned] = useState("");
   const [returnNotes, setReturnNotes] = useState("");
+  const [showShortageForm, setShowShortageForm] = useState(false);
 
   const resetForm = () => {
     setBagNumber("");
@@ -54,6 +55,7 @@ export default function RadioGuidesScreen() {
     setReturnNotes("");
     setSelectedKit(null);
     setSelectedAssignment(null);
+    setShowShortageForm(false);
   };
 
   const openAddModal = () => {
@@ -162,7 +164,19 @@ export default function RadioGuidesScreen() {
     }
   };
 
-  const handleReturn = async () => {
+  const handleReturnAllOk = async () => {
+    if (!selectedAssignment) return;
+
+    try {
+      await returnRadioGuide(selectedAssignment.id, selectedAssignment.receiversIssued);
+      setModalMode(null);
+      resetForm();
+    } catch (err) {
+      Alert.alert("Ошибка", "Не удалось принять радиогид");
+    }
+  };
+
+  const handleReturnWithShortage = async () => {
     if (!selectedAssignment) return;
 
     const count = parseInt(receiversReturned);
@@ -478,50 +492,88 @@ export default function RadioGuidesScreen() {
                   </View>
                 ) : null}
 
-                <View style={styles.inputGroup}>
-                  <ThemedText style={[styles.label, { color: theme.textSecondary }]}>
-                    Возвращено приёмников *
-                  </ThemedText>
-                  <TextInput
-                    style={[
-                      styles.input,
-                      { backgroundColor: theme.backgroundSecondary, borderColor: theme.border, color: theme.text },
-                    ]}
-                    value={receiversReturned}
-                    onChangeText={setReceiversReturned}
-                    placeholder="40"
-                    placeholderTextColor={theme.textSecondary}
-                    keyboardType="number-pad"
-                  />
-                </View>
+                {!showShortageForm ? (
+                  <View style={styles.returnButtons}>
+                    <Pressable
+                      style={[styles.returnButton, { backgroundColor: theme.success }]}
+                      onPress={handleReturnAllOk}
+                    >
+                      <Feather name="check-circle" size={20} color={theme.buttonText} />
+                      <ThemedText style={[styles.returnButtonText, { color: theme.buttonText }]}>
+                        Всё на месте
+                      </ThemedText>
+                    </Pressable>
 
-                <View style={styles.inputGroup}>
-                  <ThemedText style={[styles.label, { color: theme.textSecondary }]}>
-                    Заметки (опционально)
-                  </ThemedText>
-                  <TextInput
-                    style={[
-                      styles.input,
-                      styles.multilineInput,
-                      { backgroundColor: theme.backgroundSecondary, borderColor: theme.border, color: theme.text },
-                    ]}
-                    value={returnNotes}
-                    onChangeText={setReturnNotes}
-                    placeholder="Проблемы, недостачи..."
-                    placeholderTextColor={theme.textSecondary}
-                    multiline
-                    numberOfLines={2}
-                  />
-                </View>
+                    <Pressable
+                      style={[styles.returnButton, { backgroundColor: theme.warning }]}
+                      onPress={() => setShowShortageForm(true)}
+                    >
+                      <Feather name="alert-circle" size={20} color={theme.buttonText} />
+                      <ThemedText style={[styles.returnButtonText, { color: theme.buttonText }]}>
+                        Не хватает
+                      </ThemedText>
+                    </Pressable>
+                  </View>
+                ) : (
+                  <>
+                    <View style={styles.inputGroup}>
+                      <ThemedText style={[styles.label, { color: theme.textSecondary }]}>
+                        Сколько вернули? *
+                      </ThemedText>
+                      <TextInput
+                        style={[
+                          styles.input,
+                          { backgroundColor: theme.backgroundSecondary, borderColor: theme.border, color: theme.text },
+                        ]}
+                        value={receiversReturned}
+                        onChangeText={setReceiversReturned}
+                        placeholder="Количество"
+                        placeholderTextColor={theme.textSecondary}
+                        keyboardType="number-pad"
+                        autoFocus
+                      />
+                    </View>
 
-                <Pressable
-                  style={[styles.saveButton, { backgroundColor: theme.success }]}
-                  onPress={handleReturn}
-                >
-                  <ThemedText style={[styles.saveButtonText, { color: theme.buttonText }]}>
-                    Принять
-                  </ThemedText>
-                </Pressable>
+                    <View style={styles.inputGroup}>
+                      <ThemedText style={[styles.label, { color: theme.textSecondary }]}>
+                        Комментарий (опционально)
+                      </ThemedText>
+                      <TextInput
+                        style={[
+                          styles.input,
+                          styles.multilineInput,
+                          { backgroundColor: theme.backgroundSecondary, borderColor: theme.border, color: theme.text },
+                        ]}
+                        value={returnNotes}
+                        onChangeText={setReturnNotes}
+                        placeholder="Причина недостачи..."
+                        placeholderTextColor={theme.textSecondary}
+                        multiline
+                        numberOfLines={2}
+                      />
+                    </View>
+
+                    <View style={styles.returnButtons}>
+                      <Pressable
+                        style={[styles.returnButton, { backgroundColor: theme.backgroundTertiary, borderWidth: 1, borderColor: theme.border }]}
+                        onPress={() => setShowShortageForm(false)}
+                      >
+                        <ThemedText style={[styles.returnButtonText, { color: theme.text }]}>
+                          Назад
+                        </ThemedText>
+                      </Pressable>
+
+                      <Pressable
+                        style={[styles.returnButton, { backgroundColor: theme.primary }]}
+                        onPress={handleReturnWithShortage}
+                      >
+                        <ThemedText style={[styles.returnButtonText, { color: theme.buttonText }]}>
+                          Подтвердить
+                        </ThemedText>
+                      </Pressable>
+                    </View>
+                  </>
+                )}
               </View>
             ) : null}
           </ThemedView>
@@ -697,5 +749,22 @@ const styles = StyleSheet.create({
   },
   returnInfoText: {
     fontSize: 14,
+  },
+  returnButtons: {
+    flexDirection: "row",
+    gap: Spacing.md,
+  },
+  returnButton: {
+    flex: 1,
+    flexDirection: "row",
+    alignItems: "center",
+    justifyContent: "center",
+    padding: Spacing.md,
+    borderRadius: BorderRadius.sm,
+    gap: Spacing.sm,
+  },
+  returnButtonText: {
+    fontSize: 16,
+    fontWeight: "600",
   },
 });
