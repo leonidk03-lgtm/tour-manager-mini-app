@@ -6,6 +6,7 @@ import { BlurView } from "expo-blur";
 import DashboardStackNavigator from "@/navigation/DashboardStackNavigator";
 import ExcursionsStackNavigator from "@/navigation/ExcursionsStackNavigator";
 import FinancesStackNavigator from "@/navigation/FinancesStackNavigator";
+import DispatchingStackNavigator from "@/navigation/DispatchingStackNavigator";
 import SettingsStackNavigator from "@/navigation/SettingsStackNavigator";
 import { useTheme } from "@/hooks/useTheme";
 import { Spacing, BorderRadius } from "@/constants/theme";
@@ -14,6 +15,7 @@ export type MainTabParamList = {
   DashboardTab: undefined;
   ExcursionsTab: undefined;
   FinancesTab: undefined;
+  DispatchingTab: undefined;
   SettingsTab: undefined;
 };
 
@@ -86,6 +88,16 @@ export default function MainTabNavigator() {
           title: "Финансы",
           tabBarIcon: ({ color, size }) => (
             <Feather name="trending-up" size={22} color={color} />
+          ),
+        }}
+      />
+      <Tab.Screen
+        name="DispatchingTab"
+        component={DispatchingStackNavigator}
+        options={{
+          title: "Отправление",
+          tabBarIcon: ({ color, size }) => (
+            <Feather name="send" size={22} color={color} />
           ),
         }}
       />
