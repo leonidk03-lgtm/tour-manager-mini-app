@@ -7,12 +7,12 @@ import { ThemedView } from "@/components/ThemedView";
 import { ScreenScrollView } from "@/components/ScreenScrollView";
 import { Spacing, BorderRadius } from "@/constants/theme";
 import { useTheme } from "@/hooks/useTheme";
-import { useData } from "@/contexts/DataContext";
+import { useAuth } from "@/contexts/AuthContext";
 
 export default function SettingsScreen() {
   const { theme } = useTheme();
   const navigation = useNavigation<NavigationProp<SettingsStackParamList>>();
-  const { currentUser, setCurrentUser } = useData();
+  const { profile, isAdmin, signOut } = useAuth();
 
   const handleLogout = () => {
     Alert.alert("Выйти из аккаунта?", "Вы уверены, что хотите выйти?", [
@@ -20,9 +20,8 @@ export default function SettingsScreen() {
       {
         text: "Выйти",
         style: "destructive",
-        onPress: () => {
-          setCurrentUser(null);
-          Alert.alert("Вы вышли", "Функция авторизации будет доступна в следующей версии");
+        onPress: async () => {
+          await signOut();
         },
       },
     ]);
@@ -50,11 +49,11 @@ export default function SettingsScreen() {
               ]}
             >
               <ThemedText style={[styles.avatarText, { color: theme.buttonText }]}>
-                {currentUser?.name.charAt(0).toUpperCase()}
+                {profile?.display_name?.charAt(0).toUpperCase() || "U"}
               </ThemedText>
             </View>
             <View style={styles.profileInfo}>
-              <ThemedText style={styles.profileName}>{currentUser?.name}</ThemedText>
+              <ThemedText style={styles.profileName}>{profile?.display_name || "Пользователь"}</ThemedText>
               <ThemedView
                 style={[
                   styles.roleBadge,
@@ -64,7 +63,7 @@ export default function SettingsScreen() {
                 ]}
               >
                 <ThemedText style={[styles.roleText, { color: theme.buttonText }]}>
-                  {currentUser?.role === "admin" ? "Администратор" : "Менеджер"}
+                  {isAdmin ? "Администратор" : "Менеджер"}
                 </ThemedText>
               </ThemedView>
             </View>
@@ -109,7 +108,7 @@ export default function SettingsScreen() {
               </View>
             </Pressable>
 
-            {currentUser?.role === "admin" && (
+            {isAdmin ? (
               <>
                 <View style={[styles.divider, { backgroundColor: theme.border }]} />
                 <Pressable
@@ -125,7 +124,7 @@ export default function SettingsScreen() {
                   </View>
                 </Pressable>
               </>
-            )}
+            ) : null}
           </ThemedView>
         </View>
 

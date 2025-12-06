@@ -38,6 +38,8 @@ export interface Excursion {
   paidCount: number;
   expenses: Expense[];
   additionalServices: { serviceId: string; count: number }[];
+  managerId?: string;
+  managerName?: string;
 }
 
 export interface Transaction {
@@ -46,6 +48,8 @@ export interface Transaction {
   amount: number;
   description: string;
   date: string;
+  managerId?: string;
+  managerName?: string;
 }
 
 export interface Manager {
