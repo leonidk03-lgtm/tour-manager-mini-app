@@ -1,5 +1,5 @@
 import { useState, useEffect, useRef } from "react";
-import { View, StyleSheet, TextInput, Pressable, Platform, Modal, FlatList, Alert, Dimensions } from "react-native";
+import { View, StyleSheet, TextInput, Pressable, Platform, Modal, FlatList, Alert, Keyboard, TouchableWithoutFeedback } from "react-native";
 import { WebView } from "react-native-webview";
 import { Feather } from "@expo/vector-icons";
 import { useSafeAreaInsets } from "react-native-safe-area-context";
@@ -114,6 +114,10 @@ export default function DispatchingScreen() {
     setEditingNote(null);
     setCurrentNote("");
     setShowFullscreenNote(false);
+  };
+
+  const dismissKeyboard = () => {
+    Keyboard.dismiss();
   };
 
   const formatCalcDisplay = (value: string): string => {
@@ -316,54 +320,55 @@ export default function DispatchingScreen() {
         animationType="slide"
         onRequestClose={() => setShowFullscreenNote(false)}
       >
-        <ThemedView style={[styles.fullscreenContainer, { paddingTop: insets.top, paddingBottom: insets.bottom }]}>
-          <View style={styles.fullscreenHeader}>
-            <Pressable onPress={() => setShowFullscreenNote(false)}>
-              <Feather name="x" size={24} color={theme.text} />
-            </Pressable>
-            <ThemedText style={styles.fullscreenTitle}>
-              {editingNote ? "Редактирование" : "Новая заметка"}
-            </ThemedText>
-            <Pressable onPress={handleSaveNote}>
-              <Feather name="check" size={24} color={theme.primary} />
-            </Pressable>
-          </View>
-          <TextInput
-            style={[
-              styles.fullscreenInput,
-              {
-                backgroundColor: theme.backgroundSecondary,
-                color: theme.text,
-              },
-            ]}
-            value={currentNote}
-            onChangeText={setCurrentNote}
-            placeholder="Введите текст заметки..."
-            placeholderTextColor={theme.textSecondary}
-            multiline
-            textAlignVertical="top"
-            autoFocus
-          />
-          <View style={styles.fullscreenActions}>
-            {editingNote ? (
-              <Pressable
-                style={[styles.cancelButton, { backgroundColor: theme.backgroundSecondary, flex: 1 }]}
-                onPress={handleCancelEdit}
-              >
-                <ThemedText style={{ color: theme.text }}>Отмена</ThemedText>
+        <TouchableWithoutFeedback onPress={dismissKeyboard}>
+          <ThemedView style={[styles.fullscreenContainer, { paddingTop: insets.top, paddingBottom: insets.bottom }]}>
+            <View style={styles.fullscreenHeader}>
+              <Pressable onPress={() => { dismissKeyboard(); setShowFullscreenNote(false); }}>
+                <Feather name="x" size={24} color={theme.text} />
               </Pressable>
-            ) : null}
-            <Pressable
-              style={[styles.saveButton, { backgroundColor: theme.primary, flex: 1 }]}
-              onPress={handleSaveNote}
-            >
-              <Feather name="save" size={16} color="#FFFFFF" />
-              <ThemedText style={styles.saveButtonText}>
-                {editingNote ? "Обновить" : "Сохранить"}
+              <ThemedText style={styles.fullscreenTitle}>
+                {editingNote ? "Редактирование" : "Новая заметка"}
               </ThemedText>
-            </Pressable>
-          </View>
-        </ThemedView>
+              <Pressable onPress={() => { dismissKeyboard(); handleSaveNote(); }}>
+                <Feather name="check" size={24} color={theme.primary} />
+              </Pressable>
+            </View>
+            <TextInput
+              style={[
+                styles.fullscreenInput,
+                {
+                  backgroundColor: theme.backgroundSecondary,
+                  color: theme.text,
+                },
+              ]}
+              value={currentNote}
+              onChangeText={setCurrentNote}
+              placeholder="Введите текст заметки..."
+              placeholderTextColor={theme.textSecondary}
+              multiline
+              textAlignVertical="top"
+            />
+            <View style={styles.fullscreenActions}>
+              {editingNote ? (
+                <Pressable
+                  style={[styles.cancelButton, { backgroundColor: theme.backgroundSecondary, flex: 1 }]}
+                  onPress={handleCancelEdit}
+                >
+                  <ThemedText style={{ color: theme.text }}>Отмена</ThemedText>
+                </Pressable>
+              ) : null}
+              <Pressable
+                style={[styles.saveButton, { backgroundColor: theme.primary, flex: 1 }]}
+                onPress={handleSaveNote}
+              >
+                <Feather name="save" size={16} color="#FFFFFF" />
+                <ThemedText style={styles.saveButtonText}>
+                  {editingNote ? "Обновить" : "Сохранить"}
+                </ThemedText>
+              </Pressable>
+            </View>
+          </ThemedView>
+        </TouchableWithoutFeedback>
       </Modal>
 
       <Modal
