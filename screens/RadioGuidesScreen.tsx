@@ -37,7 +37,6 @@ export default function RadioGuidesScreen() {
   const [selectedAssignment, setSelectedAssignment] = useState<RadioGuideAssignment | null>(null);
 
   const [bagNumber, setBagNumber] = useState("");
-  const [receiverCount, setReceiverCount] = useState("");
   const [notes, setNotes] = useState("");
   const [guideName, setGuideName] = useState("");
   const [busNumber, setBusNumber] = useState("");
@@ -47,7 +46,6 @@ export default function RadioGuidesScreen() {
 
   const resetForm = () => {
     setBagNumber("");
-    setReceiverCount("");
     setNotes("");
     setGuideName("");
     setBusNumber("");
@@ -66,14 +64,13 @@ export default function RadioGuidesScreen() {
   const openEditModal = (kit: RadioGuideKit) => {
     setSelectedKit(kit);
     setBagNumber(kit.bagNumber.toString());
-    setReceiverCount(kit.receiverCount.toString());
     setNotes(kit.notes || "");
     setModalMode("edit");
   };
 
   const openIssueModal = (kit: RadioGuideKit) => {
     setSelectedKit(kit);
-    setReceiversIssued(kit.receiverCount.toString());
+    setReceiversIssued("");
     setModalMode("issue");
   };
 
@@ -89,15 +86,9 @@ export default function RadioGuidesScreen() {
 
   const handleSaveKit = async () => {
     const num = parseInt(bagNumber);
-    const count = parseInt(receiverCount);
 
     if (!num || num <= 0) {
       Alert.alert("Ошибка", "Введите номер сумки");
-      return;
-    }
-
-    if (!count || count <= 0) {
-      Alert.alert("Ошибка", "Введите количество приёмников");
       return;
     }
 
@@ -105,14 +96,12 @@ export default function RadioGuidesScreen() {
       if (modalMode === "add") {
         await addRadioGuideKit({
           bagNumber: num,
-          receiverCount: count,
           status: "available",
           notes: notes.trim() || null,
         });
       } else if (modalMode === "edit" && selectedKit) {
         await updateRadioGuideKit(selectedKit.id, {
           bagNumber: num,
-          receiverCount: count,
           notes: notes.trim() || null,
         });
       }
@@ -227,9 +216,6 @@ export default function RadioGuidesScreen() {
           <View style={styles.kitInfo}>
             <ThemedText style={styles.kitNumber}>Сумка #{kit.bagNumber}</ThemedText>
             <View style={styles.kitMeta}>
-              <ThemedText style={[styles.kitReceivers, { color: theme.textSecondary }]}>
-                {kit.receiverCount} приёмников
-              </ThemedText>
               <View
                 style={[styles.statusBadge, { backgroundColor: getStatusColor(kit.status) + "20" }]}
               >
@@ -386,23 +372,6 @@ export default function RadioGuidesScreen() {
                     value={bagNumber}
                     onChangeText={setBagNumber}
                     placeholder="1"
-                    placeholderTextColor={theme.textSecondary}
-                    keyboardType="number-pad"
-                  />
-                </View>
-
-                <View style={styles.inputGroup}>
-                  <ThemedText style={[styles.label, { color: theme.textSecondary }]}>
-                    Количество приёмников
-                  </ThemedText>
-                  <TextInput
-                    style={[
-                      styles.input,
-                      { backgroundColor: theme.backgroundSecondary, borderColor: theme.border, color: theme.text },
-                    ]}
-                    value={receiverCount}
-                    onChangeText={setReceiverCount}
-                    placeholder="40"
                     placeholderTextColor={theme.textSecondary}
                     keyboardType="number-pad"
                   />

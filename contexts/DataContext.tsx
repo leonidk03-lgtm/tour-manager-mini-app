@@ -82,7 +82,6 @@ export type RadioGuideKitStatus = 'available' | 'issued' | 'maintenance';
 export interface RadioGuideKit {
   id: string;
   bagNumber: number;
-  receiverCount: number;
   status: RadioGuideKitStatus;
   notes: string | null;
 }
@@ -331,7 +330,6 @@ export function DataProvider({ children }: { children: ReactNode }) {
       setRadioGuideKits((data || []).map(k => ({
         id: k.id,
         bagNumber: k.bag_number,
-        receiverCount: k.receiver_count,
         status: k.status as RadioGuideKitStatus,
         notes: k.notes,
       })));
@@ -767,7 +765,6 @@ export function DataProvider({ children }: { children: ReactNode }) {
         .from('radio_guide_kits')
         .insert({
           bag_number: kit.bagNumber,
-          receiver_count: kit.receiverCount,
           status: kit.status,
           notes: kit.notes,
         });
@@ -784,7 +781,6 @@ export function DataProvider({ children }: { children: ReactNode }) {
     try {
       const updateData: Record<string, unknown> = {};
       if (kit.bagNumber !== undefined) updateData.bag_number = kit.bagNumber;
-      if (kit.receiverCount !== undefined) updateData.receiver_count = kit.receiverCount;
       if (kit.status !== undefined) updateData.status = kit.status;
       if (kit.notes !== undefined) updateData.notes = kit.notes;
 
