@@ -141,3 +141,30 @@ export interface DbActivity {
   target_id: string;
   timestamp: string;
 }
+
+export interface DbRadioGuideKit {
+  id: string;
+  bag_number: number;
+  receiver_count: number;
+  status: 'available' | 'issued' | 'maintenance';
+  notes: string | null;
+  created_at: string;
+  updated_at: string;
+}
+
+export interface DbRadioGuideAssignment {
+  id: string;
+  kit_id: string;
+  excursion_id: string | null;
+  guide_name: string;
+  bus_number: string | null;
+  receivers_issued: number;
+  receivers_returned: number | null;
+  issued_at: string;
+  returned_at: string | null;
+  return_notes: string | null;
+  manager_id: string;
+  manager_name: string;
+  created_at: string;
+  updated_at: string;
+}

@@ -77,6 +77,31 @@ export interface DeletedItem {
   deletedAt: string;
 }
 
+export type RadioGuideKitStatus = 'available' | 'issued' | 'maintenance';
+
+export interface RadioGuideKit {
+  id: string;
+  bagNumber: number;
+  receiverCount: number;
+  status: RadioGuideKitStatus;
+  notes: string | null;
+}
+
+export interface RadioGuideAssignment {
+  id: string;
+  kitId: string;
+  excursionId: string | null;
+  guideName: string;
+  busNumber: string | null;
+  receiversIssued: number;
+  receiversReturned: number | null;
+  issuedAt: string;
+  returnedAt: string | null;
+  returnNotes: string | null;
+  managerId: string;
+  managerName: string;
+}
+
 interface DataContextType {
   tourTypes: TourType[];
   addTourType: (tourType: Omit<TourType, 'id'>) => Promise<void>;
@@ -100,6 +125,14 @@ interface DataContextType {
   restoreDeletedItem: (id: string) => Promise<void>;
   permanentlyDeleteItem: (id: string) => Promise<void>;
   clearDeletedItems: () => Promise<void>;
+  radioGuideKits: RadioGuideKit[];
+  radioGuideAssignments: RadioGuideAssignment[];
+  addRadioGuideKit: (kit: Omit<RadioGuideKit, 'id'>) => Promise<void>;
+  updateRadioGuideKit: (id: string, kit: Partial<RadioGuideKit>) => Promise<void>;
+  deleteRadioGuideKit: (id: string) => Promise<void>;
+  issueRadioGuide: (data: { kitId: string; excursionId?: string; guideName: string; busNumber?: string; receiversIssued: number }) => Promise<void>;
+  returnRadioGuide: (assignmentId: string, receiversReturned: number, notes?: string) => Promise<void>;
+  getActiveAssignment: (kitId: string) => RadioGuideAssignment | undefined;
   isLoading: boolean;
   refreshData: () => Promise<void>;
 }
@@ -115,6 +148,8 @@ export function DataProvider({ children }: { children: ReactNode }) {
   const [transactions, setTransactions] = useState<Transaction[]>([]);
   const [activities, setActivities] = useState<Activity[]>([]);
   const [deletedItems, setDeletedItems] = useState<DeletedItem[]>([]);
+  const [radioGuideKits, setRadioGuideKits] = useState<RadioGuideKit[]>([]);
+  const [radioGuideAssignments, setRadioGuideAssignments] = useState<RadioGuideAssignment[]>([]);
   const [isLoading, setIsLoading] = useState(true);
 
   const currentUser = profile ? {
@@ -284,6 +319,55 @@ export function DataProvider({ children }: { children: ReactNode }) {
     }
   }, [isAdmin]);
 
+  const fetchRadioGuideKits = useCallback(async () => {
+    try {
+      const { data, error } = await supabase
+        .from('radio_guide_kits')
+        .select('*')
+        .order('bag_number');
+
+      if (error) throw error;
+
+      setRadioGuideKits((data || []).map(k => ({
+        id: k.id,
+        bagNumber: k.bag_number,
+        receiverCount: k.receiver_count,
+        status: k.status as RadioGuideKitStatus,
+        notes: k.notes,
+      })));
+    } catch (err) {
+      console.error('Error fetching radio guide kits:', err);
+    }
+  }, []);
+
+  const fetchRadioGuideAssignments = useCallback(async () => {
+    try {
+      const { data, error } = await supabase
+        .from('radio_guide_assignments')
+        .select('*')
+        .order('issued_at', { ascending: false });
+
+      if (error) throw error;
+
+      setRadioGuideAssignments((data || []).map(a => ({
+        id: a.id,
+        kitId: a.kit_id,
+        excursionId: a.excursion_id,
+        guideName: a.guide_name,
+        busNumber: a.bus_number,
+        receiversIssued: a.receivers_issued,
+        receiversReturned: a.receivers_returned,
+        issuedAt: a.issued_at,
+        returnedAt: a.returned_at,
+        returnNotes: a.return_notes,
+        managerId: a.manager_id,
+        managerName: a.manager_name,
+      })));
+    } catch (err) {
+      console.error('Error fetching radio guide assignments:', err);
+    }
+  }, []);
+
   const refreshData = useCallback(async () => {
     setIsLoading(true);
     try {
@@ -294,11 +378,13 @@ export function DataProvider({ children }: { children: ReactNode }) {
         fetchTransactions(),
         fetchActivities(),
         fetchDeletedItems(),
+        fetchRadioGuideKits(),
+        fetchRadioGuideAssignments(),
       ]);
     } finally {
       setIsLoading(false);
     }
-  }, [fetchTourTypes, fetchAdditionalServices, fetchExcursions, fetchTransactions, fetchActivities, fetchDeletedItems]);
+  }, [fetchTourTypes, fetchAdditionalServices, fetchExcursions, fetchTransactions, fetchActivities, fetchDeletedItems, fetchRadioGuideKits, fetchRadioGuideAssignments]);
 
   useEffect(() => {
     if (user && profile) {
@@ -675,6 +761,134 @@ export function DataProvider({ children }: { children: ReactNode }) {
     }
   };
 
+  const addRadioGuideKit = async (kit: Omit<RadioGuideKit, 'id'>) => {
+    try {
+      const { error } = await supabase
+        .from('radio_guide_kits')
+        .insert({
+          bag_number: kit.bagNumber,
+          receiver_count: kit.receiverCount,
+          status: kit.status,
+          notes: kit.notes,
+        });
+
+      if (error) throw error;
+      await fetchRadioGuideKits();
+    } catch (err) {
+      console.error('Error adding radio guide kit:', err);
+      throw err;
+    }
+  };
+
+  const updateRadioGuideKit = async (id: string, kit: Partial<RadioGuideKit>) => {
+    try {
+      const updateData: Record<string, unknown> = {};
+      if (kit.bagNumber !== undefined) updateData.bag_number = kit.bagNumber;
+      if (kit.receiverCount !== undefined) updateData.receiver_count = kit.receiverCount;
+      if (kit.status !== undefined) updateData.status = kit.status;
+      if (kit.notes !== undefined) updateData.notes = kit.notes;
+
+      const { error } = await supabase
+        .from('radio_guide_kits')
+        .update(updateData)
+        .eq('id', id);
+
+      if (error) throw error;
+      await fetchRadioGuideKits();
+    } catch (err) {
+      console.error('Error updating radio guide kit:', err);
+      throw err;
+    }
+  };
+
+  const deleteRadioGuideKit = async (id: string) => {
+    try {
+      const { error } = await supabase
+        .from('radio_guide_kits')
+        .delete()
+        .eq('id', id);
+
+      if (error) throw error;
+      await fetchRadioGuideKits();
+    } catch (err) {
+      console.error('Error deleting radio guide kit:', err);
+      throw err;
+    }
+  };
+
+  const issueRadioGuide = async (data: { 
+    kitId: string; 
+    excursionId?: string; 
+    guideName: string; 
+    busNumber?: string; 
+    receiversIssued: number 
+  }) => {
+    if (!user || !profile) throw new Error('User not authenticated');
+
+    try {
+      const { error: assignmentError } = await supabase
+        .from('radio_guide_assignments')
+        .insert({
+          kit_id: data.kitId,
+          excursion_id: data.excursionId || null,
+          guide_name: data.guideName,
+          bus_number: data.busNumber || null,
+          receivers_issued: data.receiversIssued,
+          issued_at: new Date().toISOString(),
+          manager_id: user.id,
+          manager_name: profile.display_name,
+        });
+
+      if (assignmentError) throw assignmentError;
+
+      const { error: kitError } = await supabase
+        .from('radio_guide_kits')
+        .update({ status: 'issued' })
+        .eq('id', data.kitId);
+
+      if (kitError) throw kitError;
+
+      await Promise.all([fetchRadioGuideKits(), fetchRadioGuideAssignments()]);
+    } catch (err) {
+      console.error('Error issuing radio guide:', err);
+      throw err;
+    }
+  };
+
+  const returnRadioGuide = async (assignmentId: string, receiversReturned: number, notes?: string) => {
+    try {
+      const assignment = radioGuideAssignments.find(a => a.id === assignmentId);
+      if (!assignment) throw new Error('Assignment not found');
+
+      const { error: assignmentError } = await supabase
+        .from('radio_guide_assignments')
+        .update({
+          receivers_returned: receiversReturned,
+          returned_at: new Date().toISOString(),
+          return_notes: notes || null,
+        })
+        .eq('id', assignmentId);
+
+      if (assignmentError) throw assignmentError;
+
+      const { error: kitError } = await supabase
+        .from('radio_guide_kits')
+        .update({ status: 'available' })
+        .eq('id', assignment.kitId);
+
+      if (kitError) throw kitError;
+
+      await Promise.all([fetchRadioGuideKits(), fetchRadioGuideAssignments()]);
+    } catch (err) {
+      console.error('Error returning radio guide:', err);
+      throw err;
+    }
+  };
+
+  const getActiveAssignment = (kitId: string): RadioGuideAssignment | undefined => {
+    return radioGuideAssignments.find(a => a.kitId === kitId && !a.returnedAt);
+  };
+
   return (
     <DataContext.Provider
       value={{
@@ -700,6 +914,14 @@ export function DataProvider({ children }: { children: ReactNode }) {
         restoreDeletedItem,
         permanentlyDeleteItem,
         clearDeletedItems,
+        radioGuideKits,
+        radioGuideAssignments,
+        addRadioGuideKit,
+        updateRadioGuideKit,
+        deleteRadioGuideKit,
+        issueRadioGuide,
+        returnRadioGuide,
+        getActiveAssignment,
         isLoading,
         refreshData,
       }}
