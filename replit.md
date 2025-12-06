@@ -34,10 +34,10 @@ Design style: Telegram-inspired dark theme with flat design (November 2025 updat
 - Safe Area Context for notch/status bar handling
 
 **State Management**
-- React Context API (`DataContext`) for global application state
+- React Context API (`DataContext` + `AuthContext`) for global application state
 - Local state management with React hooks
 - No external state management libraries (Redux/MobX) - keeping it simple
-- In-memory data storage (no persistence layer currently implemented)
+- Data persisted in Supabase PostgreSQL database with real-time sync
 
 **Theming System**
 - Dark-first design (Telegram-style) with light theme support
@@ -81,17 +81,17 @@ Design style: Telegram-inspired dark theme with flat design (November 2025 updat
 ### Authentication & Authorization
 
 **Current Implementation**
-- Mock authentication with local state
-- User roles: Manager and Admin
-- `currentUser` stored in DataContext
-- Admin-only features: AdminPanel access, manager management
+- Supabase authentication with username/password
+- User roles: Manager and Admin (stored in managers table)
+- `AuthContext` manages auth state with `signIn`, `signOut`, `isAdmin` helpers
+- `currentUser` stored in AuthContext after successful login
+- Admin-only features: AdminPanel access, manager management, see all data with manager names
+- Managers can only see their own excursions and transactions (enforced by RLS)
+- Admin creates manager accounts via AdminPanel (no self-registration)
 
-**Planned Features (not yet implemented)**
-- Email/password authentication
-- Apple Sign-In for iOS compliance
-- Forgot password flow
-- Account deletion (admin only)
-- Privacy policy and terms links
+**Data Access Rules**
+- Managers: See only own excursions/transactions, can add/edit/delete own data
+- Admins: See all data with manager attribution, manage all accounts
 
 ### Screen Structure
 
@@ -183,10 +183,14 @@ Design style: Telegram-inspired dark theme with flat design (November 2025 updat
 - `prettier` - Code formatting
 - `babel-plugin-module-resolver` - Path aliasing (@/ prefix)
 
+### Backend & Database
+- `@supabase/supabase-js` - Supabase client for PostgreSQL database and authentication
+- Supabase PostgreSQL with Row Level Security (RLS) for data access control
+- Real-time data synchronization between managers
+- Environment variables: EXPO_PUBLIC_SUPABASE_URL, EXPO_PUBLIC_SUPABASE_ANON_KEY
+
 ### Notable Absences
-- **No database**: Currently using in-memory storage via React Context
-- **No backend API**: All data is client-side only
-- **No authentication service**: Mock auth implementation
 - **No form library**: Native TextInput components used directly
 - **No date library**: Using native Date objects and ISO strings
 - **No charting library**: Charts mentioned in design doc but not yet implemented
+- **No push notifications**: Requires native build (expo-notifications doesn't work in Expo Go for remote push)

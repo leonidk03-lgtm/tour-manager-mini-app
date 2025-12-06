@@ -13,6 +13,7 @@ interface ExcursionCardProps {
   expenses: number;
   profit: number;
   onPress: () => void;
+  showManagerName?: boolean;
 }
 
 export function ExcursionCard({
@@ -22,6 +23,7 @@ export function ExcursionCard({
   expenses,
   profit,
   onPress,
+  showManagerName = false,
 }: ExcursionCardProps) {
   const { theme } = useTheme();
   const totalParticipants =
@@ -42,9 +44,16 @@ export function ExcursionCard({
       <View style={styles.header}>
         <View style={styles.headerLeft}>
           <ThemedText style={styles.tourName}>{tourTypeName}</ThemedText>
-          <ThemedText style={[styles.time, { color: theme.textSecondary }]}>
-            {excursion.time}
-          </ThemedText>
+          <View style={styles.subHeader}>
+            <ThemedText style={[styles.time, { color: theme.textSecondary }]}>
+              {excursion.time}
+            </ThemedText>
+            {showManagerName && excursion.managerName ? (
+              <ThemedText style={[styles.managerName, { color: theme.primary }]}>
+                {excursion.managerName}
+              </ThemedText>
+            ) : null}
+          </View>
         </View>
         <Feather name="chevron-right" size={20} color={theme.textSecondary} />
       </View>
@@ -115,8 +124,17 @@ const styles = StyleSheet.create({
     fontSize: 17,
     fontWeight: "600",
   },
+  subHeader: {
+    flexDirection: "row",
+    alignItems: "center",
+    gap: Spacing.sm,
+  },
   time: {
     fontSize: 15,
+  },
+  managerName: {
+    fontSize: 13,
+    fontWeight: "500",
   },
   participants: {
     marginTop: -Spacing.xs,

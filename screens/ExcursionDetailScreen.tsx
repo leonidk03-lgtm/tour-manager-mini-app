@@ -8,6 +8,7 @@ import { AddExcursionForm } from "@/components/AddExcursionForm";
 import { Spacing, BorderRadius } from "@/constants/theme";
 import { useTheme } from "@/hooks/useTheme";
 import { useData, Excursion as ExcursionType } from "@/contexts/DataContext";
+import { useAuth } from "@/contexts/AuthContext";
 import {
   calculateExcursionRevenue,
   calculateExcursionExpenses,
@@ -27,8 +28,10 @@ export default function ExcursionDetailScreen() {
   const navigation = useNavigation();
   const { excursionId } = route.params as { excursionId: string };
   const { excursions, tourTypes, additionalServices, deleteExcursion, updateExcursion } = useData();
+  const { isAdmin } = useAuth();
   const [showEditModal, setShowEditModal] = useState(false);
   const [editKey, setEditKey] = useState(0);
+  const [isDeleting, setIsDeleting] = useState(false);
 
   const excursion = excursions.find((e) => e.id === excursionId);
   const tourType = tourTypes.find((t) => t.id === excursion?.tourTypeId);
@@ -53,9 +56,13 @@ export default function ExcursionDetailScreen() {
     setShowEditModal(true);
   };
 
-  const handleSaveEdit = (updatedExcursion: ExcursionType) => {
-    updateExcursion(excursionId, updatedExcursion);
-    setShowEditModal(false);
+  const handleSaveEdit = async (updatedExcursion: Partial<ExcursionType>) => {
+    try {
+      await updateExcursion(excursionId, updatedExcursion);
+      setShowEditModal(false);
+    } catch (err) {
+      Alert.alert("Ошибка", "Не удалось сохранить изменения");
+    }
   };
 
   const handleDelete = () => {
@@ -64,9 +71,16 @@ export default function ExcursionDetailScreen() {
       {
         text: "Удалить",
         style: "destructive",
-        onPress: () => {
-          deleteExcursion(excursionId);
-          navigation.goBack();
+        onPress: async () => {
+          if (isDeleting) return;
+          setIsDeleting(true);
+          try {
+            await deleteExcursion(excursionId);
+            navigation.goBack();
+          } catch (err) {
+            Alert.alert("Ошибка", "Не удалось удалить экскурсию");
+            setIsDeleting(false);
+          }
         },
       },
     ]);
@@ -118,6 +132,14 @@ export default function ExcursionDetailScreen() {
                 {excursion.time}
               </ThemedText>
             </View>
+            {isAdmin && excursion.managerName ? (
+              <View style={styles.infoRow}>
+                <Feather name="user" size={16} color={theme.textSecondary} />
+                <ThemedText style={[styles.infoText, { color: theme.primary }]}>
+                  {excursion.managerName}
+                </ThemedText>
+              </View>
+            ) : null}
           </View>
         </ThemedView>
 

@@ -10,6 +10,7 @@ import { StatCard } from "@/components/StatCard";
 import { Spacing, BorderRadius } from "@/constants/theme";
 import { useTheme } from "@/hooks/useTheme";
 import { useData, Transaction } from "@/contexts/DataContext";
+import { useAuth } from "@/contexts/AuthContext";
 import { formatCurrency, calculateAdditionalTransactionsTotal } from "@/utils/calculations";
 
 const parseLocalDate = (dateString: string): Date => {
@@ -20,6 +21,7 @@ const parseLocalDate = (dateString: string): Date => {
 export default function FinancesScreen() {
   const { theme } = useTheme();
   const { transactions, addTransaction, deleteTransaction } = useData();
+  const { isAdmin } = useAuth();
   const [activeTab, setActiveTab] = useState<"expense" | "income">("expense");
   const [selectedDate, setSelectedDate] = useState(new Date().toISOString().split("T")[0]);
   const [showAddModal, setShowAddModal] = useState(false);
@@ -29,6 +31,7 @@ export default function FinancesScreen() {
   const [formDate, setFormDate] = useState(new Date().toISOString().split("T")[0]);
   const [showFilterDatePicker, setShowFilterDatePicker] = useState(false);
   const [showFormDatePicker, setShowFormDatePicker] = useState(false);
+  const [isSaving, setIsSaving] = useState(false);
   
   const filterDateValue = parseLocalDate(selectedDate);
   const formDateValue = parseLocalDate(formDate);
@@ -74,7 +77,7 @@ export default function FinancesScreen() {
     .filter((t) => t.type === activeTab)
     .sort((a, b) => b.date.localeCompare(a.date));
 
-  const handleAddTransaction = () => {
+  const handleAddTransaction = async () => {
     if (!formDescription || !formAmount || !formDate) {
       Alert.alert("Ошибка", "Заполните все поля");
       return;
@@ -86,20 +89,26 @@ export default function FinancesScreen() {
       return;
     }
 
-    const newTransaction: Transaction = {
-      id: Date.now().toString(),
-      type: formType,
-      amount,
-      description: formDescription,
-      date: formDate,
-    };
+    if (isSaving) return;
+    setIsSaving(true);
 
-    addTransaction(newTransaction);
-    setSelectedDate(formDate);
-    setShowAddModal(false);
-    setFormDescription("");
-    setFormAmount("");
-    setFormDate(new Date().toISOString().split("T")[0]);
+    try {
+      await addTransaction({
+        type: formType,
+        amount,
+        description: formDescription,
+        date: formDate,
+      });
+      setSelectedDate(formDate);
+      setShowAddModal(false);
+      setFormDescription("");
+      setFormAmount("");
+      setFormDate(new Date().toISOString().split("T")[0]);
+    } catch (err) {
+      Alert.alert("Ошибка", "Не удалось сохранить запись");
+    } finally {
+      setIsSaving(false);
+    }
   };
 
   const handleDeleteTransaction = (id: string) => {
@@ -108,7 +117,13 @@ export default function FinancesScreen() {
       {
         text: "Удалить",
         style: "destructive",
-        onPress: () => deleteTransaction(id),
+        onPress: async () => {
+          try {
+            await deleteTransaction(id);
+          } catch (err) {
+            Alert.alert("Ошибка", "Не удалось удалить запись");
+          }
+        },
       },
     ]);
   };
@@ -258,6 +273,7 @@ export default function FinancesScreen() {
                         </ThemedText>
                         <ThemedText style={[styles.transactionDate, { color: theme.textSecondary }]}>
                           {new Date(transaction.date).toLocaleDateString("ru-RU")}
+                          {isAdmin && transaction.managerName ? ` • ${transaction.managerName}` : ""}
                         </ThemedText>
                       </View>
                       <ThemedText

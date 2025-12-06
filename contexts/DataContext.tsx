@@ -1,4 +1,6 @@
-import React, { createContext, useContext, useState, ReactNode } from "react";
+import React, { createContext, useContext, useState, useEffect, ReactNode, useCallback } from "react";
+import { supabase } from "@/lib/supabase";
+import { useAuth } from "./AuthContext";
 
 export interface TourType {
   id: string;
@@ -77,296 +79,600 @@ export interface DeletedItem {
 
 interface DataContextType {
   tourTypes: TourType[];
-  addTourType: (tourType: TourType) => void;
-  updateTourType: (id: string, tourType: TourType) => void;
-  deleteTourType: (id: string) => void;
+  addTourType: (tourType: Omit<TourType, 'id'>) => Promise<void>;
+  updateTourType: (id: string, tourType: Partial<TourType>) => Promise<void>;
+  deleteTourType: (id: string) => Promise<void>;
   additionalServices: AdditionalService[];
-  addAdditionalService: (service: AdditionalService) => void;
-  updateAdditionalService: (id: string, service: AdditionalService) => void;
-  deleteAdditionalService: (id: string) => void;
+  addAdditionalService: (service: Omit<AdditionalService, 'id'>) => Promise<void>;
+  updateAdditionalService: (id: string, service: Partial<AdditionalService>) => Promise<void>;
+  deleteAdditionalService: (id: string) => Promise<void>;
   excursions: Excursion[];
-  addExcursion: (excursion: Excursion) => void;
-  updateExcursion: (id: string, excursion: Excursion) => void;
-  deleteExcursion: (id: string) => void;
+  addExcursion: (excursion: Omit<Excursion, 'id' | 'managerId' | 'managerName'>) => Promise<void>;
+  updateExcursion: (id: string, excursion: Partial<Excursion>) => Promise<void>;
+  deleteExcursion: (id: string) => Promise<void>;
   transactions: Transaction[];
-  addTransaction: (transaction: Transaction) => void;
-  deleteTransaction: (id: string) => void;
+  addTransaction: (transaction: Omit<Transaction, 'id' | 'managerId' | 'managerName'>) => Promise<void>;
+  deleteTransaction: (id: string) => Promise<void>;
   managers: Manager[];
-  addManager: (manager: Manager) => void;
-  updateManager: (id: string, manager: Manager) => void;
-  deleteManager: (id: string) => void;
-  currentUser: { role: "admin" | "manager"; name: string } | null;
-  setCurrentUser: (user: { role: "admin" | "manager"; name: string } | null) => void;
+  currentUser: { role: "admin" | "manager"; name: string; id: string } | null;
   activities: Activity[];
   deletedItems: DeletedItem[];
-  restoreDeletedItem: (id: string) => void;
-  permanentlyDeleteItem: (id: string) => void;
-  clearDeletedItems: () => void;
+  restoreDeletedItem: (id: string) => Promise<void>;
+  permanentlyDeleteItem: (id: string) => Promise<void>;
+  clearDeletedItems: () => Promise<void>;
+  isLoading: boolean;
+  refreshData: () => Promise<void>;
 }
 
 const DataContext = createContext<DataContextType | undefined>(undefined);
 
-const defaultTourTypes: TourType[] = [
-  { id: "1", name: "Болгар", fullPrice: 3000, discountedPrice: 2800, articleNumber: "EXC-001", isEnabled: true, applicableServiceIds: ["1"], hasRadioGuides: true },
-  { id: "2", name: "Йошкар-Ола", fullPrice: 2900, discountedPrice: 2700, articleNumber: "EXC-002", isEnabled: true, applicableServiceIds: [], hasRadioGuides: true },
-  { id: "3", name: "Свияжск", fullPrice: 2100, discountedPrice: 2000, articleNumber: "EXC-003", isEnabled: true, applicableServiceIds: ["1"], hasRadioGuides: true },
-  { id: "4", name: "Свияжск + Раифа", fullPrice: 2400, discountedPrice: 2200, articleNumber: "EXC-004", isEnabled: true, applicableServiceIds: ["1"], hasRadioGuides: true },
-  { id: "5", name: "Голубые озера", fullPrice: 1200, discountedPrice: 1100, articleNumber: "EXC-005", isEnabled: false, applicableServiceIds: [], hasRadioGuides: false },
-  { id: "6", name: "Речка 13:30", fullPrice: 1200, discountedPrice: 1100, articleNumber: "EXC-006", isEnabled: false, applicableServiceIds: [], hasRadioGuides: false },
-  { id: "7", name: "Речка 15:30", fullPrice: 1200, discountedPrice: 1100, articleNumber: "EXC-007", isEnabled: false, applicableServiceIds: [], hasRadioGuides: false },
-  { id: "8", name: "Речка 17:30", fullPrice: 1200, discountedPrice: 1100, articleNumber: "EXC-008", isEnabled: false, applicableServiceIds: [], hasRadioGuides: false },
-  { id: "9", name: "Вечерняя", fullPrice: 1100, discountedPrice: 1000, articleNumber: "EXC-009", isEnabled: true, applicableServiceIds: ["2"], hasRadioGuides: false },
-  { id: "10", name: "Вечерняя с колесом", fullPrice: 1500, discountedPrice: 1400, articleNumber: "EXC-010", isEnabled: true, applicableServiceIds: ["2"], hasRadioGuides: false },
-];
-
-const defaultServices: AdditionalService[] = [
-  { id: "1", name: "Теплоход", price: 400, isEnabled: false },
-  { id: "2", name: "Колесо обозрения", price: 400, isEnabled: true },
-];
-
-const mockExcursions: Excursion[] = [
-  {
-    id: "1",
-    tourTypeId: "1",
-    date: "2025-11-23",
-    time: "09:00",
-    fullPriceCount: 28,
-    discountedCount: 25,
-    freeCount: 1,
-    tourPackageCount: 0,
-    byTourCount: 0,
-    paidCount: 0,
-    expenses: [
-      { id: "e1", type: "Экскурсовод", amount: 13200, description: "Экскурсовод" },
-      { id: "e2", type: "Предоплата", amount: 9900, description: "Предоплата автобуса" },
-    ],
-    additionalServices: [],
-  },
-  {
-    id: "2",
-    tourTypeId: "3",
-    date: "2025-11-23",
-    time: "10:00",
-    fullPriceCount: 20,
-    discountedCount: 34,
-    freeCount: 0,
-    tourPackageCount: 0,
-    byTourCount: 0,
-    paidCount: 0,
-    expenses: [
-      { id: "e3", type: "Экскурсовод", amount: 31200, description: "Экскурсовод" },
-      { id: "e4", type: "Предоплата", amount: 8200, description: "Предоплата автобуса" },
-    ],
-    additionalServices: [{ serviceId: "1", count: 54 }],
-  },
-  {
-    id: "3",
-    tourTypeId: "5",
-    date: "2025-11-23",
-    time: "11:00",
-    fullPriceCount: 15,
-    discountedCount: 30,
-    freeCount: 0,
-    tourPackageCount: 0,
-    byTourCount: 0,
-    paidCount: 0,
-    expenses: [
-      { id: "e5", type: "Экскурсовод", amount: 4900, description: "Экскурсовод" },
-      { id: "e6", type: "Предоплата", amount: 2500, description: "Предоплата автобуса" },
-    ],
-    additionalServices: [],
-  },
-];
-
-const mockTransactions: Transaction[] = [
-  {
-    id: "t1",
-    type: "expense",
-    amount: 1500,
-    description: "Вильдану",
-    date: "2025-11-23",
-  },
-  {
-    id: "t2",
-    type: "expense",
-    amount: 4300,
-    description: "Эдику",
-    date: "2025-11-23",
-  },
-  {
-    id: "t3",
-    type: "income",
-    amount: 5000,
-    description: "Поступление от партнера",
-    date: "2025-11-23",
-  },
-];
-
 export function DataProvider({ children }: { children: ReactNode }) {
-  const [tourTypes, setTourTypes] = useState<TourType[]>(defaultTourTypes);
-  const [additionalServices, setAdditionalServices] = useState<AdditionalService[]>(defaultServices);
-  const [excursions, setExcursions] = useState<Excursion[]>(mockExcursions);
-  const [transactions, setTransactions] = useState<Transaction[]>(mockTransactions);
-  const [managers, setManagers] = useState<Manager[]>([
-    { id: "1", name: "Иван Петров", email: "ivan@example.com", isActive: true },
-    { id: "2", name: "Мария Сидорова", email: "maria@example.com", isActive: true },
-  ]);
-  const [currentUser, setCurrentUser] = useState<{ role: "admin" | "manager"; name: string } | null>({
-    role: "admin",
-    name: "Администратор",
-  });
+  const { user, profile, isAdmin, managers: authManagers } = useAuth();
+  
+  const [tourTypes, setTourTypes] = useState<TourType[]>([]);
+  const [additionalServices, setAdditionalServices] = useState<AdditionalService[]>([]);
+  const [excursions, setExcursions] = useState<Excursion[]>([]);
+  const [transactions, setTransactions] = useState<Transaction[]>([]);
   const [activities, setActivities] = useState<Activity[]>([]);
   const [deletedItems, setDeletedItems] = useState<DeletedItem[]>([]);
+  const [isLoading, setIsLoading] = useState(true);
 
-  const addExcursion = (excursion: Excursion) => {
-    setExcursions((prev) => [...prev, excursion]);
-    if (currentUser) {
-      const tourType = tourTypes.find((t) => t.id === excursion.tourTypeId);
-      const activity: Activity = {
-        id: Date.now().toString() + "_excursion",
-        type: "excursion_added",
-        managerName: currentUser.name,
-        description: `добавил экскурсию ${tourType?.name || ""}`,
-        date: excursion.date,
-        timestamp: new Date().toISOString(),
-      };
-      setActivities((prev) => [activity, ...prev]);
+  const currentUser = profile ? {
+    role: profile.role as "admin" | "manager",
+    name: profile.display_name,
+    id: profile.id,
+  } : null;
+
+  const managers: Manager[] = authManagers.map(m => ({
+    id: m.id,
+    name: m.display_name,
+    email: m.email,
+    isActive: m.is_active,
+  }));
+
+  const fetchTourTypes = useCallback(async () => {
+    try {
+      const { data, error } = await supabase
+        .from('tour_types')
+        .select('*')
+        .order('name');
+
+      if (error) throw error;
+
+      setTourTypes((data || []).map(t => ({
+        id: t.id,
+        name: t.name,
+        fullPrice: Number(t.full_price),
+        discountedPrice: Number(t.discounted_price),
+        articleNumber: t.article_number || '',
+        isEnabled: t.is_enabled,
+        applicableServiceIds: [],
+        hasRadioGuides: false,
+      })));
+    } catch (err) {
+      console.error('Error fetching tour types:', err);
+    }
+  }, []);
+
+  const fetchAdditionalServices = useCallback(async () => {
+    try {
+      const { data, error } = await supabase
+        .from('additional_services')
+        .select('*')
+        .order('name');
+
+      if (error) throw error;
+
+      setAdditionalServices((data || []).map(s => ({
+        id: s.id,
+        name: s.name,
+        price: Number(s.price),
+        isEnabled: s.is_enabled,
+      })));
+    } catch (err) {
+      console.error('Error fetching additional services:', err);
+    }
+  }, []);
+
+  const fetchExcursions = useCallback(async () => {
+    if (!user) return;
+
+    try {
+      const { data, error } = await supabase
+        .from('excursions')
+        .select(`
+          *,
+          profiles:manager_id (display_name)
+        `)
+        .order('event_date', { ascending: false });
+
+      if (error) throw error;
+
+      setExcursions((data || []).map(e => ({
+        id: e.id,
+        tourTypeId: e.tour_type_id || '',
+        date: e.event_date,
+        time: e.event_time || '',
+        fullPriceCount: e.full_price_count || 0,
+        discountedCount: e.discounted_count || 0,
+        freeCount: e.free_count || 0,
+        tourPackageCount: 0,
+        byTourCount: e.by_tour_count || 0,
+        paidCount: e.paid_count || 0,
+        expenses: e.expenses || [],
+        additionalServices: e.additional_services || [],
+        managerId: e.manager_id,
+        managerName: e.profiles?.display_name || '',
+      })));
+    } catch (err) {
+      console.error('Error fetching excursions:', err);
+    }
+  }, [user]);
+
+  const fetchTransactions = useCallback(async () => {
+    if (!user) return;
+
+    try {
+      const { data, error } = await supabase
+        .from('transactions')
+        .select(`
+          *,
+          profiles:manager_id (display_name)
+        `)
+        .order('event_date', { ascending: false });
+
+      if (error) throw error;
+
+      setTransactions((data || []).map(t => ({
+        id: t.id,
+        type: t.type as "income" | "expense",
+        amount: Number(t.amount),
+        description: t.description || '',
+        date: t.event_date,
+        managerId: t.manager_id,
+        managerName: t.profiles?.display_name || '',
+      })));
+    } catch (err) {
+      console.error('Error fetching transactions:', err);
+    }
+  }, [user]);
+
+  const fetchActivities = useCallback(async () => {
+    if (!user) return;
+
+    try {
+      const { data, error } = await supabase
+        .from('activities')
+        .select('*')
+        .order('timestamp', { ascending: false })
+        .limit(100);
+
+      if (error) throw error;
+
+      setActivities((data || []).map(a => ({
+        id: a.id,
+        type: a.type,
+        managerName: a.manager_name,
+        description: a.description,
+        date: a.timestamp?.split('T')[0] || '',
+        timestamp: a.timestamp,
+      })));
+    } catch (err) {
+      console.error('Error fetching activities:', err);
+    }
+  }, [user]);
+
+  const fetchDeletedItems = useCallback(async () => {
+    if (!isAdmin) return;
+
+    try {
+      const { data, error } = await supabase
+        .from('deleted_items')
+        .select('*')
+        .order('deleted_at', { ascending: false });
+
+      if (error) throw error;
+
+      setDeletedItems((data || []).map(d => ({
+        id: d.id,
+        type: d.item_type as "excursion" | "transaction",
+        data: d.item_data,
+        deletedAt: d.deleted_at,
+      })));
+    } catch (err) {
+      console.error('Error fetching deleted items:', err);
+    }
+  }, [isAdmin]);
+
+  const refreshData = useCallback(async () => {
+    setIsLoading(true);
+    try {
+      await Promise.all([
+        fetchTourTypes(),
+        fetchAdditionalServices(),
+        fetchExcursions(),
+        fetchTransactions(),
+        fetchActivities(),
+        fetchDeletedItems(),
+      ]);
+    } finally {
+      setIsLoading(false);
+    }
+  }, [fetchTourTypes, fetchAdditionalServices, fetchExcursions, fetchTransactions, fetchActivities, fetchDeletedItems]);
+
+  useEffect(() => {
+    if (user && profile) {
+      refreshData();
+    } else {
+      setIsLoading(false);
+    }
+  }, [user, profile]);
+
+  const addTourType = async (tourType: Omit<TourType, 'id'>) => {
+    try {
+      const { error } = await supabase
+        .from('tour_types')
+        .insert({
+          name: tourType.name,
+          full_price: tourType.fullPrice,
+          discounted_price: tourType.discountedPrice,
+          article_number: tourType.articleNumber,
+          is_enabled: tourType.isEnabled,
+        });
+
+      if (error) throw error;
+      await fetchTourTypes();
+    } catch (err) {
+      console.error('Error adding tour type:', err);
+      throw err;
     }
   };
 
-  const updateExcursion = (id: string, excursion: Excursion) => {
-    setExcursions((prev) => prev.map((e) => (e.id === id ? excursion : e)));
-  };
+  const updateTourType = async (id: string, tourType: Partial<TourType>) => {
+    try {
+      const updateData: Record<string, unknown> = {};
+      if (tourType.name !== undefined) updateData.name = tourType.name;
+      if (tourType.fullPrice !== undefined) updateData.full_price = tourType.fullPrice;
+      if (tourType.discountedPrice !== undefined) updateData.discounted_price = tourType.discountedPrice;
+      if (tourType.articleNumber !== undefined) updateData.article_number = tourType.articleNumber;
+      if (tourType.isEnabled !== undefined) updateData.is_enabled = tourType.isEnabled;
 
-  const deleteExcursion = (id: string) => {
-    const excursion = excursions.find((e) => e.id === id);
-    setExcursions((prev) => prev.filter((e) => e.id !== id));
-    if (excursion) {
-      const deletedItem: DeletedItem = {
-        id: Date.now().toString() + "_deleted_exc",
-        type: "excursion",
-        data: excursion,
-        deletedAt: new Date().toISOString(),
-      };
-      setDeletedItems((prev) => [deletedItem, ...prev]);
-    }
-    if (currentUser && excursion) {
-      const tourType = tourTypes.find((t) => t.id === excursion.tourTypeId);
-      const activity: Activity = {
-        id: Date.now().toString() + "_excursion_del",
-        type: "excursion_deleted",
-        managerName: currentUser.name,
-        description: `удалил экскурсию ${tourType?.name || ""}`,
-        date: excursion.date,
-        timestamp: new Date().toISOString(),
-      };
-      setActivities((prev) => [activity, ...prev]);
+      const { error } = await supabase
+        .from('tour_types')
+        .update(updateData)
+        .eq('id', id);
+
+      if (error) throw error;
+      await fetchTourTypes();
+    } catch (err) {
+      console.error('Error updating tour type:', err);
+      throw err;
     }
   };
 
-  const addTransaction = (transaction: Transaction) => {
-    setTransactions((prev) => [...prev, transaction]);
-    if (currentUser) {
-      const typeText = transaction.type === "income" ? "доход" : "расход";
-      const activity: Activity = {
-        id: Date.now().toString() + "_transaction",
-        type: "transaction_added",
-        managerName: currentUser.name,
+  const deleteTourType = async (id: string) => {
+    try {
+      const { error } = await supabase
+        .from('tour_types')
+        .delete()
+        .eq('id', id);
+
+      if (error) throw error;
+      await fetchTourTypes();
+    } catch (err) {
+      console.error('Error deleting tour type:', err);
+      throw err;
+    }
+  };
+
+  const addAdditionalService = async (service: Omit<AdditionalService, 'id'>) => {
+    try {
+      const { error } = await supabase
+        .from('additional_services')
+        .insert({
+          name: service.name,
+          price: service.price,
+          is_enabled: service.isEnabled,
+        });
+
+      if (error) throw error;
+      await fetchAdditionalServices();
+    } catch (err) {
+      console.error('Error adding additional service:', err);
+      throw err;
+    }
+  };
+
+  const updateAdditionalService = async (id: string, service: Partial<AdditionalService>) => {
+    try {
+      const updateData: Record<string, unknown> = {};
+      if (service.name !== undefined) updateData.name = service.name;
+      if (service.price !== undefined) updateData.price = service.price;
+      if (service.isEnabled !== undefined) updateData.is_enabled = service.isEnabled;
+
+      const { error } = await supabase
+        .from('additional_services')
+        .update(updateData)
+        .eq('id', id);
+
+      if (error) throw error;
+      await fetchAdditionalServices();
+    } catch (err) {
+      console.error('Error updating additional service:', err);
+      throw err;
+    }
+  };
+
+  const deleteAdditionalService = async (id: string) => {
+    try {
+      const { error } = await supabase
+        .from('additional_services')
+        .delete()
+        .eq('id', id);
+
+      if (error) throw error;
+      await fetchAdditionalServices();
+    } catch (err) {
+      console.error('Error deleting additional service:', err);
+      throw err;
+    }
+  };
+
+  const addExcursion = async (excursion: Omit<Excursion, 'id' | 'managerId' | 'managerName'>) => {
+    if (!user || !profile) throw new Error('User not authenticated');
+
+    try {
+      const { data: excursionData, error } = await supabase
+        .from('excursions')
+        .insert({
+          tour_type_id: excursion.tourTypeId,
+          event_date: excursion.date,
+          event_time: excursion.time,
+          full_price_count: excursion.fullPriceCount,
+          discounted_count: excursion.discountedCount,
+          free_count: excursion.freeCount,
+          by_tour_count: excursion.byTourCount,
+          paid_count: excursion.paidCount,
+          expenses: excursion.expenses,
+          additional_services: excursion.additionalServices,
+          manager_id: user.id,
+        })
+        .select()
+        .single();
+
+      if (error) throw error;
+
+      const tourType = tourTypes.find(t => t.id === excursion.tourTypeId);
+      await supabase.from('activities').insert({
+        manager_id: user.id,
+        manager_name: profile.display_name,
+        type: 'excursion_added',
+        description: `добавил экскурсию ${tourType?.name || ''}`,
+        target_id: excursionData.id,
+      });
+
+      await fetchExcursions();
+      await fetchActivities();
+    } catch (err) {
+      console.error('Error adding excursion:', err);
+      throw err;
+    }
+  };
+
+  const updateExcursion = async (id: string, excursion: Partial<Excursion>) => {
+    try {
+      const updateData: Record<string, unknown> = {};
+      if (excursion.tourTypeId !== undefined) updateData.tour_type_id = excursion.tourTypeId;
+      if (excursion.date !== undefined) updateData.event_date = excursion.date;
+      if (excursion.time !== undefined) updateData.event_time = excursion.time;
+      if (excursion.fullPriceCount !== undefined) updateData.full_price_count = excursion.fullPriceCount;
+      if (excursion.discountedCount !== undefined) updateData.discounted_count = excursion.discountedCount;
+      if (excursion.freeCount !== undefined) updateData.free_count = excursion.freeCount;
+      if (excursion.byTourCount !== undefined) updateData.by_tour_count = excursion.byTourCount;
+      if (excursion.paidCount !== undefined) updateData.paid_count = excursion.paidCount;
+      if (excursion.expenses !== undefined) updateData.expenses = excursion.expenses;
+      if (excursion.additionalServices !== undefined) updateData.additional_services = excursion.additionalServices;
+
+      const { error } = await supabase
+        .from('excursions')
+        .update(updateData)
+        .eq('id', id);
+
+      if (error) throw error;
+      await fetchExcursions();
+    } catch (err) {
+      console.error('Error updating excursion:', err);
+      throw err;
+    }
+  };
+
+  const deleteExcursion = async (id: string) => {
+    if (!user || !profile) throw new Error('User not authenticated');
+
+    try {
+      const excursion = excursions.find(e => e.id === id);
+      if (!excursion) throw new Error('Excursion not found');
+
+      await supabase.from('deleted_items').insert({
+        item_type: 'excursion',
+        item_data: excursion,
+        deleted_by: user.id,
+      });
+
+      const { error } = await supabase
+        .from('excursions')
+        .delete()
+        .eq('id', id);
+
+      if (error) throw error;
+
+      const tourType = tourTypes.find(t => t.id === excursion.tourTypeId);
+      await supabase.from('activities').insert({
+        manager_id: user.id,
+        manager_name: profile.display_name,
+        type: 'excursion_deleted',
+        description: `удалил экскурсию ${tourType?.name || ''}`,
+        target_id: id,
+      });
+
+      await fetchExcursions();
+      await fetchActivities();
+      await fetchDeletedItems();
+    } catch (err) {
+      console.error('Error deleting excursion:', err);
+      throw err;
+    }
+  };
+
+  const addTransaction = async (transaction: Omit<Transaction, 'id' | 'managerId' | 'managerName'>) => {
+    if (!user || !profile) throw new Error('User not authenticated');
+
+    try {
+      const { data: transactionData, error } = await supabase
+        .from('transactions')
+        .insert({
+          type: transaction.type,
+          amount: transaction.amount,
+          description: transaction.description,
+          event_date: transaction.date,
+          manager_id: user.id,
+        })
+        .select()
+        .single();
+
+      if (error) throw error;
+
+      const typeText = transaction.type === 'income' ? 'доход' : 'расход';
+      await supabase.from('activities').insert({
+        manager_id: user.id,
+        manager_name: profile.display_name,
+        type: 'transaction_added',
         description: `добавил ${typeText} "${transaction.description}"`,
-        date: transaction.date,
-        timestamp: new Date().toISOString(),
-      };
-      setActivities((prev) => [activity, ...prev]);
+        target_id: transactionData.id,
+      });
+
+      await fetchTransactions();
+      await fetchActivities();
+    } catch (err) {
+      console.error('Error adding transaction:', err);
+      throw err;
     }
   };
 
-  const deleteTransaction = (id: string) => {
-    const transaction = transactions.find((t) => t.id === id);
-    setTransactions((prev) => prev.filter((t) => t.id !== id));
-    if (transaction) {
-      const deletedItem: DeletedItem = {
-        id: Date.now().toString() + "_deleted_trans",
-        type: "transaction",
-        data: transaction,
-        deletedAt: new Date().toISOString(),
-      };
-      setDeletedItems((prev) => [deletedItem, ...prev]);
-    }
-    if (currentUser && transaction) {
-      const typeText = transaction.type === "income" ? "доход" : "расход";
-      const activity: Activity = {
-        id: Date.now().toString() + "_transaction_del",
-        type: "transaction_deleted",
-        managerName: currentUser.name,
+  const deleteTransaction = async (id: string) => {
+    if (!user || !profile) throw new Error('User not authenticated');
+
+    try {
+      const transaction = transactions.find(t => t.id === id);
+      if (!transaction) throw new Error('Transaction not found');
+
+      await supabase.from('deleted_items').insert({
+        item_type: 'transaction',
+        item_data: transaction,
+        deleted_by: user.id,
+      });
+
+      const { error } = await supabase
+        .from('transactions')
+        .delete()
+        .eq('id', id);
+
+      if (error) throw error;
+
+      const typeText = transaction.type === 'income' ? 'доход' : 'расход';
+      await supabase.from('activities').insert({
+        manager_id: user.id,
+        manager_name: profile.display_name,
+        type: 'transaction_deleted',
         description: `удалил ${typeText} "${transaction.description}"`,
-        date: transaction.date,
-        timestamp: new Date().toISOString(),
-      };
-      setActivities((prev) => [activity, ...prev]);
+        target_id: id,
+      });
+
+      await fetchTransactions();
+      await fetchActivities();
+      await fetchDeletedItems();
+    } catch (err) {
+      console.error('Error deleting transaction:', err);
+      throw err;
     }
   };
 
-  const addManager = (manager: Manager) => {
-    setManagers((prev) => [...prev, manager]);
-  };
+  const restoreDeletedItem = async (id: string) => {
+    if (!isAdmin) throw new Error('Only admins can restore items');
 
-  const updateManager = (id: string, manager: Manager) => {
-    setManagers((prev) => prev.map((m) => (m.id === id ? manager : m)));
-  };
+    try {
+      const item = deletedItems.find(i => i.id === id);
+      if (!item) throw new Error('Deleted item not found');
 
-  const deleteManager = (id: string) => {
-    setManagers((prev) => prev.filter((m) => m.id !== id));
-  };
+      if (item.type === 'excursion') {
+        const excursion = item.data as Excursion;
+        await supabase.from('excursions').insert({
+          id: excursion.id,
+          tour_type_id: excursion.tourTypeId,
+          event_date: excursion.date,
+          event_time: excursion.time,
+          full_price_count: excursion.fullPriceCount,
+          discounted_count: excursion.discountedCount,
+          free_count: excursion.freeCount,
+          by_tour_count: excursion.byTourCount || 0,
+          paid_count: excursion.paidCount || 0,
+          expenses: excursion.expenses,
+          additional_services: excursion.additionalServices,
+          manager_id: excursion.managerId,
+        });
+      } else if (item.type === 'transaction') {
+        const transaction = item.data as Transaction;
+        await supabase.from('transactions').insert({
+          id: transaction.id,
+          type: transaction.type,
+          amount: transaction.amount,
+          description: transaction.description,
+          event_date: transaction.date,
+          manager_id: transaction.managerId,
+        });
+      }
 
-  const addTourType = (tourType: TourType) => {
-    setTourTypes((prev) => [...prev, tourType]);
-  };
-
-  const updateTourType = (id: string, tourType: TourType) => {
-    setTourTypes((prev) => prev.map((t) => (t.id === id ? tourType : t)));
-  };
-
-  const deleteTourType = (id: string) => {
-    setTourTypes((prev) => prev.filter((t) => t.id !== id));
-  };
-
-  const addAdditionalService = (service: AdditionalService) => {
-    setAdditionalServices((prev) => [...prev, service]);
-  };
-
-  const updateAdditionalService = (id: string, service: AdditionalService) => {
-    setAdditionalServices((prev) => prev.map((s) => (s.id === id ? service : s)));
-  };
-
-  const deleteAdditionalService = (id: string) => {
-    setAdditionalServices((prev) => prev.filter((s) => s.id !== id));
-  };
-
-  const restoreDeletedItem = (id: string) => {
-    const item = deletedItems.find((i) => i.id === id);
-    if (!item) return;
-    
-    if (item.type === "excursion") {
-      const excursion = item.data as Excursion;
-      const restoredExcursion: Excursion = {
-        ...excursion,
-        byTourCount: excursion.byTourCount ?? 0,
-        paidCount: excursion.paidCount ?? 0,
-        tourPackageCount: excursion.tourPackageCount ?? 0,
-      };
-      setExcursions((prev) => [...prev, restoredExcursion]);
-    } else if (item.type === "transaction") {
-      setTransactions((prev) => [...prev, item.data as Transaction]);
+      await supabase.from('deleted_items').delete().eq('id', id);
+      
+      await refreshData();
+    } catch (err) {
+      console.error('Error restoring deleted item:', err);
+      throw err;
     }
-    setDeletedItems((prev) => prev.filter((i) => i.id !== id));
   };
 
-  const permanentlyDeleteItem = (id: string) => {
-    setDeletedItems((prev) => prev.filter((i) => i.id !== id));
+  const permanentlyDeleteItem = async (id: string) => {
+    if (!isAdmin) throw new Error('Only admins can permanently delete items');
+
+    try {
+      const { error } = await supabase
+        .from('deleted_items')
+        .delete()
+        .eq('id', id);
+
+      if (error) throw error;
+      await fetchDeletedItems();
+    } catch (err) {
+      console.error('Error permanently deleting item:', err);
+      throw err;
+    }
   };
 
-  const clearDeletedItems = () => {
-    setDeletedItems([]);
+  const clearDeletedItems = async () => {
+    if (!isAdmin) throw new Error('Only admins can clear deleted items');
+
+    try {
+      const { error } = await supabase
+        .from('deleted_items')
+        .delete()
+        .neq('id', '00000000-0000-0000-0000-000000000000');
+
+      if (error) throw error;
+      setDeletedItems([]);
+    } catch (err) {
+      console.error('Error clearing deleted items:', err);
+      throw err;
+    }
   };
 
   return (
@@ -388,16 +694,14 @@ export function DataProvider({ children }: { children: ReactNode }) {
         addTransaction,
         deleteTransaction,
         managers,
-        addManager,
-        updateManager,
-        deleteManager,
         currentUser,
-        setCurrentUser,
         activities,
         deletedItems,
         restoreDeletedItem,
         permanentlyDeleteItem,
         clearDeletedItems,
+        isLoading,
+        refreshData,
       }}
     >
       {children}

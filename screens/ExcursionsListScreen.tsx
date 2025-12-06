@@ -1,5 +1,5 @@
 import { useState, useMemo } from "react";
-import { View, StyleSheet, Pressable, TextInput, Modal, Platform } from "react-native";
+import { View, StyleSheet, Pressable, TextInput, Modal, Platform, Alert } from "react-native";
 import { Feather } from "@expo/vector-icons";
 import DateTimePicker from "@react-native-community/datetimepicker";
 import { ThemedText } from "@/components/ThemedText";
@@ -10,6 +10,7 @@ import { AddExcursionForm } from "@/components/AddExcursionForm";
 import { Spacing, BorderRadius } from "@/constants/theme";
 import { useTheme } from "@/hooks/useTheme";
 import { useData, Excursion } from "@/contexts/DataContext";
+import { useAuth } from "@/contexts/AuthContext";
 import {
   calculateExcursionRevenue,
   calculateExcursionExpenses,
@@ -27,11 +28,13 @@ export default function ExcursionsListScreen() {
   const { theme } = useTheme();
   const navigation = useNavigation<NavigationProp<ExcursionsStackParamList>>();
   const { excursions, tourTypes, additionalServices, addExcursion } = useData();
+  const { isAdmin } = useAuth();
   const [selectedDate, setSelectedDate] = useState(new Date().toISOString().split("T")[0]);
   const [searchQuery, setSearchQuery] = useState("");
   const [showAddModal, setShowAddModal] = useState(false);
   const [showDatePicker, setShowDatePicker] = useState(false);
   const [expandedGroups, setExpandedGroups] = useState<Set<string>>(new Set());
+  const [isSaving, setIsSaving] = useState(false);
   
   const dateValue = parseLocalDate(selectedDate);
   
@@ -57,10 +60,18 @@ export default function ExcursionsListScreen() {
     });
   };
 
-  const handleSaveExcursion = (excursion: Excursion) => {
-    addExcursion(excursion);
-    setSelectedDate(excursion.date);
-    setTimeout(() => setShowAddModal(false), 100);
+  const handleSaveExcursion = async (excursion: Omit<Excursion, 'id' | 'managerId' | 'managerName'>) => {
+    if (isSaving) return;
+    setIsSaving(true);
+    try {
+      await addExcursion(excursion);
+      setSelectedDate(excursion.date);
+      setShowAddModal(false);
+    } catch (err) {
+      Alert.alert('Ошибка', 'Не удалось сохранить экскурсию');
+    } finally {
+      setIsSaving(false);
+    }
   };
   
   const toggleGroup = (tourTypeId: string) => {
@@ -271,6 +282,7 @@ export default function ExcursionsListScreen() {
                               revenue={revenue}
                               expenses={expenses}
                               profit={profit}
+                              showManagerName={isAdmin}
                               onPress={() => {
                                 navigation.navigate("ExcursionDetail", {
                                   excursionId: excursion.id,

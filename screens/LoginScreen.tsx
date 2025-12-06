@@ -21,7 +21,7 @@ export default function LoginScreen() {
 
   const handleLogin = async () => {
     if (!email.trim() || !password.trim()) {
-      setError('Введите email и пароль');
+      setError('Введите логин и пароль');
       return;
     }
 
@@ -62,12 +62,12 @@ export default function LoginScreen() {
           ) : null}
 
           <View style={styles.inputContainer}>
-            <ThemedText style={[styles.label, { color: theme.textSecondary }]}>Email</ThemedText>
+            <ThemedText style={[styles.label, { color: theme.textSecondary }]}>Логин</ThemedText>
             <View style={[styles.inputWrapper, { backgroundColor: theme.backgroundSecondary, borderColor: theme.border }]}>
-              <Feather name="mail" size={20} color={theme.textSecondary} style={styles.inputIcon} />
+              <Feather name="user" size={20} color={theme.textSecondary} style={styles.inputIcon} />
               <TextInput
                 style={[styles.input, { color: theme.text }]}
-                placeholder="Введите email"
+                placeholder="Введите логин или email"
                 placeholderTextColor={theme.textSecondary}
                 value={email}
                 onChangeText={setEmail}
