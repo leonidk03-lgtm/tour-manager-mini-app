@@ -358,16 +358,19 @@ const styles = StyleSheet.create({
     fontWeight: "700",
   },
   profitCard: {
-    padding: Spacing.xl,
+    paddingHorizontal: Spacing.xl,
+    paddingVertical: Spacing["2xl"],
     alignItems: "center",
     gap: Spacing.sm,
   },
   profitLabel: {
     fontSize: 16,
     fontWeight: "500",
+    lineHeight: 22,
   },
   profitValue: {
     fontSize: 32,
     fontWeight: "700",
+    lineHeight: 42,
   },
 });
