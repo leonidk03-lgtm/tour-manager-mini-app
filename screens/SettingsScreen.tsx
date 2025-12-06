@@ -81,20 +81,23 @@ export default function SettingsScreen() {
               },
             ]}
           >
-            <Pressable
-              onPress={() => navigation.navigate("TicketPrices")}
-              style={({ pressed }) => ({ opacity: pressed ? 0.7 : 1 })}
-            >
-              <View style={styles.settingItem}>
-                <View style={styles.settingLeft}>
-                  <Feather name="dollar-sign" size={20} color={theme.textSecondary} />
-                  <ThemedText style={styles.settingText}>Цены на билеты</ThemedText>
-                </View>
-                <Feather name="chevron-right" size={20} color={theme.textSecondary} />
-              </View>
-            </Pressable>
-
-            <View style={[styles.divider, { backgroundColor: theme.border }]} />
+            {isAdmin ? (
+              <>
+                <Pressable
+                  onPress={() => navigation.navigate("TicketPrices")}
+                  style={({ pressed }) => ({ opacity: pressed ? 0.7 : 1 })}
+                >
+                  <View style={styles.settingItem}>
+                    <View style={styles.settingLeft}>
+                      <Feather name="dollar-sign" size={20} color={theme.textSecondary} />
+                      <ThemedText style={styles.settingText}>Цены на билеты</ThemedText>
+                    </View>
+                    <Feather name="chevron-right" size={20} color={theme.textSecondary} />
+                  </View>
+                </Pressable>
+                <View style={[styles.divider, { backgroundColor: theme.border }]} />
+              </>
+            ) : null}
             <Pressable
               onPress={() => navigation.navigate("DeletedData")}
               style={({ pressed }) => ({ opacity: pressed ? 0.7 : 1 })}

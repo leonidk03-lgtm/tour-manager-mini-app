@@ -31,7 +31,7 @@ export function AddExcursionForm({ excursion, onSave, onCancel }: AddExcursionFo
   const enabledTourTypes = tourTypes.filter((t) => t.isEnabled);
 
   const [selectedTourType, setSelectedTourType] = useState(
-    excursion?.tourTypeId || enabledTourTypes[0]?.id || ""
+    excursion?.tourTypeId || ""
   );
   const [dateValue, setDateValue] = useState(() => {
     if (excursion?.date) {
