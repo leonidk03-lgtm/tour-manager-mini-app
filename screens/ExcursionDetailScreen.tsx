@@ -85,7 +85,7 @@ export default function ExcursionDetailScreen() {
   const profit = calculateExcursionProfit(excursion, tourType, additionalServices);
   const totalParticipants =
     excursion.fullPriceCount + excursion.discountedCount + excursion.freeCount + 
-    excursion.tourPackageCount + (excursion.byTourCount || 0) + (excursion.paidCount || 0);
+    (excursion.byTourCount || 0) + (excursion.paidCount || 0);
 
   return (
     <ScreenScrollView>
@@ -155,12 +155,6 @@ export default function ExcursionDetailScreen() {
                 Бесплатно:
               </ThemedText>
               <ThemedText style={styles.tableValue}>{excursion.freeCount} чел.</ThemedText>
-            </View>
-            <View style={styles.tableRow}>
-              <ThemedText style={[styles.tableLabel, { color: theme.textSecondary }]}>
-                Турпакет:
-              </ThemedText>
-              <ThemedText style={styles.tableValue}>{excursion.tourPackageCount} чел.</ThemedText>
             </View>
             <View style={styles.tableRow}>
               <ThemedText style={[styles.tableLabel, { color: theme.textSecondary }]}>

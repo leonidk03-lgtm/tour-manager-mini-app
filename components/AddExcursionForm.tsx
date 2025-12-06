@@ -281,7 +281,6 @@ export function AddExcursionForm({ excursion, onSave, onCancel }: AddExcursionFo
         {[
           { label: "Льготных", value: discounted, setter: setDiscounted },
           { label: "Бесплатных", value: free, setter: setFree },
-          { label: "Турпакет", value: tourPackage, setter: setTourPackage },
           { label: "По туру", value: byTour, setter: setByTour },
           { label: "Оплаченных", value: paid, setter: setPaid },
         ].map((item, index) => (
