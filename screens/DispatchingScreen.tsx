@@ -675,19 +675,19 @@ const styles = StyleSheet.create({
   },
   calcDisplay: {
     paddingHorizontal: Spacing.lg,
-    paddingVertical: Spacing.md,
+    paddingVertical: Spacing.lg,
     borderRadius: BorderRadius.md,
     marginBottom: Spacing.md,
     alignItems: "flex-end",
-    minHeight: 70,
+    minHeight: 80,
     justifyContent: "center",
-    overflow: "hidden",
   },
   calcDisplayText: {
     fontSize: 32,
     fontWeight: "600",
     textAlign: "right",
     width: "100%",
+    lineHeight: 40,
   },
   calcGrid: {
     gap: Spacing.xs,
