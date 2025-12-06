@@ -90,12 +90,12 @@ export function TourTypeModal({ visible, onClose, onSave, tourType }: TourTypeMo
 
   return (
     <Modal visible={visible} animationType="slide" transparent onRequestClose={handleClose}>
-      <View style={styles.overlay}>
-        <KeyboardAvoidingView 
-          style={styles.modalWrapper}
-          behavior={Platform.OS === "ios" ? "padding" : "height"}
-        >
-          <ThemedView style={[styles.modal, { backgroundColor: theme.backgroundDefault }]}>
+      <KeyboardAvoidingView 
+        style={styles.overlay}
+        behavior={Platform.OS === "ios" ? "padding" : "height"}
+      >
+        <Pressable style={styles.backdrop} onPress={handleClose} />
+        <ThemedView style={[styles.modal, { backgroundColor: theme.backgroundDefault }]}>
           <View style={styles.header}>
             <ThemedText style={styles.title}>
               {tourType ? "Редактировать экскурсию" : "Новая экскурсия"}
@@ -269,9 +269,8 @@ export function TourTypeModal({ visible, onClose, onSave, tourType }: TourTypeMo
               </ThemedText>
             </Pressable>
           </View>
-          </ThemedView>
-        </KeyboardAvoidingView>
-      </View>
+        </ThemedView>
+      </KeyboardAvoidingView>
     </Modal>
   );
 }
@@ -279,11 +278,11 @@ export function TourTypeModal({ visible, onClose, onSave, tourType }: TourTypeMo
 const styles = StyleSheet.create({
   overlay: {
     flex: 1,
-    backgroundColor: "rgba(0, 0, 0, 0.5)",
     justifyContent: "flex-end",
   },
-  modalWrapper: {
-    width: "100%",
+  backdrop: {
+    ...StyleSheet.absoluteFillObject,
+    backgroundColor: "rgba(0, 0, 0, 0.5)",
   },
   modal: {
     borderTopLeftRadius: BorderRadius.lg,
