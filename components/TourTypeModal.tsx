@@ -92,13 +92,8 @@ export function TourTypeModal({ visible, onClose, onSave, tourType }: TourTypeMo
     <Modal visible={visible} animationType="slide" transparent onRequestClose={handleClose}>
       <View style={styles.overlay}>
         <Pressable style={styles.backdrop} onPress={handleClose} />
-        <KeyboardAvoidingView 
-          style={styles.modalContainer}
-          behavior={Platform.OS === "ios" ? "padding" : undefined}
-          keyboardVerticalOffset={Platform.OS === "ios" ? 0 : 0}
-        >
-          <ThemedView style={[styles.modal, { backgroundColor: theme.backgroundDefault }]}>
-            <View style={styles.header}>
+        <ThemedView style={[styles.modal, { backgroundColor: theme.backgroundDefault }]}>
+          <View style={styles.header}>
             <ThemedText style={styles.title}>
               {tourType ? "Редактировать экскурсию" : "Новая экскурсия"}
             </ThemedText>
@@ -271,8 +266,7 @@ export function TourTypeModal({ visible, onClose, onSave, tourType }: TourTypeMo
               </ThemedText>
             </Pressable>
           </View>
-          </ThemedView>
-        </KeyboardAvoidingView>
+        </ThemedView>
       </View>
     </Modal>
   );

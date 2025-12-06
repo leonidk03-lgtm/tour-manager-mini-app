@@ -65,13 +65,8 @@ export function ServiceModal({ visible, onClose, onSave, service }: ServiceModal
     <Modal visible={visible} animationType="slide" transparent onRequestClose={handleClose}>
       <View style={styles.overlay}>
         <Pressable style={styles.backdrop} onPress={handleClose} />
-        <KeyboardAvoidingView 
-          style={styles.modalContainer}
-          behavior={Platform.OS === "ios" ? "padding" : undefined}
-          keyboardVerticalOffset={Platform.OS === "ios" ? 0 : 0}
-        >
-          <ThemedView style={[styles.modal, { backgroundColor: theme.backgroundDefault }]}>
-            <View style={styles.header}>
+        <ThemedView style={[styles.modal, { backgroundColor: theme.backgroundDefault }]}>
+          <View style={styles.header}>
             <ThemedText style={styles.title}>
               {service ? "Редактировать услугу" : "Новая услуга"}
             </ThemedText>
@@ -153,8 +148,7 @@ export function ServiceModal({ visible, onClose, onSave, service }: ServiceModal
               </ThemedText>
             </Pressable>
           </View>
-          </ThemedView>
-        </KeyboardAvoidingView>
+        </ThemedView>
       </View>
     </Modal>
   );
