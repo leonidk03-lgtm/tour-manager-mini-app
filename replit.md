@@ -58,7 +58,8 @@ Design style: Telegram-inspired dark theme with flat design (November 2025 updat
 
 **Core Entities**
 - `TourType`: Excursion types with pricing (fullPrice, discountedPrice), article numbers (articleNumber), and seasonal availability (isEnabled)
-- `Excursion`: Tour instance with participant counts, date/time, expenses, and additional services
+- `Excursion`: Tour instance with participant counts (fullPrice, discounted, free, tourPackage, byTour, paid), date/time, expenses, and additional services
+- `DeletedItem`: Soft-deleted excursions and transactions with restore capability
 - `AdditionalService`: Extra services that can be added to excursions, with seasonal availability (isEnabled)
 - `Expense`: Individual expense items within an excursion
 - `Transaction`: Standalone income/expense entries
@@ -102,14 +103,17 @@ Design style: Telegram-inspired dark theme with flat design (November 2025 updat
 
 **FinancesScreen** - Separate income/expense transaction management with tabbed interface, add/delete capabilities
 
-**SettingsScreen** - User profile, logout, navigation to TicketPrices and AdminPanel
+**SettingsScreen** - User profile, logout, navigation to TicketPrices, DeletedData, and AdminPanel
+
+**DeletedDataScreen** - Soft-deleted data management with restore and permanent delete options
 
 **TicketPricesScreen** - Full price list management with add/edit/delete capabilities for tour types and additional services, article number assignment for tour types, and seasonal enable/disable toggle (e.g., summer-only or winter-only excursions). Additional services do not have article numbers.
 
 **AddExcursionForm** - Form for creating/editing excursions with:
 - Custom modal picker for tour type selection (works on mobile/Expo Go)
 - DateTimePicker calendar for date selection
-- Participant input: total count first, then breakdown (discounted/free/tour package), with auto-calculated full price
+- Participant input: total count first, then breakdown (discounted/free/tourPackage/byTour/paid), with auto-calculated full price
+- Paid participants are tracked separately but do not contribute to revenue (like free participants)
 - Additional services with direct numeric input for quantity (not +/- steppers)
 - Expense management with custom modal picker for expense type
 - Only enabled (isEnabled: true) tour types shown; validates before save

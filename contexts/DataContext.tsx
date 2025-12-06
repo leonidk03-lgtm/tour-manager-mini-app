@@ -64,6 +64,13 @@ export interface Activity {
   timestamp: string;
 }
 
+export interface DeletedItem {
+  id: string;
+  type: "excursion" | "transaction";
+  data: Excursion | Transaction;
+  deletedAt: string;
+}
+
 interface DataContextType {
   tourTypes: TourType[];
   addTourType: (tourType: TourType) => void;
@@ -87,6 +94,10 @@ interface DataContextType {
   currentUser: { role: "admin" | "manager"; name: string } | null;
   setCurrentUser: (user: { role: "admin" | "manager"; name: string } | null) => void;
   activities: Activity[];
+  deletedItems: DeletedItem[];
+  restoreDeletedItem: (id: string) => void;
+  permanentlyDeleteItem: (id: string) => void;
+  clearDeletedItems: () => void;
 }
 
 const DataContext = createContext<DataContextType | undefined>(undefined);
@@ -201,6 +212,7 @@ export function DataProvider({ children }: { children: ReactNode }) {
     name: "Администратор",
   });
   const [activities, setActivities] = useState<Activity[]>([]);
+  const [deletedItems, setDeletedItems] = useState<DeletedItem[]>([]);
 
   const addExcursion = (excursion: Excursion) => {
     setExcursions((prev) => [...prev, excursion]);
@@ -225,6 +237,15 @@ export function DataProvider({ children }: { children: ReactNode }) {
   const deleteExcursion = (id: string) => {
     const excursion = excursions.find((e) => e.id === id);
     setExcursions((prev) => prev.filter((e) => e.id !== id));
+    if (excursion) {
+      const deletedItem: DeletedItem = {
+        id: Date.now().toString() + "_deleted_exc",
+        type: "excursion",
+        data: excursion,
+        deletedAt: new Date().toISOString(),
+      };
+      setDeletedItems((prev) => [deletedItem, ...prev]);
+    }
     if (currentUser && excursion) {
       const tourType = tourTypes.find((t) => t.id === excursion.tourTypeId);
       const activity: Activity = {
@@ -258,6 +279,15 @@ export function DataProvider({ children }: { children: ReactNode }) {
   const deleteTransaction = (id: string) => {
     const transaction = transactions.find((t) => t.id === id);
     setTransactions((prev) => prev.filter((t) => t.id !== id));
+    if (transaction) {
+      const deletedItem: DeletedItem = {
+        id: Date.now().toString() + "_deleted_trans",
+        type: "transaction",
+        data: transaction,
+        deletedAt: new Date().toISOString(),
+      };
+      setDeletedItems((prev) => [deletedItem, ...prev]);
+    }
     if (currentUser && transaction) {
       const typeText = transaction.type === "income" ? "доход" : "расход";
       const activity: Activity = {
@@ -308,6 +338,33 @@ export function DataProvider({ children }: { children: ReactNode }) {
     setAdditionalServices((prev) => prev.filter((s) => s.id !== id));
   };
 
+  const restoreDeletedItem = (id: string) => {
+    const item = deletedItems.find((i) => i.id === id);
+    if (!item) return;
+    
+    if (item.type === "excursion") {
+      const excursion = item.data as Excursion;
+      const restoredExcursion: Excursion = {
+        ...excursion,
+        byTourCount: excursion.byTourCount ?? 0,
+        paidCount: excursion.paidCount ?? 0,
+        tourPackageCount: excursion.tourPackageCount ?? 0,
+      };
+      setExcursions((prev) => [...prev, restoredExcursion]);
+    } else if (item.type === "transaction") {
+      setTransactions((prev) => [...prev, item.data as Transaction]);
+    }
+    setDeletedItems((prev) => prev.filter((i) => i.id !== id));
+  };
+
+  const permanentlyDeleteItem = (id: string) => {
+    setDeletedItems((prev) => prev.filter((i) => i.id !== id));
+  };
+
+  const clearDeletedItems = () => {
+    setDeletedItems([]);
+  };
+
   return (
     <DataContext.Provider
       value={{
@@ -333,6 +390,10 @@ export function DataProvider({ children }: { children: ReactNode }) {
         currentUser,
         setCurrentUser,
         activities,
+        deletedItems,
+        restoreDeletedItem,
+        permanentlyDeleteItem,
+        clearDeletedItems,
       }}
     >
       {children}

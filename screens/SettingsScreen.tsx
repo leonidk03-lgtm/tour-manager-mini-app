@@ -95,6 +95,20 @@ export default function SettingsScreen() {
               </View>
             </Pressable>
 
+            <View style={[styles.divider, { backgroundColor: theme.border }]} />
+            <Pressable
+              onPress={() => navigation.navigate("DeletedData")}
+              style={({ pressed }) => ({ opacity: pressed ? 0.7 : 1 })}
+            >
+              <View style={styles.settingItem}>
+                <View style={styles.settingLeft}>
+                  <Feather name="trash" size={20} color={theme.textSecondary} />
+                  <ThemedText style={styles.settingText}>Удаленные данные</ThemedText>
+                </View>
+                <Feather name="chevron-right" size={20} color={theme.textSecondary} />
+              </View>
+            </Pressable>
+
             {currentUser?.role === "admin" && (
               <>
                 <View style={[styles.divider, { backgroundColor: theme.border }]} />
