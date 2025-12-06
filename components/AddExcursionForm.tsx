@@ -44,7 +44,7 @@ export function AddExcursionForm({ excursion, onSave, onCancel }: AddExcursionFo
 
   const [totalParticipants, setTotalParticipants] = useState(() => {
     if (excursion) {
-      const total = excursion.fullPriceCount + excursion.discountedCount + excursion.freeCount + excursion.tourPackageCount;
+      const total = excursion.fullPriceCount + excursion.discountedCount + excursion.freeCount + excursion.tourPackageCount + (excursion.byTourCount || 0) + (excursion.paidCount || 0);
       return total.toString();
     }
     return "";
@@ -52,6 +52,8 @@ export function AddExcursionForm({ excursion, onSave, onCancel }: AddExcursionFo
   const [discounted, setDiscounted] = useState(excursion ? excursion.discountedCount.toString() : "");
   const [free, setFree] = useState(excursion ? excursion.freeCount.toString() : "");
   const [tourPackage, setTourPackage] = useState(excursion ? excursion.tourPackageCount.toString() : "");
+  const [byTour, setByTour] = useState(excursion ? (excursion.byTourCount || 0).toString() : "");
+  const [paid, setPaid] = useState(excursion ? (excursion.paidCount || 0).toString() : "");
   
   const [selectedServices, setSelectedServices] = useState<{ serviceId: string; count: number }[]>(
     excursion?.additionalServices || []
@@ -70,7 +72,9 @@ export function AddExcursionForm({ excursion, onSave, onCancel }: AddExcursionFo
     const disc = parseInt(discounted, 10) || 0;
     const freeCount = parseInt(free, 10) || 0;
     const tour = parseInt(tourPackage, 10) || 0;
-    return Math.max(0, total - disc - freeCount - tour);
+    const byTourCount = parseInt(byTour, 10) || 0;
+    const paidCount = parseInt(paid, 10) || 0;
+    return Math.max(0, total - disc - freeCount - tour - byTourCount - paidCount);
   };
 
   const toggleService = (serviceId: string) => {
@@ -148,6 +152,8 @@ export function AddExcursionForm({ excursion, onSave, onCancel }: AddExcursionFo
       discountedCount: parseInt(discounted, 10) || 0,
       freeCount: parseInt(free, 10) || 0,
       tourPackageCount: parseInt(tourPackage, 10) || 0,
+      byTourCount: parseInt(byTour, 10) || 0,
+      paidCount: parseInt(paid, 10) || 0,
       expenses: expenses.map((e) => ({
         ...e,
         amount: typeof e.amount === "string" ? parseInt(e.amount, 10) || 0 : e.amount,
@@ -275,7 +281,9 @@ export function AddExcursionForm({ excursion, onSave, onCancel }: AddExcursionFo
         {[
           { label: "Льготных", value: discounted, setter: setDiscounted },
           { label: "Бесплатных", value: free, setter: setFree },
-          { label: "По туру", value: tourPackage, setter: setTourPackage },
+          { label: "Турпакет", value: tourPackage, setter: setTourPackage },
+          { label: "По туру", value: byTour, setter: setByTour },
+          { label: "Оплаченных", value: paid, setter: setPaid },
         ].map((item, index) => (
           <View key={index} style={styles.inputRow}>
             <ThemedText style={[styles.inputLabel, styles.subInputLabel]}>{item.label}</ThemedText>
