@@ -6,9 +6,10 @@ import { KeyboardProvider } from "react-native-keyboard-controller";
 import { SafeAreaProvider } from "react-native-safe-area-context";
 import { StatusBar } from "expo-status-bar";
 
-import MainTabNavigator from "@/navigation/MainTabNavigator";
+import RootNavigator from "@/navigation/RootNavigator";
 import { ErrorBoundary } from "@/components/ErrorBoundary";
 import { DataProvider } from "@/contexts/DataContext";
+import { AuthProvider } from "@/contexts/AuthContext";
 
 export default function App() {
   return (
@@ -16,11 +17,13 @@ export default function App() {
     <SafeAreaProvider>
         <GestureHandlerRootView style={styles.root}>
           <KeyboardProvider>
-            <DataProvider>
-              <NavigationContainer>
-                <MainTabNavigator />
-              </NavigationContainer>
-            </DataProvider>
+            <AuthProvider>
+              <DataProvider>
+                <NavigationContainer>
+                  <RootNavigator />
+                </NavigationContainer>
+              </DataProvider>
+            </AuthProvider>
             <StatusBar style="auto" />
           </KeyboardProvider>
         </GestureHandlerRootView>
