@@ -1,15 +1,15 @@
 import { useState, useEffect, useRef } from "react";
-import { View, StyleSheet, TextInput, Pressable, Platform, Dimensions, Modal, KeyboardAvoidingView } from "react-native";
+import { View, StyleSheet, TextInput, Pressable, Platform, Modal, ScrollView } from "react-native";
 import { WebView } from "react-native-webview";
 import { Feather } from "@expo/vector-icons";
 import { useSafeAreaInsets } from "react-native-safe-area-context";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import { BlurView } from "expo-blur";
+import { KeyboardAwareScrollView } from "react-native-keyboard-controller";
 import { ThemedText } from "@/components/ThemedText";
 import { ThemedView } from "@/components/ThemedView";
 import { useTheme } from "@/hooks/useTheme";
 import { Spacing, BorderRadius, Typography } from "@/constants/theme";
-import { useScreenInsets } from "@/hooks/useScreenInsets";
 
 const DATABASE_URL = "http://turburo-kazan.ru/managers/zapis-na-ekskursiyu.php?arrFilter_ff%5BNAME%5D=&arrFilter_DATE_ACTIVE_FROM_1=&arrFilter_DATE_ACTIVE_FROM_2=&arrFilter_pf%5BTYPE%5D=&arrFilter_pf%5BGOSTINICI%5D=&arrFilter_CREATED_BY=&sort=date_ex&USER_REMEMBER=Y&set_filter=Показать&set_filter=Y";
 const NOTES_STORAGE_KEY = "@dispatching_notes";
@@ -17,17 +17,14 @@ const NOTES_STORAGE_KEY = "@dispatching_notes";
 export default function DispatchingScreen() {
   const { theme } = useTheme();
   const insets = useSafeAreaInsets();
-  const { paddingTop } = useScreenInsets();
   const [notes, setNotes] = useState("");
   const [showCalculator, setShowCalculator] = useState(false);
   const [calcDisplay, setCalcDisplay] = useState("0");
   const [calcPrevValue, setCalcPrevValue] = useState<number | null>(null);
   const [calcOperation, setCalcOperation] = useState<string | null>(null);
   const [calcWaitingForOperand, setCalcWaitingForOperand] = useState(false);
+  const [isKeyboardVisible, setIsKeyboardVisible] = useState(false);
   const saveTimeoutRef = useRef<ReturnType<typeof setTimeout> | null>(null);
-
-  const screenHeight = Dimensions.get("window").height;
-  const webViewHeight = screenHeight * 0.55;
 
   useEffect(() => {
     loadNotes();
@@ -137,9 +134,35 @@ export default function DispatchingScreen() {
     </Pressable>
   );
 
+  const NotesContent = () => (
+    <View style={[styles.notesContainer, { backgroundColor: theme.backgroundDefault }]}>
+      <View style={styles.notesHeader}>
+        <Feather name="edit-3" size={18} color={theme.textSecondary} />
+        <ThemedText style={[styles.notesTitle, { color: theme.textSecondary }]}>Заметки</ThemedText>
+      </View>
+      <TextInput
+        style={[
+          styles.notesInput,
+          {
+            backgroundColor: theme.backgroundSecondary,
+            color: theme.text,
+          },
+        ]}
+        value={notes}
+        onChangeText={setNotes}
+        onFocus={() => setIsKeyboardVisible(true)}
+        onBlur={() => setIsKeyboardVisible(false)}
+        placeholder="Введите заметки..."
+        placeholderTextColor={theme.textSecondary}
+        multiline
+        textAlignVertical="top"
+      />
+    </View>
+  );
+
   return (
     <ThemedView style={[styles.container, { backgroundColor: theme.backgroundRoot }]}>
-      <View style={[styles.webViewContainer, { height: webViewHeight, marginTop: paddingTop }]}>
+      <View style={styles.webViewContainer}>
         {Platform.OS === "web" ? (
           <View style={[styles.webFallback, { backgroundColor: theme.backgroundDefault }]}>
             <Feather name="globe" size={48} color={theme.textSecondary} />
@@ -158,43 +181,33 @@ export default function DispatchingScreen() {
         )}
       </View>
 
-      <View style={[styles.notesContainer, { backgroundColor: theme.backgroundDefault }]}>
-        <View style={styles.notesHeader}>
-          <Feather name="edit-3" size={18} color={theme.textSecondary} />
-          <ThemedText style={[styles.notesTitle, { color: theme.textSecondary }]}>Заметки</ThemedText>
-        </View>
-        <KeyboardAvoidingView
-          behavior={Platform.OS === "ios" ? "padding" : "height"}
-          style={styles.notesInputContainer}
-          keyboardVerticalOffset={100}
+      {Platform.OS === "web" ? (
+        <ScrollView 
+          style={styles.notesScrollContainer}
+          contentContainerStyle={{ paddingBottom: insets.bottom + 100 }}
         >
-          <TextInput
-            style={[
-              styles.notesInput,
-              {
-                backgroundColor: theme.backgroundSecondary,
-                color: theme.text,
-                paddingBottom: insets.bottom + 80,
-              },
-            ]}
-            value={notes}
-            onChangeText={setNotes}
-            placeholder="Введите заметки..."
-            placeholderTextColor={theme.textSecondary}
-            multiline
-            textAlignVertical="top"
-          />
-        </KeyboardAvoidingView>
-      </View>
+          <NotesContent />
+        </ScrollView>
+      ) : (
+        <KeyboardAwareScrollView
+          style={styles.notesScrollContainer}
+          contentContainerStyle={{ paddingBottom: insets.bottom + 100 }}
+          keyboardShouldPersistTaps="handled"
+        >
+          <NotesContent />
+        </KeyboardAwareScrollView>
+      )}
 
-      <Pressable
-        style={[styles.fab, { bottom: insets.bottom + 90 }]}
-        onPress={() => setShowCalculator(true)}
-      >
-        <BlurView intensity={100} tint="dark" style={styles.fabBlur}>
-          <Feather name="percent" size={24} color="#FFFFFF" />
-        </BlurView>
-      </Pressable>
+      {!isKeyboardVisible ? (
+        <Pressable
+          style={[styles.fab, { bottom: insets.bottom + 90 }]}
+          onPress={() => setShowCalculator(true)}
+        >
+          <BlurView intensity={100} tint="dark" style={styles.fabBlur}>
+            <Feather name="percent" size={24} color="#FFFFFF" />
+          </BlurView>
+        </Pressable>
+      ) : null}
 
       <Modal
         visible={showCalculator}
@@ -259,6 +272,7 @@ const styles = StyleSheet.create({
     flex: 1,
   },
   webViewContainer: {
+    flex: 1,
     borderBottomWidth: 1,
     borderBottomColor: "rgba(255,255,255,0.1)",
   },
@@ -276,6 +290,9 @@ const styles = StyleSheet.create({
     textAlign: "center",
     ...Typography.body,
   },
+  notesScrollContainer: {
+    flex: 1,
+  },
   notesContainer: {
     flex: 1,
     padding: Spacing.md,
@@ -289,11 +306,9 @@ const styles = StyleSheet.create({
     marginLeft: Spacing.sm,
     ...Typography.bodySecondary,
   },
-  notesInputContainer: {
-    flex: 1,
-  },
   notesInput: {
     flex: 1,
+    minHeight: 120,
     borderRadius: BorderRadius.md,
     padding: Spacing.md,
     ...Typography.body,
