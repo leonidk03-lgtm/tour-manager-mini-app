@@ -34,6 +34,8 @@ export interface Excursion {
   discountedCount: number;
   freeCount: number;
   tourPackageCount: number;
+  byTourCount: number;
+  paidCount: number;
   expenses: Expense[];
   additionalServices: { serviceId: string; count: number }[];
 }
@@ -117,6 +119,8 @@ const mockExcursions: Excursion[] = [
     discountedCount: 25,
     freeCount: 1,
     tourPackageCount: 0,
+    byTourCount: 0,
+    paidCount: 0,
     expenses: [
       { id: "e1", type: "Экскурсовод", amount: 13200, description: "Экскурсовод" },
       { id: "e2", type: "Предоплата", amount: 9900, description: "Предоплата автобуса" },
@@ -132,6 +136,8 @@ const mockExcursions: Excursion[] = [
     discountedCount: 34,
     freeCount: 0,
     tourPackageCount: 0,
+    byTourCount: 0,
+    paidCount: 0,
     expenses: [
       { id: "e3", type: "Экскурсовод", amount: 31200, description: "Экскурсовод" },
       { id: "e4", type: "Предоплата", amount: 8200, description: "Предоплата автобуса" },
@@ -147,6 +153,8 @@ const mockExcursions: Excursion[] = [
     discountedCount: 30,
     freeCount: 0,
     tourPackageCount: 0,
+    byTourCount: 0,
+    paidCount: 0,
     expenses: [
       { id: "e5", type: "Экскурсовод", amount: 4900, description: "Экскурсовод" },
       { id: "e6", type: "Предоплата", amount: 2500, description: "Предоплата автобуса" },

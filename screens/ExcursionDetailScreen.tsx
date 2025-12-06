@@ -36,11 +36,11 @@ export default function ExcursionDetailScreen() {
   useLayoutEffect(() => {
     navigation.setOptions({
       headerRight: () => (
-        <View style={{ flexDirection: "row", gap: Spacing.md }}>
-          <Pressable onPress={handleEdit} style={({ pressed }) => ({ opacity: pressed ? 0.7 : 1 })}>
+        <View style={{ flexDirection: "row", gap: Spacing.xl }}>
+          <Pressable onPress={handleEdit} style={({ pressed }) => ({ opacity: pressed ? 0.7 : 1, padding: 4 })}>
             <Feather name="edit" size={22} color={theme.primary} />
           </Pressable>
-          <Pressable onPress={handleDelete} style={({ pressed }) => ({ opacity: pressed ? 0.7 : 1 })}>
+          <Pressable onPress={handleDelete} style={({ pressed }) => ({ opacity: pressed ? 0.7 : 1, padding: 4 })}>
             <Feather name="trash-2" size={22} color={theme.error} />
           </Pressable>
         </View>
