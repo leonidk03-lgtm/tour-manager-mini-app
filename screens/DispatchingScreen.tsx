@@ -674,16 +674,20 @@ const styles = StyleSheet.create({
     ...Typography.h3,
   },
   calcDisplay: {
-    padding: Spacing.md,
+    paddingHorizontal: Spacing.lg,
+    paddingVertical: Spacing.md,
     borderRadius: BorderRadius.md,
     marginBottom: Spacing.md,
     alignItems: "flex-end",
     minHeight: 70,
     justifyContent: "center",
+    overflow: "hidden",
   },
   calcDisplayText: {
     fontSize: 32,
     fontWeight: "600",
+    textAlign: "right",
+    width: "100%",
   },
   calcGrid: {
     gap: Spacing.xs,

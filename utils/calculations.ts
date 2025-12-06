@@ -32,7 +32,7 @@ export function calculateExcursionProfit(
 }
 
 export function formatCurrency(amount: number): string {
-  return amount.toLocaleString("ru-RU") + " ₽";
+  return amount.toLocaleString("ru-RU") + " р.";
 }
 
 export function filterExcursionsByDateRange(
