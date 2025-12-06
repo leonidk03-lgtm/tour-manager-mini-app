@@ -70,6 +70,11 @@ export default function DashboardScreen() {
   );
   const netProfit = totalRevenue - totalExpenses + additionalIncome - additionalExpenses;
 
+  const totalParticipants = filteredExcursions.reduce((sum, exc) => {
+    return sum + exc.fullPriceCount + exc.discountedCount + exc.freeCount + 
+      (exc.byTourCount || 0) + (exc.paidCount || 0);
+  }, 0);
+
   const recentActivities = activities.slice(0, 10);
 
   return (
@@ -147,6 +152,17 @@ export default function DashboardScreen() {
         <View style={styles.section}>
           <View style={styles.quickStats}>
             <ThemedView style={[styles.quickStatItem, { borderColor: theme.border }]}>
+              <Feather name="users" size={20} color={theme.primary} />
+              <View style={styles.quickStatText}>
+                <ThemedText style={[styles.quickStatValue, { color: theme.text }]}>
+                  {totalParticipants}
+                </ThemedText>
+                <ThemedText style={[styles.quickStatLabel, { color: theme.textSecondary }]}>
+                  Человек
+                </ThemedText>
+              </View>
+            </ThemedView>
+            <ThemedView style={[styles.quickStatItem, { borderColor: theme.border }]}>
               <Feather name="list" size={20} color={theme.primary} />
               <View style={styles.quickStatText}>
                 <ThemedText style={[styles.quickStatValue, { color: theme.text }]}>
@@ -157,20 +173,20 @@ export default function DashboardScreen() {
                 </ThemedText>
               </View>
             </ThemedView>
-            <ThemedView style={[styles.quickStatItem, { borderColor: theme.border }]}>
-              <Feather name="trending-up" size={20} color={theme.success} />
-              <View style={styles.quickStatText}>
-                <ThemedText style={[styles.quickStatValue, { color: theme.text }]}>
-                  {filteredExcursions.length > 0
-                    ? formatCurrency(Math.round(netProfit / filteredExcursions.length))
-                    : "0 ₽"}
-                </ThemedText>
-                <ThemedText style={[styles.quickStatLabel, { color: theme.textSecondary }]}>
-                  Средняя прибыль
-                </ThemedText>
-              </View>
-            </ThemedView>
           </View>
+          <ThemedView style={[styles.quickStatItem, { borderColor: theme.border }]}>
+            <Feather name="trending-up" size={20} color={theme.success} />
+            <View style={styles.quickStatText}>
+              <ThemedText style={[styles.quickStatValue, { color: theme.text }]}>
+                {filteredExcursions.length > 0
+                  ? formatCurrency(Math.round(netProfit / filteredExcursions.length))
+                  : "0 ₽"}
+              </ThemedText>
+              <ThemedText style={[styles.quickStatLabel, { color: theme.textSecondary }]}>
+                Средняя прибыль
+              </ThemedText>
+            </View>
+          </ThemedView>
         </View>
 
         <View style={styles.section}>
