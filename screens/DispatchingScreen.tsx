@@ -10,8 +10,9 @@ import { ThemedView } from "@/components/ThemedView";
 import { useTheme } from "@/hooks/useTheme";
 import { Spacing, BorderRadius, Typography } from "@/constants/theme";
 
-const DATABASE_URL = "http://turburo-kazan.ru/managers/zapis-na-ekskursiyu.php?arrFilter_ff%5BNAME%5D=&arrFilter_DATE_ACTIVE_FROM_1=&arrFilter_DATE_ACTIVE_FROM_2=&arrFilter_pf%5BTYPE%5D=&arrFilter_pf%5BGOSTINICI%5D=&arrFilter_CREATED_BY=&sort=date_ex&USER_REMEMBER=Y&set_filter=Показать&set_filter=Y";
+const DEFAULT_DATABASE_URL = "http://turburo-kazan.ru/managers/zapis-na-ekskursiyu.php?arrFilter_ff%5BNAME%5D=&arrFilter_DATE_ACTIVE_FROM_1=&arrFilter_DATE_ACTIVE_FROM_2=&arrFilter_pf%5BTYPE%5D=&arrFilter_pf%5BGOSTINICI%5D=&arrFilter_CREATED_BY=&sort=date_ex&USER_REMEMBER=Y&set_filter=Показать&set_filter=Y";
 const NOTES_STORAGE_KEY = "@dispatching_notes_list";
+export const DISPATCH_URL_KEY = "@dispatch_webview_url";
 
 interface Note {
   id: string;
@@ -32,10 +33,23 @@ export default function DispatchingScreen() {
   const [calcPrevValue, setCalcPrevValue] = useState<number | null>(null);
   const [calcOperation, setCalcOperation] = useState<string | null>(null);
   const [calcWaitingForOperand, setCalcWaitingForOperand] = useState(false);
+  const [webViewUrl, setWebViewUrl] = useState(DEFAULT_DATABASE_URL);
 
   useEffect(() => {
     loadNotes();
+    loadWebViewUrl();
   }, []);
+
+  const loadWebViewUrl = async () => {
+    try {
+      const savedUrl = await AsyncStorage.getItem(DISPATCH_URL_KEY);
+      if (savedUrl !== null) {
+        setWebViewUrl(savedUrl);
+      }
+    } catch (error) {
+      console.error("Failed to load webview URL:", error);
+    }
+  };
 
   const loadNotes = async () => {
     try {
@@ -297,7 +311,7 @@ export default function DispatchingScreen() {
           </View>
         ) : (
           <WebView
-            source={{ uri: DATABASE_URL }}
+            source={{ uri: webViewUrl }}
             style={styles.webView}
             startInLoadingState={true}
             javaScriptEnabled={true}

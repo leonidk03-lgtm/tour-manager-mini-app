@@ -1,6 +1,7 @@
 import { useState, useEffect } from "react";
 import { View, StyleSheet, Pressable, Alert, TextInput } from "react-native";
 import { Feather } from "@expo/vector-icons";
+import AsyncStorage from "@react-native-async-storage/async-storage";
 import { ThemedText } from "@/components/ThemedText";
 import { ThemedView } from "@/components/ThemedView";
 import { ScreenKeyboardAwareScrollView } from "@/components/ScreenKeyboardAwareScrollView";
@@ -9,12 +10,16 @@ import { useTheme } from "@/hooks/useTheme";
 import { getSupabaseConfig, updateSupabaseConfig, resetSupabaseConfig } from "@/lib/supabase";
 import { useAuth } from "@/contexts/AuthContext";
 import { reloadAppAsync } from "expo";
+import { DISPATCH_URL_KEY } from "./DispatchingScreen";
+
+const DEFAULT_DISPATCH_URL = "http://turburo-kazan.ru/managers/zapis-na-ekskursiyu.php?arrFilter_ff%5BNAME%5D=&arrFilter_DATE_ACTIVE_FROM_1=&arrFilter_DATE_ACTIVE_FROM_2=&arrFilter_pf%5BTYPE%5D=&arrFilter_pf%5BGOSTINICI%5D=&arrFilter_CREATED_BY=&sort=date_ex&USER_REMEMBER=Y&set_filter=Показать&set_filter=Y";
 
 export default function DatabaseSettingsScreen() {
   const { theme } = useTheme();
   const { signOut } = useAuth();
   const [url, setUrl] = useState("");
   const [anonKey, setAnonKey] = useState("");
+  const [dispatchUrl, setDispatchUrl] = useState("");
   const [isLoading, setIsLoading] = useState(true);
   const [isSaving, setIsSaving] = useState(false);
 
@@ -27,6 +32,9 @@ export default function DatabaseSettingsScreen() {
       const config = await getSupabaseConfig();
       setUrl(config.url);
       setAnonKey(config.anonKey);
+      
+      const savedDispatchUrl = await AsyncStorage.getItem(DISPATCH_URL_KEY);
+      setDispatchUrl(savedDispatchUrl || DEFAULT_DISPATCH_URL);
     } catch (error) {
       console.error("Error loading config:", error);
     } finally {
@@ -86,6 +94,32 @@ export default function DatabaseSettingsScreen() {
         },
       ]
     );
+  };
+
+  const handleSaveDispatchUrl = async () => {
+    if (!dispatchUrl.trim()) {
+      Alert.alert("Ошибка", "Введите URL");
+      return;
+    }
+
+    try {
+      await AsyncStorage.setItem(DISPATCH_URL_KEY, dispatchUrl.trim());
+      Alert.alert("Успешно", "URL сохранен. Перезапустите вкладку Отправление для применения.");
+    } catch (error) {
+      console.error("Error saving dispatch URL:", error);
+      Alert.alert("Ошибка", "Не удалось сохранить URL");
+    }
+  };
+
+  const handleResetDispatchUrl = async () => {
+    try {
+      await AsyncStorage.removeItem(DISPATCH_URL_KEY);
+      setDispatchUrl(DEFAULT_DISPATCH_URL);
+      Alert.alert("Успешно", "URL сброшен на значение по умолчанию");
+    } catch (error) {
+      console.error("Error resetting dispatch URL:", error);
+      Alert.alert("Ошибка", "Не удалось сбросить URL");
+    }
   };
 
   if (isLoading) {
@@ -177,7 +211,7 @@ export default function DatabaseSettingsScreen() {
           >
             <Feather name="save" size={18} color={theme.buttonText} />
             <ThemedText style={[styles.buttonText, { color: theme.buttonText }]}>
-              {isSaving ? "Сохранение..." : "Сохранить"}
+              {isSaving ? "Сохранение..." : "Сохранить Supabase"}
             </ThemedText>
           </Pressable>
 
@@ -191,7 +225,66 @@ export default function DatabaseSettingsScreen() {
           >
             <Feather name="refresh-cw" size={18} color={theme.error} />
             <ThemedText style={[styles.buttonText, { color: theme.error }]}>
-              Сбросить
+              Сбросить Supabase
+            </ThemedText>
+          </Pressable>
+        </View>
+
+        <View style={[styles.divider, { backgroundColor: theme.border }]} />
+
+        <View style={styles.section}>
+          <ThemedText style={styles.sectionTitle}>Вкладка Отправление</ThemedText>
+          
+          <View style={styles.inputGroup}>
+            <ThemedText style={[styles.label, { color: theme.textSecondary }]}>URL страницы</ThemedText>
+            <TextInput
+              style={[
+                styles.input,
+                styles.multilineInput,
+                {
+                  backgroundColor: theme.backgroundSecondary,
+                  borderColor: theme.border,
+                  color: theme.text,
+                },
+              ]}
+              value={dispatchUrl}
+              onChangeText={setDispatchUrl}
+              placeholder="https://example.com/page"
+              placeholderTextColor={theme.textSecondary}
+              autoCapitalize="none"
+              autoCorrect={false}
+              multiline
+              numberOfLines={3}
+            />
+          </View>
+        </View>
+
+        <View style={styles.actions}>
+          <Pressable
+            style={[
+              styles.button,
+              styles.saveButton,
+              { backgroundColor: theme.primary },
+            ]}
+            onPress={handleSaveDispatchUrl}
+          >
+            <Feather name="save" size={18} color={theme.buttonText} />
+            <ThemedText style={[styles.buttonText, { color: theme.buttonText }]}>
+              Сохранить URL
+            </ThemedText>
+          </Pressable>
+
+          <Pressable
+            style={[
+              styles.button,
+              styles.resetButton,
+              { borderColor: theme.textSecondary },
+            ]}
+            onPress={handleResetDispatchUrl}
+          >
+            <Feather name="refresh-cw" size={18} color={theme.textSecondary} />
+            <ThemedText style={[styles.buttonText, { color: theme.textSecondary }]}>
+              Сбросить URL
             </ThemedText>
           </Pressable>
         </View>
@@ -253,6 +346,10 @@ const styles = StyleSheet.create({
   actions: {
     gap: Spacing.md,
     marginTop: Spacing.lg,
+  },
+  divider: {
+    height: 1,
+    marginVertical: Spacing.md,
   },
   button: {
     flexDirection: "row",
