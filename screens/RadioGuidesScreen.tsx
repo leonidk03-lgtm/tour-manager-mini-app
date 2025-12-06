@@ -6,7 +6,10 @@ import {
   Alert,
   TextInput,
   Modal,
+  ScrollView,
+  Platform,
 } from "react-native";
+import { KeyboardAwareScrollView } from "react-native-keyboard-controller";
 import { Feather } from "@expo/vector-icons";
 import { ThemedText } from "@/components/ThemedText";
 import { ThemedView } from "@/components/ThemedView";
@@ -372,215 +375,247 @@ export default function RadioGuidesScreen() {
               </Pressable>
             </View>
 
-            {modalMode === "add" || modalMode === "edit" ? (
-              <View style={styles.form}>
-                <View style={styles.inputGroup}>
-                  <ThemedText style={[styles.label, { color: theme.textSecondary }]}>
-                    Номер сумки
-                  </ThemedText>
-                  <TextInput
-                    style={[
-                      styles.input,
-                      { backgroundColor: theme.backgroundSecondary, borderColor: theme.border, color: theme.text },
-                    ]}
-                    value={bagNumber}
-                    onChangeText={setBagNumber}
-                    placeholder="1"
-                    placeholderTextColor={theme.textSecondary}
-                    keyboardType="number-pad"
-                  />
-                </View>
-
-                <View style={styles.inputGroup}>
-                  <ThemedText style={[styles.label, { color: theme.textSecondary }]}>
-                    Заметки (опционально)
-                  </ThemedText>
-                  <TextInput
-                    style={[
-                      styles.input,
-                      styles.multilineInput,
-                      { backgroundColor: theme.backgroundSecondary, borderColor: theme.border, color: theme.text },
-                    ]}
-                    value={notes}
-                    onChangeText={setNotes}
-                    placeholder="Заметки о состоянии..."
-                    placeholderTextColor={theme.textSecondary}
-                    multiline
-                    numberOfLines={2}
-                  />
-                </View>
-
-                <Pressable
-                  style={[styles.saveButton, { backgroundColor: theme.primary }]}
-                  onPress={handleSaveKit}
-                >
-                  <ThemedText style={[styles.saveButtonText, { color: theme.buttonText }]}>
-                    Сохранить
-                  </ThemedText>
-                </Pressable>
-              </View>
-            ) : modalMode === "issue" ? (
-              <View style={styles.form}>
-                <View style={styles.inputGroup}>
-                  <ThemedText style={[styles.label, { color: theme.textSecondary }]}>
-                    Экскурсовод *
-                  </ThemedText>
-                  <TextInput
-                    style={[
-                      styles.input,
-                      { backgroundColor: theme.backgroundSecondary, borderColor: theme.border, color: theme.text },
-                    ]}
-                    value={guideName}
-                    onChangeText={setGuideName}
-                    placeholder="Имя экскурсовода"
-                    placeholderTextColor={theme.textSecondary}
-                  />
-                </View>
-
-                <View style={styles.inputGroup}>
-                  <ThemedText style={[styles.label, { color: theme.textSecondary }]}>
-                    Номер автобуса (опционально)
-                  </ThemedText>
-                  <TextInput
-                    style={[
-                      styles.input,
-                      { backgroundColor: theme.backgroundSecondary, borderColor: theme.border, color: theme.text },
-                    ]}
-                    value={busNumber}
-                    onChangeText={setBusNumber}
-                    placeholder="А123БВ"
-                    placeholderTextColor={theme.textSecondary}
-                  />
-                </View>
-
-                <View style={styles.inputGroup}>
-                  <ThemedText style={[styles.label, { color: theme.textSecondary }]}>
-                    Количество приёмников *
-                  </ThemedText>
-                  <TextInput
-                    style={[
-                      styles.input,
-                      { backgroundColor: theme.backgroundSecondary, borderColor: theme.border, color: theme.text },
-                    ]}
-                    value={receiversIssued}
-                    onChangeText={setReceiversIssued}
-                    placeholder="40"
-                    placeholderTextColor={theme.textSecondary}
-                    keyboardType="number-pad"
-                  />
-                </View>
-
-                <Pressable
-                  style={[styles.saveButton, { backgroundColor: theme.primary }]}
-                  onPress={handleIssue}
-                >
-                  <ThemedText style={[styles.saveButtonText, { color: theme.buttonText }]}>
-                    Выдать
-                  </ThemedText>
-                </Pressable>
-              </View>
-            ) : modalMode === "return" ? (
-              <View style={styles.form}>
-                {selectedAssignment ? (
-                  <View style={[styles.returnInfo, { backgroundColor: theme.backgroundSecondary }]}>
-                    <ThemedText style={[styles.returnInfoText, { color: theme.textSecondary }]}>
-                      Экскурсовод: {selectedAssignment.guideName}
-                    </ThemedText>
-                    <ThemedText style={[styles.returnInfoText, { color: theme.textSecondary }]}>
-                      Выдано приёмников: {selectedAssignment.receiversIssued}
-                    </ThemedText>
-                  </View>
-                ) : null}
-
-                {!showShortageForm ? (
-                  <View style={styles.returnButtons}>
-                    <Pressable
-                      style={[styles.returnButton, { backgroundColor: theme.success }]}
-                      onPress={handleReturnAllOk}
-                    >
-                      <Feather name="check-circle" size={20} color={theme.buttonText} />
-                      <ThemedText style={[styles.returnButtonText, { color: theme.buttonText }]}>
-                        Всё на месте
-                      </ThemedText>
-                    </Pressable>
-
-                    <Pressable
-                      style={[styles.returnButton, { backgroundColor: theme.warning }]}
-                      onPress={() => setShowShortageForm(true)}
-                    >
-                      <Feather name="alert-circle" size={20} color={theme.buttonText} />
-                      <ThemedText style={[styles.returnButtonText, { color: theme.buttonText }]}>
-                        Не хватает
-                      </ThemedText>
-                    </Pressable>
-                  </View>
-                ) : (
-                  <>
-                    <View style={styles.inputGroup}>
-                      <ThemedText style={[styles.label, { color: theme.textSecondary }]}>
-                        Сколько вернули? *
-                      </ThemedText>
-                      <TextInput
-                        style={[
-                          styles.input,
-                          { backgroundColor: theme.backgroundSecondary, borderColor: theme.border, color: theme.text },
-                        ]}
-                        value={receiversReturned}
-                        onChangeText={setReceiversReturned}
-                        placeholder="Количество"
-                        placeholderTextColor={theme.textSecondary}
-                        keyboardType="number-pad"
-                        autoFocus
-                      />
-                    </View>
-
-                    <View style={styles.inputGroup}>
-                      <ThemedText style={[styles.label, { color: theme.textSecondary }]}>
-                        Комментарий (опционально)
-                      </ThemedText>
-                      <TextInput
-                        style={[
-                          styles.input,
-                          styles.multilineInput,
-                          { backgroundColor: theme.backgroundSecondary, borderColor: theme.border, color: theme.text },
-                        ]}
-                        value={returnNotes}
-                        onChangeText={setReturnNotes}
-                        placeholder="Причина недостачи..."
-                        placeholderTextColor={theme.textSecondary}
-                        multiline
-                        numberOfLines={2}
-                      />
-                    </View>
-
-                    <View style={styles.returnButtons}>
-                      <Pressable
-                        style={[styles.returnButton, { backgroundColor: theme.backgroundTertiary, borderWidth: 1, borderColor: theme.border }]}
-                        onPress={() => setShowShortageForm(false)}
-                      >
-                        <ThemedText style={[styles.returnButtonText, { color: theme.text }]}>
-                          Назад
-                        </ThemedText>
-                      </Pressable>
-
-                      <Pressable
-                        style={[styles.returnButton, { backgroundColor: theme.primary }]}
-                        onPress={handleReturnWithShortage}
-                      >
-                        <ThemedText style={[styles.returnButtonText, { color: theme.buttonText }]}>
-                          Подтвердить
-                        </ThemedText>
-                      </Pressable>
-                    </View>
-                  </>
-                )}
-              </View>
-            ) : null}
+            {Platform.OS === "web" ? (
+              <ScrollView
+                style={styles.formScroll}
+                contentContainerStyle={styles.formScrollContent}
+                keyboardShouldPersistTaps="handled"
+              >
+                {renderFormContent()}
+              </ScrollView>
+            ) : (
+              <KeyboardAwareScrollView
+                style={styles.formScroll}
+                contentContainerStyle={styles.formScrollContent}
+                keyboardShouldPersistTaps="handled"
+              >
+                {renderFormContent()}
+              </KeyboardAwareScrollView>
+            )}
           </ThemedView>
         </View>
       </Modal>
     </>
   );
+
+  function renderFormContent() {
+    if (modalMode === "add" || modalMode === "edit") {
+      return (
+        <View style={styles.form}>
+          <View style={styles.inputGroup}>
+            <ThemedText style={[styles.label, { color: theme.textSecondary }]}>
+              Номер сумки
+            </ThemedText>
+            <TextInput
+              style={[
+                styles.input,
+                { backgroundColor: theme.backgroundSecondary, borderColor: theme.border, color: theme.text },
+              ]}
+              value={bagNumber}
+              onChangeText={setBagNumber}
+              placeholder="1"
+              placeholderTextColor={theme.textSecondary}
+              keyboardType="number-pad"
+            />
+          </View>
+
+          <View style={styles.inputGroup}>
+            <ThemedText style={[styles.label, { color: theme.textSecondary }]}>
+              Заметки (опционально)
+            </ThemedText>
+            <TextInput
+              style={[
+                styles.input,
+                styles.multilineInput,
+                { backgroundColor: theme.backgroundSecondary, borderColor: theme.border, color: theme.text },
+              ]}
+              value={notes}
+              onChangeText={setNotes}
+              placeholder="Заметки о состоянии..."
+              placeholderTextColor={theme.textSecondary}
+              multiline
+              numberOfLines={2}
+            />
+          </View>
+
+          <Pressable
+            style={[styles.saveButton, { backgroundColor: theme.primary }]}
+            onPress={handleSaveKit}
+          >
+            <ThemedText style={[styles.saveButtonText, { color: theme.buttonText }]}>
+              Сохранить
+            </ThemedText>
+          </Pressable>
+        </View>
+      );
+    }
+
+    if (modalMode === "issue") {
+      return (
+        <View style={styles.form}>
+          <View style={styles.inputGroup}>
+            <ThemedText style={[styles.label, { color: theme.textSecondary }]}>
+              Экскурсовод *
+            </ThemedText>
+            <TextInput
+              style={[
+                styles.input,
+                { backgroundColor: theme.backgroundSecondary, borderColor: theme.border, color: theme.text },
+              ]}
+              value={guideName}
+              onChangeText={setGuideName}
+              placeholder="Имя экскурсовода"
+              placeholderTextColor={theme.textSecondary}
+            />
+          </View>
+
+          <View style={styles.inputGroup}>
+            <ThemedText style={[styles.label, { color: theme.textSecondary }]}>
+              Номер автобуса (опционально)
+            </ThemedText>
+            <TextInput
+              style={[
+                styles.input,
+                { backgroundColor: theme.backgroundSecondary, borderColor: theme.border, color: theme.text },
+              ]}
+              value={busNumber}
+              onChangeText={setBusNumber}
+              placeholder="А123БВ"
+              placeholderTextColor={theme.textSecondary}
+            />
+          </View>
+
+          <View style={styles.inputGroup}>
+            <ThemedText style={[styles.label, { color: theme.textSecondary }]}>
+              Количество приёмников *
+            </ThemedText>
+            <TextInput
+              style={[
+                styles.input,
+                { backgroundColor: theme.backgroundSecondary, borderColor: theme.border, color: theme.text },
+              ]}
+              value={receiversIssued}
+              onChangeText={setReceiversIssued}
+              placeholder="40"
+              placeholderTextColor={theme.textSecondary}
+              keyboardType="number-pad"
+            />
+          </View>
+
+          <Pressable
+            style={[styles.saveButton, { backgroundColor: theme.primary }]}
+            onPress={handleIssue}
+          >
+            <ThemedText style={[styles.saveButtonText, { color: theme.buttonText }]}>
+              Выдать
+            </ThemedText>
+          </Pressable>
+        </View>
+      );
+    }
+
+    if (modalMode === "return") {
+      return (
+        <View style={styles.form}>
+          {selectedAssignment ? (
+            <View style={[styles.returnInfo, { backgroundColor: theme.backgroundSecondary }]}>
+              <ThemedText style={[styles.returnInfoText, { color: theme.textSecondary }]}>
+                Экскурсовод: {selectedAssignment.guideName}
+              </ThemedText>
+              <ThemedText style={[styles.returnInfoText, { color: theme.textSecondary }]}>
+                Выдано приёмников: {selectedAssignment.receiversIssued}
+              </ThemedText>
+            </View>
+          ) : null}
+
+          {!showShortageForm ? (
+            <View style={styles.returnButtons}>
+              <Pressable
+                style={[styles.returnButton, { backgroundColor: theme.success }]}
+                onPress={handleReturnAllOk}
+              >
+                <Feather name="check-circle" size={20} color={theme.buttonText} />
+                <ThemedText style={[styles.returnButtonText, { color: theme.buttonText }]}>
+                  Всё на месте
+                </ThemedText>
+              </Pressable>
+
+              <Pressable
+                style={[styles.returnButton, { backgroundColor: theme.warning }]}
+                onPress={() => setShowShortageForm(true)}
+              >
+                <Feather name="alert-circle" size={20} color={theme.buttonText} />
+                <ThemedText style={[styles.returnButtonText, { color: theme.buttonText }]}>
+                  Не хватает
+                </ThemedText>
+              </Pressable>
+            </View>
+          ) : (
+            <>
+              <View style={styles.inputGroup}>
+                <ThemedText style={[styles.label, { color: theme.textSecondary }]}>
+                  Сколько вернули? *
+                </ThemedText>
+                <TextInput
+                  style={[
+                    styles.input,
+                    { backgroundColor: theme.backgroundSecondary, borderColor: theme.border, color: theme.text },
+                  ]}
+                  value={receiversReturned}
+                  onChangeText={setReceiversReturned}
+                  placeholder="Количество"
+                  placeholderTextColor={theme.textSecondary}
+                  keyboardType="number-pad"
+                  autoFocus
+                />
+              </View>
+
+              <View style={styles.inputGroup}>
+                <ThemedText style={[styles.label, { color: theme.textSecondary }]}>
+                  Комментарий (опционально)
+                </ThemedText>
+                <TextInput
+                  style={[
+                    styles.input,
+                    styles.multilineInput,
+                    { backgroundColor: theme.backgroundSecondary, borderColor: theme.border, color: theme.text },
+                  ]}
+                  value={returnNotes}
+                  onChangeText={setReturnNotes}
+                  placeholder="Причина недостачи..."
+                  placeholderTextColor={theme.textSecondary}
+                  multiline
+                  numberOfLines={2}
+                />
+              </View>
+
+              <View style={styles.returnButtons}>
+                <Pressable
+                  style={[styles.returnButton, { backgroundColor: theme.backgroundTertiary, borderWidth: 1, borderColor: theme.border }]}
+                  onPress={() => setShowShortageForm(false)}
+                >
+                  <ThemedText style={[styles.returnButtonText, { color: theme.text }]}>
+                    Назад
+                  </ThemedText>
+                </Pressable>
+
+                <Pressable
+                  style={[styles.returnButton, { backgroundColor: theme.primary }]}
+                  onPress={handleReturnWithShortage}
+                >
+                  <ThemedText style={[styles.returnButtonText, { color: theme.buttonText }]}>
+                    Подтвердить
+                  </ThemedText>
+                </Pressable>
+              </View>
+            </>
+          )}
+        </View>
+      );
+    }
+
+    return null;
+  }
 }
 
 const styles = StyleSheet.create({
@@ -711,6 +746,12 @@ const styles = StyleSheet.create({
   modalTitle: {
     fontSize: 20,
     fontWeight: "600",
+  },
+  formScroll: {
+    flexGrow: 0,
+  },
+  formScrollContent: {
+    paddingBottom: Spacing.lg,
   },
   form: {
     gap: Spacing.md,
