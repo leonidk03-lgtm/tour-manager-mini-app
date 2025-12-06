@@ -232,9 +232,11 @@ export default function TicketPricesScreen() {
 
                 <View style={styles.servicePrice}>
                   <ThemedText style={[styles.priceLabel, { color: theme.textSecondary }]}>
-                    Цена
+                    {service.price < 0 ? "Расход" : "Цена"}
                   </ThemedText>
-                  <ThemedText style={styles.priceValue}>{service.price} ₽</ThemedText>
+                  <ThemedText style={[styles.priceValue, { color: service.price < 0 ? theme.error : theme.success }]}>
+                    {service.price < 0 ? service.price : `+${service.price}`} ₽
+                  </ThemedText>
                 </View>
 
                 <View style={styles.cardActions}>

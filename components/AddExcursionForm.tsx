@@ -6,14 +6,17 @@ import {
   Pressable,
   Alert,
   Platform,
+  Modal,
+  FlatList,
 } from "react-native";
 import { Feather } from "@expo/vector-icons";
+import DateTimePicker from "@react-native-community/datetimepicker";
 import { ThemedText } from "./ThemedText";
+import { ThemedView } from "./ThemedView";
 import { ScreenKeyboardAwareScrollView } from "./ScreenKeyboardAwareScrollView";
 import { useTheme } from "@/hooks/useTheme";
-import { useData, TourType, AdditionalService, Excursion, Expense } from "@/contexts/DataContext";
+import { useData, Excursion, Expense } from "@/contexts/DataContext";
 import { Spacing, BorderRadius, Typography } from "@/constants/theme";
-import { Picker } from "@react-native-picker/picker";
 
 interface AddExcursionFormProps {
   excursion?: Excursion;
@@ -25,11 +28,27 @@ export function AddExcursionForm({ excursion, onSave, onCancel }: AddExcursionFo
   const { theme } = useTheme();
   const { tourTypes, additionalServices } = useData();
 
+  const enabledTourTypes = tourTypes.filter((t) => t.isEnabled);
+
   const [selectedTourType, setSelectedTourType] = useState(
-    excursion?.tourTypeId || tourTypes.find((t) => t.isEnabled)?.id || ""
+    excursion?.tourTypeId || enabledTourTypes[0]?.id || ""
   );
-  const [date, setDate] = useState(excursion?.date || new Date().toISOString().split("T")[0]);
-  const [fullPrice, setFullPrice] = useState(excursion ? excursion.fullPriceCount.toString() : "");
+  const [dateValue, setDateValue] = useState(() => {
+    if (excursion?.date) {
+      return new Date(excursion.date);
+    }
+    return new Date();
+  });
+  const [showDatePicker, setShowDatePicker] = useState(false);
+  const [showTourTypePicker, setShowTourTypePicker] = useState(false);
+
+  const [totalParticipants, setTotalParticipants] = useState(() => {
+    if (excursion) {
+      const total = excursion.fullPriceCount + excursion.discountedCount + excursion.freeCount + excursion.tourPackageCount;
+      return total.toString();
+    }
+    return "";
+  });
   const [discounted, setDiscounted] = useState(excursion ? excursion.discountedCount.toString() : "");
   const [free, setFree] = useState(excursion ? excursion.freeCount.toString() : "");
   const [tourPackage, setTourPackage] = useState(excursion ? excursion.tourPackageCount.toString() : "");
@@ -44,6 +63,15 @@ export function AddExcursionForm({ excursion, onSave, onCancel }: AddExcursionFo
       { id: "prepay-default", type: "Предоплата", amount: 0, description: "" },
     ]
   );
+  const [showExpenseTypePicker, setShowExpenseTypePicker] = useState<string | null>(null);
+
+  const calculateFullPrice = () => {
+    const total = parseInt(totalParticipants, 10) || 0;
+    const disc = parseInt(discounted, 10) || 0;
+    const freeCount = parseInt(free, 10) || 0;
+    const tour = parseInt(tourPackage, 10) || 0;
+    return Math.max(0, total - disc - freeCount - tour);
+  };
 
   const toggleService = (serviceId: string) => {
     const exists = selectedServices.find((s) => s.serviceId === serviceId);
@@ -54,7 +82,8 @@ export function AddExcursionForm({ excursion, onSave, onCancel }: AddExcursionFo
     }
   };
 
-  const updateServiceCount = (serviceId: string, count: number) => {
+  const updateServiceCount = (serviceId: string, countStr: string) => {
+    const count = parseInt(countStr, 10) || 0;
     if (count <= 0) {
       setSelectedServices((prev) => prev.filter((s) => s.serviceId !== serviceId));
     } else {
@@ -84,6 +113,22 @@ export function AddExcursionForm({ excursion, onSave, onCancel }: AddExcursionFo
     setExpenses((prev) => prev.filter((e) => e.id !== id));
   };
 
+  const formatDate = (d: Date) => {
+    const day = d.getDate().toString().padStart(2, "0");
+    const month = (d.getMonth() + 1).toString().padStart(2, "0");
+    const year = d.getFullYear();
+    return `${day}.${month}.${year}`;
+  };
+
+  const handleDateChange = (event: any, selectedDate?: Date) => {
+    if (Platform.OS === "android") {
+      setShowDatePicker(false);
+    }
+    if (selectedDate) {
+      setDateValue(selectedDate);
+    }
+  };
+
   const handleSave = () => {
     if (!selectedTourType) {
       Alert.alert("Ошибка", "Выберите тип тура");
@@ -96,17 +141,14 @@ export function AddExcursionForm({ excursion, onSave, onCancel }: AddExcursionFo
       return;
     }
 
-    if (!date) {
-      Alert.alert("Ошибка", "Укажите дату");
-      return;
-    }
+    const dateString = dateValue.toISOString().split("T")[0];
 
     const newExcursion: Excursion = {
       id: excursion?.id || Date.now().toString(),
       tourTypeId: selectedTourType,
-      date,
+      date: dateString,
       time: excursion?.time || "",
-      fullPriceCount: parseInt(fullPrice, 10) || 0,
+      fullPriceCount: calculateFullPrice(),
       discountedCount: parseInt(discounted, 10) || 0,
       freeCount: parseInt(free, 10) || 0,
       tourPackageCount: parseInt(tourPackage, 10) || 0,
@@ -120,44 +162,127 @@ export function AddExcursionForm({ excursion, onSave, onCancel }: AddExcursionFo
     onSave(newExcursion);
   };
 
+  const selectedTourName = enabledTourTypes.find((t) => t.id === selectedTourType)?.name || "Выберите тур";
+
+  const expenseTypes = ["Экскурсовод", "Предоплата", "Прочее"];
+
   return (
     <ScreenKeyboardAwareScrollView contentContainerStyle={styles.content}>
       <View style={styles.section}>
         <ThemedText style={styles.label}>Тип тура</ThemedText>
-        <View style={[styles.pickerContainer, { borderColor: theme.inputBorder, backgroundColor: theme.backgroundDefault }]}>
-          <Picker
-            selectedValue={selectedTourType}
-            onValueChange={(value: string) => setSelectedTourType(value)}
-            style={[styles.picker, { color: theme.text }]}
-          >
-            {tourTypes.filter((tour) => tour.isEnabled).map((tour) => (
-              <Picker.Item key={tour.id} label={tour.name} value={tour.id} />
-            ))}
-          </Picker>
-        </View>
+        <Pressable
+          onPress={() => setShowTourTypePicker(true)}
+          style={[styles.selectButton, { borderColor: theme.inputBorder, backgroundColor: theme.backgroundDefault }]}
+        >
+          <ThemedText style={styles.selectButtonText}>{selectedTourName}</ThemedText>
+          <Feather name="chevron-down" size={20} color={theme.textSecondary} />
+        </Pressable>
       </View>
+
+      <Modal
+        visible={showTourTypePicker}
+        transparent
+        animationType="fade"
+        onRequestClose={() => setShowTourTypePicker(false)}
+      >
+        <View style={styles.modalOverlay}>
+          <Pressable style={styles.modalBackdrop} onPress={() => setShowTourTypePicker(false)} />
+          <ThemedView style={[styles.modalContent, { backgroundColor: theme.backgroundDefault }]}>
+            <ThemedText style={styles.modalTitle}>Выберите тип тура</ThemedText>
+            <FlatList
+              data={enabledTourTypes}
+              keyExtractor={(item) => item.id}
+              style={styles.modalList}
+              renderItem={({ item }) => (
+                <Pressable
+                  onPress={() => {
+                    setSelectedTourType(item.id);
+                    setShowTourTypePicker(false);
+                  }}
+                  style={[
+                    styles.modalItem,
+                    item.id === selectedTourType && { backgroundColor: theme.primary + "20" },
+                  ]}
+                >
+                  <ThemedText style={styles.modalItemText}>{item.name}</ThemedText>
+                  {item.id === selectedTourType ? (
+                    <Feather name="check" size={20} color={theme.primary} />
+                  ) : null}
+                </Pressable>
+              )}
+            />
+          </ThemedView>
+        </View>
+      </Modal>
 
       <View style={styles.section}>
         <ThemedText style={styles.label}>Дата</ThemedText>
-        <TextInput
-          style={[styles.input, { borderColor: theme.inputBorder, color: theme.text, backgroundColor: theme.backgroundDefault }]}
-          value={date}
-          onChangeText={setDate}
-          placeholder="2025-11-23"
-          placeholderTextColor={theme.textSecondary}
-        />
+        <Pressable
+          onPress={() => setShowDatePicker(true)}
+          style={[styles.selectButton, { borderColor: theme.inputBorder, backgroundColor: theme.backgroundDefault }]}
+        >
+          <Feather name="calendar" size={20} color={theme.textSecondary} style={{ marginRight: Spacing.sm }} />
+          <ThemedText style={styles.selectButtonText}>{formatDate(dateValue)}</ThemedText>
+        </Pressable>
+        {showDatePicker ? (
+          Platform.OS === "ios" ? (
+            <Modal
+              visible={showDatePicker}
+              transparent
+              animationType="fade"
+              onRequestClose={() => setShowDatePicker(false)}
+            >
+              <View style={styles.modalOverlay}>
+                <Pressable style={styles.modalBackdrop} onPress={() => setShowDatePicker(false)} />
+                <ThemedView style={[styles.datePickerModal, { backgroundColor: theme.backgroundDefault }]}>
+                  <View style={styles.datePickerHeader}>
+                    <ThemedText style={styles.modalTitle}>Выберите дату</ThemedText>
+                    <Pressable onPress={() => setShowDatePicker(false)}>
+                      <ThemedText style={{ color: theme.primary, fontWeight: "600" }}>Готово</ThemedText>
+                    </Pressable>
+                  </View>
+                  <DateTimePicker
+                    value={dateValue}
+                    mode="date"
+                    display="spinner"
+                    onChange={handleDateChange}
+                    locale="ru"
+                  />
+                </ThemedView>
+              </View>
+            </Modal>
+          ) : (
+            <DateTimePicker
+              value={dateValue}
+              mode="date"
+              display="default"
+              onChange={handleDateChange}
+            />
+          )
+        ) : null}
       </View>
 
       <View style={styles.section}>
         <ThemedText style={styles.sectionTitle}>Участники</ThemedText>
+        <View style={styles.inputRow}>
+          <ThemedText style={styles.inputLabel}>Всего участников</ThemedText>
+          <TextInput
+            style={[styles.input, styles.numericInput, { borderColor: theme.inputBorder, color: theme.text, backgroundColor: theme.backgroundDefault }]}
+            value={totalParticipants}
+            onChangeText={setTotalParticipants}
+            keyboardType="numeric"
+            placeholder="0"
+            placeholderTextColor={theme.textSecondary}
+          />
+        </View>
+        <ThemedText style={[styles.subLabel, { color: theme.textSecondary }]}>Из них:</ThemedText>
         {[
-          { label: "Полная оплата", value: fullPrice, setter: setFullPrice },
-          { label: "Льготная", value: discounted, setter: setDiscounted },
-          { label: "Бесплатные", value: free, setter: setFree },
+          { label: "Льготных", value: discounted, setter: setDiscounted },
+          { label: "Бесплатных", value: free, setter: setFree },
           { label: "По туру", value: tourPackage, setter: setTourPackage },
         ].map((item, index) => (
           <View key={index} style={styles.inputRow}>
-            <ThemedText style={styles.inputLabel}>{item.label}</ThemedText>
+            <ThemedText style={[styles.inputLabel, styles.subInputLabel]}>{item.label}</ThemedText>
             <TextInput
               style={[styles.input, styles.numericInput, { borderColor: theme.inputBorder, color: theme.text, backgroundColor: theme.backgroundDefault }]}
               value={item.value}
@@ -168,12 +293,17 @@ export function AddExcursionForm({ excursion, onSave, onCancel }: AddExcursionFo
             />
           </View>
         ))}
+        <View style={[styles.summaryRow, { borderTopColor: theme.inputBorder }]}>
+          <ThemedText style={[styles.inputLabel, { color: theme.textSecondary }]}>Полная оплата (авто)</ThemedText>
+          <ThemedText style={[styles.summaryValue, { color: theme.primary }]}>{calculateFullPrice()}</ThemedText>
+        </View>
       </View>
 
       <View style={styles.section}>
         <ThemedText style={styles.sectionTitle}>Дополнительные услуги</ThemedText>
-        {additionalServices.map((service) => {
+        {additionalServices.filter((s) => s.isEnabled).map((service) => {
           const selected = selectedServices.find((s) => s.serviceId === service.id);
+          const isNegativePrice = service.price < 0;
           return (
             <View key={service.id} style={styles.serviceRow}>
               <Pressable
@@ -184,29 +314,27 @@ export function AddExcursionForm({ excursion, onSave, onCancel }: AddExcursionFo
                   style={[
                     styles.checkbox,
                     { borderColor: theme.inputBorder },
-                    selected && { backgroundColor: theme.primary },
+                    selected && { backgroundColor: isNegativePrice ? theme.error : theme.primary },
                   ]}
                 >
                   {selected ? <Feather name="check" size={16} color="#fff" /> : null}
                 </View>
-                <ThemedText style={styles.serviceLabel}>{service.name}</ThemedText>
+                <View style={styles.serviceLabelContainer}>
+                  <ThemedText style={styles.serviceLabel}>{service.name}</ThemedText>
+                  <ThemedText style={[styles.servicePrice, { color: isNegativePrice ? theme.error : theme.success }]}>
+                    {isNegativePrice ? service.price : `+${service.price}`} р.
+                  </ThemedText>
+                </View>
               </Pressable>
               {selected ? (
-                <View style={styles.stepperControls}>
-                  <Pressable
-                    onPress={() => updateServiceCount(service.id, selected.count - 1)}
-                    style={[styles.stepperButton, { backgroundColor: theme.backgroundSecondary }]}
-                  >
-                    <Feather name="minus" size={16} color={theme.text} />
-                  </Pressable>
-                  <ThemedText style={styles.serviceCount}>{selected.count}</ThemedText>
-                  <Pressable
-                    onPress={() => updateServiceCount(service.id, selected.count + 1)}
-                    style={[styles.stepperButton, { backgroundColor: theme.backgroundSecondary }]}
-                  >
-                    <Feather name="plus" size={16} color={theme.text} />
-                  </Pressable>
-                </View>
+                <TextInput
+                  style={[styles.serviceCountInput, { borderColor: theme.inputBorder, color: theme.text, backgroundColor: theme.backgroundDefault }]}
+                  value={selected.count.toString()}
+                  onChangeText={(text) => updateServiceCount(service.id, text)}
+                  keyboardType="numeric"
+                  placeholder="0"
+                  placeholderTextColor={theme.textSecondary}
+                />
               ) : null}
             </View>
           );
@@ -224,17 +352,13 @@ export function AddExcursionForm({ excursion, onSave, onCancel }: AddExcursionFo
         {expenses.map((expense) => (
           <View key={expense.id} style={styles.expenseRow}>
             <View style={styles.expenseInputs}>
-              <View style={[styles.pickerContainer, { borderColor: theme.inputBorder, backgroundColor: theme.backgroundDefault, flex: 1 }]}>
-                <Picker
-                  selectedValue={expense.type}
-                  onValueChange={(value: string) => updateExpense(expense.id, "type", value)}
-                  style={[styles.picker, { color: theme.text }]}
-                >
-                  <Picker.Item label="Экскурсовод" value="Экскурсовод" />
-                  <Picker.Item label="Предоплата" value="Предоплата" />
-                  <Picker.Item label="Прочее" value="Прочее" />
-                </Picker>
-              </View>
+              <Pressable
+                onPress={() => setShowExpenseTypePicker(expense.id)}
+                style={[styles.expenseTypeButton, { borderColor: theme.inputBorder, backgroundColor: theme.backgroundDefault }]}
+              >
+                <ThemedText style={styles.expenseTypeText}>{expense.type}</ThemedText>
+                <Feather name="chevron-down" size={16} color={theme.textSecondary} />
+              </Pressable>
               <TextInput
                 style={[styles.expenseAmountInput, { borderColor: theme.inputBorder, color: theme.text, backgroundColor: theme.backgroundDefault }]}
                 value={expense.amount.toString()}
@@ -250,6 +374,34 @@ export function AddExcursionForm({ excursion, onSave, onCancel }: AddExcursionFo
           </View>
         ))}
       </View>
+
+      <Modal
+        visible={showExpenseTypePicker !== null}
+        transparent
+        animationType="fade"
+        onRequestClose={() => setShowExpenseTypePicker(null)}
+      >
+        <View style={styles.modalOverlay}>
+          <Pressable style={styles.modalBackdrop} onPress={() => setShowExpenseTypePicker(null)} />
+          <ThemedView style={[styles.modalContent, { backgroundColor: theme.backgroundDefault }]}>
+            <ThemedText style={styles.modalTitle}>Тип расхода</ThemedText>
+            {expenseTypes.map((type) => (
+              <Pressable
+                key={type}
+                onPress={() => {
+                  if (showExpenseTypePicker) {
+                    updateExpense(showExpenseTypePicker, "type", type);
+                  }
+                  setShowExpenseTypePicker(null);
+                }}
+                style={styles.modalItem}
+              >
+                <ThemedText style={styles.modalItemText}>{type}</ThemedText>
+              </Pressable>
+            ))}
+          </ThemedView>
+        </View>
+      </Modal>
 
       <View style={styles.footer}>
         <Pressable
@@ -293,21 +445,69 @@ const styles = StyleSheet.create({
     fontWeight: "500",
     marginBottom: Spacing.sm,
   },
-  pickerContainer: {
+  subLabel: {
+    fontSize: Typography.caption.fontSize,
+    marginBottom: Spacing.sm,
+    marginTop: Spacing.sm,
+  },
+  selectButton: {
+    flexDirection: "row",
+    alignItems: "center",
+    justifyContent: "space-between",
     borderWidth: 1,
     borderRadius: BorderRadius.md,
-    overflow: "hidden",
-  },
-  picker: {
+    paddingHorizontal: Spacing.md,
     height: 48,
   },
-  row: {
-    flexDirection: "row",
-    gap: Spacing.md,
-    marginBottom: Spacing.lg,
-  },
-  halfWidth: {
+  selectButtonText: {
+    fontSize: Typography.body.fontSize,
     flex: 1,
+  },
+  modalOverlay: {
+    flex: 1,
+    justifyContent: "center",
+    alignItems: "center",
+    padding: Spacing.xl,
+  },
+  modalBackdrop: {
+    ...StyleSheet.absoluteFillObject,
+    backgroundColor: "rgba(0,0,0,0.5)",
+  },
+  modalList: {
+    maxHeight: 300,
+  },
+  modalContent: {
+    width: "100%",
+    maxHeight: 400,
+    borderRadius: BorderRadius.lg,
+    padding: Spacing.lg,
+  },
+  modalTitle: {
+    fontSize: 17,
+    fontWeight: "600",
+    marginBottom: Spacing.md,
+  },
+  modalItem: {
+    flexDirection: "row",
+    justifyContent: "space-between",
+    alignItems: "center",
+    paddingVertical: Spacing.md,
+    paddingHorizontal: Spacing.sm,
+    borderRadius: BorderRadius.sm,
+  },
+  modalItemText: {
+    fontSize: Typography.body.fontSize,
+  },
+  datePickerModal: {
+    width: "100%",
+    borderRadius: BorderRadius.lg,
+    padding: Spacing.lg,
+  },
+  datePickerHeader: {
+    flexDirection: "row",
+    justifyContent: "space-between",
+    alignItems: "center",
+    marginBottom: Spacing.md,
   },
   input: {
     borderWidth: 1,
@@ -328,38 +528,26 @@ const styles = StyleSheet.create({
     fontWeight: "500",
     flex: 1,
   },
+  subInputLabel: {
+    paddingLeft: Spacing.md,
+  },
   numericInput: {
     width: 100,
     textAlign: "center" as const,
   },
-  stepperRow: {
+  summaryRow: {
     flexDirection: "row",
     justifyContent: "space-between",
     alignItems: "center",
-    marginBottom: Spacing.md,
+    paddingTop: Spacing.md,
+    marginTop: Spacing.sm,
+    borderTopWidth: 1,
   },
-  stepperLabel: {
+  summaryValue: {
     fontSize: Typography.body.fontSize,
-    flex: 1,
-  },
-  stepperControls: {
-    flexDirection: "row",
-    alignItems: "center",
-    gap: Spacing.sm,
-  },
-  stepperButton: {
-    width: 36,
-    height: 36,
-    borderRadius: BorderRadius.sm,
-    justifyContent: "center",
-    alignItems: "center",
-  },
-  stepperInput: {
-    borderWidth: 1,
-    borderRadius: BorderRadius.sm,
-    width: 60,
-    height: 36,
-    fontSize: Typography.body.fontSize,
+    fontWeight: "600",
+    width: 100,
+    textAlign: "center",
   },
   serviceRow: {
     flexDirection: "row",
@@ -381,14 +569,22 @@ const styles = StyleSheet.create({
     alignItems: "center",
     marginRight: Spacing.md,
   },
+  serviceLabelContainer: {
+    flex: 1,
+  },
   serviceLabel: {
     fontSize: Typography.body.fontSize,
   },
-  serviceCount: {
-    fontSize: Typography.body.fontSize,
-    fontWeight: "600",
-    minWidth: 30,
+  servicePrice: {
+    fontSize: Typography.caption.fontSize,
+  },
+  serviceCountInput: {
+    borderWidth: 1,
+    borderRadius: BorderRadius.sm,
+    width: 60,
+    height: 40,
     textAlign: "center",
+    fontSize: Typography.body.fontSize,
   },
   addButton: {
     flexDirection: "row",
@@ -413,6 +609,19 @@ const styles = StyleSheet.create({
     flex: 1,
     flexDirection: "row",
     gap: Spacing.sm,
+  },
+  expenseTypeButton: {
+    flex: 1,
+    flexDirection: "row",
+    alignItems: "center",
+    justifyContent: "space-between",
+    borderWidth: 1,
+    borderRadius: BorderRadius.md,
+    paddingHorizontal: Spacing.md,
+    height: 48,
+  },
+  expenseTypeText: {
+    fontSize: Typography.body.fontSize,
   },
   expenseAmountInput: {
     borderWidth: 1,

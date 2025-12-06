@@ -36,8 +36,13 @@ export function ServiceModal({ visible, onClose, onSave, service }: ServiceModal
 
     const priceValue = parseInt(price, 10);
 
-    if (!price.trim() || isNaN(priceValue) || priceValue <= 0) {
-      Alert.alert("Ошибка", "Введите корректную цену (целое число больше 0)");
+    if (!price.trim() || isNaN(priceValue)) {
+      Alert.alert("Ошибка", "Введите корректную цену (целое число)");
+      return;
+    }
+
+    if (priceValue === 0) {
+      Alert.alert("Ошибка", "Цена не может быть равна нулю");
       return;
     }
 
@@ -90,6 +95,9 @@ export function ServiceModal({ visible, onClose, onSave, service }: ServiceModal
 
             <View style={styles.inputGroup}>
               <ThemedText style={[styles.label, { color: theme.textSecondary }]}>Цена</ThemedText>
+              <ThemedText style={[styles.priceHint, { color: theme.textSecondary }]}>
+                Положительная = клиент платит, отрицательная = мы платим
+              </ThemedText>
               <TextInput
                 style={[
                   styles.input,
@@ -101,8 +109,8 @@ export function ServiceModal({ visible, onClose, onSave, service }: ServiceModal
                 ]}
                 value={price}
                 onChangeText={setPrice}
-                keyboardType="numeric"
-                placeholder="400"
+                keyboardType="numbers-and-punctuation"
+                placeholder="400 или -400"
                 placeholderTextColor={theme.textSecondary}
               />
             </View>
@@ -178,6 +186,10 @@ const styles = StyleSheet.create({
   label: {
     fontSize: 14,
     fontWeight: "500",
+  },
+  priceHint: {
+    fontSize: 12,
+    marginBottom: Spacing.xs,
   },
   input: {
     borderWidth: 1,
