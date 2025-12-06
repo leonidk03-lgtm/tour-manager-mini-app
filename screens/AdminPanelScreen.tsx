@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { View, StyleSheet, Pressable, Alert, Switch, Modal, TextInput } from "react-native";
 import { Feather } from "@expo/vector-icons";
 import { ThemedText } from "@/components/ThemedText";
@@ -16,6 +16,10 @@ export default function AdminPanelScreen() {
   const [newPassword, setNewPassword] = useState("");
   const [newDisplayName, setNewDisplayName] = useState("");
   const [isCreating, setIsCreating] = useState(false);
+
+  useEffect(() => {
+    refreshManagers();
+  }, []);
 
   const handleToggleStatus = async (id: string, currentStatus: boolean) => {
     const { error } = await updateManagerStatus(id, !currentStatus);

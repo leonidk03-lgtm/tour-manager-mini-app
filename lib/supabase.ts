@@ -1,17 +1,74 @@
-import { createClient } from '@supabase/supabase-js';
+import { createClient, SupabaseClient } from '@supabase/supabase-js';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 
-const supabaseUrl = process.env.SUPABASE_URL || process.env.EXPO_PUBLIC_SUPABASE_URL || '';
-const supabaseAnonKey = process.env.SUPABASE_ANON_KEY || process.env.EXPO_PUBLIC_SUPABASE_ANON_KEY || '';
+const SUPABASE_URL_KEY = 'supabase_custom_url';
+const SUPABASE_ANON_KEY_KEY = 'supabase_custom_anon_key';
 
-export const supabase = createClient(supabaseUrl, supabaseAnonKey, {
-  auth: {
-    storage: AsyncStorage,
-    autoRefreshToken: true,
-    persistSession: true,
-    detectSessionInUrl: false,
-  },
-});
+const defaultUrl = process.env.SUPABASE_URL || process.env.EXPO_PUBLIC_SUPABASE_URL || '';
+const defaultAnonKey = process.env.SUPABASE_ANON_KEY || process.env.EXPO_PUBLIC_SUPABASE_ANON_KEY || '';
+
+let currentUrl = defaultUrl;
+let currentAnonKey = defaultAnonKey;
+
+function createSupabaseClient(url: string, anonKey: string): SupabaseClient {
+  return createClient(url, anonKey, {
+    auth: {
+      storage: AsyncStorage,
+      autoRefreshToken: true,
+      persistSession: true,
+      detectSessionInUrl: false,
+    },
+  });
+}
+
+export let supabase = createSupabaseClient(currentUrl, currentAnonKey);
+
+export async function initSupabaseFromStorage(): Promise<void> {
+  try {
+    const storedUrl = await AsyncStorage.getItem(SUPABASE_URL_KEY);
+    const storedAnonKey = await AsyncStorage.getItem(SUPABASE_ANON_KEY_KEY);
+    
+    if (storedUrl && storedAnonKey) {
+      currentUrl = storedUrl;
+      currentAnonKey = storedAnonKey;
+      supabase = createSupabaseClient(currentUrl, currentAnonKey);
+    }
+  } catch (error) {
+    console.error('Error loading Supabase config from storage:', error);
+  }
+}
+
+export async function getSupabaseConfig(): Promise<{ url: string; anonKey: string }> {
+  const storedUrl = await AsyncStorage.getItem(SUPABASE_URL_KEY);
+  const storedAnonKey = await AsyncStorage.getItem(SUPABASE_ANON_KEY_KEY);
+  
+  return {
+    url: storedUrl || defaultUrl,
+    anonKey: storedAnonKey || defaultAnonKey,
+  };
+}
+
+export async function updateSupabaseConfig(url: string, anonKey: string): Promise<void> {
+  await AsyncStorage.setItem(SUPABASE_URL_KEY, url);
+  await AsyncStorage.setItem(SUPABASE_ANON_KEY_KEY, anonKey);
+  
+  currentUrl = url;
+  currentAnonKey = anonKey;
+  supabase = createSupabaseClient(url, anonKey);
+}
+
+export async function resetSupabaseConfig(): Promise<void> {
+  await AsyncStorage.removeItem(SUPABASE_URL_KEY);
+  await AsyncStorage.removeItem(SUPABASE_ANON_KEY_KEY);
+  
+  currentUrl = defaultUrl;
+  currentAnonKey = defaultAnonKey;
+  supabase = createSupabaseClient(defaultUrl, defaultAnonKey);
+}
+
+export function getCurrentSupabaseUrl(): string {
+  return currentUrl;
+}
 
 export type UserRole = 'admin' | 'manager';
 
