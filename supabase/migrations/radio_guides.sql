@@ -75,10 +75,13 @@ CREATE POLICY "radio_guide_assignments_select_all" ON radio_guide_assignments
     FOR SELECT TO authenticated USING (true);
 
 CREATE POLICY "radio_guide_assignments_insert_all" ON radio_guide_assignments
-    FOR INSERT TO authenticated WITH CHECK (true);
+    FOR INSERT TO authenticated 
+    WITH CHECK (true);
 
 CREATE POLICY "radio_guide_assignments_update_all" ON radio_guide_assignments
-    FOR UPDATE TO authenticated USING (true);
+    FOR UPDATE TO authenticated 
+    USING (true)
+    WITH CHECK (true);
 
 -- Функция обновления updated_at
 CREATE OR REPLACE FUNCTION update_radio_guide_kits_updated_at()
