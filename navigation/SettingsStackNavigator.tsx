@@ -4,6 +4,7 @@ import TicketPricesScreen from "@/screens/TicketPricesScreen";
 import AdminPanelScreen from "@/screens/AdminPanelScreen";
 import DeletedDataScreen from "@/screens/DeletedDataScreen";
 import DatabaseSettingsScreen from "@/screens/DatabaseSettingsScreen";
+import RadioGuidesScreen from "@/screens/RadioGuidesScreen";
 import { getCommonScreenOptions } from "./screenOptions";
 import { useTheme } from "@/hooks/useTheme";
 
@@ -13,6 +14,7 @@ export type SettingsStackParamList = {
   AdminPanel: undefined;
   DeletedData: undefined;
   DatabaseSettings: undefined;
+  RadioGuides: undefined;
 };
 
 const Stack = createNativeStackNavigator<SettingsStackParamList>();
@@ -46,6 +48,11 @@ export default function SettingsStackNavigator() {
         name="DatabaseSettings"
         component={DatabaseSettingsScreen}
         options={{ title: "База данных" }}
+      />
+      <Stack.Screen
+        name="RadioGuides"
+        component={RadioGuidesScreen}
+        options={{ title: "Радиогиды" }}
       />
     </Stack.Navigator>
   );
