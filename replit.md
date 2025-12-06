@@ -106,7 +106,13 @@ Design style: Telegram-inspired dark theme with flat design (November 2025 updat
 
 **TicketPricesScreen** - Full price list management with add/edit/delete capabilities for tour types and additional services, article number assignment for tour types, and seasonal enable/disable toggle (e.g., summer-only or winter-only excursions). Additional services do not have article numbers.
 
-**AddExcursionForm** - Form for creating/editing excursions with tour type selection. Only enabled (isEnabled: true) tour types are shown in the picker dropdown. The form validates that selected tour type is enabled before allowing save.
+**AddExcursionForm** - Form for creating/editing excursions with:
+- Custom modal picker for tour type selection (works on mobile/Expo Go)
+- DateTimePicker calendar for date selection
+- Participant input: total count first, then breakdown (discounted/free/tour package), with auto-calculated full price
+- Additional services with direct numeric input for quantity (not +/- steppers)
+- Expense management with custom modal picker for expense type
+- Only enabled (isEnabled: true) tour types shown; validates before save
 
 **AdminPanelScreen** - Manage manager accounts (toggle active status, delete managers)
 
