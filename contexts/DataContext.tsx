@@ -192,32 +192,7 @@ export function DataProvider({ children }: { children: ReactNode }) {
     role: "admin",
     name: "Администратор",
   });
-  const [activities, setActivities] = useState<Activity[]>([
-    {
-      id: "demo1",
-      type: "excursion_added",
-      managerName: "Администратор",
-      description: "добавил экскурсию Болгар",
-      date: "2025-11-23",
-      timestamp: "2025-11-23T10:30:00.000Z",
-    },
-    {
-      id: "demo2",
-      type: "transaction_added",
-      managerName: "Иван Петров",
-      description: 'добавил расход "Вильдану"',
-      date: "2025-11-23",
-      timestamp: "2025-11-23T11:15:00.000Z",
-    },
-    {
-      id: "demo3",
-      type: "excursion_added",
-      managerName: "Мария Сидорова",
-      description: "добавил экскурсию Свияжск",
-      date: "2025-11-22",
-      timestamp: "2025-11-22T09:45:00.000Z",
-    },
-  ]);
+  const [activities, setActivities] = useState<Activity[]>([]);
 
   const addExcursion = (excursion: Excursion) => {
     setExcursions((prev) => [...prev, excursion]);
