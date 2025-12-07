@@ -2,6 +2,24 @@ import React, { createContext, useContext, useState, useEffect, ReactNode, useCa
 import { supabase } from "@/lib/supabase";
 import { useAuth } from "./AuthContext";
 
+// Helper function to retry failed requests
+async function withRetry<T>(
+  fn: () => Promise<T>,
+  retries: number = 2,
+  delay: number = 1000
+): Promise<T> {
+  try {
+    return await fn();
+  } catch (error) {
+    if (retries > 0 && error instanceof TypeError && error.message.includes('Network')) {
+      console.log(`Retrying request, ${retries} attempts left...`);
+      await new Promise(resolve => setTimeout(resolve, delay));
+      return withRetry(fn, retries - 1, delay * 2);
+    }
+    throw error;
+  }
+}
+
 export interface TourType {
   id: string;
   name: string;
