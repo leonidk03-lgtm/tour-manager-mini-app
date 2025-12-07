@@ -1,13 +1,16 @@
 import { useState, useEffect } from "react";
 import { View, StyleSheet, Pressable, Alert, Switch, Modal, TextInput } from "react-native";
 import { Feather } from "@expo/vector-icons";
+import { useNavigation } from "@react-navigation/native";
+import { NativeStackNavigationProp } from "@react-navigation/native-stack";
 import { ThemedText } from "@/components/ThemedText";
 import { ThemedView } from "@/components/ThemedView";
 import { ScreenScrollView } from "@/components/ScreenScrollView";
 import { Spacing, BorderRadius } from "@/constants/theme";
 import { useTheme } from "@/hooks/useTheme";
 import { useAuth } from "@/contexts/AuthContext";
-import { UserRole } from "@/lib/supabase";
+import { UserRole, Profile } from "@/lib/supabase";
+import { SettingsStackParamList } from "@/navigation/SettingsStackNavigator";
 
 type RoleOption = { value: UserRole; label: string };
 const ROLE_OPTIONS: RoleOption[] = [
@@ -24,8 +27,11 @@ const getRoleLabel = (role: UserRole): string => {
   }
 };
 
+type NavigationProp = NativeStackNavigationProp<SettingsStackParamList, "AdminPanel">;
+
 export default function AdminPanelScreen() {
   const { theme } = useTheme();
+  const navigation = useNavigation<NavigationProp>();
   const { managers, createManager, updateManagerStatus, updateManagerRole, deleteManager, refreshManagers } = useAuth();
   const [showAddModal, setShowAddModal] = useState(false);
   const [newEmail, setNewEmail] = useState("");
@@ -194,6 +200,21 @@ export default function AdminPanelScreen() {
                     </View>
 
                     <View style={styles.actionButtons}>
+                      <Pressable
+                        onPress={() => navigation.navigate("ManagerDetail", { manager: manager as Profile })}
+                        style={({ pressed }) => [
+                          styles.actionButton,
+                          {
+                            backgroundColor: theme.backgroundSecondary,
+                            opacity: pressed ? 0.7 : 1,
+                          },
+                        ]}
+                      >
+                        <Feather name="activity" size={18} color={theme.primary} />
+                        <ThemedText style={[styles.actionButtonText, { color: theme.primary }]}>
+                          Действия
+                        </ThemedText>
+                      </Pressable>
                       <Pressable
                         onPress={() => handleDeleteManager(manager.id, manager.display_name)}
                         style={({ pressed }) => [

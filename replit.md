@@ -120,7 +120,14 @@ Design style: Telegram-inspired dark theme with flat design (November 2025 updat
 - Expense management with custom modal picker for expense type
 - Only enabled (isEnabled: true) tour types shown; validates before save
 
-**AdminPanelScreen** - Manage manager accounts (toggle active status, delete managers)
+**AdminPanelScreen** - Manage manager accounts (toggle active status, delete managers, view individual manager activity)
+
+**ManagerDetailScreen** - Detailed view of individual manager showing:
+- Profile information (name, email, role, status)
+- Period filter (day/week/month/all)
+- Statistics (excursions count, participants, revenue, profit)
+- List of manager's excursions with revenue
+- List of manager's transactions
 
 **RadioGuidesScreen** - Radio guide equipment management:
 - View all radio guide bags (kits) with bag number, receiver count, and status

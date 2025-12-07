@@ -5,9 +5,11 @@ import AdminPanelScreen from "@/screens/AdminPanelScreen";
 import DeletedDataScreen from "@/screens/DeletedDataScreen";
 import DatabaseSettingsScreen from "@/screens/DatabaseSettingsScreen";
 import RadioGuidesScreen from "@/screens/RadioGuidesScreen";
+import ManagerDetailScreen from "@/screens/ManagerDetailScreen";
 import { getCommonScreenOptions } from "./screenOptions";
 import { useTheme } from "@/hooks/useTheme";
 import { useAuth } from "@/contexts/AuthContext";
+import { Profile } from "@/lib/supabase";
 
 export type SettingsStackParamList = {
   Settings: undefined;
@@ -16,6 +18,7 @@ export type SettingsStackParamList = {
   DeletedData: undefined;
   DatabaseSettings: undefined;
   RadioGuides: undefined;
+  ManagerDetail: { manager: Profile };
 };
 
 const Stack = createNativeStackNavigator<SettingsStackParamList>();
@@ -45,6 +48,11 @@ export default function SettingsStackNavigator() {
             name="AdminPanel"
             component={AdminPanelScreen}
             options={{ title: "Панель администратора" }}
+          />
+          <Stack.Screen
+            name="ManagerDetail"
+            component={ManagerDetailScreen}
+            options={{ title: "Сотрудник" }}
           />
           <Stack.Screen
             name="DeletedData"
