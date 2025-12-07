@@ -134,6 +134,7 @@ interface DataContextType {
   getActiveAssignment: (kitId: string) => RadioGuideAssignment | undefined;
   isLoading: boolean;
   refreshData: () => Promise<void>;
+  refreshPriceList: () => Promise<void>;
 }
 
 const DataContext = createContext<DataContextType | undefined>(undefined);
@@ -399,29 +400,22 @@ export function DataProvider({ children }: { children: ReactNode }) {
     }
   }, [user, profile]);
 
-  // Realtime subscriptions for price list sync across devices
+  // Periodic polling for price list sync (since Realtime not available on current plan)
   useEffect(() => {
     if (!user) return;
 
-    const tourTypesChannel = supabase
-      .channel('tour_types_changes')
-      .on('postgres_changes', { event: '*', schema: 'public', table: 'tour_types' }, () => {
-        fetchTourTypes();
-      })
-      .subscribe();
+    const POLL_INTERVAL = 30000; // 30 seconds
+    const interval = setInterval(() => {
+      fetchTourTypes();
+      fetchAdditionalServices();
+    }, POLL_INTERVAL);
 
-    const servicesChannel = supabase
-      .channel('additional_services_changes')
-      .on('postgres_changes', { event: '*', schema: 'public', table: 'additional_services' }, () => {
-        fetchAdditionalServices();
-      })
-      .subscribe();
-
-    return () => {
-      supabase.removeChannel(tourTypesChannel);
-      supabase.removeChannel(servicesChannel);
-    };
+    return () => clearInterval(interval);
   }, [user, fetchTourTypes, fetchAdditionalServices]);
+
+  const refreshPriceList = useCallback(async () => {
+    await Promise.all([fetchTourTypes(), fetchAdditionalServices()]);
+  }, [fetchTourTypes, fetchAdditionalServices]);
 
   const addTourType = async (tourType: Omit<TourType, 'id'>) => {
     try {
@@ -989,6 +983,7 @@ export function DataProvider({ children }: { children: ReactNode }) {
         getActiveAssignment,
         isLoading,
         refreshData,
+        refreshPriceList,
       }}
     >
       {children}

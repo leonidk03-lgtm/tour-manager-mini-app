@@ -1,5 +1,5 @@
-import { useState } from "react";
-import { View, StyleSheet, Pressable, Alert, Switch } from "react-native";
+import { useState, useCallback } from "react";
+import { View, StyleSheet, Pressable, Alert, Switch, RefreshControl } from "react-native";
 import { Feather } from "@expo/vector-icons";
 import { ThemedText } from "@/components/ThemedText";
 import { ThemedView } from "@/components/ThemedView";
@@ -21,7 +21,16 @@ export default function TicketPricesScreen() {
     addAdditionalService,
     updateAdditionalService,
     deleteAdditionalService,
+    refreshPriceList,
   } = useData();
+
+  const [refreshing, setRefreshing] = useState(false);
+
+  const onRefresh = useCallback(async () => {
+    setRefreshing(true);
+    await refreshPriceList();
+    setRefreshing(false);
+  }, [refreshPriceList]);
 
   const [tourModalVisible, setTourModalVisible] = useState(false);
   const [serviceModalVisible, setServiceModalVisible] = useState(false);
@@ -105,7 +114,16 @@ export default function TicketPricesScreen() {
   };
 
   return (
-    <ScreenScrollView>
+    <ScreenScrollView
+      refreshControl={
+        <RefreshControl
+          refreshing={refreshing}
+          onRefresh={onRefresh}
+          tintColor={theme.primary}
+          colors={[theme.primary]}
+        />
+      }
+    >
       <View style={styles.container}>
         <View style={styles.section}>
           <View style={styles.sectionHeader}>
