@@ -7,6 +7,7 @@ import { ThemedView } from "@/components/ThemedView";
 import { ScreenScrollView } from "@/components/ScreenScrollView";
 import { Spacing, BorderRadius } from "@/constants/theme";
 import { useTheme } from "@/hooks/useTheme";
+import { useAuth } from "@/contexts/AuthContext";
 
 type ReportItem = {
   id: string;
@@ -49,7 +50,21 @@ const reportItems: ReportItem[] = [
 
 export default function ReportsScreen() {
   const { theme } = useTheme();
+  const { isAdmin } = useAuth();
   const navigation = useNavigation<NavigationProp<SettingsStackParamList>>();
+
+  if (!isAdmin) {
+    return (
+      <ScreenScrollView>
+        <View style={styles.container}>
+          <ThemedText style={styles.header}>Доступ запрещён</ThemedText>
+          <ThemedText style={{ textAlign: "center", color: theme.textSecondary }}>
+            Этот раздел доступен только администраторам
+          </ThemedText>
+        </View>
+      </ScreenScrollView>
+    );
+  }
 
   return (
     <ScreenScrollView>

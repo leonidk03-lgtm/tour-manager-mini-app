@@ -280,7 +280,7 @@ export function DataProvider({ children }: { children: ReactNode }) {
         fullPriceCount: e.full_price_count || 0,
         discountedCount: e.discounted_count || 0,
         freeCount: e.free_count || 0,
-        tourPackageCount: 0,
+        tourPackageCount: e.tour_package_count || 0,
         byTourCount: e.by_tour_count || 0,
         paidCount: e.paid_count || 0,
         expenses: e.expenses || [],

@@ -7,6 +7,7 @@ import { ScreenScrollView } from "@/components/ScreenScrollView";
 import { Spacing, BorderRadius } from "@/constants/theme";
 import { useTheme } from "@/hooks/useTheme";
 import { useData } from "@/contexts/DataContext";
+import { useAuth } from "@/contexts/AuthContext";
 
 type Period = "day" | "week" | "month" | "year" | "all";
 
@@ -20,8 +21,22 @@ const periodLabels: Record<Period, string> = {
 
 export default function ExcursionsReportScreen() {
   const { theme } = useTheme();
+  const { isAdmin } = useAuth();
   const { excursions, tourTypes, additionalServices } = useData();
   const [period, setPeriod] = useState<Period>("month");
+
+  if (!isAdmin) {
+    return (
+      <ScreenScrollView>
+        <View style={styles.container}>
+          <ThemedText style={styles.sectionTitle}>Доступ запрещён</ThemedText>
+          <ThemedText style={{ textAlign: "center", color: theme.textSecondary }}>
+            Этот раздел доступен только администраторам
+          </ThemedText>
+        </View>
+      </ScreenScrollView>
+    );
+  }
 
   const filterByPeriod = (date: string) => {
     const itemDate = new Date(date);

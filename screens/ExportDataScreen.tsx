@@ -13,6 +13,7 @@ import { ScreenScrollView } from "@/components/ScreenScrollView";
 import { Spacing, BorderRadius } from "@/constants/theme";
 import { useTheme } from "@/hooks/useTheme";
 import { useData } from "@/contexts/DataContext";
+import { useAuth } from "@/contexts/AuthContext";
 
 type ExportType = "excursions" | "transactions" | "radioguides" | "all";
 
@@ -45,8 +46,22 @@ const exportOptions: { id: ExportType; title: string; description: string; icon:
 
 export default function ExportDataScreen() {
   const { theme } = useTheme();
+  const { isAdmin } = useAuth();
   const { excursions, transactions, tourTypes, additionalServices, radioGuideKits, radioGuideAssignments, equipmentLosses } = useData();
   const [exporting, setExporting] = useState<ExportType | null>(null);
+
+  if (!isAdmin) {
+    return (
+      <ScreenScrollView>
+        <View style={styles.container}>
+          <ThemedText style={styles.header}>Доступ запрещён</ThemedText>
+          <ThemedText style={{ textAlign: "center", color: theme.textSecondary }}>
+            Этот раздел доступен только администраторам
+          </ThemedText>
+        </View>
+      </ScreenScrollView>
+    );
+  }
 
   const formatDate = (dateStr: string) => {
     const date = new Date(dateStr);
