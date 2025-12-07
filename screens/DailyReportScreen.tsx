@@ -41,13 +41,19 @@ export default function DailyReportScreen() {
       console.log("Stored data:", stored);
       if (stored) {
         const data = JSON.parse(stored);
-        setBankDeposit(data.bankDeposit || "");
-        setSafeDeposit(data.safeDeposit || "");
-        setCashAmount(data.cashAmount || "");
-        setIncomeField(data.incomeField || "");
+        const newBankDeposit = data.bankDeposit || "";
+        const newSafeDeposit = data.safeDeposit || "";
+        const newCashAmount = data.cashAmount || "";
+        const newIncomeField = data.incomeField || "";
+        console.log("Setting values:", { newBankDeposit, newSafeDeposit, newCashAmount, newIncomeField });
+        setBankDeposit(newBankDeposit);
+        setSafeDeposit(newSafeDeposit);
+        setCashAmount(newCashAmount);
+        setIncomeField(newIncomeField);
         setHasExistingReport(true);
-        console.log("Loaded existing report data");
+        console.log("Loaded existing report data, values set");
       } else {
+        console.log("No data found, clearing fields");
         setBankDeposit("");
         setSafeDeposit("");
         setCashAmount("");
@@ -92,6 +98,7 @@ export default function DailyReportScreen() {
   const selectedDateStr = selectedDate.toISOString().split("T")[0];
   
   useEffect(() => {
+    console.log("useEffect triggered for date:", selectedDateStr);
     loadReportData(selectedDate);
   }, [selectedDateStr, loadReportData]);
 
@@ -479,6 +486,7 @@ export default function DailyReportScreen() {
         <View style={styles.inputsSection}>
           <ThemedText style={styles.inputLabel}>Положил на Р/с:</ThemedText>
           <TextInput
+            key={`bank-${selectedDateStr}`}
             style={[styles.input, { backgroundColor: theme.backgroundSecondary, color: theme.text }]}
             value={bankDeposit}
             onChangeText={setBankDeposit}
@@ -489,6 +497,7 @@ export default function DailyReportScreen() {
 
           <ThemedText style={styles.inputLabel}>Положил в сейф:</ThemedText>
           <TextInput
+            key={`safe-${selectedDateStr}`}
             style={[styles.input, { backgroundColor: theme.backgroundSecondary, color: theme.text }]}
             value={safeDeposit}
             onChangeText={setSafeDeposit}
@@ -506,6 +515,7 @@ export default function DailyReportScreen() {
 
           <ThemedText style={styles.inputLabel}>Денег:</ThemedText>
           <TextInput
+            key={`cash-${selectedDateStr}`}
             style={[styles.input, { backgroundColor: theme.backgroundSecondary, color: theme.text }]}
             value={cashAmount}
             onChangeText={setCashAmount}
@@ -516,6 +526,7 @@ export default function DailyReportScreen() {
 
           <ThemedText style={styles.inputLabel}>Доход:</ThemedText>
           <TextInput
+            key={`income-${selectedDateStr}`}
             style={[styles.input, { backgroundColor: theme.backgroundSecondary, color: theme.text }]}
             value={incomeField}
             onChangeText={setIncomeField}
