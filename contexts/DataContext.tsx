@@ -444,18 +444,25 @@ export function DataProvider({ children }: { children: ReactNode }) {
     }
   }, [user, profile, fetchExcursions, fetchTransactions, fetchActivities, fetchDeletedItems]);
 
-  // Periodic polling for price list sync (since Realtime not available on current plan)
+  // Periodic polling for all shared data sync (since Realtime not available on current plan)
   useEffect(() => {
     if (!user) return;
 
-    const POLL_INTERVAL = 30000; // 30 seconds
+    const POLL_INTERVAL = 15000; // 15 seconds for better sync
     const interval = setInterval(() => {
-      fetchTourTypes();
-      fetchAdditionalServices();
+      console.log('Polling all shared data...');
+      Promise.all([
+        fetchTourTypes(),
+        fetchAdditionalServices(),
+        fetchRadioGuideKits(),
+        fetchRadioGuideAssignments(),
+        fetchExcursions(),
+        fetchTransactions(),
+      ]);
     }, POLL_INTERVAL);
 
     return () => clearInterval(interval);
-  }, [user, fetchTourTypes, fetchAdditionalServices]);
+  }, [user, fetchTourTypes, fetchAdditionalServices, fetchRadioGuideKits, fetchRadioGuideAssignments, fetchExcursions, fetchTransactions]);
 
   const refreshPriceList = useCallback(async () => {
     await Promise.all([fetchTourTypes(), fetchAdditionalServices()]);
