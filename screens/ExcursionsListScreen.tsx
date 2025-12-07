@@ -464,18 +464,33 @@ export default function ExcursionsListScreen() {
         </View>
       </ScreenScrollView>
 
-      <Pressable
-        style={({ pressed }) => [
-          styles.fab,
-          {
-            backgroundColor: theme.primary,
-            opacity: pressed ? 0.7 : 1,
-          },
-        ]}
-        onPress={() => setShowAddModal(true)}
-      >
-        <Feather name="plus" size={24} color={theme.buttonText} />
-      </Pressable>
+      <View style={styles.fabContainer}>
+        <Pressable
+          style={({ pressed }) => [
+            styles.fabSecondary,
+            {
+              backgroundColor: theme.backgroundSecondary,
+              borderColor: theme.border,
+              opacity: pressed ? 0.7 : 1,
+            },
+          ]}
+          onPress={() => navigation.getParent()?.navigate('SettingsTab', { screen: 'RadioGuides' })}
+        >
+          <Feather name="radio" size={20} color={theme.primary} />
+        </Pressable>
+        <Pressable
+          style={({ pressed }) => [
+            styles.fab,
+            {
+              backgroundColor: theme.primary,
+              opacity: pressed ? 0.7 : 1,
+            },
+          ]}
+          onPress={() => setShowAddModal(true)}
+        >
+          <Feather name="plus" size={24} color={theme.buttonText} />
+        </Pressable>
+      </View>
 
       <Modal visible={showAddModal} animationType="slide" presentationStyle="pageSheet">
         <ThemedView style={[styles.modalContainer, { backgroundColor: theme.backgroundRoot }]}>
@@ -584,10 +599,23 @@ const styles = StyleSheet.create({
     fontSize: 16,
     textAlign: "center",
   },
-  fab: {
+  fabContainer: {
     position: "absolute",
     bottom: 16 + 49 + Spacing.xl,
     right: 16,
+    flexDirection: "row",
+    alignItems: "center",
+    gap: Spacing.sm,
+  },
+  fabSecondary: {
+    width: 44,
+    height: 44,
+    borderRadius: 22,
+    alignItems: "center",
+    justifyContent: "center",
+    borderWidth: 1,
+  },
+  fab: {
     width: 56,
     height: 56,
     borderRadius: 28,
