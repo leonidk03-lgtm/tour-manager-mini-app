@@ -167,11 +167,13 @@ export function DataProvider({ children }: { children: ReactNode }) {
 
   const fetchTourTypes = useCallback(async () => {
     try {
+      console.log('Fetching tour types...');
       const { data, error } = await supabase
         .from('tour_types')
         .select('*')
         .order('name');
 
+      console.log('Tour types result:', { count: data?.length, error: error?.message });
       if (error) throw error;
 
       setTourTypes((data || []).map(t => ({
