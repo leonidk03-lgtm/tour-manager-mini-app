@@ -37,7 +37,8 @@ Design style: Telegram-inspired dark theme with flat design (November 2025 updat
 - React Context API (`DataContext` + `AuthContext`) for global application state
 - Local state management with React hooks
 - No external state management libraries (Redux/MobX) - keeping it simple
-- Data persisted in Supabase PostgreSQL database with real-time sync
+- Data persisted in Supabase PostgreSQL database
+- **Data Synchronization**: 15-second polling interval for all shared data (tour types, additional services, radio guide kits/assignments, excursions, transactions) since Supabase Realtime is not available on current plan
 
 **Theming System**
 - Dark-first design (Telegram-style) with light theme support
