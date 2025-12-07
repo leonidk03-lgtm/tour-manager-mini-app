@@ -1,5 +1,5 @@
-import { useState, useMemo } from "react";
-import { View, StyleSheet, Pressable, TextInput, Alert, Platform } from "react-native";
+import { useState, useMemo, useEffect, useCallback } from "react";
+import { View, StyleSheet, Pressable, TextInput, Alert, Platform, ActivityIndicator } from "react-native";
 import { Feather } from "@expo/vector-icons";
 import * as Clipboard from "expo-clipboard";
 import DateTimePicker from "@react-native-community/datetimepicker";
@@ -10,6 +10,7 @@ import { Spacing, BorderRadius } from "@/constants/theme";
 import { useTheme } from "@/hooks/useTheme";
 import { useData } from "@/contexts/DataContext";
 import { useAuth } from "@/contexts/AuthContext";
+import { supabase } from "@/lib/supabase";
 
 export default function DailyReportScreen() {
   const { theme } = useTheme();
@@ -23,6 +24,78 @@ export default function DailyReportScreen() {
   const [safeDeposit, setSafeDeposit] = useState("");
   const [cashAmount, setCashAmount] = useState("");
   const [incomeField, setIncomeField] = useState("");
+  const [loading, setLoading] = useState(false);
+  const [saving, setSaving] = useState(false);
+  const [hasExistingReport, setHasExistingReport] = useState(false);
+
+  const loadReportData = useCallback(async (date: Date) => {
+    const dateStr = date.toISOString().split("T")[0];
+    setLoading(true);
+    try {
+      const { data, error } = await supabase
+        .from("daily_reports")
+        .select("*")
+        .eq("report_date", dateStr)
+        .single();
+
+      if (data && !error) {
+        setBankDeposit(data.bank_deposit ? String(data.bank_deposit) : "");
+        setSafeDeposit(data.safe_deposit ? String(data.safe_deposit) : "");
+        setCashAmount(data.cash_amount ? String(data.cash_amount) : "");
+        setIncomeField(data.income_field ? String(data.income_field) : "");
+        setHasExistingReport(true);
+      } else {
+        setBankDeposit("");
+        setSafeDeposit("");
+        setCashAmount("");
+        setIncomeField("");
+        setHasExistingReport(false);
+      }
+    } catch (err) {
+      console.error("Error loading report:", err);
+    } finally {
+      setLoading(false);
+    }
+  }, []);
+
+  const saveReportData = async () => {
+    const dateStr = selectedDate.toISOString().split("T")[0];
+    setSaving(true);
+    try {
+      const reportData = {
+        report_date: dateStr,
+        bank_deposit: parseFloat(bankDeposit) || 0,
+        safe_deposit: parseFloat(safeDeposit) || 0,
+        cash_amount: parseFloat(cashAmount) || 0,
+        income_field: parseFloat(incomeField) || 0,
+        updated_at: new Date().toISOString(),
+      };
+
+      if (hasExistingReport) {
+        const { error } = await supabase
+          .from("daily_reports")
+          .update(reportData)
+          .eq("report_date", dateStr);
+        if (error) throw error;
+      } else {
+        const { error } = await supabase
+          .from("daily_reports")
+          .insert(reportData);
+        if (error) throw error;
+        setHasExistingReport(true);
+      }
+      Alert.alert("Сохранено", "Данные отчёта сохранены");
+    } catch (err) {
+      console.error("Error saving report:", err);
+      Alert.alert("Ошибка", "Не удалось сохранить данные");
+    } finally {
+      setSaving(false);
+    }
+  };
+
+  useEffect(() => {
+    loadReportData(selectedDate);
+  }, [selectedDate, loadReportData]);
 
   if (!isAdmin) {
     return (
@@ -419,6 +492,21 @@ export default function DailyReportScreen() {
             placeholderTextColor={theme.textSecondary}
             keyboardType="numeric"
           />
+
+          {loading ? (
+            <ActivityIndicator size="small" color={theme.primary} style={{ marginTop: Spacing.md }} />
+          ) : null}
+
+          <Pressable
+            style={[styles.saveButton, { backgroundColor: theme.success, opacity: saving ? 0.6 : 1 }]}
+            onPress={saveReportData}
+            disabled={saving}
+          >
+            <Feather name="save" size={20} color="#fff" />
+            <ThemedText style={styles.copyButtonText}>
+              {saving ? "Сохранение..." : hasExistingReport ? "Обновить данные" : "Сохранить данные"}
+            </ThemedText>
+          </Pressable>
         </View>
 
         <Pressable
@@ -521,6 +609,15 @@ const styles = StyleSheet.create({
   profitValue: {
     fontSize: 20,
     fontWeight: "700",
+  },
+  saveButton: {
+    flexDirection: "row",
+    alignItems: "center",
+    justifyContent: "center",
+    padding: Spacing.md,
+    borderRadius: BorderRadius.md,
+    gap: Spacing.sm,
+    marginTop: Spacing.lg,
   },
   copyButton: {
     flexDirection: "row",
