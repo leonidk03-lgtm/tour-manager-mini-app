@@ -546,8 +546,6 @@ export function DataProvider({ children }: { children: ReactNode }) {
   };
 
   const updateExcursion = async (id: string, excursion: Partial<Excursion>) => {
-    console.log('updateExcursion called with:', { id, excursion });
-    console.log('additionalServices in excursion:', excursion.additionalServices);
     try {
       const updateData: Record<string, unknown> = {};
       if (excursion.tourTypeId !== undefined) updateData.tour_type_id = excursion.tourTypeId;
@@ -561,13 +559,20 @@ export function DataProvider({ children }: { children: ReactNode }) {
       if (excursion.expenses !== undefined) updateData.expenses = excursion.expenses;
       if (excursion.additionalServices !== undefined) updateData.additional_services = excursion.additionalServices;
 
-      console.log('Saving updateData to Supabase:', updateData);
-      const { error } = await supabase
+      const { data, error } = await supabase
         .from('excursions')
         .update(updateData)
-        .eq('id', id);
+        .eq('id', id)
+        .select('additional_services');
 
       if (error) throw error;
+      
+      // Debug: show what was saved
+      if (__DEV__) {
+        const savedServices = data?.[0]?.additional_services;
+        console.log('DEBUG: Saved additional_services:', JSON.stringify(savedServices));
+      }
+      
       await fetchExcursions();
     } catch (err) {
       console.error('Error updating excursion:', err);
