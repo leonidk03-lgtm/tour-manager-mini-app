@@ -327,11 +327,14 @@ export function DataProvider({ children }: { children: ReactNode }) {
     if (!user) return;
 
     try {
+      console.log('Fetching activities...');
       const { data, error } = await supabase
         .from('activities')
         .select('*')
         .order('timestamp', { ascending: false })
         .limit(100);
+
+      console.log('Activities result:', { count: data?.length, error: error?.message });
 
       if (error) throw error;
 
