@@ -12,7 +12,7 @@ import { useAuth } from "@/contexts/AuthContext";
 export default function SettingsScreen() {
   const { theme } = useTheme();
   const navigation = useNavigation<NavigationProp<SettingsStackParamList>>();
-  const { profile, isAdmin, signOut } = useAuth();
+  const { profile, isAdmin, isRadioDispatcher, signOut } = useAuth();
 
   const handleLogout = () => {
     Alert.alert("Выйти из аккаунта?", "Вы уверены, что хотите выйти?", [
@@ -63,11 +63,23 @@ export default function SettingsScreen() {
                 ]}
               >
                 <ThemedText style={[styles.roleText, { color: theme.buttonText }]}>
-                  {isAdmin ? "Администратор" : "Менеджер"}
+                  {isAdmin ? "Администратор" : isRadioDispatcher ? "Диспетчер" : "Менеджер"}
                 </ThemedText>
               </ThemedView>
             </View>
           </View>
+          <Pressable
+            style={({ pressed }) => [
+              styles.editProfileButton,
+              { backgroundColor: theme.primary, opacity: pressed ? 0.7 : 1 },
+            ]}
+            onPress={() => navigation.navigate("EditProfile")}
+          >
+            <Feather name="edit-2" size={16} color={theme.buttonText} />
+            <ThemedText style={[styles.editProfileText, { color: theme.buttonText }]}>
+              Редактировать профиль
+            </ThemedText>
+          </Pressable>
         </ThemedView>
 
         <View style={styles.section}>
@@ -282,5 +294,19 @@ const styles = StyleSheet.create({
   logoutText: {
     fontSize: 16,
     fontWeight: "600",
+  },
+  editProfileButton: {
+    flexDirection: "row",
+    alignItems: "center",
+    justifyContent: "center",
+    gap: Spacing.sm,
+    paddingVertical: Spacing.sm,
+    paddingHorizontal: Spacing.md,
+    borderRadius: BorderRadius.xs,
+    marginTop: Spacing.md,
+  },
+  editProfileText: {
+    fontSize: 14,
+    fontWeight: "500",
   },
 });

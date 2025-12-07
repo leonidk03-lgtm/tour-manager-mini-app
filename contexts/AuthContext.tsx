@@ -15,6 +15,9 @@ interface AuthContextType {
   updateManagerStatus: (managerId: string, isActive: boolean) => Promise<{ error: string | null }>;
   updateManagerRole: (managerId: string, role: UserRole) => Promise<{ error: string | null }>;
   deleteManager: (managerId: string) => Promise<{ error: string | null }>;
+  updateOwnProfile: (data: { password?: string; displayName?: string }) => Promise<{ error: string | null }>;
+  sendPasswordReset: (email: string) => Promise<{ error: string | null }>;
+  updateManagerDisplayName: (managerId: string, displayName: string) => Promise<{ error: string | null }>;
   managers: Profile[];
   refreshManagers: () => Promise<void>;
 }
@@ -249,6 +252,75 @@ export function AuthProvider({ children }: { children: ReactNode }) {
     }
   };
 
+  const updateOwnProfile = async (data: { password?: string; displayName?: string }): Promise<{ error: string | null }> => {
+    if (!user) {
+      return { error: 'Пользователь не авторизован' };
+    }
+
+    try {
+      if (data.password) {
+        const { error } = await supabase.auth.updateUser({ password: data.password });
+        if (error) {
+          return { error: error.message };
+        }
+      }
+
+      if (data.displayName) {
+        const { error } = await supabase
+          .from('profiles')
+          .update({ display_name: data.displayName, updated_at: new Date().toISOString() })
+          .eq('id', user.id);
+
+        if (error) {
+          return { error: error.message };
+        }
+        await fetchProfile(user.id);
+      }
+
+      return { error: null };
+    } catch (err) {
+      return { error: 'Ошибка при обновлении профиля' };
+    }
+  };
+
+  const sendPasswordReset = async (email: string): Promise<{ error: string | null }> => {
+    try {
+      const { error } = await supabase.auth.resetPasswordForEmail(email, {
+        redirectTo: 'https://tourmanager.app/reset-password',
+      });
+
+      if (error) {
+        return { error: error.message };
+      }
+
+      return { error: null };
+    } catch (err) {
+      return { error: 'Ошибка при отправке ссылки сброса пароля' };
+    }
+  };
+
+  const updateManagerDisplayName = async (managerId: string, displayName: string): Promise<{ error: string | null }> => {
+    if (!isAdmin) {
+      return { error: 'Только администратор может изменять имя менеджера' };
+    }
+
+    try {
+      const { error } = await supabase
+        .from('profiles')
+        .update({ display_name: displayName, updated_at: new Date().toISOString() })
+        .eq('id', managerId);
+
+      if (error) {
+        return { error: error.message };
+      }
+
+      await refreshManagers();
+      return { error: null };
+    } catch (err) {
+      return { error: 'Ошибка при обновлении имени' };
+    }
+  };
+
   const refreshManagers = async () => {
     if (!isAdmin && profile?.role !== 'admin') return;
 
@@ -281,6 +353,9 @@ export function AuthProvider({ children }: { children: ReactNode }) {
         updateManagerStatus,
         updateManagerRole,
         deleteManager,
+        updateOwnProfile,
+        sendPasswordReset,
+        updateManagerDisplayName,
         managers,
         refreshManagers,
       }}

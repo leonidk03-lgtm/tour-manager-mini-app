@@ -105,7 +105,12 @@ Design style: Telegram-inspired dark theme with flat design (November 2025 updat
 
 **FinancesScreen** - Separate income/expense transaction management with tabbed interface, add/delete capabilities
 
-**SettingsScreen** - User profile, logout, navigation to TicketPrices, DeletedData, and AdminPanel
+**SettingsScreen** - User profile, logout, navigation to TicketPrices, DeletedData, AdminPanel, and EditProfile
+
+**EditProfileScreen** - Self-service profile editing:
+- Change display name
+- Change password (with confirmation)
+- Email is displayed but cannot be changed (read-only)
 
 **DeletedDataScreen** - Soft-deleted data management with restore and permanent delete options
 
@@ -124,6 +129,7 @@ Design style: Telegram-inspired dark theme with flat design (November 2025 updat
 
 **ManagerDetailScreen** - Detailed view of individual manager showing:
 - Profile information (name, email, role, status)
+- Admin actions: edit manager name, send password reset link
 - Period filter (day/week/month/all)
 - Statistics (excursions count, participants, revenue, profit)
 - List of manager's excursions with revenue

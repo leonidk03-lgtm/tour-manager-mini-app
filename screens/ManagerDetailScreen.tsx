@@ -1,5 +1,5 @@
 import { useState, useMemo } from "react";
-import { View, StyleSheet, Pressable } from "react-native";
+import { View, StyleSheet, Pressable, TextInput, Alert, Modal } from "react-native";
 import { Feather } from "@expo/vector-icons";
 import { useRoute, RouteProp } from "@react-navigation/native";
 import { ThemedText } from "@/components/ThemedText";
@@ -8,6 +8,7 @@ import { ScreenScrollView } from "@/components/ScreenScrollView";
 import { Spacing, BorderRadius } from "@/constants/theme";
 import { useTheme } from "@/hooks/useTheme";
 import { useData } from "@/contexts/DataContext";
+import { useAuth } from "@/contexts/AuthContext";
 import { calculateExcursionRevenue } from "@/utils/calculations";
 import { SettingsStackParamList } from "@/navigation/SettingsStackNavigator";
 
@@ -36,7 +37,50 @@ export default function ManagerDetailScreen() {
   const route = useRoute<RouteProp<SettingsStackParamList, "ManagerDetail">>();
   const { manager } = route.params;
   const { excursions, transactions, tourTypes, additionalServices } = useData();
+  const { sendPasswordReset, updateManagerDisplayName, refreshManagers, isAdmin } = useAuth();
   const [period, setPeriod] = useState<PeriodFilter>("all");
+  const [isEditingName, setIsEditingName] = useState(false);
+  const [newDisplayName, setNewDisplayName] = useState(manager.display_name);
+  const [isSaving, setIsSaving] = useState(false);
+  const [currentManager, setCurrentManager] = useState(manager);
+
+  const handleSendPasswordReset = async () => {
+    Alert.alert(
+      "Сброс пароля",
+      `Отправить ссылку для сброса пароля на ${currentManager.email}?`,
+      [
+        { text: "Отмена", style: "cancel" },
+        {
+          text: "Отправить",
+          onPress: async () => {
+            const { error } = await sendPasswordReset(currentManager.email);
+            if (error) {
+              Alert.alert("Ошибка", error);
+            } else {
+              Alert.alert("Успешно", "Ссылка для сброса пароля отправлена на email");
+            }
+          },
+        },
+      ]
+    );
+  };
+
+  const handleSaveDisplayName = async () => {
+    if (!newDisplayName.trim()) {
+      Alert.alert("Ошибка", "Имя не может быть пустым");
+      return;
+    }
+    setIsSaving(true);
+    const { error } = await updateManagerDisplayName(currentManager.id, newDisplayName.trim());
+    setIsSaving(false);
+    if (error) {
+      Alert.alert("Ошибка", error);
+    } else {
+      setCurrentManager({ ...currentManager, display_name: newDisplayName.trim() });
+      setIsEditingName(false);
+      await refreshManagers();
+    }
+  };
 
   const filterByPeriod = (date: string) => {
     const itemDate = new Date(date);
@@ -138,28 +182,28 @@ export default function ManagerDetailScreen() {
             style={[
               styles.avatar,
               {
-                backgroundColor: manager.is_active
-                  ? (manager.role === "radio_dispatcher" ? theme.warning : theme.primary)
+                backgroundColor: currentManager.is_active
+                  ? (currentManager.role === "radio_dispatcher" ? theme.warning : theme.primary)
                   : theme.textSecondary,
               },
             ]}
           >
             <Feather
-              name={manager.role === "radio_dispatcher" ? "radio" : "user"}
+              name={currentManager.role === "radio_dispatcher" ? "radio" : "user"}
               size={32}
               color={theme.buttonText}
             />
           </View>
-          <ThemedText style={styles.profileName}>{manager.display_name}</ThemedText>
+          <ThemedText style={styles.profileName}>{currentManager.display_name}</ThemedText>
           <ThemedText style={[styles.profileEmail, { color: theme.textSecondary }]}>
-            {manager.email}
+            {currentManager.email}
           </ThemedText>
           <View
             style={[
               styles.roleBadge,
               {
                 backgroundColor:
-                  manager.role === "radio_dispatcher"
+                  currentManager.role === "radio_dispatcher"
                     ? theme.warning + "30"
                     : theme.primary + "30",
               },
@@ -170,20 +214,87 @@ export default function ManagerDetailScreen() {
                 styles.roleText,
                 {
                   color:
-                    manager.role === "radio_dispatcher" ? theme.warning : theme.primary,
+                    currentManager.role === "radio_dispatcher" ? theme.warning : theme.primary,
                 },
               ]}
             >
-              {getRoleLabel(manager.role)}
+              {getRoleLabel(currentManager.role)}
             </ThemedText>
           </View>
-          <View style={[styles.statusBadge, { backgroundColor: manager.is_active ? theme.success + "30" : theme.error + "30" }]}>
-            <View style={[styles.statusDot, { backgroundColor: manager.is_active ? theme.success : theme.error }]} />
-            <ThemedText style={{ color: manager.is_active ? theme.success : theme.error, fontSize: 12 }}>
-              {manager.is_active ? "Активен" : "Неактивен"}
+          <View style={[styles.statusBadge, { backgroundColor: currentManager.is_active ? theme.success + "30" : theme.error + "30" }]}>
+            <View style={[styles.statusDot, { backgroundColor: currentManager.is_active ? theme.success : theme.error }]} />
+            <ThemedText style={{ color: currentManager.is_active ? theme.success : theme.error, fontSize: 12 }}>
+              {currentManager.is_active ? "Активен" : "Неактивен"}
             </ThemedText>
           </View>
         </ThemedView>
+
+        {isAdmin ? (
+          <View style={styles.actionsRow}>
+            <Pressable
+              style={[styles.actionButton, { backgroundColor: theme.backgroundSecondary }]}
+              onPress={() => setIsEditingName(true)}
+            >
+              <Feather name="edit-2" size={18} color={theme.primary} />
+              <ThemedText style={[styles.actionButtonText, { color: theme.primary }]}>
+                Изменить имя
+              </ThemedText>
+            </Pressable>
+            <Pressable
+              style={[styles.actionButton, { backgroundColor: theme.backgroundSecondary }]}
+              onPress={handleSendPasswordReset}
+            >
+              <Feather name="key" size={18} color={theme.warning} />
+              <ThemedText style={[styles.actionButtonText, { color: theme.warning }]}>
+                Сбросить пароль
+              </ThemedText>
+            </Pressable>
+          </View>
+        ) : null}
+
+        <Modal
+          visible={isEditingName}
+          transparent
+          animationType="fade"
+          onRequestClose={() => setIsEditingName(false)}
+        >
+          <View style={styles.modalOverlay}>
+            <ThemedView style={[styles.modalContent, { backgroundColor: theme.backgroundSecondary }]}>
+              <ThemedText style={styles.modalTitle}>Изменить имя</ThemedText>
+              <TextInput
+                style={[
+                  styles.modalInput,
+                  { backgroundColor: theme.backgroundTertiary, color: theme.text, borderColor: theme.border },
+                ]}
+                value={newDisplayName}
+                onChangeText={setNewDisplayName}
+                placeholder="Имя менеджера"
+                placeholderTextColor={theme.textSecondary}
+                autoFocus
+              />
+              <View style={styles.modalButtons}>
+                <Pressable
+                  style={[styles.modalButton, { backgroundColor: theme.backgroundTertiary }]}
+                  onPress={() => {
+                    setNewDisplayName(currentManager.display_name);
+                    setIsEditingName(false);
+                  }}
+                >
+                  <ThemedText>Отмена</ThemedText>
+                </Pressable>
+                <Pressable
+                  style={[styles.modalButton, { backgroundColor: theme.primary }]}
+                  onPress={handleSaveDisplayName}
+                  disabled={isSaving}
+                >
+                  <ThemedText style={{ color: theme.buttonText }}>
+                    {isSaving ? "Сохранение..." : "Сохранить"}
+                  </ThemedText>
+                </Pressable>
+              </View>
+            </ThemedView>
+          </View>
+        </Modal>
 
         <View style={styles.periodSelector}>
           {(Object.keys(periodLabels) as PeriodFilter[]).map((p) => (
@@ -498,5 +609,57 @@ const styles = StyleSheet.create({
   moreText: {
     textAlign: "center",
     fontSize: 13,
+  },
+  actionsRow: {
+    flexDirection: "row",
+    gap: Spacing.sm,
+  },
+  actionButton: {
+    flex: 1,
+    flexDirection: "row",
+    alignItems: "center",
+    justifyContent: "center",
+    gap: Spacing.sm,
+    paddingVertical: Spacing.md,
+    borderRadius: BorderRadius.sm,
+  },
+  actionButtonText: {
+    fontSize: 14,
+    fontWeight: "500",
+  },
+  modalOverlay: {
+    flex: 1,
+    backgroundColor: "rgba(0,0,0,0.5)",
+    justifyContent: "center",
+    alignItems: "center",
+    padding: Spacing.xl,
+  },
+  modalContent: {
+    width: "100%",
+    padding: Spacing.xl,
+    borderRadius: BorderRadius.md,
+    gap: Spacing.lg,
+  },
+  modalTitle: {
+    fontSize: 18,
+    fontWeight: "600",
+    textAlign: "center",
+  },
+  modalInput: {
+    paddingHorizontal: Spacing.md,
+    paddingVertical: Spacing.sm,
+    borderRadius: BorderRadius.sm,
+    borderWidth: 1,
+    fontSize: 16,
+  },
+  modalButtons: {
+    flexDirection: "row",
+    gap: Spacing.sm,
+  },
+  modalButton: {
+    flex: 1,
+    paddingVertical: Spacing.md,
+    borderRadius: BorderRadius.sm,
+    alignItems: "center",
   },
 });

@@ -6,6 +6,7 @@ import DeletedDataScreen from "@/screens/DeletedDataScreen";
 import DatabaseSettingsScreen from "@/screens/DatabaseSettingsScreen";
 import RadioGuidesScreen from "@/screens/RadioGuidesScreen";
 import ManagerDetailScreen from "@/screens/ManagerDetailScreen";
+import EditProfileScreen from "@/screens/EditProfileScreen";
 import { getCommonScreenOptions } from "./screenOptions";
 import { useTheme } from "@/hooks/useTheme";
 import { useAuth } from "@/contexts/AuthContext";
@@ -19,6 +20,7 @@ export type SettingsStackParamList = {
   DatabaseSettings: undefined;
   RadioGuides: undefined;
   ManagerDetail: { manager: Profile };
+  EditProfile: undefined;
 };
 
 const Stack = createNativeStackNavigator<SettingsStackParamList>();
@@ -63,6 +65,11 @@ export default function SettingsStackNavigator() {
             name="DatabaseSettings"
             component={DatabaseSettingsScreen}
             options={{ title: "База данных" }}
+          />
+          <Stack.Screen
+            name="EditProfile"
+            component={EditProfileScreen}
+            options={{ title: "Редактировать профиль" }}
           />
         </>
       ) : null}
