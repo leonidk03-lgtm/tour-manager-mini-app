@@ -23,7 +23,7 @@ type ModalMode = "add" | "edit" | "issue" | "return" | null;
 
 export default function RadioGuidesScreen() {
   const { theme } = useTheme();
-  const { isAdmin } = useAuth();
+  const { isAdmin, isRadioDispatcher, signOut, profile } = useAuth();
   const {
     radioGuideKits,
     radioGuideAssignments,
@@ -526,6 +526,33 @@ export default function RadioGuidesScreen() {
               <ThemedText style={{ color: theme.primary }}>Показать все</ThemedText>
             </Pressable>
           )}
+          
+          {isRadioDispatcher ? (
+            <View style={[styles.dispatcherFooter, { borderTopColor: theme.border }]}>
+              <View style={styles.dispatcherInfo}>
+                <Feather name="user" size={18} color={theme.textSecondary} />
+                <ThemedText style={{ color: theme.textSecondary }}>
+                  {profile?.display_name || "Диспетчер"}
+                </ThemedText>
+              </View>
+              <Pressable
+                style={[styles.logoutButton, { borderColor: theme.error }]}
+                onPress={() => {
+                  Alert.alert(
+                    "Выход",
+                    "Вы уверены, что хотите выйти?",
+                    [
+                      { text: "Отмена", style: "cancel" },
+                      { text: "Выйти", style: "destructive", onPress: signOut },
+                    ]
+                  );
+                }}
+              >
+                <Feather name="log-out" size={16} color={theme.error} />
+                <ThemedText style={{ color: theme.error }}>Выйти</ThemedText>
+              </Pressable>
+            </View>
+          ) : null}
         </View>
       </ScreenScrollView>
 
@@ -1133,6 +1160,28 @@ const styles = StyleSheet.create({
     padding: Spacing.md,
     alignItems: "center",
     marginTop: Spacing.md,
+    borderRadius: BorderRadius.md,
+    borderWidth: 1,
+  },
+  dispatcherFooter: {
+    flexDirection: "row",
+    justifyContent: "space-between",
+    alignItems: "center",
+    marginTop: Spacing.xl,
+    paddingTop: Spacing.lg,
+    borderTopWidth: 1,
+  },
+  dispatcherInfo: {
+    flexDirection: "row",
+    alignItems: "center",
+    gap: Spacing.sm,
+  },
+  logoutButton: {
+    flexDirection: "row",
+    alignItems: "center",
+    gap: Spacing.xs,
+    paddingVertical: Spacing.sm,
+    paddingHorizontal: Spacing.md,
     borderRadius: BorderRadius.md,
     borderWidth: 1,
   },
