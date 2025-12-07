@@ -88,9 +88,11 @@ export default function DailyReportScreen() {
     }
   };
 
+  const selectedDateStr = selectedDate.toISOString().split("T")[0];
+  
   useEffect(() => {
     loadReportData(selectedDate);
-  }, [selectedDate, loadReportData]);
+  }, [selectedDateStr, loadReportData]);
 
   if (!isAdmin) {
     return (
