@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useState, useMemo } from "react";
 import {
   View,
   StyleSheet,
@@ -33,7 +33,22 @@ export default function RadioGuidesScreen() {
     issueRadioGuide,
     returnRadioGuide,
     getActiveAssignment,
+    excursions,
+    tourTypes,
   } = useData();
+  
+  const getExcursionInfo = (excursionId: string | null | undefined) => {
+    if (!excursionId) return null;
+    const excursion = excursions.find(e => e.id === excursionId);
+    if (!excursion) return null;
+    const tourType = tourTypes.find(t => t.id === excursion.tourTypeId);
+    const date = new Date(excursion.date).toLocaleDateString("ru-RU", { day: "numeric", month: "short" });
+    const time = excursion.time;
+    return {
+      name: tourType?.name || "Экскурсия",
+      dateTime: `${date}, ${time}`,
+    };
+  };
 
   const [modalMode, setModalMode] = useState<ModalMode>(null);
   const [selectedKit, setSelectedKit] = useState<RadioGuideKit | null>(null);
@@ -246,6 +261,19 @@ export default function RadioGuidesScreen() {
 
         {activeAssignment ? (
           <View style={[styles.assignmentInfo, { backgroundColor: theme.backgroundTertiary }]}>
+            {(() => {
+              const excInfo = getExcursionInfo(activeAssignment.excursionId);
+              return excInfo ? (
+                <>
+                  <ThemedText style={[styles.assignmentLabel, { color: theme.textSecondary }]}>
+                    Экскурсия:
+                  </ThemedText>
+                  <ThemedText style={[styles.assignmentValue, { color: theme.primary }]}>
+                    {excInfo.name} ({excInfo.dateTime})
+                  </ThemedText>
+                </>
+              ) : null;
+            })()}
             <ThemedText style={[styles.assignmentLabel, { color: theme.textSecondary }]}>
               Экскурсовод:
             </ThemedText>
