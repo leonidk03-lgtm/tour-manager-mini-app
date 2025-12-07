@@ -1,3 +1,4 @@
+import React, { memo } from "react";
 import { StyleSheet, Pressable, View } from "react-native";
 import { ThemedText } from "@/components/ThemedText";
 import { Spacing, BorderRadius } from "@/constants/theme";
@@ -10,7 +11,7 @@ interface StatCardProps {
   onPress?: () => void;
 }
 
-export function StatCard({ title, value, color = "default", onPress }: StatCardProps) {
+export const StatCard = memo(function StatCard({ title, value, color = "default", onPress }: StatCardProps) {
   const { theme } = useTheme();
 
   const getColor = () => {
@@ -68,7 +69,7 @@ export function StatCard({ title, value, color = "default", onPress }: StatCardP
   }
 
   return content;
-}
+});
 
 const styles = StyleSheet.create({
   card: {

@@ -126,7 +126,6 @@ export function AuthProvider({ children }: { children: ReactNode }) {
     }
 
     try {
-      console.log('Creating user with role:', role);
       const { data, error } = await supabase.auth.signUp({
         email,
         password,
@@ -143,8 +142,6 @@ export function AuthProvider({ children }: { children: ReactNode }) {
         return { error: error.message };
       }
 
-      console.log('Auth signUp result:', data);
-
       if (data.user) {
         const profileData = {
           id: data.user.id,
@@ -153,7 +150,6 @@ export function AuthProvider({ children }: { children: ReactNode }) {
           role,
           is_active: true,
         };
-        console.log('Upserting profile:', profileData);
         
         const { error: profileError } = await supabase
           .from('profiles')
@@ -208,14 +204,11 @@ export function AuthProvider({ children }: { children: ReactNode }) {
     }
 
     try {
-      console.log('Updating role for manager:', managerId, 'to:', role);
-      const { error, data } = await supabase
+      const { error } = await supabase
         .from('profiles')
         .update({ role, updated_at: new Date().toISOString() })
         .eq('id', managerId)
         .select();
-
-      console.log('Update role result:', { error, data });
 
       if (error) {
         console.error('Update role error:', error);

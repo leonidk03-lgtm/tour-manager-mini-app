@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useState, useMemo, useCallback } from "react";
 import { View, StyleSheet, RefreshControl, Pressable, Modal, Platform } from "react-native";
 import { Feather } from "@expo/vector-icons";
 import DateTimePicker from "@react-native-community/datetimepicker";
@@ -56,27 +56,43 @@ export default function DashboardScreen() {
     setTimeout(() => setRefreshing(false), 1000);
   };
 
-  const { startDate, endDate } = getDateRangeForPeriod(selectedPeriod, referenceDate);
-  const filteredExcursions = filterExcursionsByDateRange(excursions, startDate, endDate);
-
-  const totalRevenue = calculateTotalRevenue(filteredExcursions, tourTypes, additionalServices);
-  const totalExpenses = calculateTotalExpenses(filteredExcursions);
-  const additionalIncome = calculateAdditionalTransactionsTotal(
-    transactions.filter((t) => t.date >= startDate && t.date <= endDate),
-    "income"
+  const { startDate, endDate } = useMemo(
+    () => getDateRangeForPeriod(selectedPeriod, referenceDate),
+    [selectedPeriod, referenceDate]
   );
-  const additionalExpenses = calculateAdditionalTransactionsTotal(
-    transactions.filter((t) => t.date >= startDate && t.date <= endDate),
-    "expense"
+  
+  const filteredExcursions = useMemo(
+    () => filterExcursionsByDateRange(excursions, startDate, endDate),
+    [excursions, startDate, endDate]
   );
-  const netProfit = totalRevenue - totalExpenses + additionalIncome - additionalExpenses;
 
-  const totalParticipants = filteredExcursions.reduce((sum, exc) => {
-    return sum + exc.fullPriceCount + exc.discountedCount + exc.freeCount + 
-      exc.byTourCount + exc.paidCount;
-  }, 0);
+  const filteredTransactions = useMemo(
+    () => transactions.filter((t) => t.date >= startDate && t.date <= endDate),
+    [transactions, startDate, endDate]
+  );
 
-  const recentActivities = activities.slice(0, 10);
+  const { totalRevenue, totalExpenses, additionalIncome, additionalExpenses, netProfit, totalParticipants } = useMemo(() => {
+    const revenue = calculateTotalRevenue(filteredExcursions, tourTypes, additionalServices);
+    const expenses = calculateTotalExpenses(filteredExcursions);
+    const income = calculateAdditionalTransactionsTotal(filteredTransactions, "income");
+    const expensesTx = calculateAdditionalTransactionsTotal(filteredTransactions, "expense");
+    const profit = revenue - expenses + income - expensesTx;
+    const participants = filteredExcursions.reduce((sum, exc) => {
+      return sum + exc.fullPriceCount + exc.discountedCount + exc.freeCount + 
+        exc.byTourCount + exc.paidCount;
+    }, 0);
+    
+    return {
+      totalRevenue: revenue,
+      totalExpenses: expenses,
+      additionalIncome: income,
+      additionalExpenses: expensesTx,
+      netProfit: profit,
+      totalParticipants: participants,
+    };
+  }, [filteredExcursions, tourTypes, additionalServices, filteredTransactions]);
+
+  const recentActivities = useMemo(() => activities.slice(0, 10), [activities]);
 
   return (
     <ScreenScrollView

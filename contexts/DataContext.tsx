@@ -12,7 +12,6 @@ async function withRetry<T>(
     return await fn();
   } catch (error) {
     if (retries > 0 && error instanceof TypeError && error.message.includes('Network')) {
-      console.log(`Retrying request, ${retries} attempts left...`);
       await new Promise(resolve => setTimeout(resolve, delay));
       return withRetry(fn, retries - 1, delay * 2);
     }
@@ -218,13 +217,11 @@ export function DataProvider({ children }: { children: ReactNode }) {
   }));
 
   const fetchTourTypes = useCallback(async (): Promise<void> => {
-    console.log('Fetching tour types...');
     const { data, error } = await supabase
       .from('tour_types')
       .select('*')
       .order('article_number');
 
-    console.log('Tour types result:', { count: data?.length, error: error?.message });
     if (error) throw error;
 
     setTourTypes((data || []).map(t => ({
@@ -530,7 +527,6 @@ export function DataProvider({ children }: { children: ReactNode }) {
 
     const POLL_INTERVAL = 15000; // 15 seconds for better sync
     const interval = setInterval(() => {
-      console.log('Polling all shared data...');
       Promise.all([
         fetchTourTypes(),
         fetchAdditionalServices(),
@@ -630,22 +626,17 @@ export function DataProvider({ children }: { children: ReactNode }) {
   };
 
   const updateAdditionalService = async (id: string, service: Partial<AdditionalService>) => {
-    console.log('updateAdditionalService called:', { id, service });
     try {
       const updateData: Record<string, unknown> = {};
       if (service.name !== undefined) updateData.name = service.name;
       if (service.price !== undefined) updateData.price = service.price;
       if (service.isEnabled !== undefined) updateData.is_enabled = service.isEnabled;
-
-      console.log('Sending to Supabase:', updateData);
       
-      const { data, error } = await supabase
+      const { error } = await supabase
         .from('additional_services')
         .update(updateData)
         .eq('id', id)
         .select();
-
-      console.log('Supabase response:', { data, error });
       
       if (error) throw error;
       await fetchAdditionalServices();
@@ -732,12 +723,6 @@ export function DataProvider({ children }: { children: ReactNode }) {
         .select('additional_services');
 
       if (error) throw error;
-      
-      // Debug: show what was saved
-      if (__DEV__) {
-        const savedServices = data?.[0]?.additional_services;
-        console.log('DEBUG: Saved additional_services:', JSON.stringify(savedServices));
-      }
       
       await fetchExcursions();
     } catch (err) {

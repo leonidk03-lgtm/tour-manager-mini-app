@@ -1,3 +1,4 @@
+import React, { memo } from "react";
 import { View, StyleSheet, Pressable } from "react-native";
 import { Feather } from "@expo/vector-icons";
 import { ThemedText } from "@/components/ThemedText";
@@ -16,7 +17,7 @@ interface ExcursionCardProps {
   showManagerName?: boolean;
 }
 
-export function ExcursionCard({
+export const ExcursionCard = memo(function ExcursionCard({
   excursion,
   tourTypeName,
   revenue,
@@ -104,7 +105,7 @@ export function ExcursionCard({
       </View>
     </Pressable>
   );
-}
+});
 
 const styles = StyleSheet.create({
   card: {
