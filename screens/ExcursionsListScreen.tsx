@@ -1,5 +1,5 @@
 import { useState, useMemo } from "react";
-import { View, StyleSheet, Pressable, TextInput, Modal, Platform, Alert } from "react-native";
+import { View, StyleSheet, Pressable, TextInput, Modal, Platform, Alert, ScrollView } from "react-native";
 import { Feather } from "@expo/vector-icons";
 import DateTimePicker from "@react-native-community/datetimepicker";
 import { ThemedText } from "@/components/ThemedText";
@@ -9,7 +9,7 @@ import { ExcursionCard } from "@/components/ExcursionCard";
 import { AddExcursionForm } from "@/components/AddExcursionForm";
 import { Spacing, BorderRadius } from "@/constants/theme";
 import { useTheme } from "@/hooks/useTheme";
-import { useData, Excursion } from "@/contexts/DataContext";
+import { useData, Excursion, RadioGuideKit } from "@/contexts/DataContext";
 import { useAuth } from "@/contexts/AuthContext";
 import {
   calculateExcursionRevenue,
@@ -27,7 +27,7 @@ const parseLocalDate = (dateString: string): Date => {
 export default function ExcursionsListScreen() {
   const { theme } = useTheme();
   const navigation = useNavigation<NavigationProp<ExcursionsStackParamList>>();
-  const { excursions, tourTypes, additionalServices, addExcursion } = useData();
+  const { excursions, tourTypes, additionalServices, addExcursion, radioGuideKits, issueRadioGuide } = useData();
   const { isAdmin } = useAuth();
   const [selectedDate, setSelectedDate] = useState(new Date().toISOString().split("T")[0]);
   const [searchQuery, setSearchQuery] = useState("");
@@ -35,6 +35,15 @@ export default function ExcursionsListScreen() {
   const [showDatePicker, setShowDatePicker] = useState(false);
   const [expandedGroups, setExpandedGroups] = useState<Set<string>>(new Set());
   const [isSaving, setIsSaving] = useState(false);
+  
+  const [showRadioGuideModal, setShowRadioGuideModal] = useState(false);
+  const [selectedKit, setSelectedKit] = useState<RadioGuideKit | null>(null);
+  const [guideName, setGuideName] = useState("");
+  const [busNumber, setBusNumber] = useState("");
+  const [receiversIssued, setReceiversIssued] = useState("");
+  const [pendingExcursionId, setPendingExcursionId] = useState<string | null>(null);
+  
+  const availableKits = radioGuideKits.filter(kit => kit.status === 'available');
   
   const dateValue = parseLocalDate(selectedDate);
   
@@ -67,11 +76,60 @@ export default function ExcursionsListScreen() {
       await addExcursion(excursion);
       setSelectedDate(excursion.date);
       setShowAddModal(false);
+      
+      const tourType = tourTypes.find(t => t.id === excursion.tourTypeId);
+      if (tourType?.hasRadioGuides && availableKits.length > 0) {
+        setShowRadioGuideModal(true);
+      }
     } catch (err) {
       Alert.alert('Ошибка', 'Не удалось сохранить экскурсию');
     } finally {
       setIsSaving(false);
     }
+  };
+  
+  const resetRadioGuideForm = () => {
+    setSelectedKit(null);
+    setGuideName("");
+    setBusNumber("");
+    setReceiversIssued("");
+    setPendingExcursionId(null);
+  };
+  
+  const handleIssueRadioGuide = async () => {
+    if (!selectedKit) {
+      Alert.alert("Ошибка", "Выберите сумку");
+      return;
+    }
+    if (!guideName.trim()) {
+      Alert.alert("Ошибка", "Введите имя экскурсовода");
+      return;
+    }
+    const count = parseInt(receiversIssued);
+    if (!count || count <= 0) {
+      Alert.alert("Ошибка", "Введите количество приёмников");
+      return;
+    }
+    
+    try {
+      await issueRadioGuide({
+        kitId: selectedKit.id,
+        excursionId: pendingExcursionId || undefined,
+        guideName: guideName.trim(),
+        busNumber: busNumber.trim() || undefined,
+        receiversIssued: count,
+      });
+      setShowRadioGuideModal(false);
+      resetRadioGuideForm();
+      Alert.alert("Успешно", "Радиогид выдан");
+    } catch (err) {
+      Alert.alert("Ошибка", "Не удалось выдать радиогид");
+    }
+  };
+  
+  const handleSkipRadioGuide = () => {
+    setShowRadioGuideModal(false);
+    resetRadioGuideForm();
   };
   
   const toggleGroup = (tourTypeId: string) => {
@@ -345,6 +403,117 @@ export default function ExcursionsListScreen() {
           />
         </ThemedView>
       </Modal>
+      
+      <Modal visible={showRadioGuideModal} animationType="slide" transparent>
+        <View style={styles.radioGuideOverlay}>
+          <Pressable style={styles.radioGuideBackdrop} onPress={handleSkipRadioGuide} />
+          <ThemedView style={[styles.radioGuideModal, { backgroundColor: theme.backgroundDefault }]}>
+            <View style={styles.radioGuideHeader}>
+              <ThemedText style={styles.radioGuideTitle}>Выдать радиогид</ThemedText>
+              <Pressable onPress={handleSkipRadioGuide}>
+                <Feather name="x" size={24} color={theme.text} />
+              </Pressable>
+            </View>
+            
+            <ScrollView style={styles.radioGuideContent} keyboardShouldPersistTaps="handled">
+              <ThemedText style={[styles.radioGuideLabel, { color: theme.textSecondary }]}>
+                Выберите сумку
+              </ThemedText>
+              <View style={styles.kitsList}>
+                {availableKits.map(kit => (
+                  <Pressable
+                    key={kit.id}
+                    onPress={() => setSelectedKit(kit)}
+                    style={[
+                      styles.kitOption,
+                      {
+                        backgroundColor: selectedKit?.id === kit.id ? theme.primary + "20" : theme.backgroundSecondary,
+                        borderColor: selectedKit?.id === kit.id ? theme.primary : theme.border,
+                      },
+                    ]}
+                  >
+                    <Feather
+                      name={selectedKit?.id === kit.id ? "check-circle" : "circle"}
+                      size={20}
+                      color={selectedKit?.id === kit.id ? theme.primary : theme.textSecondary}
+                    />
+                    <ThemedText style={styles.kitOptionText}>Сумка #{kit.bagNumber}</ThemedText>
+                  </Pressable>
+                ))}
+                {availableKits.length === 0 ? (
+                  <ThemedText style={{ color: theme.textSecondary, textAlign: "center", padding: Spacing.lg }}>
+                    Нет доступных сумок
+                  </ThemedText>
+                ) : null}
+              </View>
+              
+              <View style={styles.radioGuideInputGroup}>
+                <ThemedText style={[styles.radioGuideLabel, { color: theme.textSecondary }]}>
+                  Экскурсовод *
+                </ThemedText>
+                <TextInput
+                  style={[
+                    styles.radioGuideInput,
+                    { backgroundColor: theme.backgroundSecondary, borderColor: theme.border, color: theme.text },
+                  ]}
+                  value={guideName}
+                  onChangeText={setGuideName}
+                  placeholder="Имя экскурсовода"
+                  placeholderTextColor={theme.textSecondary}
+                />
+              </View>
+              
+              <View style={styles.radioGuideInputGroup}>
+                <ThemedText style={[styles.radioGuideLabel, { color: theme.textSecondary }]}>
+                  Номер автобуса (опционально)
+                </ThemedText>
+                <TextInput
+                  style={[
+                    styles.radioGuideInput,
+                    { backgroundColor: theme.backgroundSecondary, borderColor: theme.border, color: theme.text },
+                  ]}
+                  value={busNumber}
+                  onChangeText={setBusNumber}
+                  placeholder="А123БВ"
+                  placeholderTextColor={theme.textSecondary}
+                />
+              </View>
+              
+              <View style={styles.radioGuideInputGroup}>
+                <ThemedText style={[styles.radioGuideLabel, { color: theme.textSecondary }]}>
+                  Количество приёмников *
+                </ThemedText>
+                <TextInput
+                  style={[
+                    styles.radioGuideInput,
+                    { backgroundColor: theme.backgroundSecondary, borderColor: theme.border, color: theme.text },
+                  ]}
+                  value={receiversIssued}
+                  onChangeText={setReceiversIssued}
+                  placeholder="40"
+                  placeholderTextColor={theme.textSecondary}
+                  keyboardType="number-pad"
+                />
+              </View>
+            </ScrollView>
+            
+            <View style={styles.radioGuideActions}>
+              <Pressable
+                style={[styles.radioGuideSkipButton, { borderColor: theme.border }]}
+                onPress={handleSkipRadioGuide}
+              >
+                <ThemedText>Пропустить</ThemedText>
+              </Pressable>
+              <Pressable
+                style={[styles.radioGuideSubmitButton, { backgroundColor: theme.primary }]}
+                onPress={handleIssueRadioGuide}
+              >
+                <ThemedText style={{ color: theme.buttonText, fontWeight: "600" }}>Выдать</ThemedText>
+              </Pressable>
+            </View>
+          </ThemedView>
+        </View>
+      </Modal>
     </>
   );
 }
@@ -490,5 +659,80 @@ const styles = StyleSheet.create({
   },
   groupStatText: {
     fontSize: 13,
+  },
+  radioGuideOverlay: {
+    flex: 1,
+    justifyContent: "flex-end",
+  },
+  radioGuideBackdrop: {
+    ...StyleSheet.absoluteFillObject,
+    backgroundColor: "rgba(0,0,0,0.5)",
+  },
+  radioGuideModal: {
+    borderTopLeftRadius: BorderRadius.lg,
+    borderTopRightRadius: BorderRadius.lg,
+    maxHeight: "80%",
+  },
+  radioGuideHeader: {
+    flexDirection: "row",
+    justifyContent: "space-between",
+    alignItems: "center",
+    padding: Spacing.lg,
+    paddingBottom: Spacing.md,
+  },
+  radioGuideTitle: {
+    fontSize: 20,
+    fontWeight: "600",
+  },
+  radioGuideContent: {
+    paddingHorizontal: Spacing.lg,
+  },
+  radioGuideLabel: {
+    fontSize: 14,
+    fontWeight: "500",
+    marginBottom: Spacing.xs,
+    marginTop: Spacing.md,
+  },
+  kitsList: {
+    gap: Spacing.xs,
+  },
+  kitOption: {
+    flexDirection: "row",
+    alignItems: "center",
+    padding: Spacing.md,
+    borderRadius: BorderRadius.sm,
+    borderWidth: 1,
+    gap: Spacing.sm,
+  },
+  kitOptionText: {
+    fontSize: 15,
+  },
+  radioGuideInputGroup: {
+    marginBottom: Spacing.sm,
+  },
+  radioGuideInput: {
+    borderWidth: 1,
+    borderRadius: BorderRadius.sm,
+    padding: Spacing.md,
+    fontSize: 16,
+  },
+  radioGuideActions: {
+    flexDirection: "row",
+    gap: Spacing.md,
+    padding: Spacing.lg,
+    paddingTop: Spacing.xl,
+  },
+  radioGuideSkipButton: {
+    flex: 1,
+    padding: Spacing.md,
+    borderRadius: BorderRadius.sm,
+    alignItems: "center",
+    borderWidth: 1,
+  },
+  radioGuideSubmitButton: {
+    flex: 1,
+    padding: Spacing.md,
+    borderRadius: BorderRadius.sm,
+    alignItems: "center",
   },
 });
