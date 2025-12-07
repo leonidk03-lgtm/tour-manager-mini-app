@@ -138,6 +138,19 @@ export default function SettingsScreen() {
                     <Feather name="chevron-right" size={20} color={theme.textSecondary} />
                   </View>
                 </Pressable>
+                <View style={[styles.divider, { backgroundColor: theme.border }]} />
+                <Pressable
+                  onPress={() => navigation.navigate("Reports")}
+                  style={({ pressed }) => ({ opacity: pressed ? 0.7 : 1 })}
+                >
+                  <View style={styles.settingItem}>
+                    <View style={styles.settingLeft}>
+                      <Feather name="bar-chart-2" size={20} color={theme.textSecondary} />
+                      <ThemedText style={styles.settingText}>Отчёты</ThemedText>
+                    </View>
+                    <Feather name="chevron-right" size={20} color={theme.textSecondary} />
+                  </View>
+                </Pressable>
               </>
             ) : null}
 

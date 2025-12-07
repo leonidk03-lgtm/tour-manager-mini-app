@@ -8,6 +8,11 @@ import RadioGuidesScreen from "@/screens/RadioGuidesScreen";
 import ManagerDetailScreen from "@/screens/ManagerDetailScreen";
 import EditProfileScreen from "@/screens/EditProfileScreen";
 import EquipmentLossesScreen from "@/screens/EquipmentLossesScreen";
+import ReportsScreen from "@/screens/ReportsScreen";
+import FinancialReportScreen from "@/screens/FinancialReportScreen";
+import ExcursionsReportScreen from "@/screens/ExcursionsReportScreen";
+import RadioGuidesReportScreen from "@/screens/RadioGuidesReportScreen";
+import ExportDataScreen from "@/screens/ExportDataScreen";
 import { getCommonScreenOptions } from "./screenOptions";
 import { useTheme } from "@/hooks/useTheme";
 import { useAuth } from "@/contexts/AuthContext";
@@ -23,6 +28,11 @@ export type SettingsStackParamList = {
   EquipmentLosses: undefined;
   ManagerDetail: { manager: Profile };
   EditProfile: undefined;
+  Reports: undefined;
+  FinancialReport: undefined;
+  ExcursionsReport: undefined;
+  RadioGuidesReport: undefined;
+  ExportData: undefined;
 };
 
 const Stack = createNativeStackNavigator<SettingsStackParamList>();
@@ -77,6 +87,31 @@ export default function SettingsStackNavigator() {
             name="EquipmentLosses"
             component={EquipmentLossesScreen}
             options={{ title: "Утери оборудования" }}
+          />
+          <Stack.Screen
+            name="Reports"
+            component={ReportsScreen}
+            options={{ title: "Отчёты" }}
+          />
+          <Stack.Screen
+            name="FinancialReport"
+            component={FinancialReportScreen}
+            options={{ title: "Финансовый отчёт" }}
+          />
+          <Stack.Screen
+            name="ExcursionsReport"
+            component={ExcursionsReportScreen}
+            options={{ title: "Отчёт по экскурсиям" }}
+          />
+          <Stack.Screen
+            name="RadioGuidesReport"
+            component={RadioGuidesReportScreen}
+            options={{ title: "Отчёт по радиогидам" }}
+          />
+          <Stack.Screen
+            name="ExportData"
+            component={ExportDataScreen}
+            options={{ title: "Экспорт данных" }}
           />
         </>
       ) : null}
