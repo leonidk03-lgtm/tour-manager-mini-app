@@ -521,11 +521,12 @@ export function DataProvider({ children }: { children: ReactNode }) {
         fetchEquipmentLosses(),
         fetchExcursions(),
         fetchTransactions(),
+        fetchActivities(),
       ]);
     }, POLL_INTERVAL);
 
     return () => clearInterval(interval);
-  }, [user, fetchTourTypes, fetchAdditionalServices, fetchRadioGuideKits, fetchRadioGuideAssignments, fetchEquipmentLosses, fetchExcursions, fetchTransactions]);
+  }, [user, fetchTourTypes, fetchAdditionalServices, fetchRadioGuideKits, fetchRadioGuideAssignments, fetchEquipmentLosses, fetchExcursions, fetchTransactions, fetchActivities]);
 
   const refreshPriceList = useCallback(async () => {
     await Promise.all([fetchTourTypes(), fetchAdditionalServices()]);
