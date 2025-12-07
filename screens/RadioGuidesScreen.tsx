@@ -13,7 +13,7 @@ import { KeyboardAwareScrollView } from "react-native-keyboard-controller";
 import { Feather } from "@expo/vector-icons";
 import { ThemedText } from "@/components/ThemedText";
 import { ThemedView } from "@/components/ThemedView";
-import { ScreenFlatList } from "@/components/ScreenFlatList";
+import { ScreenScrollView } from "@/components/ScreenScrollView";
 import { Spacing, BorderRadius } from "@/constants/theme";
 import { useTheme } from "@/hooks/useTheme";
 import { useData, RadioGuideKit, RadioGuideAssignment } from "@/contexts/DataContext";
@@ -63,17 +63,59 @@ export default function RadioGuidesScreen() {
   const [returnNotes, setReturnNotes] = useState("");
   const [showShortageForm, setShowShortageForm] = useState(false);
   const [selectedExcursionId, setSelectedExcursionId] = useState<string | null>(null);
+  
+  const [selectedDate, setSelectedDate] = useState(() => new Date().toISOString().split("T")[0]);
+  const [showDatePicker, setShowDatePicker] = useState(false);
 
   const todayExcursions = useMemo(() => {
-    const today = new Date().toISOString().split("T")[0];
     return excursions
-      .filter(e => e.date === today)
+      .filter(e => e.date === selectedDate)
       .map(e => {
         const tourType = tourTypes.find(t => t.id === e.tourTypeId);
         return { ...e, tourTypeName: tourType?.name || "Экскурсия" };
       })
       .sort((a, b) => a.time.localeCompare(b.time));
-  }, [excursions, tourTypes]);
+  }, [excursions, tourTypes, selectedDate]);
+  
+  const today = new Date().toISOString().split("T")[0];
+  
+  const { issuedKits, overdueKits, availableKits } = useMemo(() => {
+    const issued: Array<{ kit: RadioGuideKit; assignment: RadioGuideAssignment; isOverdue: boolean }> = [];
+    const overdue: Array<{ kit: RadioGuideKit; assignment: RadioGuideAssignment }> = [];
+    const available: RadioGuideKit[] = [];
+    
+    radioGuideKits.forEach(kit => {
+      const activeAssignment = getActiveAssignment(kit.id);
+      if (activeAssignment) {
+        const issuedDate = activeAssignment.issuedAt.split("T")[0];
+        const isOverdue = issuedDate < today;
+        
+        if (isOverdue) {
+          overdue.push({ kit, assignment: activeAssignment });
+        }
+        issued.push({ kit, assignment: activeAssignment, isOverdue });
+      } else if (kit.status === "available") {
+        available.push(kit);
+      }
+    });
+    
+    issued.sort((a, b) => a.kit.bagNumber - b.kit.bagNumber);
+    overdue.sort((a, b) => a.kit.bagNumber - b.kit.bagNumber);
+    available.sort((a, b) => a.bagNumber - b.bagNumber);
+    
+    return { issuedKits: issued, overdueKits: overdue, availableKits: available };
+  }, [radioGuideKits, getActiveAssignment, today]);
+  
+  const formatDate = (dateStr: string) => {
+    const date = new Date(dateStr);
+    return date.toLocaleDateString("ru-RU", { weekday: "short", day: "numeric", month: "short" });
+  };
+  
+  const changeDate = (days: number) => {
+    const date = new Date(selectedDate);
+    date.setDate(date.getDate() + days);
+    setSelectedDate(date.toISOString().split("T")[0]);
+  };
 
   const resetForm = () => {
     setBagNumber("");
@@ -226,164 +268,231 @@ export default function RadioGuidesScreen() {
     }
   };
 
-  const getStatusText = (status: RadioGuideKit["status"]) => {
-    switch (status) {
-      case "available":
-        return "Доступна";
-      case "issued":
-        return "Выдана";
-      case "maintenance":
-        return "На обслуживании";
-    }
-  };
-
-  const getStatusColor = (status: RadioGuideKit["status"]) => {
-    switch (status) {
-      case "available":
-        return theme.success;
-      case "issued":
-        return theme.warning;
-      case "maintenance":
-        return theme.textSecondary;
-    }
-  };
-
-  const renderKit = ({ item: kit }: { item: RadioGuideKit }) => {
-    const activeAssignment = getActiveAssignment(kit.id);
-
+  const renderIssuedKit = (item: { kit: RadioGuideKit; assignment: RadioGuideAssignment; isOverdue: boolean }) => {
+    const { kit, assignment, isOverdue } = item;
+    const excInfo = getExcursionInfo(assignment.excursionId);
+    const issuedDate = new Date(assignment.issuedAt).toLocaleDateString("ru-RU", { day: "numeric", month: "short" });
+    
     return (
       <ThemedView
         style={[
           styles.kitCard,
-          { backgroundColor: theme.backgroundSecondary, borderColor: theme.border },
+          { 
+            backgroundColor: isOverdue ? theme.error + "10" : theme.backgroundSecondary, 
+            borderColor: isOverdue ? theme.error : theme.border 
+          },
         ]}
       >
         <View style={styles.kitHeader}>
           <View style={styles.kitInfo}>
-            <ThemedText style={styles.kitNumber}>Сумка #{kit.bagNumber}</ThemedText>
-            <View style={styles.kitMeta}>
-              <View
-                style={[styles.statusBadge, { backgroundColor: getStatusColor(kit.status) + "20" }]}
-              >
-                <ThemedText style={[styles.statusText, { color: getStatusColor(kit.status) }]}>
-                  {getStatusText(kit.status)}
-                </ThemedText>
-              </View>
+            <View style={styles.kitTitleRow}>
+              <ThemedText style={styles.kitNumber}>Сумка #{kit.bagNumber}</ThemedText>
+              {isOverdue ? (
+                <View style={[styles.overdueBadge, { backgroundColor: theme.error }]}>
+                  <ThemedText style={styles.overdueBadgeText}>Просрочена</ThemedText>
+                </View>
+              ) : null}
             </View>
           </View>
         </View>
-
-        {activeAssignment ? (
-          <View style={[styles.assignmentInfo, { backgroundColor: theme.backgroundTertiary }]}>
-            <ThemedText style={[styles.assignmentLabel, { color: theme.textSecondary }]}>
-              Экскурсия:
-            </ThemedText>
-            {(() => {
-              const excInfo = getExcursionInfo(activeAssignment.excursionId);
-              return excInfo ? (
-                <ThemedText style={[styles.assignmentValue, { color: theme.primary }]}>
-                  {excInfo.name} ({excInfo.dateTime})
-                </ThemedText>
-              ) : (
-                <ThemedText style={[styles.assignmentValue, { color: theme.textSecondary, fontStyle: "italic" }]}>
-                  Не указана
-                </ThemedText>
-              );
-            })()}
-            <ThemedText style={[styles.assignmentLabel, { color: theme.textSecondary }]}>
-              Экскурсовод:
-            </ThemedText>
-            <ThemedText style={styles.assignmentValue}>{activeAssignment.guideName}</ThemedText>
-            {activeAssignment.busNumber ? (
-              <>
-                <ThemedText style={[styles.assignmentLabel, { color: theme.textSecondary }]}>
-                  Автобус:
-                </ThemedText>
-                <ThemedText style={styles.assignmentValue}>{activeAssignment.busNumber}</ThemedText>
-              </>
-            ) : null}
-            <ThemedText style={[styles.assignmentLabel, { color: theme.textSecondary }]}>
-              Выдано:
-            </ThemedText>
-            <ThemedText style={styles.assignmentValue}>
-              {activeAssignment.receiversIssued} шт.
-            </ThemedText>
-          </View>
-        ) : null}
-
-        {kit.notes ? (
-          <ThemedText style={[styles.kitNotes, { color: theme.textSecondary }]}>
-            {kit.notes}
+        
+        <View style={[styles.assignmentInfo, { backgroundColor: theme.backgroundTertiary }]}>
+          <ThemedText style={[styles.assignmentLabel, { color: theme.textSecondary }]}>
+            Экскурсия:
           </ThemedText>
-        ) : null}
-
-        <View style={styles.kitActions}>
-          {kit.status === "available" ? (
-            <Pressable
-              style={[styles.actionButton, { backgroundColor: theme.primary }]}
-              onPress={() => openIssueModal(kit)}
-            >
-              <Feather name="send" size={16} color={theme.buttonText} />
-              <ThemedText style={[styles.actionButtonText, { color: theme.buttonText }]}>
-                Выдать
-              </ThemedText>
-            </Pressable>
-          ) : kit.status === "issued" ? (
-            <Pressable
-              style={[styles.actionButton, { backgroundColor: theme.success }]}
-              onPress={() => openReturnModal(kit)}
-            >
-              <Feather name="download" size={16} color={theme.buttonText} />
-              <ThemedText style={[styles.actionButtonText, { color: theme.buttonText }]}>
-                Принять
-              </ThemedText>
-            </Pressable>
-          ) : null}
-
-          {isAdmin ? (
+          {excInfo ? (
+            <ThemedText style={[styles.assignmentValue, { color: theme.primary }]}>
+              {excInfo.name} ({excInfo.dateTime})
+            </ThemedText>
+          ) : (
+            <ThemedText style={[styles.assignmentValue, { color: theme.textSecondary, fontStyle: "italic" }]}>
+              Не указана
+            </ThemedText>
+          )}
+          <ThemedText style={[styles.assignmentLabel, { color: theme.textSecondary }]}>
+            Экскурсовод:
+          </ThemedText>
+          <ThemedText style={styles.assignmentValue}>{assignment.guideName}</ThemedText>
+          {assignment.busNumber ? (
             <>
-              <Pressable
-                style={[styles.iconButton, { borderColor: theme.border }]}
-                onPress={() => openEditModal(kit)}
-              >
-                <Feather name="edit-2" size={18} color={theme.primary} />
-              </Pressable>
-              <Pressable
-                style={[styles.iconButton, { borderColor: theme.border }]}
-                onPress={() => handleDeleteKit(kit)}
-              >
-                <Feather name="trash-2" size={18} color={theme.error} />
-              </Pressable>
+              <ThemedText style={[styles.assignmentLabel, { color: theme.textSecondary }]}>
+                Автобус:
+              </ThemedText>
+              <ThemedText style={styles.assignmentValue}>{assignment.busNumber}</ThemedText>
             </>
           ) : null}
+          <ThemedText style={[styles.assignmentLabel, { color: theme.textSecondary }]}>
+            Выдано:
+          </ThemedText>
+          <ThemedText style={styles.assignmentValue}>
+            {assignment.receiversIssued} шт. ({issuedDate})
+          </ThemedText>
+        </View>
+        
+        <View style={styles.kitActions}>
+          <Pressable
+            style={[styles.actionButton, { backgroundColor: theme.success }]}
+            onPress={() => openReturnModal(kit)}
+          >
+            <Feather name="download" size={16} color={theme.buttonText} />
+            <ThemedText style={[styles.actionButtonText, { color: theme.buttonText }]}>
+              Принять
+            </ThemedText>
+          </Pressable>
         </View>
       </ThemedView>
     );
   };
-
-  const sortedKits = [...radioGuideKits].sort((a, b) => a.bagNumber - b.bagNumber);
+  
+  const renderAvailableKit = (kit: RadioGuideKit) => (
+    <ThemedView
+      style={[
+        styles.kitCard,
+        { backgroundColor: theme.backgroundSecondary, borderColor: theme.border },
+      ]}
+    >
+      <View style={styles.kitHeader}>
+        <View style={styles.kitInfo}>
+          <ThemedText style={styles.kitNumber}>Сумка #{kit.bagNumber}</ThemedText>
+          <View style={styles.kitMeta}>
+            <View style={[styles.statusBadge, { backgroundColor: theme.success + "20" }]}>
+              <ThemedText style={[styles.statusText, { color: theme.success }]}>
+                Доступна
+              </ThemedText>
+            </View>
+          </View>
+        </View>
+      </View>
+      
+      {kit.notes ? (
+        <ThemedText style={[styles.kitNotes, { color: theme.textSecondary }]}>
+          {kit.notes}
+        </ThemedText>
+      ) : null}
+      
+      <View style={styles.kitActions}>
+        <Pressable
+          style={[styles.actionButton, { backgroundColor: theme.primary }]}
+          onPress={() => openIssueModal(kit)}
+        >
+          <Feather name="send" size={16} color={theme.buttonText} />
+          <ThemedText style={[styles.actionButtonText, { color: theme.buttonText }]}>
+            Выдать
+          </ThemedText>
+        </Pressable>
+        
+        {isAdmin ? (
+          <>
+            <Pressable
+              style={[styles.iconButton, { borderColor: theme.border }]}
+              onPress={() => openEditModal(kit)}
+            >
+              <Feather name="edit-2" size={18} color={theme.primary} />
+            </Pressable>
+            <Pressable
+              style={[styles.iconButton, { borderColor: theme.border }]}
+              onPress={() => handleDeleteKit(kit)}
+            >
+              <Feather name="trash-2" size={18} color={theme.error} />
+            </Pressable>
+          </>
+        ) : null}
+      </View>
+    </ThemedView>
+  );
 
   return (
     <>
-      <ScreenFlatList
-        data={sortedKits}
-        renderItem={renderKit}
-        keyExtractor={(item) => item.id}
-        contentContainerStyle={styles.container}
-        ListEmptyComponent={
-          <View style={styles.emptyContainer}>
-            <Feather name="radio" size={48} color={theme.textSecondary} />
-            <ThemedText style={[styles.emptyText, { color: theme.textSecondary }]}>
-              Нет сумок с радиогидами
-            </ThemedText>
-            {isAdmin ? (
-              <ThemedText style={[styles.emptyHint, { color: theme.textSecondary }]}>
-                Нажмите + чтобы добавить
+      <ScreenScrollView>
+        <View style={styles.container}>
+          <View style={styles.statsRow}>
+            <View style={[styles.statCard, { backgroundColor: theme.warning + "20" }]}>
+              <ThemedText style={[styles.statNumber, { color: theme.warning }]}>
+                {issuedKits.length}
               </ThemedText>
-            ) : null}
+              <ThemedText style={[styles.statLabel, { color: theme.textSecondary }]}>
+                Выдано
+              </ThemedText>
+            </View>
+            <View style={[styles.statCard, { backgroundColor: theme.error + "20" }]}>
+              <ThemedText style={[styles.statNumber, { color: theme.error }]}>
+                {overdueKits.length}
+              </ThemedText>
+              <ThemedText style={[styles.statLabel, { color: theme.textSecondary }]}>
+                Просрочено
+              </ThemedText>
+            </View>
+            <View style={[styles.statCard, { backgroundColor: theme.success + "20" }]}>
+              <ThemedText style={[styles.statNumber, { color: theme.success }]}>
+                {availableKits.length}
+              </ThemedText>
+              <ThemedText style={[styles.statLabel, { color: theme.textSecondary }]}>
+                Доступно
+              </ThemedText>
+            </View>
           </View>
-        }
-      />
+          
+          {overdueKits.length > 0 ? (
+            <View style={styles.section}>
+              <View style={styles.sectionHeader}>
+                <Feather name="alert-triangle" size={18} color={theme.error} />
+                <ThemedText style={[styles.sectionTitle, { color: theme.error }]}>
+                  Просроченные ({overdueKits.length})
+                </ThemedText>
+              </View>
+              <View style={styles.kitsList}>
+                {overdueKits.map(item => (
+                  <View key={item.kit.id}>
+                    {renderIssuedKit({ ...item, isOverdue: true })}
+                  </View>
+                ))}
+              </View>
+            </View>
+          ) : null}
+          
+          {issuedKits.filter(k => !k.isOverdue).length > 0 ? (
+            <View style={styles.section}>
+              <View style={styles.sectionHeader}>
+                <Feather name="clock" size={18} color={theme.warning} />
+                <ThemedText style={[styles.sectionTitle, { color: theme.text }]}>
+                  На выдаче ({issuedKits.filter(k => !k.isOverdue).length})
+                </ThemedText>
+              </View>
+              <View style={styles.kitsList}>
+                {issuedKits.filter(k => !k.isOverdue).map(item => (
+                  <View key={item.kit.id}>
+                    {renderIssuedKit(item)}
+                  </View>
+                ))}
+              </View>
+            </View>
+          ) : null}
+          
+          <View style={styles.section}>
+            <View style={styles.sectionHeader}>
+              <Feather name="check-circle" size={18} color={theme.success} />
+              <ThemedText style={[styles.sectionTitle, { color: theme.text }]}>
+                Доступные ({availableKits.length})
+              </ThemedText>
+            </View>
+            {availableKits.length > 0 ? (
+              <View style={styles.kitsList}>
+                {availableKits.map(kit => (
+                  <View key={kit.id}>
+                    {renderAvailableKit(kit)}
+                  </View>
+                ))}
+              </View>
+            ) : (
+              <View style={styles.emptySection}>
+                <ThemedText style={{ color: theme.textSecondary }}>
+                  Все сумки выданы
+                </ThemedText>
+              </View>
+            )}
+          </View>
+        </View>
+      </ScreenScrollView>
 
       {isAdmin ? (
         <Pressable
@@ -931,5 +1040,58 @@ const styles = StyleSheet.create({
   },
   excursionOptionTime: {
     fontSize: 13,
+  },
+  statsRow: {
+    flexDirection: "row",
+    gap: Spacing.sm,
+  },
+  statCard: {
+    flex: 1,
+    padding: Spacing.md,
+    borderRadius: BorderRadius.md,
+    alignItems: "center",
+    gap: Spacing.xs,
+  },
+  statNumber: {
+    fontSize: 24,
+    fontWeight: "700",
+  },
+  statLabel: {
+    fontSize: 12,
+  },
+  section: {
+    gap: Spacing.sm,
+  },
+  sectionHeader: {
+    flexDirection: "row",
+    alignItems: "center",
+    gap: Spacing.sm,
+    paddingVertical: Spacing.xs,
+  },
+  sectionTitle: {
+    fontSize: 16,
+    fontWeight: "600",
+  },
+  kitsList: {
+    gap: Spacing.sm,
+  },
+  kitTitleRow: {
+    flexDirection: "row",
+    alignItems: "center",
+    gap: Spacing.sm,
+  },
+  overdueBadge: {
+    paddingHorizontal: Spacing.sm,
+    paddingVertical: 2,
+    borderRadius: BorderRadius.sm,
+  },
+  overdueBadgeText: {
+    fontSize: 11,
+    fontWeight: "600",
+    color: "#fff",
+  },
+  emptySection: {
+    padding: Spacing.lg,
+    alignItems: "center",
   },
 });
