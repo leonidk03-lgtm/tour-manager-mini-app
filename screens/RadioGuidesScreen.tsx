@@ -277,13 +277,23 @@ export default function RadioGuidesScreen() {
     try {
       await returnRadioGuide(selectedAssignment.id, returned, lossReason.trim());
       
-      await addEquipmentLoss({
-        assignmentId: selectedAssignment.id,
-        kitId: selectedKit.id,
-        guideName: selectedAssignment.guideName,
-        missingCount: missing,
-        reason: lossReason.trim(),
-      });
+      // Try to record the loss, but don't fail if it doesn't work
+      try {
+        await addEquipmentLoss({
+          assignmentId: selectedAssignment.id,
+          kitId: selectedKit.id,
+          guideName: selectedAssignment.guideName,
+          missingCount: missing,
+          reason: lossReason.trim(),
+        });
+      } catch (lossErr) {
+        console.warn("Could not record equipment loss:", lossErr);
+        Alert.alert(
+          "Внимание",
+          "Радиогид принят, но запись о потере не сохранена. Обратитесь к администратору.",
+          [{ text: "OK" }]
+        );
+      }
       
       setModalMode(null);
       resetForm();
