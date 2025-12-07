@@ -394,13 +394,34 @@ export function DataProvider({ children }: { children: ReactNode }) {
     }
   }, [fetchTourTypes, fetchAdditionalServices, fetchExcursions, fetchTransactions, fetchActivities, fetchDeletedItems, fetchRadioGuideKits, fetchRadioGuideAssignments]);
 
+  // Load shared data (price list, radio kits) when user is authenticated
+  useEffect(() => {
+    if (user) {
+      Promise.all([
+        fetchTourTypes(),
+        fetchAdditionalServices(),
+        fetchRadioGuideKits(),
+        fetchRadioGuideAssignments(),
+      ]);
+    }
+  }, [user, fetchTourTypes, fetchAdditionalServices, fetchRadioGuideKits, fetchRadioGuideAssignments]);
+
+  // Load user-specific data when profile is available
   useEffect(() => {
     if (user && profile) {
-      refreshData();
+      Promise.all([
+        fetchExcursions(),
+        fetchTransactions(),
+        fetchActivities(),
+        fetchDeletedItems(),
+      ]).finally(() => setIsLoading(false));
+    } else if (user && !profile) {
+      // User authenticated but no profile yet - still loading
+      setIsLoading(true);
     } else {
       setIsLoading(false);
     }
-  }, [user, profile]);
+  }, [user, profile, fetchExcursions, fetchTransactions, fetchActivities, fetchDeletedItems]);
 
   // Periodic polling for price list sync (since Realtime not available on current plan)
   useEffect(() => {
