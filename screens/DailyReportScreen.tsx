@@ -21,7 +21,7 @@ export default function DailyReportScreen() {
   const [selectedDate, setSelectedDate] = useState(today);
   const [tempDate, setTempDate] = useState(today);
   const [showDatePicker, setShowDatePicker] = useState(false);
-  const loadingDateRef = useRef<string | null>(null);
+  const loadingDateRef = useRef(0);
 
   const [bankDeposit, setBankDeposit] = useState("");
   const [safeDeposit, setSafeDeposit] = useState("");
@@ -33,21 +33,20 @@ export default function DailyReportScreen() {
 
   const getStorageKey = (dateStr: string) => `daily_report_${dateStr}`;
 
-  const loadReportData = useCallback(async (date: Date) => {
-    const dateStr = date.toISOString().split("T")[0];
+  const loadReportData = useCallback(async (dateStr: string) => {
     const key = getStorageKey(dateStr);
     
-    // Prevent race conditions - only process if this is still the current date
-    loadingDateRef.current = dateStr;
-    console.log("Loading report for date:", dateStr, "key:", key);
+    // Increment request counter
+    const requestId = ++loadingDateRef.current;
+    console.log("Loading report for date:", dateStr, "requestId:", requestId);
     setLoading(true);
     
     try {
       const stored = await AsyncStorage.getItem(key);
       
-      // Check if date changed while we were loading
-      if (loadingDateRef.current !== dateStr) {
-        console.log("Date changed during load, skipping update for:", dateStr);
+      // Only apply if this is still the latest request
+      if (loadingDateRef.current !== requestId) {
+        console.log("Newer request exists, skipping update for:", dateStr, "requestId:", requestId);
         return;
       }
       
@@ -58,26 +57,24 @@ export default function DailyReportScreen() {
         const newSafeDeposit = data.safeDeposit || "";
         const newCashAmount = data.cashAmount || "";
         const newIncomeField = data.incomeField || "";
-        console.log("Setting values:", { newBankDeposit, newSafeDeposit, newCashAmount, newIncomeField });
+        console.log("Applying values for date:", dateStr, { newBankDeposit, newSafeDeposit, newCashAmount, newIncomeField });
         setBankDeposit(newBankDeposit);
         setSafeDeposit(newSafeDeposit);
         setCashAmount(newCashAmount);
         setIncomeField(newIncomeField);
         setHasExistingReport(true);
-        console.log("Loaded existing report data, values set");
       } else {
-        console.log("No data found, clearing fields");
+        console.log("No data found for date:", dateStr, "- clearing fields");
         setBankDeposit("");
         setSafeDeposit("");
         setCashAmount("");
         setIncomeField("");
         setHasExistingReport(false);
-        console.log("No existing report found");
       }
     } catch (err) {
       console.error("Error loading report:", err);
     } finally {
-      if (loadingDateRef.current === dateStr) {
+      if (loadingDateRef.current === requestId) {
         setLoading(false);
       }
     }
@@ -114,7 +111,7 @@ export default function DailyReportScreen() {
   
   useEffect(() => {
     console.log("useEffect triggered for date:", selectedDateStr);
-    loadReportData(selectedDate);
+    loadReportData(selectedDateStr);
   }, [selectedDateStr, loadReportData]);
 
   if (!isAdmin) {
