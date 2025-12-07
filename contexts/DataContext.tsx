@@ -119,6 +119,24 @@ export interface RadioGuideAssignment {
   managerName: string;
 }
 
+export type EquipmentLossStatus = 'lost' | 'found';
+
+export interface EquipmentLoss {
+  id: string;
+  assignmentId: string;
+  kitId: string;
+  guideName: string;
+  missingCount: number;
+  reason: string;
+  status: EquipmentLossStatus;
+  foundAt: string | null;
+  foundNotes: string | null;
+  createdAt: string;
+  managerId: string;
+  managerName: string;
+  bagNumber?: number;
+}
+
 interface DataContextType {
   tourTypes: TourType[];
   addTourType: (tourType: Omit<TourType, 'id'>) => Promise<void>;
@@ -150,6 +168,11 @@ interface DataContextType {
   issueRadioGuide: (data: { kitId: string; excursionId?: string; guideName: string; busNumber?: string; receiversIssued: number }) => Promise<void>;
   returnRadioGuide: (assignmentId: string, receiversReturned: number, notes?: string) => Promise<void>;
   getActiveAssignment: (kitId: string) => RadioGuideAssignment | undefined;
+  equipmentLosses: EquipmentLoss[];
+  addEquipmentLoss: (loss: Omit<EquipmentLoss, 'id' | 'createdAt' | 'foundAt' | 'foundNotes' | 'status' | 'managerId' | 'managerName'>) => Promise<void>;
+  updateEquipmentLoss: (id: string, data: { reason?: string; missingCount?: number }) => Promise<void>;
+  markLossAsFound: (id: string, notes?: string) => Promise<void>;
+  deleteEquipmentLoss: (id: string) => Promise<void>;
   isLoading: boolean;
   refreshData: () => Promise<void>;
   refreshPriceList: () => Promise<void>;
@@ -168,6 +191,7 @@ export function DataProvider({ children }: { children: ReactNode }) {
   const [deletedItems, setDeletedItems] = useState<DeletedItem[]>([]);
   const [radioGuideKits, setRadioGuideKits] = useState<RadioGuideKit[]>([]);
   const [radioGuideAssignments, setRadioGuideAssignments] = useState<RadioGuideAssignment[]>([]);
+  const [equipmentLosses, setEquipmentLosses] = useState<EquipmentLoss[]>([]);
   const [isLoading, setIsLoading] = useState(true);
 
   const currentUser = profile ? {
@@ -397,6 +421,35 @@ export function DataProvider({ children }: { children: ReactNode }) {
     }
   }, []);
 
+  const fetchEquipmentLosses = useCallback(async () => {
+    try {
+      const { data, error } = await supabase
+        .from('equipment_losses')
+        .select('*, radio_guide_kits(bag_number)')
+        .order('created_at', { ascending: false });
+
+      if (error) throw error;
+
+      setEquipmentLosses((data || []).map(l => ({
+        id: l.id,
+        assignmentId: l.assignment_id,
+        kitId: l.kit_id,
+        guideName: l.guide_name,
+        missingCount: l.missing_count,
+        reason: l.reason,
+        status: l.status as EquipmentLossStatus,
+        foundAt: l.found_at,
+        foundNotes: l.found_notes,
+        createdAt: l.created_at,
+        managerId: l.manager_id,
+        managerName: l.manager_name,
+        bagNumber: l.radio_guide_kits?.bag_number,
+      })));
+    } catch (err) {
+      console.error('Error fetching equipment losses:', err);
+    }
+  }, []);
+
   const refreshData = useCallback(async () => {
     setIsLoading(true);
     try {
@@ -409,11 +462,12 @@ export function DataProvider({ children }: { children: ReactNode }) {
         fetchDeletedItems(),
         fetchRadioGuideKits(),
         fetchRadioGuideAssignments(),
+        fetchEquipmentLosses(),
       ]);
     } finally {
       setIsLoading(false);
     }
-  }, [fetchTourTypes, fetchAdditionalServices, fetchExcursions, fetchTransactions, fetchActivities, fetchDeletedItems, fetchRadioGuideKits, fetchRadioGuideAssignments]);
+  }, [fetchTourTypes, fetchAdditionalServices, fetchExcursions, fetchTransactions, fetchActivities, fetchDeletedItems, fetchRadioGuideKits, fetchRadioGuideAssignments, fetchEquipmentLosses]);
 
   // Load shared data (price list, radio kits) when user is authenticated
   useEffect(() => {
@@ -423,9 +477,10 @@ export function DataProvider({ children }: { children: ReactNode }) {
         fetchAdditionalServices(),
         fetchRadioGuideKits(),
         fetchRadioGuideAssignments(),
+        fetchEquipmentLosses(),
       ]);
     }
-  }, [user, fetchTourTypes, fetchAdditionalServices, fetchRadioGuideKits, fetchRadioGuideAssignments]);
+  }, [user, fetchTourTypes, fetchAdditionalServices, fetchRadioGuideKits, fetchRadioGuideAssignments, fetchEquipmentLosses]);
 
   // Load user-specific data when profile is available
   useEffect(() => {
@@ -456,13 +511,14 @@ export function DataProvider({ children }: { children: ReactNode }) {
         fetchAdditionalServices(),
         fetchRadioGuideKits(),
         fetchRadioGuideAssignments(),
+        fetchEquipmentLosses(),
         fetchExcursions(),
         fetchTransactions(),
       ]);
     }, POLL_INTERVAL);
 
     return () => clearInterval(interval);
-  }, [user, fetchTourTypes, fetchAdditionalServices, fetchRadioGuideKits, fetchRadioGuideAssignments, fetchExcursions, fetchTransactions]);
+  }, [user, fetchTourTypes, fetchAdditionalServices, fetchRadioGuideKits, fetchRadioGuideAssignments, fetchEquipmentLosses, fetchExcursions, fetchTransactions]);
 
   const refreshPriceList = useCallback(async () => {
     await Promise.all([fetchTourTypes(), fetchAdditionalServices()]);
@@ -999,6 +1055,82 @@ export function DataProvider({ children }: { children: ReactNode }) {
     return radioGuideAssignments.find(a => a.kitId === kitId && !a.returnedAt);
   };
 
+  const addEquipmentLoss = async (loss: Omit<EquipmentLoss, 'id' | 'createdAt' | 'foundAt' | 'foundNotes' | 'status' | 'managerId' | 'managerName'>) => {
+    if (!currentUser) throw new Error('No user');
+
+    try {
+      const { error } = await supabase.from('equipment_losses').insert({
+        assignment_id: loss.assignmentId,
+        kit_id: loss.kitId,
+        guide_name: loss.guideName,
+        missing_count: loss.missingCount,
+        reason: loss.reason,
+        status: 'lost',
+        manager_id: currentUser.id,
+        manager_name: currentUser.name,
+      });
+
+      if (error) throw error;
+      await fetchEquipmentLosses();
+    } catch (err) {
+      console.error('Error adding equipment loss:', err);
+      throw err;
+    }
+  };
+
+  const updateEquipmentLoss = async (id: string, data: { reason?: string; missingCount?: number }) => {
+    try {
+      const updateData: Record<string, unknown> = {};
+      if (data.reason !== undefined) updateData.reason = data.reason;
+      if (data.missingCount !== undefined) updateData.missing_count = data.missingCount;
+
+      const { error } = await supabase
+        .from('equipment_losses')
+        .update(updateData)
+        .eq('id', id);
+
+      if (error) throw error;
+      await fetchEquipmentLosses();
+    } catch (err) {
+      console.error('Error updating equipment loss:', err);
+      throw err;
+    }
+  };
+
+  const markLossAsFound = async (id: string, notes?: string) => {
+    try {
+      const { error } = await supabase
+        .from('equipment_losses')
+        .update({
+          status: 'found',
+          found_at: new Date().toISOString(),
+          found_notes: notes || null,
+        })
+        .eq('id', id);
+
+      if (error) throw error;
+      await fetchEquipmentLosses();
+    } catch (err) {
+      console.error('Error marking loss as found:', err);
+      throw err;
+    }
+  };
+
+  const deleteEquipmentLoss = async (id: string) => {
+    try {
+      const { error } = await supabase
+        .from('equipment_losses')
+        .delete()
+        .eq('id', id);
+
+      if (error) throw error;
+      await fetchEquipmentLosses();
+    } catch (err) {
+      console.error('Error deleting equipment loss:', err);
+      throw err;
+    }
+  };
+
   return (
     <DataContext.Provider
       value={{
@@ -1032,6 +1164,11 @@ export function DataProvider({ children }: { children: ReactNode }) {
         issueRadioGuide,
         returnRadioGuide,
         getActiveAssignment,
+        equipmentLosses,
+        addEquipmentLoss,
+        updateEquipmentLoss,
+        markLossAsFound,
+        deleteEquipmentLoss,
         isLoading,
         refreshData,
         refreshPriceList,

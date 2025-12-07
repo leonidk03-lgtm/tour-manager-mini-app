@@ -33,6 +33,7 @@ export default function RadioGuidesScreen() {
     issueRadioGuide,
     returnRadioGuide,
     getActiveAssignment,
+    addEquipmentLoss,
     excursions,
     tourTypes,
   } = useData();
@@ -59,8 +60,8 @@ export default function RadioGuidesScreen() {
   const [guideName, setGuideName] = useState("");
   const [busNumber, setBusNumber] = useState("");
   const [receiversIssued, setReceiversIssued] = useState("");
-  const [receiversReturned, setReceiversReturned] = useState("");
-  const [returnNotes, setReturnNotes] = useState("");
+  const [missingCount, setMissingCount] = useState("");
+  const [lossReason, setLossReason] = useState("");
   const [showShortageForm, setShowShortageForm] = useState(false);
   const [selectedExcursionId, setSelectedExcursionId] = useState<string | null>(null);
   
@@ -124,8 +125,8 @@ export default function RadioGuidesScreen() {
     setGuideName("");
     setBusNumber("");
     setReceiversIssued("");
-    setReceiversReturned("");
-    setReturnNotes("");
+    setMissingCount("");
+    setLossReason("");
     setSelectedKit(null);
     setSelectedAssignment(null);
     setShowShortageForm(false);
@@ -155,7 +156,8 @@ export default function RadioGuidesScreen() {
     if (assignment) {
       setSelectedKit(kit);
       setSelectedAssignment(assignment);
-      setReceiversReturned(assignment.receiversIssued.toString());
+      setMissingCount("");
+      setLossReason("");
       setModalMode("return");
     }
   };
@@ -252,16 +254,37 @@ export default function RadioGuidesScreen() {
   };
 
   const handleReturnWithShortage = async () => {
-    if (!selectedAssignment) return;
+    if (!selectedAssignment || !selectedKit) return;
 
-    const count = parseInt(receiversReturned);
-    if (isNaN(count) || count < 0) {
-      Alert.alert("Ошибка", "Введите количество возвращённых приёмников");
+    const missing = parseInt(missingCount);
+    if (isNaN(missing) || missing < 0) {
+      Alert.alert("Ошибка", "Введите количество недостающих приёмников");
       return;
     }
 
+    if (missing > selectedAssignment.receiversIssued) {
+      Alert.alert("Ошибка", "Количество недостающих не может превышать выданное");
+      return;
+    }
+
+    if (!lossReason.trim()) {
+      Alert.alert("Ошибка", "Укажите причину недостачи");
+      return;
+    }
+
+    const returned = selectedAssignment.receiversIssued - missing;
+
     try {
-      await returnRadioGuide(selectedAssignment.id, count, returnNotes.trim() || undefined);
+      await returnRadioGuide(selectedAssignment.id, returned, lossReason.trim());
+      
+      await addEquipmentLoss({
+        assignmentId: selectedAssignment.id,
+        kitId: selectedKit.id,
+        guideName: selectedAssignment.guideName,
+        missingCount: missing,
+        reason: lossReason.trim(),
+      });
+      
       setModalMode(null);
       resetForm();
     } catch (err) {
@@ -826,16 +849,16 @@ export default function RadioGuidesScreen() {
             <>
               <View style={styles.inputGroup}>
                 <ThemedText style={[styles.label, { color: theme.textSecondary }]}>
-                  Сколько вернули? *
+                  Сколько не хватает? *
                 </ThemedText>
                 <TextInput
                   style={[
                     styles.input,
                     { backgroundColor: theme.backgroundSecondary, borderColor: theme.border, color: theme.text },
                   ]}
-                  value={receiversReturned}
-                  onChangeText={setReceiversReturned}
-                  placeholder="Количество"
+                  value={missingCount}
+                  onChangeText={setMissingCount}
+                  placeholder={`Макс: ${selectedAssignment?.receiversIssued || 0}`}
                   placeholderTextColor={theme.textSecondary}
                   keyboardType="number-pad"
                   autoFocus
@@ -844,7 +867,7 @@ export default function RadioGuidesScreen() {
 
               <View style={styles.inputGroup}>
                 <ThemedText style={[styles.label, { color: theme.textSecondary }]}>
-                  Комментарий (опционально)
+                  Причина недостачи *
                 </ThemedText>
                 <TextInput
                   style={[
@@ -852,9 +875,9 @@ export default function RadioGuidesScreen() {
                     styles.multilineInput,
                     { backgroundColor: theme.backgroundSecondary, borderColor: theme.border, color: theme.text },
                   ]}
-                  value={returnNotes}
-                  onChangeText={setReturnNotes}
-                  placeholder="Причина недостачи..."
+                  value={lossReason}
+                  onChangeText={setLossReason}
+                  placeholder="Опишите причину..."
                   placeholderTextColor={theme.textSecondary}
                   multiline
                   numberOfLines={2}

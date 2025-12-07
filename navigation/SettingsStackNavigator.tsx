@@ -7,6 +7,7 @@ import DatabaseSettingsScreen from "@/screens/DatabaseSettingsScreen";
 import RadioGuidesScreen from "@/screens/RadioGuidesScreen";
 import ManagerDetailScreen from "@/screens/ManagerDetailScreen";
 import EditProfileScreen from "@/screens/EditProfileScreen";
+import EquipmentLossesScreen from "@/screens/EquipmentLossesScreen";
 import { getCommonScreenOptions } from "./screenOptions";
 import { useTheme } from "@/hooks/useTheme";
 import { useAuth } from "@/contexts/AuthContext";
@@ -19,6 +20,7 @@ export type SettingsStackParamList = {
   DeletedData: undefined;
   DatabaseSettings: undefined;
   RadioGuides: undefined;
+  EquipmentLosses: undefined;
   ManagerDetail: { manager: Profile };
   EditProfile: undefined;
 };
@@ -70,6 +72,11 @@ export default function SettingsStackNavigator() {
             name="EditProfile"
             component={EditProfileScreen}
             options={{ title: "Редактировать профиль" }}
+          />
+          <Stack.Screen
+            name="EquipmentLosses"
+            component={EquipmentLossesScreen}
+            options={{ title: "Утери оборудования" }}
           />
         </>
       ) : null}

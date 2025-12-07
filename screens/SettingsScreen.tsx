@@ -154,6 +154,19 @@ export default function SettingsScreen() {
                 <Feather name="chevron-right" size={20} color={theme.textSecondary} />
               </View>
             </Pressable>
+            <View style={[styles.divider, { backgroundColor: theme.border }]} />
+            <Pressable
+              onPress={() => navigation.navigate("EquipmentLosses")}
+              style={({ pressed }) => ({ opacity: pressed ? 0.7 : 1 })}
+            >
+              <View style={styles.settingItem}>
+                <View style={styles.settingLeft}>
+                  <Feather name="alert-triangle" size={20} color={theme.textSecondary} />
+                  <ThemedText style={styles.settingText}>Утери оборудования</ThemedText>
+                </View>
+                <Feather name="chevron-right" size={20} color={theme.textSecondary} />
+              </View>
+            </Pressable>
             {isAdmin ? (
               <>
                 <View style={[styles.divider, { backgroundColor: theme.border }]} />
