@@ -222,7 +222,7 @@ export function DataProvider({ children }: { children: ReactNode }) {
 
       if (error) throw error;
 
-      setExcursions((data || []).map(e => ({
+      const mappedExcursions = (data || []).map(e => ({
         id: e.id,
         tourTypeId: e.tour_type_id || '',
         date: e.event_date,
@@ -237,7 +237,9 @@ export function DataProvider({ children }: { children: ReactNode }) {
         additionalServices: e.additional_services || [],
         managerId: e.manager_id,
         managerName: e.profiles?.display_name || '',
-      })));
+      }));
+      console.log('Loaded excursions with additionalServices:', mappedExcursions.map(e => ({ id: e.id, additionalServices: e.additionalServices })));
+      setExcursions(mappedExcursions);
     } catch (err) {
       console.error('Error fetching excursions:', err);
     }
@@ -544,6 +546,8 @@ export function DataProvider({ children }: { children: ReactNode }) {
   };
 
   const updateExcursion = async (id: string, excursion: Partial<Excursion>) => {
+    console.log('updateExcursion called with:', { id, excursion });
+    console.log('additionalServices in excursion:', excursion.additionalServices);
     try {
       const updateData: Record<string, unknown> = {};
       if (excursion.tourTypeId !== undefined) updateData.tour_type_id = excursion.tourTypeId;
@@ -557,6 +561,7 @@ export function DataProvider({ children }: { children: ReactNode }) {
       if (excursion.expenses !== undefined) updateData.expenses = excursion.expenses;
       if (excursion.additionalServices !== undefined) updateData.additional_services = excursion.additionalServices;
 
+      console.log('Saving updateData to Supabase:', updateData);
       const { error } = await supabase
         .from('excursions')
         .update(updateData)
