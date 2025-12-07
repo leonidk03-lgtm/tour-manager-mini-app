@@ -2,7 +2,6 @@ import { useState, useMemo, useEffect, useCallback, useRef } from "react";
 import { View, StyleSheet, Pressable, TextInput, Alert, Platform, ActivityIndicator } from "react-native";
 import { Feather } from "@expo/vector-icons";
 import * as Clipboard from "expo-clipboard";
-import AsyncStorage from "@react-native-async-storage/async-storage";
 import DateTimePicker from "@react-native-community/datetimepicker";
 import { ThemedText } from "@/components/ThemedText";
 import { ThemedView } from "@/components/ThemedView";
@@ -12,6 +11,7 @@ import { Spacing, BorderRadius } from "@/constants/theme";
 import { useTheme } from "@/hooks/useTheme";
 import { useData } from "@/contexts/DataContext";
 import { useAuth } from "@/contexts/AuthContext";
+import { supabase } from "@/lib/supabase";
 
 // Helper to get YYYY-MM-DD in local timezone (not UTC)
 const getLocalDateKey = (date: Date): string => {
@@ -23,7 +23,7 @@ const getLocalDateKey = (date: Date): string => {
 
 export default function DailyReportScreen() {
   const { theme } = useTheme();
-  const { isAdmin } = useAuth();
+  const { isAdmin, profile } = useAuth();
   const { excursions, transactions, tourTypes, additionalServices, radioGuidePrice } = useData();
 
   const today = useRef(new Date()).current;
@@ -39,39 +39,38 @@ export default function DailyReportScreen() {
   const [loading, setLoading] = useState(false);
   const [saving, setSaving] = useState(false);
   const [hasExistingReport, setHasExistingReport] = useState(false);
-
-  const getStorageKey = (dateStr: string) => `daily_report_${dateStr}`;
+  const [reportId, setReportId] = useState<string | null>(null);
 
   const loadReportData = useCallback(async (dateStr: string) => {
-    const key = getStorageKey(dateStr);
-    
-    // Increment request counter
     const requestId = ++loadingDateRef.current;
     console.log("Loading report for date:", dateStr, "requestId:", requestId);
     setLoading(true);
     
     try {
-      const stored = await AsyncStorage.getItem(key);
+      const { data, error } = await supabase
+        .from("daily_reports")
+        .select("*")
+        .eq("report_date", dateStr)
+        .maybeSingle();
       
-      // Only apply if this is still the latest request
       if (loadingDateRef.current !== requestId) {
-        console.log("Newer request exists, skipping update for:", dateStr, "requestId:", requestId);
+        console.log("Newer request exists, skipping update for:", dateStr);
         return;
       }
       
-      console.log("Stored data:", stored);
-      if (stored) {
-        const data = JSON.parse(stored);
-        const newBankDeposit = data.bankDeposit || "";
-        const newSafeDeposit = data.safeDeposit || "";
-        const newCashAmount = data.cashAmount || "";
-        const newIncomeField = data.incomeField || "";
-        console.log("Applying values for date:", dateStr, { newBankDeposit, newSafeDeposit, newCashAmount, newIncomeField });
-        setBankDeposit(newBankDeposit);
-        setSafeDeposit(newSafeDeposit);
-        setCashAmount(newCashAmount);
-        setIncomeField(newIncomeField);
+      if (error) {
+        console.error("Error loading report:", error);
+        return;
+      }
+      
+      console.log("Loaded data:", data);
+      if (data) {
+        setBankDeposit(data.bank_deposit?.toString() || "");
+        setSafeDeposit(data.safe_deposit?.toString() || "");
+        setCashAmount(data.cash_amount?.toString() || "");
+        setIncomeField(data.income_field?.toString() || "");
         setHasExistingReport(true);
+        setReportId(data.id);
       } else {
         console.log("No data found for date:", dateStr, "- clearing fields");
         setBankDeposit("");
@@ -79,6 +78,7 @@ export default function DailyReportScreen() {
         setCashAmount("");
         setIncomeField("");
         setHasExistingReport(false);
+        setReportId(null);
       }
     } catch (err) {
       console.error("Error loading report:", err);
@@ -91,20 +91,39 @@ export default function DailyReportScreen() {
 
   const saveReportData = async () => {
     const dateStr = getLocalDateKey(selectedDate);
-    const key = getStorageKey(dateStr);
-    console.log("Saving report for date:", dateStr, "key:", key);
+    console.log("Saving report for date:", dateStr);
     setSaving(true);
+    
     try {
       const reportData = {
-        bankDeposit,
-        safeDeposit,
-        cashAmount,
-        incomeField,
-        updatedAt: new Date().toISOString(),
+        report_date: dateStr,
+        bank_deposit: bankDeposit ? parseFloat(bankDeposit) : null,
+        safe_deposit: safeDeposit ? parseFloat(safeDeposit) : null,
+        cash_amount: cashAmount ? parseFloat(cashAmount) : null,
+        income_field: incomeField ? parseFloat(incomeField) : null,
+        manager_id: profile?.id || null,
+        updated_at: new Date().toISOString(),
       };
       console.log("Report data to save:", reportData);
 
-      await AsyncStorage.setItem(key, JSON.stringify(reportData));
+      if (reportId) {
+        const { error } = await supabase
+          .from("daily_reports")
+          .update(reportData)
+          .eq("id", reportId);
+        
+        if (error) throw error;
+      } else {
+        const { data, error } = await supabase
+          .from("daily_reports")
+          .insert(reportData)
+          .select()
+          .single();
+        
+        if (error) throw error;
+        setReportId(data.id);
+      }
+      
       setHasExistingReport(true);
       console.log("Report saved successfully");
       Alert.alert("Сохранено", "Данные отчёта сохранены");
