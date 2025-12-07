@@ -27,6 +27,9 @@ interface AddExcursionFormProps {
 export function AddExcursionForm({ excursion, onSave, onCancel }: AddExcursionFormProps) {
   const { theme } = useTheme();
   const { tourTypes, additionalServices } = useData();
+  
+  console.log('AddExcursionForm opened with excursion:', excursion);
+  console.log('excursion.additionalServices:', excursion?.additionalServices);
 
   const enabledTourTypes = tourTypes.filter((t) => t.isEnabled);
 
@@ -130,6 +133,7 @@ export function AddExcursionForm({ excursion, onSave, onCancel }: AddExcursionFo
   };
 
   const handleSave = () => {
+    console.log('handleSave called, selectedServices:', selectedServices);
     if (!selectedTourType) {
       Alert.alert("Ошибка", "Выберите тип тура");
       return;
