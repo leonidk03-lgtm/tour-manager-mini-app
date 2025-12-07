@@ -180,8 +180,8 @@ export function DataProvider({ children }: { children: ReactNode }) {
         discountedPrice: Number(t.discounted_price),
         articleNumber: t.article_number || '',
         isEnabled: t.is_enabled,
-        applicableServiceIds: [],
-        hasRadioGuides: false,
+        applicableServiceIds: t.applicable_service_ids || [],
+        hasRadioGuides: t.has_radio_guides ?? false,
       })));
     } catch (err) {
       console.error('Error fetching tour types:', err);
@@ -409,6 +409,8 @@ export function DataProvider({ children }: { children: ReactNode }) {
           discounted_price: tourType.discountedPrice,
           article_number: tourType.articleNumber,
           is_enabled: tourType.isEnabled,
+          has_radio_guides: tourType.hasRadioGuides,
+          applicable_service_ids: tourType.applicableServiceIds,
         });
 
       if (error) throw error;
@@ -427,6 +429,8 @@ export function DataProvider({ children }: { children: ReactNode }) {
       if (tourType.discountedPrice !== undefined) updateData.discounted_price = tourType.discountedPrice;
       if (tourType.articleNumber !== undefined) updateData.article_number = tourType.articleNumber;
       if (tourType.isEnabled !== undefined) updateData.is_enabled = tourType.isEnabled;
+      if (tourType.hasRadioGuides !== undefined) updateData.has_radio_guides = tourType.hasRadioGuides;
+      if (tourType.applicableServiceIds !== undefined) updateData.applicable_service_ids = tourType.applicableServiceIds;
 
       const { error } = await supabase
         .from('tour_types')
