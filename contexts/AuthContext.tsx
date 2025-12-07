@@ -236,10 +236,9 @@ export function AuthProvider({ children }: { children: ReactNode }) {
     }
 
     try {
-      const { error } = await supabase
-        .from('profiles')
-        .update({ is_active: false, updated_at: new Date().toISOString() })
-        .eq('id', managerId);
+      const { error } = await supabase.rpc('delete_manager_completely', {
+        manager_id: managerId
+      });
 
       if (error) {
         return { error: error.message };
