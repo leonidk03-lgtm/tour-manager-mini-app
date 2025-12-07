@@ -63,7 +63,7 @@ export interface Manager {
 
 export interface Activity {
   id: string;
-  type: "excursion_added" | "transaction_added" | "excursion_deleted" | "transaction_deleted";
+  type: "excursion_added" | "transaction_added" | "excursion_deleted" | "transaction_deleted" | "radio_issued" | "radio_returned";
   managerName: string;
   description: string;
   date: string;
@@ -869,7 +869,16 @@ export function DataProvider({ children }: { children: ReactNode }) {
 
       if (kitError) throw kitError;
 
-      await Promise.all([fetchRadioGuideKits(), fetchRadioGuideAssignments()]);
+      const kit = radioGuideKits.find(k => k.id === data.kitId);
+      await supabase.from('activities').insert({
+        manager_id: user.id,
+        manager_name: profile.display_name,
+        type: 'radio_issued',
+        description: `выдал радиогид (сумка ${kit?.bagNumber || '?'}) гиду ${data.guideName}`,
+        target_id: data.kitId,
+      });
+
+      await Promise.all([fetchRadioGuideKits(), fetchRadioGuideAssignments(), fetchActivities()]);
     } catch (err) {
       console.error('Error issuing radio guide:', err);
       throw err;
@@ -899,7 +908,18 @@ export function DataProvider({ children }: { children: ReactNode }) {
 
       if (kitError) throw kitError;
 
-      await Promise.all([fetchRadioGuideKits(), fetchRadioGuideAssignments()]);
+      const kit = radioGuideKits.find(k => k.id === assignment.kitId);
+      if (user && profile) {
+        await supabase.from('activities').insert({
+          manager_id: user.id,
+          manager_name: profile.display_name,
+          type: 'radio_returned',
+          description: `принял радиогид (сумка ${kit?.bagNumber || '?'}) от ${assignment.guideName}`,
+          target_id: assignmentId,
+        });
+      }
+
+      await Promise.all([fetchRadioGuideKits(), fetchRadioGuideAssignments(), fetchActivities()]);
     } catch (err) {
       console.error('Error returning radio guide:', err);
       throw err;

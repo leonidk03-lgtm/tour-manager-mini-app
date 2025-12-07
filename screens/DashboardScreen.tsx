@@ -202,11 +202,21 @@ export default function DashboardScreen() {
                           ? "minus-circle"
                           : activity.type === "transaction_added"
                           ? "dollar-sign"
-                          : "x-circle"
+                          : activity.type === "transaction_deleted"
+                          ? "x-circle"
+                          : activity.type === "radio_issued"
+                          ? "radio"
+                          : activity.type === "radio_returned"
+                          ? "check-circle"
+                          : "activity"
                       }
                       size={20}
                       color={
-                        activity.type.includes("added") ? theme.success : theme.error
+                        activity.type.includes("added") || activity.type === "radio_returned"
+                          ? theme.success
+                          : activity.type === "radio_issued"
+                          ? theme.primary
+                          : theme.error
                       }
                     />
                   </View>

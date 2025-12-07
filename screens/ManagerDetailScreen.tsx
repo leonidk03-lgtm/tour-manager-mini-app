@@ -36,7 +36,7 @@ export default function ManagerDetailScreen() {
   const { theme } = useTheme();
   const route = useRoute<RouteProp<SettingsStackParamList, "ManagerDetail">>();
   const { manager } = route.params;
-  const { excursions, transactions, tourTypes, additionalServices } = useData();
+  const { excursions, transactions, tourTypes, additionalServices, radioGuideAssignments, radioGuideKits } = useData();
   const { sendPasswordReset, updateManagerDisplayName, refreshManagers, isAdmin } = useAuth();
   const [period, setPeriod] = useState<PeriodFilter>("all");
   const [isEditingName, setIsEditingName] = useState(false);
@@ -115,6 +115,17 @@ export default function ManagerDetailScreen() {
       .filter(t => t.managerId === manager.id && filterByPeriod(t.date))
       .sort((a, b) => new Date(b.date).getTime() - new Date(a.date).getTime());
   }, [transactions, manager.id, period]);
+
+  const managerRadioAssignments = useMemo(() => {
+    return radioGuideAssignments
+      .filter(a => a.managerId === manager.id && filterByPeriod(a.issuedAt))
+      .sort((a, b) => new Date(b.issuedAt).getTime() - new Date(a.issuedAt).getTime());
+  }, [radioGuideAssignments, manager.id, period]);
+
+  const getKitBagNumber = (kitId: string) => {
+    const kit = radioGuideKits.find(k => k.id === kitId);
+    return kit?.bagNumber || "?";
+  };
 
   const getExcursionRevenue = (excursion: typeof excursions[0]) => {
     const tourType = tourTypes.find(t => t.id === excursion.tourTypeId);
@@ -460,6 +471,61 @@ export default function ManagerDetailScreen() {
           {managerTransactions.length > 10 ? (
             <ThemedText style={[styles.moreText, { color: theme.textSecondary }]}>
               ... и ещё {managerTransactions.length - 10}
+            </ThemedText>
+          ) : null}
+        </View>
+
+        <View style={styles.section}>
+          <ThemedText style={styles.sectionTitle}>
+            Радиогиды ({managerRadioAssignments.length})
+          </ThemedText>
+          {managerRadioAssignments.length === 0 ? (
+            <ThemedView
+              style={[styles.emptyState, { backgroundColor: theme.backgroundSecondary }]}
+            >
+              <Feather name="radio" size={32} color={theme.textSecondary} />
+              <ThemedText style={[styles.emptyText, { color: theme.textSecondary }]}>
+                Нет выдач радиогидов за выбранный период
+              </ThemedText>
+            </ThemedView>
+          ) : (
+            managerRadioAssignments.slice(0, 10).map((assignment) => (
+              <ThemedView
+                key={assignment.id}
+                style={[
+                  styles.itemCard,
+                  { backgroundColor: theme.backgroundSecondary, borderColor: theme.border },
+                ]}
+              >
+                <View style={styles.itemHeader}>
+                  <View style={styles.transactionType}>
+                    <Feather
+                      name={assignment.returnedAt ? "check-circle" : "radio"}
+                      size={16}
+                      color={assignment.returnedAt ? theme.success : theme.primary}
+                    />
+                    <ThemedText style={styles.itemTitle}>
+                      Сумка {getKitBagNumber(assignment.kitId)} — {assignment.guideName}
+                    </ThemedText>
+                  </View>
+                  <ThemedText style={[styles.itemDate, { color: theme.textSecondary }]}>
+                    {formatDate(assignment.issuedAt)}
+                  </ThemedText>
+                </View>
+                <View style={styles.itemDetails}>
+                  <ThemedText style={{ color: theme.textSecondary, fontSize: 13 }}>
+                    Выдано: {assignment.receiversIssued} шт.
+                    {assignment.returnedAt
+                      ? ` | Возвращено: ${assignment.receiversReturned} шт.`
+                      : " | В работе"}
+                  </ThemedText>
+                </View>
+              </ThemedView>
+            ))
+          )}
+          {managerRadioAssignments.length > 10 ? (
+            <ThemedText style={[styles.moreText, { color: theme.textSecondary }]}>
+              ... и ещё {managerRadioAssignments.length - 10}
             </ThemedText>
           ) : null}
         </View>
