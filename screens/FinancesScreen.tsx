@@ -7,6 +7,7 @@ import { ThemedView } from "@/components/ThemedView";
 import { ScreenScrollView } from "@/components/ScreenScrollView";
 import { ScreenKeyboardAwareScrollView } from "@/components/ScreenKeyboardAwareScrollView";
 import { StatCard } from "@/components/StatCard";
+import { NetworkErrorBanner } from "@/components/NetworkErrorBanner";
 import { Spacing, BorderRadius } from "@/constants/theme";
 import { useTheme } from "@/hooks/useTheme";
 import { useData, Transaction } from "@/contexts/DataContext";
@@ -131,6 +132,7 @@ export default function FinancesScreen() {
   return (
     <>
       <ScreenScrollView>
+        <NetworkErrorBanner />
         <View style={styles.container}>
           <View style={styles.section}>
             <View style={styles.statsGrid}>

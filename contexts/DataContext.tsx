@@ -176,6 +176,8 @@ interface DataContextType {
   radioGuidePrice: number;
   updateRadioGuidePrice: (price: number) => Promise<void>;
   isLoading: boolean;
+  networkError: string | null;
+  clearNetworkError: () => void;
   refreshData: () => Promise<void>;
   refreshPriceList: () => Promise<void>;
 }
@@ -196,6 +198,11 @@ export function DataProvider({ children }: { children: ReactNode }) {
   const [equipmentLosses, setEquipmentLosses] = useState<EquipmentLoss[]>([]);
   const [radioGuidePrice, setRadioGuidePrice] = useState<number>(80);
   const [isLoading, setIsLoading] = useState(true);
+  const [networkError, setNetworkError] = useState<string | null>(null);
+
+  const clearNetworkError = useCallback(() => {
+    setNetworkError(null);
+  }, []);
 
   const currentUser = profile ? {
     role: profile.role as "admin" | "manager",
@@ -210,280 +217,225 @@ export function DataProvider({ children }: { children: ReactNode }) {
     isActive: m.is_active,
   }));
 
-  const fetchTourTypes = useCallback(async () => {
-    try {
-      console.log('Fetching tour types...');
-      const { data, error } = await supabase
-        .from('tour_types')
-        .select('*')
-        .order('article_number');
+  const fetchTourTypes = useCallback(async (): Promise<void> => {
+    console.log('Fetching tour types...');
+    const { data, error } = await supabase
+      .from('tour_types')
+      .select('*')
+      .order('article_number');
 
-      console.log('Tour types result:', { count: data?.length, error: error?.message });
-      if (error) throw error;
+    console.log('Tour types result:', { count: data?.length, error: error?.message });
+    if (error) throw error;
 
-      setTourTypes((data || []).map(t => ({
-        id: t.id,
-        name: t.name,
-        fullPrice: Number(t.full_price),
-        discountedPrice: Number(t.discounted_price),
-        articleNumber: t.article_number || '',
-        isEnabled: t.is_enabled,
-        applicableServiceIds: t.applicable_service_ids || [],
-        hasRadioGuides: t.has_radio_guides ?? false,
-      })));
-    } catch (err) {
-      console.error('Error fetching tour types:', err);
-    }
+    setTourTypes((data || []).map(t => ({
+      id: t.id,
+      name: t.name,
+      fullPrice: Number(t.full_price),
+      discountedPrice: Number(t.discounted_price),
+      articleNumber: t.article_number || '',
+      isEnabled: t.is_enabled,
+      applicableServiceIds: t.applicable_service_ids || [],
+      hasRadioGuides: t.has_radio_guides ?? false,
+    })));
   }, []);
 
-  const fetchAdditionalServices = useCallback(async () => {
-    try {
-      const { data, error } = await supabase
-        .from('additional_services')
-        .select('*')
-        .order('name');
+  const fetchAdditionalServices = useCallback(async (): Promise<void> => {
+    const { data, error } = await supabase
+      .from('additional_services')
+      .select('*')
+      .order('name');
 
-      if (error) throw error;
+    if (error) throw error;
 
-      setAdditionalServices((data || []).map(s => ({
-        id: s.id,
-        name: s.name,
-        price: Number(s.price),
-        isEnabled: s.is_enabled,
-      })));
-    } catch (err) {
-      console.error('Error fetching additional services:', err);
-    }
+    setAdditionalServices((data || []).map(s => ({
+      id: s.id,
+      name: s.name,
+      price: Number(s.price),
+      isEnabled: s.is_enabled,
+    })));
   }, []);
 
-  const fetchExcursions = useCallback(async () => {
+  const fetchExcursions = useCallback(async (): Promise<void> => {
     if (!user) return;
 
-    try {
-      const { data, error } = await supabase
-        .from('excursions')
-        .select(`
-          *,
-          profiles:manager_id (display_name)
-        `)
-        .order('event_date', { ascending: false });
+    const { data, error } = await supabase
+      .from('excursions')
+      .select(`
+        *,
+        profiles:manager_id (display_name)
+      `)
+      .order('event_date', { ascending: false });
 
-      if (error) throw error;
+    if (error) throw error;
 
-      // Debug: log raw data from Supabase
-      if (data && data.length > 0) {
-        console.log('RAW Supabase data (first item):', JSON.stringify(data[0]));
-      }
-
-      const mappedExcursions = (data || []).map(e => ({
-        id: e.id,
-        tourTypeId: e.tour_type_id || '',
-        date: e.event_date,
-        time: e.event_time || '',
-        fullPriceCount: e.full_price_count || 0,
-        discountedCount: e.discounted_count || 0,
-        freeCount: e.free_count || 0,
-        tourPackageCount: e.tour_package_count || 0,
-        byTourCount: e.by_tour_count || 0,
-        paidCount: e.paid_count || 0,
-        expenses: e.expenses || [],
-        additionalServices: e.additional_services || [],
-        managerId: e.manager_id,
-        managerName: e.profiles?.display_name || '',
-      }));
-      console.log('Mapped additionalServices:', mappedExcursions.map(e => ({ id: e.id, as: e.additionalServices })));
-      setExcursions(mappedExcursions);
-    } catch (err) {
-      console.error('Error fetching excursions:', err);
-    }
+    const mappedExcursions = (data || []).map(e => ({
+      id: e.id,
+      tourTypeId: e.tour_type_id || '',
+      date: e.event_date,
+      time: e.event_time || '',
+      fullPriceCount: e.full_price_count || 0,
+      discountedCount: e.discounted_count || 0,
+      freeCount: e.free_count || 0,
+      tourPackageCount: e.tour_package_count || 0,
+      byTourCount: e.by_tour_count || 0,
+      paidCount: e.paid_count || 0,
+      expenses: e.expenses || [],
+      additionalServices: e.additional_services || [],
+      managerId: e.manager_id,
+      managerName: e.profiles?.display_name || '',
+    }));
+    setExcursions(mappedExcursions);
   }, [user]);
 
-  const fetchTransactions = useCallback(async () => {
+  const fetchTransactions = useCallback(async (): Promise<void> => {
     if (!user) return;
 
-    try {
-      const { data, error } = await supabase
-        .from('transactions')
-        .select(`
-          *,
-          profiles:manager_id (display_name)
-        `)
-        .order('event_date', { ascending: false });
+    const { data, error } = await supabase
+      .from('transactions')
+      .select(`
+        *,
+        profiles:manager_id (display_name)
+      `)
+      .order('event_date', { ascending: false });
 
-      if (error) throw error;
+    if (error) throw error;
 
-      setTransactions((data || []).map(t => ({
-        id: t.id,
-        type: t.type as "income" | "expense",
-        amount: Number(t.amount),
-        description: t.description || '',
-        date: t.event_date,
-        managerId: t.manager_id,
-        managerName: t.profiles?.display_name || '',
-      })));
-    } catch (err) {
-      console.error('Error fetching transactions:', err);
-    }
+    setTransactions((data || []).map(t => ({
+      id: t.id,
+      type: t.type as "income" | "expense",
+      amount: Number(t.amount),
+      description: t.description || '',
+      date: t.event_date,
+      managerId: t.manager_id,
+      managerName: t.profiles?.display_name || '',
+    })));
   }, [user]);
 
-  const fetchActivities = useCallback(async () => {
+  const fetchActivities = useCallback(async (): Promise<void> => {
     if (!user) return;
 
-    try {
-      console.log('Fetching activities...');
-      const { data, error } = await supabase
-        .from('activities')
-        .select('*')
-        .order('timestamp', { ascending: false })
-        .limit(100);
+    const { data, error } = await supabase
+      .from('activities')
+      .select('*')
+      .order('timestamp', { ascending: false })
+      .limit(100);
 
-      console.log('Activities result:', { count: data?.length, error: error?.message });
+    if (error) throw error;
 
-      if (error) throw error;
-
-      setActivities((data || []).map(a => ({
-        id: a.id,
-        type: a.type,
-        managerName: a.manager_name,
-        description: a.description,
-        date: a.timestamp?.split('T')[0] || '',
-        timestamp: a.timestamp,
-      })));
-    } catch (err) {
-      console.error('Error fetching activities:', err);
-    }
+    setActivities((data || []).map(a => ({
+      id: a.id,
+      type: a.type,
+      managerName: a.manager_name,
+      description: a.description,
+      date: a.timestamp?.split('T')[0] || '',
+      timestamp: a.timestamp,
+    })));
   }, [user]);
 
-  const fetchDeletedItems = useCallback(async () => {
+  const fetchDeletedItems = useCallback(async (): Promise<void> => {
     if (!isAdmin) return;
 
-    try {
-      const { data, error } = await supabase
-        .from('deleted_items')
-        .select('*')
-        .order('deleted_at', { ascending: false });
+    const { data, error } = await supabase
+      .from('deleted_items')
+      .select('*')
+      .order('deleted_at', { ascending: false });
 
-      if (error) throw error;
+    if (error) throw error;
 
-      setDeletedItems((data || []).map(d => ({
-        id: d.id,
-        type: d.item_type as "excursion" | "transaction",
-        data: d.item_data,
-        deletedAt: d.deleted_at,
-      })));
-    } catch (err) {
-      console.error('Error fetching deleted items:', err);
-    }
+    setDeletedItems((data || []).map(d => ({
+      id: d.id,
+      type: d.item_type as "excursion" | "transaction",
+      data: d.item_data,
+      deletedAt: d.deleted_at,
+    })));
   }, [isAdmin]);
 
-  const fetchRadioGuideKits = useCallback(async () => {
-    console.log('Fetching radio guide kits...');
-    try {
-      const { data, error } = await supabase
-        .from('radio_guide_kits')
-        .select('*')
-        .order('bag_number');
+  const fetchRadioGuideKits = useCallback(async (): Promise<void> => {
+    const { data, error } = await supabase
+      .from('radio_guide_kits')
+      .select('*')
+      .order('bag_number');
 
-      console.log('Radio guide kits result:', { count: data?.length, error: error?.message });
+    if (error) throw error;
 
-      if (error) throw error;
-
-      setRadioGuideKits((data || []).map(k => ({
-        id: k.id,
-        bagNumber: k.bag_number,
-        status: k.status as RadioGuideKitStatus,
-        notes: k.notes,
-      })));
-    } catch (err) {
-      console.error('Error fetching radio guide kits:', err);
-    }
+    setRadioGuideKits((data || []).map(k => ({
+      id: k.id,
+      bagNumber: k.bag_number,
+      status: k.status as RadioGuideKitStatus,
+      notes: k.notes,
+    })));
   }, []);
 
-  const fetchRadioGuideAssignments = useCallback(async () => {
-    try {
-      const { data, error } = await supabase
-        .from('radio_guide_assignments')
-        .select('*')
-        .order('issued_at', { ascending: false });
+  const fetchRadioGuideAssignments = useCallback(async (): Promise<void> => {
+    const { data, error } = await supabase
+      .from('radio_guide_assignments')
+      .select('*')
+      .order('issued_at', { ascending: false });
 
-      if (error) throw error;
+    if (error) throw error;
 
-      setRadioGuideAssignments((data || []).map(a => ({
-        id: a.id,
-        kitId: a.kit_id,
-        excursionId: a.excursion_id,
-        guideName: a.guide_name,
-        busNumber: a.bus_number,
-        receiversIssued: a.receivers_issued,
-        receiversReturned: a.receivers_returned,
-        issuedAt: a.issued_at,
-        returnedAt: a.returned_at,
-        returnNotes: a.return_notes,
-        managerId: a.manager_id,
-        managerName: a.manager_name,
-      })));
-    } catch (err) {
-      console.error('Error fetching radio guide assignments:', err);
-    }
+    setRadioGuideAssignments((data || []).map(a => ({
+      id: a.id,
+      kitId: a.kit_id,
+      excursionId: a.excursion_id,
+      guideName: a.guide_name,
+      busNumber: a.bus_number,
+      receiversIssued: a.receivers_issued,
+      receiversReturned: a.receivers_returned,
+      issuedAt: a.issued_at,
+      returnedAt: a.returned_at,
+      returnNotes: a.return_notes,
+      managerId: a.manager_id,
+      managerName: a.manager_name,
+    })));
   }, []);
 
-  const fetchEquipmentLosses = useCallback(async () => {
-    try {
-      const { data, error } = await supabase
-        .from('equipment_losses')
-        .select('*, radio_guide_kits(bag_number)')
-        .order('created_at', { ascending: false });
+  const fetchEquipmentLosses = useCallback(async (): Promise<void> => {
+    const { data, error } = await supabase
+      .from('equipment_losses')
+      .select('*, radio_guide_kits(bag_number)')
+      .order('created_at', { ascending: false });
 
-      if (error) {
-        // If table doesn't exist in schema cache yet, just return empty array
-        if (error.code === 'PGRST205') {
-          console.warn('Equipment losses table not in schema cache yet, will retry on next poll');
-          return;
-        }
-        throw error;
+    if (error) {
+      if (error.code === 'PGRST205') {
+        return;
       }
-
-      setEquipmentLosses((data || []).map(l => ({
-        id: l.id,
-        assignmentId: l.assignment_id,
-        kitId: l.kit_id,
-        guideName: l.guide_name,
-        missingCount: l.missing_count,
-        reason: l.reason,
-        status: l.status as EquipmentLossStatus,
-        foundAt: l.found_at,
-        foundNotes: l.found_notes,
-        createdAt: l.created_at,
-        managerId: l.manager_id,
-        managerName: l.manager_name,
-        bagNumber: l.radio_guide_kits?.bag_number,
-      })));
-    } catch (err) {
-      console.error('Error fetching equipment losses:', err);
+      throw error;
     }
+
+    setEquipmentLosses((data || []).map(l => ({
+      id: l.id,
+      assignmentId: l.assignment_id,
+      kitId: l.kit_id,
+      guideName: l.guide_name,
+      missingCount: l.missing_count,
+      reason: l.reason,
+      status: l.status as EquipmentLossStatus,
+      foundAt: l.found_at,
+      foundNotes: l.found_notes,
+      createdAt: l.created_at,
+      managerId: l.manager_id,
+      managerName: l.manager_name,
+      bagNumber: l.radio_guide_kits?.bag_number,
+    })));
   }, []);
 
-  const fetchSettings = useCallback(async () => {
-    try {
-      const { data, error } = await supabase
-        .from('app_settings')
-        .select('*')
-        .eq('key', 'radio_guide_price')
-        .single();
+  const fetchSettings = useCallback(async (): Promise<void> => {
+    const { data, error } = await supabase
+      .from('app_settings')
+      .select('*')
+      .eq('key', 'radio_guide_price')
+      .single();
 
-      if (error) {
-        if (error.code === 'PGRST116' || error.code === 'PGRST205') {
-          // No data found or table not in cache, use default
-          return;
-        }
-        throw error;
+    if (error) {
+      if (error.code === 'PGRST116' || error.code === 'PGRST205') {
+        return;
       }
+      throw error;
+    }
 
-      if (data) {
-        setRadioGuidePrice(Number(data.value) || 80);
-      }
-    } catch (err) {
-      console.error('Error fetching settings:', err);
+    if (data) {
+      setRadioGuidePrice(Number(data.value) || 80);
     }
   }, []);
 
@@ -508,7 +460,7 @@ export function DataProvider({ children }: { children: ReactNode }) {
   const refreshData = useCallback(async () => {
     setIsLoading(true);
     try {
-      await Promise.all([
+      const results = await Promise.allSettled([
         fetchTourTypes(),
         fetchAdditionalServices(),
         fetchExcursions(),
@@ -519,6 +471,23 @@ export function DataProvider({ children }: { children: ReactNode }) {
         fetchRadioGuideAssignments(),
         fetchEquipmentLosses(),
       ]);
+      
+      const hasErrors = results.some(r => r.status === 'rejected');
+      if (hasErrors) {
+        const errors = results.filter(r => r.status === 'rejected');
+        console.error('Some data failed to load:', errors);
+        setNetworkError('Некоторые данные не удалось загрузить. Потяните вниз для обновления.');
+      } else {
+        setNetworkError(null);
+      }
+    } catch (err) {
+      const errorMessage = err instanceof Error ? err.message : 'Неизвестная ошибка';
+      if (errorMessage.includes('Network') || errorMessage.includes('fetch')) {
+        setNetworkError('Нет подключения к интернету. Проверьте соединение и попробуйте снова.');
+      } else {
+        setNetworkError('Ошибка загрузки данных. Попробуйте позже.');
+      }
+      console.error('Error refreshing data:', err);
     } finally {
       setIsLoading(false);
     }
@@ -1237,6 +1206,8 @@ export function DataProvider({ children }: { children: ReactNode }) {
         radioGuidePrice,
         updateRadioGuidePrice,
         isLoading,
+        networkError,
+        clearNetworkError,
         refreshData,
         refreshPriceList,
       }}

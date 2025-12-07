@@ -8,6 +8,7 @@ import { ThemedView } from "@/components/ThemedView";
 import { ScreenScrollView } from "@/components/ScreenScrollView";
 import { ExcursionCard } from "@/components/ExcursionCard";
 import { AddExcursionForm } from "@/components/AddExcursionForm";
+import { NetworkErrorBanner } from "@/components/NetworkErrorBanner";
 import { Spacing, BorderRadius } from "@/constants/theme";
 import { useTheme } from "@/hooks/useTheme";
 import { useData, Excursion, RadioGuideKit } from "@/contexts/DataContext";
@@ -272,6 +273,7 @@ export default function ExcursionsListScreen() {
   return (
     <>
       <ScreenScrollView>
+        <NetworkErrorBanner />
         <View style={styles.container}>
           <View style={styles.section}>
             <ThemedView
