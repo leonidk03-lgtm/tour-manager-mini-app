@@ -475,17 +475,23 @@ export function DataProvider({ children }: { children: ReactNode }) {
   };
 
   const updateAdditionalService = async (id: string, service: Partial<AdditionalService>) => {
+    console.log('updateAdditionalService called:', { id, service });
     try {
       const updateData: Record<string, unknown> = {};
       if (service.name !== undefined) updateData.name = service.name;
       if (service.price !== undefined) updateData.price = service.price;
       if (service.isEnabled !== undefined) updateData.is_enabled = service.isEnabled;
 
-      const { error } = await supabase
+      console.log('Sending to Supabase:', updateData);
+      
+      const { data, error } = await supabase
         .from('additional_services')
         .update(updateData)
-        .eq('id', id);
+        .eq('id', id)
+        .select();
 
+      console.log('Supabase response:', { data, error });
+      
       if (error) throw error;
       await fetchAdditionalServices();
     } catch (err) {
