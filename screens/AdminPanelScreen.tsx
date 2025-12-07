@@ -7,14 +7,31 @@ import { ScreenScrollView } from "@/components/ScreenScrollView";
 import { Spacing, BorderRadius } from "@/constants/theme";
 import { useTheme } from "@/hooks/useTheme";
 import { useAuth } from "@/contexts/AuthContext";
+import { UserRole } from "@/lib/supabase";
+
+type RoleOption = { value: UserRole; label: string };
+const ROLE_OPTIONS: RoleOption[] = [
+  { value: "manager", label: "Менеджер" },
+  { value: "radio_dispatcher", label: "Диспетчер радиогидов" },
+];
+
+const getRoleLabel = (role: UserRole): string => {
+  switch (role) {
+    case "admin": return "Администратор";
+    case "manager": return "Менеджер";
+    case "radio_dispatcher": return "Диспетчер радиогидов";
+    default: return role;
+  }
+};
 
 export default function AdminPanelScreen() {
   const { theme } = useTheme();
-  const { managers, createManager, updateManagerStatus, deleteManager, refreshManagers } = useAuth();
+  const { managers, createManager, updateManagerStatus, updateManagerRole, deleteManager, refreshManagers } = useAuth();
   const [showAddModal, setShowAddModal] = useState(false);
   const [newEmail, setNewEmail] = useState("");
   const [newPassword, setNewPassword] = useState("");
   const [newDisplayName, setNewDisplayName] = useState("");
+  const [newRole, setNewRole] = useState<UserRole>("manager");
   const [isCreating, setIsCreating] = useState(false);
 
   useEffect(() => {
@@ -51,7 +68,7 @@ export default function AdminPanelScreen() {
     }
 
     setIsCreating(true);
-    const { error } = await createManager(newEmail.trim(), newPassword, newDisplayName.trim());
+    const { error } = await createManager(newEmail.trim(), newPassword, newDisplayName.trim(), newRole);
     setIsCreating(false);
 
     if (error) {
@@ -61,18 +78,39 @@ export default function AdminPanelScreen() {
       setNewEmail("");
       setNewPassword("");
       setNewDisplayName("");
-      Alert.alert("Успешно", "Менеджер создан");
+      setNewRole("manager");
+      Alert.alert("Успешно", getRoleLabel(newRole) + " создан");
     }
   };
 
-  const activeManagers = managers.filter((m) => m.role === "manager");
+  const handleChangeRole = (managerId: string, currentRole: UserRole) => {
+    const options = ROLE_OPTIONS.filter(r => r.value !== currentRole);
+    Alert.alert(
+      "Изменить роль",
+      "Выберите новую роль:",
+      [
+        ...options.map(opt => ({
+          text: opt.label,
+          onPress: async () => {
+            const { error } = await updateManagerRole(managerId, opt.value);
+            if (error) {
+              Alert.alert("Ошибка", error);
+            }
+          },
+        })),
+        { text: "Отмена", style: "cancel" },
+      ]
+    );
+  };
+
+  const staffMembers = managers.filter((m) => m.role === "manager" || m.role === "radio_dispatcher");
 
   return (
     <ScreenScrollView>
       <View style={styles.container}>
         <View style={styles.section}>
           <View style={styles.sectionHeader}>
-            <ThemedText style={styles.sectionTitle}>Менеджеры</ThemedText>
+            <ThemedText style={styles.sectionTitle}>Сотрудники</ThemedText>
             <Pressable
               onPress={() => setShowAddModal(true)}
               style={({ pressed }) => ({ opacity: pressed ? 0.7 : 1 })}
@@ -82,7 +120,7 @@ export default function AdminPanelScreen() {
           </View>
 
           <View style={styles.managersList}>
-            {activeManagers.length === 0 ? (
+            {staffMembers.length === 0 ? (
               <ThemedView
                 style={[
                   styles.emptyState,
@@ -91,14 +129,14 @@ export default function AdminPanelScreen() {
               >
                 <Feather name="users" size={48} color={theme.textSecondary} />
                 <ThemedText style={[styles.emptyText, { color: theme.textSecondary }]}>
-                  Нет менеджеров
+                  Нет сотрудников
                 </ThemedText>
                 <ThemedText style={[styles.emptySubtext, { color: theme.textSecondary }]}>
                   Нажмите + чтобы добавить
                 </ThemedText>
               </ThemedView>
             ) : (
-              activeManagers.map((manager) => (
+              staffMembers.map((manager) => (
                 <ThemedView
                   key={manager.id}
                   style={[
@@ -114,19 +152,31 @@ export default function AdminPanelScreen() {
                       style={[
                         styles.managerAvatar,
                         {
-                          backgroundColor: manager.is_active ? theme.primary : theme.textSecondary,
+                          backgroundColor: manager.is_active 
+                            ? (manager.role === "radio_dispatcher" ? theme.warning : theme.primary) 
+                            : theme.textSecondary,
                         },
                       ]}
                     >
-                      <ThemedText style={[styles.avatarText, { color: theme.buttonText }]}>
-                        {manager.display_name?.charAt(0).toUpperCase() || "M"}
-                      </ThemedText>
+                      <Feather 
+                        name={manager.role === "radio_dispatcher" ? "radio" : "user"} 
+                        size={20} 
+                        color={theme.buttonText} 
+                      />
                     </View>
                     <View style={styles.managerInfo}>
                       <ThemedText style={styles.managerName}>{manager.display_name}</ThemedText>
                       <ThemedText style={[styles.managerEmail, { color: theme.textSecondary }]}>
                         {manager.email}
                       </ThemedText>
+                      <Pressable onPress={() => handleChangeRole(manager.id, manager.role)}>
+                        <View style={[styles.roleBadge, { backgroundColor: manager.role === "radio_dispatcher" ? theme.warning + "30" : theme.primary + "30" }]}>
+                          <ThemedText style={[styles.roleText, { color: manager.role === "radio_dispatcher" ? theme.warning : theme.primary }]}>
+                            {getRoleLabel(manager.role)}
+                          </ThemedText>
+                          <Feather name="chevron-down" size={12} color={manager.role === "radio_dispatcher" ? theme.warning : theme.primary} />
+                        </View>
+                      </Pressable>
                     </View>
                   </View>
 
@@ -188,10 +238,38 @@ export default function AdminPanelScreen() {
           <Pressable style={styles.modalBackdrop} onPress={() => setShowAddModal(false)} />
           <ThemedView style={[styles.modalContent, { backgroundColor: theme.backgroundDefault }]}>
             <View style={styles.modalHeader}>
-              <ThemedText style={styles.modalTitle}>Новый менеджер</ThemedText>
+              <ThemedText style={styles.modalTitle}>Новый сотрудник</ThemedText>
               <Pressable onPress={() => setShowAddModal(false)}>
                 <Feather name="x" size={24} color={theme.textSecondary} />
               </Pressable>
+            </View>
+
+            <View style={styles.formGroup}>
+              <ThemedText style={[styles.label, { color: theme.textSecondary }]}>Роль</ThemedText>
+              <View style={styles.roleSelector}>
+                {ROLE_OPTIONS.map((opt) => (
+                  <Pressable
+                    key={opt.value}
+                    onPress={() => setNewRole(opt.value)}
+                    style={[
+                      styles.roleSelectorOption,
+                      {
+                        backgroundColor: newRole === opt.value ? theme.primary : theme.backgroundSecondary,
+                        borderColor: newRole === opt.value ? theme.primary : theme.border,
+                      },
+                    ]}
+                  >
+                    <Feather 
+                      name={opt.value === "radio_dispatcher" ? "radio" : "user"} 
+                      size={16} 
+                      color={newRole === opt.value ? theme.buttonText : theme.text} 
+                    />
+                    <ThemedText style={{ color: newRole === opt.value ? theme.buttonText : theme.text }}>
+                      {opt.label}
+                    </ThemedText>
+                  </Pressable>
+                ))}
+              </View>
             </View>
 
             <View style={styles.formGroup}>
@@ -224,7 +302,7 @@ export default function AdminPanelScreen() {
                     color: theme.text,
                   },
                 ]}
-                placeholder="manager@example.com"
+                placeholder="user@example.com"
                 placeholderTextColor={theme.textSecondary}
                 value={newEmail}
                 onChangeText={setNewEmail}
@@ -266,7 +344,7 @@ export default function AdminPanelScreen() {
               ]}
             >
               <ThemedText style={[styles.createButtonText, { color: theme.buttonText }]}>
-                {isCreating ? "Создание..." : "Создать менеджера"}
+                {isCreating ? "Создание..." : "Создать"}
               </ThemedText>
             </Pressable>
           </ThemedView>
@@ -429,5 +507,32 @@ const styles = StyleSheet.create({
   createButtonText: {
     fontSize: 16,
     fontWeight: "600",
+  },
+  roleBadge: {
+    flexDirection: "row",
+    alignItems: "center",
+    gap: Spacing.xs,
+    paddingVertical: Spacing.xs,
+    paddingHorizontal: Spacing.sm,
+    borderRadius: BorderRadius.xs,
+    alignSelf: "flex-start",
+  },
+  roleText: {
+    fontSize: 12,
+    fontWeight: "500",
+  },
+  roleSelector: {
+    flexDirection: "row",
+    gap: Spacing.sm,
+  },
+  roleSelectorOption: {
+    flex: 1,
+    flexDirection: "row",
+    alignItems: "center",
+    justifyContent: "center",
+    gap: Spacing.xs,
+    paddingVertical: Spacing.md,
+    borderRadius: BorderRadius.sm,
+    borderWidth: 1,
   },
 });
