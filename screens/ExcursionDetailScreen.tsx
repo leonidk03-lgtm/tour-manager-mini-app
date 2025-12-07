@@ -58,13 +58,6 @@ export default function ExcursionDetailScreen() {
 
   const handleSaveEdit = async (updatedExcursion: Partial<ExcursionType>) => {
     try {
-      // Debug: show what will be saved
-      if (__DEV__) {
-        Alert.alert(
-          "DEBUG: Сохранение",
-          `additionalServices: ${JSON.stringify(updatedExcursion.additionalServices)}`
-        );
-      }
       await updateExcursion(excursionId, updatedExcursion);
       setShowEditModal(false);
     } catch (err) {

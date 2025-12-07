@@ -222,6 +222,11 @@ export function DataProvider({ children }: { children: ReactNode }) {
 
       if (error) throw error;
 
+      // Debug: log raw data from Supabase
+      if (data && data.length > 0) {
+        console.log('RAW Supabase data (first item):', JSON.stringify(data[0]));
+      }
+
       const mappedExcursions = (data || []).map(e => ({
         id: e.id,
         tourTypeId: e.tour_type_id || '',
@@ -238,7 +243,7 @@ export function DataProvider({ children }: { children: ReactNode }) {
         managerId: e.manager_id,
         managerName: e.profiles?.display_name || '',
       }));
-      console.log('Loaded excursions with additionalServices:', mappedExcursions.map(e => ({ id: e.id, additionalServices: e.additionalServices })));
+      console.log('Mapped additionalServices:', mappedExcursions.map(e => ({ id: e.id, as: e.additionalServices })));
       setExcursions(mappedExcursions);
     } catch (err) {
       console.error('Error fetching excursions:', err);
