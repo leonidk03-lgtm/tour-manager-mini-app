@@ -1,10 +1,11 @@
 import { useState, useMemo } from "react";
-import { View, StyleSheet, Pressable, TextInput, Modal, Platform, Alert, ScrollView } from "react-native";
+import { View, StyleSheet, Pressable, TextInput, Modal, Platform, Alert } from "react-native";
 import { Feather } from "@expo/vector-icons";
 import DateTimePicker from "@react-native-community/datetimepicker";
 import { ThemedText } from "@/components/ThemedText";
 import { ThemedView } from "@/components/ThemedView";
 import { ScreenScrollView } from "@/components/ScreenScrollView";
+import { KeyboardAwareScrollView } from "@/components/KeyboardAwareScrollView";
 import { ExcursionCard } from "@/components/ExcursionCard";
 import { AddExcursionForm } from "@/components/AddExcursionForm";
 import { Spacing, BorderRadius } from "@/constants/theme";
@@ -415,7 +416,7 @@ export default function ExcursionsListScreen() {
               </Pressable>
             </View>
             
-            <ScrollView style={styles.radioGuideContent} keyboardShouldPersistTaps="handled">
+            <KeyboardAwareScrollView style={styles.radioGuideContent} keyboardShouldPersistTaps="handled">
               <ThemedText style={[styles.radioGuideLabel, { color: theme.textSecondary }]}>
                 Выберите сумку
               </ThemedText>
@@ -495,7 +496,7 @@ export default function ExcursionsListScreen() {
                   keyboardType="number-pad"
                 />
               </View>
-            </ScrollView>
+            </KeyboardAwareScrollView>
             
             <View style={styles.radioGuideActions}>
               <Pressable
