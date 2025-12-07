@@ -399,6 +399,30 @@ export function DataProvider({ children }: { children: ReactNode }) {
     }
   }, [user, profile]);
 
+  // Realtime subscriptions for price list sync across devices
+  useEffect(() => {
+    if (!user) return;
+
+    const tourTypesChannel = supabase
+      .channel('tour_types_changes')
+      .on('postgres_changes', { event: '*', schema: 'public', table: 'tour_types' }, () => {
+        fetchTourTypes();
+      })
+      .subscribe();
+
+    const servicesChannel = supabase
+      .channel('additional_services_changes')
+      .on('postgres_changes', { event: '*', schema: 'public', table: 'additional_services' }, () => {
+        fetchAdditionalServices();
+      })
+      .subscribe();
+
+    return () => {
+      supabase.removeChannel(tourTypesChannel);
+      supabase.removeChannel(servicesChannel);
+    };
+  }, [user, fetchTourTypes, fetchAdditionalServices]);
+
   const addTourType = async (tourType: Omit<TourType, 'id'>) => {
     try {
       const { error } = await supabase
