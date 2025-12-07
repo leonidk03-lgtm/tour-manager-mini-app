@@ -329,11 +329,14 @@ export function DataProvider({ children }: { children: ReactNode }) {
   }, [isAdmin]);
 
   const fetchRadioGuideKits = useCallback(async () => {
+    console.log('Fetching radio guide kits...');
     try {
       const { data, error } = await supabase
         .from('radio_guide_kits')
         .select('*')
         .order('bag_number');
+
+      console.log('Radio guide kits result:', { count: data?.length, error: error?.message });
 
       if (error) throw error;
 
