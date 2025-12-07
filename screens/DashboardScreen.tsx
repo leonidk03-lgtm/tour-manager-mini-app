@@ -72,7 +72,7 @@ export default function DashboardScreen() {
 
   const totalParticipants = filteredExcursions.reduce((sum, exc) => {
     return sum + exc.fullPriceCount + exc.discountedCount + exc.freeCount + 
-      (exc.byTourCount || 0) + (exc.paidCount || 0);
+      exc.tourPackageCount + exc.byTourCount + exc.paidCount;
   }, 0);
 
   const recentActivities = activities.slice(0, 10);

@@ -27,7 +27,7 @@ export function ExcursionCard({
 }: ExcursionCardProps) {
   const { theme } = useTheme();
   const totalParticipants =
-    excursion.fullPriceCount + excursion.discountedCount + excursion.freeCount;
+    excursion.fullPriceCount + excursion.discountedCount + excursion.freeCount + excursion.tourPackageCount + excursion.byTourCount + excursion.paidCount;
 
   return (
     <Pressable

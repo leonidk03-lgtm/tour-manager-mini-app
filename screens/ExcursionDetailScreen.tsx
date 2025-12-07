@@ -99,7 +99,7 @@ export default function ExcursionDetailScreen() {
   const profit = calculateExcursionProfit(excursion, tourType, additionalServices);
   const totalParticipants =
     excursion.fullPriceCount + excursion.discountedCount + excursion.freeCount + 
-    (excursion.byTourCount || 0) + (excursion.paidCount || 0);
+    excursion.tourPackageCount + excursion.byTourCount + excursion.paidCount;
 
   return (
     <ScreenScrollView>
