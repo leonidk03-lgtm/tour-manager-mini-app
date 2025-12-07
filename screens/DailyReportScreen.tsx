@@ -2,6 +2,7 @@ import { useState, useMemo, useEffect, useCallback } from "react";
 import { View, StyleSheet, Pressable, TextInput, Alert, Platform, ActivityIndicator } from "react-native";
 import { Feather } from "@expo/vector-icons";
 import * as Clipboard from "expo-clipboard";
+import AsyncStorage from "@react-native-async-storage/async-storage";
 import DateTimePicker from "@react-native-community/datetimepicker";
 import { ThemedText } from "@/components/ThemedText";
 import { ThemedView } from "@/components/ThemedView";
@@ -10,7 +11,6 @@ import { Spacing, BorderRadius } from "@/constants/theme";
 import { useTheme } from "@/hooks/useTheme";
 import { useData } from "@/contexts/DataContext";
 import { useAuth } from "@/contexts/AuthContext";
-import { supabase } from "@/lib/supabase";
 
 export default function DailyReportScreen() {
   const { theme } = useTheme();
@@ -28,21 +28,19 @@ export default function DailyReportScreen() {
   const [saving, setSaving] = useState(false);
   const [hasExistingReport, setHasExistingReport] = useState(false);
 
+  const getStorageKey = (dateStr: string) => `daily_report_${dateStr}`;
+
   const loadReportData = useCallback(async (date: Date) => {
     const dateStr = date.toISOString().split("T")[0];
     setLoading(true);
     try {
-      const { data, error } = await supabase
-        .from("daily_reports")
-        .select("*")
-        .eq("report_date", dateStr)
-        .single();
-
-      if (data && !error) {
-        setBankDeposit(data.bank_deposit ? String(data.bank_deposit) : "");
-        setSafeDeposit(data.safe_deposit ? String(data.safe_deposit) : "");
-        setCashAmount(data.cash_amount ? String(data.cash_amount) : "");
-        setIncomeField(data.income_field ? String(data.income_field) : "");
+      const stored = await AsyncStorage.getItem(getStorageKey(dateStr));
+      if (stored) {
+        const data = JSON.parse(stored);
+        setBankDeposit(data.bankDeposit || "");
+        setSafeDeposit(data.safeDeposit || "");
+        setCashAmount(data.cashAmount || "");
+        setIncomeField(data.incomeField || "");
         setHasExistingReport(true);
       } else {
         setBankDeposit("");
@@ -63,27 +61,15 @@ export default function DailyReportScreen() {
     setSaving(true);
     try {
       const reportData = {
-        report_date: dateStr,
-        bank_deposit: parseFloat(bankDeposit) || 0,
-        safe_deposit: parseFloat(safeDeposit) || 0,
-        cash_amount: parseFloat(cashAmount) || 0,
-        income_field: parseFloat(incomeField) || 0,
-        updated_at: new Date().toISOString(),
+        bankDeposit,
+        safeDeposit,
+        cashAmount,
+        incomeField,
+        updatedAt: new Date().toISOString(),
       };
 
-      if (hasExistingReport) {
-        const { error } = await supabase
-          .from("daily_reports")
-          .update(reportData)
-          .eq("report_date", dateStr);
-        if (error) throw error;
-      } else {
-        const { error } = await supabase
-          .from("daily_reports")
-          .insert(reportData);
-        if (error) throw error;
-        setHasExistingReport(true);
-      }
+      await AsyncStorage.setItem(getStorageKey(dateStr), JSON.stringify(reportData));
+      setHasExistingReport(true);
       Alert.alert("Сохранено", "Данные отчёта сохранены");
     } catch (err) {
       console.error("Error saving report:", err);
