@@ -472,8 +472,8 @@ export function DataProvider({ children }: { children: ReactNode }) {
         .single();
 
       if (error) {
-        if (error.code === 'PGRST116') {
-          // No data found, use default
+        if (error.code === 'PGRST116' || error.code === 'PGRST205') {
+          // No data found or table not in cache, use default
           return;
         }
         throw error;
