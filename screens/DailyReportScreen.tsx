@@ -12,6 +12,14 @@ import { useTheme } from "@/hooks/useTheme";
 import { useData } from "@/contexts/DataContext";
 import { useAuth } from "@/contexts/AuthContext";
 
+// Helper to get YYYY-MM-DD in local timezone (not UTC)
+const getLocalDateKey = (date: Date): string => {
+  const year = date.getFullYear();
+  const month = String(date.getMonth() + 1).padStart(2, "0");
+  const day = String(date.getDate()).padStart(2, "0");
+  return `${year}-${month}-${day}`;
+};
+
 export default function DailyReportScreen() {
   const { theme } = useTheme();
   const { isAdmin } = useAuth();
@@ -81,7 +89,7 @@ export default function DailyReportScreen() {
   }, []);
 
   const saveReportData = async () => {
-    const dateStr = selectedDate.toISOString().split("T")[0];
+    const dateStr = getLocalDateKey(selectedDate);
     const key = getStorageKey(dateStr);
     console.log("Saving report for date:", dateStr, "key:", key);
     setSaving(true);
@@ -107,7 +115,7 @@ export default function DailyReportScreen() {
     }
   };
 
-  const selectedDateStr = selectedDate.toISOString().split("T")[0];
+  const selectedDateStr = getLocalDateKey(selectedDate);
   
   useEffect(() => {
     console.log("useEffect triggered for date:", selectedDateStr);
@@ -140,7 +148,7 @@ export default function DailyReportScreen() {
   };
 
   const reportData = useMemo(() => {
-    const dateStr = selectedDate.toISOString().split("T")[0];
+    const dateStr = getLocalDateKey(selectedDate);
 
     const dayExcursions = excursions.filter((e) => e.date === dateStr);
     const dayTransactions = transactions.filter((t) => t.date === dateStr);
