@@ -382,7 +382,9 @@ export default function DailyReportScreen() {
       });
 
       report.guideExpenses.forEach((exp) => {
-        lines.push(`${formatMoney(exp)}р экс`);
+        if (exp > 0) {
+          lines.push(`${formatMoney(exp)}р экс`);
+        }
       });
 
       if (report.prepaymentTotal > 0) {
@@ -550,7 +552,7 @@ export default function DailyReportScreen() {
                       </ThemedText>
                     ))}
 
-                    {report.guideExpenses.map((exp, eIdx) => (
+                    {report.guideExpenses.filter((exp) => exp > 0).map((exp, eIdx) => (
                       <ThemedText key={eIdx} style={{ color: theme.textSecondary }}>
                         {formatMoney(exp)}р экс
                       </ThemedText>
