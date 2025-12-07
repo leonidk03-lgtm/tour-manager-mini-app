@@ -136,6 +136,20 @@ Design style: Telegram-inspired dark theme with flat design (November 2025 updat
 - List of manager's excursions with revenue
 - List of manager's transactions
 
+**ReportsScreen** - Admin-only reports hub with 4 report types:
+- Financial Report: Revenue, expenses, profit breakdown by period
+- Excursions Report: Tour type statistics and participant distribution
+- Radio Guides Report: Equipment assignments and losses tracking
+- Data Export: Export to CSV/JSON (excursions, transactions, radio guides)
+
+**FinancialReportScreen** - Financial analytics with period filtering (day/week/month/year/all), revenue breakdown (tickets, services, transactions), expenses, and profit calculation
+
+**ExcursionsReportScreen** - Excursions analytics with tour type distribution, participant statistics, and service usage
+
+**RadioGuidesReportScreen** - Radio guide equipment analytics with kit usage, assignment statistics, and loss tracking
+
+**ExportDataScreen** - Data export functionality supporting CSV and JSON formats for excursions, transactions, radio guide assignments, and equipment losses. Uses expo-file-system/legacy API for mobile and blob downloads for web.
+
 **RadioGuidesScreen** - Radio guide equipment management:
 - View all radio guide bags (kits) with bag number, receiver count, and status
 - Issue equipment to guides (with guide name, optional bus number, receivers issued)
