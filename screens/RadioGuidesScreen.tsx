@@ -62,6 +62,18 @@ export default function RadioGuidesScreen() {
   const [receiversReturned, setReceiversReturned] = useState("");
   const [returnNotes, setReturnNotes] = useState("");
   const [showShortageForm, setShowShortageForm] = useState(false);
+  const [selectedExcursionId, setSelectedExcursionId] = useState<string | null>(null);
+
+  const todayExcursions = useMemo(() => {
+    const today = new Date().toISOString().split("T")[0];
+    return excursions
+      .filter(e => e.date === today)
+      .map(e => {
+        const tourType = tourTypes.find(t => t.id === e.tourTypeId);
+        return { ...e, tourTypeName: tourType?.name || "Экскурсия" };
+      })
+      .sort((a, b) => a.time.localeCompare(b.time));
+  }, [excursions, tourTypes]);
 
   const resetForm = () => {
     setBagNumber("");
@@ -74,6 +86,7 @@ export default function RadioGuidesScreen() {
     setSelectedKit(null);
     setSelectedAssignment(null);
     setShowShortageForm(false);
+    setSelectedExcursionId(null);
   };
 
   const openAddModal = () => {
@@ -171,6 +184,7 @@ export default function RadioGuidesScreen() {
     try {
       await issueRadioGuide({
         kitId: selectedKit.id,
+        excursionId: selectedExcursionId || undefined,
         guideName: guideName.trim(),
         busNumber: busNumber.trim() || undefined,
         receiversIssued: count,
@@ -483,6 +497,63 @@ export default function RadioGuidesScreen() {
     if (modalMode === "issue") {
       return (
         <View style={styles.form}>
+          <View style={styles.inputGroup}>
+            <ThemedText style={[styles.label, { color: theme.textSecondary }]}>
+              Экскурсия (опционально)
+            </ThemedText>
+            <View style={styles.excursionsList}>
+              <Pressable
+                onPress={() => setSelectedExcursionId(null)}
+                style={[
+                  styles.excursionOption,
+                  {
+                    backgroundColor: !selectedExcursionId ? theme.primary + "20" : theme.backgroundSecondary,
+                    borderColor: !selectedExcursionId ? theme.primary : theme.border,
+                  },
+                ]}
+              >
+                <Feather
+                  name={!selectedExcursionId ? "check-circle" : "circle"}
+                  size={18}
+                  color={!selectedExcursionId ? theme.primary : theme.textSecondary}
+                />
+                <ThemedText style={[styles.excursionOptionText, { color: theme.textSecondary, fontStyle: "italic" }]}>
+                  Без экскурсии
+                </ThemedText>
+              </Pressable>
+              {todayExcursions.map(exc => (
+                <Pressable
+                  key={exc.id}
+                  onPress={() => setSelectedExcursionId(exc.id)}
+                  style={[
+                    styles.excursionOption,
+                    {
+                      backgroundColor: selectedExcursionId === exc.id ? theme.primary + "20" : theme.backgroundSecondary,
+                      borderColor: selectedExcursionId === exc.id ? theme.primary : theme.border,
+                    },
+                  ]}
+                >
+                  <Feather
+                    name={selectedExcursionId === exc.id ? "check-circle" : "circle"}
+                    size={18}
+                    color={selectedExcursionId === exc.id ? theme.primary : theme.textSecondary}
+                  />
+                  <View style={styles.excursionOptionContent}>
+                    <ThemedText style={styles.excursionOptionText}>{exc.tourTypeName}</ThemedText>
+                    <ThemedText style={[styles.excursionOptionTime, { color: theme.textSecondary }]}>
+                      {exc.time}
+                    </ThemedText>
+                  </View>
+                </Pressable>
+              ))}
+              {todayExcursions.length === 0 ? (
+                <ThemedText style={{ color: theme.textSecondary, padding: Spacing.sm, fontStyle: "italic" }}>
+                  Нет экскурсий на сегодня
+                </ThemedText>
+              ) : null}
+            </View>
+          </View>
+
           <View style={styles.inputGroup}>
             <ThemedText style={[styles.label, { color: theme.textSecondary }]}>
               Экскурсовод *
@@ -837,5 +908,28 @@ const styles = StyleSheet.create({
   returnButtonText: {
     fontSize: 16,
     fontWeight: "600",
+  },
+  excursionsList: {
+    gap: Spacing.xs,
+  },
+  excursionOption: {
+    flexDirection: "row",
+    alignItems: "center",
+    padding: Spacing.sm,
+    borderRadius: BorderRadius.sm,
+    borderWidth: 1,
+    gap: Spacing.sm,
+  },
+  excursionOptionContent: {
+    flex: 1,
+    flexDirection: "row",
+    justifyContent: "space-between",
+    alignItems: "center",
+  },
+  excursionOptionText: {
+    fontSize: 14,
+  },
+  excursionOptionTime: {
+    fontSize: 13,
   },
 });
