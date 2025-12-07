@@ -7,6 +7,7 @@ import DateTimePicker from "@react-native-community/datetimepicker";
 import { ThemedText } from "@/components/ThemedText";
 import { ThemedView } from "@/components/ThemedView";
 import { ScreenScrollView } from "@/components/ScreenScrollView";
+import { ScreenKeyboardAwareScrollView } from "@/components/ScreenKeyboardAwareScrollView";
 import { Spacing, BorderRadius } from "@/constants/theme";
 import { useTheme } from "@/hooks/useTheme";
 import { useData } from "@/contexts/DataContext";
@@ -383,7 +384,7 @@ export default function DailyReportScreen() {
   };
 
   return (
-    <ScreenScrollView>
+    <ScreenKeyboardAwareScrollView>
       <View style={styles.container}>
         <ThemedText style={styles.header}>Ежедневный отчёт</ThemedText>
 
@@ -579,7 +580,7 @@ export default function DailyReportScreen() {
           <ThemedText style={styles.copyButtonText}>Скопировать отчёт</ThemedText>
         </Pressable>
       </View>
-    </ScreenScrollView>
+    </ScreenKeyboardAwareScrollView>
   );
 }
 
