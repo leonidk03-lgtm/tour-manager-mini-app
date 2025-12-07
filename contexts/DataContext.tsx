@@ -189,7 +189,7 @@ export function DataProvider({ children }: { children: ReactNode }) {
       const { data, error } = await supabase
         .from('tour_types')
         .select('*')
-        .order('name');
+        .order('article_number');
 
       console.log('Tour types result:', { count: data?.length, error: error?.message });
       if (error) throw error;
