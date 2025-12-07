@@ -261,18 +261,20 @@ export default function RadioGuidesScreen() {
 
         {activeAssignment ? (
           <View style={[styles.assignmentInfo, { backgroundColor: theme.backgroundTertiary }]}>
+            <ThemedText style={[styles.assignmentLabel, { color: theme.textSecondary }]}>
+              Экскурсия:
+            </ThemedText>
             {(() => {
               const excInfo = getExcursionInfo(activeAssignment.excursionId);
               return excInfo ? (
-                <>
-                  <ThemedText style={[styles.assignmentLabel, { color: theme.textSecondary }]}>
-                    Экскурсия:
-                  </ThemedText>
-                  <ThemedText style={[styles.assignmentValue, { color: theme.primary }]}>
-                    {excInfo.name} ({excInfo.dateTime})
-                  </ThemedText>
-                </>
-              ) : null;
+                <ThemedText style={[styles.assignmentValue, { color: theme.primary }]}>
+                  {excInfo.name} ({excInfo.dateTime})
+                </ThemedText>
+              ) : (
+                <ThemedText style={[styles.assignmentValue, { color: theme.textSecondary, fontStyle: "italic" }]}>
+                  Не указана
+                </ThemedText>
+              );
             })()}
             <ThemedText style={[styles.assignmentLabel, { color: theme.textSecondary }]}>
               Экскурсовод:
