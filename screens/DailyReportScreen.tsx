@@ -3,6 +3,7 @@ import { View, StyleSheet, Pressable, TextInput, Alert, Platform, ActivityIndica
 import { Feather } from "@expo/vector-icons";
 import * as Clipboard from "expo-clipboard";
 import DateTimePicker from "@react-native-community/datetimepicker";
+import Animated, { useAnimatedStyle, useSharedValue, withTiming } from "react-native-reanimated";
 import { ThemedText } from "@/components/ThemedText";
 import { ThemedView } from "@/components/ThemedView";
 import { ScreenScrollView } from "@/components/ScreenScrollView";
@@ -13,13 +14,49 @@ import { useData } from "@/contexts/DataContext";
 import { useAuth } from "@/contexts/AuthContext";
 import { supabase } from "@/lib/supabase";
 
-// Helper to get YYYY-MM-DD in local timezone (not UTC)
 const getLocalDateKey = (date: Date): string => {
   const year = date.getFullYear();
   const month = String(date.getMonth() + 1).padStart(2, "0");
   const day = String(date.getDate()).padStart(2, "0");
   return `${year}-${month}-${day}`;
 };
+
+interface CollapsibleSectionProps {
+  title: string;
+  icon: keyof typeof Feather.glyphMap;
+  children: React.ReactNode;
+  defaultExpanded?: boolean;
+}
+
+function CollapsibleSection({ title, icon, children, defaultExpanded = true }: CollapsibleSectionProps) {
+  const { theme } = useTheme();
+  const [expanded, setExpanded] = useState(defaultExpanded);
+  const rotation = useSharedValue(defaultExpanded ? 1 : 0);
+
+  const toggleExpanded = () => {
+    setExpanded(!expanded);
+    rotation.value = withTiming(expanded ? 0 : 1, { duration: 200 });
+  };
+
+  const chevronStyle = useAnimatedStyle(() => ({
+    transform: [{ rotate: `${rotation.value * 180}deg` }],
+  }));
+
+  return (
+    <ThemedView style={[styles.collapsibleContainer, { backgroundColor: theme.backgroundSecondary }]}>
+      <Pressable style={styles.collapsibleHeader} onPress={toggleExpanded}>
+        <View style={styles.collapsibleTitleRow}>
+          <Feather name={icon} size={18} color={theme.primary} />
+          <ThemedText style={styles.collapsibleTitle}>{title}</ThemedText>
+        </View>
+        <Animated.View style={chevronStyle}>
+          <Feather name="chevron-up" size={20} color={theme.textSecondary} />
+        </Animated.View>
+      </Pressable>
+      {expanded ? <View style={styles.collapsibleContent}>{children}</View> : null}
+    </ThemedView>
+  );
+}
 
 export default function DailyReportScreen() {
   const { theme } = useTheme();
@@ -41,9 +78,19 @@ export default function DailyReportScreen() {
   const [hasExistingReport, setHasExistingReport] = useState(false);
   const [reportId, setReportId] = useState<string | null>(null);
 
+  const [savedBankDeposit, setSavedBankDeposit] = useState("");
+  const [savedSafeDeposit, setSavedSafeDeposit] = useState("");
+  const [savedCashAmount, setSavedCashAmount] = useState("");
+  const [savedIncomeField, setSavedIncomeField] = useState("");
+
+  const hasUnsavedChanges = 
+    bankDeposit !== savedBankDeposit ||
+    safeDeposit !== savedSafeDeposit ||
+    cashAmount !== savedCashAmount ||
+    incomeField !== savedIncomeField;
+
   const loadReportData = useCallback(async (dateStr: string) => {
     const requestId = ++loadingDateRef.current;
-    console.log("Loading report for date:", dateStr, "requestId:", requestId);
     setLoading(true);
     
     try {
@@ -53,30 +100,37 @@ export default function DailyReportScreen() {
         .eq("report_date", dateStr)
         .maybeSingle();
       
-      if (loadingDateRef.current !== requestId) {
-        console.log("Newer request exists, skipping update for:", dateStr);
-        return;
-      }
+      if (loadingDateRef.current !== requestId) return;
       
       if (error) {
         console.error("Error loading report:", error);
         return;
       }
       
-      console.log("Loaded data:", data);
       if (data) {
-        setBankDeposit(data.bank_deposit?.toString() || "");
-        setSafeDeposit(data.safe_deposit?.toString() || "");
-        setCashAmount(data.cash_amount?.toString() || "");
-        setIncomeField(data.income_field?.toString() || "");
+        const bank = data.bank_deposit?.toString() || "";
+        const safe = data.safe_deposit?.toString() || "";
+        const cash = data.cash_amount?.toString() || "";
+        const income = data.income_field?.toString() || "";
+        setBankDeposit(bank);
+        setSafeDeposit(safe);
+        setCashAmount(cash);
+        setIncomeField(income);
+        setSavedBankDeposit(bank);
+        setSavedSafeDeposit(safe);
+        setSavedCashAmount(cash);
+        setSavedIncomeField(income);
         setHasExistingReport(true);
         setReportId(data.id);
       } else {
-        console.log("No data found for date:", dateStr, "- clearing fields");
         setBankDeposit("");
         setSafeDeposit("");
         setCashAmount("");
         setIncomeField("");
+        setSavedBankDeposit("");
+        setSavedSafeDeposit("");
+        setSavedCashAmount("");
+        setSavedIncomeField("");
         setHasExistingReport(false);
         setReportId(null);
       }
@@ -91,7 +145,6 @@ export default function DailyReportScreen() {
 
   const saveReportData = async () => {
     const dateStr = getLocalDateKey(selectedDate);
-    console.log("Saving report for date:", dateStr);
     setSaving(true);
     
     try {
@@ -104,7 +157,6 @@ export default function DailyReportScreen() {
         manager_id: profile?.id || null,
         updated_at: new Date().toISOString(),
       };
-      console.log("Report data to save:", reportData);
 
       if (reportId) {
         const { error } = await supabase
@@ -124,8 +176,11 @@ export default function DailyReportScreen() {
         setReportId(data.id);
       }
       
+      setSavedBankDeposit(bankDeposit);
+      setSavedSafeDeposit(safeDeposit);
+      setSavedCashAmount(cashAmount);
+      setSavedIncomeField(incomeField);
       setHasExistingReport(true);
-      console.log("Report saved successfully");
       Alert.alert("Сохранено", "Данные отчёта сохранены");
     } catch (err) {
       console.error("Error saving report:", err);
@@ -138,7 +193,6 @@ export default function DailyReportScreen() {
   const selectedDateStr = getLocalDateKey(selectedDate);
   
   useEffect(() => {
-    console.log("useEffect triggered for date:", selectedDateStr);
     loadReportData(selectedDateStr);
   }, [selectedDateStr, loadReportData]);
 
@@ -173,124 +227,138 @@ export default function DailyReportScreen() {
     const dayExcursions = excursions.filter((e) => e.date === dateStr);
     const dayTransactions = transactions.filter((t) => t.date === dateStr);
 
-    const grouped: Record<string, typeof dayExcursions> = {};
+    const tourTypeMap: Record<
+      string,
+      {
+        name: string;
+        buses: { total: number; discounted: number }[];
+        freeCount: number;
+        byTourCount: number;
+        paidCount: number;
+        services: { name: string; count: number }[];
+        guideExpenses: number[];
+        prepaymentTotal: number;
+      }
+    > = {};
+
+    let radioGuideParticipants = 0;
+
     dayExcursions.forEach((exc) => {
       const tourType = tourTypes.find((t) => t.id === exc.tourTypeId);
-      const name = tourType?.name || "Неизвестный тип";
-      if (!grouped[name]) grouped[name] = [];
-      grouped[name].push(exc);
+      const typeName = tourType?.name || "Неизвестный тип";
+
+      if (!tourTypeMap[exc.tourTypeId]) {
+        tourTypeMap[exc.tourTypeId] = {
+          name: typeName,
+          buses: [],
+          freeCount: 0,
+          byTourCount: 0,
+          paidCount: 0,
+          services: [],
+          guideExpenses: [],
+          prepaymentTotal: 0,
+        };
+      }
+
+      const group = tourTypeMap[exc.tourTypeId];
+
+      const total = exc.fullPriceCount + exc.discountedCount;
+      group.buses.push({ total, discounted: exc.discountedCount });
+      group.freeCount += exc.freeCount;
+      group.byTourCount += exc.byTourCount;
+      group.paidCount += exc.paidCount;
+
+      if (tourType?.hasRadioGuides) {
+        radioGuideParticipants += total + exc.freeCount + exc.byTourCount + exc.paidCount;
+      }
+
+      exc.additionalServices.forEach((svc) => {
+        const service = additionalServices.find((s) => s.id === svc.serviceId);
+        if (service) {
+          const existing = group.services.find((s) => s.name === service.name);
+          if (existing) {
+            existing.count += svc.count;
+          } else {
+            group.services.push({ name: service.name, count: svc.count });
+          }
+        }
+      });
+
+      const guideExpense = exc.expenses.find((e) => e.type === "guide" || e.type === "Экскурсовод");
+      if (guideExpense) {
+        group.guideExpenses.push(guideExpense.amount);
+      }
+
+      const prepayment = exc.expenses.find((e) => e.type === "prepayment" || e.type === "Предоплата");
+      if (prepayment) {
+        group.prepaymentTotal += prepayment.amount;
+      }
+    });
+
+    const tourTypeReports = Object.values(tourTypeMap);
+
+    const additionalExpenses: { description: string; amount: number }[] = [];
+    const additionalIncome: { description: string; amount: number }[] = [];
+
+    dayTransactions.forEach((t) => {
+      if (t.type === "expense") {
+        additionalExpenses.push({ description: t.description, amount: t.amount });
+      } else {
+        additionalIncome.push({ description: t.description, amount: t.amount });
+      }
     });
 
     let totalRevenue = 0;
     let totalExpenses = 0;
-    let radioGuideParticipants = 0;
 
-    const tourTypeReports: {
-      name: string;
-      buses: { total: number; discounted: number }[];
-      freeCount: number;
-      byTourCount: number;
-      paidCount: number;
-      services: { name: string; count: number }[];
-      guideExpenses: number[];
-      prepaymentTotal: number;
-    }[] = [];
-
-    Object.entries(grouped).forEach(([typeName, excs]) => {
-      const tourType = tourTypes.find((t) => t.name === typeName);
-      const buses: { total: number; discounted: number }[] = [];
-      let freeCount = 0;
-      let byTourCount = 0;
-      let paidCount = 0;
-      const servicesMap: Record<string, number> = {};
-      const guideExpenses: number[] = [];
-      let prepaymentTotal = 0;
-
-      excs.forEach((exc) => {
-        const total = exc.fullPriceCount + exc.discountedCount + exc.freeCount + exc.tourPackageCount + exc.byTourCount + exc.paidCount;
-        buses.push({ total, discounted: exc.discountedCount });
-
-        freeCount += exc.freeCount;
-        byTourCount += exc.byTourCount;
-        paidCount += exc.paidCount;
-
-        exc.additionalServices.forEach((svc) => {
-          const service = additionalServices.find((s) => s.id === svc.serviceId);
-          if (service && svc.count > 0) {
-            servicesMap[service.name] = (servicesMap[service.name] || 0) + svc.count;
-          }
-        });
-
-        let guideExp = 0;
-        exc.expenses.forEach((exp) => {
-          if (exp.type === "Экскурсовод") {
-            guideExp += exp.amount;
-          } else if (exp.type === "Предоплата") {
-            prepaymentTotal += exp.amount;
-          }
-          totalExpenses += exp.amount;
-        });
-        if (guideExp > 0) guideExpenses.push(guideExp);
-
-        const ticketRevenue =
-          exc.fullPriceCount * (tourType?.fullPrice || 0) +
-          exc.discountedCount * (tourType?.discountedPrice || 0);
-        totalRevenue += ticketRevenue;
-
-        exc.additionalServices.forEach((svc) => {
-          const service = additionalServices.find((s) => s.id === svc.serviceId);
-          if (service) {
-            totalRevenue += svc.count * service.price;
-          }
-        });
-
-        if (tourType?.hasRadioGuides) {
-          radioGuideParticipants += total;
+    dayExcursions.forEach((exc) => {
+      const tourType = tourTypes.find((t) => t.id === exc.tourTypeId);
+      if (tourType) {
+        totalRevenue += exc.fullPriceCount * tourType.fullPrice;
+        totalRevenue += exc.discountedCount * tourType.discountedPrice;
+      }
+      exc.additionalServices.forEach((svc) => {
+        const service = additionalServices.find((s) => s.id === svc.serviceId);
+        if (service) {
+          totalRevenue += svc.count * service.price;
         }
       });
-
-      const services = Object.entries(servicesMap).map(([name, count]) => ({ name, count }));
-
-      tourTypeReports.push({
-        name: typeName,
-        buses,
-        freeCount,
-        byTourCount,
-        paidCount,
-        services,
-        guideExpenses,
-        prepaymentTotal,
+      exc.expenses.forEach((e) => {
+        totalExpenses += e.amount;
       });
     });
 
-    const additionalExpenses = dayTransactions
-      .filter((t) => t.type === "expense")
-      .map((t) => ({ description: t.description, amount: t.amount }));
-
-    const additionalIncome = dayTransactions
-      .filter((t) => t.type === "income")
-      .map((t) => ({ description: t.description, amount: t.amount }));
-
-    additionalExpenses.forEach((e) => (totalExpenses += e.amount));
-    additionalIncome.forEach((i) => (totalRevenue += i.amount));
+    dayTransactions.forEach((t) => {
+      if (t.type === "income") {
+        totalRevenue += t.amount;
+      } else {
+        totalExpenses += t.amount;
+      }
+    });
 
     const radioGuideTotal = radioGuideParticipants * radioGuidePrice;
+    totalRevenue += radioGuideTotal;
+
     const profit = totalRevenue - totalExpenses;
 
     return {
       tourTypeReports,
       additionalExpenses,
       additionalIncome,
+      totalRevenue,
+      totalExpenses,
+      profit,
       radioGuideParticipants,
       radioGuideTotal,
-      profit,
+      excursionCount: dayExcursions.length,
+      transactionCount: dayTransactions.length,
     };
   }, [selectedDate, excursions, transactions, tourTypes, additionalServices, radioGuidePrice]);
 
   const generateReportText = () => {
     const lines: string[] = [];
 
-    lines.push(`📅 Отчет за ${formatDateDisplay(selectedDate)}`);
+    lines.push(`Отчет за ${formatDateDisplay(selectedDate)}`);
     lines.push("");
 
     reportData.tourTypeReports.forEach((report) => {
@@ -314,11 +382,11 @@ export default function DailyReportScreen() {
       });
 
       report.guideExpenses.forEach((exp) => {
-        lines.push(`${formatMoney(exp)}₽ экс`);
+        lines.push(`${formatMoney(exp)}р экс`);
       });
 
       if (report.prepaymentTotal > 0) {
-        lines.push(`${formatMoney(report.prepaymentTotal)}₽ пред`);
+        lines.push(`${formatMoney(report.prepaymentTotal)}р пред`);
       }
 
       lines.push("");
@@ -327,7 +395,7 @@ export default function DailyReportScreen() {
     if (reportData.additionalExpenses.length > 0) {
       lines.push("Дополнительные расходы:");
       reportData.additionalExpenses.forEach((exp) => {
-        lines.push(`${exp.description} - ${formatMoney(exp.amount)}₽`);
+        lines.push(`${exp.description} - ${formatMoney(exp.amount)}р`);
       });
       lines.push("");
     }
@@ -335,14 +403,14 @@ export default function DailyReportScreen() {
     if (reportData.additionalIncome.length > 0) {
       lines.push("Дополнительные доходы:");
       reportData.additionalIncome.forEach((inc) => {
-        lines.push(`${inc.description} - ${formatMoney(inc.amount)}₽`);
+        lines.push(`${inc.description} - ${formatMoney(inc.amount)}р`);
       });
       lines.push("");
     }
 
     if (reportData.radioGuideParticipants > 0) {
       lines.push(
-        `Радиогиды работали: ${reportData.radioGuideParticipants} шт. = ${formatMoney(reportData.radioGuideTotal)}₽`
+        `Радиогиды работали: ${reportData.radioGuideParticipants} шт. = ${formatMoney(reportData.radioGuideTotal)}р`
       );
       lines.push("");
     }
@@ -394,7 +462,20 @@ export default function DailyReportScreen() {
   return (
     <ScreenKeyboardAwareScrollView>
       <View style={styles.container}>
-        <ThemedText style={styles.header}>Ежедневный отчёт</ThemedText>
+        <View style={styles.headerRow}>
+          <ThemedText style={styles.header}>Ежедневный отчёт</ThemedText>
+          {hasUnsavedChanges ? (
+            <View style={[styles.statusBadge, { backgroundColor: theme.warning }]}>
+              <Feather name="edit-3" size={12} color="#fff" />
+              <ThemedText style={styles.statusText}>Изменено</ThemedText>
+            </View>
+          ) : hasExistingReport ? (
+            <View style={[styles.statusBadge, { backgroundColor: theme.success }]}>
+              <Feather name="check" size={12} color="#fff" />
+              <ThemedText style={styles.statusText}>Сохранено</ThemedText>
+            </View>
+          ) : null}
+        </View>
 
         <Pressable
           style={[styles.dateButton, { backgroundColor: theme.backgroundSecondary }]}
@@ -404,9 +485,9 @@ export default function DailyReportScreen() {
           <ThemedText style={styles.dateText}>{formatDateDisplay(selectedDate)}</ThemedText>
         </Pressable>
 
-        {showDatePicker && (
+        {showDatePicker ? (
           <View>
-            {Platform.OS === "ios" && (
+            {Platform.OS === "ios" ? (
               <View style={styles.datePickerButtons}>
                 <Pressable onPress={cancelDateSelection} style={styles.datePickerButton}>
                   <ThemedText style={{ color: theme.textSecondary }}>Отмена</ThemedText>
@@ -415,7 +496,7 @@ export default function DailyReportScreen() {
                   <ThemedText style={{ color: theme.primary, fontWeight: "600" }}>Готово</ThemedText>
                 </Pressable>
               </View>
-            )}
+            ) : null}
             <DateTimePicker
               value={tempDate}
               mode="date"
@@ -424,189 +505,241 @@ export default function DailyReportScreen() {
               maximumDate={new Date()}
             />
           </View>
+        ) : null}
+
+        {loading ? (
+          <ActivityIndicator size="large" color={theme.primary} style={{ marginVertical: Spacing.xl }} />
+        ) : (
+          <>
+            <CollapsibleSection 
+              title={`Экскурсии (${reportData.excursionCount})`} 
+              icon="map"
+              defaultExpanded={true}
+            >
+              {reportData.tourTypeReports.length === 0 ? (
+                <ThemedText style={[styles.emptyText, { color: theme.textSecondary }]}>
+                  Нет экскурсий за этот день
+                </ThemedText>
+              ) : (
+                reportData.tourTypeReports.map((report, idx) => (
+                  <View key={idx} style={styles.tourTypeBlock}>
+                    <ThemedText style={styles.tourTypeName}>{report.name}</ThemedText>
+                    <ThemedText style={{ color: theme.textSecondary }}>
+                      {report.buses.map((b) => `${b.total}, ${b.discounted}`).join("; ")}
+                    </ThemedText>
+
+                    {report.freeCount > 0 ? (
+                      <ThemedText style={{ color: theme.textSecondary }}>
+                        {report.freeCount} бесплатно
+                      </ThemedText>
+                    ) : null}
+                    {report.byTourCount > 0 ? (
+                      <ThemedText style={{ color: theme.textSecondary }}>
+                        {report.byTourCount} по туру
+                      </ThemedText>
+                    ) : null}
+                    {report.paidCount > 0 ? (
+                      <ThemedText style={{ color: theme.textSecondary }}>
+                        {report.paidCount} оплаченных
+                      </ThemedText>
+                    ) : null}
+
+                    {report.services.map((svc, sIdx) => (
+                      <ThemedText key={sIdx} style={{ color: theme.textSecondary }}>
+                        {svc.count} {svc.name}
+                      </ThemedText>
+                    ))}
+
+                    {report.guideExpenses.map((exp, eIdx) => (
+                      <ThemedText key={eIdx} style={{ color: theme.textSecondary }}>
+                        {formatMoney(exp)}р экс
+                      </ThemedText>
+                    ))}
+
+                    {report.prepaymentTotal > 0 ? (
+                      <ThemedText style={{ color: theme.textSecondary }}>
+                        {formatMoney(report.prepaymentTotal)}р пред
+                      </ThemedText>
+                    ) : null}
+                  </View>
+                ))
+              )}
+
+              {reportData.radioGuideParticipants > 0 ? (
+                <View style={styles.radioGuideRow}>
+                  <Feather name="radio" size={16} color={theme.primary} />
+                  <ThemedText style={{ color: theme.textSecondary, marginLeft: Spacing.xs }}>
+                    Радиогиды: {reportData.radioGuideParticipants} шт. = {formatMoney(reportData.radioGuideTotal)}р
+                  </ThemedText>
+                </View>
+              ) : null}
+            </CollapsibleSection>
+
+            {(reportData.additionalExpenses.length > 0 || reportData.additionalIncome.length > 0) ? (
+              <CollapsibleSection 
+                title={`Транзакции (${reportData.transactionCount})`} 
+                icon="credit-card"
+                defaultExpanded={false}
+              >
+                {reportData.additionalExpenses.length > 0 ? (
+                  <View style={styles.transactionGroup}>
+                    <ThemedText style={[styles.transactionGroupTitle, { color: theme.error }]}>
+                      Расходы:
+                    </ThemedText>
+                    {reportData.additionalExpenses.map((exp, idx) => (
+                      <ThemedText key={idx} style={{ color: theme.textSecondary }}>
+                        {exp.description} - {formatMoney(exp.amount)}р
+                      </ThemedText>
+                    ))}
+                  </View>
+                ) : null}
+
+                {reportData.additionalIncome.length > 0 ? (
+                  <View style={styles.transactionGroup}>
+                    <ThemedText style={[styles.transactionGroupTitle, { color: theme.success }]}>
+                      Доходы:
+                    </ThemedText>
+                    {reportData.additionalIncome.map((inc, idx) => (
+                      <ThemedText key={idx} style={{ color: theme.textSecondary }}>
+                        {inc.description} - {formatMoney(inc.amount)}р
+                      </ThemedText>
+                    ))}
+                  </View>
+                ) : null}
+              </CollapsibleSection>
+            ) : null}
+
+            <CollapsibleSection 
+              title="Финансовая сводка" 
+              icon="dollar-sign"
+              defaultExpanded={true}
+            >
+              <View style={styles.summaryRow}>
+                <ThemedText style={styles.summaryLabel}>Выручка:</ThemedText>
+                <ThemedText style={[styles.summaryValue, { color: theme.success }]}>
+                  {formatMoney(reportData.totalRevenue)}р
+                </ThemedText>
+              </View>
+              <View style={styles.summaryRow}>
+                <ThemedText style={styles.summaryLabel}>Расходы:</ThemedText>
+                <ThemedText style={[styles.summaryValue, { color: theme.error }]}>
+                  {formatMoney(reportData.totalExpenses)}р
+                </ThemedText>
+              </View>
+              <View style={[styles.summaryRow, styles.profitRow]}>
+                <ThemedText style={styles.profitLabel}>Прибыль:</ThemedText>
+                <ThemedText style={[styles.profitValue, { color: theme.primary }]}>
+                  {formatMoney(reportData.profit)}р
+                </ThemedText>
+              </View>
+            </CollapsibleSection>
+
+            <CollapsibleSection 
+              title="Ручной ввод" 
+              icon="edit"
+              defaultExpanded={true}
+            >
+              <View style={styles.inputRow}>
+                <ThemedText style={styles.inputLabel}>Положил на Р/с:</ThemedText>
+                <TextInput
+                  key={`bank-${selectedDateStr}`}
+                  style={[styles.input, { backgroundColor: theme.backgroundTertiary, color: theme.text }]}
+                  value={bankDeposit}
+                  onChangeText={setBankDeposit}
+                  placeholder="Сумма"
+                  placeholderTextColor={theme.textSecondary}
+                  keyboardType="numeric"
+                />
+              </View>
+
+              <View style={styles.inputRow}>
+                <ThemedText style={styles.inputLabel}>Положил в сейф:</ThemedText>
+                <TextInput
+                  key={`safe-${selectedDateStr}`}
+                  style={[styles.input, { backgroundColor: theme.backgroundTertiary, color: theme.text }]}
+                  value={safeDeposit}
+                  onChangeText={setSafeDeposit}
+                  placeholder="Сумма"
+                  placeholderTextColor={theme.textSecondary}
+                  keyboardType="numeric"
+                />
+              </View>
+
+              <View style={styles.inputRow}>
+                <ThemedText style={styles.inputLabel}>Денег:</ThemedText>
+                <TextInput
+                  key={`cash-${selectedDateStr}`}
+                  style={[styles.input, { backgroundColor: theme.backgroundTertiary, color: theme.text }]}
+                  value={cashAmount}
+                  onChangeText={setCashAmount}
+                  placeholder="Наличные"
+                  placeholderTextColor={theme.textSecondary}
+                  keyboardType="numeric"
+                />
+              </View>
+
+              <View style={styles.inputRow}>
+                <ThemedText style={styles.inputLabel}>Доход:</ThemedText>
+                <TextInput
+                  key={`income-${selectedDateStr}`}
+                  style={[styles.input, { backgroundColor: theme.backgroundTertiary, color: theme.text }]}
+                  value={incomeField}
+                  onChangeText={setIncomeField}
+                  placeholder="Можно +, -, ="
+                  placeholderTextColor={theme.textSecondary}
+                  keyboardType="default"
+                />
+              </View>
+              <View style={styles.symbolButtons}>
+                <Pressable
+                  style={[styles.symbolButton, { backgroundColor: theme.backgroundTertiary }]}
+                  onPress={() => setIncomeField((prev) => prev + "+")}
+                >
+                  <ThemedText style={styles.symbolButtonText}>+</ThemedText>
+                </Pressable>
+                <Pressable
+                  style={[styles.symbolButton, { backgroundColor: theme.backgroundTertiary }]}
+                  onPress={() => setIncomeField((prev) => prev + "-")}
+                >
+                  <ThemedText style={styles.symbolButtonText}>-</ThemedText>
+                </Pressable>
+                <Pressable
+                  style={[styles.symbolButton, { backgroundColor: theme.backgroundTertiary }]}
+                  onPress={() => setIncomeField((prev) => prev + "=")}
+                >
+                  <ThemedText style={styles.symbolButtonText}>=</ThemedText>
+                </Pressable>
+              </View>
+            </CollapsibleSection>
+          </>
         )}
 
-        <ThemedView style={[styles.reportContainer, { backgroundColor: theme.backgroundSecondary }]}>
-          <ThemedText style={styles.reportTitle}>
-            📅 Отчет за {formatDateDisplay(selectedDate)}
-          </ThemedText>
-
-          {reportData.tourTypeReports.length === 0 ? (
-            <ThemedText style={[styles.emptyText, { color: theme.textSecondary }]}>
-              Нет экскурсий за этот день
-            </ThemedText>
-          ) : (
-            reportData.tourTypeReports.map((report, idx) => (
-              <View key={idx} style={styles.tourTypeBlock}>
-                <ThemedText style={styles.tourTypeName}>{report.name}</ThemedText>
-                <ThemedText style={{ color: theme.textSecondary }}>
-                  {report.buses.map((b) => `${b.total}, ${b.discounted}`).join("; ")}
-                </ThemedText>
-
-                {report.freeCount > 0 && (
-                  <ThemedText style={{ color: theme.textSecondary }}>
-                    {report.freeCount} бесплатно
-                  </ThemedText>
-                )}
-                {report.byTourCount > 0 && (
-                  <ThemedText style={{ color: theme.textSecondary }}>
-                    {report.byTourCount} по туру
-                  </ThemedText>
-                )}
-                {report.paidCount > 0 && (
-                  <ThemedText style={{ color: theme.textSecondary }}>
-                    {report.paidCount} оплаченных
-                  </ThemedText>
-                )}
-
-                {report.services.map((svc, sIdx) => (
-                  <ThemedText key={sIdx} style={{ color: theme.textSecondary }}>
-                    {svc.count} {svc.name}
-                  </ThemedText>
-                ))}
-
-                {report.guideExpenses.map((exp, eIdx) => (
-                  <ThemedText key={eIdx} style={{ color: theme.textSecondary }}>
-                    {formatMoney(exp)}₽ экс
-                  </ThemedText>
-                ))}
-
-                {report.prepaymentTotal > 0 && (
-                  <ThemedText style={{ color: theme.textSecondary }}>
-                    {formatMoney(report.prepaymentTotal)}₽ пред
-                  </ThemedText>
-                )}
-              </View>
-            ))
-          )}
-
-          {reportData.additionalExpenses.length > 0 && (
-            <View style={styles.section}>
-              <ThemedText style={styles.sectionTitle}>Дополнительные расходы:</ThemedText>
-              {reportData.additionalExpenses.map((exp, idx) => (
-                <ThemedText key={idx} style={{ color: theme.textSecondary }}>
-                  {exp.description} - {formatMoney(exp.amount)}₽
-                </ThemedText>
-              ))}
-            </View>
-          )}
-
-          {reportData.additionalIncome.length > 0 && (
-            <View style={styles.section}>
-              <ThemedText style={styles.sectionTitle}>Дополнительные доходы:</ThemedText>
-              {reportData.additionalIncome.map((inc, idx) => (
-                <ThemedText key={idx} style={{ color: theme.textSecondary }}>
-                  {inc.description} - {formatMoney(inc.amount)}₽
-                </ThemedText>
-              ))}
-            </View>
-          )}
-
-          {reportData.radioGuideParticipants > 0 && (
-            <View style={styles.section}>
-              <ThemedText style={{ color: theme.textSecondary }}>
-                Радиогиды работали: {reportData.radioGuideParticipants} шт. ={" "}
-                {formatMoney(reportData.radioGuideTotal)}₽
-              </ThemedText>
-            </View>
-          )}
-        </ThemedView>
-
-        <View style={styles.inputsSection}>
-          <ThemedText style={styles.inputLabel}>Положил на Р/с:</ThemedText>
-          <TextInput
-            key={`bank-${selectedDateStr}`}
-            style={[styles.input, { backgroundColor: theme.backgroundSecondary, color: theme.text }]}
-            value={bankDeposit}
-            onChangeText={setBankDeposit}
-            placeholder="Сумма"
-            placeholderTextColor={theme.textSecondary}
-            keyboardType="numeric"
-          />
-
-          <ThemedText style={styles.inputLabel}>Положил в сейф:</ThemedText>
-          <TextInput
-            key={`safe-${selectedDateStr}`}
-            style={[styles.input, { backgroundColor: theme.backgroundSecondary, color: theme.text }]}
-            value={safeDeposit}
-            onChangeText={setSafeDeposit}
-            placeholder="Сумма"
-            placeholderTextColor={theme.textSecondary}
-            keyboardType="numeric"
-          />
-
-          <View style={styles.profitRow}>
-            <ThemedText style={styles.profitLabel}>Всего (прибыль):</ThemedText>
-            <ThemedText style={[styles.profitValue, { color: theme.primary }]}>
-              {formatMoney(reportData.profit)}₽
-            </ThemedText>
-          </View>
-
-          <ThemedText style={styles.inputLabel}>Денег:</ThemedText>
-          <TextInput
-            key={`cash-${selectedDateStr}`}
-            style={[styles.input, { backgroundColor: theme.backgroundSecondary, color: theme.text }]}
-            value={cashAmount}
-            onChangeText={setCashAmount}
-            placeholder="Наличные"
-            placeholderTextColor={theme.textSecondary}
-            keyboardType="numeric"
-          />
-
-          <ThemedText style={styles.inputLabel}>Доход:</ThemedText>
-          <TextInput
-            key={`income-${selectedDateStr}`}
-            style={[styles.input, { backgroundColor: theme.backgroundSecondary, color: theme.text }]}
-            value={incomeField}
-            onChangeText={setIncomeField}
-            placeholder="Доход (можно использовать + - =)"
-            placeholderTextColor={theme.textSecondary}
-            keyboardType="default"
-          />
-          <View style={styles.symbolButtons}>
-            <Pressable
-              style={[styles.symbolButton, { backgroundColor: theme.backgroundTertiary }]}
-              onPress={() => setIncomeField((prev) => prev + "+")}
-            >
-              <ThemedText style={styles.symbolButtonText}>+</ThemedText>
-            </Pressable>
-            <Pressable
-              style={[styles.symbolButton, { backgroundColor: theme.backgroundTertiary }]}
-              onPress={() => setIncomeField((prev) => prev + "-")}
-            >
-              <ThemedText style={styles.symbolButtonText}>-</ThemedText>
-            </Pressable>
-            <Pressable
-              style={[styles.symbolButton, { backgroundColor: theme.backgroundTertiary }]}
-              onPress={() => setIncomeField((prev) => prev + "=")}
-            >
-              <ThemedText style={styles.symbolButtonText}>=</ThemedText>
-            </Pressable>
-          </View>
-
-          {loading ? (
-            <ActivityIndicator size="small" color={theme.primary} style={{ marginTop: Spacing.md }} />
-          ) : null}
-
+        <View style={styles.actionButtons}>
           <Pressable
-            style={[styles.saveButton, { backgroundColor: theme.success, opacity: saving ? 0.6 : 1 }]}
+            style={[
+              styles.saveButton, 
+              { 
+                backgroundColor: hasUnsavedChanges ? theme.success : theme.backgroundSecondary,
+                opacity: saving ? 0.6 : 1 
+              }
+            ]}
             onPress={saveReportData}
             disabled={saving}
           >
-            <Feather name="save" size={20} color="#fff" />
-            <ThemedText style={styles.copyButtonText}>
-              {saving ? "Сохранение..." : hasExistingReport ? "Обновить данные" : "Сохранить данные"}
+            <Feather name="save" size={20} color={hasUnsavedChanges ? "#fff" : theme.textSecondary} />
+            <ThemedText style={[styles.buttonText, { color: hasUnsavedChanges ? "#fff" : theme.textSecondary }]}>
+              {saving ? "Сохранение..." : "Сохранить"}
             </ThemedText>
           </Pressable>
-        </View>
 
-        <Pressable
-          style={[styles.copyButton, { backgroundColor: theme.primary }]}
-          onPress={copyToClipboard}
-        >
-          <Feather name="copy" size={20} color="#fff" />
-          <ThemedText style={styles.copyButtonText}>Скопировать отчёт</ThemedText>
-        </Pressable>
+          <Pressable
+            style={[styles.copyButton, { backgroundColor: theme.primary }]}
+            onPress={copyToClipboard}
+          >
+            <Feather name="copy" size={20} color="#fff" />
+            <ThemedText style={styles.buttonText}>Скопировать</ThemedText>
+          </Pressable>
+        </View>
       </View>
     </ScreenKeyboardAwareScrollView>
   );
@@ -617,11 +750,29 @@ const styles = StyleSheet.create({
     flex: 1,
     padding: Spacing.md,
   },
-  header: {
-    fontSize: 24,
-    fontWeight: "700",
+  headerRow: {
+    flexDirection: "row",
+    alignItems: "center",
+    justifyContent: "center",
     marginBottom: Spacing.lg,
-    textAlign: "center",
+    gap: Spacing.sm,
+  },
+  header: {
+    fontSize: 22,
+    fontWeight: "700",
+  },
+  statusBadge: {
+    flexDirection: "row",
+    alignItems: "center",
+    paddingHorizontal: Spacing.sm,
+    paddingVertical: 4,
+    borderRadius: BorderRadius.sm,
+    gap: 4,
+  },
+  statusText: {
+    color: "#fff",
+    fontSize: 11,
+    fontWeight: "600",
   },
   dateButton: {
     flexDirection: "row",
@@ -629,22 +780,36 @@ const styles = StyleSheet.create({
     justifyContent: "center",
     padding: Spacing.md,
     borderRadius: BorderRadius.md,
-    marginBottom: Spacing.lg,
+    marginBottom: Spacing.md,
     gap: Spacing.sm,
   },
   dateText: {
     fontSize: 18,
     fontWeight: "600",
   },
-  reportContainer: {
-    padding: Spacing.md,
+  collapsibleContainer: {
     borderRadius: BorderRadius.md,
-    marginBottom: Spacing.lg,
-  },
-  reportTitle: {
-    fontSize: 18,
-    fontWeight: "700",
     marginBottom: Spacing.md,
+    overflow: "hidden",
+  },
+  collapsibleHeader: {
+    flexDirection: "row",
+    alignItems: "center",
+    justifyContent: "space-between",
+    padding: Spacing.md,
+  },
+  collapsibleTitleRow: {
+    flexDirection: "row",
+    alignItems: "center",
+    gap: Spacing.sm,
+  },
+  collapsibleTitle: {
+    fontSize: 16,
+    fontWeight: "600",
+  },
+  collapsibleContent: {
+    paddingHorizontal: Spacing.md,
+    paddingBottom: Spacing.md,
   },
   emptyText: {
     textAlign: "center",
@@ -654,44 +819,44 @@ const styles = StyleSheet.create({
     marginBottom: Spacing.md,
   },
   tourTypeName: {
-    fontSize: 16,
+    fontSize: 15,
     fontWeight: "600",
     marginBottom: Spacing.xs,
   },
-  section: {
-    marginTop: Spacing.md,
-    paddingTop: Spacing.md,
+  radioGuideRow: {
+    flexDirection: "row",
+    alignItems: "center",
+    marginTop: Spacing.sm,
+    paddingTop: Spacing.sm,
     borderTopWidth: 1,
     borderTopColor: "rgba(255,255,255,0.1)",
   },
-  sectionTitle: {
+  transactionGroup: {
+    marginBottom: Spacing.sm,
+  },
+  transactionGroupTitle: {
     fontSize: 14,
     fontWeight: "600",
     marginBottom: Spacing.xs,
   },
-  inputsSection: {
-    marginBottom: Spacing.lg,
-  },
-  inputLabel: {
-    fontSize: 14,
-    fontWeight: "500",
-    marginBottom: Spacing.xs,
-  },
-  input: {
-    padding: Spacing.md,
-    borderRadius: BorderRadius.md,
-    marginBottom: Spacing.md,
-    fontSize: 16,
-  },
-  profitRow: {
+  summaryRow: {
     flexDirection: "row",
     justifyContent: "space-between",
     alignItems: "center",
-    marginVertical: Spacing.md,
-    paddingVertical: Spacing.md,
+    paddingVertical: Spacing.xs,
+  },
+  summaryLabel: {
+    fontSize: 14,
+  },
+  summaryValue: {
+    fontSize: 16,
+    fontWeight: "600",
+  },
+  profitRow: {
+    marginTop: Spacing.sm,
+    paddingTop: Spacing.sm,
     borderTopWidth: 1,
-    borderBottomWidth: 1,
-    borderColor: "rgba(255,255,255,0.1)",
+    borderTopColor: "rgba(255,255,255,0.1)",
   },
   profitLabel: {
     fontSize: 16,
@@ -701,26 +866,58 @@ const styles = StyleSheet.create({
     fontSize: 20,
     fontWeight: "700",
   },
+  inputRow: {
+    marginBottom: Spacing.sm,
+  },
+  inputLabel: {
+    fontSize: 13,
+    fontWeight: "500",
+    marginBottom: Spacing.xs,
+  },
+  input: {
+    padding: Spacing.sm,
+    borderRadius: BorderRadius.sm,
+    fontSize: 15,
+  },
+  symbolButtons: {
+    flexDirection: "row",
+    gap: Spacing.sm,
+  },
+  symbolButton: {
+    paddingVertical: Spacing.xs,
+    paddingHorizontal: Spacing.md,
+    borderRadius: BorderRadius.sm,
+  },
+  symbolButtonText: {
+    fontSize: 16,
+    fontWeight: "600",
+  },
+  actionButtons: {
+    flexDirection: "row",
+    gap: Spacing.sm,
+    marginTop: Spacing.md,
+  },
   saveButton: {
+    flex: 1,
     flexDirection: "row",
     alignItems: "center",
     justifyContent: "center",
     padding: Spacing.md,
     borderRadius: BorderRadius.md,
-    gap: Spacing.sm,
-    marginTop: Spacing.lg,
+    gap: Spacing.xs,
   },
   copyButton: {
+    flex: 1,
     flexDirection: "row",
     alignItems: "center",
     justifyContent: "center",
     padding: Spacing.md,
     borderRadius: BorderRadius.md,
-    gap: Spacing.sm,
+    gap: Spacing.xs,
   },
-  copyButtonText: {
+  buttonText: {
     color: "#fff",
-    fontSize: 16,
+    fontSize: 14,
     fontWeight: "600",
   },
   datePickerButtons: {
@@ -731,19 +928,5 @@ const styles = StyleSheet.create({
   },
   datePickerButton: {
     padding: Spacing.sm,
-  },
-  symbolButtons: {
-    flexDirection: "row",
-    gap: Spacing.sm,
-    marginBottom: Spacing.md,
-  },
-  symbolButton: {
-    paddingVertical: Spacing.sm,
-    paddingHorizontal: Spacing.lg,
-    borderRadius: BorderRadius.md,
-  },
-  symbolButtonText: {
-    fontSize: 18,
-    fontWeight: "600",
   },
 });
