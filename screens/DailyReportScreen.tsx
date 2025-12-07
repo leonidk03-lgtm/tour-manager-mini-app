@@ -1,4 +1,4 @@
-import { useState, useMemo, useEffect, useCallback } from "react";
+import { useState, useMemo, useEffect, useCallback, useRef } from "react";
 import { View, StyleSheet, Pressable, TextInput, Alert, Platform, ActivityIndicator } from "react-native";
 import { Feather } from "@expo/vector-icons";
 import * as Clipboard from "expo-clipboard";
@@ -17,9 +17,11 @@ export default function DailyReportScreen() {
   const { isAdmin } = useAuth();
   const { excursions, transactions, tourTypes, additionalServices, radioGuidePrice } = useData();
 
-  const [selectedDate, setSelectedDate] = useState(new Date());
-  const [tempDate, setTempDate] = useState(new Date());
+  const today = useRef(new Date()).current;
+  const [selectedDate, setSelectedDate] = useState(today);
+  const [tempDate, setTempDate] = useState(today);
   const [showDatePicker, setShowDatePicker] = useState(false);
+  const loadingDateRef = useRef<string | null>(null);
 
   const [bankDeposit, setBankDeposit] = useState("");
   const [safeDeposit, setSafeDeposit] = useState("");
@@ -34,10 +36,21 @@ export default function DailyReportScreen() {
   const loadReportData = useCallback(async (date: Date) => {
     const dateStr = date.toISOString().split("T")[0];
     const key = getStorageKey(dateStr);
+    
+    // Prevent race conditions - only process if this is still the current date
+    loadingDateRef.current = dateStr;
     console.log("Loading report for date:", dateStr, "key:", key);
     setLoading(true);
+    
     try {
       const stored = await AsyncStorage.getItem(key);
+      
+      // Check if date changed while we were loading
+      if (loadingDateRef.current !== dateStr) {
+        console.log("Date changed during load, skipping update for:", dateStr);
+        return;
+      }
+      
       console.log("Stored data:", stored);
       if (stored) {
         const data = JSON.parse(stored);
@@ -64,7 +77,9 @@ export default function DailyReportScreen() {
     } catch (err) {
       console.error("Error loading report:", err);
     } finally {
-      setLoading(false);
+      if (loadingDateRef.current === dateStr) {
+        setLoading(false);
+      }
     }
   }, []);
 
