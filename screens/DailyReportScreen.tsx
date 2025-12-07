@@ -262,14 +262,14 @@ export default function DailyReportScreen() {
 
       const group = tourTypeMap[exc.tourTypeId];
 
-      const total = exc.fullPriceCount + exc.discountedCount;
+      const total = exc.fullPriceCount + exc.discountedCount + exc.freeCount + exc.byTourCount + exc.paidCount;
       group.buses.push({ total, discounted: exc.discountedCount });
       group.freeCount += exc.freeCount;
       group.byTourCount += exc.byTourCount;
       group.paidCount += exc.paidCount;
 
       if (tourType?.hasRadioGuides) {
-        radioGuideParticipants += total + exc.freeCount + exc.byTourCount + exc.paidCount;
+        radioGuideParticipants += total;
       }
 
       exc.additionalServices.forEach((svc) => {
