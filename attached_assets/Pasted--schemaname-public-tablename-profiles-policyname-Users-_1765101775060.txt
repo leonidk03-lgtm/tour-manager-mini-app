@@ -1,0 +1,232 @@
+[
+  {
+    "schemaname": "public",
+    "tablename": "profiles",
+    "policyname": "Users can view own profile",
+    "permissive": "PERMISSIVE",
+    "roles": "{public}",
+    "cmd": "SELECT",
+    "qual": "(auth.uid() = id)",
+    "with_check": null
+  },
+  {
+    "schemaname": "public",
+    "tablename": "profiles",
+    "policyname": "Admins can view all profiles",
+    "permissive": "PERMISSIVE",
+    "roles": "{public}",
+    "cmd": "SELECT",
+    "qual": "is_admin()",
+    "with_check": null
+  },
+  {
+    "schemaname": "public",
+    "tablename": "profiles",
+    "policyname": "Admins can insert profiles",
+    "permissive": "PERMISSIVE",
+    "roles": "{public}",
+    "cmd": "INSERT",
+    "qual": null,
+    "with_check": "is_admin()"
+  },
+  {
+    "schemaname": "public",
+    "tablename": "tour_types",
+    "policyname": "Anyone can view tour types",
+    "permissive": "PERMISSIVE",
+    "roles": "{public}",
+    "cmd": "SELECT",
+    "qual": "true",
+    "with_check": null
+  },
+  {
+    "schemaname": "public",
+    "tablename": "tour_types",
+    "policyname": "Admins can insert tour types",
+    "permissive": "PERMISSIVE",
+    "roles": "{public}",
+    "cmd": "INSERT",
+    "qual": null,
+    "with_check": "is_admin()"
+  },
+  {
+    "schemaname": "public",
+    "tablename": "tour_types",
+    "policyname": "Admins can update tour types",
+    "permissive": "PERMISSIVE",
+    "roles": "{public}",
+    "cmd": "UPDATE",
+    "qual": "is_admin()",
+    "with_check": null
+  },
+  {
+    "schemaname": "public",
+    "tablename": "tour_types",
+    "policyname": "Admins can delete tour types",
+    "permissive": "PERMISSIVE",
+    "roles": "{public}",
+    "cmd": "DELETE",
+    "qual": "is_admin()",
+    "with_check": null
+  },
+  {
+    "schemaname": "public",
+    "tablename": "additional_services",
+    "policyname": "Anyone can view additional services",
+    "permissive": "PERMISSIVE",
+    "roles": "{public}",
+    "cmd": "SELECT",
+    "qual": "true",
+    "with_check": null
+  },
+  {
+    "schemaname": "public",
+    "tablename": "additional_services",
+    "policyname": "Admins can insert additional services",
+    "permissive": "PERMISSIVE",
+    "roles": "{public}",
+    "cmd": "INSERT",
+    "qual": null,
+    "with_check": "is_admin()"
+  },
+  {
+    "schemaname": "public",
+    "tablename": "additional_services",
+    "policyname": "Admins can update additional services",
+    "permissive": "PERMISSIVE",
+    "roles": "{public}",
+    "cmd": "UPDATE",
+    "qual": "is_admin()",
+    "with_check": null
+  },
+  {
+    "schemaname": "public",
+    "tablename": "additional_services",
+    "policyname": "Admins can delete additional services",
+    "permissive": "PERMISSIVE",
+    "roles": "{public}",
+    "cmd": "DELETE",
+    "qual": "is_admin()",
+    "with_check": null
+  },
+  {
+    "schemaname": "public",
+    "tablename": "radio_guide_kits",
+    "policyname": "radio_guide_kits_insert_admin",
+    "permissive": "PERMISSIVE",
+    "roles": "{authenticated}",
+    "cmd": "INSERT",
+    "qual": null,
+    "with_check": "(EXISTS ( SELECT 1\n   FROM profiles\n  WHERE ((profiles.id = auth.uid()) AND (profiles.role = 'admin'::text))))"
+  },
+  {
+    "schemaname": "public",
+    "tablename": "radio_guide_kits",
+    "policyname": "radio_guide_kits_delete_admin",
+    "permissive": "PERMISSIVE",
+    "roles": "{authenticated}",
+    "cmd": "DELETE",
+    "qual": "(EXISTS ( SELECT 1\n   FROM profiles\n  WHERE ((profiles.id = auth.uid()) AND (profiles.role = 'admin'::text))))",
+    "with_check": null
+  },
+  {
+    "schemaname": "public",
+    "tablename": "radio_guide_kits",
+    "policyname": "radio_guide_kits_all",
+    "permissive": "PERMISSIVE",
+    "roles": "{authenticated}",
+    "cmd": "ALL",
+    "qual": "true",
+    "with_check": "true"
+  },
+  {
+    "schemaname": "public",
+    "tablename": "profiles",
+    "policyname": "New user can create their profile",
+    "permissive": "PERMISSIVE",
+    "roles": "{public}",
+    "cmd": "INSERT",
+    "qual": null,
+    "with_check": "(auth.uid() = id)"
+  },
+  {
+    "schemaname": "public",
+    "tablename": "profiles",
+    "policyname": "Admins can update profiles",
+    "permissive": "PERMISSIVE",
+    "roles": "{public}",
+    "cmd": "UPDATE",
+    "qual": "is_admin()",
+    "with_check": "is_admin()"
+  },
+  {
+    "schemaname": "public",
+    "tablename": "profiles",
+    "policyname": "Admins can delete profiles",
+    "permissive": "PERMISSIVE",
+    "roles": "{public}",
+    "cmd": "DELETE",
+    "qual": "is_admin()",
+    "with_check": null
+  },
+  {
+    "schemaname": "public",
+    "tablename": "profiles",
+    "policyname": "Users can read own profile",
+    "permissive": "PERMISSIVE",
+    "roles": "{public}",
+    "cmd": "SELECT",
+    "qual": "(auth.uid() = id)",
+    "with_check": null
+  },
+  {
+    "schemaname": "public",
+    "tablename": "tour_types",
+    "policyname": "Authenticated users can read tour types",
+    "permissive": "PERMISSIVE",
+    "roles": "{authenticated}",
+    "cmd": "SELECT",
+    "qual": "true",
+    "with_check": null
+  },
+  {
+    "schemaname": "public",
+    "tablename": "additional_services",
+    "policyname": "Authenticated users can read services",
+    "permissive": "PERMISSIVE",
+    "roles": "{authenticated}",
+    "cmd": "SELECT",
+    "qual": "true",
+    "with_check": null
+  },
+  {
+    "schemaname": "public",
+    "tablename": "radio_guide_kits",
+    "policyname": "Authenticated users can read radio kits",
+    "permissive": "PERMISSIVE",
+    "roles": "{authenticated}",
+    "cmd": "SELECT",
+    "qual": "true",
+    "with_check": null
+  },
+  {
+    "schemaname": "public",
+    "tablename": "additional_services",
+    "policyname": "Admins can insert services",
+    "permissive": "PERMISSIVE",
+    "roles": "{authenticated}",
+    "cmd": "INSERT",
+    "qual": null,
+    "with_check": "(( SELECT profiles.role\n   FROM profiles\n  WHERE (profiles.id = auth.uid())) = 'admin'::text)"
+  },
+  {
+    "schemaname": "public",
+    "tablename": "radio_guide_kits",
+    "policyname": "Admins can insert radio kits",
+    "permissive": "PERMISSIVE",
+    "roles": "{authenticated}",
+    "cmd": "INSERT",
+    "qual": null,
+    "with_check": "(( SELECT profiles.role\n   FROM profiles\n  WHERE (profiles.id = auth.uid())) = 'admin'::text)"
+  }
+]
