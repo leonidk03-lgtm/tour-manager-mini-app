@@ -66,6 +66,7 @@ export default function RadioGuidesScreen() {
   
   const [selectedDate, setSelectedDate] = useState(() => new Date().toISOString().split("T")[0]);
   const [showDatePicker, setShowDatePicker] = useState(false);
+  const [activeFilter, setActiveFilter] = useState<"all" | "issued" | "overdue" | "available">("all");
 
   const todayExcursions = useMemo(() => {
     return excursions
@@ -401,38 +402,61 @@ export default function RadioGuidesScreen() {
     </ThemedView>
   );
 
+  const todayIssuedKits = issuedKits.filter(k => !k.isOverdue);
+
   return (
     <>
       <ScreenScrollView>
         <View style={styles.container}>
           <View style={styles.statsRow}>
-            <View style={[styles.statCard, { backgroundColor: theme.warning + "20" }]}>
-              <ThemedText style={[styles.statNumber, { color: theme.warning }]}>
-                {issuedKits.length}
+            <Pressable 
+              style={[
+                styles.statCard, 
+                { 
+                  backgroundColor: activeFilter === "issued" ? theme.warning : theme.warning + "20",
+                  borderWidth: activeFilter === "issued" ? 0 : 0,
+                }
+              ]}
+              onPress={() => setActiveFilter(activeFilter === "issued" ? "all" : "issued")}
+            >
+              <ThemedText style={[styles.statNumber, { color: activeFilter === "issued" ? "#fff" : theme.warning }]}>
+                {todayIssuedKits.length}
               </ThemedText>
-              <ThemedText style={[styles.statLabel, { color: theme.textSecondary }]}>
-                Выдано
+              <ThemedText style={[styles.statLabel, { color: activeFilter === "issued" ? "#fff" : theme.textSecondary }]}>
+                На выдаче
               </ThemedText>
-            </View>
-            <View style={[styles.statCard, { backgroundColor: theme.error + "20" }]}>
-              <ThemedText style={[styles.statNumber, { color: theme.error }]}>
+            </Pressable>
+            <Pressable 
+              style={[
+                styles.statCard, 
+                { backgroundColor: activeFilter === "overdue" ? theme.error : theme.error + "20" }
+              ]}
+              onPress={() => setActiveFilter(activeFilter === "overdue" ? "all" : "overdue")}
+            >
+              <ThemedText style={[styles.statNumber, { color: activeFilter === "overdue" ? "#fff" : theme.error }]}>
                 {overdueKits.length}
               </ThemedText>
-              <ThemedText style={[styles.statLabel, { color: theme.textSecondary }]}>
+              <ThemedText style={[styles.statLabel, { color: activeFilter === "overdue" ? "#fff" : theme.textSecondary }]}>
                 Просрочено
               </ThemedText>
-            </View>
-            <View style={[styles.statCard, { backgroundColor: theme.success + "20" }]}>
-              <ThemedText style={[styles.statNumber, { color: theme.success }]}>
+            </Pressable>
+            <Pressable 
+              style={[
+                styles.statCard, 
+                { backgroundColor: activeFilter === "available" ? theme.success : theme.success + "20" }
+              ]}
+              onPress={() => setActiveFilter(activeFilter === "available" ? "all" : "available")}
+            >
+              <ThemedText style={[styles.statNumber, { color: activeFilter === "available" ? "#fff" : theme.success }]}>
                 {availableKits.length}
               </ThemedText>
-              <ThemedText style={[styles.statLabel, { color: theme.textSecondary }]}>
+              <ThemedText style={[styles.statLabel, { color: activeFilter === "available" ? "#fff" : theme.textSecondary }]}>
                 Доступно
               </ThemedText>
-            </View>
+            </Pressable>
           </View>
           
-          {overdueKits.length > 0 ? (
+          {(activeFilter === "all" || activeFilter === "overdue") && overdueKits.length > 0 ? (
             <View style={styles.section}>
               <View style={styles.sectionHeader}>
                 <Feather name="alert-triangle" size={18} color={theme.error} />
@@ -450,16 +474,16 @@ export default function RadioGuidesScreen() {
             </View>
           ) : null}
           
-          {issuedKits.filter(k => !k.isOverdue).length > 0 ? (
+          {(activeFilter === "all" || activeFilter === "issued") && todayIssuedKits.length > 0 ? (
             <View style={styles.section}>
               <View style={styles.sectionHeader}>
                 <Feather name="clock" size={18} color={theme.warning} />
                 <ThemedText style={[styles.sectionTitle, { color: theme.text }]}>
-                  На выдаче ({issuedKits.filter(k => !k.isOverdue).length})
+                  На выдаче сегодня ({todayIssuedKits.length})
                 </ThemedText>
               </View>
               <View style={styles.kitsList}>
-                {issuedKits.filter(k => !k.isOverdue).map(item => (
+                {todayIssuedKits.map(item => (
                   <View key={item.kit.id}>
                     {renderIssuedKit(item)}
                   </View>
@@ -468,29 +492,40 @@ export default function RadioGuidesScreen() {
             </View>
           ) : null}
           
-          <View style={styles.section}>
-            <View style={styles.sectionHeader}>
-              <Feather name="check-circle" size={18} color={theme.success} />
-              <ThemedText style={[styles.sectionTitle, { color: theme.text }]}>
-                Доступные ({availableKits.length})
-              </ThemedText>
-            </View>
-            {availableKits.length > 0 ? (
-              <View style={styles.kitsList}>
-                {availableKits.map(kit => (
-                  <View key={kit.id}>
-                    {renderAvailableKit(kit)}
-                  </View>
-                ))}
-              </View>
-            ) : (
-              <View style={styles.emptySection}>
-                <ThemedText style={{ color: theme.textSecondary }}>
-                  Все сумки выданы
+          {(activeFilter === "all" || activeFilter === "available") ? (
+            <View style={styles.section}>
+              <View style={styles.sectionHeader}>
+                <Feather name="check-circle" size={18} color={theme.success} />
+                <ThemedText style={[styles.sectionTitle, { color: theme.text }]}>
+                  Доступные ({availableKits.length})
                 </ThemedText>
               </View>
-            )}
-          </View>
+              {availableKits.length > 0 ? (
+                <View style={styles.kitsList}>
+                  {availableKits.map(kit => (
+                    <View key={kit.id}>
+                      {renderAvailableKit(kit)}
+                    </View>
+                  ))}
+                </View>
+              ) : (
+                <View style={styles.emptySection}>
+                  <ThemedText style={{ color: theme.textSecondary }}>
+                    Все сумки выданы
+                  </ThemedText>
+                </View>
+              )}
+            </View>
+          ) : null}
+          
+          {activeFilter !== "all" && (
+            <Pressable 
+              style={[styles.showAllButton, { borderColor: theme.border }]}
+              onPress={() => setActiveFilter("all")}
+            >
+              <ThemedText style={{ color: theme.primary }}>Показать все</ThemedText>
+            </Pressable>
+          )}
         </View>
       </ScreenScrollView>
 
@@ -1093,5 +1128,12 @@ const styles = StyleSheet.create({
   emptySection: {
     padding: Spacing.lg,
     alignItems: "center",
+  },
+  showAllButton: {
+    padding: Spacing.md,
+    alignItems: "center",
+    marginTop: Spacing.md,
+    borderRadius: BorderRadius.md,
+    borderWidth: 1,
   },
 });
