@@ -100,7 +100,7 @@ export default function DailyReportScreen() {
         bank_deposit: bankDeposit ? parseFloat(bankDeposit) : null,
         safe_deposit: safeDeposit ? parseFloat(safeDeposit) : null,
         cash_amount: cashAmount ? parseFloat(cashAmount) : null,
-        income_field: incomeField ? parseFloat(incomeField) : null,
+        income_field: incomeField || null,
         manager_id: profile?.id || null,
         updated_at: new Date().toISOString(),
       };
@@ -559,10 +559,30 @@ export default function DailyReportScreen() {
             style={[styles.input, { backgroundColor: theme.backgroundSecondary, color: theme.text }]}
             value={incomeField}
             onChangeText={setIncomeField}
-            placeholder="Доход"
+            placeholder="Доход (можно использовать + - =)"
             placeholderTextColor={theme.textSecondary}
-            keyboardType="numeric"
+            keyboardType="default"
           />
+          <View style={styles.symbolButtons}>
+            <Pressable
+              style={[styles.symbolButton, { backgroundColor: theme.backgroundTertiary }]}
+              onPress={() => setIncomeField((prev) => prev + "+")}
+            >
+              <ThemedText style={styles.symbolButtonText}>+</ThemedText>
+            </Pressable>
+            <Pressable
+              style={[styles.symbolButton, { backgroundColor: theme.backgroundTertiary }]}
+              onPress={() => setIncomeField((prev) => prev + "-")}
+            >
+              <ThemedText style={styles.symbolButtonText}>-</ThemedText>
+            </Pressable>
+            <Pressable
+              style={[styles.symbolButton, { backgroundColor: theme.backgroundTertiary }]}
+              onPress={() => setIncomeField((prev) => prev + "=")}
+            >
+              <ThemedText style={styles.symbolButtonText}>=</ThemedText>
+            </Pressable>
+          </View>
 
           {loading ? (
             <ActivityIndicator size="small" color={theme.primary} style={{ marginTop: Spacing.md }} />
@@ -711,5 +731,19 @@ const styles = StyleSheet.create({
   },
   datePickerButton: {
     padding: Spacing.sm,
+  },
+  symbolButtons: {
+    flexDirection: "row",
+    gap: Spacing.sm,
+    marginBottom: Spacing.md,
+  },
+  symbolButton: {
+    paddingVertical: Spacing.sm,
+    paddingHorizontal: Spacing.lg,
+    borderRadius: BorderRadius.md,
+  },
+  symbolButtonText: {
+    fontSize: 18,
+    fontWeight: "600",
   },
 });
