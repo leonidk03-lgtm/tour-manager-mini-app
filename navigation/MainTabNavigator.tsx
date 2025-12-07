@@ -24,11 +24,17 @@ const Tab = createBottomTabNavigator<MainTabParamList>();
 
 export default function MainTabNavigator() {
   const { theme, isDark } = useTheme();
-  const { isAdmin } = useAuth();
+  const { isAdmin, isRadioDispatcher } = useAuth();
+
+  const getInitialRouteName = () => {
+    if (isRadioDispatcher) return "SettingsTab";
+    if (isAdmin) return "DashboardTab";
+    return "ExcursionsTab";
+  };
 
   return (
     <Tab.Navigator
-      initialRouteName={isAdmin ? "DashboardTab" : "ExcursionsTab"}
+      initialRouteName={getInitialRouteName()}
       screenOptions={{
         tabBarActiveTintColor: theme.tabIconSelected,
         tabBarInactiveTintColor: theme.tabIconDefault,
@@ -75,43 +81,47 @@ export default function MainTabNavigator() {
           }}
         />
       ) : null}
-      <Tab.Screen
-        name="ExcursionsTab"
-        component={ExcursionsStackNavigator}
-        options={{
-          title: "Экскурсии",
-          tabBarIcon: ({ color, size }) => (
-            <Feather name="map" size={22} color={color} />
-          ),
-        }}
-      />
-      <Tab.Screen
-        name="FinancesTab"
-        component={FinancesStackNavigator}
-        options={{
-          title: "Финансы",
-          tabBarIcon: ({ color, size }) => (
-            <Feather name="trending-up" size={22} color={color} />
-          ),
-        }}
-      />
-      <Tab.Screen
-        name="DispatchingTab"
-        component={DispatchingStackNavigator}
-        options={{
-          title: "Отправление",
-          tabBarIcon: ({ color, size }) => (
-            <Feather name="send" size={22} color={color} />
-          ),
-        }}
-      />
+      {!isRadioDispatcher ? (
+        <>
+          <Tab.Screen
+            name="ExcursionsTab"
+            component={ExcursionsStackNavigator}
+            options={{
+              title: "Экскурсии",
+              tabBarIcon: ({ color, size }) => (
+                <Feather name="map" size={22} color={color} />
+              ),
+            }}
+          />
+          <Tab.Screen
+            name="FinancesTab"
+            component={FinancesStackNavigator}
+            options={{
+              title: "Финансы",
+              tabBarIcon: ({ color, size }) => (
+                <Feather name="trending-up" size={22} color={color} />
+              ),
+            }}
+          />
+          <Tab.Screen
+            name="DispatchingTab"
+            component={DispatchingStackNavigator}
+            options={{
+              title: "Отправление",
+              tabBarIcon: ({ color, size }) => (
+                <Feather name="send" size={22} color={color} />
+              ),
+            }}
+          />
+        </>
+      ) : null}
       <Tab.Screen
         name="SettingsTab"
         component={SettingsStackNavigator}
         options={{
-          title: "Настройки",
+          title: isRadioDispatcher ? "Радиогиды" : "Настройки",
           tabBarIcon: ({ color, size }) => (
-            <Feather name="sliders" size={22} color={color} />
+            <Feather name={isRadioDispatcher ? "radio" : "sliders"} size={22} color={color} />
           ),
         }}
       />

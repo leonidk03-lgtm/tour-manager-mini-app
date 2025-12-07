@@ -7,6 +7,7 @@ import DatabaseSettingsScreen from "@/screens/DatabaseSettingsScreen";
 import RadioGuidesScreen from "@/screens/RadioGuidesScreen";
 import { getCommonScreenOptions } from "./screenOptions";
 import { useTheme } from "@/hooks/useTheme";
+import { useAuth } from "@/contexts/AuthContext";
 
 export type SettingsStackParamList = {
   Settings: undefined;
@@ -21,34 +22,42 @@ const Stack = createNativeStackNavigator<SettingsStackParamList>();
 
 export default function SettingsStackNavigator() {
   const { theme, isDark } = useTheme();
+  const { isRadioDispatcher } = useAuth();
   
   return (
-    <Stack.Navigator screenOptions={getCommonScreenOptions({ theme, isDark })}>
-      <Stack.Screen
-        name="Settings"
-        component={SettingsScreen}
-        options={{ title: "Настройки" }}
-      />
-      <Stack.Screen
-        name="TicketPrices"
-        component={TicketPricesScreen}
-        options={{ title: "Цены на билеты" }}
-      />
-      <Stack.Screen
-        name="AdminPanel"
-        component={AdminPanelScreen}
-        options={{ title: "Панель администратора" }}
-      />
-      <Stack.Screen
-        name="DeletedData"
-        component={DeletedDataScreen}
-        options={{ title: "Удаленные данные" }}
-      />
-      <Stack.Screen
-        name="DatabaseSettings"
-        component={DatabaseSettingsScreen}
-        options={{ title: "База данных" }}
-      />
+    <Stack.Navigator 
+      initialRouteName={isRadioDispatcher ? "RadioGuides" : "Settings"}
+      screenOptions={getCommonScreenOptions({ theme, isDark })}
+    >
+      {!isRadioDispatcher ? (
+        <>
+          <Stack.Screen
+            name="Settings"
+            component={SettingsScreen}
+            options={{ title: "Настройки" }}
+          />
+          <Stack.Screen
+            name="TicketPrices"
+            component={TicketPricesScreen}
+            options={{ title: "Цены на билеты" }}
+          />
+          <Stack.Screen
+            name="AdminPanel"
+            component={AdminPanelScreen}
+            options={{ title: "Панель администратора" }}
+          />
+          <Stack.Screen
+            name="DeletedData"
+            component={DeletedDataScreen}
+            options={{ title: "Удаленные данные" }}
+          />
+          <Stack.Screen
+            name="DatabaseSettings"
+            component={DatabaseSettingsScreen}
+            options={{ title: "База данных" }}
+          />
+        </>
+      ) : null}
       <Stack.Screen
         name="RadioGuides"
         component={RadioGuidesScreen}
