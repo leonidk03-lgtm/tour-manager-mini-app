@@ -32,9 +32,12 @@ export default function DailyReportScreen() {
 
   const loadReportData = useCallback(async (date: Date) => {
     const dateStr = date.toISOString().split("T")[0];
+    const key = getStorageKey(dateStr);
+    console.log("Loading report for date:", dateStr, "key:", key);
     setLoading(true);
     try {
-      const stored = await AsyncStorage.getItem(getStorageKey(dateStr));
+      const stored = await AsyncStorage.getItem(key);
+      console.log("Stored data:", stored);
       if (stored) {
         const data = JSON.parse(stored);
         setBankDeposit(data.bankDeposit || "");
@@ -42,12 +45,14 @@ export default function DailyReportScreen() {
         setCashAmount(data.cashAmount || "");
         setIncomeField(data.incomeField || "");
         setHasExistingReport(true);
+        console.log("Loaded existing report data");
       } else {
         setBankDeposit("");
         setSafeDeposit("");
         setCashAmount("");
         setIncomeField("");
         setHasExistingReport(false);
+        console.log("No existing report found");
       }
     } catch (err) {
       console.error("Error loading report:", err);
@@ -58,6 +63,8 @@ export default function DailyReportScreen() {
 
   const saveReportData = async () => {
     const dateStr = selectedDate.toISOString().split("T")[0];
+    const key = getStorageKey(dateStr);
+    console.log("Saving report for date:", dateStr, "key:", key);
     setSaving(true);
     try {
       const reportData = {
@@ -67,9 +74,11 @@ export default function DailyReportScreen() {
         incomeField,
         updatedAt: new Date().toISOString(),
       };
+      console.log("Report data to save:", reportData);
 
-      await AsyncStorage.setItem(getStorageKey(dateStr), JSON.stringify(reportData));
+      await AsyncStorage.setItem(key, JSON.stringify(reportData));
       setHasExistingReport(true);
+      console.log("Report saved successfully");
       Alert.alert("Сохранено", "Данные отчёта сохранены");
     } catch (err) {
       console.error("Error saving report:", err);
