@@ -1006,13 +1006,17 @@ export function DataProvider({ children }: { children: ReactNode }) {
       if (kitError) throw kitError;
 
       const kit = radioGuideKits.find(k => k.id === data.kitId);
-      await supabase.from('activities').insert({
+      const { error: activityError } = await supabase.from('activities').insert({
         manager_id: user.id,
         manager_name: profile.display_name,
         type: 'radio_issued',
         description: `выдал радиогид (сумка ${kit?.bagNumber || '?'}) гиду ${data.guideName}`,
         target_id: data.kitId,
+        timestamp: new Date().toISOString(),
       });
+      if (activityError) {
+        console.error('Error creating radio_issued activity:', activityError);
+      }
 
       await Promise.all([fetchRadioGuideKits(), fetchRadioGuideAssignments(), fetchActivities()]);
     } catch (err) {
@@ -1046,13 +1050,17 @@ export function DataProvider({ children }: { children: ReactNode }) {
 
       const kit = radioGuideKits.find(k => k.id === assignment.kitId);
       if (user && profile) {
-        await supabase.from('activities').insert({
+        const { error: activityError } = await supabase.from('activities').insert({
           manager_id: user.id,
           manager_name: profile.display_name,
           type: 'radio_returned',
           description: `принял радиогид (сумка ${kit?.bagNumber || '?'}) от ${assignment.guideName}`,
           target_id: assignmentId,
+          timestamp: new Date().toISOString(),
         });
+        if (activityError) {
+          console.error('Error creating radio_returned activity:', activityError);
+        }
       }
 
       await Promise.all([fetchRadioGuideKits(), fetchRadioGuideAssignments(), fetchActivities()]);
