@@ -123,6 +123,7 @@ export function AuthProvider({ children }: { children: ReactNode }) {
     }
 
     try {
+      console.log('Creating user with role:', role);
       const { data, error } = await supabase.auth.signUp({
         email,
         password,
@@ -135,21 +136,28 @@ export function AuthProvider({ children }: { children: ReactNode }) {
       });
 
       if (error) {
+        console.error('Auth signUp error:', error);
         return { error: error.message };
       }
 
+      console.log('Auth signUp result:', data);
+
       if (data.user) {
+        const profileData = {
+          id: data.user.id,
+          email,
+          display_name: displayName,
+          role,
+          is_active: true,
+        };
+        console.log('Upserting profile:', profileData);
+        
         const { error: profileError } = await supabase
           .from('profiles')
-          .upsert({
-            id: data.user.id,
-            email,
-            display_name: displayName,
-            role,
-            is_active: true,
-          });
+          .upsert(profileData);
 
         if (profileError) {
+          console.error('Profile upsert error:', profileError);
           return { error: profileError.message };
         }
 
@@ -158,6 +166,7 @@ export function AuthProvider({ children }: { children: ReactNode }) {
 
       return { error: null };
     } catch (err) {
+      console.error('Create manager exception:', err);
       return { error: 'Ошибка при создании менеджера' };
     }
   };
@@ -196,18 +205,24 @@ export function AuthProvider({ children }: { children: ReactNode }) {
     }
 
     try {
-      const { error } = await supabase
+      console.log('Updating role for manager:', managerId, 'to:', role);
+      const { error, data } = await supabase
         .from('profiles')
         .update({ role, updated_at: new Date().toISOString() })
-        .eq('id', managerId);
+        .eq('id', managerId)
+        .select();
+
+      console.log('Update role result:', { error, data });
 
       if (error) {
+        console.error('Update role error:', error);
         return { error: error.message };
       }
 
       await refreshManagers();
       return { error: null };
     } catch (err) {
+      console.error('Update role exception:', err);
       return { error: 'Ошибка при обновлении роли' };
     }
   };
