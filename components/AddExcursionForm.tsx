@@ -47,14 +47,13 @@ export function AddExcursionForm({ excursion, onSave, onCancel }: AddExcursionFo
 
   const [totalParticipants, setTotalParticipants] = useState(() => {
     if (excursion) {
-      const total = excursion.fullPriceCount + excursion.discountedCount + excursion.freeCount + excursion.tourPackageCount + (excursion.byTourCount || 0) + (excursion.paidCount || 0);
+      const total = excursion.fullPriceCount + excursion.discountedCount + excursion.freeCount + (excursion.byTourCount || 0) + (excursion.paidCount || 0);
       return total.toString();
     }
     return "";
   });
   const [discounted, setDiscounted] = useState(excursion ? excursion.discountedCount.toString() : "");
   const [free, setFree] = useState(excursion ? excursion.freeCount.toString() : "");
-  const [tourPackage, setTourPackage] = useState(excursion ? excursion.tourPackageCount.toString() : "");
   const [byTour, setByTour] = useState(excursion ? (excursion.byTourCount || 0).toString() : "");
   const [paid, setPaid] = useState(excursion ? (excursion.paidCount || 0).toString() : "");
   
@@ -74,10 +73,9 @@ export function AddExcursionForm({ excursion, onSave, onCancel }: AddExcursionFo
     const total = parseInt(totalParticipants, 10) || 0;
     const disc = parseInt(discounted, 10) || 0;
     const freeCount = parseInt(free, 10) || 0;
-    const tour = parseInt(tourPackage, 10) || 0;
     const byTourCount = parseInt(byTour, 10) || 0;
     const paidCount = parseInt(paid, 10) || 0;
-    return Math.max(0, total - disc - freeCount - tour - byTourCount - paidCount);
+    return Math.max(0, total - disc - freeCount - byTourCount - paidCount);
   };
 
   const toggleService = (serviceId: string) => {
@@ -155,7 +153,7 @@ export function AddExcursionForm({ excursion, onSave, onCancel }: AddExcursionFo
       fullPriceCount: calculateFullPrice(),
       discountedCount: parseInt(discounted, 10) || 0,
       freeCount: parseInt(free, 10) || 0,
-      tourPackageCount: parseInt(tourPackage, 10) || 0,
+      tourPackageCount: 0,
       byTourCount: parseInt(byTour, 10) || 0,
       paidCount: parseInt(paid, 10) || 0,
       expenses: expenses.map((e) => ({

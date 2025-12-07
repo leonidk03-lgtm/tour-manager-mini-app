@@ -80,7 +80,6 @@ export default function ExportDataScreen() {
       "Полная цена",
       "Льготные",
       "Бесплатно",
-      "Турпакет",
       "По туру",
       "Оплатили",
       "Всего участников",
@@ -93,7 +92,7 @@ export default function ExportDataScreen() {
     const rows = excursions.map((exc) => {
       const tourType = tourTypes.find((t) => t.id === exc.tourTypeId);
       const totalParticipants =
-        exc.fullPriceCount + exc.discountedCount + exc.freeCount + exc.tourPackageCount + exc.byTourCount + exc.paidCount;
+        exc.fullPriceCount + exc.discountedCount + exc.freeCount + exc.byTourCount + exc.paidCount;
 
       let ticketRevenue = 0;
       if (tourType) {
@@ -122,7 +121,6 @@ export default function ExportDataScreen() {
         exc.fullPriceCount,
         exc.discountedCount,
         exc.freeCount,
-        exc.tourPackageCount,
         exc.byTourCount,
         exc.paidCount,
         totalParticipants,

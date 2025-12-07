@@ -262,7 +262,7 @@ export default function ExcursionsListScreen() {
       if (tourType) {
         totalRevenue += calculateExcursionRevenue(exc, tourType, additionalServices);
         totalExpenses += calculateExcursionExpenses(exc);
-        totalParticipants += exc.fullPriceCount + exc.discountedCount + exc.freeCount + exc.tourPackageCount + exc.byTourCount + exc.paidCount;
+        totalParticipants += exc.fullPriceCount + exc.discountedCount + exc.freeCount + exc.byTourCount + exc.paidCount;
       }
     });
     

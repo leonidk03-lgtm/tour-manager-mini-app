@@ -147,7 +147,7 @@ export default function ManagerDetailScreen() {
         totalExpenses += exp.amount;
       });
       totalParticipants += excursion.fullPriceCount + excursion.discountedCount + 
-        excursion.freeCount + excursion.tourPackageCount + excursion.byTourCount + excursion.paidCount;
+        excursion.freeCount + excursion.byTourCount + excursion.paidCount;
     });
 
     managerTransactions.forEach(t => {
@@ -403,7 +403,7 @@ export default function ManagerDetailScreen() {
                     <Feather name="users" size={14} color={theme.textSecondary} />
                     <ThemedText style={{ color: theme.textSecondary, fontSize: 13 }}>
                       {excursion.fullPriceCount + excursion.discountedCount + excursion.freeCount + 
-                        excursion.tourPackageCount + excursion.byTourCount + excursion.paidCount} чел.
+                        excursion.byTourCount + excursion.paidCount} чел.
                     </ThemedText>
                   </View>
                   <ThemedText style={[styles.itemAmount, { color: theme.success }]}>

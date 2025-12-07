@@ -72,7 +72,6 @@ export default function ExcursionsReportScreen() {
     let totalFullPrice = 0;
     let totalDiscounted = 0;
     let totalFree = 0;
-    let totalTourPackage = 0;
     let totalByTour = 0;
     let totalPaid = 0;
 
@@ -81,13 +80,12 @@ export default function ExcursionsReportScreen() {
       const typeName = tourType?.name || "Неизвестный тип";
 
       const participants =
-        exc.fullPriceCount + exc.discountedCount + exc.freeCount + exc.tourPackageCount + exc.byTourCount + exc.paidCount;
+        exc.fullPriceCount + exc.discountedCount + exc.freeCount + exc.byTourCount + exc.paidCount;
       totalParticipants += participants;
 
       totalFullPrice += exc.fullPriceCount;
       totalDiscounted += exc.discountedCount;
       totalFree += exc.freeCount;
-      totalTourPackage += exc.tourPackageCount;
       totalByTour += exc.byTourCount;
       totalPaid += exc.paidCount;
 
@@ -133,7 +131,6 @@ export default function ExcursionsReportScreen() {
       totalFullPrice,
       totalDiscounted,
       totalFree,
-      totalTourPackage,
       totalByTour,
       totalPaid,
       tourTypeList,
@@ -226,12 +223,6 @@ export default function ExcursionsReportScreen() {
           <View style={styles.participantRow}>
             <ThemedText style={styles.participantLabel}>Бесплатно</ThemedText>
             <ThemedText style={styles.participantValue}>{stats.totalFree}</ThemedText>
-          </View>
-          <View style={[styles.divider, { backgroundColor: theme.border }]} />
-
-          <View style={styles.participantRow}>
-            <ThemedText style={styles.participantLabel}>Турпакет</ThemedText>
-            <ThemedText style={styles.participantValue}>{stats.totalTourPackage}</ThemedText>
           </View>
           <View style={[styles.divider, { backgroundColor: theme.border }]} />
 
