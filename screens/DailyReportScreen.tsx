@@ -335,17 +335,6 @@ export default function DailyReportScreen() {
       lines.push(`Положил в сейф: ${safeDeposit}`);
     }
 
-    lines.push("");
-    lines.push(`Всего: ${formatMoney(reportData.profit)}`);
-
-    if (cashAmount) {
-      lines.push(`Денег: ${cashAmount}`);
-    }
-
-    if (incomeField) {
-      lines.push(`Доход: ${incomeField}`);
-    }
-
     return lines.join("\n");
   };
 
