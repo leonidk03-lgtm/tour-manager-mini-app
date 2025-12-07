@@ -1,11 +1,11 @@
 import { useState, useMemo } from "react";
-import { View, StyleSheet, Pressable, TextInput, Modal, Platform, Alert } from "react-native";
+import { View, StyleSheet, Pressable, TextInput, Modal, Platform, Alert, ScrollView } from "react-native";
 import { Feather } from "@expo/vector-icons";
 import DateTimePicker from "@react-native-community/datetimepicker";
+import { KeyboardAwareScrollView } from "react-native-keyboard-controller";
 import { ThemedText } from "@/components/ThemedText";
 import { ThemedView } from "@/components/ThemedView";
 import { ScreenScrollView } from "@/components/ScreenScrollView";
-import { KeyboardAwareScrollView } from "@/components/KeyboardAwareScrollView";
 import { ExcursionCard } from "@/components/ExcursionCard";
 import { AddExcursionForm } from "@/components/AddExcursionForm";
 import { Spacing, BorderRadius } from "@/constants/theme";
@@ -132,6 +132,90 @@ export default function ExcursionsListScreen() {
     setShowRadioGuideModal(false);
     resetRadioGuideForm();
   };
+  
+  const renderRadioGuideFormContent = () => (
+    <>
+      <ThemedText style={[styles.radioGuideLabel, { color: theme.textSecondary }]}>
+        Выберите сумку
+      </ThemedText>
+      <View style={styles.kitsList}>
+        {availableKits.map(kit => (
+          <Pressable
+            key={kit.id}
+            onPress={() => setSelectedKit(kit)}
+            style={[
+              styles.kitOption,
+              {
+                backgroundColor: selectedKit?.id === kit.id ? theme.primary + "20" : theme.backgroundSecondary,
+                borderColor: selectedKit?.id === kit.id ? theme.primary : theme.border,
+              },
+            ]}
+          >
+            <Feather
+              name={selectedKit?.id === kit.id ? "check-circle" : "circle"}
+              size={20}
+              color={selectedKit?.id === kit.id ? theme.primary : theme.textSecondary}
+            />
+            <ThemedText style={styles.kitOptionText}>Сумка #{kit.bagNumber}</ThemedText>
+          </Pressable>
+        ))}
+        {availableKits.length === 0 ? (
+          <ThemedText style={{ color: theme.textSecondary, textAlign: "center", padding: Spacing.lg }}>
+            Нет доступных сумок
+          </ThemedText>
+        ) : null}
+      </View>
+      
+      <View style={styles.radioGuideInputGroup}>
+        <ThemedText style={[styles.radioGuideLabel, { color: theme.textSecondary }]}>
+          Экскурсовод *
+        </ThemedText>
+        <TextInput
+          style={[
+            styles.radioGuideInput,
+            { backgroundColor: theme.backgroundSecondary, borderColor: theme.border, color: theme.text },
+          ]}
+          value={guideName}
+          onChangeText={setGuideName}
+          placeholder="Имя экскурсовода"
+          placeholderTextColor={theme.textSecondary}
+        />
+      </View>
+      
+      <View style={styles.radioGuideInputGroup}>
+        <ThemedText style={[styles.radioGuideLabel, { color: theme.textSecondary }]}>
+          Номер автобуса (опционально)
+        </ThemedText>
+        <TextInput
+          style={[
+            styles.radioGuideInput,
+            { backgroundColor: theme.backgroundSecondary, borderColor: theme.border, color: theme.text },
+          ]}
+          value={busNumber}
+          onChangeText={setBusNumber}
+          placeholder="А123БВ"
+          placeholderTextColor={theme.textSecondary}
+        />
+      </View>
+      
+      <View style={styles.radioGuideInputGroup}>
+        <ThemedText style={[styles.radioGuideLabel, { color: theme.textSecondary }]}>
+          Количество приёмников *
+        </ThemedText>
+        <TextInput
+          style={[
+            styles.radioGuideInput,
+            { backgroundColor: theme.backgroundSecondary, borderColor: theme.border, color: theme.text },
+          ]}
+          value={receiversIssued}
+          onChangeText={setReceiversIssued}
+          placeholder="40"
+          placeholderTextColor={theme.textSecondary}
+          keyboardType="number-pad"
+        />
+      </View>
+    </>
+  );
   
   const toggleGroup = (tourTypeId: string) => {
     setExpandedGroups((prev) => {
@@ -416,87 +500,15 @@ export default function ExcursionsListScreen() {
               </Pressable>
             </View>
             
-            <KeyboardAwareScrollView style={styles.radioGuideContent} keyboardShouldPersistTaps="handled">
-              <ThemedText style={[styles.radioGuideLabel, { color: theme.textSecondary }]}>
-                Выберите сумку
-              </ThemedText>
-              <View style={styles.kitsList}>
-                {availableKits.map(kit => (
-                  <Pressable
-                    key={kit.id}
-                    onPress={() => setSelectedKit(kit)}
-                    style={[
-                      styles.kitOption,
-                      {
-                        backgroundColor: selectedKit?.id === kit.id ? theme.primary + "20" : theme.backgroundSecondary,
-                        borderColor: selectedKit?.id === kit.id ? theme.primary : theme.border,
-                      },
-                    ]}
-                  >
-                    <Feather
-                      name={selectedKit?.id === kit.id ? "check-circle" : "circle"}
-                      size={20}
-                      color={selectedKit?.id === kit.id ? theme.primary : theme.textSecondary}
-                    />
-                    <ThemedText style={styles.kitOptionText}>Сумка #{kit.bagNumber}</ThemedText>
-                  </Pressable>
-                ))}
-                {availableKits.length === 0 ? (
-                  <ThemedText style={{ color: theme.textSecondary, textAlign: "center", padding: Spacing.lg }}>
-                    Нет доступных сумок
-                  </ThemedText>
-                ) : null}
-              </View>
-              
-              <View style={styles.radioGuideInputGroup}>
-                <ThemedText style={[styles.radioGuideLabel, { color: theme.textSecondary }]}>
-                  Экскурсовод *
-                </ThemedText>
-                <TextInput
-                  style={[
-                    styles.radioGuideInput,
-                    { backgroundColor: theme.backgroundSecondary, borderColor: theme.border, color: theme.text },
-                  ]}
-                  value={guideName}
-                  onChangeText={setGuideName}
-                  placeholder="Имя экскурсовода"
-                  placeholderTextColor={theme.textSecondary}
-                />
-              </View>
-              
-              <View style={styles.radioGuideInputGroup}>
-                <ThemedText style={[styles.radioGuideLabel, { color: theme.textSecondary }]}>
-                  Номер автобуса (опционально)
-                </ThemedText>
-                <TextInput
-                  style={[
-                    styles.radioGuideInput,
-                    { backgroundColor: theme.backgroundSecondary, borderColor: theme.border, color: theme.text },
-                  ]}
-                  value={busNumber}
-                  onChangeText={setBusNumber}
-                  placeholder="А123БВ"
-                  placeholderTextColor={theme.textSecondary}
-                />
-              </View>
-              
-              <View style={styles.radioGuideInputGroup}>
-                <ThemedText style={[styles.radioGuideLabel, { color: theme.textSecondary }]}>
-                  Количество приёмников *
-                </ThemedText>
-                <TextInput
-                  style={[
-                    styles.radioGuideInput,
-                    { backgroundColor: theme.backgroundSecondary, borderColor: theme.border, color: theme.text },
-                  ]}
-                  value={receiversIssued}
-                  onChangeText={setReceiversIssued}
-                  placeholder="40"
-                  placeholderTextColor={theme.textSecondary}
-                  keyboardType="number-pad"
-                />
-              </View>
-            </KeyboardAwareScrollView>
+            {Platform.OS === "web" ? (
+              <ScrollView style={styles.radioGuideContent} keyboardShouldPersistTaps="handled">
+                {renderRadioGuideFormContent()}
+              </ScrollView>
+            ) : (
+              <KeyboardAwareScrollView style={styles.radioGuideContent} keyboardShouldPersistTaps="handled">
+                {renderRadioGuideFormContent()}
+              </KeyboardAwareScrollView>
+            )}
             
             <View style={styles.radioGuideActions}>
               <Pressable
