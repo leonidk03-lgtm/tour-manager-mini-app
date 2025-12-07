@@ -337,7 +337,6 @@ export default function DailyReportScreen() {
     });
 
     const radioGuideTotal = radioGuideParticipants * radioGuidePrice;
-    totalRevenue += radioGuideTotal;
 
     const profit = totalRevenue - totalExpenses;
 
