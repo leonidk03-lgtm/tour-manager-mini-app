@@ -18,6 +18,7 @@ export default function DailyReportScreen() {
   const { excursions, transactions, tourTypes, additionalServices, radioGuidePrice } = useData();
 
   const [selectedDate, setSelectedDate] = useState(new Date());
+  const [tempDate, setTempDate] = useState(new Date());
   const [showDatePicker, setShowDatePicker] = useState(false);
 
   const [bankDeposit, setBankDeposit] = useState("");
@@ -327,10 +328,31 @@ export default function DailyReportScreen() {
   };
 
   const onDateChange = (event: any, date?: Date) => {
-    setShowDatePicker(Platform.OS === "ios");
-    if (date) {
-      setSelectedDate(date);
+    if (Platform.OS === "ios") {
+      if (date) {
+        setTempDate(date);
+      }
+    } else {
+      setShowDatePicker(false);
+      if (date) {
+        setSelectedDate(date);
+      }
     }
+  };
+
+  const confirmDateSelection = () => {
+    setSelectedDate(tempDate);
+    setShowDatePicker(false);
+  };
+
+  const cancelDateSelection = () => {
+    setTempDate(selectedDate);
+    setShowDatePicker(false);
+  };
+
+  const openDatePicker = () => {
+    setTempDate(selectedDate);
+    setShowDatePicker(true);
   };
 
   return (
@@ -340,20 +362,32 @@ export default function DailyReportScreen() {
 
         <Pressable
           style={[styles.dateButton, { backgroundColor: theme.backgroundSecondary }]}
-          onPress={() => setShowDatePicker(true)}
+          onPress={openDatePicker}
         >
           <Feather name="calendar" size={20} color={theme.primary} />
           <ThemedText style={styles.dateText}>{formatDateDisplay(selectedDate)}</ThemedText>
         </Pressable>
 
         {showDatePicker && (
-          <DateTimePicker
-            value={selectedDate}
-            mode="date"
-            display={Platform.OS === "ios" ? "spinner" : "default"}
-            onChange={onDateChange}
-            maximumDate={new Date()}
-          />
+          <View>
+            {Platform.OS === "ios" && (
+              <View style={styles.datePickerButtons}>
+                <Pressable onPress={cancelDateSelection} style={styles.datePickerButton}>
+                  <ThemedText style={{ color: theme.textSecondary }}>Отмена</ThemedText>
+                </Pressable>
+                <Pressable onPress={confirmDateSelection} style={styles.datePickerButton}>
+                  <ThemedText style={{ color: theme.primary, fontWeight: "600" }}>Готово</ThemedText>
+                </Pressable>
+              </View>
+            )}
+            <DateTimePicker
+              value={tempDate}
+              mode="date"
+              display={Platform.OS === "ios" ? "spinner" : "default"}
+              onChange={onDateChange}
+              maximumDate={new Date()}
+            />
+          </View>
         )}
 
         <ThemedView style={[styles.reportContainer, { backgroundColor: theme.backgroundSecondary }]}>
@@ -628,5 +662,14 @@ const styles = StyleSheet.create({
     color: "#fff",
     fontSize: 16,
     fontWeight: "600",
+  },
+  datePickerButtons: {
+    flexDirection: "row",
+    justifyContent: "space-between",
+    paddingHorizontal: Spacing.md,
+    paddingVertical: Spacing.sm,
+  },
+  datePickerButton: {
+    padding: Spacing.sm,
   },
 });
