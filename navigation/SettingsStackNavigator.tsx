@@ -13,6 +13,7 @@ import FinancialReportScreen from "@/screens/FinancialReportScreen";
 import ExcursionsReportScreen from "@/screens/ExcursionsReportScreen";
 import RadioGuidesReportScreen from "@/screens/RadioGuidesReportScreen";
 import ExportDataScreen from "@/screens/ExportDataScreen";
+import DailyReportScreen from "@/screens/DailyReportScreen";
 import { getCommonScreenOptions } from "./screenOptions";
 import { useTheme } from "@/hooks/useTheme";
 import { useAuth } from "@/contexts/AuthContext";
@@ -33,6 +34,7 @@ export type SettingsStackParamList = {
   ExcursionsReport: undefined;
   RadioGuidesReport: undefined;
   ExportData: undefined;
+  DailyReport: undefined;
 };
 
 const Stack = createNativeStackNavigator<SettingsStackParamList>();
@@ -112,6 +114,11 @@ export default function SettingsStackNavigator() {
             name="ExportData"
             component={ExportDataScreen}
             options={{ title: "Экспорт данных" }}
+          />
+          <Stack.Screen
+            name="DailyReport"
+            component={DailyReportScreen}
+            options={{ title: "Ежедневный отчёт" }}
           />
         </>
       ) : null}

@@ -19,6 +19,13 @@ type ReportItem = {
 
 const reportItems: ReportItem[] = [
   {
+    id: "daily",
+    title: "Ежедневный отчёт",
+    description: "Отчёт за день для копирования",
+    icon: "clipboard",
+    screen: "DailyReport",
+  },
+  {
     id: "financial",
     title: "Финансовый отчёт",
     description: "Доходы, расходы и прибыль за период",
