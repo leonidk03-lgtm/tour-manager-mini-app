@@ -70,7 +70,7 @@ export function getCurrentSupabaseUrl(): string {
   return currentUrl;
 }
 
-export type UserRole = 'admin' | 'manager';
+export type UserRole = 'admin' | 'manager' | 'radio_dispatcher';
 
 export interface Profile {
   id: string;

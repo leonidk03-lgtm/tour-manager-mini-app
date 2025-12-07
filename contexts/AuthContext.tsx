@@ -8,10 +8,12 @@ interface AuthContextType {
   profile: Profile | null;
   isLoading: boolean;
   isAdmin: boolean;
+  isRadioDispatcher: boolean;
   signIn: (email: string, password: string) => Promise<{ error: string | null }>;
   signOut: () => Promise<void>;
-  createManager: (email: string, password: string, displayName: string) => Promise<{ error: string | null }>;
+  createManager: (email: string, password: string, displayName: string, role?: UserRole) => Promise<{ error: string | null }>;
   updateManagerStatus: (managerId: string, isActive: boolean) => Promise<{ error: string | null }>;
+  updateManagerRole: (managerId: string, role: UserRole) => Promise<{ error: string | null }>;
   deleteManager: (managerId: string) => Promise<{ error: string | null }>;
   managers: Profile[];
   refreshManagers: () => Promise<void>;
@@ -27,6 +29,7 @@ export function AuthProvider({ children }: { children: ReactNode }) {
   const [managers, setManagers] = useState<Profile[]>([]);
 
   const isAdmin = profile?.role === 'admin';
+  const isRadioDispatcher = profile?.role === 'radio_dispatcher';
 
   useEffect(() => {
     const initAuth = async () => {
@@ -112,7 +115,8 @@ export function AuthProvider({ children }: { children: ReactNode }) {
   const createManager = async (
     email: string,
     password: string,
-    displayName: string
+    displayName: string,
+    role: UserRole = 'manager'
   ): Promise<{ error: string | null }> => {
     if (!isAdmin) {
       return { error: 'Только администратор может создавать менеджеров' };
@@ -125,7 +129,7 @@ export function AuthProvider({ children }: { children: ReactNode }) {
         options: {
           data: {
             display_name: displayName,
-            role: 'manager',
+            role,
           },
         },
       });
@@ -141,7 +145,7 @@ export function AuthProvider({ children }: { children: ReactNode }) {
             id: data.user.id,
             email,
             display_name: displayName,
-            role: 'manager' as UserRole,
+            role,
             is_active: true,
           });
 
@@ -180,6 +184,31 @@ export function AuthProvider({ children }: { children: ReactNode }) {
       return { error: null };
     } catch (err) {
       return { error: 'Ошибка при обновлении статуса' };
+    }
+  };
+
+  const updateManagerRole = async (
+    managerId: string,
+    role: UserRole
+  ): Promise<{ error: string | null }> => {
+    if (!isAdmin) {
+      return { error: 'Только администратор может изменять роль' };
+    }
+
+    try {
+      const { error } = await supabase
+        .from('profiles')
+        .update({ role, updated_at: new Date().toISOString() })
+        .eq('id', managerId);
+
+      if (error) {
+        return { error: error.message };
+      }
+
+      await refreshManagers();
+      return { error: null };
+    } catch (err) {
+      return { error: 'Ошибка при обновлении роли' };
     }
   };
 
@@ -230,10 +259,12 @@ export function AuthProvider({ children }: { children: ReactNode }) {
         profile,
         isLoading,
         isAdmin,
+        isRadioDispatcher,
         signIn,
         signOut,
         createManager,
         updateManagerStatus,
+        updateManagerRole,
         deleteManager,
         managers,
         refreshManagers,
