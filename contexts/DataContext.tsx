@@ -428,7 +428,14 @@ export function DataProvider({ children }: { children: ReactNode }) {
         .select('*, radio_guide_kits(bag_number)')
         .order('created_at', { ascending: false });
 
-      if (error) throw error;
+      if (error) {
+        // If table doesn't exist in schema cache yet, just return empty array
+        if (error.code === 'PGRST205') {
+          console.warn('Equipment losses table not in schema cache yet, will retry on next poll');
+          return;
+        }
+        throw error;
+      }
 
       setEquipmentLosses((data || []).map(l => ({
         id: l.id,

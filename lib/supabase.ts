@@ -18,6 +18,14 @@ function createSupabaseClient(url: string, anonKey: string): SupabaseClient {
       persistSession: true,
       detectSessionInUrl: false,
     },
+    db: {
+      schema: 'public',
+    },
+    global: {
+      headers: {
+        'x-my-custom-header': 'tour-manager',
+      },
+    },
   });
 }
 
