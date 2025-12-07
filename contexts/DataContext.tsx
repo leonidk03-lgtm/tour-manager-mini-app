@@ -173,6 +173,8 @@ interface DataContextType {
   updateEquipmentLoss: (id: string, data: { reason?: string; missingCount?: number }) => Promise<void>;
   markLossAsFound: (id: string, notes?: string) => Promise<void>;
   deleteEquipmentLoss: (id: string) => Promise<void>;
+  radioGuidePrice: number;
+  updateRadioGuidePrice: (price: number) => Promise<void>;
   isLoading: boolean;
   refreshData: () => Promise<void>;
   refreshPriceList: () => Promise<void>;
@@ -192,6 +194,7 @@ export function DataProvider({ children }: { children: ReactNode }) {
   const [radioGuideKits, setRadioGuideKits] = useState<RadioGuideKit[]>([]);
   const [radioGuideAssignments, setRadioGuideAssignments] = useState<RadioGuideAssignment[]>([]);
   const [equipmentLosses, setEquipmentLosses] = useState<EquipmentLoss[]>([]);
+  const [radioGuidePrice, setRadioGuidePrice] = useState<number>(80);
   const [isLoading, setIsLoading] = useState(true);
 
   const currentUser = profile ? {
@@ -460,6 +463,48 @@ export function DataProvider({ children }: { children: ReactNode }) {
     }
   }, []);
 
+  const fetchSettings = useCallback(async () => {
+    try {
+      const { data, error } = await supabase
+        .from('app_settings')
+        .select('*')
+        .eq('key', 'radio_guide_price')
+        .single();
+
+      if (error) {
+        if (error.code === 'PGRST116') {
+          // No data found, use default
+          return;
+        }
+        throw error;
+      }
+
+      if (data) {
+        setRadioGuidePrice(Number(data.value) || 80);
+      }
+    } catch (err) {
+      console.error('Error fetching settings:', err);
+    }
+  }, []);
+
+  const updateRadioGuidePrice = async (price: number) => {
+    try {
+      const { error } = await supabase
+        .from('app_settings')
+        .upsert({ 
+          key: 'radio_guide_price', 
+          value: String(price),
+          updated_at: new Date().toISOString()
+        });
+
+      if (error) throw error;
+      setRadioGuidePrice(price);
+    } catch (err) {
+      console.error('Error updating radio guide price:', err);
+      throw err;
+    }
+  };
+
   const refreshData = useCallback(async () => {
     setIsLoading(true);
     try {
@@ -479,7 +524,7 @@ export function DataProvider({ children }: { children: ReactNode }) {
     }
   }, [fetchTourTypes, fetchAdditionalServices, fetchExcursions, fetchTransactions, fetchActivities, fetchDeletedItems, fetchRadioGuideKits, fetchRadioGuideAssignments, fetchEquipmentLosses]);
 
-  // Load shared data (price list, radio kits) when user is authenticated
+  // Load shared data (price list, radio kits, settings) when user is authenticated
   useEffect(() => {
     if (user) {
       Promise.all([
@@ -488,9 +533,10 @@ export function DataProvider({ children }: { children: ReactNode }) {
         fetchRadioGuideKits(),
         fetchRadioGuideAssignments(),
         fetchEquipmentLosses(),
+        fetchSettings(),
       ]);
     }
-  }, [user, fetchTourTypes, fetchAdditionalServices, fetchRadioGuideKits, fetchRadioGuideAssignments, fetchEquipmentLosses]);
+  }, [user, fetchTourTypes, fetchAdditionalServices, fetchRadioGuideKits, fetchRadioGuideAssignments, fetchEquipmentLosses, fetchSettings]);
 
   // Load user-specific data when profile is available
   useEffect(() => {
@@ -1188,6 +1234,8 @@ export function DataProvider({ children }: { children: ReactNode }) {
         updateEquipmentLoss,
         markLossAsFound,
         deleteEquipmentLoss,
+        radioGuidePrice,
+        updateRadioGuidePrice,
         isLoading,
         refreshData,
         refreshPriceList,
