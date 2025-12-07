@@ -1,4 +1,5 @@
-import { View, StyleSheet, Pressable, Alert } from "react-native";
+import { useState } from "react";
+import { View, StyleSheet, Pressable, Alert, TextInput, Modal } from "react-native";
 import { Feather } from "@expo/vector-icons";
 import { useNavigation, NavigationProp } from "@react-navigation/native";
 import { SettingsStackParamList } from "@/navigation/SettingsStackNavigator";
@@ -8,11 +9,35 @@ import { ScreenScrollView } from "@/components/ScreenScrollView";
 import { Spacing, BorderRadius } from "@/constants/theme";
 import { useTheme } from "@/hooks/useTheme";
 import { useAuth } from "@/contexts/AuthContext";
+import { useData } from "@/contexts/DataContext";
 
 export default function SettingsScreen() {
   const { theme } = useTheme();
   const navigation = useNavigation<NavigationProp<SettingsStackParamList>>();
   const { profile, isAdmin, isRadioDispatcher, signOut } = useAuth();
+  const { radioGuidePrice, updateRadioGuidePrice } = useData();
+
+  const [showPriceModal, setShowPriceModal] = useState(false);
+  const [priceInput, setPriceInput] = useState(String(radioGuidePrice));
+  const [saving, setSaving] = useState(false);
+
+  const handleSavePrice = async () => {
+    const newPrice = parseInt(priceInput, 10);
+    if (isNaN(newPrice) || newPrice < 0) {
+      Alert.alert("Ошибка", "Введите корректную сумму");
+      return;
+    }
+    setSaving(true);
+    try {
+      await updateRadioGuidePrice(newPrice);
+      setShowPriceModal(false);
+      Alert.alert("Сохранено", "Стоимость аренды радиогида обновлена");
+    } catch (err) {
+      Alert.alert("Ошибка", "Не удалось сохранить");
+    } finally {
+      setSaving(false);
+    }
+  };
 
   const handleLogout = () => {
     Alert.alert("Выйти из аккаунта?", "Вы уверены, что хотите выйти?", [
@@ -195,6 +220,24 @@ export default function SettingsScreen() {
                     <Feather name="chevron-right" size={20} color={theme.textSecondary} />
                   </View>
                 </Pressable>
+                <View style={[styles.divider, { backgroundColor: theme.border }]} />
+                <Pressable
+                  onPress={() => {
+                    setPriceInput(String(radioGuidePrice));
+                    setShowPriceModal(true);
+                  }}
+                  style={({ pressed }) => ({ opacity: pressed ? 0.7 : 1 })}
+                >
+                  <View style={styles.settingItem}>
+                    <View style={styles.settingLeft}>
+                      <Feather name="headphones" size={20} color={theme.textSecondary} />
+                      <ThemedText style={styles.settingText}>Стоимость радиогида</ThemedText>
+                    </View>
+                    <ThemedText style={{ color: theme.primary, fontWeight: "600" }}>
+                      {radioGuidePrice}₽
+                    </ThemedText>
+                  </View>
+                </Pressable>
               </>
             ) : null}
           </ThemedView>
@@ -234,6 +277,53 @@ export default function SettingsScreen() {
           <ThemedText style={[styles.logoutText, { color: theme.buttonText }]}>Выйти</ThemedText>
         </Pressable>
       </View>
+
+      <Modal
+        visible={showPriceModal}
+        transparent
+        animationType="fade"
+        onRequestClose={() => setShowPriceModal(false)}
+      >
+        <Pressable
+          style={styles.modalOverlay}
+          onPress={() => setShowPriceModal(false)}
+        >
+          <Pressable
+            style={[styles.modalContent, { backgroundColor: theme.backgroundSecondary }]}
+            onPress={(e) => e.stopPropagation()}
+          >
+            <ThemedText style={styles.modalTitle}>Стоимость аренды радиогида</ThemedText>
+            <ThemedText style={[styles.modalSubtitle, { color: theme.textSecondary }]}>
+              Цена за одного участника для расчёта в отчётах
+            </ThemedText>
+            <TextInput
+              style={[styles.priceInput, { backgroundColor: theme.backgroundRoot, color: theme.text, borderColor: theme.border }]}
+              value={priceInput}
+              onChangeText={setPriceInput}
+              keyboardType="numeric"
+              placeholder="Введите сумму"
+              placeholderTextColor={theme.textSecondary}
+            />
+            <View style={styles.modalButtons}>
+              <Pressable
+                style={[styles.modalButton, { backgroundColor: theme.backgroundRoot }]}
+                onPress={() => setShowPriceModal(false)}
+              >
+                <ThemedText>Отмена</ThemedText>
+              </Pressable>
+              <Pressable
+                style={[styles.modalButton, { backgroundColor: theme.primary }]}
+                onPress={handleSavePrice}
+                disabled={saving}
+              >
+                <ThemedText style={{ color: theme.buttonText }}>
+                  {saving ? "Сохранение..." : "Сохранить"}
+                </ThemedText>
+              </Pressable>
+            </View>
+          </Pressable>
+        </Pressable>
+      </Modal>
     </ScreenScrollView>
   );
 }
@@ -334,5 +424,46 @@ const styles = StyleSheet.create({
   editProfileText: {
     fontSize: 14,
     fontWeight: "500",
+  },
+  modalOverlay: {
+    flex: 1,
+    backgroundColor: "rgba(0,0,0,0.5)",
+    justifyContent: "center",
+    alignItems: "center",
+    padding: Spacing.xl,
+  },
+  modalContent: {
+    width: "100%",
+    maxWidth: 400,
+    padding: Spacing.xl,
+    borderRadius: BorderRadius.md,
+    gap: Spacing.md,
+  },
+  modalTitle: {
+    fontSize: 18,
+    fontWeight: "600",
+    textAlign: "center",
+  },
+  modalSubtitle: {
+    fontSize: 14,
+    textAlign: "center",
+  },
+  priceInput: {
+    padding: Spacing.md,
+    borderRadius: BorderRadius.sm,
+    borderWidth: 1,
+    fontSize: 18,
+    textAlign: "center",
+  },
+  modalButtons: {
+    flexDirection: "row",
+    gap: Spacing.md,
+    marginTop: Spacing.md,
+  },
+  modalButton: {
+    flex: 1,
+    padding: Spacing.md,
+    borderRadius: BorderRadius.sm,
+    alignItems: "center",
   },
 });
