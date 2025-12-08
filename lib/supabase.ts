@@ -176,3 +176,13 @@ export interface DbRadioGuideAssignment {
   created_at: string;
   updated_at: string;
 }
+
+export interface DbExcursionNote {
+  id: string;
+  excursion_id: string;
+  manager_id: string;
+  manager_name: string;
+  text: string;
+  created_at: string;
+  updated_at: string;
+}

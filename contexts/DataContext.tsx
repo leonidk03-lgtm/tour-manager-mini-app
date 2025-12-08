@@ -129,6 +129,16 @@ export interface DispatchingNote {
   managerId: string;
 }
 
+export interface ExcursionNote {
+  id: string;
+  excursionId: string;
+  text: string;
+  createdAt: string;
+  updatedAt: string;
+  managerId: string;
+  managerName: string;
+}
+
 export interface EquipmentLoss {
   id: string;
   assignmentId: string;
@@ -187,6 +197,10 @@ interface DataContextType {
   addDispatchingNote: (text: string) => Promise<void>;
   updateDispatchingNote: (id: string, text: string) => Promise<void>;
   deleteDispatchingNote: (id: string) => Promise<void>;
+  excursionNotes: ExcursionNote[];
+  addExcursionNote: (excursionId: string, text: string) => Promise<void>;
+  deleteExcursionNote: (id: string) => Promise<void>;
+  getExcursionNotes: (excursionId: string) => ExcursionNote[];
   isLoading: boolean;
   isOffline: boolean;
   networkError: string | null;
@@ -211,6 +225,7 @@ export function DataProvider({ children }: { children: ReactNode }) {
   const [equipmentLosses, setEquipmentLosses] = useState<EquipmentLoss[]>([]);
   const [radioGuidePrice, setRadioGuidePrice] = useState<number>(80);
   const [dispatchingNotes, setDispatchingNotes] = useState<DispatchingNote[]>([]);
+  const [excursionNotes, setExcursionNotes] = useState<ExcursionNote[]>([]);
   const [isLoading, setIsLoading] = useState(true);
   const [networkError, setNetworkError] = useState<string | null>(null);
   const [isOffline, setIsOffline] = useState(false);
@@ -255,6 +270,7 @@ export function DataProvider({ children }: { children: ReactNode }) {
         if (cached.equipmentLosses) setEquipmentLosses(cached.equipmentLosses as EquipmentLoss[]);
         if (cached.radioGuidePrice) setRadioGuidePrice(cached.radioGuidePrice as number);
         if (cached.dispatchingNotes) setDispatchingNotes(cached.dispatchingNotes as DispatchingNote[]);
+        if (cached.excursionNotes) setExcursionNotes(cached.excursionNotes as ExcursionNote[]);
       }
     });
   }, []);
@@ -590,15 +606,16 @@ export function DataProvider({ children }: { children: ReactNode }) {
         const localOnlyNotes = prev.filter(n => n.id.startsWith('local_'));
         
         for (const localNote of localOnlyNotes) {
-          supabase
-            .from('dispatching_notes')
-            .insert({
-              manager_id: user.id,
-              text: localNote.text,
-            })
-            .select()
-            .single()
-            .then(({ data: syncedData }) => {
+          (async () => {
+            try {
+              const { data: syncedData } = await supabase
+                .from('dispatching_notes')
+                .insert({
+                  manager_id: user.id,
+                  text: localNote.text,
+                })
+                .select()
+                .single();
               if (syncedData) {
                 setDispatchingNotes(current => {
                   const synced = current.map(n => n.id === localNote.id ? {
@@ -612,8 +629,9 @@ export function DataProvider({ children }: { children: ReactNode }) {
                   return synced;
                 });
               }
-            })
-            .catch(() => {});
+            } catch {
+            }
+          })();
         }
         
         const merged = [...localOnlyNotes, ...serverNotes];
@@ -718,6 +736,109 @@ export function DataProvider({ children }: { children: ReactNode }) {
     }
   };
 
+  const fetchExcursionNotes = useCallback(async (): Promise<void> => {
+    if (!user) return;
+    
+    try {
+      const { data, error } = await supabase
+        .from('excursion_notes')
+        .select('*')
+        .order('created_at', { ascending: false });
+
+      if (error) {
+        if (error.code === 'PGRST205' || error.code === '42P01') {
+          return;
+        }
+        throw error;
+      }
+
+      const notes = (data || []).map(n => ({
+        id: n.id,
+        excursionId: n.excursion_id,
+        text: n.text,
+        createdAt: n.created_at,
+        updatedAt: n.updated_at,
+        managerId: n.manager_id,
+        managerName: n.manager_name,
+      }));
+      
+      setExcursionNotes(notes);
+      saveToCache('excursionNotes', notes);
+    } catch (err) {
+      console.warn('Failed to fetch excursion notes from server');
+    }
+  }, [user]);
+
+  const addExcursionNote = async (excursionId: string, text: string) => {
+    if (!user || !profile) throw new Error('Not authenticated');
+    
+    try {
+      const { data, error } = await supabase
+        .from('excursion_notes')
+        .insert({
+          excursion_id: excursionId,
+          manager_id: user.id,
+          manager_name: profile.display_name,
+          text,
+        })
+        .select()
+        .single();
+
+      if (error) throw error;
+
+      const newNote: ExcursionNote = {
+        id: data.id,
+        excursionId: data.excursion_id,
+        text: data.text,
+        createdAt: data.created_at,
+        updatedAt: data.updated_at,
+        managerId: data.manager_id,
+        managerName: data.manager_name,
+      };
+
+      setExcursionNotes(prev => {
+        const updated = [newNote, ...prev];
+        saveToCache('excursionNotes', updated);
+        return updated;
+      });
+    } catch (err) {
+      console.error('Error adding excursion note:', err);
+      throw err;
+    }
+  };
+
+  const deleteExcursionNote = async (id: string) => {
+    const note = excursionNotes.find(n => n.id === id);
+    if (!note) return;
+
+    setExcursionNotes(prev => {
+      const updated = prev.filter(n => n.id !== id);
+      saveToCache('excursionNotes', updated);
+      return updated;
+    });
+
+    try {
+      await supabase.from('deleted_items').insert({
+        item_type: 'excursion_note',
+        item_data: note,
+        deleted_at: new Date().toISOString(),
+      });
+
+      const { error } = await supabase
+        .from('excursion_notes')
+        .delete()
+        .eq('id', id);
+
+      if (error) throw error;
+    } catch (err) {
+      console.error('Error deleting excursion note:', err);
+    }
+  };
+
+  const getExcursionNotes = useCallback((excursionId: string): ExcursionNote[] => {
+    return excursionNotes.filter(n => n.excursionId === excursionId);
+  }, [excursionNotes]);
+
   const refreshData = useCallback(async () => {
     setIsLoading(true);
     try {
@@ -732,6 +853,7 @@ export function DataProvider({ children }: { children: ReactNode }) {
         fetchRadioGuideAssignments(),
         fetchEquipmentLosses(),
         fetchDispatchingNotes(),
+        fetchExcursionNotes(),
       ]);
       
       const hasErrors = results.some(r => r.status === 'rejected');
@@ -1521,6 +1643,10 @@ export function DataProvider({ children }: { children: ReactNode }) {
         addDispatchingNote,
         updateDispatchingNote,
         deleteDispatchingNote,
+        excursionNotes,
+        addExcursionNote,
+        deleteExcursionNote,
+        getExcursionNotes,
         isLoading,
         isOffline,
         networkError,
