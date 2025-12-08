@@ -489,7 +489,7 @@ export default function ExcursionsListScreen() {
           ]}
           onPress={() => {
             hapticFeedback.light();
-            navigation.getParent()?.navigate('SettingsTab', { screen: 'RadioGuides' });
+            navigation.navigate('RadioGuides' as never);
           }}
         >
           <Icon name="radio" size={20} color={theme.primary} />
