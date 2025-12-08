@@ -32,7 +32,7 @@ type NavigationProp = NativeStackNavigationProp<SettingsStackParamList, "AdminPa
 export default function AdminPanelScreen() {
   const { theme } = useTheme();
   const navigation = useNavigation<NavigationProp>();
-  const { managers, createManager, updateManagerStatus, updateManagerRole, deleteManager, refreshManagers } = useAuth();
+  const { user, managers, createManager, updateManagerStatus, updateManagerRole, deleteManager, refreshManagers } = useAuth();
   const [showAddModal, setShowAddModal] = useState(false);
   const [newEmail, setNewEmail] = useState("");
   const [newPassword, setNewPassword] = useState("");
@@ -111,9 +111,54 @@ export default function AdminPanelScreen() {
 
   const staffMembers = managers.filter((m) => m.role === "manager" || m.role === "radio_dispatcher");
 
+  const adminProfile = managers.find(m => m.id === user?.id);
+
   return (
     <ScreenScrollView>
       <View style={styles.container}>
+        {adminProfile ? (
+          <View style={styles.section}>
+            <ThemedText style={styles.sectionTitle}>Моя статистика</ThemedText>
+            <Pressable
+              onPress={() => navigation.navigate("ManagerDetail", { manager: adminProfile as Profile })}
+              style={({ pressed }) => ({ opacity: pressed ? 0.7 : 1 })}
+            >
+              <ThemedView
+                style={[
+                  styles.adminCard,
+                  {
+                    borderColor: theme.border,
+                    borderRadius: BorderRadius.sm,
+                  },
+                ]}
+              >
+                <View style={styles.managerMain}>
+                  <View
+                    style={[
+                      styles.managerAvatar,
+                      { backgroundColor: theme.success },
+                    ]}
+                  >
+                    <Feather name="shield" size={20} color={theme.buttonText} />
+                  </View>
+                  <View style={styles.managerInfo}>
+                    <ThemedText style={styles.managerName}>{adminProfile.display_name}</ThemedText>
+                    <ThemedText style={[styles.managerEmail, { color: theme.textSecondary }]}>
+                      {adminProfile.email}
+                    </ThemedText>
+                    <View style={[styles.roleBadge, { backgroundColor: theme.success + "30" }]}>
+                      <ThemedText style={[styles.roleText, { color: theme.success }]}>
+                        Администратор
+                      </ThemedText>
+                    </View>
+                  </View>
+                  <Feather name="chevron-right" size={24} color={theme.textSecondary} />
+                </View>
+              </ThemedView>
+            </Pressable>
+          </View>
+        ) : null}
+
         <View style={styles.section}>
           <View style={styles.sectionHeader}>
             <ThemedText style={styles.sectionTitle}>Сотрудники</ThemedText>
@@ -412,6 +457,10 @@ const styles = StyleSheet.create({
     padding: Spacing.lg,
     borderWidth: 1,
     gap: Spacing.lg,
+  },
+  adminCard: {
+    padding: Spacing.lg,
+    borderWidth: 1,
   },
   managerMain: {
     flexDirection: "row",
