@@ -153,7 +153,7 @@ export default function ExcursionsListScreen() {
               },
             ]}
           >
-            <Feather
+            <Icon
               name={selectedKit?.id === kit.id ? "check-circle" : "circle"}
               size={20}
               color={selectedKit?.id === kit.id ? theme.primary : theme.textSecondary}

@@ -153,7 +153,7 @@ export default function EditProfileScreen() {
                 style={styles.eyeButton}
                 onPress={() => setShowPassword(!showPassword)}
               >
-                <Feather
+                <Icon
                   name={showPassword ? "eye-off" : "eye"}
                   size={20}
                   color={theme.textSecondary}

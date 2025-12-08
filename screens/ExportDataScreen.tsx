@@ -17,7 +17,7 @@ import { useAuth } from "@/contexts/AuthContext";
 
 type ExportType = "excursions" | "transactions" | "radioguides" | "all";
 
-const exportOptions: { id: ExportType; title: string; description: string; icon: keyof typeof Feather.glyphMap }[] = [
+const exportOptions: { id: ExportType; title: string; description: string; icon: string }[] = [
   {
     id: "excursions",
     title: "Экскурсии",

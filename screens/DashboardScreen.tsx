@@ -212,7 +212,7 @@ export default function DashboardScreen() {
                   ]}
                 >
                   <View style={styles.activityIcon}>
-                    <Feather
+                    <Icon
                       name={
                         activity.type === "excursion_added"
                           ? "plus-circle"

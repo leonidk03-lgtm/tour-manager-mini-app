@@ -199,7 +199,7 @@ export default function ManagerDetailScreen() {
               },
             ]}
           >
-            <Feather
+            <Icon
               name={currentManager.role === "radio_dispatcher" ? "radio" : "user"}
               size={32}
               color={theme.buttonText}
@@ -444,7 +444,7 @@ export default function ManagerDetailScreen() {
               >
                 <View style={styles.itemHeader}>
                   <View style={styles.transactionType}>
-                    <Feather
+                    <Icon
                       name={transaction.type === "income" ? "arrow-down-left" : "arrow-up-right"}
                       size={16}
                       color={transaction.type === "income" ? theme.success : theme.error}
@@ -499,7 +499,7 @@ export default function ManagerDetailScreen() {
               >
                 <View style={styles.itemHeader}>
                   <View style={styles.transactionType}>
-                    <Feather
+                    <Icon
                       name={assignment.returnedAt ? "check-circle" : "radio"}
                       size={16}
                       color={assignment.returnedAt ? theme.success : theme.primary}

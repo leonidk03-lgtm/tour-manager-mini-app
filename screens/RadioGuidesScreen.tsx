@@ -716,7 +716,7 @@ export default function RadioGuidesScreen() {
                   },
                 ]}
               >
-                <Feather
+                <Icon
                   name={!selectedExcursionId ? "check-circle" : "circle"}
                   size={18}
                   color={!selectedExcursionId ? theme.primary : theme.textSecondary}
@@ -737,7 +737,7 @@ export default function RadioGuidesScreen() {
                     },
                   ]}
                 >
-                  <Feather
+                  <Icon
                     name={selectedExcursionId === exc.id ? "check-circle" : "circle"}
                     size={18}
                     color={selectedExcursionId === exc.id ? theme.primary : theme.textSecondary}

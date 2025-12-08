@@ -13,7 +13,7 @@ type ReportItem = {
   id: string;
   title: string;
   description: string;
-  icon: keyof typeof Feather.glyphMap;
+  icon: string;
   screen: keyof SettingsStackParamList;
 };
 

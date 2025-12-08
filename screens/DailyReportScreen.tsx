@@ -23,7 +23,7 @@ const getLocalDateKey = (date: Date): string => {
 
 interface CollapsibleSectionProps {
   title: string;
-  icon: keyof typeof Feather.glyphMap;
+  icon: string;
   children: React.ReactNode;
   defaultExpanded?: boolean;
 }

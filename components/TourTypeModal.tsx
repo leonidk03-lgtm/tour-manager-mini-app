@@ -250,7 +250,7 @@ export function TourTypeModal({ visible, onClose, onSave, tourType }: TourTypeMo
                           },
                         ]}
                       >
-                        <Feather
+                        <Icon
                           name={isSelected ? "check-square" : "square"}
                           size={20}
                           color={isSelected ? theme.primary : theme.textSecondary}
