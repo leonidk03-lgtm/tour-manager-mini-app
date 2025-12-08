@@ -489,6 +489,22 @@ export default function ExcursionsListScreen() {
           ]}
           onPress={() => {
             hapticFeedback.light();
+            navigation.getParent()?.navigate('SettingsTab', { screen: 'DailyReport' });
+          }}
+        >
+          <Icon name="clipboard" size={20} color={theme.primary} />
+        </Pressable>
+        <Pressable
+          style={({ pressed }) => [
+            styles.fabSecondary,
+            {
+              backgroundColor: theme.backgroundSecondary,
+              borderColor: theme.border,
+              opacity: pressed ? 0.7 : 1,
+            },
+          ]}
+          onPress={() => {
+            hapticFeedback.light();
             navigation.navigate('RadioGuides' as never);
           }}
         >

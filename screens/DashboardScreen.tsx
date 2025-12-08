@@ -102,21 +102,38 @@ export default function DashboardScreen() {
       <View style={styles.container}>
         <View style={styles.section}>
           <PeriodSelector selectedPeriod={selectedPeriod} onPeriodChange={setSelectedPeriod} />
-          <Pressable
-            onPress={() => setShowDatePicker(true)}
-            style={[
-              styles.dateFilter,
-              {
-                backgroundColor: theme.backgroundSecondary,
-                borderRadius: BorderRadius.xs,
-              },
-            ]}
-          >
-            <Icon name="calendar" size={20} color={theme.textSecondary} />
-            <ThemedText style={[styles.dateText, { color: theme.text }]}>
-              {formatDisplayDate(referenceDate)}
-            </ThemedText>
-          </Pressable>
+          <View style={styles.dateRow}>
+            <Pressable
+              onPress={() => setShowDatePicker(true)}
+              style={[
+                styles.dateFilter,
+                {
+                  backgroundColor: theme.backgroundSecondary,
+                  borderRadius: BorderRadius.xs,
+                  flex: 1,
+                },
+              ]}
+            >
+              <Icon name="calendar" size={20} color={theme.textSecondary} />
+              <ThemedText style={[styles.dateText, { color: theme.text }]}>
+                {formatDisplayDate(referenceDate)}
+              </ThemedText>
+            </Pressable>
+            <Pressable
+              onPress={() => {
+                navigation.getParent()?.navigate('SettingsTab', { screen: 'DailyReport' });
+              }}
+              style={[
+                styles.dailyReportButton,
+                {
+                  backgroundColor: theme.primary,
+                  borderRadius: BorderRadius.xs,
+                },
+              ]}
+            >
+              <Icon name="clipboard" size={20} color={theme.buttonText} />
+            </Pressable>
+          </View>
           {showDatePicker ? (
             Platform.OS === "ios" ? (
               <Modal
@@ -355,6 +372,10 @@ const styles = StyleSheet.create({
     fontSize: 16,
     textAlign: "center",
   },
+  dateRow: {
+    flexDirection: "row",
+    gap: Spacing.sm,
+  },
   dateFilter: {
     flexDirection: "row",
     alignItems: "center",
@@ -365,6 +386,12 @@ const styles = StyleSheet.create({
   dateText: {
     flex: 1,
     fontSize: 16,
+  },
+  dailyReportButton: {
+    width: 48,
+    height: 48,
+    alignItems: "center",
+    justifyContent: "center",
   },
   modalOverlay: {
     flex: 1,
