@@ -121,6 +121,14 @@ export interface RadioGuideAssignment {
 
 export type EquipmentLossStatus = 'lost' | 'found';
 
+export interface DispatchingNote {
+  id: string;
+  text: string;
+  createdAt: string;
+  updatedAt: string;
+  managerId: string;
+}
+
 export interface EquipmentLoss {
   id: string;
   assignmentId: string;
@@ -175,6 +183,10 @@ interface DataContextType {
   deleteEquipmentLoss: (id: string) => Promise<void>;
   radioGuidePrice: number;
   updateRadioGuidePrice: (price: number) => Promise<void>;
+  dispatchingNotes: DispatchingNote[];
+  addDispatchingNote: (text: string) => Promise<void>;
+  updateDispatchingNote: (id: string, text: string) => Promise<void>;
+  deleteDispatchingNote: (id: string) => Promise<void>;
   isLoading: boolean;
   isOffline: boolean;
   networkError: string | null;
@@ -198,6 +210,7 @@ export function DataProvider({ children }: { children: ReactNode }) {
   const [radioGuideAssignments, setRadioGuideAssignments] = useState<RadioGuideAssignment[]>([]);
   const [equipmentLosses, setEquipmentLosses] = useState<EquipmentLoss[]>([]);
   const [radioGuidePrice, setRadioGuidePrice] = useState<number>(80);
+  const [dispatchingNotes, setDispatchingNotes] = useState<DispatchingNote[]>([]);
   const [isLoading, setIsLoading] = useState(true);
   const [networkError, setNetworkError] = useState<string | null>(null);
   const [isOffline, setIsOffline] = useState(false);
@@ -547,6 +560,80 @@ export function DataProvider({ children }: { children: ReactNode }) {
     }
   };
 
+  const fetchDispatchingNotes = useCallback(async (): Promise<void> => {
+    if (!user) return;
+    
+    const { data, error } = await supabase
+      .from('dispatching_notes')
+      .select('*')
+      .eq('manager_id', user.id)
+      .order('created_at', { ascending: false });
+
+    if (error) {
+      if (error.code === 'PGRST205' || error.code === '42P01') {
+        return;
+      }
+      throw error;
+    }
+
+    setDispatchingNotes((data || []).map(n => ({
+      id: n.id,
+      text: n.text,
+      createdAt: n.created_at,
+      updatedAt: n.updated_at,
+      managerId: n.manager_id,
+    })));
+  }, [user]);
+
+  const addDispatchingNote = async (text: string) => {
+    if (!user) throw new Error('Not authenticated');
+    
+    const { data, error } = await supabase
+      .from('dispatching_notes')
+      .insert({
+        manager_id: user.id,
+        text,
+      })
+      .select()
+      .single();
+
+    if (error) throw error;
+
+    const newNote: DispatchingNote = {
+      id: data.id,
+      text: data.text,
+      createdAt: data.created_at,
+      updatedAt: data.updated_at,
+      managerId: data.manager_id,
+    };
+
+    setDispatchingNotes(prev => [newNote, ...prev]);
+  };
+
+  const updateDispatchingNote = async (id: string, text: string) => {
+    const { error } = await supabase
+      .from('dispatching_notes')
+      .update({ text, updated_at: new Date().toISOString() })
+      .eq('id', id);
+
+    if (error) throw error;
+
+    setDispatchingNotes(prev =>
+      prev.map(n => n.id === id ? { ...n, text, updatedAt: new Date().toISOString() } : n)
+    );
+  };
+
+  const deleteDispatchingNote = async (id: string) => {
+    const { error } = await supabase
+      .from('dispatching_notes')
+      .delete()
+      .eq('id', id);
+
+    if (error) throw error;
+
+    setDispatchingNotes(prev => prev.filter(n => n.id !== id));
+  };
+
   const refreshData = useCallback(async () => {
     setIsLoading(true);
     try {
@@ -560,6 +647,7 @@ export function DataProvider({ children }: { children: ReactNode }) {
         fetchRadioGuideKits(),
         fetchRadioGuideAssignments(),
         fetchEquipmentLosses(),
+        fetchDispatchingNotes(),
       ]);
       
       const hasErrors = results.some(r => r.status === 'rejected');
@@ -613,6 +701,7 @@ export function DataProvider({ children }: { children: ReactNode }) {
         fetchTransactions(),
         fetchActivities(),
         fetchDeletedItems(),
+        fetchDispatchingNotes(),
       ]).then(() => {
         setIsOffline(false);
         setNetworkError(null);
@@ -625,7 +714,7 @@ export function DataProvider({ children }: { children: ReactNode }) {
     } else {
       setIsLoading(false);
     }
-  }, [user, profile, fetchExcursions, fetchTransactions, fetchActivities, fetchDeletedItems]);
+  }, [user, profile, fetchExcursions, fetchTransactions, fetchActivities, fetchDeletedItems, fetchDispatchingNotes]);
 
   // Supabase Realtime subscriptions for live data sync
   useEffect(() => {
@@ -677,6 +766,11 @@ export function DataProvider({ children }: { children: ReactNode }) {
         { event: '*', schema: 'public', table: 'equipment_losses' },
         () => safeFetch(fetchEquipmentLosses)
       )
+      .on(
+        'postgres_changes',
+        { event: '*', schema: 'public', table: 'dispatching_notes' },
+        () => safeFetch(fetchDispatchingNotes)
+      )
       .subscribe((status) => {
         if (status === 'CHANNEL_ERROR') {
           console.error('Supabase Realtime channel error');
@@ -689,7 +783,7 @@ export function DataProvider({ children }: { children: ReactNode }) {
     return () => {
       supabase.removeChannel(channel);
     };
-  }, [user, fetchTourTypes, fetchAdditionalServices, fetchRadioGuideKits, fetchRadioGuideAssignments, fetchEquipmentLosses, fetchExcursions, fetchTransactions, fetchActivities, fetchDeletedItems, safeFetch]);
+  }, [user, fetchTourTypes, fetchAdditionalServices, fetchRadioGuideKits, fetchRadioGuideAssignments, fetchEquipmentLosses, fetchExcursions, fetchTransactions, fetchActivities, fetchDeletedItems, fetchDispatchingNotes, safeFetch]);
 
   const refreshPriceList = useCallback(async () => {
     await Promise.all([fetchTourTypes(), fetchAdditionalServices()]);
@@ -1339,6 +1433,10 @@ export function DataProvider({ children }: { children: ReactNode }) {
         deleteEquipmentLoss,
         radioGuidePrice,
         updateRadioGuidePrice,
+        dispatchingNotes,
+        addDispatchingNote,
+        updateDispatchingNote,
+        deleteDispatchingNote,
         isLoading,
         isOffline,
         networkError,

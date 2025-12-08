@@ -8,35 +8,30 @@ import { BlurView } from "expo-blur";
 import { ThemedText } from "@/components/ThemedText";
 import { ThemedView } from "@/components/ThemedView";
 import { useTheme } from "@/hooks/useTheme";
+import { useData, DispatchingNote } from "@/contexts/DataContext";
 import { Spacing, BorderRadius, Typography } from "@/constants/theme";
+import { hapticFeedback } from "@/utils/haptics";
 
 const DEFAULT_DATABASE_URL = "http://turburo-kazan.ru/managers/zapis-na-ekskursiyu.php?arrFilter_ff%5BNAME%5D=&arrFilter_DATE_ACTIVE_FROM_1=&arrFilter_DATE_ACTIVE_FROM_2=&arrFilter_pf%5BTYPE%5D=&arrFilter_pf%5BGOSTINICI%5D=&arrFilter_CREATED_BY=&sort=date_ex&USER_REMEMBER=Y&set_filter=Показать&set_filter=Y";
-const NOTES_STORAGE_KEY = "@dispatching_notes_list";
 export const DISPATCH_URL_KEY = "@dispatch_webview_url";
-
-interface Note {
-  id: string;
-  text: string;
-  createdAt: string;
-}
 
 export default function DispatchingScreen() {
   const { theme } = useTheme();
   const insets = useSafeAreaInsets();
-  const [notes, setNotes] = useState<Note[]>([]);
+  const { dispatchingNotes, addDispatchingNote, updateDispatchingNote, deleteDispatchingNote } = useData();
   const [currentNote, setCurrentNote] = useState("");
   const [showNotesList, setShowNotesList] = useState(false);
   const [showFullscreenNote, setShowFullscreenNote] = useState(false);
-  const [editingNote, setEditingNote] = useState<Note | null>(null);
+  const [editingNote, setEditingNote] = useState<DispatchingNote | null>(null);
   const [showCalculator, setShowCalculator] = useState(false);
   const [calcDisplay, setCalcDisplay] = useState("0");
   const [calcPrevValue, setCalcPrevValue] = useState<number | null>(null);
   const [calcOperation, setCalcOperation] = useState<string | null>(null);
   const [calcWaitingForOperand, setCalcWaitingForOperand] = useState(false);
   const [webViewUrl, setWebViewUrl] = useState(DEFAULT_DATABASE_URL);
+  const [isSaving, setIsSaving] = useState(false);
 
   useEffect(() => {
-    loadNotes();
     loadWebViewUrl();
   }, []);
 
@@ -51,56 +46,42 @@ export default function DispatchingScreen() {
     }
   };
 
-  const loadNotes = async () => {
-    try {
-      const savedNotes = await AsyncStorage.getItem(NOTES_STORAGE_KEY);
-      if (savedNotes !== null) {
-        setNotes(JSON.parse(savedNotes));
-      }
-    } catch (error) {
-      console.error("Failed to load notes:", error);
-    }
+  const formatNoteDate = (dateStr: string) => {
+    const date = new Date(dateStr);
+    return date.toLocaleDateString("ru-RU", {
+      day: "2-digit",
+      month: "2-digit",
+      year: "numeric",
+      hour: "2-digit",
+      minute: "2-digit",
+    });
   };
 
-  const saveNotes = async (notesList: Note[]) => {
-    try {
-      await AsyncStorage.setItem(NOTES_STORAGE_KEY, JSON.stringify(notesList));
-    } catch (error) {
-      console.error("Failed to save notes:", error);
-    }
-  };
-
-  const handleSaveNote = () => {
+  const handleSaveNote = async () => {
     if (!currentNote.trim()) {
       Alert.alert("Внимание", "Введите текст заметки");
       return;
     }
 
-    let updatedNotes: Note[];
-    if (editingNote) {
-      updatedNotes = notes.map((n) =>
-        n.id === editingNote.id ? { ...n, text: currentNote.trim() } : n
-      );
-      setEditingNote(null);
-    } else {
-      const newNote: Note = {
-        id: Date.now().toString(),
-        text: currentNote.trim(),
-        createdAt: new Date().toLocaleDateString("ru-RU", {
-          day: "2-digit",
-          month: "2-digit",
-          year: "numeric",
-          hour: "2-digit",
-          minute: "2-digit",
-        }),
-      };
-      updatedNotes = [newNote, ...notes];
-    }
+    if (isSaving) return;
+    setIsSaving(true);
 
-    setNotes(updatedNotes);
-    saveNotes(updatedNotes);
-    setCurrentNote("");
-    setShowFullscreenNote(false);
+    try {
+      if (editingNote) {
+        await updateDispatchingNote(editingNote.id, currentNote.trim());
+        setEditingNote(null);
+      } else {
+        await addDispatchingNote(currentNote.trim());
+      }
+      hapticFeedback.success();
+      setCurrentNote("");
+      setShowFullscreenNote(false);
+    } catch (err) {
+      hapticFeedback.error();
+      Alert.alert("Ошибка", "Не удалось сохранить заметку");
+    } finally {
+      setIsSaving(false);
+    }
   };
 
   const handleDeleteNote = (noteId: string) => {
@@ -109,16 +90,20 @@ export default function DispatchingScreen() {
       {
         text: "Удалить",
         style: "destructive",
-        onPress: () => {
-          const updatedNotes = notes.filter((n) => n.id !== noteId);
-          setNotes(updatedNotes);
-          saveNotes(updatedNotes);
+        onPress: async () => {
+          try {
+            await deleteDispatchingNote(noteId);
+            hapticFeedback.success();
+          } catch (err) {
+            hapticFeedback.error();
+            Alert.alert("Ошибка", "Не удалось удалить заметку");
+          }
         },
       },
     ]);
   };
 
-  const handleEditNote = (note: Note) => {
+  const handleEditNote = (note: DispatchingNote) => {
     setEditingNote(note);
     setCurrentNote(note.text);
     setShowNotesList(false);
@@ -147,17 +132,17 @@ export default function DispatchingScreen() {
   };
 
   const handleCalcDigit = (digit: string) => {
+    hapticFeedback.light();
     if (calcWaitingForOperand) {
       setCalcDisplay(digit);
       setCalcWaitingForOperand(false);
     } else {
-      if (calcDisplay.length < 15) {
-        setCalcDisplay(calcDisplay === "0" ? digit : calcDisplay + digit);
-      }
+      setCalcDisplay(calcDisplay === "0" ? digit : calcDisplay + digit);
     }
   };
 
   const handleCalcDecimal = () => {
+    hapticFeedback.light();
     if (calcWaitingForOperand) {
       setCalcDisplay("0.");
       setCalcWaitingForOperand(false);
@@ -167,137 +152,133 @@ export default function DispatchingScreen() {
   };
 
   const handleCalcOperation = (op: string) => {
-    const currentValue = parseFloat(calcDisplay);
+    hapticFeedback.light();
+    const current = parseFloat(calcDisplay);
     
-    if (calcPrevValue !== null && calcOperation && !calcWaitingForOperand) {
-      const result = calculate(calcPrevValue, currentValue, calcOperation);
+    if (calcPrevValue !== null && !calcWaitingForOperand) {
+      const result = calculate(calcPrevValue, current, calcOperation!);
       setCalcDisplay(String(result));
       setCalcPrevValue(result);
     } else {
-      setCalcPrevValue(currentValue);
+      setCalcPrevValue(current);
     }
     
     setCalcOperation(op);
     setCalcWaitingForOperand(true);
   };
 
-  const calculate = (prev: number, current: number, op: string): number => {
+  const calculate = (a: number, b: number, op: string): number => {
     switch (op) {
-      case "+": return prev + current;
-      case "-": return prev - current;
-      case "×": return prev * current;
-      case "÷": return current !== 0 ? prev / current : 0;
-      default: return current;
+      case "+": return a + b;
+      case "-": return a - b;
+      case "×": return a * b;
+      case "÷": return b !== 0 ? a / b : 0;
+      default: return b;
     }
   };
 
   const handleCalcEquals = () => {
-    if (calcPrevValue !== null && calcOperation) {
-      const currentValue = parseFloat(calcDisplay);
-      const result = calculate(calcPrevValue, currentValue, calcOperation);
-      setCalcDisplay(String(result));
-      setCalcPrevValue(null);
-      setCalcOperation(null);
-      setCalcWaitingForOperand(true);
-    }
+    hapticFeedback.medium();
+    if (calcPrevValue === null || calcOperation === null) return;
+    
+    const current = parseFloat(calcDisplay);
+    const result = calculate(calcPrevValue, current, calcOperation);
+    setCalcDisplay(String(result));
+    setCalcPrevValue(null);
+    setCalcOperation(null);
+    setCalcWaitingForOperand(true);
   };
 
   const handleCalcClear = () => {
+    hapticFeedback.light();
     setCalcDisplay("0");
     setCalcPrevValue(null);
     setCalcOperation(null);
     setCalcWaitingForOperand(false);
   };
 
-  const CalcButton = ({ label, onPress, style, textStyle }: { label: string; onPress: () => void; style?: any; textStyle?: any }) => (
+  const CalcButton = ({ label, onPress, style, textStyle }: { label: string; onPress: () => void; style?: object; textStyle?: object }) => (
     <Pressable
-      style={[styles.calcButton, { backgroundColor: theme.backgroundSecondary }, style]}
+      style={({ pressed }) => [
+        styles.calcButton,
+        { backgroundColor: theme.backgroundSecondary },
+        style,
+        pressed && { opacity: 0.7 },
+      ]}
       onPress={onPress}
     >
       <ThemedText style={[styles.calcButtonText, textStyle]}>{label}</ThemedText>
     </Pressable>
   );
 
-  const renderNoteItem = ({ item }: { item: Note }) => (
-    <View style={[styles.noteItem, { backgroundColor: theme.backgroundSecondary }]}>
-      <Pressable style={styles.noteContent} onPress={() => handleEditNote(item)}>
-        <ThemedText style={styles.noteText} numberOfLines={2}>
-          {item.text}
-        </ThemedText>
-        <ThemedText style={[styles.noteDate, { color: theme.textSecondary }]}>
-          {item.createdAt}
-        </ThemedText>
-      </Pressable>
-      <Pressable style={styles.noteDeleteButton} onPress={() => handleDeleteNote(item.id)}>
-        <Feather name="trash-2" size={18} color={theme.error} />
-      </Pressable>
-    </View>
-  );
-
   return (
-    <ThemedView style={[styles.container, { backgroundColor: theme.backgroundRoot }]}>
-      <View style={[styles.notesSection, { backgroundColor: theme.backgroundDefault }]}>
+    <View style={[styles.container, { backgroundColor: theme.backgroundRoot }]}>
+      <View style={[styles.notesContainer, { paddingTop: insets.top + 60 }]}>
         <View style={styles.notesHeader}>
-          <View style={styles.notesHeaderLeft}>
-            <Feather name="edit-3" size={18} color={theme.textSecondary} />
-            <ThemedText style={[styles.notesTitle, { color: theme.textSecondary }]}>
-              {editingNote ? "Редактирование" : "Новая заметка"}
-            </ThemedText>
-          </View>
-          <View style={styles.notesHeaderRight}>
+          <ThemedText style={styles.notesTitle}>Заметки</ThemedText>
+          <View style={styles.notesActions}>
+            {dispatchingNotes.length > 0 ? (
+              <Pressable
+                style={({ pressed }) => [
+                  styles.notesHeaderButton,
+                  { backgroundColor: theme.backgroundSecondary, opacity: pressed ? 0.7 : 1 },
+                ]}
+                onPress={() => {
+                  hapticFeedback.selection();
+                  setShowNotesList(true);
+                }}
+              >
+                <Feather name="list" size={16} color={theme.text} />
+                <ThemedText style={styles.notesHeaderButtonText}>
+                  {dispatchingNotes.length}
+                </ThemedText>
+              </Pressable>
+            ) : null}
             <Pressable
-              style={[styles.headerButton, { backgroundColor: theme.backgroundSecondary }]}
-              onPress={() => setShowFullscreenNote(true)}
+              style={({ pressed }) => [
+                styles.notesHeaderButton,
+                { backgroundColor: theme.primary, opacity: pressed ? 0.7 : 1 },
+              ]}
+              onPress={() => {
+                hapticFeedback.medium();
+                setShowFullscreenNote(true);
+              }}
             >
-              <Feather name="maximize-2" size={18} color={theme.text} />
-            </Pressable>
-            <Pressable
-              style={[styles.headerButton, { backgroundColor: theme.backgroundSecondary }]}
-              onPress={() => setShowNotesList(true)}
-            >
-              <Feather name="list" size={18} color={theme.text} />
-              {notes.length > 0 ? (
-                <View style={[styles.notesBadge, { backgroundColor: theme.primary }]}>
-                  <ThemedText style={styles.notesBadgeText}>{notes.length}</ThemedText>
-                </View>
-              ) : null}
+              <Feather name="plus" size={16} color={theme.buttonText} />
             </Pressable>
           </View>
         </View>
-        <TextInput
-          style={[
-            styles.notesInput,
-            {
-              backgroundColor: theme.backgroundSecondary,
-              color: theme.text,
-            },
-          ]}
-          value={currentNote}
-          onChangeText={setCurrentNote}
-          placeholder="Введите текст заметки..."
-          placeholderTextColor={theme.textSecondary}
-          multiline
-          textAlignVertical="top"
-          blurOnSubmit={false}
-        />
-        <View style={styles.notesActions}>
-          {editingNote ? (
+
+        {editingNote ? (
+          <View style={styles.editingIndicator}>
+            <ThemedText style={[styles.editingText, { color: theme.primary }]}>
+              Редактирование заметки
+            </ThemedText>
+            <Pressable onPress={handleCancelEdit}>
+              <Feather name="x" size={18} color={theme.error} />
+            </Pressable>
+          </View>
+        ) : null}
+
+        <View style={[styles.noteInputContainer, { backgroundColor: theme.backgroundSecondary }]}>
+          <TextInput
+            style={[styles.noteInput, { color: theme.text }]}
+            placeholder="Быстрая заметка..."
+            placeholderTextColor={theme.textSecondary}
+            value={currentNote}
+            onChangeText={setCurrentNote}
+            multiline
+            numberOfLines={2}
+          />
+          {currentNote.trim() ? (
             <Pressable
-              style={[styles.cancelButton, { backgroundColor: theme.backgroundSecondary }]}
-              onPress={handleCancelEdit}
+              style={[styles.sendButton, { backgroundColor: theme.primary }]}
+              onPress={handleSaveNote}
+              disabled={isSaving}
             >
-              <ThemedText style={{ color: theme.text }}>Отмена</ThemedText>
+              <Feather name={editingNote ? "check" : "send"} size={16} color={theme.buttonText} />
             </Pressable>
           ) : null}
-          <Pressable
-            style={[styles.saveButton, { backgroundColor: theme.primary }]}
-            onPress={handleSaveNote}
-          >
-            <Feather name="save" size={16} color="#FFFFFF" />
-            <ThemedText style={styles.saveButtonText}>
-              {editingNote ? "Обновить" : "Сохранить"}
-            </ThemedText>
-          </Pressable>
         </View>
       </View>
 
@@ -322,68 +303,15 @@ export default function DispatchingScreen() {
 
       <Pressable
         style={[styles.fab, { bottom: insets.bottom + 90 }]}
-        onPress={() => setShowCalculator(true)}
+        onPress={() => {
+          hapticFeedback.light();
+          setShowCalculator(true);
+        }}
       >
         <BlurView intensity={100} tint="dark" style={styles.fabBlur}>
           <Feather name="percent" size={24} color="#FFFFFF" />
         </BlurView>
       </Pressable>
-
-      <Modal
-        visible={showFullscreenNote}
-        animationType="slide"
-        onRequestClose={() => setShowFullscreenNote(false)}
-      >
-        <TouchableWithoutFeedback onPress={dismissKeyboard}>
-          <ThemedView style={[styles.fullscreenContainer, { paddingTop: insets.top, paddingBottom: insets.bottom }]}>
-            <View style={styles.fullscreenHeader}>
-              <Pressable onPress={() => { dismissKeyboard(); setShowFullscreenNote(false); }}>
-                <Feather name="x" size={24} color={theme.text} />
-              </Pressable>
-              <ThemedText style={styles.fullscreenTitle}>
-                {editingNote ? "Редактирование" : "Новая заметка"}
-              </ThemedText>
-              <Pressable onPress={() => { dismissKeyboard(); handleSaveNote(); }}>
-                <Feather name="check" size={24} color={theme.primary} />
-              </Pressable>
-            </View>
-            <TextInput
-              style={[
-                styles.fullscreenInput,
-                {
-                  backgroundColor: theme.backgroundSecondary,
-                  color: theme.text,
-                },
-              ]}
-              value={currentNote}
-              onChangeText={setCurrentNote}
-              placeholder="Введите текст заметки..."
-              placeholderTextColor={theme.textSecondary}
-              multiline
-              textAlignVertical="top"
-            />
-            <View style={styles.fullscreenActions}>
-              {editingNote ? (
-                <Pressable
-                  style={[styles.cancelButton, { backgroundColor: theme.backgroundSecondary, flex: 1 }]}
-                  onPress={handleCancelEdit}
-                >
-                  <ThemedText style={{ color: theme.text }}>Отмена</ThemedText>
-                </Pressable>
-              ) : null}
-              <Pressable
-                style={[styles.saveButton, { backgroundColor: theme.primary, flex: 1 }]}
-                onPress={handleSaveNote}
-              >
-                <Feather name="save" size={16} color="#FFFFFF" />
-                <ThemedText style={styles.saveButtonText}>
-                  {editingNote ? "Обновить" : "Сохранить"}
-                </ThemedText>
-              </Pressable>
-            </View>
-          </ThemedView>
-        </TouchableWithoutFeedback>
-      </Modal>
 
       <Modal
         visible={showNotesList}
@@ -392,34 +320,94 @@ export default function DispatchingScreen() {
         onRequestClose={() => setShowNotesList(false)}
       >
         <Pressable style={styles.modalBackdrop} onPress={() => setShowNotesList(false)}>
-          <Pressable
-            style={[styles.notesListContainer, { backgroundColor: theme.backgroundDefault }]}
-            onPress={(e) => e.stopPropagation()}
-          >
-            <View style={styles.notesListHeader}>
-              <ThemedText style={styles.notesListTitle}>Сохраненные заметки</ThemedText>
-              <Pressable onPress={() => setShowNotesList(false)}>
-                <Feather name="x" size={24} color={theme.text} />
-              </Pressable>
-            </View>
-            {notes.length === 0 ? (
-              <View style={styles.emptyNotes}>
-                <Feather name="file-text" size={48} color={theme.textSecondary} />
-                <ThemedText style={[styles.emptyNotesText, { color: theme.textSecondary }]}>
-                  Нет сохраненных заметок
-                </ThemedText>
+          <TouchableWithoutFeedback>
+            <ThemedView style={[styles.notesListModal, { backgroundColor: theme.backgroundDefault }]}>
+              <View style={styles.notesListHeader}>
+                <ThemedText style={styles.notesListTitle}>Все заметки</ThemedText>
+                <Pressable onPress={() => setShowNotesList(false)}>
+                  <Feather name="x" size={24} color={theme.text} />
+                </Pressable>
               </View>
-            ) : (
+
               <FlatList
-                data={notes}
-                renderItem={renderNoteItem}
+                data={dispatchingNotes}
                 keyExtractor={(item) => item.id}
-                contentContainerStyle={styles.notesList}
-                showsVerticalScrollIndicator={false}
+                renderItem={({ item }) => (
+                  <View style={[styles.noteItem, { borderBottomColor: theme.border }]}>
+                    <View style={styles.noteContent}>
+                      <ThemedText style={styles.noteText} numberOfLines={3}>
+                        {item.text}
+                      </ThemedText>
+                      <ThemedText style={[styles.noteDate, { color: theme.textSecondary }]}>
+                        {formatNoteDate(item.createdAt)}
+                      </ThemedText>
+                    </View>
+                    <View style={styles.noteActions}>
+                      <Pressable
+                        style={styles.noteActionButton}
+                        onPress={() => {
+                          hapticFeedback.selection();
+                          handleEditNote(item);
+                        }}
+                      >
+                        <Feather name="edit-2" size={18} color={theme.primary} />
+                      </Pressable>
+                      <Pressable
+                        style={styles.noteActionButton}
+                        onPress={() => {
+                          hapticFeedback.light();
+                          handleDeleteNote(item.id);
+                        }}
+                      >
+                        <Feather name="trash-2" size={18} color={theme.error} />
+                      </Pressable>
+                    </View>
+                  </View>
+                )}
+                ListEmptyComponent={
+                  <View style={styles.emptyNotes}>
+                    <Feather name="file-text" size={48} color={theme.textSecondary} />
+                    <ThemedText style={[styles.emptyNotesText, { color: theme.textSecondary }]}>
+                      Нет заметок
+                    </ThemedText>
+                  </View>
+                }
               />
-            )}
-          </Pressable>
+            </ThemedView>
+          </TouchableWithoutFeedback>
         </Pressable>
+      </Modal>
+
+      <Modal
+        visible={showFullscreenNote}
+        animationType="slide"
+        presentationStyle="pageSheet"
+        onRequestClose={handleCancelEdit}
+      >
+        <ThemedView style={[styles.fullscreenNoteContainer, { backgroundColor: theme.backgroundRoot }]}>
+          <View style={[styles.fullscreenNoteHeader, { borderBottomColor: theme.border }]}>
+            <Pressable onPress={handleCancelEdit}>
+              <ThemedText style={{ color: theme.primary }}>Отмена</ThemedText>
+            </Pressable>
+            <ThemedText style={styles.fullscreenNoteTitle}>
+              {editingNote ? "Редактировать" : "Новая заметка"}
+            </ThemedText>
+            <Pressable onPress={handleSaveNote} disabled={isSaving}>
+              <ThemedText style={{ color: theme.primary, fontWeight: "600" }}>
+                {isSaving ? "..." : "Сохранить"}
+              </ThemedText>
+            </Pressable>
+          </View>
+          <TextInput
+            style={[styles.fullscreenNoteInput, { color: theme.text }]}
+            placeholder="Введите заметку..."
+            placeholderTextColor={theme.textSecondary}
+            value={currentNote}
+            onChangeText={setCurrentNote}
+            multiline
+            autoFocus
+          />
+        </ThemedView>
       </Modal>
 
       <Modal
@@ -476,7 +464,7 @@ export default function DispatchingScreen() {
           </Pressable>
         </Pressable>
       </Modal>
-    </ThemedView>
+    </View>
   );
 }
 
@@ -484,82 +472,65 @@ const styles = StyleSheet.create({
   container: {
     flex: 1,
   },
-  notesSection: {
-    height: 280,
-    padding: Spacing.md,
-    borderBottomWidth: 1,
-    borderBottomColor: "rgba(255,255,255,0.1)",
+  notesContainer: {
+    paddingHorizontal: Spacing.md,
+    paddingBottom: Spacing.md,
+    gap: Spacing.sm,
   },
   notesHeader: {
     flexDirection: "row",
-    alignItems: "center",
     justifyContent: "space-between",
-    marginBottom: Spacing.sm,
-  },
-  notesHeaderLeft: {
-    flexDirection: "row",
     alignItems: "center",
-  },
-  notesHeaderRight: {
-    flexDirection: "row",
-    alignItems: "center",
-    gap: Spacing.sm,
   },
   notesTitle: {
-    marginLeft: Spacing.sm,
-    ...Typography.bodySecondary,
-  },
-  headerButton: {
-    flexDirection: "row",
-    alignItems: "center",
-    paddingHorizontal: Spacing.md,
-    paddingVertical: Spacing.sm,
-    borderRadius: BorderRadius.md,
-  },
-  notesBadge: {
-    marginLeft: Spacing.xs,
-    paddingHorizontal: 6,
-    paddingVertical: 2,
-    borderRadius: 10,
-    minWidth: 20,
-    alignItems: "center",
-  },
-  notesBadgeText: {
-    color: "#FFFFFF",
-    fontSize: 12,
+    fontSize: Typography.h3.fontSize,
     fontWeight: "600",
-  },
-  notesInput: {
-    flex: 1,
-    borderRadius: BorderRadius.md,
-    padding: Spacing.md,
-    ...Typography.body,
   },
   notesActions: {
     flexDirection: "row",
-    justifyContent: "flex-end",
-    marginTop: Spacing.sm,
     gap: Spacing.sm,
   },
-  saveButton: {
+  notesHeaderButton: {
     flexDirection: "row",
     alignItems: "center",
-    justifyContent: "center",
-    paddingHorizontal: Spacing.lg,
-    paddingVertical: Spacing.sm,
-    borderRadius: BorderRadius.md,
     gap: Spacing.xs,
-  },
-  saveButtonText: {
-    color: "#FFFFFF",
-    fontWeight: "600",
-  },
-  cancelButton: {
-    alignItems: "center",
-    justifyContent: "center",
-    paddingHorizontal: Spacing.lg,
+    paddingHorizontal: Spacing.md,
     paddingVertical: Spacing.sm,
+    borderRadius: BorderRadius.sm,
+  },
+  notesHeaderButtonText: {
+    fontSize: 14,
+    fontWeight: "500",
+  },
+  editingIndicator: {
+    flexDirection: "row",
+    alignItems: "center",
+    justifyContent: "space-between",
+    paddingHorizontal: Spacing.sm,
+  },
+  editingText: {
+    fontSize: 13,
+    fontWeight: "500",
+  },
+  noteInputContainer: {
+    flexDirection: "row",
+    alignItems: "flex-end",
     borderRadius: BorderRadius.md,
+    padding: Spacing.sm,
+    gap: Spacing.sm,
+  },
+  noteInput: {
+    flex: 1,
+    fontSize: 15,
+    maxHeight: 80,
+    paddingVertical: Spacing.xs,
+  },
+  sendButton: {
+    width: 36,
+    height: 36,
+    borderRadius: 18,
+    justifyContent: "center",
+    alignItems: "center",
   },
   webViewContainer: {
     flex: 1,
@@ -571,12 +542,12 @@ const styles = StyleSheet.create({
     flex: 1,
     justifyContent: "center",
     alignItems: "center",
+    gap: Spacing.md,
     padding: Spacing.xl,
   },
   webFallbackText: {
-    marginTop: Spacing.md,
     textAlign: "center",
-    ...Typography.body,
+    fontSize: 15,
   },
   fab: {
     position: "absolute",
@@ -591,91 +562,92 @@ const styles = StyleSheet.create({
     justifyContent: "center",
     alignItems: "center",
   },
-  fullscreenContainer: {
-    flex: 1,
-    padding: Spacing.lg,
-  },
-  fullscreenHeader: {
-    flexDirection: "row",
-    justifyContent: "space-between",
-    alignItems: "center",
-    marginBottom: Spacing.lg,
-  },
-  fullscreenTitle: {
-    ...Typography.h3,
-  },
-  fullscreenInput: {
-    flex: 1,
-    borderRadius: BorderRadius.md,
-    padding: Spacing.lg,
-    ...Typography.body,
-    fontSize: 18,
-  },
-  fullscreenActions: {
-    flexDirection: "row",
-    marginTop: Spacing.lg,
-    gap: Spacing.md,
-  },
   modalBackdrop: {
     flex: 1,
-    backgroundColor: "rgba(0,0,0,0.6)",
+    backgroundColor: "rgba(0,0,0,0.5)",
     justifyContent: "flex-end",
   },
-  calcModalBackdrop: {
-    flex: 1,
-    backgroundColor: "rgba(0,0,0,0.6)",
-    justifyContent: "center",
-    alignItems: "center",
-  },
-  notesListContainer: {
-    height: "70%",
+  notesListModal: {
+    maxHeight: "70%",
     borderTopLeftRadius: BorderRadius.xl,
     borderTopRightRadius: BorderRadius.xl,
-    padding: Spacing.lg,
+    paddingBottom: Spacing.xl,
   },
   notesListHeader: {
     flexDirection: "row",
     justifyContent: "space-between",
     alignItems: "center",
-    marginBottom: Spacing.lg,
+    padding: Spacing.lg,
+    borderBottomWidth: 1,
+    borderBottomColor: "rgba(255,255,255,0.1)",
   },
   notesListTitle: {
-    ...Typography.h3,
-  },
-  notesList: {
-    gap: Spacing.sm,
+    fontSize: Typography.h3.fontSize,
+    fontWeight: "600",
   },
   noteItem: {
     flexDirection: "row",
     alignItems: "center",
-    borderRadius: BorderRadius.md,
-    padding: Spacing.md,
+    paddingVertical: Spacing.md,
+    paddingHorizontal: Spacing.lg,
+    borderBottomWidth: 1,
   },
   noteContent: {
     flex: 1,
+    gap: Spacing.xs,
   },
   noteText: {
-    ...Typography.body,
-    marginBottom: Spacing.xs,
+    fontSize: 15,
   },
   noteDate: {
-    ...Typography.caption,
+    fontSize: 12,
   },
-  noteDeleteButton: {
+  noteActions: {
+    flexDirection: "row",
+    gap: Spacing.md,
+  },
+  noteActionButton: {
     padding: Spacing.sm,
   },
   emptyNotes: {
+    alignItems: "center",
+    justifyContent: "center",
+    paddingVertical: Spacing["2xl"],
+    gap: Spacing.md,
+  },
+  emptyNotesText: {
+    fontSize: 15,
+  },
+  fullscreenNoteContainer: {
     flex: 1,
+  },
+  fullscreenNoteHeader: {
+    flexDirection: "row",
+    justifyContent: "space-between",
+    alignItems: "center",
+    padding: Spacing.lg,
+    borderBottomWidth: 1,
+  },
+  fullscreenNoteTitle: {
+    fontSize: Typography.h3.fontSize,
+    fontWeight: "600",
+  },
+  fullscreenNoteInput: {
+    flex: 1,
+    fontSize: 16,
+    padding: Spacing.lg,
+    textAlignVertical: "top",
+  },
+  calcModalBackdrop: {
+    flex: 1,
+    backgroundColor: "rgba(0,0,0,0.5)",
     justifyContent: "center",
     alignItems: "center",
   },
-  emptyNotesText: {
-    marginTop: Spacing.md,
-    ...Typography.body,
-  },
   calculatorContainer: {
-    width: 300,
-    borderRadius: BorderRadius.xl,
+    width: "85%",
+    maxWidth: 320,
+    borderRadius: BorderRadius.lg,
     padding: Spacing.lg,
   },
   calcHeader: {
@@ -685,41 +657,35 @@ const styles = StyleSheet.create({
     marginBottom: Spacing.md,
   },
   calcTitle: {
-    ...Typography.h3,
+    fontSize: Typography.h3.fontSize,
+    fontWeight: "600",
   },
   calcDisplay: {
-    paddingHorizontal: Spacing.lg,
-    paddingVertical: Spacing.lg,
+    padding: Spacing.lg,
     borderRadius: BorderRadius.md,
     marginBottom: Spacing.md,
     alignItems: "flex-end",
-    minHeight: 80,
-    justifyContent: "center",
   },
   calcDisplayText: {
     fontSize: 32,
-    fontWeight: "600",
-    textAlign: "right",
-    width: "100%",
-    lineHeight: 40,
+    fontWeight: "500",
   },
   calcGrid: {
-    gap: Spacing.xs,
+    gap: Spacing.sm,
   },
   calcRow: {
     flexDirection: "row",
-    gap: Spacing.xs,
+    gap: Spacing.sm,
   },
   calcButton: {
     flex: 1,
     aspectRatio: 1,
-    borderRadius: BorderRadius.md,
     justifyContent: "center",
     alignItems: "center",
-    maxHeight: 60,
+    borderRadius: BorderRadius.md,
   },
   calcButtonText: {
     fontSize: 22,
-    fontWeight: "600",
+    fontWeight: "500",
   },
 });
