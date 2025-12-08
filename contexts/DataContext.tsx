@@ -207,6 +207,23 @@ export function DataProvider({ children }: { children: ReactNode }) {
     setNetworkError(null);
   }, []);
 
+  // Centralized fetch wrapper that manages offline state and clears errors on success
+  const safeFetch = useCallback(async <T,>(fetchFn: () => Promise<T>): Promise<T | null> => {
+    try {
+      const result = await fetchFn();
+      setIsOffline(false);
+      setNetworkError(null);
+      return result;
+    } catch (err) {
+      const errorMessage = err instanceof Error ? err.message : '';
+      if (errorMessage.includes('Network') || errorMessage.includes('fetch') || errorMessage.includes('Failed to fetch')) {
+        setIsOffline(true);
+      }
+      console.error('Fetch error:', err);
+      return null;
+    }
+  }, []);
+
   // Load cached data on app start
   useEffect(() => {
     if (cacheLoadedRef.current) return;
@@ -228,45 +245,55 @@ export function DataProvider({ children }: { children: ReactNode }) {
     });
   }, []);
 
-  // Save data to cache when it changes
+  // Track if initial load is complete to avoid caching on first mount
+  const initialLoadDoneRef = useRef(false);
+  
+  // Mark initial load complete when loading finishes
   useEffect(() => {
-    if (tourTypes.length > 0) saveToCache('tourTypes', tourTypes);
+    if (!isLoading && !initialLoadDoneRef.current) {
+      initialLoadDoneRef.current = true;
+    }
+  }, [isLoading]);
+
+  // Save data to cache when it changes (after initial load)
+  useEffect(() => {
+    if (initialLoadDoneRef.current) saveToCache('tourTypes', tourTypes);
   }, [tourTypes]);
 
   useEffect(() => {
-    if (additionalServices.length > 0) saveToCache('additionalServices', additionalServices);
+    if (initialLoadDoneRef.current) saveToCache('additionalServices', additionalServices);
   }, [additionalServices]);
 
   useEffect(() => {
-    if (excursions.length > 0) saveToCache('excursions', excursions);
+    if (initialLoadDoneRef.current) saveToCache('excursions', excursions);
   }, [excursions]);
 
   useEffect(() => {
-    if (transactions.length > 0) saveToCache('transactions', transactions);
+    if (initialLoadDoneRef.current) saveToCache('transactions', transactions);
   }, [transactions]);
 
   useEffect(() => {
-    if (activities.length > 0) saveToCache('activities', activities);
+    if (initialLoadDoneRef.current) saveToCache('activities', activities);
   }, [activities]);
 
   useEffect(() => {
-    if (deletedItems.length > 0) saveToCache('deletedItems', deletedItems);
+    if (initialLoadDoneRef.current) saveToCache('deletedItems', deletedItems);
   }, [deletedItems]);
 
   useEffect(() => {
-    if (radioGuideKits.length > 0) saveToCache('radioGuideKits', radioGuideKits);
+    if (initialLoadDoneRef.current) saveToCache('radioGuideKits', radioGuideKits);
   }, [radioGuideKits]);
 
   useEffect(() => {
-    if (radioGuideAssignments.length > 0) saveToCache('radioGuideAssignments', radioGuideAssignments);
+    if (initialLoadDoneRef.current) saveToCache('radioGuideAssignments', radioGuideAssignments);
   }, [radioGuideAssignments]);
 
   useEffect(() => {
-    if (equipmentLosses.length > 0) saveToCache('equipmentLosses', equipmentLosses);
+    if (initialLoadDoneRef.current) saveToCache('equipmentLosses', equipmentLosses);
   }, [equipmentLosses]);
 
   useEffect(() => {
-    saveToCache('radioGuidePrice', radioGuidePrice);
+    if (initialLoadDoneRef.current) saveToCache('radioGuidePrice', radioGuidePrice);
   }, [radioGuidePrice]);
 
   const currentUser = profile ? {
@@ -569,7 +596,12 @@ export function DataProvider({ children }: { children: ReactNode }) {
         fetchRadioGuideAssignments(),
         fetchEquipmentLosses(),
         fetchSettings(),
-      ]);
+      ]).then(() => {
+        setIsOffline(false);
+        setNetworkError(null);
+      }).catch(() => {
+        setIsOffline(true);
+      });
     }
   }, [user, fetchTourTypes, fetchAdditionalServices, fetchRadioGuideKits, fetchRadioGuideAssignments, fetchEquipmentLosses, fetchSettings]);
 
@@ -581,7 +613,12 @@ export function DataProvider({ children }: { children: ReactNode }) {
         fetchTransactions(),
         fetchActivities(),
         fetchDeletedItems(),
-      ]).finally(() => setIsLoading(false));
+      ]).then(() => {
+        setIsOffline(false);
+        setNetworkError(null);
+      }).catch(() => {
+        setIsOffline(true);
+      }).finally(() => setIsLoading(false));
     } else if (user && !profile) {
       // User authenticated but no profile yet - still loading
       setIsLoading(true);
@@ -598,58 +635,61 @@ export function DataProvider({ children }: { children: ReactNode }) {
       .on(
         'postgres_changes',
         { event: '*', schema: 'public', table: 'tour_types' },
-        () => fetchTourTypes()
+        () => safeFetch(fetchTourTypes)
       )
       .on(
         'postgres_changes',
         { event: '*', schema: 'public', table: 'additional_services' },
-        () => fetchAdditionalServices()
+        () => safeFetch(fetchAdditionalServices)
       )
       .on(
         'postgres_changes',
         { event: '*', schema: 'public', table: 'excursions' },
-        () => fetchExcursions()
+        () => safeFetch(fetchExcursions)
       )
       .on(
         'postgres_changes',
         { event: '*', schema: 'public', table: 'transactions' },
-        () => fetchTransactions()
+        () => safeFetch(fetchTransactions)
       )
       .on(
         'postgres_changes',
         { event: '*', schema: 'public', table: 'activities' },
-        () => fetchActivities()
+        () => safeFetch(fetchActivities)
       )
       .on(
         'postgres_changes',
         { event: '*', schema: 'public', table: 'deleted_items' },
-        () => fetchDeletedItems()
+        () => safeFetch(fetchDeletedItems)
       )
       .on(
         'postgres_changes',
         { event: '*', schema: 'public', table: 'radio_guide_kits' },
-        () => fetchRadioGuideKits()
+        () => safeFetch(fetchRadioGuideKits)
       )
       .on(
         'postgres_changes',
         { event: '*', schema: 'public', table: 'radio_guide_assignments' },
-        () => fetchRadioGuideAssignments()
+        () => safeFetch(fetchRadioGuideAssignments)
       )
       .on(
         'postgres_changes',
         { event: '*', schema: 'public', table: 'equipment_losses' },
-        () => fetchEquipmentLosses()
+        () => safeFetch(fetchEquipmentLosses)
       )
       .subscribe((status) => {
         if (status === 'CHANNEL_ERROR') {
           console.error('Supabase Realtime channel error');
+          setIsOffline(true);
+        } else if (status === 'SUBSCRIBED') {
+          setIsOffline(false);
         }
       });
 
     return () => {
       supabase.removeChannel(channel);
     };
-  }, [user, fetchTourTypes, fetchAdditionalServices, fetchRadioGuideKits, fetchRadioGuideAssignments, fetchEquipmentLosses, fetchExcursions, fetchTransactions, fetchActivities, fetchDeletedItems]);
+  }, [user, fetchTourTypes, fetchAdditionalServices, fetchRadioGuideKits, fetchRadioGuideAssignments, fetchEquipmentLosses, fetchExcursions, fetchTransactions, fetchActivities, fetchDeletedItems, safeFetch]);
 
   const refreshPriceList = useCallback(async () => {
     await Promise.all([fetchTourTypes(), fetchAdditionalServices()]);

@@ -8,9 +8,29 @@ import { Spacing } from "@/constants/theme";
 
 export function NetworkErrorBanner() {
   const { theme } = useTheme();
-  const { networkError, clearNetworkError, refreshData } = useData();
+  const { networkError, clearNetworkError, refreshData, isOffline } = useData();
 
-  if (!networkError) return null;
+  if (!networkError && !isOffline) return null;
+
+  if (isOffline && !networkError) {
+    return (
+      <View style={[styles.container, { backgroundColor: theme.warning + '15' }]}>
+        <View style={styles.content}>
+          <Feather name="cloud-off" size={20} color={theme.warning} />
+          <ThemedText style={[styles.message, { color: theme.warning }]}>
+            Офлайн-режим. Данные могут быть устаревшими.
+          </ThemedText>
+        </View>
+        <Pressable
+          onPress={refreshData}
+          style={[styles.button, { backgroundColor: theme.warning }]}
+        >
+          <Feather name="refresh-cw" size={14} color="#fff" />
+          <ThemedText style={styles.buttonText}>Обновить</ThemedText>
+        </Pressable>
+      </View>
+    );
+  }
 
   return (
     <View style={[styles.container, { backgroundColor: theme.error + '15' }]}>
