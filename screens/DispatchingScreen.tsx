@@ -145,8 +145,11 @@ export default function DispatchingScreen() {
   };
 
   const handleOpenExcursionPicker = (note: DispatchingNote) => {
+    setShowNotesList(false);
     setSelectedNoteForLink(note);
-    setShowExcursionPicker(true);
+    setTimeout(() => {
+      setShowExcursionPicker(true);
+    }, 300);
   };
 
   const handleLinkToExcursion = async (excursion: Excursion) => {
