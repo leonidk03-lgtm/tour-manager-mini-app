@@ -1,4 +1,4 @@
-import { useState, useEffect } from "react";
+import { useState, useEffect, useRef } from "react";
 import { View, Modal, StyleSheet, TextInput, Pressable, Alert, Switch, KeyboardAvoidingView, Platform, ScrollView } from "react-native";
 import { Feather } from "@expo/vector-icons";
 import { ThemedText } from "@/components/ThemedText";
@@ -19,6 +19,8 @@ export function ServiceModal({ visible, onClose, onSave, service }: ServiceModal
   const [name, setName] = useState("");
   const [price, setPrice] = useState("");
   const [isEnabled, setIsEnabled] = useState(true);
+
+  const priceRef = useRef<TextInput>(null);
 
   useEffect(() => {
     if (visible) {
@@ -91,6 +93,9 @@ export function ServiceModal({ visible, onClose, onSave, service }: ServiceModal
                 onChangeText={setName}
                 placeholder="Например: Теплоход"
                 placeholderTextColor={theme.textSecondary}
+                returnKeyType="next"
+                blurOnSubmit={false}
+                onSubmitEditing={() => priceRef.current?.focus()}
               />
             </View>
 
@@ -100,6 +105,7 @@ export function ServiceModal({ visible, onClose, onSave, service }: ServiceModal
                 Положительная = клиент платит, отрицательная = мы платим
               </ThemedText>
               <TextInput
+                ref={priceRef}
                 style={[
                   styles.input,
                   {
@@ -113,6 +119,7 @@ export function ServiceModal({ visible, onClose, onSave, service }: ServiceModal
                 keyboardType="numbers-and-punctuation"
                 placeholder="400 или -400"
                 placeholderTextColor={theme.textSecondary}
+                returnKeyType="done"
               />
             </View>
 

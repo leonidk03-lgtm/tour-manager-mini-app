@@ -25,12 +25,6 @@ export default function App() {
               </DataProvider>
             </AuthProvider>
             <StatusBar style="auto" />
-            {Platform.OS !== "web" ? (
-              <KeyboardToolbar 
-                showArrows={true}
-                doneText="Готово"
-              />
-            ) : null}
           </KeyboardProvider>
         </GestureHandlerRootView>
       </SafeAreaProvider>

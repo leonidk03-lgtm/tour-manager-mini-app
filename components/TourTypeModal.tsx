@@ -1,4 +1,4 @@
-import { useState, useEffect } from "react";
+import { useState, useEffect, useRef } from "react";
 import { View, Modal, StyleSheet, TextInput, Pressable, Alert, Switch, KeyboardAvoidingView, Platform, ScrollView } from "react-native";
 import { Feather } from "@expo/vector-icons";
 import { ThemedText } from "@/components/ThemedText";
@@ -24,6 +24,10 @@ export function TourTypeModal({ visible, onClose, onSave, tourType }: TourTypeMo
   const [isEnabled, setIsEnabled] = useState(true);
   const [hasRadioGuides, setHasRadioGuides] = useState(false);
   const [selectedServiceIds, setSelectedServiceIds] = useState<string[]>([]);
+
+  const articleRef = useRef<TextInput>(null);
+  const fullPriceRef = useRef<TextInput>(null);
+  const discountedPriceRef = useRef<TextInput>(null);
 
   useEffect(() => {
     if (visible) {
@@ -118,12 +122,16 @@ export function TourTypeModal({ visible, onClose, onSave, tourType }: TourTypeMo
                 onChangeText={setName}
                 placeholder="Например: Болгар"
                 placeholderTextColor={theme.textSecondary}
+                returnKeyType="next"
+                blurOnSubmit={false}
+                onSubmitEditing={() => articleRef.current?.focus()}
               />
             </View>
 
             <View style={styles.inputGroup}>
               <ThemedText style={[styles.label, { color: theme.textSecondary }]}>Артикул</ThemedText>
               <TextInput
+                ref={articleRef}
                 style={[
                   styles.input,
                   {
@@ -136,6 +144,9 @@ export function TourTypeModal({ visible, onClose, onSave, tourType }: TourTypeMo
                 onChangeText={setArticleNumber}
                 placeholder="Например: EXC-001"
                 placeholderTextColor={theme.textSecondary}
+                returnKeyType="next"
+                blurOnSubmit={false}
+                onSubmitEditing={() => fullPriceRef.current?.focus()}
               />
             </View>
 
@@ -145,6 +156,7 @@ export function TourTypeModal({ visible, onClose, onSave, tourType }: TourTypeMo
                   Полная цена
                 </ThemedText>
                 <TextInput
+                  ref={fullPriceRef}
                   style={[
                     styles.input,
                     {
@@ -158,6 +170,9 @@ export function TourTypeModal({ visible, onClose, onSave, tourType }: TourTypeMo
                   keyboardType="numeric"
                   placeholder="3000"
                   placeholderTextColor={theme.textSecondary}
+                  returnKeyType="next"
+                  blurOnSubmit={false}
+                  onSubmitEditing={() => discountedPriceRef.current?.focus()}
                 />
               </View>
 
@@ -166,6 +181,7 @@ export function TourTypeModal({ visible, onClose, onSave, tourType }: TourTypeMo
                   Льготная цена
                 </ThemedText>
                 <TextInput
+                  ref={discountedPriceRef}
                   style={[
                     styles.input,
                     {
@@ -179,6 +195,7 @@ export function TourTypeModal({ visible, onClose, onSave, tourType }: TourTypeMo
                   keyboardType="numeric"
                   placeholder="2800"
                   placeholderTextColor={theme.textSecondary}
+                  returnKeyType="done"
                 />
               </View>
             </View>
