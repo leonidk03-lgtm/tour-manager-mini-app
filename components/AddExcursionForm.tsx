@@ -33,7 +33,6 @@ export function AddExcursionForm({ excursion, onSave, onCancel }: AddExcursionFo
   const freeRef = useRef<TextInput>(null);
   const byTourRef = useRef<TextInput>(null);
   const paidRef = useRef<TextInput>(null);
-  const participantRefs = [discountedRef, freeRef, byTourRef, paidRef];
 
   const enabledTourTypes = tourTypes.filter((t) => t.isEnabled);
 
@@ -309,32 +308,65 @@ export function AddExcursionForm({ excursion, onSave, onCancel }: AddExcursionFo
           />
         </View>
         <ThemedText style={[styles.subLabel, { color: theme.textSecondary }]}>Из них:</ThemedText>
-        {[
-          { label: "Льготных", value: discounted, setter: setDiscounted, ref: discountedRef },
-          { label: "Бесплатных", value: free, setter: setFree, ref: freeRef },
-          { label: "По туру", value: byTour, setter: setByTour, ref: byTourRef },
-          { label: "Оплаченных", value: paid, setter: setPaid, ref: paidRef },
-        ].map((item, index, arr) => (
-          <View key={index} style={styles.inputRow}>
-            <ThemedText style={[styles.inputLabel, styles.subInputLabel]}>{item.label}</ThemedText>
-            <TextInput
-              ref={item.ref}
-              style={[styles.input, styles.numericInput, { borderColor: theme.inputBorder, color: theme.text, backgroundColor: theme.backgroundDefault }]}
-              value={item.value}
-              onChangeText={item.setter}
-              keyboardType="numeric"
-              placeholder="0"
-              placeholderTextColor={theme.textSecondary}
-              returnKeyType={index < arr.length - 1 ? "next" : "done"}
-              onSubmitEditing={() => {
-                if (index < arr.length - 1) {
-                  participantRefs[index + 1]?.current?.focus();
-                }
-              }}
-              blurOnSubmit={index === arr.length - 1}
-            />
-          </View>
-        ))}
+        <View style={styles.inputRow}>
+          <ThemedText style={[styles.inputLabel, styles.subInputLabel]}>Льготных</ThemedText>
+          <TextInput
+            ref={discountedRef}
+            style={[styles.input, styles.numericInput, { borderColor: theme.inputBorder, color: theme.text, backgroundColor: theme.backgroundDefault }]}
+            value={discounted}
+            onChangeText={setDiscounted}
+            keyboardType="numeric"
+            placeholder="0"
+            placeholderTextColor={theme.textSecondary}
+            returnKeyType="next"
+            onSubmitEditing={() => freeRef.current?.focus()}
+            blurOnSubmit={false}
+          />
+        </View>
+        <View style={styles.inputRow}>
+          <ThemedText style={[styles.inputLabel, styles.subInputLabel]}>Бесплатных</ThemedText>
+          <TextInput
+            ref={freeRef}
+            style={[styles.input, styles.numericInput, { borderColor: theme.inputBorder, color: theme.text, backgroundColor: theme.backgroundDefault }]}
+            value={free}
+            onChangeText={setFree}
+            keyboardType="numeric"
+            placeholder="0"
+            placeholderTextColor={theme.textSecondary}
+            returnKeyType="next"
+            onSubmitEditing={() => byTourRef.current?.focus()}
+            blurOnSubmit={false}
+          />
+        </View>
+        <View style={styles.inputRow}>
+          <ThemedText style={[styles.inputLabel, styles.subInputLabel]}>По туру</ThemedText>
+          <TextInput
+            ref={byTourRef}
+            style={[styles.input, styles.numericInput, { borderColor: theme.inputBorder, color: theme.text, backgroundColor: theme.backgroundDefault }]}
+            value={byTour}
+            onChangeText={setByTour}
+            keyboardType="numeric"
+            placeholder="0"
+            placeholderTextColor={theme.textSecondary}
+            returnKeyType="next"
+            onSubmitEditing={() => paidRef.current?.focus()}
+            blurOnSubmit={false}
+          />
+        </View>
+        <View style={styles.inputRow}>
+          <ThemedText style={[styles.inputLabel, styles.subInputLabel]}>Оплаченных</ThemedText>
+          <TextInput
+            ref={paidRef}
+            style={[styles.input, styles.numericInput, { borderColor: theme.inputBorder, color: theme.text, backgroundColor: theme.backgroundDefault }]}
+            value={paid}
+            onChangeText={setPaid}
+            keyboardType="numeric"
+            placeholder="0"
+            placeholderTextColor={theme.textSecondary}
+            returnKeyType="next"
+            blurOnSubmit={false}
+          />
+        </View>
         <View style={[styles.summaryRow, { borderTopColor: theme.inputBorder }]}>
           <ThemedText style={[styles.inputLabel, { color: theme.textSecondary }]}>Полная оплата (авто)</ThemedText>
           <ThemedText style={[styles.summaryValue, { color: theme.primary }]}>{calculateFullPrice()}</ThemedText>
