@@ -379,6 +379,7 @@ export default function FinancesScreen() {
                   placeholderTextColor={theme.textSecondary}
                   value={formDescription}
                   onChangeText={setFormDescription}
+                  returnKeyType="next"
                 />
               </View>
               <View style={styles.formGroup}>
@@ -397,6 +398,7 @@ export default function FinancesScreen() {
                   keyboardType="numeric"
                   value={formAmount}
                   onChangeText={setFormAmount}
+                  returnKeyType="done"
                 />
               </View>
               <View style={styles.formGroup}>

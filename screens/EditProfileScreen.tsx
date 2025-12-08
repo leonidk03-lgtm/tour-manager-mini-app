@@ -90,6 +90,7 @@ export default function EditProfileScreen() {
               onChangeText={setDisplayName}
               placeholder="Введите имя"
               placeholderTextColor={theme.textSecondary}
+              returnKeyType="next"
             />
           </View>
 
@@ -138,6 +139,7 @@ export default function EditProfileScreen() {
                 placeholder="Введите новый пароль"
                 placeholderTextColor={theme.textSecondary}
                 secureTextEntry={!showPassword}
+                returnKeyType="next"
               />
               <Pressable
                 style={styles.eyeButton}
@@ -166,6 +168,7 @@ export default function EditProfileScreen() {
               placeholder="Повторите пароль"
               placeholderTextColor={theme.textSecondary}
               secureTextEntry={!showPassword}
+              returnKeyType="done"
             />
           </View>
 

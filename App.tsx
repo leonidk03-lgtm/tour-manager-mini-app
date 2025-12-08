@@ -1,8 +1,8 @@
 import React from "react";
-import { StyleSheet } from "react-native";
+import { StyleSheet, Platform } from "react-native";
 import { NavigationContainer } from "@react-navigation/native";
 import { GestureHandlerRootView } from "react-native-gesture-handler";
-import { KeyboardProvider } from "react-native-keyboard-controller";
+import { KeyboardProvider, KeyboardToolbar } from "react-native-keyboard-controller";
 import { SafeAreaProvider } from "react-native-safe-area-context";
 import { StatusBar } from "expo-status-bar";
 
@@ -25,6 +25,7 @@ export default function App() {
               </DataProvider>
             </AuthProvider>
             <StatusBar style="auto" />
+            {Platform.OS !== "web" ? <KeyboardToolbar /> : null}
           </KeyboardProvider>
         </GestureHandlerRootView>
       </SafeAreaProvider>

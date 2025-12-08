@@ -31,6 +31,8 @@ Design style: Telegram-inspired dark theme with flat design (November 2025 updat
 - Reanimated 4.1 for performant animations with spring physics
 - Gesture Handler for native-quality touch interactions
 - Keyboard Controller for proper keyboard handling on forms
+- **KeyboardToolbar**: Global navigation toolbar above keyboard with Previous/Next/Done buttons for easy field switching (iOS/Android)
+- **returnKeyType**: Forms use "next" to show Next button on keyboard, "done" for last field
 - Safe Area Context for notch/status bar handling
 
 **State Management**

@@ -295,6 +295,7 @@ export function AddExcursionForm({ excursion, onSave, onCancel }: AddExcursionFo
             keyboardType="numeric"
             placeholder="0"
             placeholderTextColor={theme.textSecondary}
+            returnKeyType="next"
           />
         </View>
         <ThemedText style={[styles.subLabel, { color: theme.textSecondary }]}>Из них:</ThemedText>
@@ -303,7 +304,7 @@ export function AddExcursionForm({ excursion, onSave, onCancel }: AddExcursionFo
           { label: "Бесплатных", value: free, setter: setFree },
           { label: "По туру", value: byTour, setter: setByTour },
           { label: "Оплаченных", value: paid, setter: setPaid },
-        ].map((item, index) => (
+        ].map((item, index, arr) => (
           <View key={index} style={styles.inputRow}>
             <ThemedText style={[styles.inputLabel, styles.subInputLabel]}>{item.label}</ThemedText>
             <TextInput
@@ -313,6 +314,7 @@ export function AddExcursionForm({ excursion, onSave, onCancel }: AddExcursionFo
               keyboardType="numeric"
               placeholder="0"
               placeholderTextColor={theme.textSecondary}
+              returnKeyType={index < arr.length - 1 ? "next" : "done"}
             />
           </View>
         ))}
