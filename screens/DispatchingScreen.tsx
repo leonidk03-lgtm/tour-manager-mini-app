@@ -536,82 +536,81 @@ export default function DispatchingScreen() {
           setSelectedNoteForLink(null);
         }}
       >
-        <Pressable 
-          style={styles.modalBackdrop} 
-          onPress={() => {
-            setShowExcursionPicker(false);
-            setSelectedNoteForLink(null);
-          }}
-        >
-          <TouchableWithoutFeedback>
-            <ThemedView style={[styles.excursionPickerModal, { backgroundColor: theme.backgroundDefault }]}>
-              <View style={styles.excursionPickerHeader}>
-                <ThemedText style={styles.excursionPickerTitle}>Привязать к экскурсии</ThemedText>
-                <Pressable onPress={() => {
-                  setShowExcursionPicker(false);
-                  setSelectedNoteForLink(null);
-                }}>
-                  <Feather name="x" size={24} color={theme.text} />
-                </Pressable>
+        <View style={styles.modalBackdrop}>
+          <Pressable 
+            style={StyleSheet.absoluteFill} 
+            onPress={() => {
+              setShowExcursionPicker(false);
+              setSelectedNoteForLink(null);
+            }}
+          />
+          <ThemedView style={[styles.excursionPickerModal, { backgroundColor: theme.backgroundDefault }]}>
+            <View style={styles.excursionPickerHeader}>
+              <ThemedText style={styles.excursionPickerTitle}>Привязать к экскурсии</ThemedText>
+              <Pressable onPress={() => {
+                setShowExcursionPicker(false);
+                setSelectedNoteForLink(null);
+              }}>
+                <Feather name="x" size={24} color={theme.text} />
+              </Pressable>
+            </View>
+            
+            {selectedNoteForLink ? (
+              <View style={[styles.selectedNotePreview, { backgroundColor: theme.backgroundSecondary }]}>
+                <ThemedText numberOfLines={2} style={styles.selectedNoteText}>
+                  {selectedNoteForLink.text}
+                </ThemedText>
               </View>
-              
-              {selectedNoteForLink ? (
-                <View style={[styles.selectedNotePreview, { backgroundColor: theme.backgroundSecondary }]}>
-                  <ThemedText numberOfLines={2} style={styles.selectedNoteText}>
-                    {selectedNoteForLink.text}
-                  </ThemedText>
-                </View>
-              ) : null}
+            ) : null}
 
-              {getAvailableExcursions().length === 0 ? (
-                <View style={styles.emptyExcursions}>
-                  <Feather name="calendar" size={48} color={theme.textSecondary} />
-                  <ThemedText style={{ color: theme.textSecondary, marginTop: Spacing.md }}>
-                    Нет доступных экскурсий
-                  </ThemedText>
-                  <ThemedText style={{ color: theme.textSecondary, fontSize: 12, marginTop: Spacing.xs }}>
-                    Добавьте экскурсию на сегодня или будущие даты
-                  </ThemedText>
-                </View>
-              ) : (
-                <FlatList
-                  data={getAvailableExcursions()}
-                  keyExtractor={(item) => item.id}
-                  renderItem={({ item }) => {
-                    const excDate = new Date(item.date);
-                    const isToday = excDate.toDateString() === new Date().toDateString();
-                    return (
-                      <Pressable
-                        style={({ pressed }) => [
-                          styles.excursionItem,
-                          { backgroundColor: pressed ? theme.backgroundTertiary : theme.backgroundSecondary },
-                        ]}
-                        onPress={() => handleLinkToExcursion(item)}
-                      >
-                        <View style={styles.excursionItemContent}>
-                          <ThemedText style={styles.excursionItemName} numberOfLines={1}>
-                            {getTourTypeName(item.tourTypeId)}
+            {getAvailableExcursions().length === 0 ? (
+              <View style={styles.emptyExcursions}>
+                <Feather name="calendar" size={48} color={theme.textSecondary} />
+                <ThemedText style={{ color: theme.textSecondary, marginTop: Spacing.md }}>
+                  Нет доступных экскурсий
+                </ThemedText>
+                <ThemedText style={{ color: theme.textSecondary, fontSize: 12, marginTop: Spacing.xs }}>
+                  Добавьте экскурсию на сегодня или будущие даты
+                </ThemedText>
+              </View>
+            ) : (
+              <FlatList
+                data={getAvailableExcursions()}
+                keyExtractor={(item) => item.id}
+                renderItem={({ item }) => {
+                  const excDate = new Date(item.date);
+                  const isToday = excDate.toDateString() === new Date().toDateString();
+                  return (
+                    <Pressable
+                      style={({ pressed }) => [
+                        styles.excursionItem,
+                        { backgroundColor: pressed ? theme.backgroundTertiary : theme.backgroundSecondary },
+                      ]}
+                      onPress={() => handleLinkToExcursion(item)}
+                    >
+                      <View style={styles.excursionItemContent}>
+                        <ThemedText style={styles.excursionItemName} numberOfLines={1}>
+                          {getTourTypeName(item.tourTypeId)}
+                        </ThemedText>
+                        <View style={styles.excursionItemMeta}>
+                          <ThemedText style={[styles.excursionItemDate, isToday && { color: theme.success }]}>
+                            {isToday ? "Сегодня" : excDate.toLocaleDateString("ru-RU", { day: "2-digit", month: "2-digit" })}
                           </ThemedText>
-                          <View style={styles.excursionItemMeta}>
-                            <ThemedText style={[styles.excursionItemDate, isToday && { color: theme.success }]}>
-                              {isToday ? "Сегодня" : excDate.toLocaleDateString("ru-RU", { day: "2-digit", month: "2-digit" })}
-                            </ThemedText>
-                            <ThemedText style={[styles.excursionItemTime, { color: theme.textSecondary }]}>
-                              {excDate.toLocaleTimeString("ru-RU", { hour: "2-digit", minute: "2-digit" })}
-                            </ThemedText>
-                          </View>
+                          <ThemedText style={[styles.excursionItemTime, { color: theme.textSecondary }]}>
+                            {excDate.toLocaleTimeString("ru-RU", { hour: "2-digit", minute: "2-digit" })}
+                          </ThemedText>
                         </View>
-                        <Feather name="chevron-right" size={20} color={theme.textSecondary} />
-                      </Pressable>
-                    );
-                  }}
-                  ItemSeparatorComponent={() => <View style={{ height: Spacing.sm }} />}
-                  contentContainerStyle={{ paddingBottom: Spacing.xl }}
-                />
-              )}
-            </ThemedView>
-          </TouchableWithoutFeedback>
-        </Pressable>
+                      </View>
+                      <Feather name="chevron-right" size={20} color={theme.textSecondary} />
+                    </Pressable>
+                  );
+                }}
+                ItemSeparatorComponent={() => <View style={{ height: Spacing.sm }} />}
+                contentContainerStyle={{ paddingBottom: Spacing.xl }}
+              />
+            )}
+          </ThemedView>
+        </View>
       </Modal>
     </View>
   );
