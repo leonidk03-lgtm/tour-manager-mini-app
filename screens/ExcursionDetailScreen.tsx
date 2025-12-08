@@ -549,9 +549,9 @@ const styles = StyleSheet.create({
     borderWidth: 1,
     borderRadius: 8,
     padding: Spacing.md,
-    minHeight: 80,
+    minHeight: 120,
     textAlignVertical: "top",
-    fontSize: 14,
+    fontSize: 16,
   },
   addNoteButton: {
     paddingVertical: Spacing.sm,
