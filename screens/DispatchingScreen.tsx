@@ -266,7 +266,8 @@ export default function DispatchingScreen() {
 
   return (
     <View style={[styles.container, { backgroundColor: theme.backgroundRoot }]}>
-      <View style={[styles.notesContainer, { paddingTop: Spacing.md }]}>
+      <TouchableWithoutFeedback onPress={dismissKeyboard} accessible={false}>
+        <View style={[styles.notesContainer, { paddingTop: Spacing.md }]}>
         <View style={styles.notesHeader}>
           <ThemedText style={styles.notesTitle}>Заметки</ThemedText>
           <View style={styles.notesActions}>
@@ -341,7 +342,8 @@ export default function DispatchingScreen() {
             </Pressable>
           ) : null}
         </View>
-      </View>
+        </View>
+      </TouchableWithoutFeedback>
 
       <View style={styles.webViewContainer}>
         {Platform.OS === "web" ? (
