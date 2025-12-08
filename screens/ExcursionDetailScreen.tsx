@@ -38,6 +38,7 @@ export default function ExcursionDetailScreen() {
   const [showNoteInput, setShowNoteInput] = useState(false);
   const [showNotesPicker, setShowNotesPicker] = useState(false);
   const [expandedNoteId, setExpandedNoteId] = useState<string | null>(null);
+  const [fullscreenNote, setFullscreenNote] = useState<ExcursionNote | null>(null);
 
   const excursion = excursions.find((e) => e.id === excursionId);
   const tourType = tourTypes.find((t) => t.id === excursion?.tourTypeId);
@@ -447,7 +448,10 @@ export default function ExcursionDetailScreen() {
                   return (
                     <Pressable
                       key={note.id}
-                      onPress={() => isLongNote && toggleNoteExpand(note.id)}
+                      onPress={() => {
+                        hapticFeedback.selection();
+                        setFullscreenNote(note);
+                      }}
                       style={[
                         styles.noteItem,
                         { backgroundColor: theme.backgroundSecondary, borderRadius: BorderRadius.sm },
@@ -456,15 +460,13 @@ export default function ExcursionDetailScreen() {
                       <View style={styles.noteContent}>
                         <ThemedText 
                           style={styles.noteText}
-                          numberOfLines={isExpanded ? undefined : 3}
+                          numberOfLines={3}
                         >
                           {note.text}
                         </ThemedText>
-                        {isLongNote && !isExpanded ? (
-                          <ThemedText style={{ color: theme.primary, fontSize: 12, marginTop: 4 }}>
-                            Нажмите для раскрытия...
-                          </ThemedText>
-                        ) : null}
+                        <ThemedText style={{ color: theme.primary, fontSize: 12, marginTop: 4 }}>
+                          Нажмите для просмотра
+                        </ThemedText>
                         <View style={styles.noteMeta}>
                           {isAdmin && note.managerName ? (
                             <ThemedText style={[styles.noteAuthor, { color: theme.primary }]}>
@@ -560,6 +562,51 @@ export default function ExcursionDetailScreen() {
                 contentContainerStyle={{ paddingBottom: Spacing.xl }}
               />
             )}
+          </ThemedView>
+        </Pressable>
+      </Modal>
+
+      {/* Fullscreen Note Modal */}
+      <Modal
+        visible={fullscreenNote !== null}
+        transparent
+        animationType="fade"
+        onRequestClose={() => setFullscreenNote(null)}
+      >
+        <Pressable 
+          style={styles.fullscreenNoteBackdrop} 
+          onPress={() => setFullscreenNote(null)}
+        >
+          <ThemedView style={[styles.fullscreenNoteContainer, { backgroundColor: theme.backgroundDefault }]}>
+            <View style={styles.fullscreenNoteHeader}>
+              <ThemedText style={styles.fullscreenNoteTitle}>Заметка</ThemedText>
+              <Pressable onPress={() => setFullscreenNote(null)}>
+                <Icon name="x" size={24} color={theme.text} />
+              </Pressable>
+            </View>
+            <View style={styles.fullscreenNoteContent}>
+              <ThemedText style={styles.fullscreenNoteText}>
+                {fullscreenNote?.text}
+              </ThemedText>
+              <View style={styles.fullscreenNoteMeta}>
+                {isAdmin && fullscreenNote?.managerName ? (
+                  <ThemedText style={[styles.noteAuthor, { color: theme.primary }]}>
+                    {fullscreenNote.managerName}
+                  </ThemedText>
+                ) : null}
+                {fullscreenNote?.createdAt ? (
+                  <ThemedText style={[styles.noteDate, { color: theme.textSecondary }]}>
+                    {new Date(fullscreenNote.createdAt).toLocaleString("ru-RU", {
+                      day: "2-digit",
+                      month: "2-digit",
+                      year: "numeric",
+                      hour: "2-digit",
+                      minute: "2-digit",
+                    })}
+                  </ThemedText>
+                ) : null}
+              </View>
+            </View>
           </ThemedView>
         </Pressable>
       </Modal>
@@ -727,5 +774,46 @@ const styles = StyleSheet.create({
   dispatchingNoteDate: {
     fontSize: 12,
     marginTop: Spacing.xs,
+  },
+  fullscreenNoteBackdrop: {
+    flex: 1,
+    backgroundColor: "rgba(0, 0, 0, 0.7)",
+    justifyContent: "center",
+    alignItems: "center",
+    padding: Spacing.lg,
+  },
+  fullscreenNoteContainer: {
+    width: "100%",
+    maxHeight: "80%",
+    borderRadius: BorderRadius.lg,
+    overflow: "hidden",
+  },
+  fullscreenNoteHeader: {
+    flexDirection: "row",
+    justifyContent: "space-between",
+    alignItems: "center",
+    padding: Spacing.lg,
+    borderBottomWidth: 1,
+    borderBottomColor: "rgba(255, 255, 255, 0.1)",
+  },
+  fullscreenNoteTitle: {
+    fontSize: 18,
+    fontWeight: "600",
+  },
+  fullscreenNoteContent: {
+    padding: Spacing.lg,
+  },
+  fullscreenNoteText: {
+    fontSize: 16,
+    lineHeight: 24,
+  },
+  fullscreenNoteMeta: {
+    flexDirection: "row",
+    gap: Spacing.sm,
+    alignItems: "center",
+    marginTop: Spacing.lg,
+    paddingTop: Spacing.md,
+    borderTopWidth: 1,
+    borderTopColor: "rgba(255, 255, 255, 0.1)",
   },
 });
