@@ -38,7 +38,7 @@ Design style: Telegram-inspired dark theme with flat design (November 2025 updat
 - Local state management with React hooks
 - No external state management libraries (Redux/MobX) - keeping it simple
 - Data persisted in Supabase PostgreSQL database
-- **Data Synchronization**: Supabase Realtime subscriptions for instant data sync across all tables (tour_types, additional_services, excursions, transactions, activities, deleted_items, radio_guide_kits, radio_guide_assignments, equipment_losses)
+- **Data Synchronization**: Supabase Realtime subscriptions for instant data sync across all tables (tour_types, additional_services, excursions, transactions, activities, deleted_items, radio_guide_kits, radio_guide_assignments, equipment_losses, dispatching_notes)
 - **Network Error Handling**: Centralized error handling with NetworkErrorBanner component shows user-friendly messages on connection issues; retry button only clears error on successful reload
 
 **Theming System**
@@ -68,6 +68,7 @@ Design style: Telegram-inspired dark theme with flat design (November 2025 updat
 - `Manager`: User accounts with active/inactive status
 - `RadioGuideKit`: Radio guide equipment bags with bagNumber, receiverCount, status (available/issued/maintenance)
 - `RadioGuideAssignment`: Equipment issue/return records with kitId, guideName, busNumber, receiversIssued, receiversReturned
+- `DispatchingNote`: Personal notes for managers, synced across devices via Supabase Realtime with offline caching
 
 **Data Relationships**
 - Excursions reference TourTypes by ID

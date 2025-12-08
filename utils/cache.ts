@@ -14,6 +14,7 @@ export interface CacheData {
   radioGuideAssignments: unknown[];
   equipmentLosses: unknown[];
   radioGuidePrice: number;
+  dispatchingNotes: unknown[];
 }
 
 export async function saveToCache(key: keyof CacheData, data: unknown): Promise<void> {
@@ -68,6 +69,9 @@ export async function loadAllFromCache(): Promise<Partial<CacheData> | null> {
     
     const radioGuidePrice = await loadFromCache<number>('radioGuidePrice');
     if (radioGuidePrice !== null) result.radioGuidePrice = radioGuidePrice;
+    
+    const dispatchingNotes = await loadFromCache<unknown[]>('dispatchingNotes');
+    if (dispatchingNotes) result.dispatchingNotes = dispatchingNotes;
 
     return Object.keys(result).length > 0 ? result : null;
   } catch (error) {

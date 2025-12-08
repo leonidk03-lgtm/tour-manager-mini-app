@@ -254,6 +254,7 @@ export function DataProvider({ children }: { children: ReactNode }) {
         if (cached.radioGuideAssignments) setRadioGuideAssignments(cached.radioGuideAssignments as RadioGuideAssignment[]);
         if (cached.equipmentLosses) setEquipmentLosses(cached.equipmentLosses as EquipmentLoss[]);
         if (cached.radioGuidePrice) setRadioGuidePrice(cached.radioGuidePrice as number);
+        if (cached.dispatchingNotes) setDispatchingNotes(cached.dispatchingNotes as DispatchingNote[]);
       }
     });
   }, []);
@@ -563,75 +564,158 @@ export function DataProvider({ children }: { children: ReactNode }) {
   const fetchDispatchingNotes = useCallback(async (): Promise<void> => {
     if (!user) return;
     
-    const { data, error } = await supabase
-      .from('dispatching_notes')
-      .select('*')
-      .eq('manager_id', user.id)
-      .order('created_at', { ascending: false });
+    try {
+      const { data, error } = await supabase
+        .from('dispatching_notes')
+        .select('*')
+        .eq('manager_id', user.id)
+        .order('created_at', { ascending: false });
 
-    if (error) {
-      if (error.code === 'PGRST205' || error.code === '42P01') {
-        return;
+      if (error) {
+        if (error.code === 'PGRST205' || error.code === '42P01') {
+          return;
+        }
+        throw error;
       }
-      throw error;
-    }
 
-    setDispatchingNotes((data || []).map(n => ({
-      id: n.id,
-      text: n.text,
-      createdAt: n.created_at,
-      updatedAt: n.updated_at,
-      managerId: n.manager_id,
-    })));
+      const serverNotes = (data || []).map(n => ({
+        id: n.id,
+        text: n.text,
+        createdAt: n.created_at,
+        updatedAt: n.updated_at,
+        managerId: n.manager_id,
+      }));
+      
+      setDispatchingNotes(prev => {
+        const localOnlyNotes = prev.filter(n => n.id.startsWith('local_'));
+        
+        for (const localNote of localOnlyNotes) {
+          supabase
+            .from('dispatching_notes')
+            .insert({
+              manager_id: user.id,
+              text: localNote.text,
+            })
+            .select()
+            .single()
+            .then(({ data: syncedData }) => {
+              if (syncedData) {
+                setDispatchingNotes(current => {
+                  const synced = current.map(n => n.id === localNote.id ? {
+                    id: syncedData.id,
+                    text: syncedData.text,
+                    createdAt: syncedData.created_at,
+                    updatedAt: syncedData.updated_at,
+                    managerId: syncedData.manager_id,
+                  } : n);
+                  saveToCache('dispatchingNotes', synced);
+                  return synced;
+                });
+              }
+            })
+            .catch(() => {});
+        }
+        
+        const merged = [...localOnlyNotes, ...serverNotes];
+        saveToCache('dispatchingNotes', merged);
+        return merged;
+      });
+    } catch (err) {
+      console.warn('Failed to fetch notes from server, using cache');
+    }
   }, [user]);
 
   const addDispatchingNote = async (text: string) => {
     if (!user) throw new Error('Not authenticated');
     
-    const { data, error } = await supabase
-      .from('dispatching_notes')
-      .insert({
-        manager_id: user.id,
-        text,
-      })
-      .select()
-      .single();
-
-    if (error) throw error;
-
-    const newNote: DispatchingNote = {
-      id: data.id,
-      text: data.text,
-      createdAt: data.created_at,
-      updatedAt: data.updated_at,
-      managerId: data.manager_id,
+    const tempId = `local_${Date.now()}`;
+    const now = new Date().toISOString();
+    const optimisticNote: DispatchingNote = {
+      id: tempId,
+      text,
+      createdAt: now,
+      updatedAt: now,
+      managerId: user.id,
     };
+    
+    setDispatchingNotes(prev => {
+      const updated = [optimisticNote, ...prev];
+      saveToCache('dispatchingNotes', updated);
+      return updated;
+    });
+    
+    try {
+      const { data, error } = await supabase
+        .from('dispatching_notes')
+        .insert({
+          manager_id: user.id,
+          text,
+        })
+        .select()
+        .single();
 
-    setDispatchingNotes(prev => [newNote, ...prev]);
+      if (error) throw error;
+
+      const serverNote: DispatchingNote = {
+        id: data.id,
+        text: data.text,
+        createdAt: data.created_at,
+        updatedAt: data.updated_at,
+        managerId: data.manager_id,
+      };
+
+      setDispatchingNotes(prev => {
+        const updated = prev.map(n => n.id === tempId ? serverNote : n);
+        saveToCache('dispatchingNotes', updated);
+        return updated;
+      });
+    } catch (err) {
+      console.warn('Note saved locally, will sync when online');
+    }
   };
 
   const updateDispatchingNote = async (id: string, text: string) => {
-    const { error } = await supabase
-      .from('dispatching_notes')
-      .update({ text, updated_at: new Date().toISOString() })
-      .eq('id', id);
+    const now = new Date().toISOString();
+    
+    setDispatchingNotes(prev => {
+      const updated = prev.map(n => n.id === id ? { ...n, text, updatedAt: now } : n);
+      saveToCache('dispatchingNotes', updated);
+      return updated;
+    });
+    
+    if (!id.startsWith('local_')) {
+      try {
+        const { error } = await supabase
+          .from('dispatching_notes')
+          .update({ text, updated_at: now })
+          .eq('id', id);
 
-    if (error) throw error;
-
-    setDispatchingNotes(prev =>
-      prev.map(n => n.id === id ? { ...n, text, updatedAt: new Date().toISOString() } : n)
-    );
+        if (error) throw error;
+      } catch (err) {
+        console.warn('Note updated locally, will sync when online');
+      }
+    }
   };
 
   const deleteDispatchingNote = async (id: string) => {
-    const { error } = await supabase
-      .from('dispatching_notes')
-      .delete()
-      .eq('id', id);
+    setDispatchingNotes(prev => {
+      const updated = prev.filter(n => n.id !== id);
+      saveToCache('dispatchingNotes', updated);
+      return updated;
+    });
+    
+    if (!id.startsWith('local_')) {
+      try {
+        const { error } = await supabase
+          .from('dispatching_notes')
+          .delete()
+          .eq('id', id);
 
-    if (error) throw error;
-
-    setDispatchingNotes(prev => prev.filter(n => n.id !== id));
+        if (error) throw error;
+      } catch (err) {
+        console.warn('Note deleted locally, will sync when online');
+      }
+    }
   };
 
   const refreshData = useCallback(async () => {
