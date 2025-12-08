@@ -1,6 +1,7 @@
-import React, { createContext, useContext, useState, useEffect, ReactNode, useCallback } from "react";
+import React, { createContext, useContext, useState, useEffect, ReactNode, useCallback, useRef } from "react";
 import { supabase } from "@/lib/supabase";
 import { useAuth } from "./AuthContext";
+import { saveToCache, loadAllFromCache } from "@/utils/cache";
 
 // Helper function to retry failed requests
 async function withRetry<T>(
@@ -175,6 +176,7 @@ interface DataContextType {
   radioGuidePrice: number;
   updateRadioGuidePrice: (price: number) => Promise<void>;
   isLoading: boolean;
+  isOffline: boolean;
   networkError: string | null;
   clearNetworkError: () => void;
   refreshData: () => Promise<void>;
@@ -198,10 +200,74 @@ export function DataProvider({ children }: { children: ReactNode }) {
   const [radioGuidePrice, setRadioGuidePrice] = useState<number>(80);
   const [isLoading, setIsLoading] = useState(true);
   const [networkError, setNetworkError] = useState<string | null>(null);
+  const [isOffline, setIsOffline] = useState(false);
+  const cacheLoadedRef = useRef(false);
 
   const clearNetworkError = useCallback(() => {
     setNetworkError(null);
   }, []);
+
+  // Load cached data on app start
+  useEffect(() => {
+    if (cacheLoadedRef.current) return;
+    cacheLoadedRef.current = true;
+
+    loadAllFromCache().then((cached) => {
+      if (cached) {
+        if (cached.tourTypes) setTourTypes(cached.tourTypes as TourType[]);
+        if (cached.additionalServices) setAdditionalServices(cached.additionalServices as AdditionalService[]);
+        if (cached.excursions) setExcursions(cached.excursions as Excursion[]);
+        if (cached.transactions) setTransactions(cached.transactions as Transaction[]);
+        if (cached.activities) setActivities(cached.activities as Activity[]);
+        if (cached.deletedItems) setDeletedItems(cached.deletedItems as DeletedItem[]);
+        if (cached.radioGuideKits) setRadioGuideKits(cached.radioGuideKits as RadioGuideKit[]);
+        if (cached.radioGuideAssignments) setRadioGuideAssignments(cached.radioGuideAssignments as RadioGuideAssignment[]);
+        if (cached.equipmentLosses) setEquipmentLosses(cached.equipmentLosses as EquipmentLoss[]);
+        if (cached.radioGuidePrice) setRadioGuidePrice(cached.radioGuidePrice as number);
+      }
+    });
+  }, []);
+
+  // Save data to cache when it changes
+  useEffect(() => {
+    if (tourTypes.length > 0) saveToCache('tourTypes', tourTypes);
+  }, [tourTypes]);
+
+  useEffect(() => {
+    if (additionalServices.length > 0) saveToCache('additionalServices', additionalServices);
+  }, [additionalServices]);
+
+  useEffect(() => {
+    if (excursions.length > 0) saveToCache('excursions', excursions);
+  }, [excursions]);
+
+  useEffect(() => {
+    if (transactions.length > 0) saveToCache('transactions', transactions);
+  }, [transactions]);
+
+  useEffect(() => {
+    if (activities.length > 0) saveToCache('activities', activities);
+  }, [activities]);
+
+  useEffect(() => {
+    if (deletedItems.length > 0) saveToCache('deletedItems', deletedItems);
+  }, [deletedItems]);
+
+  useEffect(() => {
+    if (radioGuideKits.length > 0) saveToCache('radioGuideKits', radioGuideKits);
+  }, [radioGuideKits]);
+
+  useEffect(() => {
+    if (radioGuideAssignments.length > 0) saveToCache('radioGuideAssignments', radioGuideAssignments);
+  }, [radioGuideAssignments]);
+
+  useEffect(() => {
+    if (equipmentLosses.length > 0) saveToCache('equipmentLosses', equipmentLosses);
+  }, [equipmentLosses]);
+
+  useEffect(() => {
+    saveToCache('radioGuidePrice', radioGuidePrice);
+  }, [radioGuidePrice]);
 
   const currentUser = profile ? {
     role: profile.role as "admin" | "manager",
@@ -474,13 +540,16 @@ export function DataProvider({ children }: { children: ReactNode }) {
         const errors = results.filter(r => r.status === 'rejected');
         console.error('Some data failed to load:', errors);
         setNetworkError('Некоторые данные не удалось загрузить. Потяните вниз для обновления.');
+        setIsOffline(true);
       } else {
         setNetworkError(null);
+        setIsOffline(false);
       }
     } catch (err) {
       const errorMessage = err instanceof Error ? err.message : 'Неизвестная ошибка';
       if (errorMessage.includes('Network') || errorMessage.includes('fetch')) {
         setNetworkError('Нет подключения к интернету. Проверьте соединение и попробуйте снова.');
+        setIsOffline(true);
       } else {
         setNetworkError('Ошибка загрузки данных. Попробуйте позже.');
       }
@@ -1231,6 +1300,7 @@ export function DataProvider({ children }: { children: ReactNode }) {
         radioGuidePrice,
         updateRadioGuidePrice,
         isLoading,
+        isOffline,
         networkError,
         clearNetworkError,
         refreshData,
