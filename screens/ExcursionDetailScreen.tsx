@@ -52,7 +52,8 @@ export default function ExcursionDetailScreen() {
     );
   }, [excursion]);
 
-  const canAddNote = !isAdmin && isExcursionToday && profile?.id === excursion?.managerId;
+  // Admins can always add notes, managers can add only on excursion day for their own excursions
+  const canAddNote = isAdmin || (isExcursionToday && profile?.id === excursion?.managerId);
 
   const visibleNotes = useMemo(() => {
     if (isAdmin) return excursionNotesData;
