@@ -16,7 +16,6 @@ import ExportDataScreen from "@/screens/ExportDataScreen";
 import DailyReportScreen from "@/screens/DailyReportScreen";
 import { getCommonScreenOptions } from "./screenOptions";
 import { useTheme } from "@/hooks/useTheme";
-import { useAuth } from "@/contexts/AuthContext";
 import { Profile } from "@/lib/supabase";
 
 export type SettingsStackParamList = {
@@ -41,87 +40,82 @@ const Stack = createNativeStackNavigator<SettingsStackParamList>();
 
 export default function SettingsStackNavigator() {
   const { theme, isDark } = useTheme();
-  const { isRadioDispatcher } = useAuth();
   
   return (
     <Stack.Navigator 
-      initialRouteName={isRadioDispatcher ? "RadioGuides" : "Settings"}
+      initialRouteName="Settings"
       screenOptions={getCommonScreenOptions({ theme, isDark })}
     >
-      {!isRadioDispatcher ? (
-        <>
-          <Stack.Screen
-            name="Settings"
-            component={SettingsScreen}
-            options={{ title: "Настройки" }}
-          />
-          <Stack.Screen
-            name="TicketPrices"
-            component={TicketPricesScreen}
-            options={{ title: "Цены на билеты" }}
-          />
-          <Stack.Screen
-            name="AdminPanel"
-            component={AdminPanelScreen}
-            options={{ title: "Панель администратора" }}
-          />
-          <Stack.Screen
-            name="ManagerDetail"
-            component={ManagerDetailScreen}
-            options={{ title: "Сотрудник" }}
-          />
-          <Stack.Screen
-            name="DeletedData"
-            component={DeletedDataScreen}
-            options={{ title: "Удаленные данные" }}
-          />
-          <Stack.Screen
-            name="DatabaseSettings"
-            component={DatabaseSettingsScreen}
-            options={{ title: "База данных" }}
-          />
-          <Stack.Screen
-            name="EditProfile"
-            component={EditProfileScreen}
-            options={{ title: "Редактировать профиль" }}
-          />
-          <Stack.Screen
-            name="EquipmentLosses"
-            component={EquipmentLossesScreen}
-            options={{ title: "Утери оборудования" }}
-          />
-          <Stack.Screen
-            name="Reports"
-            component={ReportsScreen}
-            options={{ title: "Отчёты" }}
-          />
-          <Stack.Screen
-            name="FinancialReport"
-            component={FinancialReportScreen}
-            options={{ title: "Финансовый отчёт" }}
-          />
-          <Stack.Screen
-            name="ExcursionsReport"
-            component={ExcursionsReportScreen}
-            options={{ title: "Отчёт по экскурсиям" }}
-          />
-          <Stack.Screen
-            name="RadioGuidesReport"
-            component={RadioGuidesReportScreen}
-            options={{ title: "Отчёт по радиогидам" }}
-          />
-          <Stack.Screen
-            name="ExportData"
-            component={ExportDataScreen}
-            options={{ title: "Экспорт данных" }}
-          />
-          <Stack.Screen
-            name="DailyReport"
-            component={DailyReportScreen}
-            options={{ title: "Ежедневный отчёт" }}
-          />
-        </>
-      ) : null}
+      <Stack.Screen
+        name="Settings"
+        component={SettingsScreen}
+        options={{ title: "Настройки" }}
+      />
+      <Stack.Screen
+        name="TicketPrices"
+        component={TicketPricesScreen}
+        options={{ title: "Цены на билеты" }}
+      />
+      <Stack.Screen
+        name="AdminPanel"
+        component={AdminPanelScreen}
+        options={{ title: "Панель администратора" }}
+      />
+      <Stack.Screen
+        name="ManagerDetail"
+        component={ManagerDetailScreen}
+        options={{ title: "Сотрудник" }}
+      />
+      <Stack.Screen
+        name="DeletedData"
+        component={DeletedDataScreen}
+        options={{ title: "Удаленные данные" }}
+      />
+      <Stack.Screen
+        name="DatabaseSettings"
+        component={DatabaseSettingsScreen}
+        options={{ title: "База данных" }}
+      />
+      <Stack.Screen
+        name="EditProfile"
+        component={EditProfileScreen}
+        options={{ title: "Редактировать профиль" }}
+      />
+      <Stack.Screen
+        name="EquipmentLosses"
+        component={EquipmentLossesScreen}
+        options={{ title: "Утери оборудования" }}
+      />
+      <Stack.Screen
+        name="Reports"
+        component={ReportsScreen}
+        options={{ title: "Отчёты" }}
+      />
+      <Stack.Screen
+        name="FinancialReport"
+        component={FinancialReportScreen}
+        options={{ title: "Финансовый отчёт" }}
+      />
+      <Stack.Screen
+        name="ExcursionsReport"
+        component={ExcursionsReportScreen}
+        options={{ title: "Отчёт по экскурсиям" }}
+      />
+      <Stack.Screen
+        name="RadioGuidesReport"
+        component={RadioGuidesReportScreen}
+        options={{ title: "Отчёт по радиогидам" }}
+      />
+      <Stack.Screen
+        name="ExportData"
+        component={ExportDataScreen}
+        options={{ title: "Экспорт данных" }}
+      />
+      <Stack.Screen
+        name="DailyReport"
+        component={DailyReportScreen}
+        options={{ title: "Ежедневный отчёт" }}
+      />
       <Stack.Screen
         name="RadioGuides"
         component={RadioGuidesScreen}
