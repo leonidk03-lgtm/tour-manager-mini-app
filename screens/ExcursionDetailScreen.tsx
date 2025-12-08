@@ -57,8 +57,9 @@ export default function ExcursionDetailScreen() {
   const visibleNotes = useMemo(() => {
     if (isAdmin) return excursionNotesData;
     if (!isExcursionToday) return [];
-    return excursionNotesData.filter(n => n.managerId === profile?.id);
-  }, [isAdmin, isExcursionToday, excursionNotesData, profile]);
+    // Managers see ALL notes for this excursion on excursion day
+    return excursionNotesData;
+  }, [isAdmin, isExcursionToday, excursionNotesData]);
 
   const handleAddNote = async () => {
     if (!noteText.trim() || isAddingNote) return;
