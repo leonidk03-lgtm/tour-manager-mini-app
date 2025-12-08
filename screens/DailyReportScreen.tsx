@@ -230,6 +230,7 @@ export default function DailyReportScreen() {
     const tourTypeMap: Record<
       string,
       {
+        tourTypeId: string;
         name: string;
         buses: { total: number; discounted: number }[];
         freeCount: number;
@@ -249,6 +250,7 @@ export default function DailyReportScreen() {
 
       if (!tourTypeMap[exc.tourTypeId]) {
         tourTypeMap[exc.tourTypeId] = {
+          tourTypeId: exc.tourTypeId,
           name: typeName,
           buses: [],
           freeCount: 0,
@@ -295,7 +297,13 @@ export default function DailyReportScreen() {
       }
     });
 
-    const tourTypeReports = Object.values(tourTypeMap);
+    const tourTypeReports = Object.values(tourTypeMap).sort((a, b) => {
+      const tourTypeA = tourTypes.find((t) => t.id === a.tourTypeId);
+      const tourTypeB = tourTypes.find((t) => t.id === b.tourTypeId);
+      const articleA = tourTypeA?.articleNumber || '';
+      const articleB = tourTypeB?.articleNumber || '';
+      return articleA.localeCompare(articleB, 'ru', { numeric: true });
+    });
 
     const additionalExpenses: { description: string; amount: number }[] = [];
     const additionalIncome: { description: string; amount: number }[] = [];
