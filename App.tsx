@@ -1,5 +1,5 @@
 import React from "react";
-import { StyleSheet, Platform } from "react-native";
+import { StyleSheet, Platform, Text } from "react-native";
 import { NavigationContainer } from "@react-navigation/native";
 import { GestureHandlerRootView } from "react-native-gesture-handler";
 import { KeyboardProvider, KeyboardToolbar } from "react-native-keyboard-controller";
@@ -25,7 +25,12 @@ export default function App() {
               </DataProvider>
             </AuthProvider>
             <StatusBar style="auto" />
-            {Platform.OS !== "web" ? <KeyboardToolbar /> : null}
+            {Platform.OS !== "web" ? (
+              <KeyboardToolbar 
+                showArrows={true}
+                doneText="Готово"
+              />
+            ) : null}
           </KeyboardProvider>
         </GestureHandlerRootView>
       </SafeAreaProvider>
