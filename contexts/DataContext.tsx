@@ -839,6 +839,37 @@ export function DataProvider({ children }: { children: ReactNode }) {
     return excursionNotes.filter(n => n.excursionId === excursionId);
   }, [excursionNotes]);
 
+  const fetchExcursionNotes = useCallback(async (): Promise<void> => {
+    try {
+      const cached = await loadFromCache<ExcursionNote[]>('excursionNotes');
+      if (cached) {
+        setExcursionNotes(cached);
+      }
+
+      const { data, error } = await supabase
+        .from('excursion_notes')
+        .select('*')
+        .order('created_at', { ascending: false });
+
+      if (error) throw error;
+
+      const notes: ExcursionNote[] = (data || []).map(n => ({
+        id: n.id,
+        excursionId: n.excursion_id,
+        text: n.text,
+        createdAt: n.created_at,
+        updatedAt: n.updated_at,
+        managerId: n.manager_id,
+        managerName: n.manager_name,
+      }));
+
+      setExcursionNotes(notes);
+      saveToCache('excursionNotes', notes);
+    } catch (err) {
+      console.warn('Failed to fetch excursion notes:', err);
+    }
+  }, []);
+
   const refreshData = useCallback(async () => {
     setIsLoading(true);
     try {
@@ -908,6 +939,7 @@ export function DataProvider({ children }: { children: ReactNode }) {
         fetchActivities(),
         fetchDeletedItems(),
         fetchDispatchingNotes(),
+        fetchExcursionNotes(),
       ]).then(() => {
         setIsOffline(false);
         setNetworkError(null);
@@ -920,7 +952,7 @@ export function DataProvider({ children }: { children: ReactNode }) {
     } else {
       setIsLoading(false);
     }
-  }, [user, profile, fetchExcursions, fetchTransactions, fetchActivities, fetchDeletedItems, fetchDispatchingNotes]);
+  }, [user, profile, fetchExcursions, fetchTransactions, fetchActivities, fetchDeletedItems, fetchDispatchingNotes, fetchExcursionNotes]);
 
   // Supabase Realtime subscriptions for live data sync
   useEffect(() => {
@@ -977,6 +1009,11 @@ export function DataProvider({ children }: { children: ReactNode }) {
         { event: '*', schema: 'public', table: 'dispatching_notes' },
         () => safeFetch(fetchDispatchingNotes)
       )
+      .on(
+        'postgres_changes',
+        { event: '*', schema: 'public', table: 'excursion_notes' },
+        () => safeFetch(fetchExcursionNotes)
+      )
       .subscribe((status) => {
         if (status === 'CHANNEL_ERROR') {
           console.error('Supabase Realtime channel error');
@@ -989,7 +1026,7 @@ export function DataProvider({ children }: { children: ReactNode }) {
     return () => {
       supabase.removeChannel(channel);
     };
-  }, [user, fetchTourTypes, fetchAdditionalServices, fetchRadioGuideKits, fetchRadioGuideAssignments, fetchEquipmentLosses, fetchExcursions, fetchTransactions, fetchActivities, fetchDeletedItems, fetchDispatchingNotes, safeFetch]);
+  }, [user, fetchTourTypes, fetchAdditionalServices, fetchRadioGuideKits, fetchRadioGuideAssignments, fetchEquipmentLosses, fetchExcursions, fetchTransactions, fetchActivities, fetchDeletedItems, fetchDispatchingNotes, fetchExcursionNotes, safeFetch]);
 
   const refreshPriceList = useCallback(async () => {
     await Promise.all([fetchTourTypes(), fetchAdditionalServices()]);
