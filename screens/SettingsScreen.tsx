@@ -355,6 +355,8 @@ const styles = StyleSheet.create({
   avatarText: {
     fontSize: 28,
     fontWeight: "700",
+    lineHeight: 32,
+    textAlign: "center",
   },
   profileInfo: {
     flex: 1,
