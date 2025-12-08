@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useRef } from "react";
 import {
   View,
   TextInput,
@@ -27,6 +27,13 @@ interface AddExcursionFormProps {
 export function AddExcursionForm({ excursion, onSave, onCancel }: AddExcursionFormProps) {
   const { theme } = useTheme();
   const { tourTypes, additionalServices } = useData();
+
+  const totalRef = useRef<TextInput>(null);
+  const discountedRef = useRef<TextInput>(null);
+  const freeRef = useRef<TextInput>(null);
+  const byTourRef = useRef<TextInput>(null);
+  const paidRef = useRef<TextInput>(null);
+  const participantRefs = [discountedRef, freeRef, byTourRef, paidRef];
 
   const enabledTourTypes = tourTypes.filter((t) => t.isEnabled);
 
@@ -289,6 +296,7 @@ export function AddExcursionForm({ excursion, onSave, onCancel }: AddExcursionFo
         <View style={styles.inputRow}>
           <ThemedText style={styles.inputLabel}>Всего участников</ThemedText>
           <TextInput
+            ref={totalRef}
             style={[styles.input, styles.numericInput, { borderColor: theme.inputBorder, color: theme.text, backgroundColor: theme.backgroundDefault }]}
             value={totalParticipants}
             onChangeText={setTotalParticipants}
@@ -296,18 +304,21 @@ export function AddExcursionForm({ excursion, onSave, onCancel }: AddExcursionFo
             placeholder="0"
             placeholderTextColor={theme.textSecondary}
             returnKeyType="next"
+            onSubmitEditing={() => discountedRef.current?.focus()}
+            blurOnSubmit={false}
           />
         </View>
         <ThemedText style={[styles.subLabel, { color: theme.textSecondary }]}>Из них:</ThemedText>
         {[
-          { label: "Льготных", value: discounted, setter: setDiscounted },
-          { label: "Бесплатных", value: free, setter: setFree },
-          { label: "По туру", value: byTour, setter: setByTour },
-          { label: "Оплаченных", value: paid, setter: setPaid },
+          { label: "Льготных", value: discounted, setter: setDiscounted, ref: discountedRef },
+          { label: "Бесплатных", value: free, setter: setFree, ref: freeRef },
+          { label: "По туру", value: byTour, setter: setByTour, ref: byTourRef },
+          { label: "Оплаченных", value: paid, setter: setPaid, ref: paidRef },
         ].map((item, index, arr) => (
           <View key={index} style={styles.inputRow}>
             <ThemedText style={[styles.inputLabel, styles.subInputLabel]}>{item.label}</ThemedText>
             <TextInput
+              ref={item.ref}
               style={[styles.input, styles.numericInput, { borderColor: theme.inputBorder, color: theme.text, backgroundColor: theme.backgroundDefault }]}
               value={item.value}
               onChangeText={item.setter}
@@ -315,6 +326,12 @@ export function AddExcursionForm({ excursion, onSave, onCancel }: AddExcursionFo
               placeholder="0"
               placeholderTextColor={theme.textSecondary}
               returnKeyType={index < arr.length - 1 ? "next" : "done"}
+              onSubmitEditing={() => {
+                if (index < arr.length - 1) {
+                  participantRefs[index + 1]?.current?.focus();
+                }
+              }}
+              blurOnSubmit={index === arr.length - 1}
             />
           </View>
         ))}

@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useState, useRef } from "react";
 import { View, StyleSheet, Pressable, Modal, TextInput, Alert, Platform } from "react-native";
 import { Feather } from "@expo/vector-icons";
 import DateTimePicker from "@react-native-community/datetimepicker";
@@ -24,6 +24,9 @@ export default function FinancesScreen() {
   const { theme } = useTheme();
   const { transactions, addTransaction, deleteTransaction } = useData();
   const { isAdmin } = useAuth();
+  
+  const amountRef = useRef<TextInput>(null);
+  
   const [activeTab, setActiveTab] = useState<"expense" | "income">("expense");
   const [selectedDate, setSelectedDate] = useState(new Date().toISOString().split("T")[0]);
   const [showAddModal, setShowAddModal] = useState(false);
@@ -380,11 +383,14 @@ export default function FinancesScreen() {
                   value={formDescription}
                   onChangeText={setFormDescription}
                   returnKeyType="next"
+                  onSubmitEditing={() => amountRef.current?.focus()}
+                  blurOnSubmit={false}
                 />
               </View>
               <View style={styles.formGroup}>
                 <ThemedText style={styles.label}>Сумма (₽)</ThemedText>
                 <TextInput
+                  ref={amountRef}
                   style={[
                     styles.input,
                     {

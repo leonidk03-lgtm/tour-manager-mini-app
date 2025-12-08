@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useState, useRef } from "react";
 import { View, StyleSheet, Pressable, TextInput, Alert } from "react-native";
 import { Feather } from "@expo/vector-icons";
 import { useNavigation } from "@react-navigation/native";
@@ -13,6 +13,9 @@ export default function EditProfileScreen() {
   const { theme } = useTheme();
   const navigation = useNavigation();
   const { profile, updateOwnProfile } = useAuth();
+
+  const newPasswordRef = useRef<TextInput>(null);
+  const confirmPasswordRef = useRef<TextInput>(null);
 
   const [displayName, setDisplayName] = useState(profile?.display_name || "");
   const [newPassword, setNewPassword] = useState("");
@@ -91,6 +94,8 @@ export default function EditProfileScreen() {
               placeholder="Введите имя"
               placeholderTextColor={theme.textSecondary}
               returnKeyType="next"
+              onSubmitEditing={() => newPasswordRef.current?.focus()}
+              blurOnSubmit={false}
             />
           </View>
 
@@ -129,6 +134,7 @@ export default function EditProfileScreen() {
             </ThemedText>
             <View style={styles.passwordContainer}>
               <TextInput
+                ref={newPasswordRef}
                 style={[
                   styles.input,
                   styles.passwordInput,
@@ -140,6 +146,8 @@ export default function EditProfileScreen() {
                 placeholderTextColor={theme.textSecondary}
                 secureTextEntry={!showPassword}
                 returnKeyType="next"
+                onSubmitEditing={() => confirmPasswordRef.current?.focus()}
+                blurOnSubmit={false}
               />
               <Pressable
                 style={styles.eyeButton}
@@ -159,6 +167,7 @@ export default function EditProfileScreen() {
               Подтвердите пароль
             </ThemedText>
             <TextInput
+              ref={confirmPasswordRef}
               style={[
                 styles.input,
                 { backgroundColor: theme.backgroundTertiary, color: theme.text, borderColor: theme.border },
