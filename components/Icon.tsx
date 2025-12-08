@@ -75,6 +75,12 @@ const SVG_ICONS: Record<string, (size: number, color: string) => React.ReactNode
       <Polyline points="18 15 12 9 6 15" />
     </Svg>
   ),
+  "clipboard": (s, c) => (
+    <Svg width={s} height={s} viewBox="0 0 24 24" fill="none" stroke={c} strokeWidth={2} strokeLinecap="round" strokeLinejoin="round">
+      <Path d="M16 4h2a2 2 0 0 1 2 2v14a2 2 0 0 1-2 2H6a2 2 0 0 1-2-2V6a2 2 0 0 1 2-2h2" />
+      <Rect x="8" y="2" width="8" height="4" rx="1" ry="1" />
+    </Svg>
+  ),
   "clock": (s, c) => (
     <Svg width={s} height={s} viewBox="0 0 24 24" fill="none" stroke={c} strokeWidth={2} strokeLinecap="round" strokeLinejoin="round">
       <Circle cx="12" cy="12" r="10" />
@@ -190,6 +196,12 @@ const SVG_ICONS: Record<string, (size: number, color: string) => React.ReactNode
       <Circle cx="12" cy="12" r="10" />
       <Line x1="12" y1="16" x2="12" y2="12" />
       <Line x1="12" y1="8" x2="12.01" y2="8" />
+    </Svg>
+  ),
+  "inbox": (s, c) => (
+    <Svg width={s} height={s} viewBox="0 0 24 24" fill="none" stroke={c} strokeWidth={2} strokeLinecap="round" strokeLinejoin="round">
+      <Polyline points="22 12 16 12 14 15 10 15 8 12 2 12" />
+      <Path d="M5.45 5.11L2 12v6a2 2 0 0 0 2 2h16a2 2 0 0 0 2-2v-6l-3.45-6.89A2 2 0 0 0 16.76 4H7.24a2 2 0 0 0-1.79 1.11z" />
     </Svg>
   ),
   "link": (s, c) => (
