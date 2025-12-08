@@ -358,7 +358,15 @@ export default function ExcursionsListScreen() {
 
           {Object.keys(groupedByTourType).length > 0 ? (
             <View style={styles.section}>
-              {Object.keys(groupedByTourType).map((tourTypeId) => {
+              {Object.keys(groupedByTourType)
+                .sort((a, b) => {
+                  const tourTypeA = tourTypes.find((t) => t.id === a);
+                  const tourTypeB = tourTypes.find((t) => t.id === b);
+                  const articleA = tourTypeA?.articleNumber || '';
+                  const articleB = tourTypeB?.articleNumber || '';
+                  return articleA.localeCompare(articleB, 'ru', { numeric: true });
+                })
+                .map((tourTypeId) => {
                 const tourType = tourTypes.find((t) => t.id === tourTypeId);
                 if (!tourType) return null;
                 
