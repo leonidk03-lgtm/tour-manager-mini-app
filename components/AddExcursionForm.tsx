@@ -33,7 +33,7 @@ export function AddExcursionForm({ excursion, onSave, onCancel }: AddExcursionFo
   const freeRef = useRef<TextInput>(null);
   const byTourRef = useRef<TextInput>(null);
   const paidRef = useRef<TextInput>(null);
-  const firstExpenseRef = useRef<TextInput>(null);
+  const expenseRefs = useRef<{ [key: string]: TextInput | null }>({});
 
   const enabledTourTypes = tourTypes.filter((t) => t.isEnabled);
 
@@ -365,7 +365,11 @@ export function AddExcursionForm({ excursion, onSave, onCancel }: AddExcursionFo
             placeholder="0"
             placeholderTextColor={theme.textSecondary}
             returnKeyType="next"
-            onSubmitEditing={() => firstExpenseRef.current?.focus()}
+            onSubmitEditing={() => {
+              if (expenses.length > 0) {
+                expenseRefs.current[expenses[0].id]?.focus();
+              }
+            }}
             blurOnSubmit={false}
           />
         </View>
@@ -448,14 +452,20 @@ export function AddExcursionForm({ excursion, onSave, onCancel }: AddExcursionFo
                 <Feather name="chevron-down" size={16} color={theme.textSecondary} />
               </Pressable>
               <TextInput
-                ref={index === 0 ? firstExpenseRef : undefined}
+                ref={(ref) => { expenseRefs.current[expense.id] = ref; }}
                 style={[styles.expenseAmountInput, { borderColor: theme.inputBorder, color: theme.text, backgroundColor: theme.backgroundDefault }]}
                 value={Number(expense.amount) === 0 ? "" : expense.amount.toString()}
                 onChangeText={(value) => updateExpense(expense.id, "amount", value)}
                 keyboardType="numeric"
                 placeholder="Сумма"
                 placeholderTextColor={theme.textSecondary}
-                returnKeyType="done"
+                returnKeyType={index < expenses.length - 1 ? "next" : "done"}
+                onSubmitEditing={() => {
+                  if (index < expenses.length - 1) {
+                    expenseRefs.current[expenses[index + 1].id]?.focus();
+                  }
+                }}
+                blurOnSubmit={index === expenses.length - 1}
               />
             </View>
             <Pressable onPress={() => removeExpense(expense.id)} style={styles.removeButton}>
