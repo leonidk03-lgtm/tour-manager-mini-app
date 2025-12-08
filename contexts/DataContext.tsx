@@ -1053,10 +1053,20 @@ export function DataProvider({ children }: { children: ReactNode }) {
       )
       .subscribe((status) => {
         if (status === 'CHANNEL_ERROR') {
-          console.error('Supabase Realtime channel error');
+          console.warn('Supabase Realtime channel error - will retry');
           setIsOffline(true);
+          // Auto-retry after 5 seconds
+          setTimeout(() => {
+            channel.subscribe();
+          }, 5000);
         } else if (status === 'SUBSCRIBED') {
           setIsOffline(false);
+        } else if (status === 'TIMED_OUT') {
+          console.warn('Supabase Realtime timed out - will retry');
+          setIsOffline(true);
+          setTimeout(() => {
+            channel.subscribe();
+          }, 3000);
         }
       });
 
