@@ -8,7 +8,8 @@ import { BlurView } from "expo-blur";
 import { ThemedText } from "@/components/ThemedText";
 import { ThemedView } from "@/components/ThemedView";
 import { useTheme } from "@/hooks/useTheme";
-import { useData, DispatchingNote } from "@/contexts/DataContext";
+import { useData, DispatchingNote, Excursion } from "@/contexts/DataContext";
+import { useAuth } from "@/contexts/AuthContext";
 import { Spacing, BorderRadius, Typography } from "@/constants/theme";
 import { hapticFeedback } from "@/utils/haptics";
 
@@ -18,7 +19,8 @@ export const DISPATCH_URL_KEY = "@dispatch_webview_url";
 export default function DispatchingScreen() {
   const { theme } = useTheme();
   const insets = useSafeAreaInsets();
-  const { dispatchingNotes, addDispatchingNote, updateDispatchingNote, deleteDispatchingNote } = useData();
+  const { dispatchingNotes, addDispatchingNote, updateDispatchingNote, deleteDispatchingNote, excursions, tourTypes, addExcursionNote } = useData();
+  const { profile, isAdmin } = useAuth();
   const [currentNote, setCurrentNote] = useState("");
   const [showNotesList, setShowNotesList] = useState(false);
   const [showFullscreenNote, setShowFullscreenNote] = useState(false);
@@ -30,6 +32,8 @@ export default function DispatchingScreen() {
   const [calcWaitingForOperand, setCalcWaitingForOperand] = useState(false);
   const [webViewUrl, setWebViewUrl] = useState(DEFAULT_DATABASE_URL);
   const [isSaving, setIsSaving] = useState(false);
+  const [showExcursionPicker, setShowExcursionPicker] = useState(false);
+  const [selectedNoteForLink, setSelectedNoteForLink] = useState<DispatchingNote | null>(null);
 
   useEffect(() => {
     loadWebViewUrl();
@@ -117,6 +121,47 @@ export default function DispatchingScreen() {
 
   const dismissKeyboard = () => {
     Keyboard.dismiss();
+  };
+
+  const getTourTypeName = (tourTypeId: string) => {
+    const tourType = tourTypes.find((t) => t.id === tourTypeId);
+    return tourType?.name || "Неизвестная экскурсия";
+  };
+
+  const getAvailableExcursions = (): Excursion[] => {
+    const today = new Date();
+    today.setHours(0, 0, 0, 0);
+    
+    return excursions
+      .filter((exc) => {
+        const excDate = new Date(exc.date);
+        excDate.setHours(0, 0, 0, 0);
+        if (isAdmin) {
+          return excDate >= today;
+        }
+        return excDate >= today && exc.managerId === profile?.id;
+      })
+      .sort((a, b) => new Date(a.date).getTime() - new Date(b.date).getTime());
+  };
+
+  const handleOpenExcursionPicker = (note: DispatchingNote) => {
+    setSelectedNoteForLink(note);
+    setShowExcursionPicker(true);
+  };
+
+  const handleLinkToExcursion = async (excursion: Excursion) => {
+    if (!selectedNoteForLink || !profile?.id) return;
+
+    try {
+      await addExcursionNote(excursion.id, selectedNoteForLink.text);
+      hapticFeedback.success();
+      Alert.alert("Готово", "Заметка привязана к экскурсии");
+      setShowExcursionPicker(false);
+      setSelectedNoteForLink(null);
+    } catch (err) {
+      hapticFeedback.error();
+      Alert.alert("Ошибка", "Не удалось привязать заметку");
+    }
   };
 
   const formatCalcDisplay = (value: string): string => {
@@ -355,6 +400,15 @@ export default function DispatchingScreen() {
                         style={styles.noteActionButton}
                         onPress={() => {
                           hapticFeedback.selection();
+                          handleOpenExcursionPicker(item);
+                        }}
+                      >
+                        <Feather name="link" size={18} color={theme.success} />
+                      </Pressable>
+                      <Pressable
+                        style={styles.noteActionButton}
+                        onPress={() => {
+                          hapticFeedback.selection();
                           handleEditNote(item);
                         }}
                       >
@@ -470,6 +524,93 @@ export default function DispatchingScreen() {
               </View>
             </View>
           </Pressable>
+        </Pressable>
+      </Modal>
+
+      <Modal
+        visible={showExcursionPicker}
+        transparent
+        animationType="slide"
+        onRequestClose={() => {
+          setShowExcursionPicker(false);
+          setSelectedNoteForLink(null);
+        }}
+      >
+        <Pressable 
+          style={styles.modalBackdrop} 
+          onPress={() => {
+            setShowExcursionPicker(false);
+            setSelectedNoteForLink(null);
+          }}
+        >
+          <TouchableWithoutFeedback>
+            <ThemedView style={[styles.excursionPickerModal, { backgroundColor: theme.backgroundDefault }]}>
+              <View style={styles.excursionPickerHeader}>
+                <ThemedText style={styles.excursionPickerTitle}>Привязать к экскурсии</ThemedText>
+                <Pressable onPress={() => {
+                  setShowExcursionPicker(false);
+                  setSelectedNoteForLink(null);
+                }}>
+                  <Feather name="x" size={24} color={theme.text} />
+                </Pressable>
+              </View>
+              
+              {selectedNoteForLink ? (
+                <View style={[styles.selectedNotePreview, { backgroundColor: theme.backgroundSecondary }]}>
+                  <ThemedText numberOfLines={2} style={styles.selectedNoteText}>
+                    {selectedNoteForLink.text}
+                  </ThemedText>
+                </View>
+              ) : null}
+
+              {getAvailableExcursions().length === 0 ? (
+                <View style={styles.emptyExcursions}>
+                  <Feather name="calendar" size={48} color={theme.textSecondary} />
+                  <ThemedText style={{ color: theme.textSecondary, marginTop: Spacing.md }}>
+                    Нет доступных экскурсий
+                  </ThemedText>
+                  <ThemedText style={{ color: theme.textSecondary, fontSize: 12, marginTop: Spacing.xs }}>
+                    Добавьте экскурсию на сегодня или будущие даты
+                  </ThemedText>
+                </View>
+              ) : (
+                <FlatList
+                  data={getAvailableExcursions()}
+                  keyExtractor={(item) => item.id}
+                  renderItem={({ item }) => {
+                    const excDate = new Date(item.date);
+                    const isToday = excDate.toDateString() === new Date().toDateString();
+                    return (
+                      <Pressable
+                        style={({ pressed }) => [
+                          styles.excursionItem,
+                          { backgroundColor: pressed ? theme.backgroundTertiary : theme.backgroundSecondary },
+                        ]}
+                        onPress={() => handleLinkToExcursion(item)}
+                      >
+                        <View style={styles.excursionItemContent}>
+                          <ThemedText style={styles.excursionItemName} numberOfLines={1}>
+                            {getTourTypeName(item.tourTypeId)}
+                          </ThemedText>
+                          <View style={styles.excursionItemMeta}>
+                            <ThemedText style={[styles.excursionItemDate, isToday && { color: theme.success }]}>
+                              {isToday ? "Сегодня" : excDate.toLocaleDateString("ru-RU", { day: "2-digit", month: "2-digit" })}
+                            </ThemedText>
+                            <ThemedText style={[styles.excursionItemTime, { color: theme.textSecondary }]}>
+                              {excDate.toLocaleTimeString("ru-RU", { hour: "2-digit", minute: "2-digit" })}
+                            </ThemedText>
+                          </View>
+                        </View>
+                        <Feather name="chevron-right" size={20} color={theme.textSecondary} />
+                      </Pressable>
+                    );
+                  }}
+                  ItemSeparatorComponent={() => <View style={{ height: Spacing.sm }} />}
+                  contentContainerStyle={{ paddingBottom: Spacing.xl }}
+                />
+              )}
+            </ThemedView>
+          </TouchableWithoutFeedback>
         </Pressable>
       </Modal>
     </View>
@@ -697,5 +838,59 @@ const styles = StyleSheet.create({
   calcButtonText: {
     fontSize: 22,
     fontWeight: "500",
+  },
+  excursionPickerModal: {
+    maxHeight: "70%",
+    borderTopLeftRadius: 16,
+    borderTopRightRadius: 16,
+    padding: Spacing.lg,
+  },
+  excursionPickerHeader: {
+    flexDirection: "row",
+    justifyContent: "space-between",
+    alignItems: "center",
+    marginBottom: Spacing.lg,
+  },
+  excursionPickerTitle: {
+    fontSize: 18,
+    fontWeight: "600",
+  },
+  selectedNotePreview: {
+    padding: Spacing.md,
+    borderRadius: BorderRadius.sm,
+    marginBottom: Spacing.lg,
+  },
+  selectedNoteText: {
+    fontSize: 14,
+    lineHeight: 20,
+  },
+  emptyExcursions: {
+    alignItems: "center",
+    paddingVertical: Spacing["2xl"],
+  },
+  excursionItem: {
+    flexDirection: "row",
+    alignItems: "center",
+    padding: Spacing.md,
+    borderRadius: BorderRadius.sm,
+  },
+  excursionItemContent: {
+    flex: 1,
+    gap: Spacing.xs,
+  },
+  excursionItemName: {
+    fontSize: 15,
+    fontWeight: "500",
+  },
+  excursionItemMeta: {
+    flexDirection: "row",
+    gap: Spacing.md,
+  },
+  excursionItemDate: {
+    fontSize: 13,
+    fontWeight: "500",
+  },
+  excursionItemTime: {
+    fontSize: 13,
   },
 });
