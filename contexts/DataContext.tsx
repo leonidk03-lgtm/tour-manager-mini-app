@@ -127,6 +127,7 @@ export interface DispatchingNote {
   createdAt: string;
   updatedAt: string;
   managerId: string;
+  linkedExcursionId?: string | null;
 }
 
 export interface ExcursionNote {
@@ -195,7 +196,8 @@ interface DataContextType {
   updateRadioGuidePrice: (price: number) => Promise<void>;
   dispatchingNotes: DispatchingNote[];
   addDispatchingNote: (text: string) => Promise<void>;
-  updateDispatchingNote: (id: string, text: string) => Promise<void>;
+  updateDispatchingNote: (id: string, text: string, linkedExcursionId?: string | null) => Promise<void>;
+  linkDispatchingNoteToExcursion: (noteId: string, excursionId: string) => Promise<void>;
   deleteDispatchingNote: (id: string) => Promise<void>;
   excursionNotes: ExcursionNote[];
   addExcursionNote: (excursionId: string, text: string) => Promise<void>;
@@ -600,6 +602,7 @@ export function DataProvider({ children }: { children: ReactNode }) {
         createdAt: n.created_at,
         updatedAt: n.updated_at,
         managerId: n.manager_id,
+        linkedExcursionId: n.linked_excursion_id || null,
       }));
       
       setDispatchingNotes(prev => {
@@ -692,25 +695,52 @@ export function DataProvider({ children }: { children: ReactNode }) {
     }
   };
 
-  const updateDispatchingNote = async (id: string, text: string) => {
+  const updateDispatchingNote = async (id: string, text: string, linkedExcursionId?: string | null) => {
     const now = new Date().toISOString();
     
     setDispatchingNotes(prev => {
-      const updated = prev.map(n => n.id === id ? { ...n, text, updatedAt: now } : n);
+      const updated = prev.map(n => n.id === id ? { ...n, text, updatedAt: now, ...(linkedExcursionId !== undefined && { linkedExcursionId }) } : n);
       saveToCache('dispatchingNotes', updated);
       return updated;
     });
     
     if (!id.startsWith('local_')) {
       try {
+        const updateData: Record<string, unknown> = { text, updated_at: now };
+        if (linkedExcursionId !== undefined) {
+          updateData.linked_excursion_id = linkedExcursionId;
+        }
         const { error } = await supabase
           .from('dispatching_notes')
-          .update({ text, updated_at: now })
+          .update(updateData)
           .eq('id', id);
 
         if (error) throw error;
       } catch (err) {
         console.warn('Note updated locally, will sync when online');
+      }
+    }
+  };
+
+  const linkDispatchingNoteToExcursion = async (noteId: string, excursionId: string) => {
+    const now = new Date().toISOString();
+    
+    setDispatchingNotes(prev => {
+      const updated = prev.map(n => n.id === noteId ? { ...n, linkedExcursionId: excursionId, updatedAt: now } : n);
+      saveToCache('dispatchingNotes', updated);
+      return updated;
+    });
+    
+    if (!noteId.startsWith('local_')) {
+      try {
+        const { error } = await supabase
+          .from('dispatching_notes')
+          .update({ linked_excursion_id: excursionId, updated_at: now })
+          .eq('id', noteId);
+
+        if (error) throw error;
+      } catch (err) {
+        console.warn('Link saved locally, will sync when online');
       }
     }
   };
@@ -1669,6 +1699,7 @@ export function DataProvider({ children }: { children: ReactNode }) {
         dispatchingNotes,
         addDispatchingNote,
         updateDispatchingNote,
+        linkDispatchingNoteToExcursion,
         deleteDispatchingNote,
         excursionNotes,
         addExcursionNote,

@@ -19,7 +19,7 @@ export const DISPATCH_URL_KEY = "@dispatch_webview_url";
 export default function DispatchingScreen() {
   const { theme } = useTheme();
   const insets = useSafeAreaInsets();
-  const { dispatchingNotes, addDispatchingNote, updateDispatchingNote, deleteDispatchingNote, excursions, tourTypes, addExcursionNote } = useData();
+  const { dispatchingNotes, addDispatchingNote, updateDispatchingNote, deleteDispatchingNote, excursions, tourTypes, addExcursionNote, linkDispatchingNoteToExcursion } = useData();
   const { profile, isAdmin } = useAuth();
   const [currentNote, setCurrentNote] = useState("");
   const [showNotesList, setShowNotesList] = useState(false);
@@ -154,6 +154,7 @@ export default function DispatchingScreen() {
 
     try {
       await addExcursionNote(excursion.id, selectedNoteForLink.text);
+      await linkDispatchingNoteToExcursion(selectedNoteForLink.id, excursion.id);
       hapticFeedback.success();
       Alert.alert("Готово", "Заметка привязана к экскурсии");
       setShowExcursionPicker(false);
@@ -162,6 +163,13 @@ export default function DispatchingScreen() {
       hapticFeedback.error();
       Alert.alert("Ошибка", "Не удалось привязать заметку");
     }
+  };
+
+  const getLinkedExcursionName = (excursionId: string | null | undefined): string | null => {
+    if (!excursionId) return null;
+    const excursion = excursions.find(e => e.id === excursionId);
+    if (!excursion) return null;
+    return getTourTypeName(excursion.tourTypeId);
   };
 
   const formatCalcDisplay = (value: string): string => {
@@ -385,47 +393,60 @@ export default function DispatchingScreen() {
               <FlatList
                 data={dispatchingNotes}
                 keyExtractor={(item) => item.id}
-                renderItem={({ item }) => (
-                  <View style={[styles.noteItem, { borderBottomColor: theme.border }]}>
-                    <View style={styles.noteContent}>
-                      <ThemedText style={styles.noteText} numberOfLines={3}>
-                        {item.text}
-                      </ThemedText>
-                      <ThemedText style={[styles.noteDate, { color: theme.textSecondary }]}>
-                        {formatNoteDate(item.createdAt)}
-                      </ThemedText>
+                renderItem={({ item }) => {
+                  const linkedName = getLinkedExcursionName(item.linkedExcursionId);
+                  return (
+                    <View style={[styles.noteItem, { borderBottomColor: theme.border }]}>
+                      <View style={styles.noteContent}>
+                        <ThemedText style={styles.noteText} numberOfLines={3}>
+                          {item.text}
+                        </ThemedText>
+                        <View style={styles.noteMetaRow}>
+                          <ThemedText style={[styles.noteDate, { color: theme.textSecondary }]}>
+                            {formatNoteDate(item.createdAt)}
+                          </ThemedText>
+                          {linkedName ? (
+                            <View style={[styles.linkedBadge, { backgroundColor: theme.success + '20' }]}>
+                              <Feather name="link" size={10} color={theme.success} />
+                              <ThemedText style={[styles.linkedBadgeText, { color: theme.success }]} numberOfLines={1}>
+                                {linkedName}
+                              </ThemedText>
+                            </View>
+                          ) : null}
+                        </View>
+                      </View>
+                      <View style={styles.noteActions}>
+                        <Pressable
+                          style={styles.noteActionButton}
+                          onPress={() => {
+                            hapticFeedback.selection();
+                            handleOpenExcursionPicker(item);
+                          }}
+                        >
+                          <Feather name={linkedName ? "link-2" : "link"} size={18} color={theme.success} />
+                        </Pressable>
+                        <Pressable
+                          style={styles.noteActionButton}
+                          onPress={() => {
+                            hapticFeedback.selection();
+                            handleEditNote(item);
+                          }}
+                        >
+                          <Feather name="edit-2" size={18} color={theme.primary} />
+                        </Pressable>
+                        <Pressable
+                          style={styles.noteActionButton}
+                          onPress={() => {
+                            hapticFeedback.light();
+                            handleDeleteNote(item.id);
+                          }}
+                        >
+                          <Feather name="trash-2" size={18} color={theme.error} />
+                        </Pressable>
+                      </View>
                     </View>
-                    <View style={styles.noteActions}>
-                      <Pressable
-                        style={styles.noteActionButton}
-                        onPress={() => {
-                          hapticFeedback.selection();
-                          handleOpenExcursionPicker(item);
-                        }}
-                      >
-                        <Feather name="link" size={18} color={theme.success} />
-                      </Pressable>
-                      <Pressable
-                        style={styles.noteActionButton}
-                        onPress={() => {
-                          hapticFeedback.selection();
-                          handleEditNote(item);
-                        }}
-                      >
-                        <Feather name="edit-2" size={18} color={theme.primary} />
-                      </Pressable>
-                      <Pressable
-                        style={styles.noteActionButton}
-                        onPress={() => {
-                          hapticFeedback.light();
-                          handleDeleteNote(item.id);
-                        }}
-                      >
-                        <Feather name="trash-2" size={18} color={theme.error} />
-                      </Pressable>
-                    </View>
-                  </View>
-                )}
+                  );
+                }}
                 ListEmptyComponent={
                   <View style={styles.emptyNotes}>
                     <Feather name="file-text" size={48} color={theme.textSecondary} />
@@ -592,14 +613,6 @@ export default function DispatchingScreen() {
                         <ThemedText style={styles.excursionItemName} numberOfLines={1}>
                           {getTourTypeName(item.tourTypeId)}
                         </ThemedText>
-                        <View style={styles.excursionItemMeta}>
-                          <ThemedText style={[styles.excursionItemDate, isToday && { color: theme.success }]}>
-                            {isToday ? "Сегодня" : excDate.toLocaleDateString("ru-RU", { day: "2-digit", month: "2-digit" })}
-                          </ThemedText>
-                          <ThemedText style={[styles.excursionItemTime, { color: theme.textSecondary }]}>
-                            {excDate.toLocaleTimeString("ru-RU", { hour: "2-digit", minute: "2-digit" })}
-                          </ThemedText>
-                        </View>
                       </View>
                       <Feather name="chevron-right" size={20} color={theme.textSecondary} />
                     </Pressable>
@@ -751,6 +764,25 @@ const styles = StyleSheet.create({
   },
   noteDate: {
     fontSize: 12,
+  },
+  noteMetaRow: {
+    flexDirection: "row",
+    alignItems: "center",
+    gap: Spacing.sm,
+    flexWrap: "wrap",
+  },
+  linkedBadge: {
+    flexDirection: "row",
+    alignItems: "center",
+    gap: 4,
+    paddingHorizontal: Spacing.sm,
+    paddingVertical: 2,
+    borderRadius: BorderRadius.xs,
+    maxWidth: 150,
+  },
+  linkedBadgeText: {
+    fontSize: 11,
+    fontWeight: "500",
   },
   noteActions: {
     flexDirection: "row",
