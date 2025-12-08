@@ -16,6 +16,13 @@ import { hapticFeedback } from "@/utils/haptics";
 
 const DEFAULT_DATABASE_URL = "http://turburo-kazan.ru/managers/zapis-na-ekskursiyu.php?arrFilter_ff%5BNAME%5D=&arrFilter_DATE_ACTIVE_FROM_1=&arrFilter_DATE_ACTIVE_FROM_2=&arrFilter_pf%5BTYPE%5D=&arrFilter_pf%5BGOSTINICI%5D=&arrFilter_CREATED_BY=&sort=date_ex&USER_REMEMBER=Y&set_filter=Показать&set_filter=Y";
 export const DISPATCH_URL_KEY = "@dispatch_webview_url";
+const DISPATCH_TABS_KEY = "@dispatch_browser_tabs";
+
+interface BrowserTab {
+  id: string;
+  url: string;
+  title: string;
+}
 
 export default function DispatchingScreen() {
   const { theme } = useTheme();
@@ -37,13 +44,109 @@ export default function DispatchingScreen() {
   const [selectedNoteForLink, setSelectedNoteForLink] = useState<DispatchingNote | null>(null);
   const [searchQuery, setSearchQuery] = useState("");
   const [searchResult, setSearchResult] = useState<string | null>(null);
+  const [tabs, setTabs] = useState<BrowserTab[]>([
+    { id: '1', url: DEFAULT_DATABASE_URL, title: 'Вкладка 1' }
+  ]);
+  const [activeTabId, setActiveTabId] = useState('1');
   const webViewRef = useRef<WebViewType>(null);
+  const webViewRefs = useRef<{ [key: string]: WebViewType | null }>({});
   const prevNoteRef = useRef("");
   const processedCodesRef = useRef<Set<string>>(new Set());
 
+  const activeTab = tabs.find(t => t.id === activeTabId) || tabs[0];
+
   useEffect(() => {
-    loadWebViewUrl();
+    loadTabs();
   }, []);
+
+  useEffect(() => {
+    saveTabs();
+  }, [tabs, activeTabId]);
+
+  const loadTabs = async () => {
+    try {
+      const savedTabs = await AsyncStorage.getItem(DISPATCH_TABS_KEY);
+      if (savedTabs) {
+        const parsed = JSON.parse(savedTabs);
+        if (parsed.tabs && parsed.tabs.length > 0) {
+          setTabs(parsed.tabs);
+          setActiveTabId(parsed.activeTabId || parsed.tabs[0].id);
+        }
+      }
+    } catch (error) {
+      console.error("Failed to load tabs:", error);
+    }
+  };
+
+  const saveTabs = async () => {
+    try {
+      await AsyncStorage.setItem(DISPATCH_TABS_KEY, JSON.stringify({
+        tabs,
+        activeTabId
+      }));
+    } catch (error) {
+      console.error("Failed to save tabs:", error);
+    }
+  };
+
+  const addNewTab = () => {
+    hapticFeedback.medium();
+    const newId = String(Date.now());
+    const newTab: BrowserTab = {
+      id: newId,
+      url: DEFAULT_DATABASE_URL,
+      title: `Вкладка ${tabs.length + 1}`
+    };
+    setTabs([...tabs, newTab]);
+    setActiveTabId(newId);
+  };
+
+  const closeTab = (tabId: string) => {
+    if (tabs.length === 1) {
+      Alert.alert("Внимание", "Нельзя закрыть последнюю вкладку");
+      return;
+    }
+    hapticFeedback.light();
+    const newTabs = tabs.filter(t => t.id !== tabId);
+    setTabs(newTabs);
+    if (activeTabId === tabId) {
+      setActiveTabId(newTabs[0].id);
+    }
+  };
+
+  const switchTab = (tabId: string) => {
+    if (tabId !== activeTabId) {
+      hapticFeedback.selection();
+      setActiveTabId(tabId);
+    }
+  };
+
+  const updateTabUrl = (tabId: string, url: string) => {
+    setTabs(tabs.map(t => t.id === tabId ? { ...t, url } : t));
+  };
+
+  const renameTab = (tabId: string) => {
+    const tab = tabs.find(t => t.id === tabId);
+    if (!tab) return;
+    
+    Alert.prompt(
+      "Переименовать вкладку",
+      "Введите новое название",
+      [
+        { text: "Отмена", style: "cancel" },
+        { 
+          text: "OK", 
+          onPress: (name?: string) => {
+            if (name && name.trim()) {
+              setTabs(tabs.map(t => t.id === tabId ? { ...t, title: name.trim() } : t));
+            }
+          }
+        }
+      ],
+      "plain-text",
+      tab.title
+    );
+  };
 
   const handleNoteChange = (text: string) => {
     const prevText = prevNoteRef.current;
@@ -92,7 +195,8 @@ export default function DispatchingScreen() {
   };
 
   const searchInWebView = (query: string) => {
-    if (!webViewRef.current || !query.trim()) return;
+    const activeWebView = webViewRefs.current[activeTabId];
+    if (!activeWebView || !query.trim()) return;
     
     const jsCode = `
       (function() {
@@ -159,7 +263,7 @@ export default function DispatchingScreen() {
       true;
     `;
     
-    webViewRef.current.injectJavaScript(jsCode);
+    activeWebView.injectJavaScript(jsCode);
   };
 
   const handleWebViewMessage = (event: WebViewMessageEvent) => {
@@ -478,6 +582,55 @@ export default function DispatchingScreen() {
       </TouchableWithoutFeedback>
 
       <View style={styles.webViewContainer}>
+        {/* Browser Tabs */}
+        <View style={[styles.tabsContainer, { backgroundColor: theme.backgroundSecondary }]}>
+          <FlatList
+            horizontal
+            data={tabs}
+            keyExtractor={(item) => item.id}
+            showsHorizontalScrollIndicator={false}
+            contentContainerStyle={styles.tabsList}
+            renderItem={({ item }) => (
+              <Pressable
+                style={[
+                  styles.tab,
+                  { 
+                    backgroundColor: item.id === activeTabId ? theme.backgroundTertiary : 'transparent',
+                    borderColor: item.id === activeTabId ? theme.primary : 'transparent',
+                  }
+                ]}
+                onPress={() => switchTab(item.id)}
+                onLongPress={() => renameTab(item.id)}
+              >
+                <ThemedText 
+                  style={[
+                    styles.tabTitle, 
+                    { color: item.id === activeTabId ? theme.text : theme.textSecondary }
+                  ]}
+                  numberOfLines={1}
+                >
+                  {item.title}
+                </ThemedText>
+                {tabs.length > 1 ? (
+                  <Pressable
+                    style={styles.tabCloseButton}
+                    onPress={() => closeTab(item.id)}
+                    hitSlop={{ top: 10, bottom: 10, left: 5, right: 10 }}
+                  >
+                    <Icon name="x" size={12} color={theme.textSecondary} />
+                  </Pressable>
+                ) : null}
+              </Pressable>
+            )}
+          />
+          <Pressable
+            style={[styles.addTabButton, { backgroundColor: theme.primary }]}
+            onPress={addNewTab}
+          >
+            <Icon name="plus" size={16} color={theme.buttonText} />
+          </Pressable>
+        </View>
+
         <View style={[styles.searchBar, { backgroundColor: theme.backgroundSecondary }]}>
           <Icon name="search" size={18} color={theme.textSecondary} />
           <TextInput
@@ -521,15 +674,32 @@ export default function DispatchingScreen() {
             </ThemedText>
           </View>
         ) : (
-          <WebView
-            ref={webViewRef}
-            source={{ uri: webViewUrl }}
-            style={styles.webView}
-            startInLoadingState={true}
-            javaScriptEnabled={true}
-            domStorageEnabled={true}
-            onMessage={handleWebViewMessage}
-          />
+          <View style={styles.webViewsWrapper}>
+            {tabs.map((tab) => (
+              <View 
+                key={tab.id}
+                style={[
+                  styles.webViewWrapper,
+                  { display: tab.id === activeTabId ? 'flex' : 'none' }
+                ]}
+              >
+                <WebView
+                  ref={(ref) => { webViewRefs.current[tab.id] = ref; }}
+                  source={{ uri: tab.url }}
+                  style={styles.webView}
+                  startInLoadingState={true}
+                  javaScriptEnabled={true}
+                  domStorageEnabled={true}
+                  onMessage={handleWebViewMessage}
+                  onNavigationStateChange={(navState) => {
+                    if (navState.url && navState.url !== tab.url) {
+                      updateTabUrl(tab.id, navState.url);
+                    }
+                  }}
+                />
+              </View>
+            ))}
+          </View>
         )}
       </View>
 
@@ -905,6 +1075,52 @@ const styles = StyleSheet.create({
   searchResultText: {
     fontSize: 13,
     fontWeight: "500",
+  },
+  tabsContainer: {
+    flexDirection: "row",
+    alignItems: "center",
+    paddingVertical: Spacing.xs,
+    paddingHorizontal: Spacing.sm,
+    borderBottomWidth: 1,
+    borderBottomColor: "rgba(255,255,255,0.1)",
+  },
+  tabsList: {
+    flexDirection: "row",
+    gap: Spacing.xs,
+    paddingRight: Spacing.sm,
+  },
+  tab: {
+    flexDirection: "row",
+    alignItems: "center",
+    paddingVertical: Spacing.xs,
+    paddingLeft: Spacing.sm,
+    paddingRight: Spacing.xs,
+    borderRadius: BorderRadius.sm,
+    borderWidth: 1,
+    minWidth: 80,
+    maxWidth: 140,
+  },
+  tabTitle: {
+    fontSize: 13,
+    fontWeight: "500",
+    flex: 1,
+  },
+  tabCloseButton: {
+    padding: 4,
+    marginLeft: 4,
+  },
+  addTabButton: {
+    width: 28,
+    height: 28,
+    borderRadius: BorderRadius.sm,
+    justifyContent: "center",
+    alignItems: "center",
+  },
+  webViewsWrapper: {
+    flex: 1,
+  },
+  webViewWrapper: {
+    flex: 1,
   },
   webView: {
     flex: 1,
