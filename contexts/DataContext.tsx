@@ -762,8 +762,29 @@ export function DataProvider({ children }: { children: ReactNode }) {
         managerName: n.manager_name,
       }));
       
-      setExcursionNotes(notes);
-      saveToCache('excursionNotes', notes);
+      // Auto-delete notes older than 14 days
+      const fourteenDaysAgo = new Date();
+      fourteenDaysAgo.setDate(fourteenDaysAgo.getDate() - 14);
+      
+      const expiredNotes = notes.filter(n => new Date(n.createdAt) < fourteenDaysAgo);
+      const activeNotes = notes.filter(n => new Date(n.createdAt) >= fourteenDaysAgo);
+      
+      // Move expired notes to deleted_items and delete from excursion_notes
+      for (const note of expiredNotes) {
+        try {
+          await supabase.from('deleted_items').insert({
+            item_type: 'excursion_note_expired',
+            item_data: note,
+            deleted_at: new Date().toISOString(),
+          });
+          await supabase.from('excursion_notes').delete().eq('id', note.id);
+        } catch (delErr) {
+          console.warn('Failed to auto-delete expired note:', delErr);
+        }
+      }
+      
+      setExcursionNotes(activeNotes);
+      saveToCache('excursionNotes', activeNotes);
     } catch (err) {
       console.warn('Failed to fetch excursion notes from server');
     }
@@ -838,37 +859,6 @@ export function DataProvider({ children }: { children: ReactNode }) {
   const getExcursionNotes = useCallback((excursionId: string): ExcursionNote[] => {
     return excursionNotes.filter(n => n.excursionId === excursionId);
   }, [excursionNotes]);
-
-  const fetchExcursionNotes = useCallback(async (): Promise<void> => {
-    try {
-      const cached = await loadFromCache<ExcursionNote[]>('excursionNotes');
-      if (cached) {
-        setExcursionNotes(cached);
-      }
-
-      const { data, error } = await supabase
-        .from('excursion_notes')
-        .select('*')
-        .order('created_at', { ascending: false });
-
-      if (error) throw error;
-
-      const notes: ExcursionNote[] = (data || []).map(n => ({
-        id: n.id,
-        excursionId: n.excursion_id,
-        text: n.text,
-        createdAt: n.created_at,
-        updatedAt: n.updated_at,
-        managerId: n.manager_id,
-        managerName: n.manager_name,
-      }));
-
-      setExcursionNotes(notes);
-      saveToCache('excursionNotes', notes);
-    } catch (err) {
-      console.warn('Failed to fetch excursion notes:', err);
-    }
-  }, []);
 
   const refreshData = useCallback(async () => {
     setIsLoading(true);
