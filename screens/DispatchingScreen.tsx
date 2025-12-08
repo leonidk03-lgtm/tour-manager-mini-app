@@ -473,6 +473,7 @@ const styles = StyleSheet.create({
     flex: 1,
   },
   notesContainer: {
+    flex: 0.4,
     paddingHorizontal: Spacing.md,
     paddingBottom: Spacing.md,
     gap: Spacing.sm,
@@ -533,7 +534,7 @@ const styles = StyleSheet.create({
     alignItems: "center",
   },
   webViewContainer: {
-    flex: 1,
+    flex: 0.6,
   },
   webView: {
     flex: 1,
