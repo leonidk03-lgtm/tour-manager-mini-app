@@ -213,7 +213,7 @@ export default function DispatchingScreen() {
 
   return (
     <View style={[styles.container, { backgroundColor: theme.backgroundRoot }]}>
-      <View style={[styles.notesContainer, { paddingTop: insets.top + 60 }]}>
+      <View style={[styles.notesContainer, { paddingTop: Spacing.md }]}>
         <View style={styles.notesHeader}>
           <ThemedText style={styles.notesTitle}>Заметки</ThemedText>
           <View style={styles.notesActions}>
