@@ -521,26 +521,71 @@ export function DataProvider({ children }: { children: ReactNode }) {
     }
   }, [user, profile, fetchExcursions, fetchTransactions, fetchActivities, fetchDeletedItems]);
 
-  // Periodic polling for all shared data sync (since Realtime not available on current plan)
+  // Supabase Realtime subscriptions for live data sync
   useEffect(() => {
     if (!user) return;
 
-    const POLL_INTERVAL = 15000; // 15 seconds for better sync
-    const interval = setInterval(() => {
-      Promise.all([
-        fetchTourTypes(),
-        fetchAdditionalServices(),
-        fetchRadioGuideKits(),
-        fetchRadioGuideAssignments(),
-        fetchEquipmentLosses(),
-        fetchExcursions(),
-        fetchTransactions(),
-        fetchActivities(),
-      ]);
-    }, POLL_INTERVAL);
+    const channel = supabase.channel('db-changes')
+      .on(
+        'postgres_changes',
+        { event: '*', schema: 'public', table: 'tour_types' },
+        () => fetchTourTypes()
+      )
+      .on(
+        'postgres_changes',
+        { event: '*', schema: 'public', table: 'additional_services' },
+        () => fetchAdditionalServices()
+      )
+      .on(
+        'postgres_changes',
+        { event: '*', schema: 'public', table: 'excursions' },
+        () => fetchExcursions()
+      )
+      .on(
+        'postgres_changes',
+        { event: '*', schema: 'public', table: 'transactions' },
+        () => fetchTransactions()
+      )
+      .on(
+        'postgres_changes',
+        { event: '*', schema: 'public', table: 'activities' },
+        () => fetchActivities()
+      )
+      .on(
+        'postgres_changes',
+        { event: '*', schema: 'public', table: 'deleted_items' },
+        () => fetchDeletedItems()
+      )
+      .on(
+        'postgres_changes',
+        { event: '*', schema: 'public', table: 'radio_guide_kits' },
+        () => fetchRadioGuideKits()
+      )
+      .on(
+        'postgres_changes',
+        { event: '*', schema: 'public', table: 'radio_guide_assignments' },
+        () => fetchRadioGuideAssignments()
+      )
+      .on(
+        'postgres_changes',
+        { event: '*', schema: 'public', table: 'equipment_losses' },
+        () => fetchEquipmentLosses()
+      )
+      .on(
+        'postgres_changes',
+        { event: '*', schema: 'public', table: 'app_settings' },
+        () => fetchSettings()
+      )
+      .subscribe((status) => {
+        if (status === 'CHANNEL_ERROR') {
+          console.error('Supabase Realtime channel error');
+        }
+      });
 
-    return () => clearInterval(interval);
-  }, [user, fetchTourTypes, fetchAdditionalServices, fetchRadioGuideKits, fetchRadioGuideAssignments, fetchEquipmentLosses, fetchExcursions, fetchTransactions, fetchActivities]);
+    return () => {
+      supabase.removeChannel(channel);
+    };
+  }, [user, fetchTourTypes, fetchAdditionalServices, fetchRadioGuideKits, fetchRadioGuideAssignments, fetchEquipmentLosses, fetchExcursions, fetchTransactions, fetchActivities, fetchDeletedItems, fetchSettings]);
 
   const refreshPriceList = useCallback(async () => {
     await Promise.all([fetchTourTypes(), fetchAdditionalServices()]);

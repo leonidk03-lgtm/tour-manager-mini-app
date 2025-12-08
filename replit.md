@@ -38,7 +38,7 @@ Design style: Telegram-inspired dark theme with flat design (November 2025 updat
 - Local state management with React hooks
 - No external state management libraries (Redux/MobX) - keeping it simple
 - Data persisted in Supabase PostgreSQL database
-- **Data Synchronization**: 15-second polling interval for all shared data (tour types, additional services, radio guide kits/assignments, excursions, transactions) since Supabase Realtime is not available on current plan
+- **Data Synchronization**: Supabase Realtime subscriptions for instant data sync across all tables (tour_types, additional_services, excursions, transactions, activities, deleted_items, radio_guide_kits, radio_guide_assignments, equipment_losses, settings)
 - **Network Error Handling**: Centralized error handling with NetworkErrorBanner component shows user-friendly messages on connection issues; retry button only clears error on successful reload
 
 **Theming System**
