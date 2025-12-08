@@ -269,6 +269,15 @@ export default function DispatchingScreen() {
             onChangeText={setCurrentNote}
             multiline
           />
+          <Pressable
+            style={[styles.expandButton, { position: "absolute", right: Spacing.sm, top: Spacing.sm }]}
+            onPress={() => {
+              hapticFeedback.light();
+              setShowFullscreenNote(true);
+            }}
+          >
+            <Feather name="maximize-2" size={18} color={theme.textSecondary} />
+          </Pressable>
           {currentNote.trim() ? (
             <Pressable
               style={[styles.sendButton, { backgroundColor: theme.primary, position: "absolute", right: Spacing.sm, bottom: Spacing.sm }]}
@@ -521,6 +530,10 @@ const styles = StyleSheet.create({
     fontSize: 15,
     textAlignVertical: "top",
     paddingVertical: Spacing.xs,
+    paddingRight: 40,
+  },
+  expandButton: {
+    padding: Spacing.xs,
   },
   sendButton: {
     width: 36,
