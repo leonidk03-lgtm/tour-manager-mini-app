@@ -10,6 +10,7 @@ import { Spacing, BorderRadius } from "@/constants/theme";
 import { useTheme } from "@/hooks/useTheme";
 import { useAuth } from "@/contexts/AuthContext";
 import { useData } from "@/contexts/DataContext";
+import { hapticFeedback } from "@/utils/haptics";
 
 export default function SettingsScreen() {
   const { theme } = useTheme();
@@ -98,7 +99,10 @@ export default function SettingsScreen() {
               styles.editProfileButton,
               { backgroundColor: theme.primary, opacity: pressed ? 0.7 : 1 },
             ]}
-            onPress={() => navigation.navigate("EditProfile")}
+            onPress={() => {
+              hapticFeedback.light();
+              navigation.navigate("EditProfile");
+            }}
           >
             <Feather name="edit-2" size={16} color={theme.buttonText} />
             <ThemedText style={[styles.editProfileText, { color: theme.buttonText }]}>
@@ -121,7 +125,7 @@ export default function SettingsScreen() {
             {isAdmin ? (
               <>
                 <Pressable
-                  onPress={() => navigation.navigate("TicketPrices")}
+                  onPress={() => { hapticFeedback.selection(); navigation.navigate("TicketPrices"); }}
                   style={({ pressed }) => ({ opacity: pressed ? 0.7 : 1 })}
                 >
                   <View style={styles.settingItem}>
@@ -136,7 +140,7 @@ export default function SettingsScreen() {
               </>
             ) : null}
             <Pressable
-              onPress={() => navigation.navigate("DeletedData")}
+              onPress={() => { hapticFeedback.selection(); navigation.navigate("DeletedData"); }}
               style={({ pressed }) => ({ opacity: pressed ? 0.7 : 1 })}
             >
               <View style={styles.settingItem}>
@@ -152,7 +156,7 @@ export default function SettingsScreen() {
               <>
                 <View style={[styles.divider, { backgroundColor: theme.border }]} />
                 <Pressable
-                  onPress={() => navigation.navigate("AdminPanel")}
+                  onPress={() => { hapticFeedback.selection(); navigation.navigate("AdminPanel"); }}
                   style={({ pressed }) => ({ opacity: pressed ? 0.7 : 1 })}
                 >
                   <View style={styles.settingItem}>
@@ -165,7 +169,7 @@ export default function SettingsScreen() {
                 </Pressable>
                 <View style={[styles.divider, { backgroundColor: theme.border }]} />
                 <Pressable
-                  onPress={() => navigation.navigate("Reports")}
+                  onPress={() => { hapticFeedback.selection(); navigation.navigate("Reports"); }}
                   style={({ pressed }) => ({ opacity: pressed ? 0.7 : 1 })}
                 >
                   <View style={styles.settingItem}>
@@ -181,7 +185,7 @@ export default function SettingsScreen() {
 
             <View style={[styles.divider, { backgroundColor: theme.border }]} />
             <Pressable
-              onPress={() => navigation.navigate("RadioGuides")}
+              onPress={() => { hapticFeedback.selection(); navigation.navigate("RadioGuides"); }}
               style={({ pressed }) => ({ opacity: pressed ? 0.7 : 1 })}
             >
               <View style={styles.settingItem}>
@@ -194,7 +198,7 @@ export default function SettingsScreen() {
             </Pressable>
             <View style={[styles.divider, { backgroundColor: theme.border }]} />
             <Pressable
-              onPress={() => navigation.navigate("EquipmentLosses")}
+              onPress={() => { hapticFeedback.selection(); navigation.navigate("EquipmentLosses"); }}
               style={({ pressed }) => ({ opacity: pressed ? 0.7 : 1 })}
             >
               <View style={styles.settingItem}>
@@ -209,7 +213,7 @@ export default function SettingsScreen() {
               <>
                 <View style={[styles.divider, { backgroundColor: theme.border }]} />
                 <Pressable
-                  onPress={() => navigation.navigate("DatabaseSettings")}
+                  onPress={() => { hapticFeedback.selection(); navigation.navigate("DatabaseSettings"); }}
                   style={({ pressed }) => ({ opacity: pressed ? 0.7 : 1 })}
                 >
                   <View style={styles.settingItem}>

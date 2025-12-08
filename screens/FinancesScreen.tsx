@@ -13,6 +13,7 @@ import { useTheme } from "@/hooks/useTheme";
 import { useData, Transaction } from "@/contexts/DataContext";
 import { useAuth } from "@/contexts/AuthContext";
 import { formatCurrency, calculateAdditionalTransactionsTotal } from "@/utils/calculations";
+import { hapticFeedback } from "@/utils/haptics";
 
 const parseLocalDate = (dateString: string): Date => {
   const [year, month, day] = dateString.split('-').map(Number);
@@ -332,6 +333,7 @@ export default function FinancesScreen() {
           },
         ]}
         onPress={() => {
+          hapticFeedback.medium();
           setFormType(activeTab);
           setShowAddModal(true);
         }}
@@ -356,7 +358,7 @@ export default function FinancesScreen() {
             <ThemedText style={styles.modalTitle}>
               {formType === "expense" ? "Новый расход" : "Новый доход"}
             </ThemedText>
-            <Pressable onPress={handleAddTransaction} style={styles.modalButton}>
+            <Pressable onPress={() => { hapticFeedback.light(); handleAddTransaction(); }} style={styles.modalButton}>
               <ThemedText style={{ color: theme.primary, fontWeight: "600" }}>Сохранить</ThemedText>
             </Pressable>
           </View>

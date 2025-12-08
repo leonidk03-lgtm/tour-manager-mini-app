@@ -13,6 +13,7 @@ import { Spacing, BorderRadius } from "@/constants/theme";
 import { useTheme } from "@/hooks/useTheme";
 import { useData, Excursion, RadioGuideKit } from "@/contexts/DataContext";
 import { useAuth } from "@/contexts/AuthContext";
+import { hapticFeedback } from "@/utils/haptics";
 import {
   calculateExcursionRevenue,
   calculateExcursionExpenses,
@@ -476,7 +477,10 @@ export default function ExcursionsListScreen() {
               opacity: pressed ? 0.7 : 1,
             },
           ]}
-          onPress={() => navigation.getParent()?.navigate('SettingsTab', { screen: 'RadioGuides' })}
+          onPress={() => {
+            hapticFeedback.light();
+            navigation.getParent()?.navigate('SettingsTab', { screen: 'RadioGuides' });
+          }}
         >
           <Feather name="radio" size={20} color={theme.primary} />
         </Pressable>
@@ -488,7 +492,10 @@ export default function ExcursionsListScreen() {
               opacity: pressed ? 0.7 : 1,
             },
           ]}
-          onPress={() => setShowAddModal(true)}
+          onPress={() => {
+            hapticFeedback.medium();
+            setShowAddModal(true);
+          }}
         >
           <Feather name="plus" size={24} color={theme.buttonText} />
         </Pressable>
