@@ -1,4 +1,4 @@
-import { View, StyleSheet, Pressable, Alert, Modal, TextInput } from "react-native";
+import { View, StyleSheet, Pressable, Alert, Modal, TextInput, FlatList } from "react-native";
 import { Feather } from "@expo/vector-icons";
 import { useRoute, useNavigation } from "@react-navigation/native";
 import { ThemedText } from "@/components/ThemedText";
@@ -7,7 +7,7 @@ import { ScreenScrollView } from "@/components/ScreenScrollView";
 import { AddExcursionForm } from "@/components/AddExcursionForm";
 import { Spacing, BorderRadius } from "@/constants/theme";
 import { useTheme } from "@/hooks/useTheme";
-import { useData, Excursion as ExcursionType, ExcursionNote } from "@/contexts/DataContext";
+import { useData, Excursion as ExcursionType, ExcursionNote, DispatchingNote } from "@/contexts/DataContext";
 import { useAuth } from "@/contexts/AuthContext";
 import {
   calculateExcursionRevenue,
@@ -28,7 +28,7 @@ export default function ExcursionDetailScreen() {
   const route = useRoute();
   const navigation = useNavigation();
   const { excursionId } = route.params as { excursionId: string };
-  const { excursions, tourTypes, additionalServices, deleteExcursion, updateExcursion, getExcursionNotes, addExcursionNote, deleteExcursionNote } = useData();
+  const { excursions, tourTypes, additionalServices, deleteExcursion, updateExcursion, getExcursionNotes, addExcursionNote, deleteExcursionNote, dispatchingNotes } = useData();
   const { isAdmin, profile } = useAuth();
   const [showEditModal, setShowEditModal] = useState(false);
   const [editKey, setEditKey] = useState(0);
@@ -36,6 +36,8 @@ export default function ExcursionDetailScreen() {
   const [noteText, setNoteText] = useState("");
   const [isAddingNote, setIsAddingNote] = useState(false);
   const [showNoteInput, setShowNoteInput] = useState(false);
+  const [showNotesPicker, setShowNotesPicker] = useState(false);
+  const [expandedNoteId, setExpandedNoteId] = useState<string | null>(null);
 
   const excursion = excursions.find((e) => e.id === excursionId);
   const tourType = tourTypes.find((t) => t.id === excursion?.tourTypeId);
@@ -95,6 +97,24 @@ export default function ExcursionDetailScreen() {
         },
       },
     ]);
+  };
+
+  const handleSelectDispatchingNote = async (note: DispatchingNote) => {
+    setShowNotesPicker(false);
+    setIsAddingNote(true);
+    try {
+      await addExcursionNote(excursionId, note.text);
+      hapticFeedback.success();
+    } catch (err) {
+      hapticFeedback.error();
+      Alert.alert("Ошибка", "Не удалось добавить заметку");
+    } finally {
+      setIsAddingNote(false);
+    }
+  };
+
+  const toggleNoteExpand = (noteId: string) => {
+    setExpandedNoteId(expandedNoteId === noteId ? null : noteId);
   };
 
   useLayoutEffect(() => {
@@ -360,12 +380,23 @@ export default function ExcursionDetailScreen() {
             <View style={styles.sectionHeader}>
               <ThemedText style={styles.sectionTitle}>Заметки к экскурсии</ThemedText>
               {canAddNote ? (
-                <Pressable
-                  onPress={() => setShowNoteInput(!showNoteInput)}
-                  style={({ pressed }) => ({ opacity: pressed ? 0.7 : 1 })}
-                >
-                  <Feather name={showNoteInput ? "x" : "plus"} size={20} color={theme.primary} />
-                </Pressable>
+                <View style={{ flexDirection: "row", gap: Spacing.sm }}>
+                  <Pressable
+                    onPress={() => {
+                      hapticFeedback.selection();
+                      setShowNotesPicker(true);
+                    }}
+                    style={({ pressed }) => ({ opacity: pressed ? 0.7 : 1 })}
+                  >
+                    <Feather name="plus" size={20} color={theme.primary} />
+                  </Pressable>
+                  <Pressable
+                    onPress={() => setShowNoteInput(!showNoteInput)}
+                    style={({ pressed }) => ({ opacity: pressed ? 0.7 : 1 })}
+                  >
+                    <Feather name={showNoteInput ? "x" : "edit-3"} size={20} color={theme.primary} />
+                  </Pressable>
+                </View>
               ) : null}
             </View>
 
@@ -410,42 +441,57 @@ export default function ExcursionDetailScreen() {
               </ThemedText>
             ) : (
               <View style={styles.notesList}>
-                {visibleNotes.map((note: ExcursionNote) => (
-                  <View
-                    key={note.id}
-                    style={[
-                      styles.noteItem,
-                      { backgroundColor: theme.backgroundSecondary, borderRadius: BorderRadius.sm },
-                    ]}
-                  >
-                    <View style={styles.noteContent}>
-                      <ThemedText style={styles.noteText}>{note.text}</ThemedText>
-                      <View style={styles.noteMeta}>
-                        {isAdmin && note.managerName ? (
-                          <ThemedText style={[styles.noteAuthor, { color: theme.primary }]}>
-                            {note.managerName}
+                {visibleNotes.map((note: ExcursionNote) => {
+                  const isExpanded = expandedNoteId === note.id;
+                  const isLongNote = note.text.length > 100;
+                  return (
+                    <Pressable
+                      key={note.id}
+                      onPress={() => isLongNote && toggleNoteExpand(note.id)}
+                      style={[
+                        styles.noteItem,
+                        { backgroundColor: theme.backgroundSecondary, borderRadius: BorderRadius.sm },
+                      ]}
+                    >
+                      <View style={styles.noteContent}>
+                        <ThemedText 
+                          style={styles.noteText}
+                          numberOfLines={isExpanded ? undefined : 3}
+                        >
+                          {note.text}
+                        </ThemedText>
+                        {isLongNote && !isExpanded ? (
+                          <ThemedText style={{ color: theme.primary, fontSize: 12, marginTop: 4 }}>
+                            Нажмите для раскрытия...
                           </ThemedText>
                         ) : null}
-                        <ThemedText style={[styles.noteDate, { color: theme.textSecondary }]}>
-                          {new Date(note.createdAt).toLocaleString("ru-RU", {
-                            day: "2-digit",
-                            month: "2-digit",
-                            hour: "2-digit",
-                            minute: "2-digit",
-                          })}
-                        </ThemedText>
+                        <View style={styles.noteMeta}>
+                          {isAdmin && note.managerName ? (
+                            <ThemedText style={[styles.noteAuthor, { color: theme.primary }]}>
+                              {note.managerName}
+                            </ThemedText>
+                          ) : null}
+                          <ThemedText style={[styles.noteDate, { color: theme.textSecondary }]}>
+                            {new Date(note.createdAt).toLocaleString("ru-RU", {
+                              day: "2-digit",
+                              month: "2-digit",
+                              hour: "2-digit",
+                              minute: "2-digit",
+                            })}
+                          </ThemedText>
+                        </View>
                       </View>
-                    </View>
-                    {(note.managerId === profile?.id || isAdmin) ? (
-                      <Pressable
-                        onPress={() => handleDeleteNote(note.id)}
-                        style={({ pressed }) => ({ opacity: pressed ? 0.7 : 1, padding: 4 })}
-                      >
-                        <Feather name="trash-2" size={16} color={theme.error} />
-                      </Pressable>
-                    ) : null}
-                  </View>
-                ))}
+                      {(note.managerId === profile?.id || isAdmin) ? (
+                        <Pressable
+                          onPress={() => handleDeleteNote(note.id)}
+                          style={({ pressed }) => ({ opacity: pressed ? 0.7 : 1, padding: 4 })}
+                        >
+                          <Feather name="trash-2" size={16} color={theme.error} />
+                        </Pressable>
+                      ) : null}
+                    </Pressable>
+                  );
+                })}
               </View>
             )}
           </ThemedView>
@@ -459,6 +505,63 @@ export default function ExcursionDetailScreen() {
           onSave={handleSaveEdit}
           onCancel={() => setShowEditModal(false)}
         />
+      </Modal>
+
+      <Modal
+        visible={showNotesPicker}
+        transparent
+        animationType="slide"
+        onRequestClose={() => setShowNotesPicker(false)}
+      >
+        <Pressable style={styles.modalBackdrop} onPress={() => setShowNotesPicker(false)}>
+          <ThemedView style={[styles.notesPickerModal, { backgroundColor: theme.backgroundDefault }]}>
+            <View style={styles.notesPickerHeader}>
+              <ThemedText style={styles.notesPickerTitle}>Выберите заметку</ThemedText>
+              <Pressable onPress={() => setShowNotesPicker(false)}>
+                <Feather name="x" size={24} color={theme.text} />
+              </Pressable>
+            </View>
+            {dispatchingNotes.length === 0 ? (
+              <View style={styles.emptyNotes}>
+                <Feather name="file-text" size={48} color={theme.textSecondary} />
+                <ThemedText style={{ color: theme.textSecondary, marginTop: Spacing.md }}>
+                  Нет личных заметок
+                </ThemedText>
+                <ThemedText style={{ color: theme.textSecondary, fontSize: 12, marginTop: Spacing.xs }}>
+                  Добавьте заметки на вкладке "Отправление"
+                </ThemedText>
+              </View>
+            ) : (
+              <FlatList
+                data={dispatchingNotes}
+                keyExtractor={(item) => item.id}
+                renderItem={({ item }) => (
+                  <Pressable
+                    style={({ pressed }) => [
+                      styles.dispatchingNoteItem,
+                      { backgroundColor: pressed ? theme.backgroundTertiary : theme.backgroundSecondary },
+                    ]}
+                    onPress={() => handleSelectDispatchingNote(item)}
+                  >
+                    <ThemedText numberOfLines={3} style={styles.dispatchingNoteText}>
+                      {item.text}
+                    </ThemedText>
+                    <ThemedText style={[styles.dispatchingNoteDate, { color: theme.textSecondary }]}>
+                      {new Date(item.createdAt).toLocaleDateString("ru-RU", {
+                        day: "2-digit",
+                        month: "2-digit",
+                        hour: "2-digit",
+                        minute: "2-digit",
+                      })}
+                    </ThemedText>
+                  </Pressable>
+                )}
+                ItemSeparatorComponent={() => <View style={{ height: Spacing.sm }} />}
+                contentContainerStyle={{ paddingBottom: Spacing.xl }}
+              />
+            )}
+          </ThemedView>
+        </Pressable>
       </Modal>
     </ScreenScrollView>
   );
@@ -587,5 +690,42 @@ const styles = StyleSheet.create({
   },
   noteDate: {
     fontSize: 12,
+  },
+  modalBackdrop: {
+    flex: 1,
+    backgroundColor: "rgba(0, 0, 0, 0.5)",
+    justifyContent: "flex-end",
+  },
+  notesPickerModal: {
+    maxHeight: "70%",
+    borderTopLeftRadius: 16,
+    borderTopRightRadius: 16,
+    padding: Spacing.lg,
+  },
+  notesPickerHeader: {
+    flexDirection: "row",
+    justifyContent: "space-between",
+    alignItems: "center",
+    marginBottom: Spacing.lg,
+  },
+  notesPickerTitle: {
+    fontSize: 18,
+    fontWeight: "600",
+  },
+  emptyNotes: {
+    alignItems: "center",
+    paddingVertical: Spacing["2xl"],
+  },
+  dispatchingNoteItem: {
+    padding: Spacing.md,
+    borderRadius: BorderRadius.sm,
+  },
+  dispatchingNoteText: {
+    fontSize: 14,
+    lineHeight: 20,
+  },
+  dispatchingNoteDate: {
+    fontSize: 12,
+    marginTop: Spacing.xs,
   },
 });
