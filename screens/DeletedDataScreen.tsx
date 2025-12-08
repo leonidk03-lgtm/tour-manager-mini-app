@@ -6,9 +6,11 @@ import { ScreenScrollView } from "@/components/ScreenScrollView";
 import { Spacing, BorderRadius } from "@/constants/theme";
 import { useTheme } from "@/hooks/useTheme";
 import { useData, Excursion, Transaction, ExcursionNote, DispatchingNote } from "@/contexts/DataContext";
+import { useAuth } from "@/contexts/AuthContext";
 
 export default function DeletedDataScreen() {
   const { theme } = useTheme();
+  const { isAdmin } = useAuth();
   const { deletedItems, restoreDeletedItem, permanentlyDeleteItem, clearDeletedItems, tourTypes } = useData();
 
   const handleRestore = (id: string) => {
@@ -92,7 +94,7 @@ export default function DeletedDataScreen() {
   return (
     <ScreenScrollView>
       <View style={styles.container}>
-        {deletedItems.length > 0 ? (
+        {isAdmin && deletedItems.length > 0 ? (
           <Pressable
             onPress={handleClearAll}
             style={[styles.clearButton, { backgroundColor: theme.error }]}
@@ -161,15 +163,17 @@ export default function DeletedDataScreen() {
                     Восстановить
                   </ThemedText>
                 </Pressable>
-                <Pressable
-                  onPress={() => handlePermanentDelete(item.id)}
-                  style={[styles.actionButton, { backgroundColor: theme.error }]}
-                >
-                  <Feather name="x" size={16} color="#FFFFFF" />
-                  <ThemedText style={[styles.actionButtonText, { color: "#FFFFFF" }]}>
-                    Удалить
-                  </ThemedText>
-                </Pressable>
+                {isAdmin ? (
+                  <Pressable
+                    onPress={() => handlePermanentDelete(item.id)}
+                    style={[styles.actionButton, { backgroundColor: theme.error }]}
+                  >
+                    <Feather name="x" size={16} color="#FFFFFF" />
+                    <ThemedText style={[styles.actionButtonText, { color: "#FFFFFF" }]}>
+                      Удалить
+                    </ThemedText>
+                  </Pressable>
+                ) : null}
               </View>
             </ThemedView>
           ))

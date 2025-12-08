@@ -455,12 +455,18 @@ export function DataProvider({ children }: { children: ReactNode }) {
   }, [user]);
 
   const fetchDeletedItems = useCallback(async (): Promise<void> => {
-    if (!isAdmin) return;
+    if (!user) return;
 
-    const { data, error } = await supabase
+    let query = supabase
       .from('deleted_items')
       .select('*')
       .order('deleted_at', { ascending: false });
+
+    if (!isAdmin) {
+      query = query.eq('deleted_by', user.id);
+    }
+
+    const { data, error } = await query;
 
     if (error) throw error;
 
@@ -470,7 +476,7 @@ export function DataProvider({ children }: { children: ReactNode }) {
       data: d.item_data,
       deletedAt: d.deleted_at,
     })));
-  }, [isAdmin]);
+  }, [user, isAdmin]);
 
   const fetchRadioGuideKits = useCallback(async (): Promise<void> => {
     const { data, error } = await supabase
@@ -1360,11 +1366,14 @@ export function DataProvider({ children }: { children: ReactNode }) {
   };
 
   const restoreDeletedItem = async (id: string) => {
-    if (!isAdmin) throw new Error('Only admins can restore items');
-
     try {
       const item = deletedItems.find(i => i.id === id);
       if (!item) throw new Error('Deleted item not found');
+
+      const isNoteType = item.type === 'dispatching_note' || item.type === 'excursion_note' || item.type === 'excursion_note_expired';
+      if (!isAdmin && !isNoteType) {
+        throw new Error('Only admins can restore excursions and transactions');
+      }
 
       if (item.type === 'excursion') {
         const excursion = item.data as Excursion;
