@@ -51,10 +51,24 @@ export default function DispatchingScreen() {
     prevNoteRef.current = text;
     
     // Check if user just typed a period after 4 digits
-    if (text.length > prevText.length && text.endsWith('.')) {
-      // Get the last 5 characters (4 digits + period)
-      const tail = text.slice(-5);
-      const match = tail.match(/^(\d{4})\.$/);
+    // Also check for double space (iOS auto-inserts period on double space)
+    const endsWithPeriod = text.endsWith('.');
+    const endsWithDoubleSpace = text.endsWith('  ');
+    
+    if (text.length > prevText.length && (endsWithPeriod || endsWithDoubleSpace)) {
+      // Get the characters before the trigger
+      let searchText = text;
+      if (endsWithDoubleSpace) {
+        // Remove trailing double space for matching
+        searchText = text.slice(0, -2);
+      } else {
+        // Remove trailing period for matching
+        searchText = text.slice(0, -1);
+      }
+      
+      // Get the last 4 characters (should be digits)
+      const tail = searchText.slice(-4);
+      const match = tail.match(/^(\d{4})$/);
       
       if (match) {
         const code = match[1];
