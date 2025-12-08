@@ -5,7 +5,7 @@ import { ThemedView } from '@/components/ThemedView';
 import { Spacing, BorderRadius } from '@/constants/theme';
 import { useTheme } from '@/hooks/useTheme';
 import { useAuth } from '@/contexts/AuthContext';
-import { Feather } from '@expo/vector-icons';
+import { Icon } from '@/components/Icon';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
 
 export default function LoginScreen() {
@@ -45,7 +45,7 @@ export default function LoginScreen() {
       <View style={[styles.content, { paddingTop: insets.top + Spacing['3xl'], paddingBottom: insets.bottom + Spacing['3xl'] }]}>
         <View style={styles.header}>
           <View style={[styles.logoContainer, { backgroundColor: theme.primary }]}>
-            <Feather name="map" size={48} color="#FFFFFF" />
+            <Icon name="map" size={48} color="#FFFFFF" />
           </View>
           <ThemedText style={styles.title}>TourManager</ThemedText>
           <ThemedText style={[styles.subtitle, { color: theme.textSecondary }]}>
@@ -56,7 +56,7 @@ export default function LoginScreen() {
         <View style={styles.form}>
           {error ? (
             <ThemedView style={[styles.errorContainer, { backgroundColor: theme.error + '20' }]}>
-              <Feather name="alert-circle" size={20} color={theme.error} />
+              <Icon name="alert-circle" size={20} color={theme.error} />
               <ThemedText style={[styles.errorText, { color: theme.error }]}>{error}</ThemedText>
             </ThemedView>
           ) : null}
@@ -64,7 +64,7 @@ export default function LoginScreen() {
           <View style={styles.inputContainer}>
             <ThemedText style={[styles.label, { color: theme.textSecondary }]}>Логин</ThemedText>
             <View style={[styles.inputWrapper, { backgroundColor: theme.backgroundSecondary, borderColor: theme.border }]}>
-              <Feather name="user" size={20} color={theme.textSecondary} style={styles.inputIcon} />
+              <Icon name="user" size={20} color={theme.textSecondary} style={styles.inputIcon} />
               <TextInput
                 style={[styles.input, { color: theme.text }]}
                 placeholder="Введите логин или email"
@@ -82,7 +82,7 @@ export default function LoginScreen() {
           <View style={styles.inputContainer}>
             <ThemedText style={[styles.label, { color: theme.textSecondary }]}>Пароль</ThemedText>
             <View style={[styles.inputWrapper, { backgroundColor: theme.backgroundSecondary, borderColor: theme.border }]}>
-              <Feather name="lock" size={20} color={theme.textSecondary} style={styles.inputIcon} />
+              <Icon name="lock" size={20} color={theme.textSecondary} style={styles.inputIcon} />
               <TextInput
                 style={[styles.input, { color: theme.text }]}
                 placeholder="Введите пароль"
@@ -94,7 +94,7 @@ export default function LoginScreen() {
                 editable={!isLoading}
               />
               <Pressable onPress={() => setShowPassword(!showPassword)} style={styles.eyeButton}>
-                <Feather name={showPassword ? 'eye-off' : 'eye'} size={20} color={theme.textSecondary} />
+                <Icon name={showPassword ? 'eye-off' : 'eye'} size={20} color={theme.textSecondary} />
               </Pressable>
             </View>
           </View>

@@ -9,7 +9,7 @@ import {
   Modal,
   FlatList,
 } from "react-native";
-import { Feather } from "@expo/vector-icons";
+import { Icon } from "@/components/Icon";
 import DateTimePicker from "@react-native-community/datetimepicker";
 import { ThemedText } from "./ThemedText";
 import { ThemedView } from "./ThemedView";
@@ -177,7 +177,7 @@ export function AddExcursionForm({ excursion, onSave, onCancel }: AddExcursionFo
     return (
       <ScreenKeyboardAwareScrollView contentContainerStyle={styles.content}>
         <ThemedView style={[styles.emptyState, { backgroundColor: theme.backgroundSecondary }]}>
-          <Feather name="alert-circle" size={48} color={theme.textSecondary} />
+          <Icon name="alert-circle" size={48} color={theme.textSecondary} />
           <ThemedText style={[styles.emptyStateText, { color: theme.textSecondary }]}>
             Нет доступных типов туров
           </ThemedText>
@@ -204,7 +204,7 @@ export function AddExcursionForm({ excursion, onSave, onCancel }: AddExcursionFo
           style={[styles.selectButton, { borderColor: theme.inputBorder, backgroundColor: theme.backgroundDefault }]}
         >
           <ThemedText style={styles.selectButtonText}>{selectedTourName}</ThemedText>
-          <Feather name="chevron-down" size={20} color={theme.textSecondary} />
+          <Icon name="chevron-down" size={20} color={theme.textSecondary} />
         </Pressable>
       </View>
 
@@ -235,7 +235,7 @@ export function AddExcursionForm({ excursion, onSave, onCancel }: AddExcursionFo
                 >
                   <ThemedText style={styles.modalItemText}>{item.name}</ThemedText>
                   {item.id === selectedTourType ? (
-                    <Feather name="check" size={20} color={theme.primary} />
+                    <Icon name="check" size={20} color={theme.primary} />
                   ) : null}
                 </Pressable>
               )}
@@ -250,7 +250,7 @@ export function AddExcursionForm({ excursion, onSave, onCancel }: AddExcursionFo
           onPress={() => setShowDatePicker(true)}
           style={[styles.selectButton, { borderColor: theme.inputBorder, backgroundColor: theme.backgroundDefault }]}
         >
-          <Feather name="calendar" size={20} color={theme.textSecondary} style={{ marginRight: Spacing.sm }} />
+          <Icon name="calendar" size={20} color={theme.textSecondary} style={{ marginRight: Spacing.sm }} />
           <ThemedText style={styles.selectButtonText}>{formatDate(dateValue)}</ThemedText>
         </Pressable>
         {showDatePicker ? (
@@ -407,7 +407,7 @@ export function AddExcursionForm({ excursion, onSave, onCancel }: AddExcursionFo
                         selected && { backgroundColor: isNegativePrice ? theme.error : theme.primary },
                       ]}
                     >
-                      {selected ? <Feather name="check" size={16} color="#fff" /> : null}
+                      {selected ? <Icon name="check" size={16} color="#fff" /> : null}
                     </View>
                     <View style={styles.serviceLabelContainer}>
                       <ThemedText style={styles.serviceLabel}>{service.name}</ThemedText>
@@ -437,7 +437,7 @@ export function AddExcursionForm({ excursion, onSave, onCancel }: AddExcursionFo
         <View style={styles.sectionHeader}>
           <ThemedText style={styles.sectionTitle}>Расходы</ThemedText>
           <Pressable onPress={addExpense} style={[styles.addButton, { backgroundColor: theme.primary }]}>
-            <Feather name="plus" size={16} color="#fff" />
+            <Icon name="plus" size={16} color="#fff" />
             <ThemedText style={styles.addButtonText}>Добавить</ThemedText>
           </Pressable>
         </View>
@@ -449,7 +449,7 @@ export function AddExcursionForm({ excursion, onSave, onCancel }: AddExcursionFo
                 style={[styles.expenseTypeButton, { borderColor: theme.inputBorder, backgroundColor: theme.backgroundDefault }]}
               >
                 <ThemedText style={styles.expenseTypeText}>{expense.type}</ThemedText>
-                <Feather name="chevron-down" size={16} color={theme.textSecondary} />
+                <Icon name="chevron-down" size={16} color={theme.textSecondary} />
               </Pressable>
               <TextInput
                 ref={(ref) => { expenseRefs.current[expense.id] = ref; }}
@@ -469,7 +469,7 @@ export function AddExcursionForm({ excursion, onSave, onCancel }: AddExcursionFo
               />
             </View>
             <Pressable onPress={() => removeExpense(expense.id)} style={styles.removeButton}>
-              <Feather name="trash-2" size={20} color={theme.error} />
+              <Icon name="trash-2" size={20} color={theme.error} />
             </Pressable>
           </View>
         ))}

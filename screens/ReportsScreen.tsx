@@ -1,5 +1,5 @@
 import { View, StyleSheet, Pressable } from "react-native";
-import { Feather } from "@expo/vector-icons";
+import { Icon } from "@/components/Icon";
 import { useNavigation, NavigationProp } from "@react-navigation/native";
 import { SettingsStackParamList } from "@/navigation/SettingsStackNavigator";
 import { ThemedText } from "@/components/ThemedText";
@@ -100,7 +100,7 @@ export default function ReportsScreen() {
                     { backgroundColor: theme.primary + "20" },
                   ]}
                 >
-                  <Feather name={item.icon} size={28} color={theme.primary} />
+                  <Icon name={item.icon} size={28} color={theme.primary} />
                 </View>
                 <ThemedText style={styles.cardTitle}>{item.title}</ThemedText>
                 <ThemedText

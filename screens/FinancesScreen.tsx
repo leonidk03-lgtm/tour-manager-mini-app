@@ -1,6 +1,6 @@
 import { useState, useRef } from "react";
 import { View, StyleSheet, Pressable, Modal, TextInput, Alert, Platform } from "react-native";
-import { Feather } from "@expo/vector-icons";
+import { Icon } from "@/components/Icon";
 import DateTimePicker from "@react-native-community/datetimepicker";
 import { ThemedText } from "@/components/ThemedText";
 import { ThemedView } from "@/components/ThemedView";
@@ -156,7 +156,7 @@ export default function FinancesScreen() {
                 },
               ]}
             >
-              <Feather name="calendar" size={20} color={theme.textSecondary} />
+              <Icon name="calendar" size={20} color={theme.textSecondary} />
               <ThemedText style={[styles.dateInput, { color: theme.text }]}>
                 {formatDisplayDate(selectedDate)}
               </ThemedText>
@@ -301,7 +301,7 @@ export default function FinancesScreen() {
                         padding: Spacing.sm,
                       })}
                     >
-                      <Feather name="trash-2" size={18} color={theme.error} />
+                      <Icon name="trash-2" size={18} color={theme.error} />
                     </Pressable>
                   </ThemedView>
                 ))}
@@ -318,7 +318,7 @@ export default function FinancesScreen() {
                 },
               ]}
             >
-              <Feather name="inbox" size={48} color={theme.textSecondary} />
+              <Icon name="inbox" size={48} color={theme.textSecondary} />
               <ThemedText style={[styles.emptyText, { color: theme.textSecondary }]}>
                 Нет записей
               </ThemedText>
@@ -341,7 +341,7 @@ export default function FinancesScreen() {
           setShowAddModal(true);
         }}
       >
-        <Feather name="plus" size={24} color={theme.buttonText} />
+        <Icon name="plus" size={24} color={theme.buttonText} />
       </Pressable>
 
       <Modal visible={showAddModal} animationType="slide" presentationStyle="pageSheet">
@@ -419,7 +419,7 @@ export default function FinancesScreen() {
                     },
                   ]}
                 >
-                  <Feather name="calendar" size={20} color={theme.textSecondary} style={{ marginRight: Spacing.sm }} />
+                  <Icon name="calendar" size={20} color={theme.textSecondary} style={{ marginRight: Spacing.sm }} />
                   <ThemedText style={{ color: theme.text, fontSize: 16 }}>
                     {formatDisplayDate(formDate)}
                   </ThemedText>

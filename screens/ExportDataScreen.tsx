@@ -1,6 +1,6 @@
 import { useState } from "react";
 import { View, StyleSheet, Pressable, Alert, Platform } from "react-native";
-import { Feather } from "@expo/vector-icons";
+import { Icon } from "@/components/Icon";
 import * as Sharing from "expo-sharing";
 import {
   documentDirectory,
@@ -289,7 +289,7 @@ export default function ExportDataScreen() {
                       { backgroundColor: theme.primary + "20" },
                     ]}
                   >
-                    <Feather name={option.icon} size={24} color={theme.primary} />
+                    <Icon name={option.icon} size={24} color={theme.primary} />
                   </View>
                   <View style={styles.optionText}>
                     <ThemedText style={styles.optionTitle}>{option.title}</ThemedText>
@@ -313,7 +313,7 @@ export default function ExportDataScreen() {
                     </ThemedText>
                   ) : (
                     <>
-                      <Feather name="download" size={16} color={theme.buttonText} />
+                      <Icon name="download" size={16} color={theme.buttonText} />
                       <ThemedText style={[styles.exportButtonText, { color: theme.buttonText }]}>
                         Скачать
                       </ThemedText>
@@ -331,7 +331,7 @@ export default function ExportDataScreen() {
             { backgroundColor: theme.backgroundSecondary, borderRadius: BorderRadius.sm },
           ]}
         >
-          <Feather name="info" size={18} color={theme.textSecondary} />
+          <Icon name="info" size={18} color={theme.textSecondary} />
           <ThemedText style={[styles.infoText, { color: theme.textSecondary }]}>
             Файлы CSV можно открыть в Microsoft Excel, Google Sheets или Numbers. Используется кодировка UTF-8 с разделителем ";".
           </ThemedText>

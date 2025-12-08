@@ -1,6 +1,6 @@
 import { useState, useEffect } from "react";
 import { View, StyleSheet, Pressable, Alert, TextInput } from "react-native";
-import { Feather } from "@expo/vector-icons";
+import { Icon } from "@/components/Icon";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import { ThemedText } from "@/components/ThemedText";
 import { ThemedView } from "@/components/ThemedView";
@@ -143,7 +143,7 @@ export default function DatabaseSettingsScreen() {
           ]}
         >
           <View style={styles.infoRow}>
-            <Feather name="info" size={20} color={theme.primary} />
+            <Icon name="info" size={20} color={theme.primary} />
             <ThemedText style={[styles.infoText, { color: theme.textSecondary }]}>
               Здесь вы можете изменить подключение к базе данных Supabase. После сохранения приложение перезапустится.
             </ThemedText>
@@ -209,7 +209,7 @@ export default function DatabaseSettingsScreen() {
             onPress={handleSave}
             disabled={isSaving}
           >
-            <Feather name="save" size={18} color={theme.buttonText} />
+            <Icon name="save" size={18} color={theme.buttonText} />
             <ThemedText style={[styles.buttonText, { color: theme.buttonText }]}>
               {isSaving ? "Сохранение..." : "Сохранить Supabase"}
             </ThemedText>
@@ -223,7 +223,7 @@ export default function DatabaseSettingsScreen() {
             ]}
             onPress={handleReset}
           >
-            <Feather name="refresh-cw" size={18} color={theme.error} />
+            <Icon name="refresh-cw" size={18} color={theme.error} />
             <ThemedText style={[styles.buttonText, { color: theme.error }]}>
               Сбросить Supabase
             </ThemedText>
@@ -268,7 +268,7 @@ export default function DatabaseSettingsScreen() {
             ]}
             onPress={handleSaveDispatchUrl}
           >
-            <Feather name="save" size={18} color={theme.buttonText} />
+            <Icon name="save" size={18} color={theme.buttonText} />
             <ThemedText style={[styles.buttonText, { color: theme.buttonText }]}>
               Сохранить URL
             </ThemedText>
@@ -282,7 +282,7 @@ export default function DatabaseSettingsScreen() {
             ]}
             onPress={handleResetDispatchUrl}
           >
-            <Feather name="refresh-cw" size={18} color={theme.textSecondary} />
+            <Icon name="refresh-cw" size={18} color={theme.textSecondary} />
             <ThemedText style={[styles.buttonText, { color: theme.textSecondary }]}>
               Сбросить URL
             </ThemedText>

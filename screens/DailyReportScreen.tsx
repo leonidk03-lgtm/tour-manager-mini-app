@@ -1,6 +1,6 @@
 import { useState, useMemo, useEffect, useCallback, useRef } from "react";
 import { View, StyleSheet, Pressable, TextInput, Alert, Platform, ActivityIndicator } from "react-native";
-import { Feather } from "@expo/vector-icons";
+import { Icon } from "@/components/Icon";
 import * as Clipboard from "expo-clipboard";
 import DateTimePicker from "@react-native-community/datetimepicker";
 import Animated, { useAnimatedStyle, useSharedValue, withTiming } from "react-native-reanimated";
@@ -46,11 +46,11 @@ function CollapsibleSection({ title, icon, children, defaultExpanded = true }: C
     <ThemedView style={[styles.collapsibleContainer, { backgroundColor: theme.backgroundSecondary }]}>
       <Pressable style={styles.collapsibleHeader} onPress={toggleExpanded}>
         <View style={styles.collapsibleTitleRow}>
-          <Feather name={icon} size={18} color={theme.primary} />
+          <Icon name={icon} size={18} color={theme.primary} />
           <ThemedText style={styles.collapsibleTitle}>{title}</ThemedText>
         </View>
         <Animated.View style={chevronStyle}>
-          <Feather name="chevron-up" size={20} color={theme.textSecondary} />
+          <Icon name="chevron-up" size={20} color={theme.textSecondary} />
         </Animated.View>
       </Pressable>
       {expanded ? <View style={styles.collapsibleContent}>{children}</View> : null}
@@ -467,12 +467,12 @@ export default function DailyReportScreen() {
           <ThemedText style={styles.header}>Ежедневный отчёт</ThemedText>
           {hasUnsavedChanges ? (
             <View style={[styles.statusBadge, { backgroundColor: theme.warning }]}>
-              <Feather name="edit-3" size={12} color="#fff" />
+              <Icon name="edit-3" size={12} color="#fff" />
               <ThemedText style={styles.statusText}>Изменено</ThemedText>
             </View>
           ) : hasExistingReport ? (
             <View style={[styles.statusBadge, { backgroundColor: theme.success }]}>
-              <Feather name="check" size={12} color="#fff" />
+              <Icon name="check" size={12} color="#fff" />
               <ThemedText style={styles.statusText}>Сохранено</ThemedText>
             </View>
           ) : null}
@@ -482,7 +482,7 @@ export default function DailyReportScreen() {
           style={[styles.dateButton, { backgroundColor: theme.backgroundSecondary }]}
           onPress={openDatePicker}
         >
-          <Feather name="calendar" size={20} color={theme.primary} />
+          <Icon name="calendar" size={20} color={theme.primary} />
           <ThemedText style={styles.dateText}>{formatDateDisplay(selectedDate)}</ThemedText>
         </Pressable>
 
@@ -568,7 +568,7 @@ export default function DailyReportScreen() {
 
               {reportData.radioGuideParticipants > 0 ? (
                 <View style={styles.radioGuideRow}>
-                  <Feather name="radio" size={16} color={theme.primary} />
+                  <Icon name="radio" size={16} color={theme.primary} />
                   <ThemedText style={{ color: theme.textSecondary, marginLeft: Spacing.xs }}>
                     Радиогиды: {reportData.radioGuideParticipants} шт. = {formatMoney(reportData.radioGuideTotal)}р
                   </ThemedText>
@@ -727,7 +727,7 @@ export default function DailyReportScreen() {
             onPress={saveReportData}
             disabled={saving}
           >
-            <Feather name="save" size={20} color={hasUnsavedChanges ? "#fff" : theme.textSecondary} />
+            <Icon name="save" size={20} color={hasUnsavedChanges ? "#fff" : theme.textSecondary} />
             <ThemedText style={[styles.buttonText, { color: hasUnsavedChanges ? "#fff" : theme.textSecondary }]}>
               {saving ? "Сохранение..." : "Сохранить"}
             </ThemedText>
@@ -737,7 +737,7 @@ export default function DailyReportScreen() {
             style={[styles.copyButton, { backgroundColor: theme.primary }]}
             onPress={copyToClipboard}
           >
-            <Feather name="copy" size={20} color="#fff" />
+            <Icon name="copy" size={20} color="#fff" />
             <ThemedText style={styles.buttonText}>Скопировать</ThemedText>
           </Pressable>
         </View>

@@ -1,6 +1,6 @@
 import { useState, useMemo } from "react";
 import { View, StyleSheet, Pressable } from "react-native";
-import { Feather } from "@expo/vector-icons";
+import { Icon } from "@/components/Icon";
 import { ThemedText } from "@/components/ThemedText";
 import { ThemedView } from "@/components/ThemedView";
 import { ScreenScrollView } from "@/components/ScreenScrollView";
@@ -163,7 +163,7 @@ export default function FinancialReportScreen() {
 
           <View style={styles.mainStats}>
             <View style={[styles.mainStatItem, { backgroundColor: theme.success + "20" }]}>
-              <Feather name="trending-up" size={24} color={theme.success} />
+              <Icon name="trending-up" size={24} color={theme.success} />
               <ThemedText style={[styles.mainStatLabel, { color: theme.textSecondary }]}>
                 Доходы
               </ThemedText>
@@ -173,7 +173,7 @@ export default function FinancialReportScreen() {
             </View>
 
             <View style={[styles.mainStatItem, { backgroundColor: theme.error + "20" }]}>
-              <Feather name="trending-down" size={24} color={theme.error} />
+              <Icon name="trending-down" size={24} color={theme.error} />
               <ThemedText style={[styles.mainStatLabel, { color: theme.textSecondary }]}>
                 Расходы
               </ThemedText>
@@ -212,7 +212,7 @@ export default function FinancialReportScreen() {
 
           <View style={styles.detailRow}>
             <View style={styles.detailLeft}>
-              <Feather name="credit-card" size={18} color={theme.textSecondary} />
+              <Icon name="credit-card" size={18} color={theme.textSecondary} />
               <ThemedText style={styles.detailLabel}>Билеты</ThemedText>
             </View>
             <ThemedText style={styles.detailValue}>{formatMoney(stats.ticketRevenue)}</ThemedText>
@@ -222,7 +222,7 @@ export default function FinancialReportScreen() {
 
           <View style={styles.detailRow}>
             <View style={styles.detailLeft}>
-              <Feather name="plus-circle" size={18} color={theme.textSecondary} />
+              <Icon name="plus-circle" size={18} color={theme.textSecondary} />
               <ThemedText style={styles.detailLabel}>Доп. услуги</ThemedText>
             </View>
             <ThemedText style={styles.detailValue}>{formatMoney(stats.servicesRevenue)}</ThemedText>
@@ -232,7 +232,7 @@ export default function FinancialReportScreen() {
 
           <View style={styles.detailRow}>
             <View style={styles.detailLeft}>
-              <Feather name="arrow-down-circle" size={18} color={theme.textSecondary} />
+              <Icon name="arrow-down-circle" size={18} color={theme.textSecondary} />
               <ThemedText style={styles.detailLabel}>Прочие доходы</ThemedText>
             </View>
             <ThemedText style={styles.detailValue}>{formatMoney(stats.transactionIncome)}</ThemedText>
@@ -246,7 +246,7 @@ export default function FinancialReportScreen() {
 
           <View style={styles.detailRow}>
             <View style={styles.detailLeft}>
-              <Feather name="map" size={18} color={theme.textSecondary} />
+              <Icon name="map" size={18} color={theme.textSecondary} />
               <ThemedText style={styles.detailLabel}>Расходы на экскурсии</ThemedText>
             </View>
             <ThemedText style={styles.detailValue}>{formatMoney(stats.excursionExpenses)}</ThemedText>
@@ -256,7 +256,7 @@ export default function FinancialReportScreen() {
 
           <View style={styles.detailRow}>
             <View style={styles.detailLeft}>
-              <Feather name="arrow-up-circle" size={18} color={theme.textSecondary} />
+              <Icon name="arrow-up-circle" size={18} color={theme.textSecondary} />
               <ThemedText style={styles.detailLabel}>Прочие расходы</ThemedText>
             </View>
             <ThemedText style={styles.detailValue}>{formatMoney(stats.transactionExpenses)}</ThemedText>

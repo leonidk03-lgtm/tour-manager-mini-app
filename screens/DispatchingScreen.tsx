@@ -1,7 +1,7 @@
 import { useState, useEffect, useRef } from "react";
 import { View, StyleSheet, TextInput, Pressable, Platform, Modal, FlatList, Alert, Keyboard, TouchableWithoutFeedback } from "react-native";
 import { WebView } from "react-native-webview";
-import { Feather } from "@expo/vector-icons";
+import { Icon } from "@/components/Icon";
 import { useSafeAreaInsets } from "react-native-safe-area-context";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import { BlurView } from "expo-blur";
@@ -281,7 +281,7 @@ export default function DispatchingScreen() {
                   setShowNotesList(true);
                 }}
               >
-                <Feather name="list" size={16} color={theme.text} />
+                <Icon name="list" size={16} color={theme.text} />
                 <ThemedText style={styles.notesHeaderButtonText}>
                   {dispatchingNotes.length}
                 </ThemedText>
@@ -297,7 +297,7 @@ export default function DispatchingScreen() {
                 setShowFullscreenNote(true);
               }}
             >
-              <Feather name="plus" size={16} color={theme.buttonText} />
+              <Icon name="plus" size={16} color={theme.buttonText} />
             </Pressable>
           </View>
         </View>
@@ -308,7 +308,7 @@ export default function DispatchingScreen() {
               Редактирование заметки
             </ThemedText>
             <Pressable onPress={handleCancelEdit}>
-              <Feather name="x" size={18} color={theme.error} />
+              <Icon name="x" size={18} color={theme.error} />
             </Pressable>
           </View>
         ) : null}
@@ -329,7 +329,7 @@ export default function DispatchingScreen() {
               setShowFullscreenNote(true);
             }}
           >
-            <Feather name="maximize-2" size={18} color={theme.textSecondary} />
+            <Icon name="maximize-2" size={18} color={theme.textSecondary} />
           </Pressable>
           {currentNote.trim() ? (
             <Pressable
@@ -337,7 +337,7 @@ export default function DispatchingScreen() {
               onPress={handleSaveNote}
               disabled={isSaving}
             >
-              <Feather name={editingNote ? "check" : "send"} size={16} color={theme.buttonText} />
+              <Icon name={editingNote ? "check" : "send"} size={16} color={theme.buttonText} />
             </Pressable>
           ) : null}
         </View>
@@ -346,7 +346,7 @@ export default function DispatchingScreen() {
       <View style={styles.webViewContainer}>
         {Platform.OS === "web" ? (
           <View style={[styles.webFallback, { backgroundColor: theme.backgroundDefault }]}>
-            <Feather name="globe" size={48} color={theme.textSecondary} />
+            <Icon name="globe" size={48} color={theme.textSecondary} />
             <ThemedText style={[styles.webFallbackText, { color: theme.textSecondary }]}>
               Откройте приложение в Expo Go для доступа к браузеру
             </ThemedText>
@@ -370,7 +370,7 @@ export default function DispatchingScreen() {
         }}
       >
         <BlurView intensity={100} tint="dark" style={styles.fabBlur}>
-          <Feather name="percent" size={24} color="#FFFFFF" />
+          <Icon name="percent" size={24} color="#FFFFFF" />
         </BlurView>
       </Pressable>
 
@@ -386,7 +386,7 @@ export default function DispatchingScreen() {
               <View style={styles.notesListHeader}>
                 <ThemedText style={styles.notesListTitle}>Все заметки</ThemedText>
                 <Pressable onPress={() => setShowNotesList(false)}>
-                  <Feather name="x" size={24} color={theme.text} />
+                  <Icon name="x" size={24} color={theme.text} />
                 </Pressable>
               </View>
 
@@ -407,7 +407,7 @@ export default function DispatchingScreen() {
                           </ThemedText>
                           {linkedName ? (
                             <View style={[styles.linkedBadge, { backgroundColor: theme.success + '20' }]}>
-                              <Feather name="link" size={10} color={theme.success} />
+                              <Icon name="link" size={10} color={theme.success} />
                               <ThemedText style={[styles.linkedBadgeText, { color: theme.success }]} numberOfLines={1}>
                                 {linkedName}
                               </ThemedText>
@@ -423,7 +423,7 @@ export default function DispatchingScreen() {
                             handleOpenExcursionPicker(item);
                           }}
                         >
-                          <Feather name={linkedName ? "link-2" : "link"} size={18} color={theme.success} />
+                          <Icon name={linkedName ? "link-2" : "link"} size={18} color={theme.success} />
                         </Pressable>
                         <Pressable
                           style={styles.noteActionButton}
@@ -432,7 +432,7 @@ export default function DispatchingScreen() {
                             handleEditNote(item);
                           }}
                         >
-                          <Feather name="edit-2" size={18} color={theme.primary} />
+                          <Icon name="edit-2" size={18} color={theme.primary} />
                         </Pressable>
                         <Pressable
                           style={styles.noteActionButton}
@@ -441,7 +441,7 @@ export default function DispatchingScreen() {
                             handleDeleteNote(item.id);
                           }}
                         >
-                          <Feather name="trash-2" size={18} color={theme.error} />
+                          <Icon name="trash-2" size={18} color={theme.error} />
                         </Pressable>
                       </View>
                     </View>
@@ -449,7 +449,7 @@ export default function DispatchingScreen() {
                 }}
                 ListEmptyComponent={
                   <View style={styles.emptyNotes}>
-                    <Feather name="file-text" size={48} color={theme.textSecondary} />
+                    <Icon name="file-text" size={48} color={theme.textSecondary} />
                     <ThemedText style={[styles.emptyNotesText, { color: theme.textSecondary }]}>
                       Нет заметок
                     </ThemedText>
@@ -504,7 +504,7 @@ export default function DispatchingScreen() {
             <View style={styles.calcHeader}>
               <ThemedText style={styles.calcTitle}>Калькулятор</ThemedText>
               <Pressable onPress={() => setShowCalculator(false)}>
-                <Feather name="x" size={24} color={theme.text} />
+                <Icon name="x" size={24} color={theme.text} />
               </Pressable>
             </View>
 
@@ -572,7 +572,7 @@ export default function DispatchingScreen() {
                 setShowExcursionPicker(false);
                 setSelectedNoteForLink(null);
               }}>
-                <Feather name="x" size={24} color={theme.text} />
+                <Icon name="x" size={24} color={theme.text} />
               </Pressable>
             </View>
             
@@ -586,7 +586,7 @@ export default function DispatchingScreen() {
 
             {getAvailableExcursions().length === 0 ? (
               <View style={styles.emptyExcursions}>
-                <Feather name="calendar" size={48} color={theme.textSecondary} />
+                <Icon name="calendar" size={48} color={theme.textSecondary} />
                 <ThemedText style={{ color: theme.textSecondary, marginTop: Spacing.md }}>
                   Нет доступных экскурсий
                 </ThemedText>
@@ -614,7 +614,7 @@ export default function DispatchingScreen() {
                           {getTourTypeName(item.tourTypeId)}
                         </ThemedText>
                       </View>
-                      <Feather name="chevron-right" size={20} color={theme.textSecondary} />
+                      <Icon name="chevron-right" size={20} color={theme.textSecondary} />
                     </Pressable>
                   );
                 }}

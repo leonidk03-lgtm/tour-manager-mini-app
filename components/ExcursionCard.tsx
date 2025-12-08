@@ -1,6 +1,6 @@
 import React, { memo } from "react";
 import { View, StyleSheet, Pressable } from "react-native";
-import { Feather } from "@expo/vector-icons";
+import { Icon } from "@/components/Icon";
 import { ThemedText } from "@/components/ThemedText";
 import { Spacing } from "@/constants/theme";
 import { useTheme } from "@/hooks/useTheme";
@@ -58,13 +58,13 @@ export const ExcursionCard = memo(function ExcursionCard({
             ) : null}
             {notesCount > 0 ? (
               <View style={[styles.notesBadge, { backgroundColor: theme.primary }]}>
-                <Feather name="message-square" size={10} color="#FFFFFF" />
+                <Icon name="message-square" size={10} color="#FFFFFF" />
                 <ThemedText style={styles.notesBadgeText}>{notesCount}</ThemedText>
               </View>
             ) : null}
           </View>
         </View>
-        <Feather name="chevron-right" size={20} color={theme.textSecondary} />
+        <Icon name="chevron-right" size={20} color={theme.textSecondary} />
       </View>
 
       <View style={styles.participants}>

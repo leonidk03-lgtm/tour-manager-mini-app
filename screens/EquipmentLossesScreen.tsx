@@ -7,7 +7,7 @@ import {
   TextInput,
   Modal,
 } from "react-native";
-import { Feather } from "@expo/vector-icons";
+import { Icon } from "@/components/Icon";
 import { ThemedText } from "@/components/ThemedText";
 import { ThemedView } from "@/components/ThemedView";
 import { ScreenScrollView } from "@/components/ScreenScrollView";
@@ -173,26 +173,26 @@ export default function EquipmentLossesScreen() {
 
         <View style={styles.cardContent}>
           <View style={styles.infoRow}>
-            <Feather name="user" size={14} color={theme.textSecondary} />
+            <Icon name="user" size={14} color={theme.textSecondary} />
             <ThemedText style={[styles.infoText, { color: theme.text }]}>
               {loss.guideName}
             </ThemedText>
           </View>
           <View style={styles.infoRow}>
-            <Feather name="radio" size={14} color={theme.textSecondary} />
+            <Icon name="radio" size={14} color={theme.textSecondary} />
             <ThemedText style={[styles.infoText, { color: theme.text }]}>
               {loss.missingCount} шт.
             </ThemedText>
           </View>
           <View style={styles.infoRow}>
-            <Feather name="file-text" size={14} color={theme.textSecondary} />
+            <Icon name="file-text" size={14} color={theme.textSecondary} />
             <ThemedText style={[styles.infoText, { color: theme.text }]} numberOfLines={2}>
               {loss.reason}
             </ThemedText>
           </View>
           {loss.foundNotes ? (
             <View style={styles.infoRow}>
-              <Feather name="check-circle" size={14} color={theme.success} />
+              <Icon name="check-circle" size={14} color={theme.success} />
               <ThemedText style={[styles.infoText, { color: theme.success }]} numberOfLines={2}>
                 {loss.foundNotes}
               </ThemedText>
@@ -209,7 +209,7 @@ export default function EquipmentLossesScreen() {
               style={[styles.actionButton, { backgroundColor: theme.success }]}
               onPress={() => openFoundModal(loss)}
             >
-              <Feather name="check" size={16} color={theme.buttonText} />
+              <Icon name="check" size={16} color={theme.buttonText} />
               <ThemedText style={[styles.actionButtonText, { color: theme.buttonText }]}>
                 Найдено
               </ThemedText>
@@ -219,7 +219,7 @@ export default function EquipmentLossesScreen() {
             style={[styles.actionButton, { backgroundColor: theme.backgroundTertiary, borderWidth: 1, borderColor: theme.border }]}
             onPress={() => openEditModal(loss)}
           >
-            <Feather name="edit-2" size={16} color={theme.text} />
+            <Icon name="edit-2" size={16} color={theme.text} />
             <ThemedText style={[styles.actionButtonText, { color: theme.text }]}>
               Изменить
             </ThemedText>
@@ -229,7 +229,7 @@ export default function EquipmentLossesScreen() {
               style={[styles.actionButton, { backgroundColor: theme.error }]}
               onPress={() => handleDelete(loss)}
             >
-              <Feather name="trash-2" size={16} color={theme.buttonText} />
+              <Icon name="trash-2" size={16} color={theme.buttonText} />
             </Pressable>
           ) : null}
         </View>
@@ -296,7 +296,7 @@ export default function EquipmentLossesScreen() {
 
         {filteredLosses.length === 0 ? (
           <ThemedView style={[styles.emptyCard, { borderColor: theme.border }]}>
-            <Feather name="check-circle" size={48} color={theme.success} />
+            <Icon name="check-circle" size={48} color={theme.success} />
             <ThemedText style={[styles.emptyText, { color: theme.textSecondary }]}>
               {filter === "lost" ? "Нет потерянного оборудования" : filter === "found" ? "Нет найденного оборудования" : "Нет записей об утерях"}
             </ThemedText>
@@ -317,7 +317,7 @@ export default function EquipmentLossesScreen() {
             <View style={styles.modalHeader}>
               <ThemedText style={styles.modalTitle}>Редактировать запись</ThemedText>
               <Pressable onPress={() => setEditModalVisible(false)}>
-                <Feather name="x" size={24} color={theme.text} />
+                <Icon name="x" size={24} color={theme.text} />
               </Pressable>
             </View>
 
@@ -378,7 +378,7 @@ export default function EquipmentLossesScreen() {
             <View style={styles.modalHeader}>
               <ThemedText style={styles.modalTitle}>Оборудование найдено</ThemedText>
               <Pressable onPress={() => setFoundModalVisible(false)}>
-                <Feather name="x" size={24} color={theme.text} />
+                <Icon name="x" size={24} color={theme.text} />
               </Pressable>
             </View>
 
@@ -405,7 +405,7 @@ export default function EquipmentLossesScreen() {
               style={[styles.saveButton, { backgroundColor: theme.success }]}
               onPress={handleMarkAsFound}
             >
-              <Feather name="check" size={20} color={theme.buttonText} />
+              <Icon name="check" size={20} color={theme.buttonText} />
               <ThemedText style={[styles.saveButtonText, { color: theme.buttonText }]}>
                 Отметить как найденное
               </ThemedText>

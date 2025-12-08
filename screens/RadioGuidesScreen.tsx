@@ -10,7 +10,7 @@ import {
   Platform,
 } from "react-native";
 import { KeyboardAwareScrollView } from "react-native-keyboard-controller";
-import { Feather } from "@expo/vector-icons";
+import { Icon } from "@/components/Icon";
 import { ThemedText } from "@/components/ThemedText";
 import { ThemedView } from "@/components/ThemedView";
 import { ScreenScrollView } from "@/components/ScreenScrollView";
@@ -368,7 +368,7 @@ export default function RadioGuidesScreen() {
             style={[styles.actionButton, { backgroundColor: theme.success }]}
             onPress={() => openReturnModal(kit)}
           >
-            <Feather name="download" size={16} color={theme.buttonText} />
+            <Icon name="download" size={16} color={theme.buttonText} />
             <ThemedText style={[styles.actionButtonText, { color: theme.buttonText }]}>
               Принять
             </ThemedText>
@@ -409,7 +409,7 @@ export default function RadioGuidesScreen() {
           style={[styles.actionButton, { backgroundColor: theme.primary }]}
           onPress={() => openIssueModal(kit)}
         >
-          <Feather name="send" size={16} color={theme.buttonText} />
+          <Icon name="send" size={16} color={theme.buttonText} />
           <ThemedText style={[styles.actionButtonText, { color: theme.buttonText }]}>
             Выдать
           </ThemedText>
@@ -421,13 +421,13 @@ export default function RadioGuidesScreen() {
               style={[styles.iconButton, { borderColor: theme.border }]}
               onPress={() => openEditModal(kit)}
             >
-              <Feather name="edit-2" size={18} color={theme.primary} />
+              <Icon name="edit-2" size={18} color={theme.primary} />
             </Pressable>
             <Pressable
               style={[styles.iconButton, { borderColor: theme.border }]}
               onPress={() => handleDeleteKit(kit)}
             >
-              <Feather name="trash-2" size={18} color={theme.error} />
+              <Icon name="trash-2" size={18} color={theme.error} />
             </Pressable>
           </>
         ) : null}
@@ -492,7 +492,7 @@ export default function RadioGuidesScreen() {
           {(activeFilter === "all" || activeFilter === "overdue") && overdueKits.length > 0 ? (
             <View style={styles.section}>
               <View style={styles.sectionHeader}>
-                <Feather name="alert-triangle" size={18} color={theme.error} />
+                <Icon name="alert-triangle" size={18} color={theme.error} />
                 <ThemedText style={[styles.sectionTitle, { color: theme.error }]}>
                   Просроченные ({overdueKits.length})
                 </ThemedText>
@@ -510,7 +510,7 @@ export default function RadioGuidesScreen() {
           {(activeFilter === "all" || activeFilter === "issued") && todayIssuedKits.length > 0 ? (
             <View style={styles.section}>
               <View style={styles.sectionHeader}>
-                <Feather name="clock" size={18} color={theme.warning} />
+                <Icon name="clock" size={18} color={theme.warning} />
                 <ThemedText style={[styles.sectionTitle, { color: theme.text }]}>
                   На выдаче сегодня ({todayIssuedKits.length})
                 </ThemedText>
@@ -528,7 +528,7 @@ export default function RadioGuidesScreen() {
           {(activeFilter === "all" || activeFilter === "available") ? (
             <View style={styles.section}>
               <View style={styles.sectionHeader}>
-                <Feather name="check-circle" size={18} color={theme.success} />
+                <Icon name="check-circle" size={18} color={theme.success} />
                 <ThemedText style={[styles.sectionTitle, { color: theme.text }]}>
                   Доступные ({availableKits.length})
                 </ThemedText>
@@ -563,7 +563,7 @@ export default function RadioGuidesScreen() {
           {isRadioDispatcher ? (
             <View style={[styles.dispatcherFooter, { borderTopColor: theme.border }]}>
               <View style={styles.dispatcherInfo}>
-                <Feather name="user" size={18} color={theme.textSecondary} />
+                <Icon name="user" size={18} color={theme.textSecondary} />
                 <ThemedText style={{ color: theme.textSecondary }}>
                   {profile?.display_name || "Диспетчер"}
                 </ThemedText>
@@ -581,7 +581,7 @@ export default function RadioGuidesScreen() {
                   );
                 }}
               >
-                <Feather name="log-out" size={16} color={theme.error} />
+                <Icon name="log-out" size={16} color={theme.error} />
                 <ThemedText style={{ color: theme.error }}>Выйти</ThemedText>
               </Pressable>
             </View>
@@ -594,7 +594,7 @@ export default function RadioGuidesScreen() {
           style={[styles.fab, { backgroundColor: theme.primary }]}
           onPress={openAddModal}
         >
-          <Feather name="plus" size={24} color={theme.buttonText} />
+          <Icon name="plus" size={24} color={theme.buttonText} />
         </Pressable>
       ) : null}
 
@@ -619,7 +619,7 @@ export default function RadioGuidesScreen() {
                   : "Принять радиогид"}
               </ThemedText>
               <Pressable onPress={() => setModalMode(null)}>
-                <Feather name="x" size={24} color={theme.text} />
+                <Icon name="x" size={24} color={theme.text} />
               </Pressable>
             </View>
 
@@ -839,7 +839,7 @@ export default function RadioGuidesScreen() {
                 style={[styles.returnButton, { backgroundColor: theme.success }]}
                 onPress={handleReturnAllOk}
               >
-                <Feather name="check-circle" size={20} color={theme.buttonText} />
+                <Icon name="check-circle" size={20} color={theme.buttonText} />
                 <ThemedText style={[styles.returnButtonText, { color: theme.buttonText }]}>
                   Всё на месте
                 </ThemedText>
@@ -849,7 +849,7 @@ export default function RadioGuidesScreen() {
                 style={[styles.returnButton, { backgroundColor: theme.warning }]}
                 onPress={() => setShowShortageForm(true)}
               >
-                <Feather name="alert-circle" size={20} color={theme.buttonText} />
+                <Icon name="alert-circle" size={20} color={theme.buttonText} />
                 <ThemedText style={[styles.returnButtonText, { color: theme.buttonText }]}>
                   Не хватает
                 </ThemedText>

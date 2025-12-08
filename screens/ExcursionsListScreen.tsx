@@ -1,6 +1,6 @@
 import { useState, useMemo } from "react";
 import { View, StyleSheet, Pressable, TextInput, Modal, Platform, Alert, ScrollView } from "react-native";
-import { Feather } from "@expo/vector-icons";
+import { Icon } from "@/components/Icon";
 import DateTimePicker from "@react-native-community/datetimepicker";
 import { KeyboardAwareScrollView } from "react-native-keyboard-controller";
 import { ThemedText } from "@/components/ThemedText";
@@ -286,7 +286,7 @@ export default function ExcursionsListScreen() {
                 },
               ]}
             >
-              <Feather name="search" size={20} color={theme.textSecondary} />
+              <Icon name="search" size={20} color={theme.textSecondary} />
               <TextInput
                 style={[
                   styles.searchInput,
@@ -313,7 +313,7 @@ export default function ExcursionsListScreen() {
                 },
               ]}
             >
-              <Feather name="calendar" size={20} color={theme.textSecondary} />
+              <Icon name="calendar" size={20} color={theme.textSecondary} />
               <ThemedText style={[styles.dateInput, { color: theme.text }]}>
                 {formatDisplayDate(selectedDate)}
               </ThemedText>
@@ -402,7 +402,7 @@ export default function ExcursionsListScreen() {
                           ) : null}
                         </View>
                       </View>
-                      <Feather 
+                      <Icon 
                         name={isExpanded ? "chevron-up" : "chevron-down"} 
                         size={24} 
                         color={theme.textSecondary} 
@@ -460,7 +460,7 @@ export default function ExcursionsListScreen() {
                 },
               ]}
             >
-              <Feather name="calendar" size={48} color={theme.textSecondary} />
+              <Icon name="calendar" size={48} color={theme.textSecondary} />
               <ThemedText style={[styles.emptyText, { color: theme.textSecondary }]}>
                 {searchQuery ? "Экскурсии не найдены" : "Нет экскурсий за выбранный период"}
               </ThemedText>
@@ -484,7 +484,7 @@ export default function ExcursionsListScreen() {
             navigation.getParent()?.navigate('SettingsTab', { screen: 'RadioGuides' });
           }}
         >
-          <Feather name="radio" size={20} color={theme.primary} />
+          <Icon name="radio" size={20} color={theme.primary} />
         </Pressable>
         <Pressable
           style={({ pressed }) => [
@@ -499,7 +499,7 @@ export default function ExcursionsListScreen() {
             setShowAddModal(true);
           }}
         >
-          <Feather name="plus" size={24} color={theme.buttonText} />
+          <Icon name="plus" size={24} color={theme.buttonText} />
         </Pressable>
       </View>
 
@@ -522,7 +522,7 @@ export default function ExcursionsListScreen() {
             <View style={styles.radioGuideHeader}>
               <ThemedText style={styles.radioGuideTitle}>Выдать радиогид</ThemedText>
               <Pressable onPress={handleSkipRadioGuide}>
-                <Feather name="x" size={24} color={theme.text} />
+                <Icon name="x" size={24} color={theme.text} />
               </Pressable>
             </View>
             

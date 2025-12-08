@@ -1,6 +1,6 @@
 import React from "react";
 import { View, Pressable, StyleSheet } from "react-native";
-import { Feather } from "@expo/vector-icons";
+import { Icon } from "@/components/Icon";
 import { ThemedText } from "./ThemedText";
 import { useTheme } from "@/hooks/useTheme";
 import { useData } from "@/contexts/DataContext";
@@ -16,7 +16,7 @@ export function NetworkErrorBanner() {
     return (
       <View style={[styles.container, { backgroundColor: theme.warning + '15' }]}>
         <View style={styles.content}>
-          <Feather name="cloud-off" size={20} color={theme.warning} />
+          <Icon name="cloud-off" size={20} color={theme.warning} />
           <ThemedText style={[styles.message, { color: theme.warning }]}>
             Офлайн-режим. Данные могут быть устаревшими.
           </ThemedText>
@@ -25,7 +25,7 @@ export function NetworkErrorBanner() {
           onPress={refreshData}
           style={[styles.button, { backgroundColor: theme.warning }]}
         >
-          <Feather name="refresh-cw" size={14} color="#fff" />
+          <Icon name="refresh-cw" size={14} color="#fff" />
           <ThemedText style={styles.buttonText}>Обновить</ThemedText>
         </Pressable>
       </View>
@@ -35,7 +35,7 @@ export function NetworkErrorBanner() {
   return (
     <View style={[styles.container, { backgroundColor: theme.error + '15' }]}>
       <View style={styles.content}>
-        <Feather name="wifi-off" size={20} color={theme.error} />
+        <Icon name="wifi-off" size={20} color={theme.error} />
         <ThemedText style={[styles.message, { color: theme.error }]}>
           {networkError}
         </ThemedText>
@@ -45,11 +45,11 @@ export function NetworkErrorBanner() {
           onPress={refreshData}
           style={[styles.button, { backgroundColor: theme.error }]}
         >
-          <Feather name="refresh-cw" size={14} color="#fff" />
+          <Icon name="refresh-cw" size={14} color="#fff" />
           <ThemedText style={styles.buttonText}>Повторить</ThemedText>
         </Pressable>
         <Pressable onPress={clearNetworkError} style={styles.closeButton}>
-          <Feather name="x" size={18} color={theme.error} />
+          <Icon name="x" size={18} color={theme.error} />
         </Pressable>
       </View>
     </View>

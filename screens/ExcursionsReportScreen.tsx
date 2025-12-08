@@ -1,6 +1,6 @@
 import { useState, useMemo } from "react";
 import { View, StyleSheet, Pressable } from "react-native";
-import { Feather } from "@expo/vector-icons";
+import { Icon } from "@/components/Icon";
 import { ThemedText } from "@/components/ThemedText";
 import { ThemedView } from "@/components/ThemedView";
 import { ScreenScrollView } from "@/components/ScreenScrollView";
@@ -178,7 +178,7 @@ export default function ExcursionsReportScreen() {
 
           <View style={styles.statsGrid}>
             <View style={[styles.statItem, { backgroundColor: theme.primary + "20" }]}>
-              <Feather name="map" size={24} color={theme.primary} />
+              <Icon name="map" size={24} color={theme.primary} />
               <ThemedText style={styles.statValue}>{stats.totalCount}</ThemedText>
               <ThemedText style={[styles.statLabel, { color: theme.textSecondary }]}>
                 Экскурсий
@@ -186,7 +186,7 @@ export default function ExcursionsReportScreen() {
             </View>
 
             <View style={[styles.statItem, { backgroundColor: theme.success + "20" }]}>
-              <Feather name="users" size={24} color={theme.success} />
+              <Icon name="users" size={24} color={theme.success} />
               <ThemedText style={styles.statValue}>{stats.totalParticipants}</ThemedText>
               <ThemedText style={[styles.statLabel, { color: theme.textSecondary }]}>
                 Участников
@@ -194,7 +194,7 @@ export default function ExcursionsReportScreen() {
             </View>
 
             <View style={[styles.statItem, { backgroundColor: theme.warning + "20" }]}>
-              <Feather name="user" size={24} color={theme.warning} />
+              <Icon name="user" size={24} color={theme.warning} />
               <ThemedText style={styles.statValue}>{stats.avgParticipants}</ThemedText>
               <ThemedText style={[styles.statLabel, { color: theme.textSecondary }]}>
                 Среднее

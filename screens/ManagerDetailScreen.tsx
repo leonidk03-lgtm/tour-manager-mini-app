@@ -1,6 +1,6 @@
 import { useState, useMemo } from "react";
 import { View, StyleSheet, Pressable, TextInput, Alert, Modal } from "react-native";
-import { Feather } from "@expo/vector-icons";
+import { Icon } from "@/components/Icon";
 import { useRoute, RouteProp } from "@react-navigation/native";
 import { ThemedText } from "@/components/ThemedText";
 import { ThemedView } from "@/components/ThemedView";
@@ -246,7 +246,7 @@ export default function ManagerDetailScreen() {
               style={[styles.actionButton, { backgroundColor: theme.backgroundSecondary }]}
               onPress={() => setIsEditingName(true)}
             >
-              <Feather name="edit-2" size={18} color={theme.primary} />
+              <Icon name="edit-2" size={18} color={theme.primary} />
               <ThemedText style={[styles.actionButtonText, { color: theme.primary }]}>
                 Изменить имя
               </ThemedText>
@@ -255,7 +255,7 @@ export default function ManagerDetailScreen() {
               style={[styles.actionButton, { backgroundColor: theme.backgroundSecondary }]}
               onPress={handleSendPasswordReset}
             >
-              <Feather name="key" size={18} color={theme.warning} />
+              <Icon name="key" size={18} color={theme.warning} />
               <ThemedText style={[styles.actionButtonText, { color: theme.warning }]}>
                 Сбросить пароль
               </ThemedText>
@@ -376,7 +376,7 @@ export default function ManagerDetailScreen() {
             <ThemedView
               style={[styles.emptyState, { backgroundColor: theme.backgroundSecondary }]}
             >
-              <Feather name="calendar" size={32} color={theme.textSecondary} />
+              <Icon name="calendar" size={32} color={theme.textSecondary} />
               <ThemedText style={[styles.emptyText, { color: theme.textSecondary }]}>
                 Нет экскурсий за выбранный период
               </ThemedText>
@@ -400,7 +400,7 @@ export default function ManagerDetailScreen() {
                 </View>
                 <View style={styles.itemDetails}>
                   <View style={styles.itemDetail}>
-                    <Feather name="users" size={14} color={theme.textSecondary} />
+                    <Icon name="users" size={14} color={theme.textSecondary} />
                     <ThemedText style={{ color: theme.textSecondary, fontSize: 13 }}>
                       {excursion.fullPriceCount + excursion.discountedCount + excursion.freeCount + 
                         excursion.byTourCount + excursion.paidCount} чел.
@@ -428,7 +428,7 @@ export default function ManagerDetailScreen() {
             <ThemedView
               style={[styles.emptyState, { backgroundColor: theme.backgroundSecondary }]}
             >
-              <Feather name="credit-card" size={32} color={theme.textSecondary} />
+              <Icon name="credit-card" size={32} color={theme.textSecondary} />
               <ThemedText style={[styles.emptyText, { color: theme.textSecondary }]}>
                 Нет транзакций за выбранный период
               </ThemedText>
@@ -483,7 +483,7 @@ export default function ManagerDetailScreen() {
             <ThemedView
               style={[styles.emptyState, { backgroundColor: theme.backgroundSecondary }]}
             >
-              <Feather name="radio" size={32} color={theme.textSecondary} />
+              <Icon name="radio" size={32} color={theme.textSecondary} />
               <ThemedText style={[styles.emptyText, { color: theme.textSecondary }]}>
                 Нет выдач радиогидов за выбранный период
               </ThemedText>

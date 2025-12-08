@@ -1,5 +1,5 @@
 import { View, StyleSheet, Pressable, Alert } from "react-native";
-import { Feather } from "@expo/vector-icons";
+import { Icon } from "@/components/Icon";
 import { ThemedText } from "@/components/ThemedText";
 import { ThemedView } from "@/components/ThemedView";
 import { ScreenScrollView } from "@/components/ScreenScrollView";
@@ -113,7 +113,7 @@ export default function DeletedDataScreen() {
             onPress={handleClearAll}
             style={[styles.clearButton, { backgroundColor: theme.error }]}
           >
-            <Feather name="trash-2" size={18} color="#FFFFFF" />
+            <Icon name="trash-2" size={18} color="#FFFFFF" />
             <ThemedText style={[styles.clearButtonText, { color: "#FFFFFF" }]}>
               Очистить всё
             </ThemedText>
@@ -127,7 +127,7 @@ export default function DeletedDataScreen() {
               { borderColor: theme.border, borderRadius: BorderRadius.sm },
             ]}
           >
-            <Feather name="trash" size={48} color={theme.textSecondary} />
+            <Icon name="trash" size={48} color={theme.textSecondary} />
             <ThemedText style={[styles.emptyText, { color: theme.textSecondary }]}>
               Корзина пуста
             </ThemedText>
@@ -172,7 +172,7 @@ export default function DeletedDataScreen() {
                   onPress={() => handleRestore(item.id)}
                   style={[styles.actionButton, { backgroundColor: theme.success }]}
                 >
-                  <Feather name="rotate-ccw" size={16} color="#FFFFFF" />
+                  <Icon name="rotate-ccw" size={16} color="#FFFFFF" />
                   <ThemedText style={[styles.actionButtonText, { color: "#FFFFFF" }]}>
                     Восстановить
                   </ThemedText>
@@ -182,7 +182,7 @@ export default function DeletedDataScreen() {
                     onPress={() => handlePermanentDelete(item.id)}
                     style={[styles.actionButton, { backgroundColor: theme.error }]}
                   >
-                    <Feather name="x" size={16} color="#FFFFFF" />
+                    <Icon name="x" size={16} color="#FFFFFF" />
                     <ThemedText style={[styles.actionButtonText, { color: "#FFFFFF" }]}>
                       Удалить
                     </ThemedText>

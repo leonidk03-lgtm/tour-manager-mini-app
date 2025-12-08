@@ -1,6 +1,6 @@
 import React from "react";
 import { createBottomTabNavigator } from "@react-navigation/bottom-tabs";
-import { Feather } from "@expo/vector-icons";
+import { Icon } from "@/components/Icon";
 import { View, StyleSheet, Platform } from "react-native";
 import { BlurView } from "expo-blur";
 import DashboardStackNavigator from "@/navigation/DashboardStackNavigator";
@@ -76,7 +76,7 @@ export default function MainTabNavigator() {
           options={{
             title: "Главная",
             tabBarIcon: ({ color, size }) => (
-              <Feather name="pie-chart" size={22} color={color} />
+              <Icon name="pie-chart" size={22} color={color} />
             ),
           }}
         />
@@ -89,7 +89,7 @@ export default function MainTabNavigator() {
             options={{
               title: "Экскурсии",
               tabBarIcon: ({ color, size }) => (
-                <Feather name="map" size={22} color={color} />
+                <Icon name="map" size={22} color={color} />
               ),
             }}
           />
@@ -99,7 +99,7 @@ export default function MainTabNavigator() {
             options={{
               title: "Финансы",
               tabBarIcon: ({ color, size }) => (
-                <Feather name="trending-up" size={22} color={color} />
+                <Icon name="trending-up" size={22} color={color} />
               ),
             }}
           />
@@ -109,7 +109,7 @@ export default function MainTabNavigator() {
             options={{
               title: "Отправление",
               tabBarIcon: ({ color, size }) => (
-                <Feather name="send" size={22} color={color} />
+                <Icon name="send" size={22} color={color} />
               ),
             }}
           />
@@ -121,7 +121,7 @@ export default function MainTabNavigator() {
         options={{
           title: isRadioDispatcher ? "Радиогиды" : "Настройки",
           tabBarIcon: ({ color, size }) => (
-            <Feather name={isRadioDispatcher ? "radio" : "sliders"} size={22} color={color} />
+            <Icon name={isRadioDispatcher ? "radio" : "sliders"} size={22} color={color} />
           ),
         }}
       />

@@ -1,6 +1,6 @@
 import { useState, useEffect } from "react";
 import { View, StyleSheet, Pressable, Alert, Switch, Modal, TextInput } from "react-native";
-import { Feather } from "@expo/vector-icons";
+import { Icon } from "@/components/Icon";
 import { useNavigation } from "@react-navigation/native";
 import { NativeStackNavigationProp } from "@react-navigation/native-stack";
 import { ThemedText } from "@/components/ThemedText";
@@ -139,7 +139,7 @@ export default function AdminPanelScreen() {
                       { backgroundColor: theme.success },
                     ]}
                   >
-                    <Feather name="shield" size={20} color={theme.buttonText} />
+                    <Icon name="shield" size={20} color={theme.buttonText} />
                   </View>
                   <View style={styles.managerInfo}>
                     <ThemedText style={styles.managerName}>{adminProfile.display_name}</ThemedText>
@@ -152,7 +152,7 @@ export default function AdminPanelScreen() {
                       </ThemedText>
                     </View>
                   </View>
-                  <Feather name="chevron-right" size={24} color={theme.textSecondary} />
+                  <Icon name="chevron-right" size={24} color={theme.textSecondary} />
                 </View>
               </ThemedView>
             </Pressable>
@@ -166,7 +166,7 @@ export default function AdminPanelScreen() {
               onPress={() => setShowAddModal(true)}
               style={({ pressed }) => ({ opacity: pressed ? 0.7 : 1 })}
             >
-              <Feather name="user-plus" size={22} color={theme.primary} />
+              <Icon name="user-plus" size={22} color={theme.primary} />
             </Pressable>
           </View>
 
@@ -178,7 +178,7 @@ export default function AdminPanelScreen() {
                   { borderColor: theme.border, backgroundColor: theme.backgroundSecondary },
                 ]}
               >
-                <Feather name="users" size={48} color={theme.textSecondary} />
+                <Icon name="users" size={48} color={theme.textSecondary} />
                 <ThemedText style={[styles.emptyText, { color: theme.textSecondary }]}>
                   Нет сотрудников
                 </ThemedText>
@@ -209,7 +209,7 @@ export default function AdminPanelScreen() {
                         },
                       ]}
                     >
-                      <Feather 
+                      <Icon 
                         name={manager.role === "radio_dispatcher" ? "radio" : "user"} 
                         size={20} 
                         color={theme.buttonText} 
@@ -225,7 +225,7 @@ export default function AdminPanelScreen() {
                           <ThemedText style={[styles.roleText, { color: manager.role === "radio_dispatcher" ? theme.warning : theme.primary }]}>
                             {getRoleLabel(manager.role)}
                           </ThemedText>
-                          <Feather name="chevron-down" size={12} color={manager.role === "radio_dispatcher" ? theme.warning : theme.primary} />
+                          <Icon name="chevron-down" size={12} color={manager.role === "radio_dispatcher" ? theme.warning : theme.primary} />
                         </View>
                       </Pressable>
                     </View>
@@ -255,7 +255,7 @@ export default function AdminPanelScreen() {
                           },
                         ]}
                       >
-                        <Feather name="activity" size={18} color={theme.primary} />
+                        <Icon name="activity" size={18} color={theme.primary} />
                         <ThemedText style={[styles.actionButtonText, { color: theme.primary }]}>
                           Действия
                         </ThemedText>
@@ -270,7 +270,7 @@ export default function AdminPanelScreen() {
                           },
                         ]}
                       >
-                        <Feather name="trash-2" size={18} color={theme.error} />
+                        <Icon name="trash-2" size={18} color={theme.error} />
                         <ThemedText style={[styles.actionButtonText, { color: theme.error }]}>
                           Удалить
                         </ThemedText>
@@ -292,7 +292,7 @@ export default function AdminPanelScreen() {
             },
           ]}
         >
-          <Feather name="info" size={20} color={theme.primary} />
+          <Icon name="info" size={20} color={theme.primary} />
           <ThemedText style={[styles.infoText, { color: theme.textSecondary }]}>
             Неактивные менеджеры не смогут войти в приложение и добавлять новые экскурсии.
           </ThemedText>
@@ -306,7 +306,7 @@ export default function AdminPanelScreen() {
             <View style={styles.modalHeader}>
               <ThemedText style={styles.modalTitle}>Новый сотрудник</ThemedText>
               <Pressable onPress={() => setShowAddModal(false)}>
-                <Feather name="x" size={24} color={theme.textSecondary} />
+                <Icon name="x" size={24} color={theme.textSecondary} />
               </Pressable>
             </View>
 
@@ -325,7 +325,7 @@ export default function AdminPanelScreen() {
                       },
                     ]}
                   >
-                    <Feather 
+                    <Icon 
                       name={opt.value === "radio_dispatcher" ? "radio" : "user"} 
                       size={16} 
                       color={newRole === opt.value ? theme.buttonText : theme.text} 

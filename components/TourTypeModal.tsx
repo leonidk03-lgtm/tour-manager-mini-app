@@ -1,6 +1,6 @@
 import { useState, useEffect, useRef } from "react";
 import { View, Modal, StyleSheet, TextInput, Pressable, Alert, Switch, KeyboardAvoidingView, Platform, ScrollView } from "react-native";
-import { Feather } from "@expo/vector-icons";
+import { Icon } from "@/components/Icon";
 import { ThemedText } from "@/components/ThemedText";
 import { ThemedView } from "@/components/ThemedView";
 import { Spacing, BorderRadius } from "@/constants/theme";
@@ -102,7 +102,7 @@ export function TourTypeModal({ visible, onClose, onSave, tourType }: TourTypeMo
               {tourType ? "Редактировать экскурсию" : "Новая экскурсия"}
             </ThemedText>
             <Pressable onPress={handleClose} style={({ pressed }) => ({ opacity: pressed ? 0.7 : 1 })}>
-              <Feather name="x" size={24} color={theme.text} />
+              <Icon name="x" size={24} color={theme.text} />
             </Pressable>
           </View>
 

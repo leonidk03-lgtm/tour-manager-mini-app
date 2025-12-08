@@ -1,5 +1,5 @@
 import { View, StyleSheet, Pressable, Alert, Modal, TextInput, FlatList } from "react-native";
-import { Feather } from "@expo/vector-icons";
+import { Icon } from "@/components/Icon";
 import { useRoute, useNavigation } from "@react-navigation/native";
 import { ThemedText } from "@/components/ThemedText";
 import { ThemedView } from "@/components/ThemedView";
@@ -122,10 +122,10 @@ export default function ExcursionDetailScreen() {
       headerRight: () => (
         <View style={{ flexDirection: "row", gap: Spacing.xl }}>
           <Pressable onPress={handleEdit} style={({ pressed }) => ({ opacity: pressed ? 0.7 : 1, padding: 4 })}>
-            <Feather name="edit" size={22} color={theme.primary} />
+            <Icon name="edit" size={22} color={theme.primary} />
           </Pressable>
           <Pressable onPress={handleDelete} style={({ pressed }) => ({ opacity: pressed ? 0.7 : 1, padding: 4 })}>
-            <Feather name="trash-2" size={22} color={theme.error} />
+            <Icon name="trash-2" size={22} color={theme.error} />
           </Pressable>
         </View>
       ),
@@ -197,7 +197,7 @@ export default function ExcursionDetailScreen() {
           <ThemedText style={styles.tourName}>{tourType.name}</ThemedText>
           <View style={styles.info}>
             <View style={styles.infoRow}>
-              <Feather name="calendar" size={16} color={theme.textSecondary} />
+              <Icon name="calendar" size={16} color={theme.textSecondary} />
               <ThemedText style={[styles.infoText, { color: theme.textSecondary }]}>
                 {parseLocalDate(excursion.date).toLocaleDateString("ru-RU", {
                   weekday: "long",
@@ -208,14 +208,14 @@ export default function ExcursionDetailScreen() {
               </ThemedText>
             </View>
             <View style={styles.infoRow}>
-              <Feather name="clock" size={16} color={theme.textSecondary} />
+              <Icon name="clock" size={16} color={theme.textSecondary} />
               <ThemedText style={[styles.infoText, { color: theme.textSecondary }]}>
                 {excursion.time}
               </ThemedText>
             </View>
             {isAdmin && excursion.managerName ? (
               <View style={styles.infoRow}>
-                <Feather name="user" size={16} color={theme.textSecondary} />
+                <Icon name="user" size={16} color={theme.textSecondary} />
                 <ThemedText style={[styles.infoText, { color: theme.primary }]}>
                   {excursion.managerName}
                 </ThemedText>
@@ -388,13 +388,13 @@ export default function ExcursionDetailScreen() {
                     }}
                     style={({ pressed }) => ({ opacity: pressed ? 0.7 : 1 })}
                   >
-                    <Feather name="plus" size={20} color={theme.primary} />
+                    <Icon name="plus" size={20} color={theme.primary} />
                   </Pressable>
                   <Pressable
                     onPress={() => setShowNoteInput(!showNoteInput)}
                     style={({ pressed }) => ({ opacity: pressed ? 0.7 : 1 })}
                   >
-                    <Feather name={showNoteInput ? "x" : "edit-3"} size={20} color={theme.primary} />
+                    <Icon name={showNoteInput ? "x" : "edit-3"} size={20} color={theme.primary} />
                   </Pressable>
                 </View>
               ) : null}
@@ -486,7 +486,7 @@ export default function ExcursionDetailScreen() {
                           onPress={() => handleDeleteNote(note.id)}
                           style={({ pressed }) => ({ opacity: pressed ? 0.7 : 1, padding: 4 })}
                         >
-                          <Feather name="trash-2" size={16} color={theme.error} />
+                          <Icon name="trash-2" size={16} color={theme.error} />
                         </Pressable>
                       ) : null}
                     </Pressable>
@@ -518,12 +518,12 @@ export default function ExcursionDetailScreen() {
             <View style={styles.notesPickerHeader}>
               <ThemedText style={styles.notesPickerTitle}>Выберите заметку</ThemedText>
               <Pressable onPress={() => setShowNotesPicker(false)}>
-                <Feather name="x" size={24} color={theme.text} />
+                <Icon name="x" size={24} color={theme.text} />
               </Pressable>
             </View>
             {dispatchingNotes.length === 0 ? (
               <View style={styles.emptyNotes}>
-                <Feather name="file-text" size={48} color={theme.textSecondary} />
+                <Icon name="file-text" size={48} color={theme.textSecondary} />
                 <ThemedText style={{ color: theme.textSecondary, marginTop: Spacing.md }}>
                   Нет личных заметок
                 </ThemedText>

@@ -1,6 +1,6 @@
 import { useState } from "react";
 import { View, StyleSheet, Pressable, Alert, TextInput, Modal } from "react-native";
-import { Feather } from "@expo/vector-icons";
+import { Icon } from "@/components/Icon";
 import { useNavigation, NavigationProp } from "@react-navigation/native";
 import { SettingsStackParamList } from "@/navigation/SettingsStackNavigator";
 import { ThemedText } from "@/components/ThemedText";
@@ -104,7 +104,7 @@ export default function SettingsScreen() {
               navigation.navigate("EditProfile");
             }}
           >
-            <Feather name="edit-2" size={16} color={theme.buttonText} />
+            <Icon name="edit-2" size={16} color={theme.buttonText} />
             <ThemedText style={[styles.editProfileText, { color: theme.buttonText }]}>
               Редактировать профиль
             </ThemedText>
@@ -130,10 +130,10 @@ export default function SettingsScreen() {
                 >
                   <View style={styles.settingItem}>
                     <View style={styles.settingLeft}>
-                      <Feather name="dollar-sign" size={20} color={theme.textSecondary} />
+                      <Icon name="dollar-sign" size={20} color={theme.textSecondary} />
                       <ThemedText style={styles.settingText}>Цены на билеты</ThemedText>
                     </View>
-                    <Feather name="chevron-right" size={20} color={theme.textSecondary} />
+                    <Icon name="chevron-right" size={20} color={theme.textSecondary} />
                   </View>
                 </Pressable>
                 <View style={[styles.divider, { backgroundColor: theme.border }]} />
@@ -145,10 +145,10 @@ export default function SettingsScreen() {
             >
               <View style={styles.settingItem}>
                 <View style={styles.settingLeft}>
-                  <Feather name="trash" size={20} color={theme.textSecondary} />
+                  <Icon name="trash" size={20} color={theme.textSecondary} />
                   <ThemedText style={styles.settingText}>Удаленные данные</ThemedText>
                 </View>
-                <Feather name="chevron-right" size={20} color={theme.textSecondary} />
+                <Icon name="chevron-right" size={20} color={theme.textSecondary} />
               </View>
             </Pressable>
 
@@ -161,10 +161,10 @@ export default function SettingsScreen() {
                 >
                   <View style={styles.settingItem}>
                     <View style={styles.settingLeft}>
-                      <Feather name="users" size={20} color={theme.textSecondary} />
+                      <Icon name="users" size={20} color={theme.textSecondary} />
                       <ThemedText style={styles.settingText}>Панель администратора</ThemedText>
                     </View>
-                    <Feather name="chevron-right" size={20} color={theme.textSecondary} />
+                    <Icon name="chevron-right" size={20} color={theme.textSecondary} />
                   </View>
                 </Pressable>
                 <View style={[styles.divider, { backgroundColor: theme.border }]} />
@@ -174,10 +174,10 @@ export default function SettingsScreen() {
                 >
                   <View style={styles.settingItem}>
                     <View style={styles.settingLeft}>
-                      <Feather name="bar-chart-2" size={20} color={theme.textSecondary} />
+                      <Icon name="bar-chart-2" size={20} color={theme.textSecondary} />
                       <ThemedText style={styles.settingText}>Отчёты</ThemedText>
                     </View>
-                    <Feather name="chevron-right" size={20} color={theme.textSecondary} />
+                    <Icon name="chevron-right" size={20} color={theme.textSecondary} />
                   </View>
                 </Pressable>
               </>
@@ -190,10 +190,10 @@ export default function SettingsScreen() {
             >
               <View style={styles.settingItem}>
                 <View style={styles.settingLeft}>
-                  <Feather name="radio" size={20} color={theme.textSecondary} />
+                  <Icon name="radio" size={20} color={theme.textSecondary} />
                   <ThemedText style={styles.settingText}>Радиогиды</ThemedText>
                 </View>
-                <Feather name="chevron-right" size={20} color={theme.textSecondary} />
+                <Icon name="chevron-right" size={20} color={theme.textSecondary} />
               </View>
             </Pressable>
             <View style={[styles.divider, { backgroundColor: theme.border }]} />
@@ -203,10 +203,10 @@ export default function SettingsScreen() {
             >
               <View style={styles.settingItem}>
                 <View style={styles.settingLeft}>
-                  <Feather name="alert-triangle" size={20} color={theme.textSecondary} />
+                  <Icon name="alert-triangle" size={20} color={theme.textSecondary} />
                   <ThemedText style={styles.settingText}>Утери оборудования</ThemedText>
                 </View>
-                <Feather name="chevron-right" size={20} color={theme.textSecondary} />
+                <Icon name="chevron-right" size={20} color={theme.textSecondary} />
               </View>
             </Pressable>
             {isAdmin ? (
@@ -218,10 +218,10 @@ export default function SettingsScreen() {
                 >
                   <View style={styles.settingItem}>
                     <View style={styles.settingLeft}>
-                      <Feather name="database" size={20} color={theme.textSecondary} />
+                      <Icon name="database" size={20} color={theme.textSecondary} />
                       <ThemedText style={styles.settingText}>База данных</ThemedText>
                     </View>
-                    <Feather name="chevron-right" size={20} color={theme.textSecondary} />
+                    <Icon name="chevron-right" size={20} color={theme.textSecondary} />
                   </View>
                 </Pressable>
                 <View style={[styles.divider, { backgroundColor: theme.border }]} />
@@ -234,7 +234,7 @@ export default function SettingsScreen() {
                 >
                   <View style={styles.settingItem}>
                     <View style={styles.settingLeft}>
-                      <Feather name="headphones" size={20} color={theme.textSecondary} />
+                      <Icon name="headphones" size={20} color={theme.textSecondary} />
                       <ThemedText style={styles.settingText}>Стоимость радиогида</ThemedText>
                     </View>
                     <ThemedText style={{ color: theme.primary, fontWeight: "600" }}>
@@ -277,7 +277,7 @@ export default function SettingsScreen() {
             },
           ]}
         >
-          <Feather name="log-out" size={20} color={theme.buttonText} />
+          <Icon name="log-out" size={20} color={theme.buttonText} />
           <ThemedText style={[styles.logoutText, { color: theme.buttonText }]}>Выйти</ThemedText>
         </Pressable>
       </View>

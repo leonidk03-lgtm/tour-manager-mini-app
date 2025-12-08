@@ -1,6 +1,6 @@
 import { useState, useCallback } from "react";
 import { View, StyleSheet, Pressable, Alert, Switch, RefreshControl } from "react-native";
-import { Feather } from "@expo/vector-icons";
+import { Icon } from "@/components/Icon";
 import { ThemedText } from "@/components/ThemedText";
 import { ThemedView } from "@/components/ThemedView";
 import { ScreenScrollView } from "@/components/ScreenScrollView";
@@ -135,7 +135,7 @@ export default function TicketPricesScreen() {
                 { backgroundColor: theme.primary, opacity: pressed ? 0.7 : 1 },
               ]}
             >
-              <Feather name="plus" size={20} color="#FFFFFF" />
+              <Icon name="plus" size={20} color="#FFFFFF" />
               <ThemedText style={styles.addButtonText}>Добавить</ThemedText>
             </Pressable>
           </View>
@@ -188,7 +188,7 @@ export default function TicketPricesScreen() {
                     onPress={() => handleEditTour(tourType)}
                     style={({ pressed }) => [styles.actionButton, { opacity: pressed ? 0.7 : 1 }]}
                   >
-                    <Feather name="edit-2" size={18} color={theme.primary} />
+                    <Icon name="edit-2" size={18} color={theme.primary} />
                     <ThemedText style={[styles.actionButtonText, { color: theme.primary }]}>
                       Редактировать
                     </ThemedText>
@@ -197,7 +197,7 @@ export default function TicketPricesScreen() {
                     onPress={() => handleDeleteTour(tourType.id)}
                     style={({ pressed }) => [styles.actionButton, { opacity: pressed ? 0.7 : 1 }]}
                   >
-                    <Feather name="trash-2" size={18} color={theme.error} />
+                    <Icon name="trash-2" size={18} color={theme.error} />
                     <ThemedText style={[styles.actionButtonText, { color: theme.error }]}>
                       Удалить
                     </ThemedText>
@@ -218,7 +218,7 @@ export default function TicketPricesScreen() {
                 { backgroundColor: theme.primary, opacity: pressed ? 0.7 : 1 },
               ]}
             >
-              <Feather name="plus" size={20} color="#FFFFFF" />
+              <Icon name="plus" size={20} color="#FFFFFF" />
               <ThemedText style={styles.addButtonText}>Добавить</ThemedText>
             </Pressable>
           </View>
@@ -262,7 +262,7 @@ export default function TicketPricesScreen() {
                     onPress={() => handleEditService(service)}
                     style={({ pressed }) => [styles.actionButton, { opacity: pressed ? 0.7 : 1 }]}
                   >
-                    <Feather name="edit-2" size={18} color={theme.primary} />
+                    <Icon name="edit-2" size={18} color={theme.primary} />
                     <ThemedText style={[styles.actionButtonText, { color: theme.primary }]}>
                       Редактировать
                     </ThemedText>
@@ -271,7 +271,7 @@ export default function TicketPricesScreen() {
                     onPress={() => handleDeleteService(service.id)}
                     style={({ pressed }) => [styles.actionButton, { opacity: pressed ? 0.7 : 1 }]}
                   >
-                    <Feather name="trash-2" size={18} color={theme.error} />
+                    <Icon name="trash-2" size={18} color={theme.error} />
                     <ThemedText style={[styles.actionButtonText, { color: theme.error }]}>
                       Удалить
                     </ThemedText>

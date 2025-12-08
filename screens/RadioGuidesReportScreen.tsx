@@ -1,6 +1,6 @@
 import { useState, useMemo } from "react";
 import { View, StyleSheet, Pressable } from "react-native";
-import { Feather } from "@expo/vector-icons";
+import { Icon } from "@/components/Icon";
 import { ThemedText } from "@/components/ThemedText";
 import { ThemedView } from "@/components/ThemedView";
 import { ScreenScrollView } from "@/components/ScreenScrollView";
@@ -179,7 +179,7 @@ export default function RadioGuidesReportScreen() {
 
           <View style={styles.statsGrid}>
             <View style={[styles.statItem, { backgroundColor: theme.primary + "20" }]}>
-              <Feather name="briefcase" size={24} color={theme.primary} />
+              <Icon name="briefcase" size={24} color={theme.primary} />
               <ThemedText style={styles.statValue}>{stats.totalKits}</ThemedText>
               <ThemedText style={[styles.statLabel, { color: theme.textSecondary }]}>
                 Всего сумок
@@ -187,7 +187,7 @@ export default function RadioGuidesReportScreen() {
             </View>
 
             <View style={[styles.statItem, { backgroundColor: theme.success + "20" }]}>
-              <Feather name="check-circle" size={24} color={theme.success} />
+              <Icon name="check-circle" size={24} color={theme.success} />
               <ThemedText style={styles.statValue}>{stats.availableKits}</ThemedText>
               <ThemedText style={[styles.statLabel, { color: theme.textSecondary }]}>
                 Доступно
@@ -195,7 +195,7 @@ export default function RadioGuidesReportScreen() {
             </View>
 
             <View style={[styles.statItem, { backgroundColor: theme.warning + "20" }]}>
-              <Feather name="send" size={24} color={theme.warning} />
+              <Icon name="send" size={24} color={theme.warning} />
               <ThemedText style={styles.statValue}>{stats.issuedKits}</ThemedText>
               <ThemedText style={[styles.statLabel, { color: theme.textSecondary }]}>
                 Выдано
@@ -204,7 +204,7 @@ export default function RadioGuidesReportScreen() {
           </View>
 
           <View style={[styles.infoRow, { backgroundColor: theme.backgroundSecondary, borderRadius: BorderRadius.xs }]}>
-            <Feather name="headphones" size={18} color={theme.textSecondary} />
+            <Icon name="headphones" size={18} color={theme.textSecondary} />
             <ThemedText style={[styles.infoText, { color: theme.textSecondary }]}>
               Всего приёмников: {stats.totalReceivers}
             </ThemedText>
@@ -218,7 +218,7 @@ export default function RadioGuidesReportScreen() {
 
           <View style={styles.activityGrid}>
             <View style={[styles.activityItem, { borderColor: theme.border }]}>
-              <Feather name="arrow-up-circle" size={20} color={theme.success} />
+              <Icon name="arrow-up-circle" size={20} color={theme.success} />
               <ThemedText style={styles.activityValue}>{stats.totalIssues}</ThemedText>
               <ThemedText style={[styles.activityLabel, { color: theme.textSecondary }]}>
                 Выдач
@@ -226,7 +226,7 @@ export default function RadioGuidesReportScreen() {
             </View>
 
             <View style={[styles.activityItem, { borderColor: theme.border }]}>
-              <Feather name="arrow-down-circle" size={20} color={theme.primary} />
+              <Icon name="arrow-down-circle" size={20} color={theme.primary} />
               <ThemedText style={styles.activityValue}>{stats.totalReturns}</ThemedText>
               <ThemedText style={[styles.activityLabel, { color: theme.textSecondary }]}>
                 Возвратов
@@ -234,7 +234,7 @@ export default function RadioGuidesReportScreen() {
             </View>
 
             <View style={[styles.activityItem, { borderColor: theme.border }]}>
-              <Feather name="clock" size={20} color={theme.warning} />
+              <Icon name="clock" size={20} color={theme.warning} />
               <ThemedText style={styles.activityValue}>{stats.pending}</ThemedText>
               <ThemedText style={[styles.activityLabel, { color: theme.textSecondary }]}>
                 Не возвр.
@@ -263,7 +263,7 @@ export default function RadioGuidesReportScreen() {
 
           <View style={styles.lossesGrid}>
             <View style={[styles.lossItem, { backgroundColor: theme.error + "20" }]}>
-              <Feather name="alert-triangle" size={24} color={theme.error} />
+              <Icon name="alert-triangle" size={24} color={theme.error} />
               <ThemedText style={styles.lossValue}>{stats.lostCount}</ThemedText>
               <ThemedText style={[styles.lossLabel, { color: theme.textSecondary }]}>
                 Случаев потерь
@@ -271,7 +271,7 @@ export default function RadioGuidesReportScreen() {
             </View>
 
             <View style={[styles.lossItem, { backgroundColor: theme.success + "20" }]}>
-              <Feather name="check-circle" size={24} color={theme.success} />
+              <Icon name="check-circle" size={24} color={theme.success} />
               <ThemedText style={styles.lossValue}>{stats.foundCount}</ThemedText>
               <ThemedText style={[styles.lossLabel, { color: theme.textSecondary }]}>
                 Найдено
@@ -286,7 +286,7 @@ export default function RadioGuidesReportScreen() {
                 { backgroundColor: theme.error + "10", borderRadius: BorderRadius.xs },
               ]}
             >
-              <Feather name="alert-circle" size={18} color={theme.error} />
+              <Icon name="alert-circle" size={18} color={theme.error} />
               <ThemedText style={[styles.lostAlertText, { color: theme.error }]}>
                 Потеряно приёмников: {stats.totalLostReceivers}
               </ThemedText>

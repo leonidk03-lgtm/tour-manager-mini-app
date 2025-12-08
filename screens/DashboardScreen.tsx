@@ -1,6 +1,6 @@
 import { useState, useMemo, useCallback } from "react";
 import { View, StyleSheet, RefreshControl, Pressable, Modal, Platform } from "react-native";
-import { Feather } from "@expo/vector-icons";
+import { Icon } from "@/components/Icon";
 import DateTimePicker from "@react-native-community/datetimepicker";
 import { ThemedText } from "@/components/ThemedText";
 import { ThemedView } from "@/components/ThemedView";
@@ -112,7 +112,7 @@ export default function DashboardScreen() {
               },
             ]}
           >
-            <Feather name="calendar" size={20} color={theme.textSecondary} />
+            <Icon name="calendar" size={20} color={theme.textSecondary} />
             <ThemedText style={[styles.dateText, { color: theme.text }]}>
               {formatDisplayDate(referenceDate)}
             </ThemedText>
@@ -170,7 +170,7 @@ export default function DashboardScreen() {
         <View style={styles.section}>
           <View style={styles.quickStats}>
             <ThemedView style={[styles.quickStatItem, { borderColor: theme.border }]}>
-              <Feather name="users" size={20} color={theme.primary} />
+              <Icon name="users" size={20} color={theme.primary} />
               <View style={styles.quickStatText}>
                 <ThemedText style={[styles.quickStatValue, { color: theme.text }]}>
                   {totalParticipants}
@@ -181,7 +181,7 @@ export default function DashboardScreen() {
               </View>
             </ThemedView>
             <ThemedView style={[styles.quickStatItem, { borderColor: theme.border }]}>
-              <Feather name="list" size={20} color={theme.primary} />
+              <Icon name="list" size={20} color={theme.primary} />
               <View style={styles.quickStatText}>
                 <ThemedText style={[styles.quickStatValue, { color: theme.text }]}>
                   {filteredExcursions.length}
@@ -263,7 +263,7 @@ export default function DashboardScreen() {
             <ThemedView
               style={[styles.emptyState, { borderColor: theme.border, backgroundColor: theme.backgroundSecondary }]}
             >
-              <Feather name="activity" size={48} color={theme.textSecondary} />
+              <Icon name="activity" size={48} color={theme.textSecondary} />
               <ThemedText style={[styles.emptyText, { color: theme.textSecondary }]}>
                 Нет действий
               </ThemedText>

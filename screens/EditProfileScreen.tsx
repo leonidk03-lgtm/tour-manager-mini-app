@@ -1,6 +1,6 @@
 import { useState, useRef } from "react";
 import { View, StyleSheet, Pressable, TextInput, Alert } from "react-native";
-import { Feather } from "@expo/vector-icons";
+import { Icon } from "@/components/Icon";
 import { useNavigation } from "@react-navigation/native";
 import { ThemedText } from "@/components/ThemedText";
 import { ThemedView } from "@/components/ThemedView";
@@ -112,7 +112,7 @@ export default function EditProfileScreen() {
               <ThemedText style={{ color: theme.textSecondary }}>
                 {profile?.email || ""}
               </ThemedText>
-              <Feather name="lock" size={16} color={theme.textSecondary} />
+              <Icon name="lock" size={16} color={theme.textSecondary} />
             </View>
             <ThemedText style={[styles.hint, { color: theme.textSecondary }]}>
               Email нельзя изменить
@@ -194,7 +194,7 @@ export default function EditProfileScreen() {
           onPress={handleSave}
           disabled={isSaving}
         >
-          <Feather name="check" size={20} color={theme.buttonText} />
+          <Icon name="check" size={20} color={theme.buttonText} />
           <ThemedText style={[styles.saveButtonText, { color: theme.buttonText }]}>
             {isSaving ? "Сохранение..." : "Сохранить изменения"}
           </ThemedText>
