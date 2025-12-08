@@ -571,11 +571,6 @@ export function DataProvider({ children }: { children: ReactNode }) {
         { event: '*', schema: 'public', table: 'equipment_losses' },
         () => fetchEquipmentLosses()
       )
-      .on(
-        'postgres_changes',
-        { event: '*', schema: 'public', table: 'app_settings' },
-        () => fetchSettings()
-      )
       .subscribe((status) => {
         if (status === 'CHANNEL_ERROR') {
           console.error('Supabase Realtime channel error');
@@ -585,7 +580,7 @@ export function DataProvider({ children }: { children: ReactNode }) {
     return () => {
       supabase.removeChannel(channel);
     };
-  }, [user, fetchTourTypes, fetchAdditionalServices, fetchRadioGuideKits, fetchRadioGuideAssignments, fetchEquipmentLosses, fetchExcursions, fetchTransactions, fetchActivities, fetchDeletedItems, fetchSettings]);
+  }, [user, fetchTourTypes, fetchAdditionalServices, fetchRadioGuideKits, fetchRadioGuideAssignments, fetchEquipmentLosses, fetchExcursions, fetchTransactions, fetchActivities, fetchDeletedItems]);
 
   const refreshPriceList = useCallback(async () => {
     await Promise.all([fetchTourTypes(), fetchAdditionalServices()]);
