@@ -38,10 +38,39 @@ export default function DispatchingScreen() {
   const [searchQuery, setSearchQuery] = useState("");
   const [searchResult, setSearchResult] = useState<string | null>(null);
   const webViewRef = useRef<WebViewType>(null);
+  const prevNoteRef = useRef("");
+  const processedCodesRef = useRef<Set<string>>(new Set());
 
   useEffect(() => {
     loadWebViewUrl();
   }, []);
+
+  const handleNoteChange = (text: string) => {
+    const prevText = prevNoteRef.current;
+    setCurrentNote(text);
+    prevNoteRef.current = text;
+    
+    // Check if user just typed a period after 4 digits
+    if (text.length > prevText.length && text.endsWith('.')) {
+      // Get the last 5 characters (4 digits + period)
+      const tail = text.slice(-5);
+      const match = tail.match(/^(\d{4})\.$/);
+      
+      if (match) {
+        const code = match[1];
+        // Only search if we haven't processed this code recently
+        if (!processedCodesRef.current.has(code)) {
+          processedCodesRef.current.add(code);
+          searchInWebView(code);
+          
+          // Clear from processed after 3 seconds to allow re-search
+          setTimeout(() => {
+            processedCodesRef.current.delete(code);
+          }, 3000);
+        }
+      }
+    }
+  };
 
   const loadWebViewUrl = async () => {
     try {
@@ -411,10 +440,10 @@ export default function DispatchingScreen() {
         <View style={[styles.noteInputContainer, { backgroundColor: theme.backgroundSecondary, flex: 1 }]}>
           <TextInput
             style={[styles.noteInput, { color: theme.text, flex: 1 }]}
-            placeholder="Быстрая заметка..."
+            placeholder="Быстрая заметка... (1234. для поиска)"
             placeholderTextColor={theme.textSecondary}
             value={currentNote}
-            onChangeText={setCurrentNote}
+            onChangeText={handleNoteChange}
             multiline
           />
           <Pressable
@@ -617,10 +646,10 @@ export default function DispatchingScreen() {
           </View>
           <TextInput
             style={[styles.fullscreenNoteInput, { color: theme.text }]}
-            placeholder="Введите заметку..."
+            placeholder="Введите заметку... (1234. для поиска)"
             placeholderTextColor={theme.textSecondary}
             value={currentNote}
-            onChangeText={setCurrentNote}
+            onChangeText={handleNoteChange}
             multiline
             autoFocus
           />
