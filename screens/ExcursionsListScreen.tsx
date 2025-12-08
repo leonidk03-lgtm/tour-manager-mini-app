@@ -489,7 +489,7 @@ export default function ExcursionsListScreen() {
           ]}
           onPress={() => {
             hapticFeedback.light();
-            navigation.getParent()?.navigate('SettingsTab', { screen: 'DailyReport' });
+            navigation.navigate('DailyReport' as never);
           }}
         >
           <Icon name="clipboard" size={20} color={theme.primary} />

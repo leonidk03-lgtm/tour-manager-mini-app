@@ -2,6 +2,7 @@ import { createNativeStackNavigator } from "@react-navigation/native-stack";
 import ExcursionsListScreen from "@/screens/ExcursionsListScreen";
 import ExcursionDetailScreen from "@/screens/ExcursionDetailScreen";
 import RadioGuidesScreen from "@/screens/RadioGuidesScreen";
+import DailyReportScreen from "@/screens/DailyReportScreen";
 import { getCommonScreenOptions } from "./screenOptions";
 import { useTheme } from "@/hooks/useTheme";
 
@@ -9,6 +10,7 @@ export type ExcursionsStackParamList = {
   ExcursionsList: undefined;
   ExcursionDetail: { excursionId: string };
   RadioGuides: undefined;
+  DailyReport: undefined;
 };
 
 const Stack = createNativeStackNavigator<ExcursionsStackParamList>();
@@ -32,6 +34,11 @@ export default function ExcursionsStackNavigator() {
         name="RadioGuides"
         component={RadioGuidesScreen}
         options={{ title: "Радиогиды" }}
+      />
+      <Stack.Screen
+        name="DailyReport"
+        component={DailyReportScreen}
+        options={{ title: "Ежедневный отчёт" }}
       />
     </Stack.Navigator>
   );

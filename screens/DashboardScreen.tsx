@@ -121,7 +121,7 @@ export default function DashboardScreen() {
             </Pressable>
             <Pressable
               onPress={() => {
-                navigation.getParent()?.navigate('SettingsTab', { screen: 'DailyReport' });
+                navigation.navigate('DailyReport' as never);
               }}
               style={[
                 styles.dailyReportButton,
