@@ -324,13 +324,14 @@ export default function DispatchingScreen() {
             multiline
           />
           <Pressable
-            style={[styles.expandButton, { position: "absolute", right: Spacing.sm, top: Spacing.sm }]}
+            style={[styles.expandButton, { backgroundColor: theme.backgroundTertiary }]}
             onPress={() => {
               hapticFeedback.light();
               setShowFullscreenNote(true);
             }}
           >
-            <Icon name="maximize-2" size={18} color={theme.textSecondary} />
+            <Icon name="edit-3" size={14} color={theme.textSecondary} />
+            <ThemedText style={[styles.expandButtonText, { color: theme.textSecondary }]}>Развернуть</ThemedText>
           </Pressable>
           {currentNote.trim() ? (
             <Pressable
@@ -685,10 +686,22 @@ const styles = StyleSheet.create({
     fontSize: 15,
     textAlignVertical: "top",
     paddingVertical: Spacing.xs,
-    paddingRight: 40,
+    paddingRight: 90,
   },
   expandButton: {
-    padding: Spacing.xs,
+    position: "absolute",
+    right: Spacing.sm,
+    top: Spacing.sm,
+    flexDirection: "row",
+    alignItems: "center",
+    gap: 4,
+    paddingHorizontal: Spacing.sm,
+    paddingVertical: Spacing.xs,
+    borderRadius: BorderRadius.sm,
+  },
+  expandButtonText: {
+    fontSize: 12,
+    fontWeight: "500",
   },
   sendButton: {
     width: 36,
@@ -845,14 +858,18 @@ const styles = StyleSheet.create({
     fontWeight: "600",
   },
   calcDisplay: {
-    padding: Spacing.lg,
+    minHeight: 64,
+    paddingHorizontal: Spacing.lg,
+    paddingVertical: Spacing.md,
     borderRadius: BorderRadius.md,
     marginBottom: Spacing.md,
     alignItems: "flex-end",
+    justifyContent: "center",
   },
   calcDisplayText: {
     fontSize: 32,
     fontWeight: "500",
+    lineHeight: 40,
   },
   calcGrid: {
     gap: Spacing.sm,
