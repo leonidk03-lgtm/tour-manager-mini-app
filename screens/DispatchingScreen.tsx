@@ -50,28 +50,21 @@ export default function DispatchingScreen() {
     setCurrentNote(text);
     prevNoteRef.current = text;
     
-    // Check if user just typed a period after 4 digits
-    // Also check for double space (iOS auto-inserts period on double space)
-    const endsWithPeriod = text.endsWith('.');
-    const endsWithDoubleSpace = text.endsWith('  ');
+    // Check for trigger patterns:
+    // 1. Period after 4 digits (1234.)
+    // 2. Double space after 4 digits (1234  ) - for manual trigger
+    // 3. Period + space (iOS converts double space to ". ") - 1234. 
     
-    if (text.length > prevText.length && (endsWithPeriod || endsWithDoubleSpace)) {
-      // Get the characters before the trigger
-      let searchText = text;
-      if (endsWithDoubleSpace) {
-        // Remove trailing double space for matching
-        searchText = text.slice(0, -2);
-      } else {
-        // Remove trailing period for matching
-        searchText = text.slice(0, -1);
-      }
-      
-      // Get the last 4 characters (should be digits)
-      const tail = searchText.slice(-4);
-      const match = tail.match(/^(\d{4})$/);
-      
+    const triggers = [
+      { pattern: /(\d{4})\.$/, extract: 1 },           // 1234.
+      { pattern: /(\d{4})  $/, extract: 1 },           // 1234  (double space)
+      { pattern: /(\d{4})\. $/, extract: 1 },          // 1234. (period + space, iOS style)
+    ];
+    
+    for (const trigger of triggers) {
+      const match = text.match(trigger.pattern);
       if (match) {
-        const code = match[1];
+        const code = match[trigger.extract];
         // Only search if we haven't processed this code recently
         if (!processedCodesRef.current.has(code)) {
           processedCodesRef.current.add(code);
@@ -82,6 +75,7 @@ export default function DispatchingScreen() {
             processedCodesRef.current.delete(code);
           }, 3000);
         }
+        break;
       }
     }
   };
