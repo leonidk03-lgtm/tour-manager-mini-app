@@ -15,6 +15,7 @@ interface ExcursionCardProps {
   profit: number;
   onPress: () => void;
   showManagerName?: boolean;
+  notesCount?: number;
 }
 
 export const ExcursionCard = memo(function ExcursionCard({
@@ -25,6 +26,7 @@ export const ExcursionCard = memo(function ExcursionCard({
   profit,
   onPress,
   showManagerName = false,
+  notesCount = 0,
 }: ExcursionCardProps) {
   const { theme } = useTheme();
   const totalParticipants =
@@ -53,6 +55,12 @@ export const ExcursionCard = memo(function ExcursionCard({
               <ThemedText style={[styles.managerName, { color: theme.primary }]}>
                 {excursion.managerName}
               </ThemedText>
+            ) : null}
+            {notesCount > 0 ? (
+              <View style={[styles.notesBadge, { backgroundColor: theme.primary }]}>
+                <Feather name="message-square" size={10} color="#FFFFFF" />
+                <ThemedText style={styles.notesBadgeText}>{notesCount}</ThemedText>
+              </View>
             ) : null}
           </View>
         </View>
@@ -172,5 +180,18 @@ const styles = StyleSheet.create({
   profitValue: {
     fontSize: 17,
     fontWeight: "700",
+  },
+  notesBadge: {
+    flexDirection: "row",
+    alignItems: "center",
+    gap: 3,
+    paddingHorizontal: 6,
+    paddingVertical: 2,
+    borderRadius: 10,
+  },
+  notesBadgeText: {
+    color: "#FFFFFF",
+    fontSize: 11,
+    fontWeight: "600",
   },
 });

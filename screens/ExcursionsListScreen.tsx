@@ -30,7 +30,7 @@ const parseLocalDate = (dateString: string): Date => {
 export default function ExcursionsListScreen() {
   const { theme } = useTheme();
   const navigation = useNavigation<NavigationProp<ExcursionsStackParamList>>();
-  const { excursions, tourTypes, additionalServices, addExcursion, radioGuideKits, issueRadioGuide } = useData();
+  const { excursions, tourTypes, additionalServices, addExcursion, radioGuideKits, issueRadioGuide, getExcursionNotes } = useData();
   const { isAdmin } = useAuth();
   const [selectedDate, setSelectedDate] = useState(new Date().toISOString().split("T")[0]);
   const [searchQuery, setSearchQuery] = useState("");
@@ -424,6 +424,7 @@ export default function ExcursionsListScreen() {
                             additionalServices
                           );
 
+                          const notes = isAdmin ? getExcursionNotes(excursion.id) : [];
                           return (
                             <ExcursionCard
                               key={excursion.id}
@@ -433,6 +434,7 @@ export default function ExcursionsListScreen() {
                               expenses={expenses}
                               profit={profit}
                               showManagerName={isAdmin}
+                              notesCount={isAdmin ? notes.length : 0}
                               onPress={() => {
                                 navigation.navigate("ExcursionDetail", {
                                   excursionId: excursion.id,
