@@ -260,19 +260,18 @@ export default function DispatchingScreen() {
           </View>
         ) : null}
 
-        <View style={[styles.noteInputContainer, { backgroundColor: theme.backgroundSecondary }]}>
+        <View style={[styles.noteInputContainer, { backgroundColor: theme.backgroundSecondary, flex: 1 }]}>
           <TextInput
-            style={[styles.noteInput, { color: theme.text }]}
+            style={[styles.noteInput, { color: theme.text, flex: 1 }]}
             placeholder="Быстрая заметка..."
             placeholderTextColor={theme.textSecondary}
             value={currentNote}
             onChangeText={setCurrentNote}
             multiline
-            numberOfLines={2}
           />
           {currentNote.trim() ? (
             <Pressable
-              style={[styles.sendButton, { backgroundColor: theme.primary }]}
+              style={[styles.sendButton, { backgroundColor: theme.primary, position: "absolute", right: Spacing.sm, bottom: Spacing.sm }]}
               onPress={handleSaveNote}
               disabled={isSaving}
             >
@@ -514,16 +513,13 @@ const styles = StyleSheet.create({
     fontWeight: "500",
   },
   noteInputContainer: {
-    flexDirection: "row",
-    alignItems: "flex-end",
     borderRadius: BorderRadius.md,
     padding: Spacing.sm,
-    gap: Spacing.sm,
   },
   noteInput: {
     flex: 1,
     fontSize: 15,
-    maxHeight: 80,
+    textAlignVertical: "top",
     paddingVertical: Spacing.xs,
   },
   sendButton: {
