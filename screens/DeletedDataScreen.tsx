@@ -5,7 +5,7 @@ import { ThemedView } from "@/components/ThemedView";
 import { ScreenScrollView } from "@/components/ScreenScrollView";
 import { Spacing, BorderRadius } from "@/constants/theme";
 import { useTheme } from "@/hooks/useTheme";
-import { useData, Excursion, Transaction, ExcursionNote, DispatchingNote } from "@/contexts/DataContext";
+import { useData, Excursion, Transaction, ExcursionNote, DispatchingNote, RadioGuideKit, EquipmentLoss } from "@/contexts/DataContext";
 import { useAuth } from "@/contexts/AuthContext";
 
 export default function DeletedDataScreen() {
@@ -60,6 +60,12 @@ export default function DeletedDataScreen() {
     } else if (item.type === "dispatching_note") {
       const note = item.data as DispatchingNote;
       return note.text.length > 50 ? note.text.substring(0, 50) + "..." : note.text;
+    } else if (item.type === "radio_guide_kit") {
+      const kit = item.data as RadioGuideKit;
+      return `Сумка #${kit.bagNumber}`;
+    } else if (item.type === "equipment_loss") {
+      const loss = item.data as EquipmentLoss;
+      return `Утеря: ${loss.missingCount} шт.`;
     }
     return "Неизвестный элемент";
   };
@@ -76,6 +82,12 @@ export default function DeletedDataScreen() {
       return `Заметка к экскурсии от ${note.managerName || "неизвестно"}`;
     } else if (item.type === "dispatching_note") {
       return "Личная заметка";
+    } else if (item.type === "radio_guide_kit") {
+      const kit = item.data as RadioGuideKit;
+      return `Статус: ${kit.status === "available" ? "Доступна" : kit.status === "issued" ? "Выдана" : "На обслуживании"}`;
+    } else if (item.type === "equipment_loss") {
+      const loss = item.data as EquipmentLoss;
+      return `Гид: ${loss.guideName}, причина: ${loss.reason}`;
     }
     return "";
   };
@@ -87,6 +99,8 @@ export default function DeletedDataScreen() {
       case "excursion_note": return { label: "Заметка к экскурсии", color: theme.success };
       case "excursion_note_expired": return { label: "Заметка (истекла)", color: theme.textSecondary };
       case "dispatching_note": return { label: "Личная заметка", color: theme.secondary };
+      case "radio_guide_kit": return { label: "Сумка радиогида", color: theme.primary };
+      case "equipment_loss": return { label: "Утеря оборудования", color: theme.error };
       default: return { label: "Другое", color: theme.textSecondary };
     }
   };

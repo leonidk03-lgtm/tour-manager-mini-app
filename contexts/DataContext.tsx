@@ -90,8 +90,8 @@ export interface Activity {
 
 export interface DeletedItem {
   id: string;
-  type: "excursion" | "transaction" | "excursion_note" | "excursion_note_expired" | "dispatching_note";
-  data: Excursion | Transaction | ExcursionNote | DispatchingNote;
+  type: "excursion" | "transaction" | "excursion_note" | "excursion_note_expired" | "dispatching_note" | "radio_guide_kit" | "equipment_loss";
+  data: Excursion | Transaction | ExcursionNote | DispatchingNote | RadioGuideKit | EquipmentLoss;
   deletedAt: string;
 }
 
@@ -472,7 +472,7 @@ export function DataProvider({ children }: { children: ReactNode }) {
 
     setDeletedItems((data || []).map(d => ({
       id: d.id,
-      type: d.item_type as "excursion" | "transaction" | "excursion_note" | "excursion_note_expired" | "dispatching_note",
+      type: d.item_type as "excursion" | "transaction" | "excursion_note" | "excursion_note_expired" | "dispatching_note" | "radio_guide_kit" | "equipment_loss",
       data: d.item_data,
       deletedAt: d.deleted_at,
     })));
@@ -1422,6 +1422,30 @@ export function DataProvider({ children }: { children: ReactNode }) {
           updated_at: note.updatedAt,
           linked_excursion_id: note.linkedExcursionId,
         });
+      } else if (item.type === 'radio_guide_kit') {
+        const kit = item.data as RadioGuideKit;
+        await supabase.from('radio_guide_kits').insert({
+          id: kit.id,
+          bag_number: kit.bagNumber,
+          status: kit.status,
+          notes: kit.notes,
+        });
+      } else if (item.type === 'equipment_loss') {
+        const loss = item.data as EquipmentLoss;
+        await supabase.from('equipment_losses').insert({
+          id: loss.id,
+          kit_id: loss.kitId,
+          assignment_id: loss.assignmentId,
+          guide_name: loss.guideName,
+          missing_count: loss.missingCount,
+          reason: loss.reason,
+          status: loss.status,
+          found_at: loss.foundAt,
+          found_notes: loss.foundNotes,
+          created_at: loss.createdAt,
+          manager_id: loss.managerId,
+          manager_name: loss.managerName,
+        });
       }
 
       await supabase.from('deleted_items').delete().eq('id', id);
@@ -1507,6 +1531,16 @@ export function DataProvider({ children }: { children: ReactNode }) {
 
   const deleteRadioGuideKit = async (id: string) => {
     try {
+      const kit = radioGuideKits.find(k => k.id === id);
+      if (!kit) throw new Error('Kit not found');
+
+      await supabase.from('deleted_items').insert({
+        item_type: 'radio_guide_kit',
+        item_data: kit,
+        deleted_at: new Date().toISOString(),
+        deleted_by: user?.id,
+      });
+
       const { error } = await supabase
         .from('radio_guide_kits')
         .delete()
@@ -1514,6 +1548,7 @@ export function DataProvider({ children }: { children: ReactNode }) {
 
       if (error) throw error;
       await fetchRadioGuideKits();
+      await fetchDeletedItems();
     } catch (err) {
       console.error('Error deleting radio guide kit:', err);
       throw err;
@@ -1684,6 +1719,16 @@ export function DataProvider({ children }: { children: ReactNode }) {
 
   const deleteEquipmentLoss = async (id: string) => {
     try {
+      const loss = equipmentLosses.find(l => l.id === id);
+      if (!loss) throw new Error('Loss record not found');
+
+      await supabase.from('deleted_items').insert({
+        item_type: 'equipment_loss',
+        item_data: loss,
+        deleted_at: new Date().toISOString(),
+        deleted_by: user?.id,
+      });
+
       const { error } = await supabase
         .from('equipment_losses')
         .delete()
@@ -1691,6 +1736,7 @@ export function DataProvider({ children }: { children: ReactNode }) {
 
       if (error) throw error;
       await fetchEquipmentLosses();
+      await fetchDeletedItems();
     } catch (err) {
       console.error('Error deleting equipment loss:', err);
       throw err;
