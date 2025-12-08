@@ -90,8 +90,8 @@ export interface Activity {
 
 export interface DeletedItem {
   id: string;
-  type: "excursion" | "transaction";
-  data: Excursion | Transaction;
+  type: "excursion" | "transaction" | "excursion_note" | "excursion_note_expired" | "dispatching_note";
+  data: Excursion | Transaction | ExcursionNote | DispatchingNote;
   deletedAt: string;
 }
 
@@ -466,7 +466,7 @@ export function DataProvider({ children }: { children: ReactNode }) {
 
     setDeletedItems((data || []).map(d => ({
       id: d.id,
-      type: d.item_type as "excursion" | "transaction",
+      type: d.item_type as "excursion" | "transaction" | "excursion_note" | "excursion_note_expired" | "dispatching_note",
       data: d.item_data,
       deletedAt: d.deleted_at,
     })));
@@ -746,20 +746,31 @@ export function DataProvider({ children }: { children: ReactNode }) {
   };
 
   const deleteDispatchingNote = async (id: string) => {
+    const note = dispatchingNotes.find(n => n.id === id);
+    
     setDispatchingNotes(prev => {
       const updated = prev.filter(n => n.id !== id);
       saveToCache('dispatchingNotes', updated);
       return updated;
     });
     
-    if (!id.startsWith('local_')) {
+    if (!id.startsWith('local_') && note) {
       try {
+        await supabase.from('deleted_items').insert({
+          item_type: 'dispatching_note',
+          item_data: note,
+          deleted_at: new Date().toISOString(),
+          deleted_by: user?.id,
+        });
+
         const { error } = await supabase
           .from('dispatching_notes')
           .delete()
           .eq('id', id);
 
         if (error) throw error;
+        
+        await fetchDeletedItems();
       } catch (err) {
         console.warn('Note deleted locally, will sync when online');
       }
@@ -1380,6 +1391,27 @@ export function DataProvider({ children }: { children: ReactNode }) {
           description: transaction.description,
           event_date: transaction.date,
           manager_id: transaction.managerId,
+        });
+      } else if (item.type === 'excursion_note' || item.type === 'excursion_note_expired') {
+        const note = item.data as ExcursionNote;
+        await supabase.from('excursion_notes').insert({
+          id: note.id,
+          excursion_id: note.excursionId,
+          text: note.text,
+          manager_id: note.managerId,
+          manager_name: note.managerName,
+          created_at: note.createdAt,
+          updated_at: note.updatedAt,
+        });
+      } else if (item.type === 'dispatching_note') {
+        const note = item.data as DispatchingNote;
+        await supabase.from('dispatching_notes').insert({
+          id: note.id,
+          text: note.text,
+          manager_id: note.managerId,
+          created_at: note.createdAt,
+          updated_at: note.updatedAt,
+          linked_excursion_id: note.linkedExcursionId,
         });
       }
 

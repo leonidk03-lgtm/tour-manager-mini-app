@@ -5,7 +5,7 @@ import { ThemedView } from "@/components/ThemedView";
 import { ScreenScrollView } from "@/components/ScreenScrollView";
 import { Spacing, BorderRadius } from "@/constants/theme";
 import { useTheme } from "@/hooks/useTheme";
-import { useData, Excursion, Transaction } from "@/contexts/DataContext";
+import { useData, Excursion, Transaction, ExcursionNote, DispatchingNote } from "@/contexts/DataContext";
 
 export default function DeletedDataScreen() {
   const { theme } = useTheme();
@@ -49,19 +49,43 @@ export default function DeletedDataScreen() {
       const excursion = item.data as Excursion;
       const tourType = tourTypes.find((t) => t.id === excursion.tourTypeId);
       return tourType?.name || "Экскурсия";
-    } else {
+    } else if (item.type === "transaction") {
       const transaction = item.data as Transaction;
       return transaction.description;
+    } else if (item.type === "excursion_note" || item.type === "excursion_note_expired") {
+      const note = item.data as ExcursionNote;
+      return note.text.length > 50 ? note.text.substring(0, 50) + "..." : note.text;
+    } else if (item.type === "dispatching_note") {
+      const note = item.data as DispatchingNote;
+      return note.text.length > 50 ? note.text.substring(0, 50) + "..." : note.text;
     }
+    return "Неизвестный элемент";
   };
 
   const getItemSubtitle = (item: typeof deletedItems[0]) => {
     if (item.type === "excursion") {
       const excursion = item.data as Excursion;
       return `Экскурсия от ${excursion.date}`;
-    } else {
+    } else if (item.type === "transaction") {
       const transaction = item.data as Transaction;
       return `${transaction.type === "income" ? "Доход" : "Расход"}: ${transaction.amount} р.`;
+    } else if (item.type === "excursion_note" || item.type === "excursion_note_expired") {
+      const note = item.data as ExcursionNote;
+      return `Заметка к экскурсии от ${note.managerName || "неизвестно"}`;
+    } else if (item.type === "dispatching_note") {
+      return "Личная заметка";
+    }
+    return "";
+  };
+
+  const getTypeBadge = (type: string) => {
+    switch (type) {
+      case "excursion": return { label: "Экскурсия", color: theme.primary };
+      case "transaction": return { label: "Транзакция", color: theme.warning };
+      case "excursion_note": return { label: "Заметка к экскурсии", color: theme.success };
+      case "excursion_note_expired": return { label: "Заметка (истекла)", color: theme.textSecondary };
+      case "dispatching_note": return { label: "Личная заметка", color: theme.secondary };
+      default: return { label: "Другое", color: theme.textSecondary };
     }
   };
 
@@ -106,19 +130,16 @@ export default function DeletedDataScreen() {
                   <View
                     style={[
                       styles.typeBadge,
-                      {
-                        backgroundColor:
-                          item.type === "excursion" ? theme.primary + "20" : theme.warning + "20",
-                      },
+                      { backgroundColor: getTypeBadge(item.type).color + "20" },
                     ]}
                   >
                     <ThemedText
                       style={[
                         styles.typeBadgeText,
-                        { color: item.type === "excursion" ? theme.primary : theme.warning },
+                        { color: getTypeBadge(item.type).color },
                       ]}
                     >
-                      {item.type === "excursion" ? "Экскурсия" : "Транзакция"}
+                      {getTypeBadge(item.type).label}
                     </ThemedText>
                   </View>
                   <ThemedText style={styles.itemTitle}>{getItemTitle(item)}</ThemedText>
