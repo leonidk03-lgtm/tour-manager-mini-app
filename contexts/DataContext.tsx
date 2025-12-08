@@ -762,12 +762,16 @@ export function DataProvider({ children }: { children: ReactNode }) {
     
     if (!id.startsWith('local_') && note) {
       try {
-        await supabase.from('deleted_items').insert({
+        const { error: insertError } = await supabase.from('deleted_items').insert({
           item_type: 'dispatching_note',
           item_data: note,
           deleted_at: new Date().toISOString(),
           deleted_by: user?.id,
         });
+
+        if (insertError) {
+          console.error('Error inserting dispatching note into deleted_items:', insertError);
+        }
 
         const { error } = await supabase
           .from('dispatching_notes')
@@ -1544,12 +1548,17 @@ export function DataProvider({ children }: { children: ReactNode }) {
       const kit = radioGuideKits.find(k => k.id === id);
       if (!kit) throw new Error('Kit not found');
 
-      await supabase.from('deleted_items').insert({
+      const { error: insertError } = await supabase.from('deleted_items').insert({
         item_type: 'radio_guide_kit',
         item_data: kit,
         deleted_at: new Date().toISOString(),
         deleted_by: user?.id,
       });
+
+      if (insertError) {
+        console.error('Error inserting into deleted_items:', insertError);
+        throw insertError;
+      }
 
       const { error } = await supabase
         .from('radio_guide_kits')
@@ -1732,12 +1741,17 @@ export function DataProvider({ children }: { children: ReactNode }) {
       const loss = equipmentLosses.find(l => l.id === id);
       if (!loss) throw new Error('Loss record not found');
 
-      await supabase.from('deleted_items').insert({
+      const { error: insertError } = await supabase.from('deleted_items').insert({
         item_type: 'equipment_loss',
         item_data: loss,
         deleted_at: new Date().toISOString(),
         deleted_by: user?.id,
       });
+
+      if (insertError) {
+        console.error('Error inserting into deleted_items:', insertError);
+        throw insertError;
+      }
 
       const { error } = await supabase
         .from('equipment_losses')
