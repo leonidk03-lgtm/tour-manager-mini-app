@@ -33,6 +33,7 @@ export function AddExcursionForm({ excursion, onSave, onCancel }: AddExcursionFo
   const freeRef = useRef<TextInput>(null);
   const byTourRef = useRef<TextInput>(null);
   const paidRef = useRef<TextInput>(null);
+  const firstExpenseRef = useRef<TextInput>(null);
 
   const enabledTourTypes = tourTypes.filter((t) => t.isEnabled);
 
@@ -364,6 +365,7 @@ export function AddExcursionForm({ excursion, onSave, onCancel }: AddExcursionFo
             placeholder="0"
             placeholderTextColor={theme.textSecondary}
             returnKeyType="next"
+            onSubmitEditing={() => firstExpenseRef.current?.focus()}
             blurOnSubmit={false}
           />
         </View>
@@ -435,7 +437,7 @@ export function AddExcursionForm({ excursion, onSave, onCancel }: AddExcursionFo
             <ThemedText style={styles.addButtonText}>Добавить</ThemedText>
           </Pressable>
         </View>
-        {expenses.map((expense) => (
+        {expenses.map((expense, index) => (
           <View key={expense.id} style={styles.expenseRow}>
             <View style={styles.expenseInputs}>
               <Pressable
@@ -446,12 +448,14 @@ export function AddExcursionForm({ excursion, onSave, onCancel }: AddExcursionFo
                 <Feather name="chevron-down" size={16} color={theme.textSecondary} />
               </Pressable>
               <TextInput
+                ref={index === 0 ? firstExpenseRef : undefined}
                 style={[styles.expenseAmountInput, { borderColor: theme.inputBorder, color: theme.text, backgroundColor: theme.backgroundDefault }]}
                 value={Number(expense.amount) === 0 ? "" : expense.amount.toString()}
                 onChangeText={(value) => updateExpense(expense.id, "amount", value)}
                 keyboardType="numeric"
                 placeholder="Сумма"
                 placeholderTextColor={theme.textSecondary}
+                returnKeyType="done"
               />
             </View>
             <Pressable onPress={() => removeExpense(expense.id)} style={styles.removeButton}>
