@@ -1,6 +1,7 @@
 import { useState, useEffect, useRef } from "react";
 import { View, StyleSheet, TextInput, Pressable, Platform, Modal, FlatList, Alert, Keyboard, TouchableWithoutFeedback } from "react-native";
-import { WebView } from "react-native-webview";
+import { WebView, WebViewMessageEvent } from "react-native-webview";
+import type WebViewType from "react-native-webview";
 import { Icon } from "@/components/Icon";
 import { useSafeAreaInsets } from "react-native-safe-area-context";
 import AsyncStorage from "@react-native-async-storage/async-storage";
@@ -34,6 +35,9 @@ export default function DispatchingScreen() {
   const [isSaving, setIsSaving] = useState(false);
   const [showExcursionPicker, setShowExcursionPicker] = useState(false);
   const [selectedNoteForLink, setSelectedNoteForLink] = useState<DispatchingNote | null>(null);
+  const [searchQuery, setSearchQuery] = useState("");
+  const [searchResult, setSearchResult] = useState<string | null>(null);
+  const webViewRef = useRef<WebViewType>(null);
 
   useEffect(() => {
     loadWebViewUrl();
@@ -47,6 +51,96 @@ export default function DispatchingScreen() {
       }
     } catch (error) {
       console.error("Failed to load webview URL:", error);
+    }
+  };
+
+  const searchInWebView = (query: string) => {
+    if (!webViewRef.current || !query.trim()) return;
+    
+    const jsCode = `
+      (function() {
+        // Remove previous highlights
+        document.querySelectorAll('.search-highlight').forEach(el => {
+          el.outerHTML = el.textContent;
+        });
+        
+        var searchText = '${query.replace(/'/g, "\\'")}';
+        var found = false;
+        var firstMatch = null;
+        
+        // Search in all text nodes
+        var walker = document.createTreeWalker(
+          document.body,
+          NodeFilter.SHOW_TEXT,
+          null,
+          false
+        );
+        
+        var nodesToHighlight = [];
+        while (walker.nextNode()) {
+          var node = walker.currentNode;
+          if (node.textContent.includes(searchText)) {
+            nodesToHighlight.push(node);
+          }
+        }
+        
+        nodesToHighlight.forEach(function(node, index) {
+          var text = node.textContent;
+          var idx = text.indexOf(searchText);
+          if (idx >= 0) {
+            var span = document.createElement('span');
+            span.className = 'search-highlight';
+            span.style.backgroundColor = '#FFEB3B';
+            span.style.color = '#000';
+            span.style.padding = '2px';
+            span.style.borderRadius = '3px';
+            span.textContent = text.substring(idx, idx + searchText.length);
+            
+            var before = document.createTextNode(text.substring(0, idx));
+            var after = document.createTextNode(text.substring(idx + searchText.length));
+            
+            var parent = node.parentNode;
+            parent.insertBefore(before, node);
+            parent.insertBefore(span, node);
+            parent.insertBefore(after, node);
+            parent.removeChild(node);
+            
+            if (index === 0) {
+              firstMatch = span;
+              found = true;
+            }
+          }
+        });
+        
+        if (firstMatch) {
+          firstMatch.scrollIntoView({ behavior: 'smooth', block: 'center' });
+          window.ReactNativeWebView.postMessage(JSON.stringify({ type: 'searchResult', found: true, count: nodesToHighlight.length }));
+        } else {
+          window.ReactNativeWebView.postMessage(JSON.stringify({ type: 'searchResult', found: false, count: 0 }));
+        }
+      })();
+      true;
+    `;
+    
+    webViewRef.current.injectJavaScript(jsCode);
+  };
+
+  const handleWebViewMessage = (event: WebViewMessageEvent) => {
+    try {
+      const data = JSON.parse(event.nativeEvent.data);
+      if (data.type === 'searchResult') {
+        if (data.found) {
+          setSearchResult(`Найдено: ${data.count}`);
+          hapticFeedback.success();
+        } else {
+          setSearchResult("Не найдено");
+          hapticFeedback.error();
+        }
+        // Clear result after 3 seconds
+        setTimeout(() => setSearchResult(null), 3000);
+      }
+    } catch (e) {
+      // Ignore non-JSON messages
     }
   };
 
@@ -347,6 +441,41 @@ export default function DispatchingScreen() {
       </TouchableWithoutFeedback>
 
       <View style={styles.webViewContainer}>
+        <View style={[styles.searchBar, { backgroundColor: theme.backgroundSecondary }]}>
+          <Icon name="search" size={18} color={theme.textSecondary} />
+          <TextInput
+            style={[styles.searchInput, { color: theme.text }]}
+            placeholder="Поиск по номеру (4 цифры)..."
+            placeholderTextColor={theme.textSecondary}
+            value={searchQuery}
+            onChangeText={setSearchQuery}
+            keyboardType="number-pad"
+            maxLength={10}
+            returnKeyType="search"
+            onSubmitEditing={() => {
+              if (searchQuery.trim()) {
+                searchInWebView(searchQuery);
+                Keyboard.dismiss();
+              }
+            }}
+          />
+          {searchQuery.trim() ? (
+            <Pressable
+              style={[styles.searchButton, { backgroundColor: theme.primary }]}
+              onPress={() => {
+                searchInWebView(searchQuery);
+                Keyboard.dismiss();
+              }}
+            >
+              <ThemedText style={[styles.searchButtonText, { color: theme.buttonText }]}>Найти</ThemedText>
+            </Pressable>
+          ) : null}
+          {searchResult ? (
+            <ThemedText style={[styles.searchResultText, { color: searchResult === "Не найдено" ? theme.error : theme.success }]}>
+              {searchResult}
+            </ThemedText>
+          ) : null}
+        </View>
         {Platform.OS === "web" ? (
           <View style={[styles.webFallback, { backgroundColor: theme.backgroundDefault }]}>
             <Icon name="globe" size={48} color={theme.textSecondary} />
@@ -356,11 +485,13 @@ export default function DispatchingScreen() {
           </View>
         ) : (
           <WebView
+            ref={webViewRef}
             source={{ uri: webViewUrl }}
             style={styles.webView}
             startInLoadingState={true}
             javaScriptEnabled={true}
             domStorageEnabled={true}
+            onMessage={handleWebViewMessage}
           />
         )}
       </View>
@@ -712,6 +843,31 @@ const styles = StyleSheet.create({
   },
   webViewContainer: {
     flex: 0.6,
+  },
+  searchBar: {
+    flexDirection: "row",
+    alignItems: "center",
+    paddingHorizontal: Spacing.md,
+    paddingVertical: Spacing.sm,
+    gap: Spacing.sm,
+  },
+  searchInput: {
+    flex: 1,
+    fontSize: 15,
+    paddingVertical: Spacing.xs,
+  },
+  searchButton: {
+    paddingHorizontal: Spacing.md,
+    paddingVertical: Spacing.sm,
+    borderRadius: BorderRadius.sm,
+  },
+  searchButtonText: {
+    fontSize: 14,
+    fontWeight: "600",
+  },
+  searchResultText: {
+    fontSize: 13,
+    fontWeight: "500",
   },
   webView: {
     flex: 1,
