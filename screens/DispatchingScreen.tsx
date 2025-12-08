@@ -136,10 +136,7 @@ export default function DispatchingScreen() {
       .filter((exc) => {
         const excDate = new Date(exc.date);
         excDate.setHours(0, 0, 0, 0);
-        if (isAdmin) {
-          return excDate >= today;
-        }
-        return excDate >= today && exc.managerId === profile?.id;
+        return excDate.getTime() === today.getTime();
       })
       .sort((a, b) => new Date(a.date).getTime() - new Date(b.date).getTime());
   };
