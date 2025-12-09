@@ -432,7 +432,12 @@ export default function ExcursionsListScreen() {
                             additionalServices
                           );
 
-                          const notes = isAdmin ? getExcursionNotes(excursion.id) : [];
+                          const excursionDate = parseLocalDate(excursion.date);
+                          const today = new Date();
+                          const isToday = today.getFullYear() === excursionDate.getFullYear() &&
+                            today.getMonth() === excursionDate.getMonth() &&
+                            today.getDate() === excursionDate.getDate();
+                          const notes = isToday ? getExcursionNotes(excursion.id) : [];
                           return (
                             <ExcursionCard
                               key={excursion.id}
@@ -442,7 +447,7 @@ export default function ExcursionsListScreen() {
                               expenses={expenses}
                               profit={profit}
                               showManagerName={isAdmin}
-                              notesCount={isAdmin ? notes.length : 0}
+                              notesCount={notes.length}
                               onPress={() => {
                                 navigation.navigate("ExcursionDetail", {
                                   excursionId: excursion.id,
