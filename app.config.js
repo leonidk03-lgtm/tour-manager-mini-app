@@ -41,7 +41,15 @@ module.exports = {
           }
         }
       ],
-      "expo-web-browser"
+      "expo-web-browser",
+      [
+        "expo-build-properties",
+        {
+          android: {
+            usesCleartextTraffic: true
+          }
+        }
+      ]
     ],
     experiments: {
       reactCompiler: true
