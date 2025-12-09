@@ -59,11 +59,10 @@ export default function ExcursionDetailScreen() {
   const canAddNote = isAdmin || (isExcursionToday && profile?.id === excursion?.managerId);
 
   const visibleNotes = useMemo(() => {
-    if (isAdmin) return excursionNotesData;
+    // All users (including admins) see notes only on excursion day
     if (!isExcursionToday) return [];
-    // Managers see ALL notes for this excursion on excursion day
     return excursionNotesData;
-  }, [isAdmin, isExcursionToday, excursionNotesData]);
+  }, [isExcursionToday, excursionNotesData]);
 
   const handleAddNote = async () => {
     if (!noteText.trim() || isAddingNote) return;
