@@ -1,16 +1,22 @@
 import { createClient, SupabaseClient } from '@supabase/supabase-js';
 import AsyncStorage from '@react-native-async-storage/async-storage';
+import Constants from 'expo-constants';
 
 const SUPABASE_URL_KEY = 'supabase_custom_url';
 const SUPABASE_ANON_KEY_KEY = 'supabase_custom_anon_key';
 
-const defaultUrl = process.env.SUPABASE_URL || process.env.EXPO_PUBLIC_SUPABASE_URL || '';
-const defaultAnonKey = process.env.SUPABASE_ANON_KEY || process.env.EXPO_PUBLIC_SUPABASE_ANON_KEY || '';
+const extraConfig = Constants.expoConfig?.extra || {};
+const defaultUrl = process.env.SUPABASE_URL || process.env.EXPO_PUBLIC_SUPABASE_URL || extraConfig.supabaseUrl || '';
+const defaultAnonKey = process.env.SUPABASE_ANON_KEY || process.env.EXPO_PUBLIC_SUPABASE_ANON_KEY || extraConfig.supabaseAnonKey || '';
 
 let currentUrl = defaultUrl;
 let currentAnonKey = defaultAnonKey;
 
-function createSupabaseClient(url: string, anonKey: string): SupabaseClient {
+function createSupabaseClient(url: string, anonKey: string): SupabaseClient | null {
+  if (!url || !anonKey) {
+    console.warn('Supabase URL or Anon Key not configured');
+    return null as unknown as SupabaseClient;
+  }
   return createClient(url, anonKey, {
     auth: {
       storage: AsyncStorage,
