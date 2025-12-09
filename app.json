@@ -8,6 +8,9 @@
     "scheme": "tourmanager",
     "userInterfaceStyle": "automatic",
     "newArchEnabled": true,
+    "install": {
+      "exclude": ["react-native-svg"]
+    },
     "ios": {
       "supportsTablet": true,
       "bundleIdentifier": "com.tourmanager.app"
@@ -47,7 +50,10 @@
     },
     "extra": {
       "supabaseUrl": "${SUPABASE_URL}",
-      "supabaseAnonKey": "${SUPABASE_ANON_KEY}"
+      "supabaseAnonKey": "${SUPABASE_ANON_KEY}",
+      "eas": {
+        "projectId": "e49d79e2-02f4-43f1-a64d-8ae24b0e320d"
+      }
     }
   }
 }
