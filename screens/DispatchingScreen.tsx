@@ -1,4 +1,4 @@
-import { useState, useEffect, useRef } from "react";
+import { useState, useEffect, useRef, useMemo } from "react";
 import { View, StyleSheet, TextInput, Pressable, Platform, Modal, FlatList, Alert, Keyboard, TouchableWithoutFeedback } from "react-native";
 import { WebView, WebViewMessageEvent } from "react-native-webview";
 import type WebViewType from "react-native-webview";
@@ -54,6 +54,29 @@ export default function DispatchingScreen() {
   const processedCodesRef = useRef<Set<string>>(new Set());
 
   const activeTab = tabs.find(t => t.id === activeTabId) || tabs[0];
+
+  // Filter out notes linked to past excursions (hide after excursion day)
+  const visibleNotes = useMemo(() => {
+    const today = new Date();
+    today.setHours(0, 0, 0, 0);
+    
+    return dispatchingNotes.filter(note => {
+      // Show all notes without linkedExcursionId
+      if (!note.linkedExcursionId) return true;
+      
+      // Find linked excursion
+      const linkedExcursion = excursions.find(e => e.id === note.linkedExcursionId);
+      if (!linkedExcursion) return true; // Show if excursion not found
+      
+      // Parse excursion date
+      const [year, month, day] = linkedExcursion.date.split('-').map(Number);
+      const excursionDate = new Date(year, month - 1, day);
+      excursionDate.setHours(0, 0, 0, 0);
+      
+      // Hide if excursion day has passed
+      return excursionDate >= today;
+    });
+  }, [dispatchingNotes, excursions]);
 
   useEffect(() => {
     loadTabs();
@@ -732,7 +755,7 @@ export default function DispatchingScreen() {
               </View>
 
               <FlatList
-                data={dispatchingNotes}
+                data={visibleNotes}
                 keyExtractor={(item) => item.id}
                 renderItem={({ item }) => {
                   const linkedName = getLinkedExcursionName(item.linkedExcursionId);
