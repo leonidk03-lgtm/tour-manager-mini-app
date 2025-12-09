@@ -437,7 +437,8 @@ export default function ExcursionsListScreen() {
                           const isToday = today.getFullYear() === excursionDate.getFullYear() &&
                             today.getMonth() === excursionDate.getMonth() &&
                             today.getDate() === excursionDate.getDate();
-                          const notes = isToday ? getExcursionNotes(excursion.id) : [];
+                          // Admins see notes always, managers only on excursion day
+                          const notes = (isAdmin || isToday) ? getExcursionNotes(excursion.id) : [];
                           return (
                             <ExcursionCard
                               key={excursion.id}
