@@ -800,12 +800,63 @@ export default function RadioGuidesScreen() {
     if (modalMode === "issue") {
       // Show guide picker list
       if (showGuidePicker) {
-        // Filter guides by selected excursion's tourTypeId
+        // Filter guides by selected excursion's tourTypeId or allocationGroup
         const selectedExcursion = selectedExcursionId 
           ? todayExcursions.find(e => e.id === selectedExcursionId) 
           : null;
+        
+        // Get allocation group for tour type
+        const getAllocationGroup = (tourTypeId: string | null): string | null => {
+          if (!tourTypeId) return null;
+          const tour = tourTypes.find(t => t.id === tourTypeId);
+          return tour?.allocationGroup || null;
+        };
+        
+        // Get main keyword from tour name (first significant word)
+        const getTourKeyword = (tourTypeId: string | null): string | null => {
+          if (!tourTypeId) return null;
+          const tour = tourTypes.find(t => t.id === tourTypeId);
+          if (!tour) return null;
+          const name = tour.name.toLowerCase();
+          // Extract first keyword that identifies the tour
+          if (name.includes('свияжск')) return 'свияжск';
+          if (name.includes('раиф')) return 'раифа';
+          if (name.includes('болгар') || name.includes('булгар')) return 'болгар';
+          if (name.includes('йошкар')) return 'йошкар';
+          if (name.includes('озер') || name.includes('голуб')) return 'озера';
+          if (name.includes('обзор') || name.includes('город')) return 'город';
+          return tour.id; // fallback to ID
+        };
+        
+        // Check if two tour types are in the same allocation group
+        const isSameAllocationGroup = (tourId1: string | null, tourId2: string | null): boolean => {
+          if (!tourId1 || !tourId2) return false;
+          if (tourId1 === tourId2) return true;
+          // Check allocationGroup first
+          const group1 = getAllocationGroup(tourId1);
+          const group2 = getAllocationGroup(tourId2);
+          if (group1 && group2 && group1 === group2) return true;
+          // Fallback: check keyword match
+          const keyword1 = getTourKeyword(tourId1);
+          const keyword2 = getTourKeyword(tourId2);
+          return keyword1 !== null && keyword1 === keyword2;
+        };
+        
+        console.log("[RadioGuides] Filter debug:", {
+          selectedExcursionId,
+          selectedTourTypeId: selectedExcursion?.tourTypeId,
+          selectedTourName: selectedExcursion?.tourTypeName,
+          selectedAllocationGroup: getAllocationGroup(selectedExcursion?.tourTypeId || null),
+          guidesWithTourIds: allocatedGuides.map(g => ({ 
+            name: g.name, 
+            tourId: g.assignedTourTypeId,
+            group: getAllocationGroup(g.assignedTourTypeId)
+          }))
+        });
+        
+        // Filter by allocation group (not exact tourTypeId)
         const filteredGuides = selectedExcursion
-          ? allocatedGuides.filter(g => g.assignedTourTypeId === selectedExcursion.tourTypeId)
+          ? allocatedGuides.filter(g => isSameAllocationGroup(g.assignedTourTypeId, selectedExcursion.tourTypeId))
           : allocatedGuides;
 
         return (
