@@ -1570,10 +1570,11 @@ const styles = StyleSheet.create({
     flexDirection: "row",
     alignItems: "center",
     gap: 4,
-    paddingHorizontal: Spacing.xs,
+    paddingHorizontal: Spacing.sm,
     paddingVertical: 4,
     borderRadius: BorderRadius.sm,
-    minWidth: 80,
+    flex: 1,
+    minWidth: 120,
   },
   guideCellText: {
     fontSize: 12,
