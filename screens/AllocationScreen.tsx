@@ -265,11 +265,44 @@ export default function AllocationScreen() {
         const regex = new RegExp(`(^|[\\s\\(\\-:])${alias}`, 'i');
         if (regex.test(lowerLine)) {
           // Found keyword, now find matching tour
-          for (const tour of tourTypes.filter(t => t.isEnabled)) {
-            const tourNameLower = tour.name.toLowerCase();
-            if (tourNameLower.includes(mainKey) || aliases.some(a => tourNameLower.includes(a))) {
-              return tour;
-            }
+          // Collect all matching tours and pick the best one
+          const matchingTours = tourTypes
+            .filter(t => t.isEnabled)
+            .filter(t => {
+              const tourNameLower = t.name.toLowerCase();
+              return tourNameLower.includes(mainKey) || aliases.some(a => tourNameLower.includes(a));
+            });
+          
+          if (matchingTours.length > 0) {
+            // Check if line contains additional keywords that narrow down the match
+            // e.g., if line has "раифа", prefer "Свияжск + Раифа" over "Свияжск"
+            const lineHasRaifa = /раиф/i.test(lowerLine);
+            const lineHasOzera = /озер|голуб/i.test(lowerLine);
+            const lineHasInteraktiv = /интерактив/i.test(lowerLine);
+            
+            // Score tours based on how well they match the line
+            const scoredTours = matchingTours.map(tour => {
+              const nameLower = tour.name.toLowerCase();
+              let score = 0;
+              
+              // Penalize tours with extra keywords not in line
+              if (nameLower.includes('раиф') && !lineHasRaifa) score -= 10;
+              if (nameLower.includes('озер') && !lineHasOzera) score -= 10;
+              if (nameLower.includes('интерактив') && !lineHasInteraktiv) score -= 10;
+              
+              // Bonus for tours with extra keywords that ARE in line
+              if (nameLower.includes('раиф') && lineHasRaifa) score += 10;
+              if (nameLower.includes('озер') && lineHasOzera) score += 10;
+              if (nameLower.includes('интерактив') && lineHasInteraktiv) score += 10;
+              
+              // Prefer shorter names (more specific match) when scores are equal
+              score -= tour.name.length * 0.01;
+              
+              return { tour, score };
+            });
+            
+            scoredTours.sort((a, b) => b.score - a.score);
+            return scoredTours[0].tour;
           }
         }
       }
@@ -288,11 +321,40 @@ export default function AllocationScreen() {
       
       for (const { mainKey, aliases } of keywordPriority) {
         if (aliases.some(a => tourKeyword.includes(a) || a.includes(tourKeyword))) {
-          for (const tour of tourTypes.filter(t => t.isEnabled)) {
-            const tourNameLower = tour.name.toLowerCase();
-            if (tourNameLower.includes(mainKey) || aliases.some(a => tourNameLower.includes(a))) {
-              return { tourId: tour.id, guideName };
-            }
+          // Collect all matching tours
+          const matchingTours = tourTypes
+            .filter(t => t.isEnabled)
+            .filter(t => {
+              const tourNameLower = t.name.toLowerCase();
+              return tourNameLower.includes(mainKey) || aliases.some(a => tourNameLower.includes(a));
+            });
+          
+          if (matchingTours.length > 0) {
+            // Check for additional keywords in tour keyword
+            const hasRaifa = /раиф/i.test(tourKeyword);
+            const hasOzera = /озер|голуб/i.test(tourKeyword);
+            const hasInteraktiv = /интерактив/i.test(tourKeyword);
+            
+            // Score tours
+            const scoredTours = matchingTours.map(tour => {
+              const nameLower = tour.name.toLowerCase();
+              let score = 0;
+              
+              if (nameLower.includes('раиф') && !hasRaifa) score -= 10;
+              if (nameLower.includes('озер') && !hasOzera) score -= 10;
+              if (nameLower.includes('интерактив') && !hasInteraktiv) score -= 10;
+              
+              if (nameLower.includes('раиф') && hasRaifa) score += 10;
+              if (nameLower.includes('озер') && hasOzera) score += 10;
+              if (nameLower.includes('интерактив') && hasInteraktiv) score += 10;
+              
+              score -= tour.name.length * 0.01;
+              
+              return { tour, score };
+            });
+            
+            scoredTours.sort((a, b) => b.score - a.score);
+            return { tourId: scoredTours[0].tour.id, guideName };
           }
         }
       }

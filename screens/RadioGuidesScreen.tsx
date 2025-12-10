@@ -806,11 +806,6 @@ export default function RadioGuidesScreen() {
           : null;
         
         // Filter guides by exact tour name match from allocation
-        console.log("[RadioGuides] Filtering:", {
-          selectedTourName: selectedExcursion?.tourTypeName,
-          guideTourNames: allocatedGuides.map(g => g.tourName)
-        });
-        
         const filteredGuides = selectedExcursion && selectedExcursion.tourTypeName
           ? allocatedGuides.filter(guide => {
               if (!guide.tourName) return false;
@@ -833,12 +828,7 @@ export default function RadioGuidesScreen() {
             </View>
             {selectedExcursion ? (
               <ThemedText style={{ color: theme.textSecondary, fontSize: 12, marginBottom: Spacing.sm }}>
-                Гиды для: "{selectedExcursion.tourTypeName}" | Найдено: {filteredGuides.length}/{allocatedGuides.length}
-              </ThemedText>
-            ) : null}
-            {allocatedGuides.length > 0 && filteredGuides.length === 0 ? (
-              <ThemedText style={{ color: theme.warning, fontSize: 11, marginBottom: Spacing.sm }}>
-                Названия в распределении: {allocatedGuides.map(g => `"${g.tourName}"`).join(", ")}
+                Гиды для: {selectedExcursion.tourTypeName}
               </ThemedText>
             ) : null}
             {allocatedGuides.length === 0 ? (
