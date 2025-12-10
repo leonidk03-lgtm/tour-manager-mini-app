@@ -1,5 +1,6 @@
-import { useState, useMemo } from "react";
+import { useState, useMemo, useEffect } from "react";
 import { View, StyleSheet, Pressable, TextInput, Modal, Platform, Alert, ScrollView } from "react-native";
+import AsyncStorage from "@react-native-async-storage/async-storage";
 import { Icon } from "@/components/Icon";
 import DateTimePicker from "@react-native-community/datetimepicker";
 import { KeyboardAwareScrollView } from "react-native-keyboard-controller";
@@ -12,6 +13,17 @@ import { NetworkErrorBanner } from "@/components/NetworkErrorBanner";
 import { Spacing, BorderRadius } from "@/constants/theme";
 import { useTheme } from "@/hooks/useTheme";
 import { useData, Excursion, RadioGuideKit } from "@/contexts/DataContext";
+
+interface AllocatedGuide {
+  id: string;
+  name: string;
+  assignedTourTypeId: string | null;
+  assignedBusId: string | null;
+  isAdditional: boolean;
+}
+
+const STORAGE_KEY_GUIDES = "@allocation_guides";
+const STORAGE_KEY_DATE = "@allocation_date";
 import { useAuth } from "@/contexts/AuthContext";
 import { hapticFeedback } from "@/utils/haptics";
 import {
@@ -30,7 +42,7 @@ const parseLocalDate = (dateString: string): Date => {
 export default function ExcursionsListScreen() {
   const { theme } = useTheme();
   const navigation = useNavigation<NavigationProp<ExcursionsStackParamList>>();
-  const { excursions, tourTypes, additionalServices, addExcursion, radioGuideKits, issueRadioGuide, getExcursionNotes } = useData();
+  const { excursions, tourTypes, additionalServices, addExcursion, radioGuideKits, issueRadioGuide, getExcursionNotes, radioGuideAssignments } = useData();
   const { isAdmin } = useAuth();
   const [selectedDate, setSelectedDate] = useState(new Date().toISOString().split("T")[0]);
   const [searchQuery, setSearchQuery] = useState("");
@@ -46,12 +58,60 @@ export default function ExcursionsListScreen() {
   const [receiversIssued, setReceiversIssued] = useState("");
   const [pendingExcursionId, setPendingExcursionId] = useState<string | null>(null);
   const [lastExcursionParticipants, setLastExcursionParticipants] = useState(0);
+  const [lastExcursionTourTypeId, setLastExcursionTourTypeId] = useState<string | null>(null);
+  const [guidePickerMode, setGuidePickerMode] = useState(false);
+  const [allocatedGuides, setAllocatedGuides] = useState<AllocatedGuide[]>([]);
   
   const calculateRoundedReceivers = (totalParticipants: number): number => {
     return Math.ceil(totalParticipants / 5) * 5;
   };
   
   const availableKits = radioGuideKits.filter(kit => kit.status === 'available');
+  
+  // Load allocated guides from AsyncStorage when modal opens
+  useEffect(() => {
+    const loadAllocatedGuides = async () => {
+      if (!showRadioGuideModal) return;
+      try {
+        const today = new Date().toISOString().split("T")[0];
+        const savedDate = await AsyncStorage.getItem(STORAGE_KEY_DATE);
+        if (savedDate === today) {
+          const savedGuides = await AsyncStorage.getItem(STORAGE_KEY_GUIDES);
+          if (savedGuides) {
+            setAllocatedGuides(JSON.parse(savedGuides));
+          }
+        } else {
+          setAllocatedGuides([]);
+        }
+      } catch (error) {
+        console.error('Error loading allocated guides:', error);
+        setAllocatedGuides([]);
+      }
+    };
+    loadAllocatedGuides();
+  }, [showRadioGuideModal]);
+  
+  // Filter guides by selected tour type - exclude guides with active assignments
+  const filteredAllocatedGuides = useMemo(() => {
+    if (!lastExcursionTourTypeId) return [];
+    const selectedTour = tourTypes.find(t => t.id === lastExcursionTourTypeId);
+    if (!selectedTour) return [];
+    
+    // Get guides with active assignments (not returned yet)
+    const activeAssignmentGuideNames = radioGuideAssignments
+      .filter(a => a.returnedAt === null)
+      .map(a => a.guideName.toLowerCase());
+    
+    return allocatedGuides.filter(guide => {
+      if (!guide.assignedTourTypeId) return false;
+      // Exclude guides with active assignments
+      if (activeAssignmentGuideNames.includes(guide.name.toLowerCase())) return false;
+      // Match by tour name
+      const guideTour = tourTypes.find(t => t.id === guide.assignedTourTypeId);
+      if (!guideTour) return false;
+      return guideTour.name.toLowerCase() === selectedTour.name.toLowerCase();
+    });
+  }, [allocatedGuides, lastExcursionTourTypeId, tourTypes, radioGuideAssignments]);
   
   const dateValue = parseLocalDate(selectedDate);
   
@@ -95,6 +155,7 @@ export default function ExcursionsListScreen() {
           excursion.byTourCount + 
           excursion.paidCount;
         setLastExcursionParticipants(totalParticipants);
+        setLastExcursionTourTypeId(excursion.tourTypeId);
         const suggestedReceivers = calculateRoundedReceivers(totalParticipants);
         setReceiversIssued(suggestedReceivers > 0 ? String(suggestedReceivers) : "");
         setShowRadioGuideModal(true);
@@ -113,6 +174,8 @@ export default function ExcursionsListScreen() {
     setReceiversIssued("");
     setPendingExcursionId(null);
     setLastExcursionParticipants(0);
+    setLastExcursionTourTypeId(null);
+    setGuidePickerMode(false);
   };
   
   const handleIssueRadioGuide = async () => {
@@ -188,16 +251,34 @@ export default function ExcursionsListScreen() {
         <ThemedText style={[styles.radioGuideLabel, { color: theme.textSecondary }]}>
           Экскурсовод *
         </ThemedText>
-        <TextInput
-          style={[
-            styles.radioGuideInput,
-            { backgroundColor: theme.backgroundSecondary, borderColor: theme.border, color: theme.text },
-          ]}
-          value={guideName}
-          onChangeText={setGuideName}
-          placeholder="Имя экскурсовода"
-          placeholderTextColor={theme.textSecondary}
-        />
+        <View style={{ flexDirection: "row", gap: Spacing.sm }}>
+          <TextInput
+            style={[
+              styles.radioGuideInput,
+              { backgroundColor: theme.backgroundSecondary, borderColor: theme.border, color: theme.text, flex: 1 },
+            ]}
+            value={guideName}
+            onChangeText={setGuideName}
+            placeholder="Имя экскурсовода"
+            placeholderTextColor={theme.textSecondary}
+          />
+          {filteredAllocatedGuides.length > 0 ? (
+            <Pressable
+              onPress={() => setGuidePickerMode(true)}
+              style={[
+                styles.guidePickerButton,
+                { backgroundColor: theme.primary },
+              ]}
+            >
+              <Icon name="users" size={16} color="#fff" />
+            </Pressable>
+          ) : null}
+        </View>
+        {filteredAllocatedGuides.length > 0 ? (
+          <ThemedText style={{ color: theme.textSecondary, fontSize: 11, marginTop: 4 }}>
+            Доступно гидов: {filteredAllocatedGuides.length}
+          </ThemedText>
+        ) : null}
       </View>
       
       <View style={styles.radioGuideInputGroup}>
@@ -568,39 +649,83 @@ export default function ExcursionsListScreen() {
       
       <Modal visible={showRadioGuideModal} animationType="slide" transparent>
         <View style={styles.radioGuideOverlay}>
-          <Pressable style={styles.radioGuideBackdrop} onPress={handleSkipRadioGuide} />
+          <Pressable style={styles.radioGuideBackdrop} onPress={guidePickerMode ? () => setGuidePickerMode(false) : handleSkipRadioGuide} />
           <ThemedView style={[styles.radioGuideModal, { backgroundColor: theme.backgroundDefault }]}>
-            <View style={styles.radioGuideHeader}>
-              <ThemedText style={styles.radioGuideTitle}>Выдать радиогид</ThemedText>
-              <Pressable onPress={handleSkipRadioGuide}>
-                <Icon name="x" size={24} color={theme.text} />
-              </Pressable>
-            </View>
-            
-            {Platform.OS === "web" ? (
-              <ScrollView style={styles.radioGuideContent} keyboardShouldPersistTaps="handled">
-                {renderRadioGuideFormContent()}
-              </ScrollView>
+            {guidePickerMode ? (
+              <>
+                <View style={styles.radioGuideHeader}>
+                  <Pressable 
+                    onPress={() => setGuidePickerMode(false)} 
+                    style={{ flexDirection: "row", alignItems: "center", gap: Spacing.xs }}
+                  >
+                    <Icon name="arrow-left" size={20} color={theme.text} />
+                    <ThemedText>Назад</ThemedText>
+                  </Pressable>
+                  <ThemedText style={styles.radioGuideTitle}>Выбрать гида</ThemedText>
+                  <View style={{ width: 60 }} />
+                </View>
+                <ScrollView style={styles.radioGuideContent}>
+                  {filteredAllocatedGuides.length === 0 ? (
+                    <ThemedText style={{ color: theme.textSecondary, textAlign: "center", padding: Spacing.xl }}>
+                      Нет доступных гидов
+                    </ThemedText>
+                  ) : (
+                    filteredAllocatedGuides.map(guide => (
+                      <Pressable
+                        key={guide.id}
+                        onPress={() => {
+                          setGuideName(guide.name);
+                          setGuidePickerMode(false);
+                          hapticFeedback.light();
+                        }}
+                        style={[
+                          styles.guideOption,
+                          { backgroundColor: theme.backgroundSecondary, borderColor: theme.border },
+                        ]}
+                      >
+                        <Icon name="user" size={18} color={theme.primary} />
+                        <ThemedText style={{ flex: 1 }}>{guide.name}</ThemedText>
+                        <Icon name="chevron-right" size={18} color={theme.textSecondary} />
+                      </Pressable>
+                    ))
+                  )}
+                </ScrollView>
+              </>
             ) : (
-              <KeyboardAwareScrollView style={styles.radioGuideContent} keyboardShouldPersistTaps="handled">
-                {renderRadioGuideFormContent()}
-              </KeyboardAwareScrollView>
+              <>
+                <View style={styles.radioGuideHeader}>
+                  <ThemedText style={styles.radioGuideTitle}>Выдать радиогид</ThemedText>
+                  <Pressable onPress={handleSkipRadioGuide}>
+                    <Icon name="x" size={24} color={theme.text} />
+                  </Pressable>
+                </View>
+                
+                {Platform.OS === "web" ? (
+                  <ScrollView style={styles.radioGuideContent} keyboardShouldPersistTaps="handled">
+                    {renderRadioGuideFormContent()}
+                  </ScrollView>
+                ) : (
+                  <KeyboardAwareScrollView style={styles.radioGuideContent} keyboardShouldPersistTaps="handled">
+                    {renderRadioGuideFormContent()}
+                  </KeyboardAwareScrollView>
+                )}
+                
+                <View style={styles.radioGuideActions}>
+                  <Pressable
+                    style={[styles.radioGuideSkipButton, { borderColor: theme.border }]}
+                    onPress={handleSkipRadioGuide}
+                  >
+                    <ThemedText>Пропустить</ThemedText>
+                  </Pressable>
+                  <Pressable
+                    style={[styles.radioGuideSubmitButton, { backgroundColor: theme.primary }]}
+                    onPress={handleIssueRadioGuide}
+                  >
+                    <ThemedText style={{ color: theme.buttonText, fontWeight: "600" }}>Выдать</ThemedText>
+                  </Pressable>
+                </View>
+              </>
             )}
-            
-            <View style={styles.radioGuideActions}>
-              <Pressable
-                style={[styles.radioGuideSkipButton, { borderColor: theme.border }]}
-                onPress={handleSkipRadioGuide}
-              >
-                <ThemedText>Пропустить</ThemedText>
-              </Pressable>
-              <Pressable
-                style={[styles.radioGuideSubmitButton, { backgroundColor: theme.primary }]}
-                onPress={handleIssueRadioGuide}
-              >
-                <ThemedText style={{ color: theme.buttonText, fontWeight: "600" }}>Выдать</ThemedText>
-              </Pressable>
-            </View>
           </ThemedView>
         </View>
       </Modal>
@@ -842,5 +967,21 @@ const styles = StyleSheet.create({
     padding: Spacing.md,
     borderRadius: BorderRadius.sm,
     alignItems: "center",
+  },
+  guidePickerButton: {
+    width: 44,
+    height: 44,
+    borderRadius: BorderRadius.sm,
+    alignItems: "center",
+    justifyContent: "center",
+  },
+  guideOption: {
+    flexDirection: "row",
+    alignItems: "center",
+    padding: Spacing.md,
+    borderRadius: BorderRadius.sm,
+    borderWidth: 1,
+    marginBottom: Spacing.sm,
+    gap: Spacing.sm,
   },
 });
