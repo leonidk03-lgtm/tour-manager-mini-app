@@ -73,6 +73,8 @@ Design style: Telegram-inspired dark theme with flat design (November 2025 updat
 - `DispatchingNote`: Personal notes for managers, synced across devices via Supabase Realtime with offline caching
 - `ExcursionNote`: Notes attached to specific excursions, visible only on excursion day to managers (all notes), always visible to admins; auto-deleted after 14 days (moved to deleted_items for restoration)
 - `ChatMessage`: General chat messages between all managers/admins, with senderId, senderName, message text, and createdAt timestamp; admin can clear entire history to reduce load
+- `AppNotification`: In-app notification with type (chat/excursion/transaction), title, body, isRead status, and createdAt timestamp; stored per user
+- `NotificationSettings`: Per-user notification preferences with chatEnabled, excursionsEnabled, transactionsEnabled toggles
 
 **Data Relationships**
 - Excursions reference TourTypes by ID
@@ -169,6 +171,14 @@ Design style: Telegram-inspired dark theme with flat design (November 2025 updat
 - Real-time message sync via Supabase Realtime
 - Admin-only clear history button to manage chat load
 - Accessible from Settings screen for all users
+
+**NotificationsScreen** - Notification center and settings:
+- Toggle settings for chat, excursions (admin only), transactions (admin only)
+- List of recent notifications with read/unread status
+- Mark all as read functionality
+- Notification types: chat messages, new excursions, new transactions
+- Managers see chat notifications only; admins see all notification types
+- In-app banner shows new notifications at top of screen
 
 ### Platform-Specific Considerations
 
