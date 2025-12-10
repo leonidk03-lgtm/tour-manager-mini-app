@@ -493,11 +493,12 @@ export default function AllocationScreen() {
       });
   }, [tourTypes]);
 
-  // Get available guides for a tour (unassigned or assigned to this tour)
+  // Get available guides for a tour (only guides assigned to this specific tour)
   const getAvailableGuidesForTour = (tourTypeId: string | null) => {
+    if (!tourTypeId) return [];
     return guides.filter(g => 
       !g.assignedBusId && // Not assigned to any bus
-      (!g.assignedTourTypeId || g.assignedTourTypeId === tourTypeId) // Unassigned or same tour
+      g.assignedTourTypeId === tourTypeId // Only guides for this specific tour
     );
   };
 
