@@ -806,6 +806,11 @@ export default function RadioGuidesScreen() {
           : null;
         
         // Filter guides by exact tour name match from allocation
+        console.log("[RadioGuides] Filtering:", {
+          selectedTourName: selectedExcursion?.tourTypeName,
+          guideTourNames: allocatedGuides.map(g => g.tourName)
+        });
+        
         const filteredGuides = selectedExcursion && selectedExcursion.tourTypeName
           ? allocatedGuides.filter(guide => {
               if (!guide.tourName) return false;
