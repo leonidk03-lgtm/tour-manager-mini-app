@@ -218,6 +218,7 @@ export default function RadioGuidesScreen() {
     setSelectedAssignment(null);
     setShowShortageForm(false);
     setSelectedExcursionId(null);
+    setShowGuidePicker(false);
   };
 
   const openAddModal = () => {
@@ -731,62 +732,6 @@ export default function RadioGuidesScreen() {
         </View>
       </Modal>
       
-      {/* Guide Picker from Allocation Modal */}
-      <Modal visible={showGuidePicker} animationType="fade" transparent>
-        <View style={styles.modalOverlay}>
-          <Pressable style={styles.modalBackdrop} onPress={() => setShowGuidePicker(false)} />
-          <ThemedView style={[styles.modal, { backgroundColor: theme.backgroundDefault, maxHeight: "70%" }]}>
-            <View style={styles.modalHeader}>
-              <ThemedText style={styles.modalTitle}>Выбрать из распределения</ThemedText>
-              <Pressable onPress={() => setShowGuidePicker(false)}>
-                <Icon name="x" size={24} color={theme.text} />
-              </Pressable>
-            </View>
-            
-            <ScrollView style={{ flex: 1 }} contentContainerStyle={{ padding: Spacing.md }}>
-              {allocatedGuides.length === 0 ? (
-                <ThemedText style={{ color: theme.textSecondary, textAlign: "center", padding: Spacing.xl }}>
-                  Нет данных распределения на сегодня
-                </ThemedText>
-              ) : (
-                allocatedGuides.map((guide, index) => (
-                  <Pressable
-                    key={guide.id}
-                    onPress={() => {
-                      setGuideName(guide.name);
-                      if (guide.busNumber) {
-                        setBusNumber(guide.busNumber);
-                      }
-                      setShowGuidePicker(false);
-                    }}
-                    style={[
-                      styles.guidePickerItem,
-                      { backgroundColor: theme.backgroundSecondary, borderColor: theme.border },
-                    ]}
-                  >
-                    <View style={styles.guidePickerInfo}>
-                      <ThemedText style={styles.guidePickerName}>{guide.name}</ThemedText>
-                      {guide.tourName ? (
-                        <ThemedText style={[styles.guidePickerTour, { color: theme.textSecondary }]}>
-                          {guide.tourName}
-                        </ThemedText>
-                      ) : null}
-                    </View>
-                    {guide.busNumber ? (
-                      <View style={[styles.guidePickerBus, { backgroundColor: theme.primary + "20" }]}>
-                        <Icon name="truck" size={12} color={theme.primary} />
-                        <ThemedText style={[styles.guidePickerBusText, { color: theme.primary }]}>
-                          {guide.busNumber}
-                        </ThemedText>
-                      </View>
-                    ) : null}
-                  </Pressable>
-                ))
-              )}
-            </ScrollView>
-          </ThemedView>
-        </View>
-      </Modal>
     </>
   );
 
@@ -843,6 +788,63 @@ export default function RadioGuidesScreen() {
     }
 
     if (modalMode === "issue") {
+      // Show guide picker list
+      if (showGuidePicker) {
+        return (
+          <View style={styles.form}>
+            <View style={styles.guidePickerHeader}>
+              <Pressable 
+                onPress={() => setShowGuidePicker(false)}
+                style={[styles.backButton, { backgroundColor: theme.backgroundSecondary }]}
+              >
+                <Icon name="arrow-left" size={18} color={theme.text} />
+                <ThemedText style={{ marginLeft: Spacing.xs }}>Назад</ThemedText>
+              </Pressable>
+              <ThemedText style={styles.guidePickerTitle}>Выбрать гида</ThemedText>
+            </View>
+            {allocatedGuides.length === 0 ? (
+              <ThemedText style={{ color: theme.textSecondary, textAlign: "center", padding: Spacing.xl }}>
+                Нет данных распределения на сегодня
+              </ThemedText>
+            ) : (
+              allocatedGuides.map((guide) => (
+                <Pressable
+                  key={guide.id}
+                  onPress={() => {
+                    setGuideName(guide.name);
+                    if (guide.busNumber) {
+                      setBusNumber(guide.busNumber);
+                    }
+                    setShowGuidePicker(false);
+                  }}
+                  style={[
+                    styles.guidePickerItem,
+                    { backgroundColor: theme.backgroundSecondary, borderColor: theme.border },
+                  ]}
+                >
+                  <View style={styles.guidePickerInfo}>
+                    <ThemedText style={styles.guidePickerName}>{guide.name}</ThemedText>
+                    {guide.tourName ? (
+                      <ThemedText style={[styles.guidePickerTour, { color: theme.textSecondary }]}>
+                        {guide.tourName}
+                      </ThemedText>
+                    ) : null}
+                  </View>
+                  {guide.busNumber ? (
+                    <View style={[styles.guidePickerBus, { backgroundColor: theme.primary + "20" }]}>
+                      <Icon name="truck" size={12} color={theme.primary} />
+                      <ThemedText style={[styles.guidePickerBusText, { color: theme.primary }]}>
+                        {guide.busNumber}
+                      </ThemedText>
+                    </View>
+                  ) : null}
+                </Pressable>
+              ))
+            )}
+          </View>
+        );
+      }
+
       return (
         <View style={styles.form}>
           <View style={styles.inputGroup}>
@@ -1405,6 +1407,22 @@ const styles = StyleSheet.create({
   pickFromAllocationText: {
     fontSize: 12,
     fontWeight: "500",
+  },
+  guidePickerHeader: {
+    flexDirection: "row",
+    alignItems: "center",
+    marginBottom: Spacing.md,
+    gap: Spacing.md,
+  },
+  backButton: {
+    flexDirection: "row",
+    alignItems: "center",
+    padding: Spacing.sm,
+    borderRadius: BorderRadius.md,
+  },
+  guidePickerTitle: {
+    fontSize: 16,
+    fontWeight: "600",
   },
   guidePickerItem: {
     flexDirection: "row",
