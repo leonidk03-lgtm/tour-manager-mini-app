@@ -225,7 +225,7 @@ interface DataContextType {
   updateAdditionalService: (id: string, service: Partial<AdditionalService>) => Promise<void>;
   deleteAdditionalService: (id: string) => Promise<void>;
   excursions: Excursion[];
-  addExcursion: (excursion: Omit<Excursion, 'id' | 'managerId' | 'managerName'>) => Promise<void>;
+  addExcursion: (excursion: Omit<Excursion, 'id' | 'managerId' | 'managerName'>) => Promise<string>;
   updateExcursion: (id: string, excursion: Partial<Excursion>) => Promise<void>;
   deleteExcursion: (id: string) => Promise<void>;
   transactions: Transaction[];
@@ -1615,7 +1615,7 @@ export function DataProvider({ children }: { children: ReactNode }) {
     }
   };
 
-  const addExcursion = async (excursion: Omit<Excursion, 'id' | 'managerId' | 'managerName'>) => {
+  const addExcursion = async (excursion: Omit<Excursion, 'id' | 'managerId' | 'managerName'>): Promise<string> => {
     if (!user || !profile) throw new Error('User not authenticated');
 
     try {
@@ -1650,6 +1650,8 @@ export function DataProvider({ children }: { children: ReactNode }) {
 
       await fetchExcursions();
       await fetchActivities();
+      
+      return excursionData.id;
     } catch (err) {
       console.error('Error adding excursion:', err);
       throw err;

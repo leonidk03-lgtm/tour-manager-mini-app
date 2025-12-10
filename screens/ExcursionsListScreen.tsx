@@ -161,7 +161,7 @@ export default function ExcursionsListScreen() {
     if (isSaving) return;
     setIsSaving(true);
     try {
-      await addExcursion(excursion);
+      const excursionId = await addExcursion(excursion);
       setSelectedDate(excursion.date);
       setShowAddModal(false);
       
@@ -176,6 +176,7 @@ export default function ExcursionsListScreen() {
           excursion.paidCount;
         setLastExcursionParticipants(totalParticipants);
         setLastExcursionTourTypeId(excursion.tourTypeId);
+        setPendingExcursionId(excursionId);
         const suggestedReceivers = calculateRoundedReceivers(totalParticipants);
         setReceiversIssued(suggestedReceivers > 0 ? String(suggestedReceivers) : "");
         setShowRadioGuideModal(true);
