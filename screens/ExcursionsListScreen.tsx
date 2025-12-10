@@ -22,6 +22,17 @@ interface AllocatedGuide {
   isAdditional: boolean;
 }
 
+interface AllocatedBus {
+  id: string;
+  busNumber: string;
+  seats: number;
+  assignedTourTypeId: string | null;
+  assignedGuideName: string | null;
+  isAdditional: boolean;
+  withBoat: boolean;
+}
+
+const STORAGE_KEY_BUSES = "@allocation_buses";
 const STORAGE_KEY_GUIDES = "@allocation_guides";
 const STORAGE_KEY_DATE = "@allocation_date";
 import { useAuth } from "@/contexts/AuthContext";
@@ -61,6 +72,7 @@ export default function ExcursionsListScreen() {
   const [lastExcursionTourTypeId, setLastExcursionTourTypeId] = useState<string | null>(null);
   const [guidePickerMode, setGuidePickerMode] = useState(false);
   const [allocatedGuides, setAllocatedGuides] = useState<AllocatedGuide[]>([]);
+  const [allocatedBuses, setAllocatedBuses] = useState<AllocatedBus[]>([]);
   
   const calculateRoundedReceivers = (totalParticipants: number): number => {
     return Math.ceil(totalParticipants / 5) * 5;
@@ -68,27 +80,35 @@ export default function ExcursionsListScreen() {
   
   const availableKits = radioGuideKits.filter(kit => kit.status === 'available');
   
-  // Load allocated guides from AsyncStorage when modal opens
+  // Load allocated guides and buses from AsyncStorage when modal opens
   useEffect(() => {
-    const loadAllocatedGuides = async () => {
+    const loadAllocationData = async () => {
       if (!showRadioGuideModal) return;
       try {
         const today = new Date().toISOString().split("T")[0];
         const savedDate = await AsyncStorage.getItem(STORAGE_KEY_DATE);
         if (savedDate === today) {
-          const savedGuides = await AsyncStorage.getItem(STORAGE_KEY_GUIDES);
+          const [savedGuides, savedBuses] = await Promise.all([
+            AsyncStorage.getItem(STORAGE_KEY_GUIDES),
+            AsyncStorage.getItem(STORAGE_KEY_BUSES),
+          ]);
           if (savedGuides) {
             setAllocatedGuides(JSON.parse(savedGuides));
           }
+          if (savedBuses) {
+            setAllocatedBuses(JSON.parse(savedBuses));
+          }
         } else {
           setAllocatedGuides([]);
+          setAllocatedBuses([]);
         }
       } catch (error) {
-        console.error('Error loading allocated guides:', error);
+        console.error('Error loading allocation data:', error);
         setAllocatedGuides([]);
+        setAllocatedBuses([]);
       }
     };
-    loadAllocatedGuides();
+    loadAllocationData();
   }, [showRadioGuideModal]);
   
   // Filter guides by selected tour type - exclude guides with active assignments
@@ -675,6 +695,13 @@ export default function ExcursionsListScreen() {
                         key={guide.id}
                         onPress={() => {
                           setGuideName(guide.name);
+                          // Auto-fill bus number if guide has assigned bus
+                          if (guide.assignedBusId) {
+                            const bus = allocatedBuses.find(b => b.id === guide.assignedBusId);
+                            if (bus) {
+                              setBusNumber(bus.busNumber);
+                            }
+                          }
                           setGuidePickerMode(false);
                           hapticFeedback.light();
                         }}
