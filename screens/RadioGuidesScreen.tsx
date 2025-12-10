@@ -1,4 +1,4 @@
-import { useState, useMemo } from "react";
+import { useState, useMemo, useEffect } from "react";
 import {
   View,
   StyleSheet,
@@ -9,6 +9,7 @@ import {
   ScrollView,
   Platform,
 } from "react-native";
+import AsyncStorage from "@react-native-async-storage/async-storage";
 import { KeyboardAwareScrollView } from "react-native-keyboard-controller";
 import { Icon } from "@/components/Icon";
 import { ThemedText } from "@/components/ThemedText";
@@ -18,6 +19,25 @@ import { Spacing, BorderRadius } from "@/constants/theme";
 import { useTheme } from "@/hooks/useTheme";
 import { useData, RadioGuideKit, RadioGuideAssignment } from "@/contexts/DataContext";
 import { useAuth } from "@/contexts/AuthContext";
+
+interface AllocationGuide {
+  id: string;
+  name: string;
+  assignedTourTypeId: string | null;
+  assignedBusId: string | null;
+}
+
+interface AllocationBus {
+  id: string;
+  busNumber: string;
+  seats: number;
+  assignedTourTypeId: string | null;
+  assignedGuideName: string | null;
+}
+
+const STORAGE_KEY_BUSES = "@allocation_buses";
+const STORAGE_KEY_GUIDES = "@allocation_guides";
+const STORAGE_KEY_DATE = "@allocation_date";
 
 type ModalMode = "add" | "edit" | "issue" | "return" | null;
 
@@ -68,6 +88,55 @@ export default function RadioGuidesScreen() {
   const [selectedDate, setSelectedDate] = useState(() => new Date().toISOString().split("T")[0]);
   const [showDatePicker, setShowDatePicker] = useState(false);
   const [activeFilter, setActiveFilter] = useState<"all" | "issued" | "overdue" | "available">("all");
+  
+  // Allocation data integration
+  const [allocationBuses, setAllocationBuses] = useState<AllocationBus[]>([]);
+  const [allocationGuides, setAllocationGuides] = useState<AllocationGuide[]>([]);
+  const [showGuidePicker, setShowGuidePicker] = useState(false);
+  
+  // Load allocation data from AsyncStorage
+  useEffect(() => {
+    const loadAllocationData = async () => {
+      try {
+        const today = new Date().toISOString().split("T")[0];
+        const savedDate = await AsyncStorage.getItem(STORAGE_KEY_DATE);
+        
+        if (savedDate === today) {
+          const savedBuses = await AsyncStorage.getItem(STORAGE_KEY_BUSES);
+          const savedGuides = await AsyncStorage.getItem(STORAGE_KEY_GUIDES);
+          
+          if (savedBuses) {
+            setAllocationBuses(JSON.parse(savedBuses));
+          }
+          if (savedGuides) {
+            setAllocationGuides(JSON.parse(savedGuides));
+          }
+        }
+      } catch (error) {
+        console.error("Error loading allocation data:", error);
+      }
+    };
+    
+    loadAllocationData();
+  }, []);
+  
+  // Get guides with their assigned buses from allocation
+  const allocatedGuides = useMemo(() => {
+    return allocationGuides
+      .filter(g => g.assignedTourTypeId) // Only assigned guides
+      .map(guide => {
+        // Find the bus this guide is assigned to
+        const bus = allocationBuses.find(b => 
+          b.assignedGuideName === guide.name || b.id === guide.assignedBusId
+        );
+        const tourType = tourTypes.find(t => t.id === guide.assignedTourTypeId);
+        return {
+          ...guide,
+          busNumber: bus?.busNumber || null,
+          tourName: tourType?.name || null,
+        };
+      });
+  }, [allocationGuides, allocationBuses, tourTypes]);
 
   const todayExcursions = useMemo(() => {
     return excursions
@@ -643,6 +712,63 @@ export default function RadioGuidesScreen() {
           </ThemedView>
         </View>
       </Modal>
+      
+      {/* Guide Picker from Allocation Modal */}
+      <Modal visible={showGuidePicker} animationType="fade" transparent>
+        <View style={styles.modalOverlay}>
+          <Pressable style={styles.modalBackdrop} onPress={() => setShowGuidePicker(false)} />
+          <ThemedView style={[styles.modal, { backgroundColor: theme.backgroundDefault, maxHeight: "70%" }]}>
+            <View style={styles.modalHeader}>
+              <ThemedText style={styles.modalTitle}>Выбрать из распределения</ThemedText>
+              <Pressable onPress={() => setShowGuidePicker(false)}>
+                <Icon name="x" size={24} color={theme.text} />
+              </Pressable>
+            </View>
+            
+            <ScrollView style={{ flex: 1 }} contentContainerStyle={{ padding: Spacing.md }}>
+              {allocatedGuides.length === 0 ? (
+                <ThemedText style={{ color: theme.textSecondary, textAlign: "center", padding: Spacing.xl }}>
+                  Нет данных распределения на сегодня
+                </ThemedText>
+              ) : (
+                allocatedGuides.map((guide, index) => (
+                  <Pressable
+                    key={guide.id}
+                    onPress={() => {
+                      setGuideName(guide.name);
+                      if (guide.busNumber) {
+                        setBusNumber(guide.busNumber);
+                      }
+                      setShowGuidePicker(false);
+                    }}
+                    style={[
+                      styles.guidePickerItem,
+                      { backgroundColor: theme.backgroundSecondary, borderColor: theme.border },
+                    ]}
+                  >
+                    <View style={styles.guidePickerInfo}>
+                      <ThemedText style={styles.guidePickerName}>{guide.name}</ThemedText>
+                      {guide.tourName ? (
+                        <ThemedText style={[styles.guidePickerTour, { color: theme.textSecondary }]}>
+                          {guide.tourName}
+                        </ThemedText>
+                      ) : null}
+                    </View>
+                    {guide.busNumber ? (
+                      <View style={[styles.guidePickerBus, { backgroundColor: theme.primary + "20" }]}>
+                        <Icon name="truck" size={12} color={theme.primary} />
+                        <ThemedText style={[styles.guidePickerBusText, { color: theme.primary }]}>
+                          {guide.busNumber}
+                        </ThemedText>
+                      </View>
+                    ) : null}
+                  </Pressable>
+                ))
+              )}
+            </ScrollView>
+          </ThemedView>
+        </View>
+      </Modal>
     </>
   );
 
@@ -759,9 +885,22 @@ export default function RadioGuidesScreen() {
           </View>
 
           <View style={styles.inputGroup}>
-            <ThemedText style={[styles.label, { color: theme.textSecondary }]}>
-              Экскурсовод *
-            </ThemedText>
+            <View style={styles.labelRow}>
+              <ThemedText style={[styles.label, { color: theme.textSecondary }]}>
+                Экскурсовод *
+              </ThemedText>
+              {allocatedGuides.length > 0 ? (
+                <Pressable
+                  onPress={() => setShowGuidePicker(true)}
+                  style={[styles.pickFromAllocation, { backgroundColor: theme.primary + "20", borderColor: theme.primary }]}
+                >
+                  <Icon name="users" size={14} color={theme.primary} />
+                  <ThemedText style={[styles.pickFromAllocationText, { color: theme.primary }]}>
+                    Из распред.
+                  </ThemedText>
+                </Pressable>
+              ) : null}
+            </View>
             <TextInput
               style={[
                 styles.input,
@@ -1036,6 +1175,15 @@ const styles = StyleSheet.create({
     backgroundColor: "rgba(0, 0, 0, 0.5)",
     justifyContent: "flex-end",
   },
+  modalBackdrop: {
+    ...StyleSheet.absoluteFillObject,
+  },
+  modal: {
+    borderTopLeftRadius: BorderRadius.lg,
+    borderTopRightRadius: BorderRadius.lg,
+    padding: Spacing.lg,
+    paddingBottom: Spacing.xl,
+  },
   modalContent: {
     borderTopLeftRadius: BorderRadius.lg,
     borderTopRightRadius: BorderRadius.lg,
@@ -1217,5 +1365,56 @@ const styles = StyleSheet.create({
     paddingHorizontal: Spacing.md,
     borderRadius: BorderRadius.md,
     borderWidth: 1,
+  },
+  labelRow: {
+    flexDirection: "row",
+    justifyContent: "space-between",
+    alignItems: "center",
+    marginBottom: Spacing.xs,
+  },
+  pickFromAllocation: {
+    flexDirection: "row",
+    alignItems: "center",
+    gap: Spacing.xs,
+    paddingHorizontal: Spacing.sm,
+    paddingVertical: 4,
+    borderRadius: BorderRadius.sm,
+    borderWidth: 1,
+  },
+  pickFromAllocationText: {
+    fontSize: 12,
+    fontWeight: "500",
+  },
+  guidePickerItem: {
+    flexDirection: "row",
+    justifyContent: "space-between",
+    alignItems: "center",
+    padding: Spacing.md,
+    borderRadius: BorderRadius.md,
+    borderWidth: 1,
+    marginBottom: Spacing.sm,
+  },
+  guidePickerInfo: {
+    flex: 1,
+  },
+  guidePickerName: {
+    fontSize: 15,
+    fontWeight: "500",
+  },
+  guidePickerTour: {
+    fontSize: 12,
+    marginTop: 2,
+  },
+  guidePickerBus: {
+    flexDirection: "row",
+    alignItems: "center",
+    gap: Spacing.xs,
+    paddingHorizontal: Spacing.sm,
+    paddingVertical: 4,
+    borderRadius: BorderRadius.sm,
+  },
+  guidePickerBusText: {
+    fontSize: 12,
+    fontWeight: "600",
   },
 });
