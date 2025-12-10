@@ -934,25 +934,58 @@ export default function AllocationScreen() {
 
       {/* Unassigned guides (not linked to any tour) */}
       {unassignedGuides.length > 0 ? (
-        <View style={[styles.unassignedGuidesSection, { backgroundColor: theme.backgroundSecondary }]}>
-          <ThemedText style={[styles.sectionTitle, { color: theme.warning }]}>
-            Гиды без экскурсии ({unassignedGuides.length})
-          </ThemedText>
-          <View style={styles.guidesChipsRow}>
-            {unassignedGuides.map(guide => (
-              <Pressable
-                key={guide.id}
-                style={[styles.guideChip, { backgroundColor: theme.backgroundTertiary }]}
-                onPress={() => {
-                  setPickingFor({ type: 'guide', id: guide.id });
-                  setShowTourPicker(true);
-                }}
-              >
-                <Icon name="user" size={14} color={theme.warning} />
-                <ThemedText style={styles.guideChipText}>{guide.name}</ThemedText>
-              </Pressable>
-            ))}
+        <View style={[styles.tourSection, { backgroundColor: theme.backgroundSecondary, borderLeftColor: theme.warning, borderLeftWidth: 3 }]}>
+          <View style={styles.tourHeader}>
+            <View style={styles.tourTitleRow}>
+              <Icon name="users" size={16} color={theme.warning} />
+              <ThemedText style={styles.tourName}>Гиды без экскурсии</ThemedText>
+            </View>
+            <ThemedText style={[styles.busCount, { color: theme.warning }]}>
+              {unassignedGuides.length} гид.
+            </ThemedText>
           </View>
+          
+          {unassignedGuides.map(guide => (
+            <View key={guide.id}>
+              <View style={[styles.busRow, { backgroundColor: theme.backgroundTertiary }]}>
+                {/* Guide icon and name */}
+                <View style={[styles.busCell, { flex: 1 }]}>
+                  <Icon name="user" size={16} color={theme.warning} />
+                  <ThemedText style={styles.busNumber}>{guide.name}</ThemedText>
+                </View>
+                
+                {/* Tour selector with inline dropdown */}
+                <Pressable 
+                  style={[styles.tourCell, styles.tourCellEmpty, { flex: 1.5 }]}
+                  onPress={() => setExpandedBusDropdown(expandedBusDropdown === `guide-${guide.id}` ? null : `guide-${guide.id}`)}
+                >
+                  <Icon name="map-pin" size={14} color={theme.textSecondary} />
+                  <ThemedText style={[styles.tourCellText, { color: theme.textSecondary }]}>
+                    Выбрать экскурсию
+                  </ThemedText>
+                  <Icon name="chevron-down" size={12} color={theme.textSecondary} />
+                </Pressable>
+              </View>
+              
+              {/* Inline dropdown for guide */}
+              {expandedBusDropdown === `guide-${guide.id}` ? (
+                <View style={[styles.inlineDropdown, { backgroundColor: theme.backgroundTertiary }]}>
+                  {sortedTourTypes.map(t => (
+                    <Pressable
+                      key={t.id}
+                      style={styles.dropdownItem}
+                      onPress={() => {
+                        handleAssignGuideToTour(guide.id, t.id);
+                        setExpandedBusDropdown(null);
+                      }}
+                    >
+                      <ThemedText style={styles.dropdownItemText}>{t.name}</ThemedText>
+                    </Pressable>
+                  ))}
+                </View>
+              ) : null}
+            </View>
+          ))}
         </View>
       ) : null}
 
