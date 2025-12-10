@@ -647,7 +647,19 @@ export default function DispatchingScreen() {
             )}
           />
           <Pressable
-            style={[styles.addTabButton, { backgroundColor: theme.primary }]}
+            style={[styles.tabActionButton, { backgroundColor: theme.backgroundTertiary, marginRight: Spacing.xs }]}
+            onPress={() => {
+              hapticFeedback.medium();
+              const activeWebView = webViewRefs.current[activeTabId];
+              if (activeWebView) {
+                activeWebView.reload();
+              }
+            }}
+          >
+            <Icon name="refresh-cw" size={16} color={theme.text} />
+          </Pressable>
+          <Pressable
+            style={[styles.tabActionButton, { backgroundColor: theme.primary }]}
             onPress={addNewTab}
           >
             <Icon name="plus" size={16} color={theme.buttonText} />
@@ -1120,8 +1132,8 @@ const styles = StyleSheet.create({
     paddingRight: Spacing.xs,
     borderRadius: BorderRadius.sm,
     borderWidth: 1,
-    minWidth: 80,
-    maxWidth: 140,
+    minWidth: 120,
+    maxWidth: 200,
   },
   tabTitle: {
     fontSize: 13,
@@ -1132,9 +1144,9 @@ const styles = StyleSheet.create({
     padding: 4,
     marginLeft: 4,
   },
-  addTabButton: {
-    width: 28,
-    height: 28,
+  tabActionButton: {
+    width: 32,
+    height: 32,
     borderRadius: BorderRadius.sm,
     justifyContent: "center",
     alignItems: "center",
