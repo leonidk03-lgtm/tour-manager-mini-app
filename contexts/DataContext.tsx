@@ -238,6 +238,8 @@ interface DataContextType {
   notificationSettings: NotificationSettings;
   markNotificationAsRead: (id: string) => Promise<void>;
   markAllNotificationsAsRead: () => Promise<void>;
+  deleteNotification: (id: string) => Promise<void>;
+  clearAllNotifications: () => Promise<void>;
   updateNotificationSettings: (settings: Partial<NotificationSettings>) => Promise<void>;
   addNotification: (type: NotificationType, title: string, body?: string, data?: Record<string, unknown>) => Promise<void>;
   isLoading: boolean;
@@ -1121,6 +1123,40 @@ export function DataProvider({ children }: { children: ReactNode }) {
       setNotifications(prev => prev.map(n => ({ ...n, isRead: true })));
     } catch (err) {
       console.error('Error marking all notifications as read:', err);
+      throw err;
+    }
+  };
+
+  const deleteNotification = async (id: string) => {
+    try {
+      const { error } = await supabase
+        .from('notifications')
+        .delete()
+        .eq('id', id);
+
+      if (error) throw error;
+      
+      setNotifications(prev => prev.filter(n => n.id !== id));
+    } catch (err) {
+      console.error('Error deleting notification:', err);
+      throw err;
+    }
+  };
+
+  const clearAllNotifications = async () => {
+    if (!user) return;
+    
+    try {
+      const { error } = await supabase
+        .from('notifications')
+        .delete()
+        .eq('user_id', user.id);
+
+      if (error) throw error;
+      
+      setNotifications([]);
+    } catch (err) {
+      console.error('Error clearing all notifications:', err);
       throw err;
     }
   };
@@ -2159,6 +2195,8 @@ export function DataProvider({ children }: { children: ReactNode }) {
         notificationSettings,
         markNotificationAsRead,
         markAllNotificationsAsRead,
+        deleteNotification,
+        clearAllNotifications,
         updateNotificationSettings,
         addNotification,
         isLoading,
