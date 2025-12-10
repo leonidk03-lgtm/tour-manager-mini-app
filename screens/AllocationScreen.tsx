@@ -22,6 +22,7 @@ interface ParsedBus {
   assignedTourTypeId: string | null;
   assignedGuideName: string | null;
   isAdditional: boolean;
+  withBoat: boolean; // С теплоходом
 }
 
 interface ParsedGuide {
@@ -161,6 +162,7 @@ export default function AllocationScreen() {
       assignedTourTypeId: null,
       assignedGuideName: null,
       isAdditional: false,
+      withBoat: false,
     }));
   };
 
@@ -377,6 +379,7 @@ export default function AllocationScreen() {
             assignedTourTypeId: lineTour?.id || null,
             assignedGuideName: null,
             isAdditional: false,
+            withBoat: false,
           });
         });
       }
@@ -579,6 +582,14 @@ export default function AllocationScreen() {
       g.name === guideName ? { ...g, assignedBusId: null } : g
     ));
     
+    hapticFeedback.light();
+  };
+  
+  // Toggle boat flag for bus
+  const toggleBoat = (busId: string) => {
+    setBuses(prev => prev.map(b => 
+      b.id === busId ? { ...b, withBoat: !b.withBoat } : b
+    ));
     hapticFeedback.light();
   };
 
@@ -870,6 +881,21 @@ export default function AllocationScreen() {
                     <Icon name="chevron-down" size={12} color={theme.textSecondary} />
                   </Pressable>
                   
+                  {/* Boat toggle */}
+                  <Pressable
+                    style={[
+                      styles.boatToggle,
+                      { backgroundColor: bus.withBoat ? theme.primary + '30' : 'transparent' }
+                    ]}
+                    onPress={() => toggleBoat(bus.id)}
+                  >
+                    <Icon 
+                      name="anchor" 
+                      size={14} 
+                      color={bus.withBoat ? theme.primary : theme.textSecondary} 
+                    />
+                  </Pressable>
+                  
                   {/* Guide selector */}
                   <Pressable 
                     style={[
@@ -912,7 +938,7 @@ export default function AllocationScreen() {
                   <Pressable
                     style={styles.copyRowButton}
                     onPress={async () => {
-                      const text = `${busTourName}, автобус ${bus.busNumber}${bus.assignedGuideName ? `, гид ${bus.assignedGuideName}` : ''}`;
+                      const text = `${busTourName}${bus.withBoat ? ' (с теплоходом)' : ''}, автобус ${bus.busNumber}${bus.assignedGuideName ? `, гид ${bus.assignedGuideName}` : ''}`;
                       await Clipboard.setStringAsync(text);
                       hapticFeedback.light();
                     }}
@@ -1592,6 +1618,10 @@ const styles = StyleSheet.create({
   copyRowButton: {
     padding: Spacing.xs,
     marginLeft: Spacing.xs,
+  },
+  boatToggle: {
+    padding: Spacing.xs,
+    borderRadius: BorderRadius.sm,
   },
   guideCellText: {
     fontSize: 12,
