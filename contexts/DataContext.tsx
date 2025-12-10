@@ -1148,7 +1148,7 @@ export function DataProvider({ children }: { children: ReactNode }) {
     }
   };
 
-  const addNotification = async (
+  const addNotification = useCallback(async (
     type: NotificationType,
     title: string,
     body?: string,
@@ -1171,7 +1171,7 @@ export function DataProvider({ children }: { children: ReactNode }) {
     } catch (err) {
       console.error('Error adding notification:', err);
     }
-  };
+  }, [user]);
 
   const unreadNotificationCount = notifications.filter(n => !n.isRead).length;
 
@@ -1280,12 +1280,50 @@ export function DataProvider({ children }: { children: ReactNode }) {
       )
       .on(
         'postgres_changes',
-        { event: '*', schema: 'public', table: 'excursions' },
+        { event: 'INSERT', schema: 'public', table: 'excursions' },
+        async (payload) => {
+          await safeFetch(fetchExcursions);
+          // Create notification for new excursion (admins only, for other managers' excursions)
+          const newExcursion = payload.new as { manager_id?: string; manager_name?: string; tour_type_id?: string };
+          if (profile?.role === 'admin' && newExcursion.manager_id !== user?.id && notificationSettings.excursionsEnabled) {
+            const managerName = newExcursion.manager_name || 'Менеджер';
+            await addNotification('excursion', `Новая экскурсия от ${managerName}`, 'Добавлена новая экскурсия');
+          }
+        }
+      )
+      .on(
+        'postgres_changes',
+        { event: 'UPDATE', schema: 'public', table: 'excursions' },
         () => safeFetch(fetchExcursions)
       )
       .on(
         'postgres_changes',
-        { event: '*', schema: 'public', table: 'transactions' },
+        { event: 'DELETE', schema: 'public', table: 'excursions' },
+        () => safeFetch(fetchExcursions)
+      )
+      .on(
+        'postgres_changes',
+        { event: 'INSERT', schema: 'public', table: 'transactions' },
+        async (payload) => {
+          await safeFetch(fetchTransactions);
+          // Create notification for new transaction (admins only, for other managers' transactions)
+          const newTransaction = payload.new as { manager_id?: string; manager_name?: string; type?: string; amount?: number };
+          if (profile?.role === 'admin' && newTransaction.manager_id !== user?.id && notificationSettings.transactionsEnabled) {
+            const managerName = newTransaction.manager_name || 'Менеджер';
+            const type = newTransaction.type === 'income' ? 'Доход' : 'Расход';
+            const amount = newTransaction.amount || 0;
+            await addNotification('transaction', `${type}: ${amount} ₽`, `Добавлен ${managerName}`);
+          }
+        }
+      )
+      .on(
+        'postgres_changes',
+        { event: 'UPDATE', schema: 'public', table: 'transactions' },
+        () => safeFetch(fetchTransactions)
+      )
+      .on(
+        'postgres_changes',
+        { event: 'DELETE', schema: 'public', table: 'transactions' },
         () => safeFetch(fetchTransactions)
       )
       .on(
@@ -1325,7 +1363,26 @@ export function DataProvider({ children }: { children: ReactNode }) {
       )
       .on(
         'postgres_changes',
-        { event: '*', schema: 'public', table: 'chat_messages' },
+        { event: 'INSERT', schema: 'public', table: 'chat_messages' },
+        async (payload) => {
+          await safeFetch(fetchChatMessages);
+          // Create notification for new chat message from other users
+          const newMessage = payload.new as { sender_id?: string; sender_name?: string; message?: string };
+          if (newMessage.sender_id && newMessage.sender_id !== user?.id && notificationSettings.chatEnabled) {
+            const senderName = newMessage.sender_name || 'Пользователь';
+            const messagePreview = newMessage.message?.substring(0, 50) || '';
+            await addNotification('chat', `Новое сообщение от ${senderName}`, messagePreview);
+          }
+        }
+      )
+      .on(
+        'postgres_changes',
+        { event: 'UPDATE', schema: 'public', table: 'chat_messages' },
+        () => safeFetch(fetchChatMessages)
+      )
+      .on(
+        'postgres_changes',
+        { event: 'DELETE', schema: 'public', table: 'chat_messages' },
         () => safeFetch(fetchChatMessages)
       )
       .on(
@@ -1355,7 +1412,7 @@ export function DataProvider({ children }: { children: ReactNode }) {
     return () => {
       supabase.removeChannel(channel);
     };
-  }, [user, fetchTourTypes, fetchAdditionalServices, fetchRadioGuideKits, fetchRadioGuideAssignments, fetchEquipmentLosses, fetchExcursions, fetchTransactions, fetchActivities, fetchDeletedItems, fetchDispatchingNotes, fetchExcursionNotes, fetchChatMessages, fetchNotifications, safeFetch]);
+  }, [user, profile, notificationSettings, fetchTourTypes, fetchAdditionalServices, fetchRadioGuideKits, fetchRadioGuideAssignments, fetchEquipmentLosses, fetchExcursions, fetchTransactions, fetchActivities, fetchDeletedItems, fetchDispatchingNotes, fetchExcursionNotes, fetchChatMessages, fetchNotifications, safeFetch, addNotification]);
 
   const refreshPriceList = useCallback(async () => {
     await Promise.all([fetchTourTypes(), fetchAdditionalServices()]);
