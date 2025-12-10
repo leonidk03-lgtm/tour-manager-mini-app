@@ -45,6 +45,11 @@ export default function ExcursionsListScreen() {
   const [busNumber, setBusNumber] = useState("");
   const [receiversIssued, setReceiversIssued] = useState("");
   const [pendingExcursionId, setPendingExcursionId] = useState<string | null>(null);
+  const [lastExcursionParticipants, setLastExcursionParticipants] = useState(0);
+  
+  const calculateRoundedReceivers = (totalParticipants: number): number => {
+    return Math.ceil(totalParticipants / 5) * 5;
+  };
   
   const availableKits = radioGuideKits.filter(kit => kit.status === 'available');
   
@@ -82,6 +87,16 @@ export default function ExcursionsListScreen() {
       
       const tourType = tourTypes.find(t => t.id === excursion.tourTypeId);
       if (tourType?.hasRadioGuides && availableKits.length > 0) {
+        const totalParticipants = 
+          excursion.fullPriceCount + 
+          excursion.discountedCount + 
+          excursion.freeCount + 
+          excursion.tourPackageCount + 
+          excursion.byTourCount + 
+          excursion.paidCount;
+        setLastExcursionParticipants(totalParticipants);
+        const suggestedReceivers = calculateRoundedReceivers(totalParticipants);
+        setReceiversIssued(suggestedReceivers > 0 ? String(suggestedReceivers) : "");
         setShowRadioGuideModal(true);
       }
     } catch (err) {
@@ -97,6 +112,7 @@ export default function ExcursionsListScreen() {
     setBusNumber("");
     setReceiversIssued("");
     setPendingExcursionId(null);
+    setLastExcursionParticipants(0);
   };
   
   const handleIssueRadioGuide = async () => {
@@ -215,6 +231,11 @@ export default function ExcursionsListScreen() {
           placeholderTextColor={theme.textSecondary}
           keyboardType="number-pad"
         />
+        {lastExcursionParticipants > 0 ? (
+          <ThemedText style={[styles.radioGuideHint, { color: theme.textSecondary }]}>
+            Участников: {lastExcursionParticipants}, рекомендуется: {calculateRoundedReceivers(lastExcursionParticipants)}
+          </ThemedText>
+        ) : null}
       </View>
     </>
   );
@@ -797,6 +818,11 @@ const styles = StyleSheet.create({
     borderRadius: BorderRadius.sm,
     padding: Spacing.md,
     fontSize: 16,
+  },
+  radioGuideHint: {
+    fontSize: 12,
+    marginTop: Spacing.xs,
+    fontStyle: "italic",
   },
   radioGuideActions: {
     flexDirection: "row",
