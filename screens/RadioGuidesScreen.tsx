@@ -833,7 +833,12 @@ export default function RadioGuidesScreen() {
             </View>
             {selectedExcursion ? (
               <ThemedText style={{ color: theme.textSecondary, fontSize: 12, marginBottom: Spacing.sm }}>
-                Гиды для: {selectedExcursion.tourTypeName}
+                Гиды для: "{selectedExcursion.tourTypeName}" | Найдено: {filteredGuides.length}/{allocatedGuides.length}
+              </ThemedText>
+            ) : null}
+            {allocatedGuides.length > 0 && filteredGuides.length === 0 ? (
+              <ThemedText style={{ color: theme.warning, fontSize: 11, marginBottom: Spacing.sm }}>
+                Названия в распределении: {allocatedGuides.map(g => `"${g.tourName}"`).join(", ")}
               </ThemedText>
             ) : null}
             {allocatedGuides.length === 0 ? (
