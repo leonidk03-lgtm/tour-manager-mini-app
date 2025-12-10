@@ -1,5 +1,6 @@
-import { useState, useMemo } from "react";
+import { useState, useMemo, useEffect, useCallback } from "react";
 import { View, StyleSheet, TextInput, Pressable, Modal, FlatList, Alert, ScrollView, Platform, KeyboardAvoidingView } from "react-native";
+import AsyncStorage from "@react-native-async-storage/async-storage";
 import { Icon } from "@/components/Icon";
 import { ThemedText } from "@/components/ThemedText";
 import { ThemedView } from "@/components/ThemedView";
@@ -9,6 +10,10 @@ import { useTheme } from "@/hooks/useTheme";
 import { useData, TourType } from "@/contexts/DataContext";
 import { hapticFeedback } from "@/utils/haptics";
 import * as Clipboard from "expo-clipboard";
+
+const STORAGE_KEY_BUSES = "@allocation_buses";
+const STORAGE_KEY_GUIDES = "@allocation_guides";
+const STORAGE_KEY_DATE = "@allocation_date";
 
 interface ParsedBus {
   id: string;
@@ -44,6 +49,8 @@ export default function AllocationScreen() {
   const [selectedTourTypeId, setSelectedTourTypeId] = useState<string | null>(null);
   const [showTourPicker, setShowTourPicker] = useState(false);
   const [pickingFor, setPickingFor] = useState<{ type: 'bus' | 'guide'; id: string } | null>(null);
+  const [showGuidePicker, setShowGuidePicker] = useState(false);
+  const [pickingGuideForBus, setPickingGuideForBus] = useState<string | null>(null);
 
   // Group tour types by allocation group
   const tourGroups = useMemo(() => {
@@ -69,6 +76,54 @@ export default function AllocationScreen() {
 
     return result;
   }, [tourTypes]);
+
+  // Load saved data on mount
+  useEffect(() => {
+    const loadSavedData = async () => {
+      try {
+        const today = new Date().toISOString().split('T')[0];
+        const savedDate = await AsyncStorage.getItem(STORAGE_KEY_DATE);
+        
+        // Only load if data is from today
+        if (savedDate === today) {
+          const savedBuses = await AsyncStorage.getItem(STORAGE_KEY_BUSES);
+          const savedGuides = await AsyncStorage.getItem(STORAGE_KEY_GUIDES);
+          
+          if (savedBuses) {
+            setBuses(JSON.parse(savedBuses));
+          }
+          if (savedGuides) {
+            setGuides(JSON.parse(savedGuides));
+          }
+        } else {
+          // Clear old data
+          await AsyncStorage.multiRemove([STORAGE_KEY_BUSES, STORAGE_KEY_GUIDES, STORAGE_KEY_DATE]);
+        }
+      } catch (error) {
+        console.error('Error loading allocation data:', error);
+      }
+    };
+    
+    loadSavedData();
+  }, []);
+
+  // Save data when buses or guides change
+  useEffect(() => {
+    const saveData = async () => {
+      try {
+        const today = new Date().toISOString().split('T')[0];
+        await AsyncStorage.setItem(STORAGE_KEY_DATE, today);
+        await AsyncStorage.setItem(STORAGE_KEY_BUSES, JSON.stringify(buses));
+        await AsyncStorage.setItem(STORAGE_KEY_GUIDES, JSON.stringify(guides));
+      } catch (error) {
+        console.error('Error saving allocation data:', error);
+      }
+    };
+    
+    if (buses.length > 0 || guides.length > 0) {
+      saveData();
+    }
+  }, [buses, guides]);
 
   // Parse bus format: XXX-YY (number-seats)
   const parseBuses = (text: string): ParsedBus[] => {
@@ -340,6 +395,75 @@ export default function AllocationScreen() {
   const unassignedBuses = buses.filter(b => !b.assignedTourTypeId);
   const unassignedGuides = guides.filter(g => !g.assignedTourTypeId);
 
+  // Get sorted tour types by articleNumber for display
+  const sortedTourTypes = useMemo(() => {
+    return [...tourTypes]
+      .filter(t => t.isEnabled)
+      .sort((a, b) => {
+        const aNum = parseInt(a.articleNumber || '999', 10);
+        const bNum = parseInt(b.articleNumber || '999', 10);
+        return aNum - bNum;
+      });
+  }, [tourTypes]);
+
+  // Get available guides for a tour (unassigned or assigned to this tour)
+  const getAvailableGuidesForTour = (tourTypeId: string | null) => {
+    return guides.filter(g => 
+      !g.assignedBusId && // Not assigned to any bus
+      (!g.assignedTourTypeId || g.assignedTourTypeId === tourTypeId) // Unassigned or same tour
+    );
+  };
+
+  // Open guide picker for a bus
+  const openGuidePicker = (busId: string) => {
+    setPickingGuideForBus(busId);
+    setShowGuidePicker(true);
+  };
+
+  // Assign guide to bus
+  const assignGuideToBus = (busId: string, guideName: string) => {
+    const guide = guides.find(g => g.name === guideName);
+    const bus = buses.find(b => b.id === busId);
+    
+    if (bus) {
+      // Update bus with guide name
+      setBuses(prev => prev.map(b => 
+        b.id === busId ? { ...b, assignedGuideName: guideName } : b
+      ));
+      
+      // Update guide if found
+      if (guide) {
+        setGuides(prev => prev.map(g => 
+          g.name === guideName ? { ...g, assignedBusId: busId, assignedTourTypeId: bus.assignedTourTypeId } : g
+        ));
+      }
+    }
+    
+    setShowGuidePicker(false);
+    setPickingGuideForBus(null);
+    hapticFeedback.light();
+  };
+
+  // Remove guide from bus
+  const removeGuideFromBus = (busId: string) => {
+    const bus = buses.find(b => b.id === busId);
+    if (!bus || !bus.assignedGuideName) return;
+    
+    const guideName = bus.assignedGuideName;
+    
+    // Update bus
+    setBuses(prev => prev.map(b => 
+      b.id === busId ? { ...b, assignedGuideName: null } : b
+    ));
+    
+    // Update guide
+    setGuides(prev => prev.map(g => 
+      g.name === guideName ? { ...g, assignedBusId: null } : g
+    ));
+    
+    hapticFeedback.light();
+  };
+
   // Get buses and guides for a specific tour type
   const getBusesForTour = (tourTypeId: string) => 
     buses.filter(b => b.assignedTourTypeId === tourTypeId);
@@ -518,121 +642,185 @@ export default function AllocationScreen() {
         </View>
       ) : null}
 
-      {/* Unassigned section */}
-      {(unassignedBuses.length > 0 || unassignedGuides.length > 0) ? (
-        <View style={styles.section}>
-          <ThemedText style={styles.sectionTitle}>Не распределено</ThemedText>
-          
-          {unassignedBuses.length > 0 ? (
-            <View style={styles.itemsRow}>
-              <ThemedText style={[styles.itemsLabel, { color: theme.textSecondary }]}>Автобусы:</ThemedText>
-              <ScrollView horizontal showsHorizontalScrollIndicator={false}>
-                {unassignedBuses.map(bus => (
-                  <Pressable
-                    key={bus.id}
-                    style={[styles.chip, { backgroundColor: theme.backgroundTertiary }]}
-                    onPress={() => {
-                      setPickingFor({ type: 'bus', id: bus.id });
-                      setShowTourPicker(true);
-                    }}
-                  >
-                    <ThemedText style={styles.chipText}>{bus.busNumber}</ThemedText>
-                    <ThemedText style={[styles.chipSeats, { color: theme.textSecondary }]}>
-                      ({bus.seats})
-                    </ThemedText>
-                  </Pressable>
-                ))}
-              </ScrollView>
-            </View>
-          ) : null}
-
-          {unassignedGuides.length > 0 ? (
-            <View style={styles.itemsRow}>
-              <ThemedText style={[styles.itemsLabel, { color: theme.textSecondary }]}>Гиды:</ThemedText>
-              <ScrollView horizontal showsHorizontalScrollIndicator={false}>
-                {unassignedGuides.map(guide => (
-                  <Pressable
-                    key={guide.id}
-                    style={[styles.chip, { backgroundColor: theme.backgroundTertiary }]}
-                    onPress={() => {
-                      setPickingFor({ type: 'guide', id: guide.id });
-                      setShowTourPicker(true);
-                    }}
-                  >
-                    <ThemedText style={styles.chipText}>{guide.name}</ThemedText>
-                  </Pressable>
-                ))}
-              </ScrollView>
-            </View>
-          ) : null}
-        </View>
-      ) : null}
-
-      {/* Tour groups */}
-      {tourGroups.map(group => {
-        const groupBuses = group.tourTypes.flatMap(t => getBusesForTour(t.id));
-        const groupGuides = group.tourTypes.flatMap(t => getGuidesForTour(t.id));
-
-        if (groupBuses.length === 0 && groupGuides.length === 0) return null;
-
+      {/* Excursions sorted by article number */}
+      {sortedTourTypes.map(tour => {
+        const tourBuses = getBusesForTour(tour.id);
+        const tourGuides = getGuidesForTour(tour.id);
+        
+        if (tourBuses.length === 0) return null;
+        
         return (
-          <View key={group.groupName} style={[styles.tourCard, { backgroundColor: theme.backgroundSecondary }]}>
-            <ThemedText style={styles.tourCardTitle}>{group.groupName}</ThemedText>
-            
-            {group.tourTypes.length > 1 ? (
-              <View style={styles.subTours}>
-                {group.tourTypes.map(tour => {
-                  const tourBuses = getBusesForTour(tour.id);
-                  const tourGuides = getGuidesForTour(tour.id);
-                  
-                  return (
-                    <View key={tour.id} style={styles.subTour}>
-                      <ThemedText style={[styles.subTourName, { color: theme.primary }]}>
-                        {tour.name}
-                      </ThemedText>
-                      
-                      {tourBuses.map(bus => (
-                        <View key={bus.id} style={[styles.assignmentRow, { backgroundColor: theme.backgroundTertiary }]}>
-                          <ThemedText style={styles.busInfo}>
-                            Авт. {bus.busNumber} ({bus.seats})
-                          </ThemedText>
-                          <Icon name="arrow-right" size={14} color={theme.textSecondary} />
-                          <ThemedText style={[styles.guideName, { color: bus.assignedGuideName ? theme.text : theme.textSecondary }]}>
-                            {bus.assignedGuideName || 'Выбрать гида'}
-                          </ThemedText>
-                        </View>
-                      ))}
-
-                      {tourGuides.filter(g => !g.assignedBusId).map(guide => (
-                        <View key={guide.id} style={[styles.unassignedGuide, { borderColor: theme.warning }]}>
-                          <Icon name="user" size={14} color={theme.warning} />
-                          <ThemedText style={[styles.unassignedGuideName, { color: theme.warning }]}>
-                            {guide.name} (без автобуса)
-                          </ThemedText>
-                        </View>
-                      ))}
-                    </View>
-                  );
-                })}
+          <View key={tour.id} style={[styles.tourSection, { backgroundColor: theme.backgroundSecondary }]}>
+            {/* Tour header with article number */}
+            <View style={styles.tourHeader}>
+              <View style={styles.tourTitleRow}>
+                <View style={[styles.articleBadge, { backgroundColor: theme.primary }]}>
+                  <ThemedText style={[styles.articleNumber, { color: theme.buttonText }]}>
+                    {tour.articleNumber || '—'}
+                  </ThemedText>
+                </View>
+                <ThemedText style={styles.tourName}>{tour.name}</ThemedText>
               </View>
-            ) : (
-              <View style={styles.singleTour}>
-                {groupBuses.map(bus => (
-                  <View key={bus.id} style={[styles.assignmentRow, { backgroundColor: theme.backgroundTertiary }]}>
-                    <ThemedText style={styles.busInfo}>
-                      Авт. {bus.busNumber} ({bus.seats})
-                    </ThemedText>
-                    <Icon name="arrow-right" size={14} color={theme.textSecondary} />
-                    <ThemedText style={[styles.guideName, { color: bus.assignedGuideName ? theme.text : theme.textSecondary }]}>
-                      {bus.assignedGuideName || 'Выбрать гида'}
+              <ThemedText style={[styles.busCount, { color: theme.textSecondary }]}>
+                {tourBuses.length} авт.
+              </ThemedText>
+            </View>
+            
+            {/* Bus rows */}
+            {tourBuses.map(bus => (
+              <View key={bus.id} style={[styles.busRow, { backgroundColor: theme.backgroundTertiary }]}>
+                {/* Bus icon and number */}
+                <View style={styles.busCell}>
+                  <Icon name="truck" size={16} color={theme.primary} />
+                  <ThemedText style={styles.busNumber}>{bus.busNumber}</ThemedText>
+                  <ThemedText style={[styles.busSeats, { color: theme.textSecondary }]}>
+                    ({bus.seats})
+                  </ThemedText>
+                </View>
+                
+                {/* Excursion (already assigned, show name) */}
+                <View style={styles.tourCell}>
+                  <Icon name="map-pin" size={14} color={theme.success} />
+                  <ThemedText style={[styles.tourCellText, { color: theme.success }]} numberOfLines={1}>
+                    {tour.name.length > 12 ? tour.name.substring(0, 12) + '...' : tour.name}
+                  </ThemedText>
+                </View>
+                
+                {/* Guide selector */}
+                <Pressable 
+                  style={[
+                    styles.guideCell, 
+                    { backgroundColor: bus.assignedGuideName ? theme.backgroundSecondary : 'transparent' }
+                  ]}
+                  onPress={() => {
+                    if (bus.assignedGuideName) {
+                      Alert.alert(
+                        bus.assignedGuideName,
+                        "Что сделать?",
+                        [
+                          { text: "Отмена", style: "cancel" },
+                          { text: "Сменить", onPress: () => openGuidePicker(bus.id) },
+                          { text: "Убрать", style: "destructive", onPress: () => removeGuideFromBus(bus.id) },
+                        ]
+                      );
+                    } else {
+                      openGuidePicker(bus.id);
+                    }
+                  }}
+                >
+                  <Icon 
+                    name="user" 
+                    size={14} 
+                    color={bus.assignedGuideName ? theme.text : theme.textSecondary} 
+                  />
+                  <ThemedText 
+                    style={[
+                      styles.guideCellText, 
+                      { color: bus.assignedGuideName ? theme.text : theme.textSecondary }
+                    ]} 
+                    numberOfLines={1}
+                  >
+                    {bus.assignedGuideName || 'Выбрать'}
+                  </ThemedText>
+                </Pressable>
+              </View>
+            ))}
+            
+            {/* Unassigned guides for this tour */}
+            {tourGuides.filter(g => !g.assignedBusId).length > 0 ? (
+              <View style={styles.unassignedGuidesRow}>
+                <ThemedText style={[styles.unassignedLabel, { color: theme.warning }]}>
+                  Свободные гиды:
+                </ThemedText>
+                {tourGuides.filter(g => !g.assignedBusId).map(guide => (
+                  <View key={guide.id} style={[styles.freeGuideChip, { backgroundColor: theme.backgroundTertiary }]}>
+                    <Icon name="user" size={12} color={theme.warning} />
+                    <ThemedText style={[styles.freeGuideName, { color: theme.warning }]}>
+                      {guide.name}
                     </ThemedText>
                   </View>
                 ))}
               </View>
-            )}
+            ) : null}
           </View>
         );
       })}
+
+      {/* Unassigned section */}
+      {unassignedBuses.length > 0 ? (
+        <View style={[styles.tourSection, { backgroundColor: theme.backgroundSecondary, borderLeftColor: theme.warning, borderLeftWidth: 3 }]}>
+          <View style={styles.tourHeader}>
+            <View style={styles.tourTitleRow}>
+              <View style={[styles.articleBadge, { backgroundColor: theme.warning }]}>
+                <Icon name="alert-circle" size={14} color={theme.buttonText} />
+              </View>
+              <ThemedText style={styles.tourName}>Не назначено</ThemedText>
+            </View>
+            <ThemedText style={[styles.busCount, { color: theme.warning }]}>
+              {unassignedBuses.length} авт.
+            </ThemedText>
+          </View>
+          
+          {unassignedBuses.map(bus => (
+            <View key={bus.id} style={[styles.busRow, { backgroundColor: theme.backgroundTertiary }]}>
+              {/* Bus icon and number */}
+              <View style={styles.busCell}>
+                <Icon name="truck" size={16} color={theme.warning} />
+                <ThemedText style={styles.busNumber}>{bus.busNumber}</ThemedText>
+                <ThemedText style={[styles.busSeats, { color: theme.textSecondary }]}>
+                  ({bus.seats})
+                </ThemedText>
+              </View>
+              
+              {/* Excursion selector (empty - needs assignment) */}
+              <Pressable 
+                style={[styles.tourCell, styles.tourCellEmpty]}
+                onPress={() => {
+                  setPickingFor({ type: 'bus', id: bus.id });
+                  setShowTourPicker(true);
+                }}
+              >
+                <Icon name="map-pin" size={14} color={theme.textSecondary} />
+                <ThemedText style={[styles.tourCellText, { color: theme.textSecondary }]}>
+                  Выбрать
+                </ThemedText>
+              </Pressable>
+              
+              {/* Guide selector (disabled until tour assigned) */}
+              <View style={[styles.guideCell, { opacity: 0.5 }]}>
+                <Icon name="user" size={14} color={theme.textSecondary} />
+                <ThemedText style={[styles.guideCellText, { color: theme.textSecondary }]}>
+                  —
+                </ThemedText>
+              </View>
+            </View>
+          ))}
+        </View>
+      ) : null}
+
+      {/* Unassigned guides (not linked to any tour) */}
+      {unassignedGuides.length > 0 ? (
+        <View style={[styles.unassignedGuidesSection, { backgroundColor: theme.backgroundSecondary }]}>
+          <ThemedText style={[styles.sectionTitle, { color: theme.warning }]}>
+            Гиды без экскурсии ({unassignedGuides.length})
+          </ThemedText>
+          <View style={styles.guidesChipsRow}>
+            {unassignedGuides.map(guide => (
+              <Pressable
+                key={guide.id}
+                style={[styles.guideChip, { backgroundColor: theme.backgroundTertiary }]}
+                onPress={() => {
+                  setPickingFor({ type: 'guide', id: guide.id });
+                  setShowTourPicker(true);
+                }}
+              >
+                <Icon name="user" size={14} color={theme.warning} />
+                <ThemedText style={styles.guideChipText}>{guide.name}</ThemedText>
+              </Pressable>
+            ))}
+          </View>
+        </View>
+      ) : null}
 
       {/* Input Modal */}
       <Modal visible={showInputModal} animationType="slide" transparent>
@@ -713,6 +901,57 @@ export default function AllocationScreen() {
                 </Pressable>
               )}
             />
+          </ThemedView>
+        </View>
+      </Modal>
+
+      {/* Guide Picker Modal */}
+      <Modal visible={showGuidePicker} animationType="fade" transparent>
+        <View style={styles.modalOverlay}>
+          <Pressable style={styles.modalBackdrop} onPress={() => setShowGuidePicker(false)} />
+          <ThemedView style={[styles.pickerModal, { backgroundColor: theme.backgroundDefault }]}>
+            <View style={styles.modalHeader}>
+              <ThemedText style={styles.modalTitle}>Выберите гида</ThemedText>
+              <Pressable onPress={() => setShowGuidePicker(false)}>
+                <Icon name="x" size={24} color={theme.text} />
+              </Pressable>
+            </View>
+
+            {(() => {
+              const bus = buses.find(b => b.id === pickingGuideForBus);
+              const availableGuides = getAvailableGuidesForTour(bus?.assignedTourTypeId || null);
+              
+              if (availableGuides.length === 0) {
+                return (
+                  <View style={styles.emptyGuides}>
+                    <Icon name="user-x" size={32} color={theme.textSecondary} />
+                    <ThemedText style={[styles.emptyGuidesText, { color: theme.textSecondary }]}>
+                      Нет доступных гидов
+                    </ThemedText>
+                  </View>
+                );
+              }
+              
+              return (
+                <FlatList
+                  data={availableGuides}
+                  keyExtractor={item => item.id}
+                  renderItem={({ item }) => (
+                    <Pressable
+                      style={[styles.guideOption, { borderBottomColor: theme.border }]}
+                      onPress={() => {
+                        if (pickingGuideForBus) {
+                          assignGuideToBus(pickingGuideForBus, item.name);
+                        }
+                      }}
+                    >
+                      <Icon name="user" size={18} color={theme.primary} />
+                      <ThemedText style={styles.guideOptionText}>{item.name}</ThemedText>
+                    </Pressable>
+                  )}
+                />
+              );
+            })()}
           </ThemedView>
         </View>
       </Modal>
@@ -986,5 +1225,157 @@ const styles = StyleSheet.create({
   },
   copyOptionDesc: {
     fontSize: 12,
+  },
+  // New styles for updated UI
+  tourSection: {
+    padding: Spacing.md,
+    borderRadius: BorderRadius.lg,
+    marginBottom: Spacing.md,
+  },
+  tourHeader: {
+    flexDirection: "row",
+    justifyContent: "space-between",
+    alignItems: "center",
+    marginBottom: Spacing.sm,
+  },
+  tourTitleRow: {
+    flexDirection: "row",
+    alignItems: "center",
+    gap: Spacing.sm,
+    flex: 1,
+  },
+  articleBadge: {
+    width: 32,
+    height: 24,
+    borderRadius: BorderRadius.sm,
+    alignItems: "center",
+    justifyContent: "center",
+  },
+  articleNumber: {
+    fontSize: 12,
+    fontWeight: "700",
+  },
+  tourName: {
+    fontSize: 15,
+    fontWeight: "600",
+    flex: 1,
+  },
+  busCount: {
+    fontSize: 12,
+  },
+  busRow: {
+    flexDirection: "row",
+    alignItems: "center",
+    padding: Spacing.sm,
+    borderRadius: BorderRadius.md,
+    marginBottom: Spacing.xs,
+    gap: Spacing.sm,
+  },
+  busCell: {
+    flexDirection: "row",
+    alignItems: "center",
+    gap: 4,
+    minWidth: 90,
+  },
+  busNumber: {
+    fontSize: 14,
+    fontWeight: "600",
+  },
+  busSeats: {
+    fontSize: 12,
+  },
+  tourCell: {
+    flexDirection: "row",
+    alignItems: "center",
+    gap: 4,
+    flex: 1,
+  },
+  tourCellEmpty: {
+    borderWidth: 1,
+    borderColor: "rgba(128,128,128,0.3)",
+    borderStyle: "dashed",
+    borderRadius: BorderRadius.sm,
+    paddingHorizontal: Spacing.xs,
+    paddingVertical: 2,
+  },
+  tourCellText: {
+    fontSize: 12,
+  },
+  guideCell: {
+    flexDirection: "row",
+    alignItems: "center",
+    gap: 4,
+    paddingHorizontal: Spacing.xs,
+    paddingVertical: 4,
+    borderRadius: BorderRadius.sm,
+    minWidth: 80,
+  },
+  guideCellText: {
+    fontSize: 12,
+    flex: 1,
+  },
+  unassignedGuidesRow: {
+    flexDirection: "row",
+    flexWrap: "wrap",
+    alignItems: "center",
+    gap: Spacing.xs,
+    marginTop: Spacing.xs,
+    paddingTop: Spacing.xs,
+    borderTopWidth: 1,
+    borderTopColor: "rgba(128,128,128,0.2)",
+  },
+  unassignedLabel: {
+    fontSize: 11,
+    marginRight: Spacing.xs,
+  },
+  freeGuideChip: {
+    flexDirection: "row",
+    alignItems: "center",
+    gap: 4,
+    paddingHorizontal: Spacing.xs,
+    paddingVertical: 2,
+    borderRadius: BorderRadius.sm,
+  },
+  freeGuideName: {
+    fontSize: 11,
+  },
+  unassignedGuidesSection: {
+    padding: Spacing.md,
+    borderRadius: BorderRadius.lg,
+    marginBottom: Spacing.md,
+  },
+  guidesChipsRow: {
+    flexDirection: "row",
+    flexWrap: "wrap",
+    gap: Spacing.xs,
+  },
+  guideChip: {
+    flexDirection: "row",
+    alignItems: "center",
+    gap: 4,
+    paddingHorizontal: Spacing.sm,
+    paddingVertical: Spacing.xs,
+    borderRadius: BorderRadius.md,
+  },
+  guideChipText: {
+    fontSize: 13,
+  },
+  emptyGuides: {
+    alignItems: "center",
+    paddingVertical: Spacing.xl,
+    gap: Spacing.sm,
+  },
+  emptyGuidesText: {
+    fontSize: 14,
+  },
+  guideOption: {
+    flexDirection: "row",
+    alignItems: "center",
+    gap: Spacing.md,
+    paddingVertical: Spacing.md,
+    borderBottomWidth: 1,
+  },
+  guideOptionText: {
+    fontSize: 16,
   },
 });
