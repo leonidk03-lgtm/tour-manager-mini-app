@@ -156,6 +156,14 @@ export interface EquipmentLoss {
   bagNumber?: number;
 }
 
+export interface ChatMessage {
+  id: string;
+  senderId: string;
+  senderName: string;
+  message: string;
+  createdAt: string;
+}
+
 interface DataContextType {
   tourTypes: TourType[];
   addTourType: (tourType: Omit<TourType, 'id'>) => Promise<void>;
@@ -203,6 +211,9 @@ interface DataContextType {
   addExcursionNote: (excursionId: string, text: string) => Promise<void>;
   deleteExcursionNote: (id: string) => Promise<void>;
   getExcursionNotes: (excursionId: string) => ExcursionNote[];
+  chatMessages: ChatMessage[];
+  sendChatMessage: (message: string) => Promise<void>;
+  clearChatHistory: () => Promise<void>;
   isLoading: boolean;
   isOffline: boolean;
   networkError: string | null;
@@ -228,6 +239,7 @@ export function DataProvider({ children }: { children: ReactNode }) {
   const [radioGuidePrice, setRadioGuidePrice] = useState<number>(80);
   const [dispatchingNotes, setDispatchingNotes] = useState<DispatchingNote[]>([]);
   const [excursionNotes, setExcursionNotes] = useState<ExcursionNote[]>([]);
+  const [chatMessages, setChatMessages] = useState<ChatMessage[]>([]);
   const [isLoading, setIsLoading] = useState(true);
   const [networkError, setNetworkError] = useState<string | null>(null);
   const [isOffline, setIsOffline] = useState(false);
@@ -911,6 +923,71 @@ export function DataProvider({ children }: { children: ReactNode }) {
     return excursionNotes.filter(n => n.excursionId === excursionId);
   }, [excursionNotes]);
 
+  const fetchChatMessages = useCallback(async (): Promise<void> => {
+    if (!user) return;
+    
+    try {
+      const { data, error } = await supabase
+        .from('chat_messages')
+        .select('*')
+        .order('created_at', { ascending: true });
+
+      if (error) {
+        if (error.code === 'PGRST205' || error.code === '42P01') {
+          return;
+        }
+        throw error;
+      }
+
+      const messages: ChatMessage[] = (data || []).map(m => ({
+        id: m.id,
+        senderId: m.sender_id,
+        senderName: m.sender_name,
+        message: m.message,
+        createdAt: m.created_at,
+      }));
+      
+      setChatMessages(messages);
+    } catch (err) {
+      console.warn('Failed to fetch chat messages from server');
+    }
+  }, [user]);
+
+  const sendChatMessage = async (message: string) => {
+    if (!user || !profile) throw new Error('Not authenticated');
+    
+    try {
+      const { error } = await supabase
+        .from('chat_messages')
+        .insert({
+          sender_id: user.id,
+          sender_name: profile.display_name,
+          message,
+        });
+
+      if (error) throw error;
+    } catch (err) {
+      console.error('Error sending chat message:', err);
+      throw err;
+    }
+  };
+
+  const clearChatHistory = async () => {
+    try {
+      const { error } = await supabase
+        .from('chat_messages')
+        .delete()
+        .neq('id', '00000000-0000-0000-0000-000000000000'); // Delete all
+
+      if (error) throw error;
+      
+      setChatMessages([]);
+    } catch (err) {
+      console.error('Error clearing chat history:', err);
+      throw err;
+    }
+  };
+
   const refreshData = useCallback(async () => {
     setIsLoading(true);
     try {
@@ -926,6 +1003,7 @@ export function DataProvider({ children }: { children: ReactNode }) {
         fetchEquipmentLosses(),
         fetchDispatchingNotes(),
         fetchExcursionNotes(),
+        fetchChatMessages(),
       ]);
       
       const hasErrors = results.some(r => r.status === 'rejected');
@@ -981,6 +1059,7 @@ export function DataProvider({ children }: { children: ReactNode }) {
         fetchDeletedItems(),
         fetchDispatchingNotes(),
         fetchExcursionNotes(),
+        fetchChatMessages(),
       ]).then(() => {
         setIsOffline(false);
         setNetworkError(null);
@@ -993,7 +1072,7 @@ export function DataProvider({ children }: { children: ReactNode }) {
     } else {
       setIsLoading(false);
     }
-  }, [user, profile, fetchExcursions, fetchTransactions, fetchActivities, fetchDeletedItems, fetchDispatchingNotes, fetchExcursionNotes]);
+  }, [user, profile, fetchExcursions, fetchTransactions, fetchActivities, fetchDeletedItems, fetchDispatchingNotes, fetchExcursionNotes, fetchChatMessages]);
 
   // Supabase Realtime subscriptions for live data sync
   useEffect(() => {
@@ -1055,6 +1134,11 @@ export function DataProvider({ children }: { children: ReactNode }) {
         { event: '*', schema: 'public', table: 'excursion_notes' },
         () => safeFetch(fetchExcursionNotes)
       )
+      .on(
+        'postgres_changes',
+        { event: '*', schema: 'public', table: 'chat_messages' },
+        () => safeFetch(fetchChatMessages)
+      )
       .subscribe((status) => {
         if (status === 'CHANNEL_ERROR') {
           console.warn('Supabase Realtime channel error - will retry');
@@ -1077,7 +1161,7 @@ export function DataProvider({ children }: { children: ReactNode }) {
     return () => {
       supabase.removeChannel(channel);
     };
-  }, [user, fetchTourTypes, fetchAdditionalServices, fetchRadioGuideKits, fetchRadioGuideAssignments, fetchEquipmentLosses, fetchExcursions, fetchTransactions, fetchActivities, fetchDeletedItems, fetchDispatchingNotes, fetchExcursionNotes, safeFetch]);
+  }, [user, fetchTourTypes, fetchAdditionalServices, fetchRadioGuideKits, fetchRadioGuideAssignments, fetchEquipmentLosses, fetchExcursions, fetchTransactions, fetchActivities, fetchDeletedItems, fetchDispatchingNotes, fetchExcursionNotes, fetchChatMessages, safeFetch]);
 
   const refreshPriceList = useCallback(async () => {
     await Promise.all([fetchTourTypes(), fetchAdditionalServices()]);
@@ -1816,6 +1900,9 @@ export function DataProvider({ children }: { children: ReactNode }) {
         addExcursionNote,
         deleteExcursionNote,
         getExcursionNotes,
+        chatMessages,
+        sendChatMessage,
+        clearChatHistory,
         isLoading,
         isOffline,
         networkError,
