@@ -813,7 +813,8 @@ export default function AllocationScreen() {
           }
         });
         
-        if (groupBuses.length === 0) return null;
+        // Show section if has buses OR guides
+        if (groupBuses.length === 0 && groupGuides.length === 0) return null;
         
         // Get selected bus for dropdown
         const selectedBus = expandedBusDropdown ? buses.find(b => b.id === expandedBusDropdown) : null;
@@ -827,9 +828,18 @@ export default function AllocationScreen() {
                 <Icon name="map" size={16} color={theme.primary} />
                 <ThemedText style={styles.tourName}>{group.groupName}</ThemedText>
               </View>
-              <ThemedText style={[styles.busCount, { color: theme.textSecondary }]}>
-                {groupBuses.length} авт.
-              </ThemedText>
+              <View style={{ flexDirection: 'row', gap: 8 }}>
+                {groupBuses.length > 0 ? (
+                  <ThemedText style={[styles.busCount, { color: theme.textSecondary }]}>
+                    {groupBuses.length} авт.
+                  </ThemedText>
+                ) : null}
+                {groupGuides.length > 0 ? (
+                  <ThemedText style={[styles.busCount, { color: theme.textSecondary }]}>
+                    {groupGuides.length} гид.
+                  </ThemedText>
+                ) : null}
+              </View>
             </View>
             
             {/* Bus rows */}
