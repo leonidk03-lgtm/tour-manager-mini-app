@@ -790,6 +790,14 @@ export default function RadioGuidesScreen() {
     if (modalMode === "issue") {
       // Show guide picker list
       if (showGuidePicker) {
+        // Filter guides by selected excursion's tourTypeId
+        const selectedExcursion = selectedExcursionId 
+          ? todayExcursions.find(e => e.id === selectedExcursionId) 
+          : null;
+        const filteredGuides = selectedExcursion
+          ? allocatedGuides.filter(g => g.assignedTourTypeId === selectedExcursion.tourTypeId)
+          : allocatedGuides;
+
         return (
           <View style={styles.form}>
             <View style={styles.guidePickerHeader}>
@@ -802,12 +810,21 @@ export default function RadioGuidesScreen() {
               </Pressable>
               <ThemedText style={styles.guidePickerTitle}>Выбрать гида</ThemedText>
             </View>
+            {selectedExcursion ? (
+              <ThemedText style={{ color: theme.textSecondary, fontSize: 12, marginBottom: Spacing.sm }}>
+                Гиды для: {selectedExcursion.tourTypeName}
+              </ThemedText>
+            ) : null}
             {allocatedGuides.length === 0 ? (
               <ThemedText style={{ color: theme.textSecondary, textAlign: "center", padding: Spacing.xl }}>
                 Нет данных распределения на сегодня
               </ThemedText>
+            ) : filteredGuides.length === 0 ? (
+              <ThemedText style={{ color: theme.textSecondary, textAlign: "center", padding: Spacing.xl }}>
+                Нет гидов для этой экскурсии
+              </ThemedText>
             ) : (
-              allocatedGuides.map((guide) => (
+              filteredGuides.map((guide) => (
                 <Pressable
                   key={guide.id}
                   onPress={() => {
