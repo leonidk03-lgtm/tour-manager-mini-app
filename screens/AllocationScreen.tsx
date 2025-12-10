@@ -131,27 +131,41 @@ export default function AllocationScreen() {
     return guides;
   };
 
-  // Common keywords for auto-detection
-  const tourKeywords: { [key: string]: string[] } = {
-    'свияжск': ['свияжск'],
-    'раифа': ['раифа', 'раифский'],
-    'болгар': ['болгар', 'болгары'],
-    'елабуга': ['елабуга'],
-    'город': ['город', 'обзорная', 'казан'],
-    'ночь': ['ночь', 'ночная', 'вечер'],
-    'кремль': ['кремль'],
-    'йошкар': ['йошкар', 'ола'],
-  };
-
-  // Match tour type by logist short name or keywords
+  // Match tour type by finding keyword in text and matching to tour
   const matchTourType = (text: string): TourType | null => {
     const lowerText = text.toLowerCase().trim();
+    
+    // Extract potential tour keywords from text
+    const foundKeywords: { keyword: string; position: number }[] = [];
+    
+    // Key destination words to look for
+    const destinationWords = [
+      'свияжск', 'раифа', 'болгар', 'елабуга', 'чистополь', 
+      'йошкар', 'кремль', 'город', 'ночь', 'вечер', 'обзорная'
+    ];
+    
+    // Find which keywords are in the text and their positions
+    destinationWords.forEach(kw => {
+      const pos = lowerText.indexOf(kw);
+      if (pos !== -1) {
+        foundKeywords.push({ keyword: kw, position: pos });
+      }
+    });
+    
+    // Sort by position - use the FIRST mentioned keyword
+    foundKeywords.sort((a, b) => a.position - b.position);
+    
+    if (foundKeywords.length === 0) {
+      return null;
+    }
+    
+    const primaryKeyword = foundKeywords[0].keyword;
     
     // First try logistShortName (most accurate)
     for (const tour of tourTypes.filter(t => t.isEnabled)) {
       if (tour.logistShortName) {
         const shortNames = tour.logistShortName.split(',').map(s => s.trim().toLowerCase());
-        if (shortNames.some(name => name && lowerText.includes(name))) {
+        if (shortNames.some(name => name && name.includes(primaryKeyword))) {
           return tour;
         }
       }
@@ -161,29 +175,16 @@ export default function AllocationScreen() {
     for (const tour of tourTypes.filter(t => t.isEnabled)) {
       if (tour.allocationGroup) {
         const groupLower = tour.allocationGroup.toLowerCase();
-        if (lowerText.includes(groupLower)) {
+        if (groupLower.includes(primaryKeyword)) {
           return tour;
         }
       }
     }
     
-    // Then try keywords from tour name
+    // Then try tour name
     for (const tour of tourTypes.filter(t => t.isEnabled)) {
       const tourNameLower = tour.name.toLowerCase();
-      // Check each keyword set
-      for (const [key, keywords] of Object.entries(tourKeywords)) {
-        if (tourNameLower.includes(key)) {
-          if (keywords.some(kw => lowerText.includes(kw))) {
-            return tour;
-          }
-        }
-      }
-    }
-    
-    // Finally try partial name match
-    for (const tour of tourTypes.filter(t => t.isEnabled)) {
-      const nameParts = tour.name.toLowerCase().split(/\s+/);
-      if (nameParts.some(part => part.length > 4 && lowerText.includes(part))) {
+      if (tourNameLower.includes(primaryKeyword)) {
         return tour;
       }
     }
