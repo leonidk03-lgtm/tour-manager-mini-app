@@ -53,6 +53,20 @@ export default function AllocationScreen() {
   const [pickingGuideForBus, setPickingGuideForBus] = useState<string | null>(null);
   const [expandedBusDropdown, setExpandedBusDropdown] = useState<string | null>(null); // For inline tour picker
 
+  // Helper: get allocation group key for a tour (allocationGroup or tourId as fallback)
+  const getAllocationKey = (tourTypeId: string | null): string | null => {
+    if (!tourTypeId) return null;
+    const tour = tourTypes.find(t => t.id === tourTypeId);
+    if (!tour) return tourTypeId;
+    return tour.allocationGroup || tourTypeId;
+  };
+
+  // Helper: check if two tourTypeIds belong to same allocation group
+  const isSameAllocationGroup = (tourId1: string | null, tourId2: string | null): boolean => {
+    if (!tourId1 || !tourId2) return false;
+    return getAllocationKey(tourId1) === getAllocationKey(tourId2);
+  };
+
   // Group tour types by allocation group
   const tourGroups = useMemo(() => {
     const groups: Map<string, TourType[]> = new Map();
@@ -362,33 +376,36 @@ export default function AllocationScreen() {
     const { guides: allGuides, assignments } = parseGuidesFromLines(lines);
     
     // Third pass: auto-assign guides to buses when counts match (1:1)
-    const tourBusCounts = new Map<string, ParsedBus[]>();
-    const tourGuideCounts = new Map<string, ParsedGuide[]>();
+    // Group by allocation group, not by exact tourTypeId
+    const groupBusCounts = new Map<string, ParsedBus[]>();
+    const groupGuideCounts = new Map<string, ParsedGuide[]>();
     
     allBuses.forEach(bus => {
       if (bus.assignedTourTypeId) {
-        const existing = tourBusCounts.get(bus.assignedTourTypeId) || [];
+        const groupKey = getAllocationKey(bus.assignedTourTypeId) || bus.assignedTourTypeId;
+        const existing = groupBusCounts.get(groupKey) || [];
         existing.push(bus);
-        tourBusCounts.set(bus.assignedTourTypeId, existing);
+        groupBusCounts.set(groupKey, existing);
       }
     });
     
     allGuides.forEach(guide => {
       if (guide.assignedTourTypeId) {
-        const existing = tourGuideCounts.get(guide.assignedTourTypeId) || [];
+        const groupKey = getAllocationKey(guide.assignedTourTypeId) || guide.assignedTourTypeId;
+        const existing = groupGuideCounts.get(groupKey) || [];
         existing.push(guide);
-        tourGuideCounts.set(guide.assignedTourTypeId, existing);
+        groupGuideCounts.set(groupKey, existing);
       }
     });
     
-    // Auto-pair when counts match
-    tourBusCounts.forEach((tourBuses, tourId) => {
-      const tourGuides = tourGuideCounts.get(tourId) || [];
-      if (tourBuses.length === tourGuides.length && tourBuses.length > 0) {
-        tourBuses.forEach((bus, idx) => {
-          if (tourGuides[idx]) {
-            bus.assignedGuideName = tourGuides[idx].name;
-            tourGuides[idx].assignedBusId = bus.id;
+    // Auto-pair when counts match within allocation group
+    groupBusCounts.forEach((groupBuses, groupKey) => {
+      const groupGuides = groupGuideCounts.get(groupKey) || [];
+      if (groupBuses.length === groupGuides.length && groupBuses.length > 0) {
+        groupBuses.forEach((bus, idx) => {
+          if (groupGuides[idx]) {
+            bus.assignedGuideName = groupGuides[idx].name;
+            groupGuides[idx].assignedBusId = bus.id;
           }
         });
       }
@@ -496,12 +513,12 @@ export default function AllocationScreen() {
       });
   }, [tourTypes]);
 
-  // Get available guides for a tour (only guides assigned to this specific tour)
+  // Get available guides for a tour (guides in the same allocation group)
   const getAvailableGuidesForTour = (tourTypeId: string | null) => {
     if (!tourTypeId) return [];
     return guides.filter(g => 
       !g.assignedBusId && // Not assigned to any bus
-      g.assignedTourTypeId === tourTypeId // Only guides for this specific tour
+      isSameAllocationGroup(g.assignedTourTypeId, tourTypeId) // Same allocation group
     );
   };
 
@@ -557,9 +574,9 @@ export default function AllocationScreen() {
 
   // Get buses and guides for a specific tour type
   const getBusesForTour = (tourTypeId: string) => 
-    buses.filter(b => b.assignedTourTypeId === tourTypeId);
+    buses.filter(b => isSameAllocationGroup(b.assignedTourTypeId, tourTypeId));
   const getGuidesForTour = (tourTypeId: string) => 
-    guides.filter(g => g.assignedTourTypeId === tourTypeId);
+    guides.filter(g => isSameAllocationGroup(g.assignedTourTypeId, tourTypeId));
 
   // Auto-assign 1:1 matches
   const handleAutoAssign = () => {
