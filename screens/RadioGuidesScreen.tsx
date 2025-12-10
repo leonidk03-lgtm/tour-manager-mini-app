@@ -800,64 +800,8 @@ export default function RadioGuidesScreen() {
     if (modalMode === "issue") {
       // Show guide picker list
       if (showGuidePicker) {
-        // Filter guides by selected excursion's tourTypeId or allocationGroup
-        const selectedExcursion = selectedExcursionId 
-          ? todayExcursions.find(e => e.id === selectedExcursionId) 
-          : null;
-        
-        // Get allocation group for tour type
-        const getAllocationGroup = (tourTypeId: string | null): string | null => {
-          if (!tourTypeId) return null;
-          const tour = tourTypes.find(t => t.id === tourTypeId);
-          return tour?.allocationGroup || null;
-        };
-        
-        // Get main keyword from tour name (first significant word)
-        const getTourKeyword = (tourTypeId: string | null): string | null => {
-          if (!tourTypeId) return null;
-          const tour = tourTypes.find(t => t.id === tourTypeId);
-          if (!tour) return null;
-          const name = tour.name.toLowerCase();
-          // Extract first keyword that identifies the tour
-          if (name.includes('свияжск')) return 'свияжск';
-          if (name.includes('раиф')) return 'раифа';
-          if (name.includes('болгар') || name.includes('булгар')) return 'болгар';
-          if (name.includes('йошкар')) return 'йошкар';
-          if (name.includes('озер') || name.includes('голуб')) return 'озера';
-          if (name.includes('обзор') || name.includes('город')) return 'город';
-          return tour.id; // fallback to ID
-        };
-        
-        // Check if two tour types are in the same allocation group
-        const isSameAllocationGroup = (tourId1: string | null, tourId2: string | null): boolean => {
-          if (!tourId1 || !tourId2) return false;
-          if (tourId1 === tourId2) return true;
-          // Check allocationGroup first
-          const group1 = getAllocationGroup(tourId1);
-          const group2 = getAllocationGroup(tourId2);
-          if (group1 && group2 && group1 === group2) return true;
-          // Fallback: check keyword match
-          const keyword1 = getTourKeyword(tourId1);
-          const keyword2 = getTourKeyword(tourId2);
-          return keyword1 !== null && keyword1 === keyword2;
-        };
-        
-        console.log("[RadioGuides] Filter debug:", {
-          selectedExcursionId,
-          selectedTourTypeId: selectedExcursion?.tourTypeId,
-          selectedTourName: selectedExcursion?.tourTypeName,
-          selectedAllocationGroup: getAllocationGroup(selectedExcursion?.tourTypeId || null),
-          guidesWithTourIds: allocatedGuides.map(g => ({ 
-            name: g.name, 
-            tourId: g.assignedTourTypeId,
-            group: getAllocationGroup(g.assignedTourTypeId)
-          }))
-        });
-        
-        // Filter by allocation group (not exact tourTypeId)
-        const filteredGuides = selectedExcursion
-          ? allocatedGuides.filter(g => isSameAllocationGroup(g.assignedTourTypeId, selectedExcursion.tourTypeId))
-          : allocatedGuides;
+        // Show all guides from allocation (no filtering by excursion type)
+        // Guides are already filtered by active assignments in allocatedGuides
 
         return (
           <View style={styles.form}>
@@ -871,21 +815,12 @@ export default function RadioGuidesScreen() {
               </Pressable>
               <ThemedText style={styles.guidePickerTitle}>Выбрать гида</ThemedText>
             </View>
-            {selectedExcursion ? (
-              <ThemedText style={{ color: theme.textSecondary, fontSize: 12, marginBottom: Spacing.sm }}>
-                Гиды для: {selectedExcursion.tourTypeName}
-              </ThemedText>
-            ) : null}
             {allocatedGuides.length === 0 ? (
               <ThemedText style={{ color: theme.textSecondary, textAlign: "center", padding: Spacing.xl }}>
                 Нет данных распределения на сегодня
               </ThemedText>
-            ) : filteredGuides.length === 0 ? (
-              <ThemedText style={{ color: theme.textSecondary, textAlign: "center", padding: Spacing.xl }}>
-                Нет гидов для этой экскурсии
-              </ThemedText>
             ) : (
-              filteredGuides.map((guide) => (
+              allocatedGuides.map((guide) => (
                 <Pressable
                   key={guide.id}
                   onPress={() => {
@@ -893,15 +828,18 @@ export default function RadioGuidesScreen() {
                     if (guide.busNumber) {
                       setBusNumber(guide.busNumber);
                     }
-                    // Auto-fill receivers count from excursion participants (rounded up to nearest 5)
-                    if (selectedExcursion) {
+                    // Auto-fill receivers count from selected excursion participants
+                    const selectedExc = selectedExcursionId 
+                      ? todayExcursions.find(e => e.id === selectedExcursionId) 
+                      : null;
+                    if (selectedExc) {
                       const totalParticipants = 
-                        (selectedExcursion.fullPriceCount || 0) + 
-                        (selectedExcursion.discountedCount || 0) + 
-                        (selectedExcursion.freeCount || 0) + 
-                        (selectedExcursion.tourPackageCount || 0) + 
-                        (selectedExcursion.byTourCount || 0) + 
-                        (selectedExcursion.paidCount || 0);
+                        (selectedExc.fullPriceCount || 0) + 
+                        (selectedExc.discountedCount || 0) + 
+                        (selectedExc.freeCount || 0) + 
+                        (selectedExc.tourPackageCount || 0) + 
+                        (selectedExc.byTourCount || 0) + 
+                        (selectedExc.paidCount || 0);
                       if (totalParticipants > 0) {
                         // Round up to nearest 5, and add 5 if already divisible by 5
                         const roundedUp = totalParticipants % 5 === 0 
