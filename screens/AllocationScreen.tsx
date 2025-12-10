@@ -53,6 +53,8 @@ export default function AllocationScreen() {
   const [showGuidePicker, setShowGuidePicker] = useState(false);
   const [pickingGuideForBus, setPickingGuideForBus] = useState<string | null>(null);
   const [expandedBusDropdown, setExpandedBusDropdown] = useState<string | null>(null); // For inline tour picker
+  const [showBusModal, setShowBusModal] = useState(false);
+  const [selectedBusId, setSelectedBusId] = useState<string | null>(null);
 
   // Helper: get allocation group key for a tour (allocationGroup or tourId as fallback)
   const getAllocationKey = (tourTypeId: string | null): string | null => {
@@ -1012,25 +1014,33 @@ export default function AllocationScreen() {
               
               return (
                 <View key={bus.id} style={[styles.busRow, { backgroundColor: theme.backgroundTertiary }]}>
-                  {/* Bus icon and number */}
-                  <View style={styles.busCell}>
+                  {/* Bus icon and number - pressable to open modal */}
+                  <Pressable 
+                    style={styles.busCell}
+                    onPress={() => {
+                      setSelectedBusId(bus.id);
+                      setShowBusModal(true);
+                    }}
+                  >
                     <Icon name="truck" size={16} color={theme.primary} />
                     <ThemedText style={styles.busNumber}>{bus.busNumber}</ThemedText>
                     <ThemedText style={[styles.busSeats, { color: theme.textSecondary }]}>
                       ({bus.seats})
                     </ThemedText>
-                  </View>
+                  </Pressable>
                   
-                  {/* Excursion - pressable to change (shows only group tours) */}
+                  {/* Excursion display (read-only, managed via bus modal) */}
                   <Pressable 
                     style={styles.tourCell}
-                    onPress={() => setExpandedBusDropdown(expandedBusDropdown === bus.id ? null : bus.id)}
+                    onPress={() => {
+                      setSelectedBusId(bus.id);
+                      setShowBusModal(true);
+                    }}
                   >
                     <Icon name="map-pin" size={14} color={theme.success} />
                     <ThemedText style={[styles.tourCellText, { color: theme.success }]} numberOfLines={1}>
                       {busTourName.length > 12 ? busTourName.substring(0, 12) + '...' : busTourName}
                     </ThemedText>
-                    <Icon name="chevron-down" size={12} color={theme.textSecondary} />
                   </Pressable>
                   
                   {/* Boat toggle - letter T for Теплоход */}
@@ -1101,56 +1111,9 @@ export default function AllocationScreen() {
                     <Icon name="copy" size={16} color={theme.textSecondary} />
                   </Pressable>
                   
-                  {/* Delete button */}
-                  <Pressable
-                    style={styles.deleteRowButton}
-                    onPress={() => {
-                      Alert.alert(
-                        "Удалить автобус?",
-                        `${bus.busNumber} будет удалён из распределения`,
-                        [
-                          { text: "Отмена", style: "cancel" },
-                          { text: "Удалить", style: "destructive", onPress: () => deleteBus(bus.id) },
-                        ]
-                      );
-                    }}
-                  >
-                    <Icon name="x" size={16} color={theme.error} />
-                  </Pressable>
                 </View>
               );
             })}
-            
-            {/* Inline dropdown for tour selection - ONLY tours from this group */}
-            {groupBuses.some(b => expandedBusDropdown === b.id) ? (
-              <View style={[styles.inlineDropdown, { backgroundColor: theme.backgroundTertiary }]}>
-                {group.tourTypes.map(t => (
-                  <Pressable
-                    key={t.id}
-                    style={[
-                      styles.dropdownItem,
-                      selectedBusTour?.id === t.id && { backgroundColor: theme.primary + '20' }
-                    ]}
-                    onPress={() => {
-                      if (expandedBusDropdown) {
-                        handleAssignBusToTour(expandedBusDropdown, t.id);
-                        setExpandedBusDropdown(null);
-                      }
-                    }}
-                  >
-                    <ThemedText style={[
-                      styles.dropdownItemText,
-                      selectedBusTour?.id === t.id && { color: theme.primary, fontWeight: '600' }
-                    ]}>
-                      {t.name}
-                    </ThemedText>
-                    {selectedBusTour?.id === t.id ? (
-                      <Icon name="check" size={14} color={theme.primary} />
-                    ) : null}
-                  </Pressable>
-                ))}
-              </View>
-            ) : null}
             
             {/* Unassigned guides for this group */}
             {groupGuides.filter(g => !g.assignedBusId).length > 0 ? (
@@ -1455,6 +1418,93 @@ export default function AllocationScreen() {
                     </Pressable>
                   )}
                 />
+              );
+            })()}
+          </ThemedView>
+        </View>
+      </Modal>
+
+      {/* Bus Management Modal */}
+      <Modal visible={showBusModal} animationType="fade" transparent>
+        <View style={styles.modalOverlay}>
+          <Pressable style={styles.modalBackdrop} onPress={() => setShowBusModal(false)} />
+          <ThemedView style={[styles.pickerModal, { backgroundColor: theme.backgroundDefault }]}>
+            {(() => {
+              const bus = buses.find(b => b.id === selectedBusId);
+              if (!bus) return null;
+              
+              const currentTour = tourTypes.find(t => t.id === bus.assignedTourTypeId);
+              
+              return (
+                <>
+                  <View style={styles.modalHeader}>
+                    <View>
+                      <ThemedText style={styles.modalTitle}>{bus.busNumber}</ThemedText>
+                      <ThemedText style={{ color: theme.textSecondary, fontSize: 12 }}>
+                        {bus.seats} мест {bus.withBoat ? '(с теплоходом)' : ''}
+                      </ThemedText>
+                    </View>
+                    <Pressable onPress={() => setShowBusModal(false)}>
+                      <Icon name="x" size={24} color={theme.text} />
+                    </Pressable>
+                  </View>
+                  
+                  <ThemedText style={{ color: theme.textSecondary, marginBottom: Spacing.sm, fontSize: 13 }}>
+                    Выберите экскурсию:
+                  </ThemedText>
+                  
+                  <ScrollView style={{ maxHeight: 300 }}>
+                    {sortedTourTypes.map(tour => (
+                      <Pressable
+                        key={tour.id}
+                        style={[
+                          styles.guideOption, 
+                          { borderBottomColor: theme.border },
+                          currentTour?.id === tour.id && { backgroundColor: theme.primary + '20' }
+                        ]}
+                        onPress={() => {
+                          handleAssignBusToTour(bus.id, tour.id);
+                          setShowBusModal(false);
+                        }}
+                      >
+                        <Icon name="map-pin" size={18} color={currentTour?.id === tour.id ? theme.primary : theme.textSecondary} />
+                        <ThemedText style={[
+                          styles.guideOptionText,
+                          currentTour?.id === tour.id && { color: theme.primary, fontWeight: '600' }
+                        ]}>
+                          {tour.name}
+                        </ThemedText>
+                        {currentTour?.id === tour.id ? (
+                          <Icon name="check" size={16} color={theme.primary} />
+                        ) : null}
+                      </Pressable>
+                    ))}
+                  </ScrollView>
+                  
+                  <Pressable
+                    style={[styles.deleteButton, { backgroundColor: theme.error + '20', borderColor: theme.error }]}
+                    onPress={() => {
+                      Alert.alert(
+                        "Удалить автобус?",
+                        `${bus.busNumber} будет удалён из распределения`,
+                        [
+                          { text: "Отмена", style: "cancel" },
+                          { 
+                            text: "Удалить", 
+                            style: "destructive", 
+                            onPress: () => {
+                              deleteBus(bus.id);
+                              setShowBusModal(false);
+                            }
+                          },
+                        ]
+                      );
+                    }}
+                  >
+                    <Icon name="trash-2" size={18} color={theme.error} />
+                    <ThemedText style={{ color: theme.error, fontWeight: '600' }}>Удалить автобус</ThemedText>
+                  </Pressable>
+                </>
               );
             })()}
           </ThemedView>
@@ -1901,6 +1951,16 @@ const styles = StyleSheet.create({
   },
   guideOptionText: {
     fontSize: 16,
+  },
+  deleteButton: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    justifyContent: 'center',
+    gap: Spacing.sm,
+    padding: Spacing.md,
+    borderRadius: BorderRadius.md,
+    borderWidth: 1,
+    marginTop: Spacing.lg,
   },
   inlineDropdown: {
     marginLeft: Spacing.md,
