@@ -805,14 +805,12 @@ export default function RadioGuidesScreen() {
           ? todayExcursions.find(e => e.id === selectedExcursionId) 
           : null;
         
-        // Filter guides by matching tour name from allocation
+        // Filter guides by exact tour name match from allocation
         const filteredGuides = selectedExcursion && selectedExcursion.tourTypeName
           ? allocatedGuides.filter(guide => {
               if (!guide.tourName) return false;
-              const guideTourLower = guide.tourName.toLowerCase();
-              const selectedTourLower = selectedExcursion.tourTypeName.toLowerCase();
-              // Match if guide's tour name contains selected tour name or vice versa
-              return guideTourLower.includes(selectedTourLower) || selectedTourLower.includes(guideTourLower);
+              // Strict match: tour names must be exactly the same
+              return guide.tourName.toLowerCase() === selectedExcursion.tourTypeName.toLowerCase();
             })
           : allocatedGuides;
 
