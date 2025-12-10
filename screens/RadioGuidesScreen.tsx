@@ -800,8 +800,21 @@ export default function RadioGuidesScreen() {
     if (modalMode === "issue") {
       // Show guide picker list
       if (showGuidePicker) {
-        // Show all guides from allocation (no filtering by excursion type)
-        // Guides are already filtered by active assignments in allocatedGuides
+        // Get selected excursion to filter guides
+        const selectedExcursion = selectedExcursionId 
+          ? todayExcursions.find(e => e.id === selectedExcursionId) 
+          : null;
+        
+        // Filter guides by matching tour name from allocation
+        const filteredGuides = selectedExcursion && selectedExcursion.tourTypeName
+          ? allocatedGuides.filter(guide => {
+              if (!guide.tourName) return false;
+              const guideTourLower = guide.tourName.toLowerCase();
+              const selectedTourLower = selectedExcursion.tourTypeName.toLowerCase();
+              // Match if guide's tour name contains selected tour name or vice versa
+              return guideTourLower.includes(selectedTourLower) || selectedTourLower.includes(guideTourLower);
+            })
+          : allocatedGuides;
 
         return (
           <View style={styles.form}>
@@ -815,12 +828,21 @@ export default function RadioGuidesScreen() {
               </Pressable>
               <ThemedText style={styles.guidePickerTitle}>Выбрать гида</ThemedText>
             </View>
+            {selectedExcursion ? (
+              <ThemedText style={{ color: theme.textSecondary, fontSize: 12, marginBottom: Spacing.sm }}>
+                Гиды для: {selectedExcursion.tourTypeName}
+              </ThemedText>
+            ) : null}
             {allocatedGuides.length === 0 ? (
               <ThemedText style={{ color: theme.textSecondary, textAlign: "center", padding: Spacing.xl }}>
                 Нет данных распределения на сегодня
               </ThemedText>
+            ) : filteredGuides.length === 0 ? (
+              <ThemedText style={{ color: theme.textSecondary, textAlign: "center", padding: Spacing.xl }}>
+                Нет гидов для этой экскурсии
+              </ThemedText>
             ) : (
-              allocatedGuides.map((guide) => (
+              filteredGuides.map((guide) => (
                 <Pressable
                   key={guide.id}
                   onPress={() => {
