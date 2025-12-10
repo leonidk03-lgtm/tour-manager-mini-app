@@ -890,7 +890,7 @@ export default function AllocationScreen() {
                     onPress={() => toggleBoat(bus.id)}
                   >
                     <Icon 
-                      name="anchor" 
+                      name="navigation" 
                       size={14} 
                       color={bus.withBoat ? theme.primary : theme.textSecondary} 
                     />
