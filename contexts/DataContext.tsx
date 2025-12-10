@@ -1026,6 +1026,14 @@ export function DataProvider({ children }: { children: ReactNode }) {
     if (!user) return;
     
     try {
+      // Auto-delete notifications older than 24 hours
+      const oneDayAgo = new Date(Date.now() - 24 * 60 * 60 * 1000).toISOString();
+      await supabase
+        .from('notifications')
+        .delete()
+        .eq('user_id', user.id)
+        .lt('created_at', oneDayAgo);
+
       const { data, error } = await supabase
         .from('notifications')
         .select('*')
