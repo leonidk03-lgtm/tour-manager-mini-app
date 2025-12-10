@@ -1553,7 +1553,8 @@ const styles = StyleSheet.create({
     flexDirection: "row",
     alignItems: "center",
     gap: 4,
-    flex: 1,
+    minWidth: 100,
+    marginRight: Spacing.sm,
   },
   tourCellEmpty: {
     borderWidth: 1,
