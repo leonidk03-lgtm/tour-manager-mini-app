@@ -136,10 +136,20 @@ export default function RadioGuidesScreen() {
   );
   
   // Get guides with their assigned buses from allocation
+  // Exclude guides who already have active radio guide assignments
   const allocatedGuides = useMemo(() => {
     console.log("[RadioGuides] Computing allocatedGuides, allocationGuides:", allocationGuides.length);
+    
+    // Get names of guides with active assignments (not returned yet)
+    const activeGuideNames = new Set(
+      radioGuideAssignments
+        .filter(a => !a.returnedAt)
+        .map(a => a.guideName.toLowerCase().trim())
+    );
+    
     const result = allocationGuides
       .filter(g => g.assignedTourTypeId) // Only assigned guides
+      .filter(g => !activeGuideNames.has(g.name.toLowerCase().trim())) // Exclude already issued
       .map(guide => {
         // Find the bus this guide is assigned to
         const bus = allocationBuses.find(b => 
@@ -154,7 +164,7 @@ export default function RadioGuidesScreen() {
       });
     console.log("[RadioGuides] allocatedGuides result:", result.length);
     return result;
-  }, [allocationGuides, allocationBuses, tourTypes]);
+  }, [allocationGuides, allocationBuses, tourTypes, radioGuideAssignments]);
 
   const todayExcursions = useMemo(() => {
     return excursions
