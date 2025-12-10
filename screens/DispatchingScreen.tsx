@@ -529,7 +529,7 @@ export default function DispatchingScreen() {
         <View style={styles.notesHeader}>
           <ThemedText style={styles.notesTitle}>Заметки</ThemedText>
           <View style={styles.notesActions}>
-            {dispatchingNotes.length > 0 ? (
+            {visibleNotes.length > 0 ? (
               <Pressable
                 style={({ pressed }) => [
                   styles.notesHeaderButton,
@@ -542,7 +542,7 @@ export default function DispatchingScreen() {
               >
                 <Icon name="list" size={16} color={theme.text} />
                 <ThemedText style={styles.notesHeaderButtonText}>
-                  {dispatchingNotes.length}
+                  {visibleNotes.length}
                 </ThemedText>
               </Pressable>
             ) : null}
