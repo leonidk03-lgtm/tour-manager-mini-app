@@ -164,6 +164,25 @@ export interface ChatMessage {
   createdAt: string;
 }
 
+export type NotificationType = 'chat' | 'excursion' | 'transaction';
+
+export interface AppNotification {
+  id: string;
+  userId: string;
+  type: NotificationType;
+  title: string;
+  body: string | null;
+  data: Record<string, unknown>;
+  isRead: boolean;
+  createdAt: string;
+}
+
+export interface NotificationSettings {
+  chatEnabled: boolean;
+  excursionsEnabled: boolean;
+  transactionsEnabled: boolean;
+}
+
 interface DataContextType {
   tourTypes: TourType[];
   addTourType: (tourType: Omit<TourType, 'id'>) => Promise<void>;
@@ -214,6 +233,13 @@ interface DataContextType {
   chatMessages: ChatMessage[];
   sendChatMessage: (message: string) => Promise<void>;
   clearChatHistory: () => Promise<void>;
+  notifications: AppNotification[];
+  unreadNotificationCount: number;
+  notificationSettings: NotificationSettings;
+  markNotificationAsRead: (id: string) => Promise<void>;
+  markAllNotificationsAsRead: () => Promise<void>;
+  updateNotificationSettings: (settings: Partial<NotificationSettings>) => Promise<void>;
+  addNotification: (type: NotificationType, title: string, body?: string, data?: Record<string, unknown>) => Promise<void>;
   isLoading: boolean;
   isOffline: boolean;
   networkError: string | null;
@@ -240,6 +266,12 @@ export function DataProvider({ children }: { children: ReactNode }) {
   const [dispatchingNotes, setDispatchingNotes] = useState<DispatchingNote[]>([]);
   const [excursionNotes, setExcursionNotes] = useState<ExcursionNote[]>([]);
   const [chatMessages, setChatMessages] = useState<ChatMessage[]>([]);
+  const [notifications, setNotifications] = useState<AppNotification[]>([]);
+  const [notificationSettings, setNotificationSettings] = useState<NotificationSettings>({
+    chatEnabled: true,
+    excursionsEnabled: true,
+    transactionsEnabled: true,
+  });
   const [isLoading, setIsLoading] = useState(true);
   const [networkError, setNetworkError] = useState<string | null>(null);
   const [isOffline, setIsOffline] = useState(false);
@@ -988,6 +1020,161 @@ export function DataProvider({ children }: { children: ReactNode }) {
     }
   };
 
+  const fetchNotifications = useCallback(async (): Promise<void> => {
+    if (!user) return;
+    
+    try {
+      const { data, error } = await supabase
+        .from('notifications')
+        .select('*')
+        .eq('user_id', user.id)
+        .order('created_at', { ascending: false })
+        .limit(100);
+
+      if (error) {
+        if (error.code === 'PGRST205' || error.code === '42P01') {
+          return;
+        }
+        throw error;
+      }
+
+      const notifs: AppNotification[] = (data || []).map(n => ({
+        id: n.id,
+        userId: n.user_id,
+        type: n.type as NotificationType,
+        title: n.title,
+        body: n.body,
+        data: n.data || {},
+        isRead: n.is_read,
+        createdAt: n.created_at,
+      }));
+      
+      setNotifications(notifs);
+    } catch (err) {
+      console.warn('Failed to fetch notifications from server');
+    }
+  }, [user]);
+
+  const fetchNotificationSettings = useCallback(async (): Promise<void> => {
+    if (!user) return;
+    
+    try {
+      const { data, error } = await supabase
+        .from('notification_settings')
+        .select('*')
+        .eq('user_id', user.id)
+        .single();
+
+      if (error) {
+        if (error.code === 'PGRST116') {
+          // No settings found, use defaults
+          return;
+        }
+        if (error.code === 'PGRST205' || error.code === '42P01') {
+          return;
+        }
+        throw error;
+      }
+
+      if (data) {
+        setNotificationSettings({
+          chatEnabled: data.chat_enabled ?? true,
+          excursionsEnabled: data.excursions_enabled ?? true,
+          transactionsEnabled: data.transactions_enabled ?? true,
+        });
+      }
+    } catch (err) {
+      console.warn('Failed to fetch notification settings');
+    }
+  }, [user]);
+
+  const markNotificationAsRead = async (id: string) => {
+    try {
+      const { error } = await supabase
+        .from('notifications')
+        .update({ is_read: true })
+        .eq('id', id);
+
+      if (error) throw error;
+      
+      setNotifications(prev => prev.map(n => 
+        n.id === id ? { ...n, isRead: true } : n
+      ));
+    } catch (err) {
+      console.error('Error marking notification as read:', err);
+      throw err;
+    }
+  };
+
+  const markAllNotificationsAsRead = async () => {
+    if (!user) return;
+    
+    try {
+      const { error } = await supabase
+        .from('notifications')
+        .update({ is_read: true })
+        .eq('user_id', user.id)
+        .eq('is_read', false);
+
+      if (error) throw error;
+      
+      setNotifications(prev => prev.map(n => ({ ...n, isRead: true })));
+    } catch (err) {
+      console.error('Error marking all notifications as read:', err);
+      throw err;
+    }
+  };
+
+  const updateNotificationSettings = async (settings: Partial<NotificationSettings>) => {
+    if (!user) return;
+    
+    try {
+      const updateData: Record<string, unknown> = { user_id: user.id };
+      if (settings.chatEnabled !== undefined) updateData.chat_enabled = settings.chatEnabled;
+      if (settings.excursionsEnabled !== undefined) updateData.excursions_enabled = settings.excursionsEnabled;
+      if (settings.transactionsEnabled !== undefined) updateData.transactions_enabled = settings.transactionsEnabled;
+      updateData.updated_at = new Date().toISOString();
+
+      const { error } = await supabase
+        .from('notification_settings')
+        .upsert(updateData, { onConflict: 'user_id' });
+
+      if (error) throw error;
+      
+      setNotificationSettings(prev => ({ ...prev, ...settings }));
+    } catch (err) {
+      console.error('Error updating notification settings:', err);
+      throw err;
+    }
+  };
+
+  const addNotification = async (
+    type: NotificationType,
+    title: string,
+    body?: string,
+    data?: Record<string, unknown>
+  ) => {
+    if (!user) return;
+    
+    try {
+      const { error } = await supabase
+        .from('notifications')
+        .insert({
+          user_id: user.id,
+          type,
+          title,
+          body: body || null,
+          data: data || {},
+        });
+
+      if (error) throw error;
+    } catch (err) {
+      console.error('Error adding notification:', err);
+    }
+  };
+
+  const unreadNotificationCount = notifications.filter(n => !n.isRead).length;
+
   const refreshData = useCallback(async () => {
     setIsLoading(true);
     try {
@@ -1060,6 +1247,8 @@ export function DataProvider({ children }: { children: ReactNode }) {
         fetchDispatchingNotes(),
         fetchExcursionNotes(),
         fetchChatMessages(),
+        fetchNotifications(),
+        fetchNotificationSettings(),
       ]).then(() => {
         setIsOffline(false);
         setNetworkError(null);
@@ -1072,7 +1261,7 @@ export function DataProvider({ children }: { children: ReactNode }) {
     } else {
       setIsLoading(false);
     }
-  }, [user, profile, fetchExcursions, fetchTransactions, fetchActivities, fetchDeletedItems, fetchDispatchingNotes, fetchExcursionNotes, fetchChatMessages]);
+  }, [user, profile, fetchExcursions, fetchTransactions, fetchActivities, fetchDeletedItems, fetchDispatchingNotes, fetchExcursionNotes, fetchChatMessages, fetchNotifications, fetchNotificationSettings]);
 
   // Supabase Realtime subscriptions for live data sync
   useEffect(() => {
@@ -1139,6 +1328,11 @@ export function DataProvider({ children }: { children: ReactNode }) {
         { event: '*', schema: 'public', table: 'chat_messages' },
         () => safeFetch(fetchChatMessages)
       )
+      .on(
+        'postgres_changes',
+        { event: '*', schema: 'public', table: 'notifications' },
+        () => safeFetch(fetchNotifications)
+      )
       .subscribe((status) => {
         if (status === 'CHANNEL_ERROR') {
           console.warn('Supabase Realtime channel error - will retry');
@@ -1161,7 +1355,7 @@ export function DataProvider({ children }: { children: ReactNode }) {
     return () => {
       supabase.removeChannel(channel);
     };
-  }, [user, fetchTourTypes, fetchAdditionalServices, fetchRadioGuideKits, fetchRadioGuideAssignments, fetchEquipmentLosses, fetchExcursions, fetchTransactions, fetchActivities, fetchDeletedItems, fetchDispatchingNotes, fetchExcursionNotes, fetchChatMessages, safeFetch]);
+  }, [user, fetchTourTypes, fetchAdditionalServices, fetchRadioGuideKits, fetchRadioGuideAssignments, fetchEquipmentLosses, fetchExcursions, fetchTransactions, fetchActivities, fetchDeletedItems, fetchDispatchingNotes, fetchExcursionNotes, fetchChatMessages, fetchNotifications, safeFetch]);
 
   const refreshPriceList = useCallback(async () => {
     await Promise.all([fetchTourTypes(), fetchAdditionalServices()]);
@@ -1903,6 +2097,13 @@ export function DataProvider({ children }: { children: ReactNode }) {
         chatMessages,
         sendChatMessage,
         clearChatHistory,
+        notifications,
+        unreadNotificationCount,
+        notificationSettings,
+        markNotificationAsRead,
+        markAllNotificationsAsRead,
+        updateNotificationSettings,
+        addNotification,
         isLoading,
         isOffline,
         networkError,

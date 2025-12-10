@@ -8,6 +8,7 @@ import { StatusBar } from "expo-status-bar";
 
 import RootNavigator from "@/navigation/RootNavigator";
 import { ErrorBoundary } from "@/components/ErrorBoundary";
+import { NotificationBanner } from "@/components/NotificationBanner";
 import { DataProvider } from "@/contexts/DataContext";
 import { AuthProvider } from "@/contexts/AuthContext";
 
@@ -21,6 +22,7 @@ export default function App() {
               <DataProvider>
                 <NavigationContainer>
                   <RootNavigator />
+                  <NotificationBanner />
                 </NavigationContainer>
               </DataProvider>
             </AuthProvider>
