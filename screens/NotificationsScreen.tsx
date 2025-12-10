@@ -1,5 +1,5 @@
 import { useState, useCallback } from "react";
-import { View, StyleSheet, Pressable, Switch, Alert, RefreshControl } from "react-native";
+import { View, StyleSheet, Pressable, Switch, RefreshControl } from "react-native";
 import { ScreenScrollView } from "@/components/ScreenScrollView";
 import { ThemedText } from "@/components/ThemedText";
 import { ThemedView } from "@/components/ThemedView";
@@ -19,8 +19,6 @@ export default function NotificationsScreen() {
     notificationSettings,
     markNotificationAsRead,
     markAllNotificationsAsRead,
-    deleteNotification,
-    clearAllNotifications,
     updateNotificationSettings,
   } = useData();
 
@@ -34,29 +32,6 @@ export default function NotificationsScreen() {
   const handleMarkAllAsRead = async () => {
     hapticFeedback.light();
     await markAllNotificationsAsRead();
-  };
-
-  const handleDeleteNotification = async (id: string) => {
-    hapticFeedback.medium();
-    await deleteNotification(id);
-  };
-
-  const handleClearAll = () => {
-    Alert.alert(
-      "Очистить все уведомления",
-      "Вы уверены, что хотите удалить все уведомления?",
-      [
-        { text: "Отмена", style: "cancel" },
-        {
-          text: "Удалить",
-          style: "destructive",
-          onPress: async () => {
-            hapticFeedback.medium();
-            await clearAllNotifications();
-          },
-        },
-      ]
-    );
   };
 
   const handleToggleSetting = async (key: 'chatEnabled' | 'excursionsEnabled' | 'transactionsEnabled', value: boolean) => {
@@ -165,21 +140,12 @@ export default function NotificationsScreen() {
 
         <View style={styles.section}>
           <View style={styles.sectionHeader}>
-            <ThemedText style={styles.sectionTitle}>
-              Уведомления {unreadNotificationCount > 0 ? `(${unreadNotificationCount})` : ""}
-            </ThemedText>
-            <View style={styles.headerActions}>
-              {unreadNotificationCount > 0 ? (
-                <Pressable onPress={handleMarkAllAsRead} style={styles.headerButton}>
-                  <ThemedText style={{ color: theme.primary }}>Прочитать все</ThemedText>
-                </Pressable>
-              ) : null}
-              {notifications.length > 0 ? (
-                <Pressable onPress={handleClearAll} style={styles.headerButton}>
-                  <ThemedText style={{ color: theme.error }}>Очистить</ThemedText>
-                </Pressable>
-              ) : null}
-            </View>
+            <ThemedText style={styles.sectionTitle}>Уведомления</ThemedText>
+            {unreadNotificationCount > 0 ? (
+              <Pressable onPress={handleMarkAllAsRead}>
+                <ThemedText style={{ color: theme.primary }}>Прочитать все</ThemedText>
+              </Pressable>
+            ) : null}
           </View>
           
           {notifications.length === 0 ? (
@@ -247,13 +213,6 @@ export default function NotificationsScreen() {
                       </ThemedText>
                     ) : null}
                   </View>
-                  <Pressable
-                    onPress={() => handleDeleteNotification(notification.id)}
-                    style={styles.deleteButton}
-                    hitSlop={{ top: 8, bottom: 8, left: 8, right: 8 }}
-                  >
-                    <Icon name="x" size={16} color={theme.textSecondary} />
-                  </Pressable>
                   {!notification.isRead ? (
                     <View style={[styles.unreadDot, { backgroundColor: theme.primary }]} />
                   ) : null}
@@ -360,17 +319,5 @@ const styles = StyleSheet.create({
     height: 8,
     borderRadius: BorderRadius.full,
     marginLeft: Spacing.sm,
-  },
-  headerActions: {
-    flexDirection: "row",
-    alignItems: "center",
-    gap: Spacing.md,
-  },
-  headerButton: {
-    paddingVertical: Spacing.xs,
-  },
-  deleteButton: {
-    padding: Spacing.xs,
-    marginLeft: Spacing.xs,
   },
 });
