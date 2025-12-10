@@ -1,9 +1,9 @@
 import { useState, useMemo } from "react";
-import { View, StyleSheet, TextInput, Pressable, Modal, FlatList, Alert, ScrollView } from "react-native";
+import { View, StyleSheet, TextInput, Pressable, Modal, FlatList, Alert, ScrollView, Platform, KeyboardAvoidingView } from "react-native";
 import { Icon } from "@/components/Icon";
 import { ThemedText } from "@/components/ThemedText";
 import { ThemedView } from "@/components/ThemedView";
-import { ScreenScrollView } from "@/components/ScreenScrollView";
+import { ScreenKeyboardAwareScrollView } from "@/components/ScreenKeyboardAwareScrollView";
 import { Spacing, BorderRadius } from "@/constants/theme";
 import { useTheme } from "@/hooks/useTheme";
 import { useData, TourType } from "@/contexts/DataContext";
@@ -327,7 +327,7 @@ export default function AllocationScreen() {
   };
 
   return (
-    <ScreenScrollView>
+    <ScreenKeyboardAwareScrollView>
       {/* Header Actions */}
       <View style={styles.headerActions}>
         <Pressable
@@ -510,7 +510,10 @@ export default function AllocationScreen() {
 
       {/* Input Modal */}
       <Modal visible={showInputModal} animationType="slide" transparent>
-        <View style={styles.modalOverlay}>
+        <KeyboardAvoidingView 
+          behavior={Platform.OS === 'ios' ? 'padding' : 'height'}
+          style={styles.modalOverlay}
+        >
           <Pressable style={styles.modalBackdrop} onPress={() => setShowInputModal(false)} />
           <ThemedView style={[styles.modal, { backgroundColor: theme.backgroundDefault }]}>
             <View style={styles.modalHeader}>
@@ -544,7 +547,7 @@ export default function AllocationScreen() {
               </ThemedText>
             </Pressable>
           </ThemedView>
-        </View>
+        </KeyboardAvoidingView>
       </Modal>
 
       {/* Tour Picker Modal */}
@@ -641,7 +644,7 @@ export default function AllocationScreen() {
           </ThemedView>
         </View>
       </Modal>
-    </ScreenScrollView>
+    </ScreenKeyboardAwareScrollView>
   );
 }
 
