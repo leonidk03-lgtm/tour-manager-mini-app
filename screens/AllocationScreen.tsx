@@ -55,6 +55,8 @@ export default function AllocationScreen() {
   const [expandedBusDropdown, setExpandedBusDropdown] = useState<string | null>(null); // For inline tour picker
   const [showBusModal, setShowBusModal] = useState(false);
   const [selectedBusId, setSelectedBusId] = useState<string | null>(null);
+  const [showGuideModal, setShowGuideModal] = useState(false);
+  const [selectedGuideId, setSelectedGuideId] = useState<string | null>(null);
 
   // Helper: get allocation group key for a tour (allocationGroup or tourId as fallback)
   const getAllocationKey = (tourTypeId: string | null): string | null => {
@@ -705,6 +707,25 @@ export default function AllocationScreen() {
     hapticFeedback.light();
   };
   
+  // Change guide's tour assignment
+  const changeGuideTour = (guideId: string, newTourTypeId: string) => {
+    const guide = guides.find(g => g.id === guideId);
+    if (!guide) return;
+    
+    // If guide was assigned to a bus, remove from that bus too
+    if (guide.assignedBusId) {
+      setBuses(prev => prev.map(b => 
+        b.id === guide.assignedBusId ? { ...b, assignedGuideName: null } : b
+      ));
+    }
+    
+    setGuides(prev => prev.map(g => 
+      g.id === guideId ? { ...g, assignedTourTypeId: newTourTypeId, assignedBusId: null } : g
+    ));
+    
+    hapticFeedback.light();
+  };
+  
   // Toggle boat flag for bus
   const toggleBoat = (busId: string) => {
     setBuses(prev => prev.map(b => 
@@ -1069,15 +1090,11 @@ export default function AllocationScreen() {
                     ]}
                     onPress={() => {
                       if (bus.assignedGuideName) {
-                        Alert.alert(
-                          bus.assignedGuideName,
-                          "Что сделать?",
-                          [
-                            { text: "Отмена", style: "cancel" },
-                            { text: "Сменить", onPress: () => openGuidePicker(bus.id) },
-                            { text: "Убрать", style: "destructive", onPress: () => removeGuideFromBus(bus.id) },
-                          ]
-                        );
+                        const guide = guides.find(g => g.name === bus.assignedGuideName);
+                        if (guide) {
+                          setSelectedGuideId(guide.id);
+                          setShowGuideModal(true);
+                        }
                       } else {
                         openGuidePicker(bus.id);
                       }
@@ -1126,14 +1143,8 @@ export default function AllocationScreen() {
                     key={guide.id} 
                     style={[styles.freeGuideChip, { backgroundColor: theme.backgroundTertiary }]}
                     onPress={() => {
-                      Alert.alert(
-                        guide.name,
-                        "Что сделать?",
-                        [
-                          { text: "Отмена", style: "cancel" },
-                          { text: "Удалить", style: "destructive", onPress: () => deleteGuide(guide.id) },
-                        ]
-                      );
+                      setSelectedGuideId(guide.id);
+                      setShowGuideModal(true);
                     }}
                   >
                     <Icon name="user" size={12} color={theme.warning} />
@@ -1503,6 +1514,108 @@ export default function AllocationScreen() {
                   >
                     <Icon name="trash-2" size={18} color={theme.error} />
                     <ThemedText style={{ color: theme.error, fontWeight: '600' }}>Удалить автобус</ThemedText>
+                  </Pressable>
+                </>
+              );
+            })()}
+          </ThemedView>
+        </View>
+      </Modal>
+
+      {/* Guide Management Modal */}
+      <Modal visible={showGuideModal} animationType="fade" transparent>
+        <View style={styles.modalOverlay}>
+          <Pressable style={styles.modalBackdrop} onPress={() => setShowGuideModal(false)} />
+          <ThemedView style={[styles.pickerModal, { backgroundColor: theme.backgroundDefault }]}>
+            {(() => {
+              const guide = guides.find(g => g.id === selectedGuideId);
+              if (!guide) return null;
+              
+              const currentTour = tourTypes.find(t => t.id === guide.assignedTourTypeId);
+              const assignedBus = buses.find(b => b.id === guide.assignedBusId);
+              
+              return (
+                <>
+                  <View style={styles.modalHeader}>
+                    <View>
+                      <ThemedText style={styles.modalTitle}>{guide.name}</ThemedText>
+                      <ThemedText style={{ color: theme.textSecondary, fontSize: 12 }}>
+                        {currentTour?.name || 'Не назначен'}
+                        {assignedBus ? ` (авт. ${assignedBus.busNumber})` : ''}
+                      </ThemedText>
+                    </View>
+                    <Pressable onPress={() => setShowGuideModal(false)}>
+                      <Icon name="x" size={24} color={theme.text} />
+                    </Pressable>
+                  </View>
+                  
+                  <ThemedText style={{ color: theme.textSecondary, marginBottom: Spacing.sm, fontSize: 13 }}>
+                    Переместить на экскурсию:
+                  </ThemedText>
+                  
+                  <ScrollView style={{ maxHeight: 300 }}>
+                    {sortedTourTypes.map(tour => (
+                      <Pressable
+                        key={tour.id}
+                        style={[
+                          styles.guideOption, 
+                          { borderBottomColor: theme.border },
+                          currentTour?.id === tour.id && { backgroundColor: theme.primary + '20' }
+                        ]}
+                        onPress={() => {
+                          changeGuideTour(guide.id, tour.id);
+                          setShowGuideModal(false);
+                        }}
+                      >
+                        <Icon name="map-pin" size={18} color={currentTour?.id === tour.id ? theme.primary : theme.textSecondary} />
+                        <ThemedText style={[
+                          styles.guideOptionText,
+                          currentTour?.id === tour.id && { color: theme.primary, fontWeight: '600' }
+                        ]}>
+                          {tour.name}
+                        </ThemedText>
+                        {currentTour?.id === tour.id ? (
+                          <Icon name="check" size={16} color={theme.primary} />
+                        ) : null}
+                      </Pressable>
+                    ))}
+                  </ScrollView>
+                  
+                  {guide.assignedBusId ? (
+                    <Pressable
+                      style={[styles.deleteButton, { backgroundColor: theme.warning + '20', borderColor: theme.warning, marginTop: Spacing.md }]}
+                      onPress={() => {
+                        removeGuideFromBus(guide.assignedBusId!);
+                        setShowGuideModal(false);
+                      }}
+                    >
+                      <Icon name="user-minus" size={18} color={theme.warning} />
+                      <ThemedText style={{ color: theme.warning, fontWeight: '600' }}>Убрать с автобуса</ThemedText>
+                    </Pressable>
+                  ) : null}
+                  
+                  <Pressable
+                    style={[styles.deleteButton, { backgroundColor: theme.error + '20', borderColor: theme.error }]}
+                    onPress={() => {
+                      Alert.alert(
+                        "Удалить гида?",
+                        `${guide.name} будет удалён из распределения`,
+                        [
+                          { text: "Отмена", style: "cancel" },
+                          { 
+                            text: "Удалить", 
+                            style: "destructive", 
+                            onPress: () => {
+                              deleteGuide(guide.id);
+                              setShowGuideModal(false);
+                            }
+                          },
+                        ]
+                      );
+                    }}
+                  >
+                    <Icon name="trash-2" size={18} color={theme.error} />
+                    <ThemedText style={{ color: theme.error, fontWeight: '600' }}>Удалить гида</ThemedText>
                   </Pressable>
                 </>
               );
