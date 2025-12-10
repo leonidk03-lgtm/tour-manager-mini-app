@@ -907,6 +907,18 @@ export default function AllocationScreen() {
                       {bus.assignedGuideName || 'Выбрать'}
                     </ThemedText>
                   </Pressable>
+                  
+                  {/* Copy button */}
+                  <Pressable
+                    style={styles.copyRowButton}
+                    onPress={async () => {
+                      const text = `${busTourName}, автобус ${bus.busNumber}${bus.assignedGuideName ? `, гид ${bus.assignedGuideName}` : ''}`;
+                      await Clipboard.setStringAsync(text);
+                      hapticFeedback.light();
+                    }}
+                  >
+                    <Icon name="copy" size={16} color={theme.textSecondary} />
+                  </Pressable>
                 </View>
               );
             })}
@@ -1575,7 +1587,11 @@ const styles = StyleSheet.create({
     paddingVertical: 4,
     borderRadius: BorderRadius.sm,
     flex: 1,
-    minWidth: 120,
+    minWidth: 100,
+  },
+  copyRowButton: {
+    padding: Spacing.xs,
+    marginLeft: Spacing.xs,
   },
   guideCellText: {
     fontSize: 12,
