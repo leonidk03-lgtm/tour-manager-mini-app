@@ -51,6 +51,7 @@ export default function AllocationScreen() {
   const [pickingFor, setPickingFor] = useState<{ type: 'bus' | 'guide'; id: string } | null>(null);
   const [showGuidePicker, setShowGuidePicker] = useState(false);
   const [pickingGuideForBus, setPickingGuideForBus] = useState<string | null>(null);
+  const [expandedBusDropdown, setExpandedBusDropdown] = useState<string | null>(null); // For inline tour picker
 
   // Group tour types by allocation group
   const tourGroups = useMemo(() => {
@@ -145,102 +146,47 @@ export default function AllocationScreen() {
     'йошкар', 'ола', 'кремль', 'ночь', 'день', 'вечер', 'утро', 'озера', 'озеро',
     'экскурсия', 'автобус', 'авт', 'ито', 'итого', 'всего', 'на', 'и', 'йошка',
     'тур', 'маршрут', 'обзорная', 'пешеходная', 'речная', 'ночная', 'интерактив',
-    'трансфер', 'трансферы', 'резерв'
+    'трансфер', 'трансферы', 'резерв', 'каждый', 'час'
   ];
 
-  // Parse guide names - must look like "Имя Фамилия" (two capitalized words)
-  // Also handles lowercase last names like "Резеда хуснутдинова"
-  const parseGuides = (text: string): ParsedGuide[] => {
-    const guides: ParsedGuide[] = [];
-    let idCounter = 0;
-    
-    // Pattern for Russian names: Имя Фамилия (first word capital, second can be lower)
-    const namePattern = /([А-ЯЁ][а-яё]{2,})\s+([А-ЯЁа-яё][а-яё]{2,})/g;
-    const matches = [...text.matchAll(namePattern)];
-    
-    matches.forEach(match => {
-      const fullName = match[0];
-      const firstName = match[1].toLowerCase();
-      const lastName = match[2].toLowerCase();
-      
-      // Skip if any part is an excluded word
-      if (excludeWords.includes(firstName) || excludeWords.includes(lastName)) {
-        return;
-      }
-      
-      // Skip common non-name patterns
-      if (firstName === 'всего' || lastName === 'автобусов') {
-        return;
-      }
-      
-      // Avoid duplicates
-      if (!guides.find(g => g.name.toLowerCase() === fullName.toLowerCase())) {
-        guides.push({
-          id: `guide-${idCounter++}-${Date.now()}`,
-          name: fullName,
-          assignedTourTypeId: null,
-          assignedBusId: null,
-          isAdditional: false,
-        });
-      }
-    });
+  // Keyword aliases with PRIORITY ORDER (higher priority first)
+  // IMPORTANT: 'трансфер' before 'город' to avoid mismatches
+  const keywordPriority: { mainKey: string; aliases: string[] }[] = [
+    { mainKey: 'трансфер', aliases: ['трансфер', 'трансферы'] }, // HIGH PRIORITY
+    { mainKey: 'болгар', aliases: ['булгар', 'булгары', 'болгар', 'болгары'] },
+    { mainKey: 'йошкар', aliases: ['йошкар', 'йошка', 'йошкар-ола', 'йошкар ола'] },
+    { mainKey: 'свияжск', aliases: ['свияжск'] },
+    { mainKey: 'озера', aliases: ['озера', 'озеро', 'голубые'] },
+    { mainKey: 'интерактив', aliases: ['интерактив'] },
+    { mainKey: 'раифа', aliases: ['раифа', 'раифский'] },
+    { mainKey: 'кремль', aliases: ['кремль'] },
+    { mainKey: 'ночь', aliases: ['ночь', 'ночная', 'вечер'] },
+    { mainKey: 'город', aliases: ['город', 'обзорная'] }, // LOW PRIORITY - after трансфер
+  ];
 
-    return guides;
-  };
-
-  // Keyword aliases for matching (logist uses short forms)
-  const keywordAliases: { [key: string]: string[] } = {
-    'болгар': ['булгар', 'булгары', 'болгар', 'болгары'],
-    'йошкар': ['йошкар', 'йошка'],
-    'свияжск': ['свияжск'],
-    'город': ['город', 'обзорная'],
-    'раифа': ['раифа', 'раифский'],
-    'озера': ['озера', 'озеро', 'голубые'],
-    'кремль': ['кремль'],
-    'ночь': ['ночь', 'ночная', 'вечер'],
-    'трансфер': ['трансфер', 'трансферы'],
-    'интерактив': ['интерактив'],
-  };
-
-  // Match tour type by finding keyword in text and matching to tour
-  const matchTourType = (text: string): TourType | null => {
-    const lowerText = text.toLowerCase().trim();
+  // Find tour by keyword ANYWHERE in the line (not just at start)
+  const findTourInLine = (line: string): TourType | null => {
+    const lowerLine = line.toLowerCase();
     
-    // Skip lines that are just guide names or time headers
-    if (/^\d{1,2}:\d{2}$/.test(lowerText)) return null;
-    if (!lowerText.match(/\d{3}-\d{2}/) && !lowerText.includes(':') && !lowerText.includes('-')) {
-      // Line without bus numbers or separators - likely just names
-      return null;
-    }
-    
-    // First try logistShortName (most accurate)
+    // First try logistShortName (most accurate) - anywhere in line
     for (const tour of tourTypes.filter(t => t.isEnabled)) {
       if (tour.logistShortName) {
         const shortNames = tour.logistShortName.split(',').map(s => s.trim().toLowerCase());
-        if (shortNames.some(name => name && lowerText.startsWith(name))) {
+        if (shortNames.some(name => name && lowerLine.includes(name))) {
           return tour;
         }
       }
     }
     
-    // Then try allocationGroup
-    for (const tour of tourTypes.filter(t => t.isEnabled)) {
-      if (tour.allocationGroup) {
-        const groupLower = tour.allocationGroup.toLowerCase();
-        if (lowerText.startsWith(groupLower)) {
-          return tour;
-        }
-      }
-    }
-    
-    // Then try keyword aliases at the start of line
-    for (const [mainKey, aliases] of Object.entries(keywordAliases)) {
+    // Then try keyword aliases in priority order
+    for (const { mainKey, aliases } of keywordPriority) {
       for (const alias of aliases) {
-        if (lowerText.startsWith(alias)) {
+        // Check if alias appears as a word (word boundary check)
+        const regex = new RegExp(`(^|[\\s\\(\\-:])${alias}`, 'i');
+        if (regex.test(lowerLine)) {
           // Found keyword, now find matching tour
           for (const tour of tourTypes.filter(t => t.isEnabled)) {
             const tourNameLower = tour.name.toLowerCase();
-            // Check if tour name contains main keyword or any alias
             if (tourNameLower.includes(mainKey) || aliases.some(a => tourNameLower.includes(a))) {
               return tour;
             }
@@ -249,62 +195,203 @@ export default function AllocationScreen() {
       }
     }
     
-    // Finally try tour name contains keyword from start of line
-    const firstWord = lowerText.split(/[\s\(\-:]/)[0];
-    if (firstWord && firstWord.length >= 3) {
-      for (const tour of tourTypes.filter(t => t.isEnabled)) {
-        const tourNameLower = tour.name.toLowerCase();
-        if (tourNameLower.includes(firstWord)) {
-          return tour;
-        }
-      }
-    }
-    
     return null;
   };
 
-  // Parse text with multiple excursion blocks
-  // Format expected: "Свияжск: 051-53, 921-53\nБолгар: 123-45, 678-50"
-  // Or: "ито Свияжск 051-53, 921-53\nито Болгар 123-45"
+  // Check if line is a guide assignment format: "Экскурсия - Имя Фамилия"
+  const parseGuideAssignment = (line: string): { tourId: string | null; guideName: string } | null => {
+    const trimmed = line.trim();
+    const match = trimmed.match(/^([А-ЯЁа-яё]+)\s*[-–—]\s*([А-ЯЁ][а-яё]+(?:\s+[А-ЯЁа-яё]+)?)/);
+    if (match) {
+      const tourKeyword = match[1].toLowerCase();
+      const guideName = match[2];
+      
+      for (const { mainKey, aliases } of keywordPriority) {
+        if (aliases.some(a => tourKeyword.includes(a) || a.includes(tourKeyword))) {
+          for (const tour of tourTypes.filter(t => t.isEnabled)) {
+            const tourNameLower = tour.name.toLowerCase();
+            if (tourNameLower.includes(mainKey) || aliases.some(a => tourNameLower.includes(a))) {
+              return { tourId: tour.id, guideName };
+            }
+          }
+        }
+      }
+    }
+    return null;
+  };
+
+  // Parse guides - supports "Имя Фамилия" AND single names like "Мила"
+  const parseGuidesFromLines = (lines: string[]): { guides: ParsedGuide[], assignments: Map<string, string> } => {
+    const guides: ParsedGuide[] = [];
+    const assignments = new Map<string, string>(); // guideName -> tourId
+    let idCounter = 0;
+    let currentTourContext: TourType | null = null;
+    
+    lines.forEach(line => {
+      const trimmed = line.trim();
+      if (!trimmed) return;
+      
+      // Skip lines with bus patterns
+      if (/\d{3}-\d{2}/.test(trimmed)) return;
+      
+      // Check for tour header (e.g., "Свияжск:")
+      if (trimmed.match(/^[А-ЯЁа-яё]+\s*:$/)) {
+        const keyword = trimmed.replace(':', '').toLowerCase();
+        for (const { mainKey, aliases } of keywordPriority) {
+          if (aliases.some(a => keyword.includes(a))) {
+            for (const tour of tourTypes.filter(t => t.isEnabled)) {
+              const tourNameLower = tour.name.toLowerCase();
+              if (tourNameLower.includes(mainKey) || aliases.some(a => tourNameLower.includes(a))) {
+                currentTourContext = tour;
+                break;
+              }
+            }
+            break;
+          }
+        }
+        return;
+      }
+      
+      // Skip time headers like "11:00"
+      if (/^\d{1,2}:\d{2}$/.test(trimmed)) return;
+      
+      // Check for guide assignment "Экскурсия - Имя Фамилия"
+      const assignment = parseGuideAssignment(trimmed);
+      if (assignment) {
+        if (!guides.find(g => g.name.toLowerCase() === assignment.guideName.toLowerCase())) {
+          guides.push({
+            id: `guide-${idCounter++}-${Date.now()}`,
+            name: assignment.guideName,
+            assignedTourTypeId: assignment.tourId,
+            assignedBusId: null,
+            isAdditional: false,
+          });
+          if (assignment.tourId) {
+            assignments.set(assignment.guideName, assignment.tourId);
+          }
+        }
+        return;
+      }
+      
+      // Full name pattern: "Имя Фамилия"
+      const fullNameMatch = trimmed.match(/^([А-ЯЁ][а-яё]{2,})\s+([А-ЯЁа-яё][а-яё]{2,})$/);
+      if (fullNameMatch) {
+        const firstName = fullNameMatch[1].toLowerCase();
+        const lastName = fullNameMatch[2].toLowerCase();
+        
+        if (!excludeWords.includes(firstName) && !excludeWords.includes(lastName)) {
+          const fullName = `${fullNameMatch[1]} ${fullNameMatch[2]}`;
+          if (!guides.find(g => g.name.toLowerCase() === fullName.toLowerCase())) {
+            guides.push({
+              id: `guide-${idCounter++}-${Date.now()}`,
+              name: fullName,
+              assignedTourTypeId: currentTourContext?.id || null,
+              assignedBusId: null,
+              isAdditional: false,
+            });
+            if (currentTourContext) {
+              assignments.set(fullName, currentTourContext.id);
+            }
+          }
+        }
+        return;
+      }
+      
+      // Single name pattern: "Мила" (capitalized word, 3+ chars, on its own line)
+      const singleNameMatch = trimmed.match(/^([А-ЯЁ][а-яё]{2,})$/);
+      if (singleNameMatch) {
+        const name = singleNameMatch[1];
+        const nameLower = name.toLowerCase();
+        
+        if (!excludeWords.includes(nameLower)) {
+          if (!guides.find(g => g.name.toLowerCase() === nameLower)) {
+            guides.push({
+              id: `guide-${idCounter++}-${Date.now()}`,
+              name: name,
+              assignedTourTypeId: currentTourContext?.id || null,
+              assignedBusId: null,
+              isAdditional: false,
+            });
+            if (currentTourContext) {
+              assignments.set(name, currentTourContext.id);
+            }
+          }
+        }
+        return;
+      }
+    });
+
+    return { guides, assignments };
+  };
+
+  // Parse text with improved line-by-line detection
   const parseWithBlocks = (text: string): { buses: ParsedBus[], guides: ParsedGuide[] } => {
     const allBuses: ParsedBus[] = [];
-    const allGuides: ParsedGuide[] = [];
-    
-    // Split by lines and process each line/block
     const lines = text.split('\n');
-    let currentTour: TourType | null = null;
     let busIdCounter = 0;
     
+    // First pass: parse buses with LOCAL tour detection per line
     lines.forEach(line => {
       const trimmedLine = line.trim();
       if (!trimmedLine) return;
       
-      // Try to detect tour from this line
-      const lineTour = matchTourType(trimmedLine);
-      if (lineTour) {
-        currentTour = lineTour;
-      }
-      
-      // Parse buses from this line
       const busPattern = /(\d{3})-(\d{2})/g;
       const matches = [...trimmedLine.matchAll(busPattern)];
       
-      matches.forEach(match => {
-        allBuses.push({
-          id: `bus-${busIdCounter++}-${Date.now()}`,
-          busNumber: match[1],
-          seats: parseInt(match[2], 10),
-          assignedTourTypeId: currentTour?.id || null,
-          assignedGuideName: null,
-          isAdditional: false,
+      if (matches.length > 0) {
+        // Find tour FROM THIS LINE ONLY (not inherited context)
+        const lineTour = findTourInLine(trimmedLine);
+        
+        matches.forEach(match => {
+          allBuses.push({
+            id: `bus-${busIdCounter++}-${Date.now()}`,
+            busNumber: match[1],
+            seats: parseInt(match[2], 10),
+            assignedTourTypeId: lineTour?.id || null,
+            assignedGuideName: null,
+            isAdditional: false,
+          });
         });
-      });
+      }
     });
     
-    // Parse guides from entire text (names can span multiple lines)
-    const guides = parseGuides(text);
+    // Second pass: parse guides
+    const { guides: allGuides, assignments } = parseGuidesFromLines(lines);
     
-    return { buses: allBuses, guides };
+    // Third pass: auto-assign guides to buses when counts match (1:1)
+    const tourBusCounts = new Map<string, ParsedBus[]>();
+    const tourGuideCounts = new Map<string, ParsedGuide[]>();
+    
+    allBuses.forEach(bus => {
+      if (bus.assignedTourTypeId) {
+        const existing = tourBusCounts.get(bus.assignedTourTypeId) || [];
+        existing.push(bus);
+        tourBusCounts.set(bus.assignedTourTypeId, existing);
+      }
+    });
+    
+    allGuides.forEach(guide => {
+      if (guide.assignedTourTypeId) {
+        const existing = tourGuideCounts.get(guide.assignedTourTypeId) || [];
+        existing.push(guide);
+        tourGuideCounts.set(guide.assignedTourTypeId, existing);
+      }
+    });
+    
+    // Auto-pair when counts match
+    tourBusCounts.forEach((tourBuses, tourId) => {
+      const tourGuides = tourGuideCounts.get(tourId) || [];
+      if (tourBuses.length === tourGuides.length && tourBuses.length > 0) {
+        tourBuses.forEach((bus, idx) => {
+          if (tourGuides[idx]) {
+            bus.assignedGuideName = tourGuides[idx].name;
+            tourGuides[idx].assignedBusId = bus.id;
+          }
+        });
+      }
+    });
+    
+    return { buses: allBuses, guides: allGuides };
   };
 
   const handleParse = () => {
@@ -651,14 +738,10 @@ export default function AllocationScreen() {
         
         return (
           <View key={tour.id} style={[styles.tourSection, { backgroundColor: theme.backgroundSecondary }]}>
-            {/* Tour header with article number */}
+            {/* Tour header - name only, no article number */}
             <View style={styles.tourHeader}>
               <View style={styles.tourTitleRow}>
-                <View style={[styles.articleBadge, { backgroundColor: theme.primary }]}>
-                  <ThemedText style={[styles.articleNumber, { color: theme.buttonText }]}>
-                    {tour.articleNumber || '—'}
-                  </ThemedText>
-                </View>
+                <Icon name="map" size={16} color={theme.primary} />
                 <ThemedText style={styles.tourName}>{tour.name}</ThemedText>
               </View>
               <ThemedText style={[styles.busCount, { color: theme.textSecondary }]}>
@@ -678,13 +761,17 @@ export default function AllocationScreen() {
                   </ThemedText>
                 </View>
                 
-                {/* Excursion (already assigned, show name) */}
-                <View style={styles.tourCell}>
+                {/* Excursion - pressable to change */}
+                <Pressable 
+                  style={styles.tourCell}
+                  onPress={() => setExpandedBusDropdown(expandedBusDropdown === bus.id ? null : bus.id)}
+                >
                   <Icon name="map-pin" size={14} color={theme.success} />
                   <ThemedText style={[styles.tourCellText, { color: theme.success }]} numberOfLines={1}>
                     {tour.name.length > 12 ? tour.name.substring(0, 12) + '...' : tour.name}
                   </ThemedText>
-                </View>
+                  <Icon name="chevron-down" size={12} color={theme.textSecondary} />
+                </Pressable>
                 
                 {/* Guide selector */}
                 <Pressable 
@@ -726,6 +813,37 @@ export default function AllocationScreen() {
               </View>
             ))}
             
+            {/* Inline dropdown for tour selection */}
+            {tourBuses.some(b => expandedBusDropdown === b.id) ? (
+              <View style={[styles.inlineDropdown, { backgroundColor: theme.backgroundTertiary }]}>
+                {sortedTourTypes.map(t => (
+                  <Pressable
+                    key={t.id}
+                    style={[
+                      styles.dropdownItem,
+                      t.id === tour.id && { backgroundColor: theme.primary + '20' }
+                    ]}
+                    onPress={() => {
+                      if (expandedBusDropdown) {
+                        handleAssignBusToTour(expandedBusDropdown, t.id);
+                        setExpandedBusDropdown(null);
+                      }
+                    }}
+                  >
+                    <ThemedText style={[
+                      styles.dropdownItemText,
+                      t.id === tour.id && { color: theme.primary, fontWeight: '600' }
+                    ]}>
+                      {t.name}
+                    </ThemedText>
+                    {t.id === tour.id ? (
+                      <Icon name="check" size={14} color={theme.primary} />
+                    ) : null}
+                  </Pressable>
+                ))}
+              </View>
+            ) : null}
+            
             {/* Unassigned guides for this tour */}
             {tourGuides.filter(g => !g.assignedBusId).length > 0 ? (
               <View style={styles.unassignedGuidesRow}>
@@ -751,9 +869,7 @@ export default function AllocationScreen() {
         <View style={[styles.tourSection, { backgroundColor: theme.backgroundSecondary, borderLeftColor: theme.warning, borderLeftWidth: 3 }]}>
           <View style={styles.tourHeader}>
             <View style={styles.tourTitleRow}>
-              <View style={[styles.articleBadge, { backgroundColor: theme.warning }]}>
-                <Icon name="alert-circle" size={14} color={theme.buttonText} />
-              </View>
+              <Icon name="alert-circle" size={16} color={theme.warning} />
               <ThemedText style={styles.tourName}>Не назначено</ThemedText>
             </View>
             <ThemedText style={[styles.busCount, { color: theme.warning }]}>
@@ -762,37 +878,55 @@ export default function AllocationScreen() {
           </View>
           
           {unassignedBuses.map(bus => (
-            <View key={bus.id} style={[styles.busRow, { backgroundColor: theme.backgroundTertiary }]}>
-              {/* Bus icon and number */}
-              <View style={styles.busCell}>
-                <Icon name="truck" size={16} color={theme.warning} />
-                <ThemedText style={styles.busNumber}>{bus.busNumber}</ThemedText>
-                <ThemedText style={[styles.busSeats, { color: theme.textSecondary }]}>
-                  ({bus.seats})
-                </ThemedText>
+            <View key={bus.id}>
+              <View style={[styles.busRow, { backgroundColor: theme.backgroundTertiary }]}>
+                {/* Bus icon and number */}
+                <View style={styles.busCell}>
+                  <Icon name="truck" size={16} color={theme.warning} />
+                  <ThemedText style={styles.busNumber}>{bus.busNumber}</ThemedText>
+                  <ThemedText style={[styles.busSeats, { color: theme.textSecondary }]}>
+                    ({bus.seats})
+                  </ThemedText>
+                </View>
+                
+                {/* Excursion selector with inline dropdown */}
+                <Pressable 
+                  style={[styles.tourCell, styles.tourCellEmpty]}
+                  onPress={() => setExpandedBusDropdown(expandedBusDropdown === bus.id ? null : bus.id)}
+                >
+                  <Icon name="map-pin" size={14} color={theme.textSecondary} />
+                  <ThemedText style={[styles.tourCellText, { color: theme.textSecondary }]}>
+                    Выбрать
+                  </ThemedText>
+                  <Icon name="chevron-down" size={12} color={theme.textSecondary} />
+                </Pressable>
+                
+                {/* Guide selector (disabled until tour assigned) */}
+                <View style={[styles.guideCell, { opacity: 0.5 }]}>
+                  <Icon name="user" size={14} color={theme.textSecondary} />
+                  <ThemedText style={[styles.guideCellText, { color: theme.textSecondary }]}>
+                    —
+                  </ThemedText>
+                </View>
               </View>
               
-              {/* Excursion selector (empty - needs assignment) */}
-              <Pressable 
-                style={[styles.tourCell, styles.tourCellEmpty]}
-                onPress={() => {
-                  setPickingFor({ type: 'bus', id: bus.id });
-                  setShowTourPicker(true);
-                }}
-              >
-                <Icon name="map-pin" size={14} color={theme.textSecondary} />
-                <ThemedText style={[styles.tourCellText, { color: theme.textSecondary }]}>
-                  Выбрать
-                </ThemedText>
-              </Pressable>
-              
-              {/* Guide selector (disabled until tour assigned) */}
-              <View style={[styles.guideCell, { opacity: 0.5 }]}>
-                <Icon name="user" size={14} color={theme.textSecondary} />
-                <ThemedText style={[styles.guideCellText, { color: theme.textSecondary }]}>
-                  —
-                </ThemedText>
-              </View>
+              {/* Inline dropdown */}
+              {expandedBusDropdown === bus.id ? (
+                <View style={[styles.inlineDropdown, { backgroundColor: theme.backgroundTertiary }]}>
+                  {sortedTourTypes.map(t => (
+                    <Pressable
+                      key={t.id}
+                      style={styles.dropdownItem}
+                      onPress={() => {
+                        handleAssignBusToTour(bus.id, t.id);
+                        setExpandedBusDropdown(null);
+                      }}
+                    >
+                      <ThemedText style={styles.dropdownItemText}>{t.name}</ThemedText>
+                    </Pressable>
+                  ))}
+                </View>
+              ) : null}
             </View>
           ))}
         </View>
@@ -1377,5 +1511,24 @@ const styles = StyleSheet.create({
   },
   guideOptionText: {
     fontSize: 16,
+  },
+  inlineDropdown: {
+    marginLeft: Spacing.md,
+    marginBottom: Spacing.xs,
+    borderRadius: BorderRadius.md,
+    overflow: "hidden",
+    maxHeight: 200,
+  },
+  dropdownItem: {
+    flexDirection: "row",
+    alignItems: "center",
+    justifyContent: "space-between",
+    paddingVertical: Spacing.sm,
+    paddingHorizontal: Spacing.md,
+    borderBottomWidth: 1,
+    borderBottomColor: "rgba(128,128,128,0.1)",
+  },
+  dropdownItemText: {
+    fontSize: 14,
   },
 });
