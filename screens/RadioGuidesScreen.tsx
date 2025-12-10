@@ -832,7 +832,7 @@ export default function RadioGuidesScreen() {
                     if (guide.busNumber) {
                       setBusNumber(guide.busNumber);
                     }
-                    // Auto-fill receivers count from excursion participants
+                    // Auto-fill receivers count from excursion participants (rounded up to nearest 5)
                     if (selectedExcursion) {
                       const totalParticipants = 
                         (selectedExcursion.fullPriceCount || 0) + 
@@ -842,7 +842,8 @@ export default function RadioGuidesScreen() {
                         (selectedExcursion.byTourCount || 0) + 
                         (selectedExcursion.paidCount || 0);
                       if (totalParticipants > 0) {
-                        setReceiversIssued(totalParticipants.toString());
+                        const roundedUp = Math.ceil(totalParticipants / 5) * 5;
+                        setReceiversIssued(roundedUp.toString());
                       }
                     }
                     setShowGuidePicker(false);
