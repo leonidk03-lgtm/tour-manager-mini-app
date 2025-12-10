@@ -192,29 +192,66 @@ export default function AllocationScreen() {
     return null;
   };
 
+  // Parse text with multiple excursion blocks
+  // Format expected: "Свияжск: 051-53, 921-53\nБолгар: 123-45, 678-50"
+  // Or: "ито Свияжск 051-53, 921-53\nито Болгар 123-45"
+  const parseWithBlocks = (text: string): { buses: ParsedBus[], guides: ParsedGuide[] } => {
+    const allBuses: ParsedBus[] = [];
+    const allGuides: ParsedGuide[] = [];
+    
+    // Split by lines and process each line/block
+    const lines = text.split('\n');
+    let currentTour: TourType | null = null;
+    let busIdCounter = 0;
+    
+    lines.forEach(line => {
+      const trimmedLine = line.trim();
+      if (!trimmedLine) return;
+      
+      // Try to detect tour from this line
+      const lineTour = matchTourType(trimmedLine);
+      if (lineTour) {
+        currentTour = lineTour;
+      }
+      
+      // Parse buses from this line
+      const busPattern = /(\d{3})-(\d{2})/g;
+      const matches = [...trimmedLine.matchAll(busPattern)];
+      
+      matches.forEach(match => {
+        allBuses.push({
+          id: `bus-${busIdCounter++}-${Date.now()}`,
+          busNumber: match[1],
+          seats: parseInt(match[2], 10),
+          assignedTourTypeId: currentTour?.id || null,
+          assignedGuideName: null,
+          isAdditional: false,
+        });
+      });
+    });
+    
+    // Parse guides from entire text (names can span multiple lines)
+    const guides = parseGuides(text);
+    
+    return { buses: allBuses, guides };
+  };
+
   const handleParse = () => {
     if (!inputText.trim()) {
       Alert.alert("Внимание", "Вставьте данные от логиста");
       return;
     }
 
-    const parsedBuses = parseBuses(inputText);
-    const parsedGuides = parseGuides(inputText);
+    const { buses: parsedBuses, guides: parsedGuides } = parseWithBlocks(inputText);
 
     if (parsedBuses.length === 0 && parsedGuides.length === 0) {
       Alert.alert("Внимание", "Не удалось распознать автобусы или гидов");
       return;
     }
 
-    // Try to auto-detect excursion from text
-    const detectedTour = matchTourType(inputText);
-    
-    // If excursion detected, pre-assign all buses to it
-    if (detectedTour) {
-      parsedBuses.forEach(bus => {
-        bus.assignedTourTypeId = detectedTour.id;
-      });
-    }
+    // Count how many buses were auto-assigned
+    const assignedCount = parsedBuses.filter(b => b.assignedTourTypeId).length;
+    const unassignedCount = parsedBuses.length - assignedCount;
 
     // Merge with existing data (for additional entries)
     setBuses(prev => {
@@ -230,11 +267,15 @@ export default function AllocationScreen() {
     setInputText("");
     setShowInputModal(false);
 
-    const tourInfo = detectedTour ? `\nЭкскурсия: ${detectedTour.name}` : '';
-    Alert.alert(
-      "Распознано",
-      `Автобусов: ${parsedBuses.length}\nГидов: ${parsedGuides.length}${tourInfo}`
-    );
+    let message = `Автобусов: ${parsedBuses.length}\nГидов: ${parsedGuides.length}`;
+    if (assignedCount > 0) {
+      message += `\n\nАвто-назначено: ${assignedCount}`;
+    }
+    if (unassignedCount > 0) {
+      message += `\nТребуют назначения: ${unassignedCount}`;
+    }
+    
+    Alert.alert("Распознано", message);
   };
 
   const handleAssignBusToTour = (busId: string, tourTypeId: string) => {
