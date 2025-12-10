@@ -842,7 +842,10 @@ export default function RadioGuidesScreen() {
                         (selectedExcursion.byTourCount || 0) + 
                         (selectedExcursion.paidCount || 0);
                       if (totalParticipants > 0) {
-                        const roundedUp = Math.ceil(totalParticipants / 5) * 5;
+                        // Round up to nearest 5, and add 5 if already divisible by 5
+                        const roundedUp = totalParticipants % 5 === 0 
+                          ? totalParticipants + 5 
+                          : Math.ceil(totalParticipants / 5) * 5;
                         setReceiversIssued(roundedUp.toString());
                       }
                     }
