@@ -229,27 +229,30 @@ export default function AllocationScreen() {
     
     lines.forEach(line => {
       const trimmed = line.trim();
-      if (!trimmed) return;
+      
+      // Empty line resets context
+      if (!trimmed) {
+        currentTourContext = null;
+        return;
+      }
       
       // Skip lines with bus patterns
-      if (/\d{3}-\d{2}/.test(trimmed)) return;
-      
-      // Check for tour header (e.g., "Свияжск:")
-      if (trimmed.match(/^[А-ЯЁа-яё]+\s*:$/)) {
-        const keyword = trimmed.replace(':', '').toLowerCase();
-        for (const { mainKey, aliases } of keywordPriority) {
-          if (aliases.some(a => keyword.includes(a))) {
-            for (const tour of tourTypes.filter(t => t.isEnabled)) {
-              const tourNameLower = tour.name.toLowerCase();
-              if (tourNameLower.includes(mainKey) || aliases.some(a => tourNameLower.includes(a))) {
-                currentTourContext = tour;
-                break;
-              }
-            }
-            break;
-          }
-        }
+      if (/\d{3}-\d{2}/.test(trimmed)) {
+        // But still try to update context from this line
+        const lineTour = findTourInLine(trimmed);
+        if (lineTour) currentTourContext = lineTour;
         return;
+      }
+      
+      // Always try to detect tour from current line first
+      const lineTour = findTourInLine(trimmed);
+      if (lineTour) {
+        currentTourContext = lineTour;
+      }
+      
+      // Check for tour header (e.g., "Свияжск:") - already handled by findTourInLine above
+      if (trimmed.match(/^[А-ЯЁа-яё]+\s*:$/)) {
+        return; // Just a header line, skip further processing
       }
       
       // Skip time headers like "11:00"
