@@ -909,7 +909,10 @@ export default function RadioGuidesScreen() {
               </ThemedText>
               {allocatedGuides.length > 0 ? (
                 <Pressable
-                  onPress={() => setShowGuidePicker(true)}
+                  onPress={() => {
+                    console.log("[RadioGuides] Opening picker, guides:", allocatedGuides.length, allocatedGuides.map(g => g.name));
+                    setShowGuidePicker(true);
+                  }}
                   style={[styles.pickFromAllocation, { backgroundColor: theme.primary + "20", borderColor: theme.primary }]}
                 >
                   <Icon name="users" size={14} color={theme.primary} />
