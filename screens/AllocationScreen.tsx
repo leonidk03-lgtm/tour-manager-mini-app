@@ -151,6 +151,60 @@ export default function AllocationScreen() {
     }
   }, [buses, guides]);
 
+  // Auto-pair 1:1 when data changes (guides added after buses or vice versa)
+  useEffect(() => {
+    if (buses.length === 0 || guides.length === 0) return;
+    
+    // Group by allocation group
+    const groupBuses = new Map<string, ParsedBus[]>();
+    const groupGuides = new Map<string, ParsedGuide[]>();
+    
+    buses.forEach(bus => {
+      if (bus.assignedTourTypeId && !bus.assignedGuideName) {
+        const tour = tourTypes.find(t => t.id === bus.assignedTourTypeId);
+        const groupKey = tour?.allocationGroup || bus.assignedTourTypeId;
+        const existing = groupBuses.get(groupKey) || [];
+        groupBuses.set(groupKey, [...existing, bus]);
+      }
+    });
+    
+    guides.forEach(guide => {
+      if (guide.assignedTourTypeId && !guide.assignedBusId) {
+        const tour = tourTypes.find(t => t.id === guide.assignedTourTypeId);
+        const groupKey = tour?.allocationGroup || guide.assignedTourTypeId;
+        const existing = groupGuides.get(groupKey) || [];
+        groupGuides.set(groupKey, [...existing, guide]);
+      }
+    });
+    
+    // Auto-pair where counts match
+    let updated = false;
+    const newBuses = [...buses];
+    const newGuides = [...guides];
+    
+    groupBuses.forEach((grpBuses, groupKey) => {
+      const grpGuides = groupGuides.get(groupKey) || [];
+      if (grpBuses.length === grpGuides.length && grpBuses.length > 0) {
+        grpBuses.forEach((bus, idx) => {
+          if (grpGuides[idx] && !bus.assignedGuideName) {
+            const busIdx = newBuses.findIndex(b => b.id === bus.id);
+            const guideIdx = newGuides.findIndex(g => g.id === grpGuides[idx].id);
+            if (busIdx !== -1 && guideIdx !== -1) {
+              newBuses[busIdx] = { ...newBuses[busIdx], assignedGuideName: grpGuides[idx].name };
+              newGuides[guideIdx] = { ...newGuides[guideIdx], assignedBusId: bus.id };
+              updated = true;
+            }
+          }
+        });
+      }
+    });
+    
+    if (updated) {
+      setBuses(newBuses);
+      setGuides(newGuides);
+    }
+  }, [buses.length, guides.length, tourTypes]);
+
   // Parse bus format: XXX-YY (number-seats)
   const parseBuses = (text: string): ParsedBus[] => {
     const busPattern = /(\d{3})-(\d{2})/g;
@@ -502,9 +556,11 @@ export default function AllocationScreen() {
       {
         text: "Очистить",
         style: "destructive",
-        onPress: () => {
+        onPress: async () => {
           setBuses([]);
           setGuides([]);
+          // Clear AsyncStorage
+          await AsyncStorage.multiRemove([STORAGE_KEY_BUSES, STORAGE_KEY_GUIDES, STORAGE_KEY_DATE]);
           hapticFeedback.medium();
         },
       },
