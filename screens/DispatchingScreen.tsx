@@ -5,6 +5,7 @@ import type WebViewType from "react-native-webview";
 import { Icon } from "@/components/Icon";
 import { useSafeAreaInsets } from "react-native-safe-area-context";
 import AsyncStorage from "@react-native-async-storage/async-storage";
+import * as Clipboard from "expo-clipboard";
 import { BlurView } from "expo-blur";
 import { ThemedText } from "@/components/ThemedText";
 import { ThemedView } from "@/components/ThemedView";
@@ -289,7 +290,7 @@ export default function DispatchingScreen() {
     activeWebView.injectJavaScript(jsCode);
   };
 
-  const handleWebViewMessage = (event: WebViewMessageEvent) => {
+  const handleWebViewMessage = async (event: WebViewMessageEvent) => {
     try {
       const data = JSON.parse(event.nativeEvent.data);
       if (data.type === 'searchResult') {
@@ -302,6 +303,20 @@ export default function DispatchingScreen() {
         }
         // Clear result after 3 seconds
         setTimeout(() => setSearchResult(null), 3000);
+      } else if (data.type === 'callList') {
+        const phones: string[] = data.phones || [];
+        if (phones.length === 0) {
+          hapticFeedback.error();
+          Alert.alert("Обзвон", "Нет номеров для обзвона.\n\nВсе клиенты либо отмечены (зелёные), либо количество = 0.");
+        } else {
+          const text = phones.join('\n');
+          await Clipboard.setStringAsync(text);
+          hapticFeedback.success();
+          Alert.alert(
+            "Скопировано",
+            `${phones.length} номер(ов) для обзвона:\n\n${phones.slice(0, 5).join('\n')}${phones.length > 5 ? `\n... и ещё ${phones.length - 5}` : ''}`
+          );
+        }
       }
     } catch (e) {
       // Ignore non-JSON messages
@@ -657,6 +672,48 @@ export default function DispatchingScreen() {
             }}
           >
             <Icon name="refresh-cw" size={16} color={theme.text} />
+          </Pressable>
+          <Pressable
+            style={[styles.tabActionButton, { backgroundColor: theme.success, marginRight: Spacing.xs }]}
+            onPress={() => {
+              hapticFeedback.medium();
+              const activeWebView = webViewRefs.current[activeTabId];
+              if (activeWebView) {
+                const callListScript = `
+                  (function(){
+                    var rows = document.querySelectorAll('table tr');
+                    var phones = [];
+                    rows.forEach(function(row) {
+                      var bg = getComputedStyle(row).backgroundColor;
+                      var cells = row.querySelectorAll('td');
+                      if (!cells.length) return;
+                      var firstCell = cells[0];
+                      var cellBg = getComputedStyle(firstCell).backgroundColor;
+                      var combinedBg = bg + cellBg;
+                      if (combinedBg.toLowerCase().includes('green') ||
+                          /rgb\\(\\s*\\d{1,2}\\s*,\\s*(1[2-9]\\d|2\\d\\d)\\s*,\\s*\\d{1,3}\\s*\\)/.test(combinedBg) ||
+                          combinedBg.includes('144, 238') ||
+                          combinedBg.includes('152, 251') ||
+                          combinedBg.includes('0, 128, 0') ||
+                          combinedBg.includes('34, 139') ||
+                          combinedBg.includes('50, 205')) return;
+                      var phoneCell = cells[0];
+                      var countCell = cells[3];
+                      var phone = phoneCell ? phoneCell.innerText.trim() : '';
+                      var count = parseInt(countCell ? countCell.innerText.trim() : '0') || 0;
+                      if (phone && phone.startsWith('+') && count > 0) {
+                        phones.push(phone + ' (' + count + ')');
+                      }
+                    });
+                    window.ReactNativeWebView.postMessage(JSON.stringify({ type: 'callList', phones: phones }));
+                  })();
+                  true;
+                `;
+                activeWebView.injectJavaScript(callListScript);
+              }
+            }}
+          >
+            <Icon name="phone" size={16} color={theme.buttonText} />
           </Pressable>
           <Pressable
             style={[styles.tabActionButton, { backgroundColor: theme.primary }]}
