@@ -832,6 +832,19 @@ export default function RadioGuidesScreen() {
                     if (guide.busNumber) {
                       setBusNumber(guide.busNumber);
                     }
+                    // Auto-fill receivers count from excursion participants
+                    if (selectedExcursion) {
+                      const totalParticipants = 
+                        (selectedExcursion.fullPriceCount || 0) + 
+                        (selectedExcursion.discountedCount || 0) + 
+                        (selectedExcursion.freeCount || 0) + 
+                        (selectedExcursion.tourPackageCount || 0) + 
+                        (selectedExcursion.byTourCount || 0) + 
+                        (selectedExcursion.paidCount || 0);
+                      if (totalParticipants > 0) {
+                        setReceiversIssued(totalParticipants.toString());
+                      }
+                    }
                     setShowGuidePicker(false);
                   }}
                   style={[
