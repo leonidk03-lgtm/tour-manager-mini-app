@@ -726,6 +726,33 @@ export default function AllocationScreen() {
     hapticFeedback.light();
   };
   
+  // Move bus up/down in order
+  const moveBus = (busId: string, direction: 'up' | 'down') => {
+    setBuses(prev => {
+      const idx = prev.findIndex(b => b.id === busId);
+      if (idx === -1) return prev;
+      
+      // Find buses with same tour to only reorder within tour group
+      const bus = prev[idx];
+      const sameTourBuses = prev.filter(b => b.assignedTourTypeId === bus.assignedTourTypeId);
+      const posInTour = sameTourBuses.findIndex(b => b.id === busId);
+      
+      if (direction === 'up' && posInTour === 0) return prev;
+      if (direction === 'down' && posInTour === sameTourBuses.length - 1) return prev;
+      
+      // Get the bus to swap with
+      const swapBus = direction === 'up' ? sameTourBuses[posInTour - 1] : sameTourBuses[posInTour + 1];
+      const swapIdx = prev.findIndex(b => b.id === swapBus.id);
+      
+      // Swap positions in main array
+      const newBuses = [...prev];
+      [newBuses[idx], newBuses[swapIdx]] = [newBuses[swapIdx], newBuses[idx]];
+      
+      return newBuses;
+    });
+    hapticFeedback.light();
+  };
+  
   // Toggle boat flag for bus
   const toggleBoat = (busId: string) => {
     setBuses(prev => prev.map(b => 
@@ -830,10 +857,16 @@ export default function AllocationScreen() {
         const tourBuses = getBusesForTour(tour.id);
         if (tourBuses.length === 0) return;
 
-        lines.push(tour.name.toUpperCase());
+        const boatBuses = tourBuses.filter(b => b.withBoat);
+        const tourTitle = boatBuses.length > 0 
+          ? `${tour.name.toUpperCase()} (с теплоходом: ${boatBuses.length})`
+          : tour.name.toUpperCase();
+        lines.push(tourTitle);
+        
         tourBuses.forEach(bus => {
           const guideName = bus.assignedGuideName || '—';
-          lines.push(`Авт. ${bus.busNumber} (${bus.seats} м.) → ${guideName}`);
+          const boatMark = bus.withBoat ? ' 🚢' : '';
+          lines.push(`Авт. ${bus.busNumber} (${bus.seats} м.)${boatMark} → ${guideName}`);
         });
         lines.push('');
       });
@@ -853,7 +886,7 @@ export default function AllocationScreen() {
       
       if (bus && tour) {
         lines.push(`${guide.name}:`);
-        lines.push(`Экскурсия: ${tour.name}`);
+        lines.push(`Экскурсия: ${tour.name}${bus.withBoat ? ' (с теплоходом)' : ''}`);
         lines.push(`Автобус: ${bus.busNumber}`);
         lines.push('');
       }
@@ -1457,6 +1490,24 @@ export default function AllocationScreen() {
                     </View>
                     <Pressable onPress={() => setShowBusModal(false)}>
                       <Icon name="x" size={24} color={theme.text} />
+                    </Pressable>
+                  </View>
+                  
+                  {/* Move buttons */}
+                  <View style={styles.moveButtonsRow}>
+                    <Pressable
+                      style={[styles.moveButton, { backgroundColor: theme.backgroundSecondary }]}
+                      onPress={() => moveBus(bus.id, 'up')}
+                    >
+                      <Icon name="chevron-up" size={20} color={theme.primary} />
+                      <ThemedText style={{ color: theme.primary, fontSize: 13 }}>Выше</ThemedText>
+                    </Pressable>
+                    <Pressable
+                      style={[styles.moveButton, { backgroundColor: theme.backgroundSecondary }]}
+                      onPress={() => moveBus(bus.id, 'down')}
+                    >
+                      <Icon name="chevron-down" size={20} color={theme.primary} />
+                      <ThemedText style={{ color: theme.primary, fontSize: 13 }}>Ниже</ThemedText>
                     </Pressable>
                   </View>
                   
@@ -2074,6 +2125,20 @@ const styles = StyleSheet.create({
     borderRadius: BorderRadius.md,
     borderWidth: 1,
     marginTop: Spacing.lg,
+  },
+  moveButtonsRow: {
+    flexDirection: 'row',
+    gap: Spacing.sm,
+    marginBottom: Spacing.md,
+  },
+  moveButton: {
+    flex: 1,
+    flexDirection: 'row',
+    alignItems: 'center',
+    justifyContent: 'center',
+    gap: Spacing.xs,
+    paddingVertical: Spacing.sm,
+    borderRadius: BorderRadius.md,
   },
   inlineDropdown: {
     marginLeft: Spacing.md,
