@@ -24,10 +24,14 @@ export function TourTypeModal({ visible, onClose, onSave, tourType }: TourTypeMo
   const [isEnabled, setIsEnabled] = useState(true);
   const [hasRadioGuides, setHasRadioGuides] = useState(false);
   const [selectedServiceIds, setSelectedServiceIds] = useState<string[]>([]);
+  const [logistShortName, setLogistShortName] = useState("");
+  const [allocationGroup, setAllocationGroup] = useState("");
 
   const articleRef = useRef<TextInput>(null);
   const fullPriceRef = useRef<TextInput>(null);
   const discountedPriceRef = useRef<TextInput>(null);
+  const logistShortNameRef = useRef<TextInput>(null);
+  const allocationGroupRef = useRef<TextInput>(null);
 
   useEffect(() => {
     if (visible) {
@@ -38,6 +42,8 @@ export function TourTypeModal({ visible, onClose, onSave, tourType }: TourTypeMo
       setIsEnabled(tourType?.isEnabled ?? true);
       setHasRadioGuides(tourType?.hasRadioGuides ?? false);
       setSelectedServiceIds(tourType?.applicableServiceIds || []);
+      setLogistShortName(tourType?.logistShortName || "");
+      setAllocationGroup(tourType?.allocationGroup || "");
     }
   }, [visible, tourType]);
 
@@ -82,6 +88,8 @@ export function TourTypeModal({ visible, onClose, onSave, tourType }: TourTypeMo
       isEnabled,
       applicableServiceIds: selectedServiceIds,
       hasRadioGuides,
+      logistShortName: logistShortName.trim() || undefined,
+      allocationGroup: allocationGroup.trim() || undefined,
     };
 
     onSave(newTourType);
@@ -228,6 +236,54 @@ export function TourTypeModal({ visible, onClose, onSave, tourType }: TourTypeMo
                 trackColor={{ false: theme.divider, true: theme.primary }}
                 thumbColor={theme.backgroundDefault}
               />
+            </View>
+
+            <View style={styles.row}>
+              <View style={[styles.inputGroup, { flex: 1 }]}>
+                <ThemedText style={[styles.label, { color: theme.textSecondary }]}>
+                  Сокращение логиста
+                </ThemedText>
+                <TextInput
+                  ref={logistShortNameRef}
+                  style={[
+                    styles.input,
+                    {
+                      borderColor: theme.inputBorder,
+                      color: theme.text,
+                      backgroundColor: theme.backgroundSecondary,
+                    },
+                  ]}
+                  value={logistShortName}
+                  onChangeText={setLogistShortName}
+                  placeholder="Город, 11:00"
+                  placeholderTextColor={theme.textSecondary}
+                  returnKeyType="next"
+                  blurOnSubmit={false}
+                  onSubmitEditing={() => allocationGroupRef.current?.focus()}
+                />
+              </View>
+
+              <View style={[styles.inputGroup, { flex: 1 }]}>
+                <ThemedText style={[styles.label, { color: theme.textSecondary }]}>
+                  Группа распред.
+                </ThemedText>
+                <TextInput
+                  ref={allocationGroupRef}
+                  style={[
+                    styles.input,
+                    {
+                      borderColor: theme.inputBorder,
+                      color: theme.text,
+                      backgroundColor: theme.backgroundSecondary,
+                    },
+                  ]}
+                  value={allocationGroup}
+                  onChangeText={setAllocationGroup}
+                  placeholder="Свияжск"
+                  placeholderTextColor={theme.textSecondary}
+                  returnKeyType="done"
+                />
+              </View>
             </View>
 
             {additionalServices.length > 0 ? (

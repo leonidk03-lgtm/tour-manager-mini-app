@@ -4,6 +4,8 @@ import { WebView, WebViewMessageEvent } from "react-native-webview";
 import type WebViewType from "react-native-webview";
 import { Icon } from "@/components/Icon";
 import { useSafeAreaInsets } from "react-native-safe-area-context";
+import { useNavigation } from "@react-navigation/native";
+import type { NativeStackNavigationProp } from "@react-navigation/native-stack";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import * as Clipboard from "expo-clipboard";
 import { BlurView } from "expo-blur";
@@ -14,6 +16,7 @@ import { useData, DispatchingNote, Excursion } from "@/contexts/DataContext";
 import { useAuth } from "@/contexts/AuthContext";
 import { Spacing, BorderRadius, Typography } from "@/constants/theme";
 import { hapticFeedback } from "@/utils/haptics";
+import { DispatchingStackParamList } from "@/navigation/DispatchingStackNavigator";
 
 const DEFAULT_DATABASE_URL = "http://turburo-kazan.ru/managers/zapis-na-ekskursiyu.php?arrFilter_ff%5BNAME%5D=&arrFilter_DATE_ACTIVE_FROM_1=&arrFilter_DATE_ACTIVE_FROM_2=&arrFilter_pf%5BTYPE%5D=&arrFilter_pf%5BGOSTINICI%5D=&arrFilter_CREATED_BY=&sort=date_ex&USER_REMEMBER=Y&set_filter=Показать&set_filter=Y";
 export const DISPATCH_URL_KEY = "@dispatch_webview_url";
@@ -25,9 +28,12 @@ interface BrowserTab {
   title: string;
 }
 
+type NavigationProp = NativeStackNavigationProp<DispatchingStackParamList, 'Dispatching'>;
+
 export default function DispatchingScreen() {
   const { theme } = useTheme();
   const insets = useSafeAreaInsets();
+  const navigation = useNavigation<NavigationProp>();
   const { dispatchingNotes, addDispatchingNote, updateDispatchingNote, deleteDispatchingNote, excursions, tourTypes, addExcursionNote, linkDispatchingNoteToExcursion } = useData();
   const { profile, isAdmin } = useAuth();
   const [currentNote, setCurrentNote] = useState("");
@@ -544,6 +550,21 @@ export default function DispatchingScreen() {
         <View style={styles.notesHeader}>
           <ThemedText style={styles.notesTitle}>Заметки</ThemedText>
           <View style={styles.notesActions}>
+            <Pressable
+              style={({ pressed }) => [
+                styles.notesHeaderButton,
+                { backgroundColor: theme.success, opacity: pressed ? 0.7 : 1 },
+              ]}
+              onPress={() => {
+                hapticFeedback.medium();
+                navigation.navigate('Allocation');
+              }}
+            >
+              <Icon name="git-branch" size={16} color={theme.buttonText} />
+              <ThemedText style={[styles.notesHeaderButtonText, { color: theme.buttonText }]}>
+                Распред.
+              </ThemedText>
+            </Pressable>
             {visibleNotes.length > 0 ? (
               <Pressable
                 style={({ pressed }) => [

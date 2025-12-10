@@ -29,6 +29,8 @@ export interface TourType {
   isEnabled: boolean;
   applicableServiceIds: string[];
   hasRadioGuides: boolean;
+  logistShortName?: string;
+  allocationGroup?: string;
 }
 
 export interface AdditionalService {
@@ -162,6 +164,36 @@ export interface ChatMessage {
   senderName: string;
   message: string;
   createdAt: string;
+}
+
+export interface AllocationBus {
+  id: string;
+  allocationId: string;
+  busNumber: string;
+  seats: number;
+  tourTypeId: string | null;
+  guideName: string | null;
+  isAdditional: boolean;
+  createdAt: string;
+}
+
+export interface AllocationGuide {
+  id: string;
+  allocationId: string;
+  guideName: string;
+  tourTypeId: string | null;
+  busId: string | null;
+  isAdditional: boolean;
+  createdAt: string;
+}
+
+export interface Allocation {
+  id: string;
+  date: string;
+  buses: AllocationBus[];
+  guides: AllocationGuide[];
+  createdAt: string;
+  updatedAt: string;
 }
 
 export type NotificationType = 'chat' | 'excursion' | 'transaction';
@@ -404,6 +436,8 @@ export function DataProvider({ children }: { children: ReactNode }) {
       isEnabled: t.is_enabled,
       applicableServiceIds: t.applicable_service_ids || [],
       hasRadioGuides: t.has_radio_guides ?? false,
+      logistShortName: t.logist_short_name || undefined,
+      allocationGroup: t.allocation_group || undefined,
     })));
   }, []);
 
@@ -1474,6 +1508,8 @@ export function DataProvider({ children }: { children: ReactNode }) {
           is_enabled: tourType.isEnabled,
           has_radio_guides: tourType.hasRadioGuides,
           applicable_service_ids: tourType.applicableServiceIds,
+          logist_short_name: tourType.logistShortName || null,
+          allocation_group: tourType.allocationGroup || null,
         });
 
       if (error) throw error;
@@ -1494,6 +1530,8 @@ export function DataProvider({ children }: { children: ReactNode }) {
       if (tourType.isEnabled !== undefined) updateData.is_enabled = tourType.isEnabled;
       if (tourType.hasRadioGuides !== undefined) updateData.has_radio_guides = tourType.hasRadioGuides;
       if (tourType.applicableServiceIds !== undefined) updateData.applicable_service_ids = tourType.applicableServiceIds;
+      if (tourType.logistShortName !== undefined) updateData.logist_short_name = tourType.logistShortName || null;
+      if (tourType.allocationGroup !== undefined) updateData.allocation_group = tourType.allocationGroup || null;
 
       const { error } = await supabase
         .from('tour_types')
