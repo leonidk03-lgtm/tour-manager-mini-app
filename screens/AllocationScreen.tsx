@@ -64,7 +64,17 @@ export default function AllocationScreen() {
   // Helper: check if two tourTypeIds belong to same allocation group
   const isSameAllocationGroup = (tourId1: string | null, tourId2: string | null): boolean => {
     if (!tourId1 || !tourId2) return false;
-    return getAllocationKey(tourId1) === getAllocationKey(tourId2);
+    const tour1 = tourTypes.find(t => t.id === tourId1);
+    const tour2 = tourTypes.find(t => t.id === tourId2);
+    if (!tour1 || !tour2) return false;
+    
+    // Both must have allocationGroup to be in same group
+    if (tour1.allocationGroup && tour2.allocationGroup) {
+      return tour1.allocationGroup === tour2.allocationGroup;
+    }
+    
+    // If neither has group, only same if same tour
+    return tourId1 === tourId2;
   };
 
   // Group tour types by allocation group
@@ -771,21 +781,36 @@ export default function AllocationScreen() {
 
       {/* Allocation groups - one section per group */}
       {tourGroups.map(group => {
+        // Check if this is a real allocation group or just a single tour
+        const isRealGroup = group.tourTypes.length > 1 || 
+          (group.tourTypes.length === 1 && group.tourTypes[0].allocationGroup);
+        
         // Get all buses in this allocation group
         const groupBuses = buses.filter(b => {
           if (!b.assignedTourTypeId) return false;
-          const busGroupKey = getAllocationKey(b.assignedTourTypeId);
-          // Match by group name or by tour id if no group
-          if (busGroupKey) return busGroupKey === group.groupName;
-          return group.tourTypes.some(t => t.id === b.assignedTourTypeId);
+          const busTour = tourTypes.find(t => t.id === b.assignedTourTypeId);
+          if (!busTour) return false;
+          
+          if (isRealGroup) {
+            // For real groups, match by allocationGroup
+            return busTour.allocationGroup === group.groupName;
+          } else {
+            // For ungrouped tours, match by exact tour ID
+            return group.tourTypes.some(t => t.id === b.assignedTourTypeId);
+          }
         });
         
         // Get all guides in this allocation group
         const groupGuides = guides.filter(g => {
           if (!g.assignedTourTypeId) return false;
-          const guideGroupKey = getAllocationKey(g.assignedTourTypeId);
-          if (guideGroupKey) return guideGroupKey === group.groupName;
-          return group.tourTypes.some(t => t.id === g.assignedTourTypeId);
+          const guideTour = tourTypes.find(t => t.id === g.assignedTourTypeId);
+          if (!guideTour) return false;
+          
+          if (isRealGroup) {
+            return guideTour.allocationGroup === group.groupName;
+          } else {
+            return group.tourTypes.some(t => t.id === g.assignedTourTypeId);
+          }
         });
         
         if (groupBuses.length === 0) return null;
