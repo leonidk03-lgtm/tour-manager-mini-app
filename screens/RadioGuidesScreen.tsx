@@ -1,4 +1,4 @@
-import { useState, useMemo, useEffect } from "react";
+import { useState, useMemo, useEffect, useCallback } from "react";
 import {
   View,
   StyleSheet,
@@ -10,6 +10,7 @@ import {
   Platform,
 } from "react-native";
 import AsyncStorage from "@react-native-async-storage/async-storage";
+import { useFocusEffect } from "@react-navigation/native";
 import { KeyboardAwareScrollView } from "react-native-keyboard-controller";
 import { Icon } from "@/components/Icon";
 import { ThemedText } from "@/components/ThemedText";
@@ -94,35 +95,50 @@ export default function RadioGuidesScreen() {
   const [allocationGuides, setAllocationGuides] = useState<AllocationGuide[]>([]);
   const [showGuidePicker, setShowGuidePicker] = useState(false);
   
-  // Load allocation data from AsyncStorage
-  useEffect(() => {
-    const loadAllocationData = async () => {
-      try {
-        const today = new Date().toISOString().split("T")[0];
-        const savedDate = await AsyncStorage.getItem(STORAGE_KEY_DATE);
-        
-        if (savedDate === today) {
-          const savedBuses = await AsyncStorage.getItem(STORAGE_KEY_BUSES);
-          const savedGuides = await AsyncStorage.getItem(STORAGE_KEY_GUIDES);
+  // Load allocation data from AsyncStorage on every screen focus
+  useFocusEffect(
+    useCallback(() => {
+      const loadAllocationData = async () => {
+        try {
+          const today = new Date().toISOString().split("T")[0];
+          const savedDate = await AsyncStorage.getItem(STORAGE_KEY_DATE);
           
-          if (savedBuses) {
-            setAllocationBuses(JSON.parse(savedBuses));
+          console.log("[RadioGuides] Loading allocation data, today:", today, "savedDate:", savedDate);
+          
+          if (savedDate === today) {
+            const savedBuses = await AsyncStorage.getItem(STORAGE_KEY_BUSES);
+            const savedGuides = await AsyncStorage.getItem(STORAGE_KEY_GUIDES);
+            
+            console.log("[RadioGuides] Buses:", savedBuses?.length, "Guides:", savedGuides?.length);
+            
+            if (savedBuses) {
+              const buses = JSON.parse(savedBuses);
+              console.log("[RadioGuides] Parsed buses:", buses.length);
+              setAllocationBuses(buses);
+            }
+            if (savedGuides) {
+              const guides = JSON.parse(savedGuides);
+              console.log("[RadioGuides] Parsed guides:", guides.length, "assigned:", guides.filter((g: AllocationGuide) => g.assignedTourTypeId).length);
+              setAllocationGuides(guides);
+            }
+          } else {
+            console.log("[RadioGuides] Date mismatch or no saved date");
+            setAllocationBuses([]);
+            setAllocationGuides([]);
           }
-          if (savedGuides) {
-            setAllocationGuides(JSON.parse(savedGuides));
-          }
+        } catch (error) {
+          console.error("Error loading allocation data:", error);
         }
-      } catch (error) {
-        console.error("Error loading allocation data:", error);
-      }
-    };
-    
-    loadAllocationData();
-  }, []);
+      };
+      
+      loadAllocationData();
+    }, [])
+  );
   
   // Get guides with their assigned buses from allocation
   const allocatedGuides = useMemo(() => {
-    return allocationGuides
+    console.log("[RadioGuides] Computing allocatedGuides, allocationGuides:", allocationGuides.length);
+    const result = allocationGuides
       .filter(g => g.assignedTourTypeId) // Only assigned guides
       .map(guide => {
         // Find the bus this guide is assigned to
@@ -136,6 +152,8 @@ export default function RadioGuidesScreen() {
           tourName: tourType?.name || null,
         };
       });
+    console.log("[RadioGuides] allocatedGuides result:", result.length);
+    return result;
   }, [allocationGuides, allocationBuses, tourTypes]);
 
   const todayExcursions = useMemo(() => {
