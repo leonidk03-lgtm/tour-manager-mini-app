@@ -560,7 +560,7 @@ export default function DispatchingScreen() {
                 navigation.navigate('Allocation');
               }}
             >
-              <Icon name="git-branch" size={16} color={theme.buttonText} />
+              <Icon name="shuffle" size={16} color={theme.buttonText} />
               <ThemedText style={[styles.notesHeaderButtonText, { color: theme.buttonText }]}>
                 Распред.
               </ThemedText>
@@ -734,7 +734,7 @@ export default function DispatchingScreen() {
               }
             }}
           >
-            <Icon name="phone" size={16} color={theme.buttonText} />
+            <Icon name="phone-call" size={16} color={theme.buttonText} />
           </Pressable>
           <Pressable
             style={[styles.tabActionButton, { backgroundColor: theme.primary }]}

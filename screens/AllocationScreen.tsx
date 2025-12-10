@@ -881,7 +881,7 @@ export default function AllocationScreen() {
                     <Icon name="chevron-down" size={12} color={theme.textSecondary} />
                   </Pressable>
                   
-                  {/* Boat toggle */}
+                  {/* Boat toggle - letter T for Теплоход */}
                   <Pressable
                     style={[
                       styles.boatToggle,
@@ -889,11 +889,14 @@ export default function AllocationScreen() {
                     ]}
                     onPress={() => toggleBoat(bus.id)}
                   >
-                    <Icon 
-                      name="navigation" 
-                      size={14} 
-                      color={bus.withBoat ? theme.primary : theme.textSecondary} 
-                    />
+                    <ThemedText 
+                      style={[
+                        styles.boatToggleText,
+                        { color: bus.withBoat ? theme.primary : theme.textSecondary }
+                      ]}
+                    >
+                      Т
+                    </ThemedText>
                   </Pressable>
                   
                   {/* Guide selector */}
@@ -1622,6 +1625,12 @@ const styles = StyleSheet.create({
   boatToggle: {
     padding: 4,
     borderRadius: BorderRadius.sm,
+    minWidth: 20,
+    alignItems: 'center',
+  },
+  boatToggleText: {
+    fontSize: 12,
+    fontWeight: '700',
   },
   guideCellText: {
     fontSize: 11,
