@@ -710,6 +710,40 @@ export default function AllocationScreen() {
     ));
     hapticFeedback.light();
   };
+  
+  // Delete bus from allocation
+  const deleteBus = (busId: string) => {
+    const bus = buses.find(b => b.id === busId);
+    if (!bus) return;
+    
+    // If bus has assigned guide, unassign them
+    if (bus.assignedGuideName) {
+      setGuides(prev => prev.map(g => 
+        g.name === bus.assignedGuideName ? { ...g, assignedBusId: null } : g
+      ));
+    }
+    
+    // Remove bus
+    setBuses(prev => prev.filter(b => b.id !== busId));
+    hapticFeedback.medium();
+  };
+  
+  // Delete guide from allocation
+  const deleteGuide = (guideId: string) => {
+    const guide = guides.find(g => g.id === guideId);
+    if (!guide) return;
+    
+    // If guide is assigned to bus, remove from bus
+    if (guide.assignedBusId) {
+      setBuses(prev => prev.map(b => 
+        b.id === guide.assignedBusId ? { ...b, assignedGuideName: null } : b
+      ));
+    }
+    
+    // Remove guide
+    setGuides(prev => prev.filter(g => g.id !== guideId));
+    hapticFeedback.medium();
+  };
 
   // Get buses and guides for a specific tour type
   // Get buses for exact tour (not group) - for visual display
@@ -1066,6 +1100,23 @@ export default function AllocationScreen() {
                   >
                     <Icon name="copy" size={16} color={theme.textSecondary} />
                   </Pressable>
+                  
+                  {/* Delete button */}
+                  <Pressable
+                    style={styles.deleteRowButton}
+                    onPress={() => {
+                      Alert.alert(
+                        "Удалить автобус?",
+                        `${bus.busNumber} будет удалён из распределения`,
+                        [
+                          { text: "Отмена", style: "cancel" },
+                          { text: "Удалить", style: "destructive", onPress: () => deleteBus(bus.id) },
+                        ]
+                      );
+                    }}
+                  >
+                    <Icon name="x" size={16} color={theme.error} />
+                  </Pressable>
                 </View>
               );
             })}
@@ -1108,12 +1159,25 @@ export default function AllocationScreen() {
                   Свободные гиды:
                 </ThemedText>
                 {groupGuides.filter(g => !g.assignedBusId).map(guide => (
-                  <View key={guide.id} style={[styles.freeGuideChip, { backgroundColor: theme.backgroundTertiary }]}>
+                  <Pressable 
+                    key={guide.id} 
+                    style={[styles.freeGuideChip, { backgroundColor: theme.backgroundTertiary }]}
+                    onPress={() => {
+                      Alert.alert(
+                        guide.name,
+                        "Что сделать?",
+                        [
+                          { text: "Отмена", style: "cancel" },
+                          { text: "Удалить", style: "destructive", onPress: () => deleteGuide(guide.id) },
+                        ]
+                      );
+                    }}
+                  >
                     <Icon name="user" size={12} color={theme.warning} />
                     <ThemedText style={[styles.freeGuideName, { color: theme.warning }]}>
                       {guide.name}
                     </ThemedText>
-                  </View>
+                  </Pressable>
                 ))}
               </View>
             ) : null}
@@ -1221,6 +1285,23 @@ export default function AllocationScreen() {
                     Выбрать экскурсию
                   </ThemedText>
                   <Icon name="chevron-down" size={12} color={theme.textSecondary} />
+                </Pressable>
+                
+                {/* Delete button */}
+                <Pressable
+                  style={styles.deleteRowButton}
+                  onPress={() => {
+                    Alert.alert(
+                      "Удалить гида?",
+                      `${guide.name} будет удалён из распределения`,
+                      [
+                        { text: "Отмена", style: "cancel" },
+                        { text: "Удалить", style: "destructive", onPress: () => deleteGuide(guide.id) },
+                      ]
+                    );
+                  }}
+                >
+                  <Icon name="x" size={16} color={theme.error} />
                 </Pressable>
               </View>
               
@@ -1738,6 +1819,9 @@ const styles = StyleSheet.create({
     minWidth: 70,
   },
   copyRowButton: {
+    padding: 4,
+  },
+  deleteRowButton: {
     padding: 4,
   },
   boatToggle: {
