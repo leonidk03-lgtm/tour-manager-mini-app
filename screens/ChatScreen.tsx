@@ -69,8 +69,9 @@ export default function ChatScreen() {
     );
   };
 
-  const getSenderName = (senderId: string): string => {
-    const manager = managers.find(m => m.id === senderId);
+  const getSenderName = (item: ChatMessage): string => {
+    if (item.senderName) return item.senderName;
+    const manager = managers.find(m => m.id === item.senderId);
     return manager?.name || "Неизвестный";
   };
 
@@ -118,7 +119,7 @@ export default function ChatScreen() {
           >
             {!isOwn ? (
               <ThemedText type="small" style={[styles.senderName, { color: theme.primary }]}>
-                {getSenderName(item.senderId)}
+                {getSenderName(item)}
               </ThemedText>
             ) : null}
             <ThemedText
