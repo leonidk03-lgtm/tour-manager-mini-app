@@ -15,6 +15,7 @@ import RadioGuidesReportScreen from "@/screens/RadioGuidesReportScreen";
 import ExportDataScreen from "@/screens/ExportDataScreen";
 import DailyReportScreen from "@/screens/DailyReportScreen";
 import ChatScreen from "@/screens/ChatScreen";
+import NotificationsScreen from "@/screens/NotificationsScreen";
 import { getCommonScreenOptions } from "./screenOptions";
 import { useTheme } from "@/hooks/useTheme";
 import { Profile } from "@/lib/supabase";
@@ -36,6 +37,7 @@ export type SettingsStackParamList = {
   ExportData: undefined;
   DailyReport: undefined;
   Chat: undefined;
+  Notifications: undefined;
 };
 
 const Stack = createNativeStackNavigator<SettingsStackParamList>();
@@ -127,6 +129,11 @@ export default function SettingsStackNavigator() {
         name="Chat"
         component={ChatScreen}
         options={{ title: "Чат менеджеров" }}
+      />
+      <Stack.Screen
+        name="Notifications"
+        component={NotificationsScreen}
+        options={{ title: "Уведомления" }}
       />
     </Stack.Navigator>
   );

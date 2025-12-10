@@ -10,6 +10,7 @@ import DispatchingStackNavigator from "@/navigation/DispatchingStackNavigator";
 import SettingsStackNavigator from "@/navigation/SettingsStackNavigator";
 import { useTheme } from "@/hooks/useTheme";
 import { useAuth } from "@/contexts/AuthContext";
+import { useData } from "@/contexts/DataContext";
 import { Spacing, BorderRadius } from "@/constants/theme";
 
 export type MainTabParamList = {
@@ -25,6 +26,7 @@ const Tab = createBottomTabNavigator<MainTabParamList>();
 export default function MainTabNavigator() {
   const { theme, isDark } = useTheme();
   const { isAdmin, isRadioDispatcher } = useAuth();
+  const { unreadNotificationCount } = useData();
 
   const getInitialRouteName = () => {
     if (isRadioDispatcher) return "SettingsTab";
@@ -123,6 +125,13 @@ export default function MainTabNavigator() {
           tabBarIcon: ({ color, size }) => (
             <Icon name={isRadioDispatcher ? "radio" : "sliders"} size={22} color={color} />
           ),
+          tabBarBadge: unreadNotificationCount > 0 ? unreadNotificationCount : undefined,
+          tabBarBadgeStyle: {
+            backgroundColor: theme.primary,
+            fontSize: 10,
+            minWidth: 18,
+            height: 18,
+          },
         }}
       />
     </Tab.Navigator>
