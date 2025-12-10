@@ -84,28 +84,43 @@ export default function AllocationScreen() {
     }));
   };
 
-  // Parse guide names (each line or comma-separated)
+  // Words that indicate excursion/location names, not guide names
+  const excludeWords = [
+    'свияжск', 'город', 'казань', 'раифа', 'болгар', 'елабуга', 'чистополь',
+    'йошкар', 'ола', 'кремль', 'ночь', 'день', 'вечер', 'утро',
+    'экскурсия', 'автобус', 'авт', 'ито', 'итого', 'всего', 'на', 'и',
+    'тур', 'маршрут', 'обзорная', 'пешеходная', 'речная', 'ночная'
+  ];
+
+  // Parse guide names - must look like "Имя Фамилия" (two capitalized words)
   const parseGuides = (text: string): ParsedGuide[] => {
-    const lines = text.split('\n');
     const guides: ParsedGuide[] = [];
     let idCounter = 0;
-
-    lines.forEach(line => {
-      // Skip lines that look like headers or bus data
-      if (line.match(/^\d{3}-\d{2}/) || line.match(/^\d{1,2}:\d{2}/) || line.includes('автобус')) {
+    
+    // Pattern for Russian names: Имя Фамилия (two words starting with capital)
+    const namePattern = /([А-ЯЁ][а-яё]+)\s+([А-ЯЁ][а-яё]+)/g;
+    const matches = [...text.matchAll(namePattern)];
+    
+    matches.forEach(match => {
+      const fullName = match[0];
+      const firstName = match[1].toLowerCase();
+      const lastName = match[2].toLowerCase();
+      
+      // Skip if any part is an excluded word
+      if (excludeWords.includes(firstName) || excludeWords.includes(lastName)) {
         return;
       }
       
-      // Check if it's a name (contains Cyrillic letters and is not too long)
-      const trimmed = line.trim();
-      if (trimmed && /[А-Яа-яЁё]/.test(trimmed) && trimmed.length < 50) {
-        // Skip if it looks like an excursion name or header
-        if (trimmed.includes(':') && !trimmed.match(/^\d/)) return;
-        if (trimmed.toLowerCase().includes('гид') && trimmed.toLowerCase().includes('на')) return;
-        
+      // Skip if too short (likely abbreviation)
+      if (firstName.length < 3 || lastName.length < 3) {
+        return;
+      }
+      
+      // Avoid duplicates
+      if (!guides.find(g => g.name === fullName)) {
         guides.push({
           id: `guide-${idCounter++}-${Date.now()}`,
-          name: trimmed,
+          name: fullName,
           assignedTourTypeId: null,
           assignedBusId: null,
           isAdditional: false,
@@ -116,21 +131,63 @@ export default function AllocationScreen() {
     return guides;
   };
 
-  // Match tour type by logist short name
+  // Common keywords for auto-detection
+  const tourKeywords: { [key: string]: string[] } = {
+    'свияжск': ['свияжск'],
+    'раифа': ['раифа', 'раифский'],
+    'болгар': ['болгар', 'болгары'],
+    'елабуга': ['елабуга'],
+    'город': ['город', 'обзорная', 'казан'],
+    'ночь': ['ночь', 'ночная', 'вечер'],
+    'кремль': ['кремль'],
+    'йошкар': ['йошкар', 'ола'],
+  };
+
+  // Match tour type by logist short name or keywords
   const matchTourType = (text: string): TourType | null => {
     const lowerText = text.toLowerCase().trim();
     
-    for (const tour of tourTypes) {
+    // First try logistShortName (most accurate)
+    for (const tour of tourTypes.filter(t => t.isEnabled)) {
       if (tour.logistShortName) {
         const shortNames = tour.logistShortName.split(',').map(s => s.trim().toLowerCase());
-        if (shortNames.some(name => lowerText.includes(name))) {
+        if (shortNames.some(name => name && lowerText.includes(name))) {
           return tour;
         }
       }
-      if (tour.name.toLowerCase().includes(lowerText) || lowerText.includes(tour.name.toLowerCase())) {
+    }
+    
+    // Then try allocationGroup
+    for (const tour of tourTypes.filter(t => t.isEnabled)) {
+      if (tour.allocationGroup) {
+        const groupLower = tour.allocationGroup.toLowerCase();
+        if (lowerText.includes(groupLower)) {
+          return tour;
+        }
+      }
+    }
+    
+    // Then try keywords from tour name
+    for (const tour of tourTypes.filter(t => t.isEnabled)) {
+      const tourNameLower = tour.name.toLowerCase();
+      // Check each keyword set
+      for (const [key, keywords] of Object.entries(tourKeywords)) {
+        if (tourNameLower.includes(key)) {
+          if (keywords.some(kw => lowerText.includes(kw))) {
+            return tour;
+          }
+        }
+      }
+    }
+    
+    // Finally try partial name match
+    for (const tour of tourTypes.filter(t => t.isEnabled)) {
+      const nameParts = tour.name.toLowerCase().split(/\s+/);
+      if (nameParts.some(part => part.length > 4 && lowerText.includes(part))) {
         return tour;
       }
     }
+    
     return null;
   };
 
@@ -148,6 +205,16 @@ export default function AllocationScreen() {
       return;
     }
 
+    // Try to auto-detect excursion from text
+    const detectedTour = matchTourType(inputText);
+    
+    // If excursion detected, pre-assign all buses to it
+    if (detectedTour) {
+      parsedBuses.forEach(bus => {
+        bus.assignedTourTypeId = detectedTour.id;
+      });
+    }
+
     // Merge with existing data (for additional entries)
     setBuses(prev => {
       const newBuses = parsedBuses.map(b => ({ ...b, isAdditional: prev.length > 0 }));
@@ -162,9 +229,10 @@ export default function AllocationScreen() {
     setInputText("");
     setShowInputModal(false);
 
+    const tourInfo = detectedTour ? `\nЭкскурсия: ${detectedTour.name}` : '';
     Alert.alert(
       "Распознано",
-      `Автобусов: ${parsedBuses.length}\nГидов: ${parsedGuides.length}`
+      `Автобусов: ${parsedBuses.length}\nГидов: ${parsedGuides.length}${tourInfo}`
     );
   };
 
