@@ -7,6 +7,7 @@ import DashboardStackNavigator from "@/navigation/DashboardStackNavigator";
 import ExcursionsStackNavigator from "@/navigation/ExcursionsStackNavigator";
 import FinancesStackNavigator from "@/navigation/FinancesStackNavigator";
 import DispatchingStackNavigator from "@/navigation/DispatchingStackNavigator";
+import ChatStackNavigator from "@/navigation/ChatStackNavigator";
 import SettingsStackNavigator from "@/navigation/SettingsStackNavigator";
 import { useTheme } from "@/hooks/useTheme";
 import { useAuth } from "@/contexts/AuthContext";
@@ -18,6 +19,7 @@ export type MainTabParamList = {
   ExcursionsTab: undefined;
   FinancesTab: undefined;
   DispatchingTab: undefined;
+  ChatTab: undefined;
   SettingsTab: undefined;
 };
 
@@ -117,6 +119,16 @@ export default function MainTabNavigator() {
           />
         </>
       ) : null}
+      <Tab.Screen
+        name="ChatTab"
+        component={ChatStackNavigator}
+        options={{
+          title: "Чат",
+          tabBarIcon: ({ color, size }) => (
+            <Icon name="message-circle" size={22} color={color} />
+          ),
+        }}
+      />
       <Tab.Screen
         name="SettingsTab"
         component={SettingsStackNavigator}

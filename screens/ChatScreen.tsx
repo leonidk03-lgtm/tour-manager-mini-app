@@ -1,6 +1,7 @@
 import { useState, useRef, useCallback, useEffect } from "react";
 import { View, StyleSheet, TextInput, Pressable, FlatList, Alert, KeyboardAvoidingView, Platform } from "react-native";
 import { useSafeAreaInsets } from "react-native-safe-area-context";
+import { useBottomTabBarHeight } from "@react-navigation/bottom-tabs";
 import { Icon } from "@/components/Icon";
 import { ThemedText } from "@/components/ThemedText";
 import { ThemedView } from "@/components/ThemedView";
@@ -13,6 +14,7 @@ import { hapticFeedback } from "@/utils/haptics";
 export default function ChatScreen() {
   const { theme } = useTheme();
   const insets = useSafeAreaInsets();
+  const tabBarHeight = useBottomTabBarHeight();
   const { chatMessages, sendChatMessage, clearChatHistory, managers } = useData();
   const { profile, isAdmin } = useAuth();
   const [message, setMessage] = useState("");
@@ -181,7 +183,7 @@ export default function ChatScreen() {
           }
         />
 
-        <View style={[styles.inputContainer, { paddingBottom: Math.max(insets.bottom, Spacing.md), backgroundColor: theme.backgroundDefault }]}>
+        <View style={[styles.inputContainer, { paddingBottom: tabBarHeight + Spacing.sm, backgroundColor: theme.backgroundDefault }]}>
           <TextInput
             style={[
               styles.input,
