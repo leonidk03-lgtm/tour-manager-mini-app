@@ -86,19 +86,21 @@ export default function AllocationScreen() {
 
   // Words that indicate excursion/location names, not guide names
   const excludeWords = [
-    'свияжск', 'город', 'казань', 'раифа', 'болгар', 'елабуга', 'чистополь',
-    'йошкар', 'ола', 'кремль', 'ночь', 'день', 'вечер', 'утро',
-    'экскурсия', 'автобус', 'авт', 'ито', 'итого', 'всего', 'на', 'и',
-    'тур', 'маршрут', 'обзорная', 'пешеходная', 'речная', 'ночная'
+    'свияжск', 'город', 'казань', 'раифа', 'болгар', 'булгар', 'булгары', 'елабуга', 'чистополь',
+    'йошкар', 'ола', 'кремль', 'ночь', 'день', 'вечер', 'утро', 'озера', 'озеро',
+    'экскурсия', 'автобус', 'авт', 'ито', 'итого', 'всего', 'на', 'и', 'йошка',
+    'тур', 'маршрут', 'обзорная', 'пешеходная', 'речная', 'ночная', 'интерактив',
+    'трансфер', 'трансферы', 'резерв'
   ];
 
   // Parse guide names - must look like "Имя Фамилия" (two capitalized words)
+  // Also handles lowercase last names like "Резеда хуснутдинова"
   const parseGuides = (text: string): ParsedGuide[] => {
     const guides: ParsedGuide[] = [];
     let idCounter = 0;
     
-    // Pattern for Russian names: Имя Фамилия (two words starting with capital)
-    const namePattern = /([А-ЯЁ][а-яё]+)\s+([А-ЯЁ][а-яё]+)/g;
+    // Pattern for Russian names: Имя Фамилия (first word capital, second can be lower)
+    const namePattern = /([А-ЯЁ][а-яё]{2,})\s+([А-ЯЁа-яё][а-яё]{2,})/g;
     const matches = [...text.matchAll(namePattern)];
     
     matches.forEach(match => {
@@ -111,13 +113,13 @@ export default function AllocationScreen() {
         return;
       }
       
-      // Skip if too short (likely abbreviation)
-      if (firstName.length < 3 || lastName.length < 3) {
+      // Skip common non-name patterns
+      if (firstName === 'всего' || lastName === 'автобусов') {
         return;
       }
       
       // Avoid duplicates
-      if (!guides.find(g => g.name === fullName)) {
+      if (!guides.find(g => g.name.toLowerCase() === fullName.toLowerCase())) {
         guides.push({
           id: `guide-${idCounter++}-${Date.now()}`,
           name: fullName,
@@ -131,41 +133,36 @@ export default function AllocationScreen() {
     return guides;
   };
 
+  // Keyword aliases for matching (logist uses short forms)
+  const keywordAliases: { [key: string]: string[] } = {
+    'болгар': ['булгар', 'булгары', 'болгар', 'болгары'],
+    'йошкар': ['йошкар', 'йошка'],
+    'свияжск': ['свияжск'],
+    'город': ['город', 'обзорная'],
+    'раифа': ['раифа', 'раифский'],
+    'озера': ['озера', 'озеро', 'голубые'],
+    'кремль': ['кремль'],
+    'ночь': ['ночь', 'ночная', 'вечер'],
+    'трансфер': ['трансфер', 'трансферы'],
+    'интерактив': ['интерактив'],
+  };
+
   // Match tour type by finding keyword in text and matching to tour
   const matchTourType = (text: string): TourType | null => {
     const lowerText = text.toLowerCase().trim();
     
-    // Extract potential tour keywords from text
-    const foundKeywords: { keyword: string; position: number }[] = [];
-    
-    // Key destination words to look for
-    const destinationWords = [
-      'свияжск', 'раифа', 'болгар', 'елабуга', 'чистополь', 
-      'йошкар', 'кремль', 'город', 'ночь', 'вечер', 'обзорная'
-    ];
-    
-    // Find which keywords are in the text and their positions
-    destinationWords.forEach(kw => {
-      const pos = lowerText.indexOf(kw);
-      if (pos !== -1) {
-        foundKeywords.push({ keyword: kw, position: pos });
-      }
-    });
-    
-    // Sort by position - use the FIRST mentioned keyword
-    foundKeywords.sort((a, b) => a.position - b.position);
-    
-    if (foundKeywords.length === 0) {
+    // Skip lines that are just guide names or time headers
+    if (/^\d{1,2}:\d{2}$/.test(lowerText)) return null;
+    if (!lowerText.match(/\d{3}-\d{2}/) && !lowerText.includes(':') && !lowerText.includes('-')) {
+      // Line without bus numbers or separators - likely just names
       return null;
     }
-    
-    const primaryKeyword = foundKeywords[0].keyword;
     
     // First try logistShortName (most accurate)
     for (const tour of tourTypes.filter(t => t.isEnabled)) {
       if (tour.logistShortName) {
         const shortNames = tour.logistShortName.split(',').map(s => s.trim().toLowerCase());
-        if (shortNames.some(name => name && name.includes(primaryKeyword))) {
+        if (shortNames.some(name => name && lowerText.startsWith(name))) {
           return tour;
         }
       }
@@ -175,17 +172,36 @@ export default function AllocationScreen() {
     for (const tour of tourTypes.filter(t => t.isEnabled)) {
       if (tour.allocationGroup) {
         const groupLower = tour.allocationGroup.toLowerCase();
-        if (groupLower.includes(primaryKeyword)) {
+        if (lowerText.startsWith(groupLower)) {
           return tour;
         }
       }
     }
     
-    // Then try tour name
-    for (const tour of tourTypes.filter(t => t.isEnabled)) {
-      const tourNameLower = tour.name.toLowerCase();
-      if (tourNameLower.includes(primaryKeyword)) {
-        return tour;
+    // Then try keyword aliases at the start of line
+    for (const [mainKey, aliases] of Object.entries(keywordAliases)) {
+      for (const alias of aliases) {
+        if (lowerText.startsWith(alias)) {
+          // Found keyword, now find matching tour
+          for (const tour of tourTypes.filter(t => t.isEnabled)) {
+            const tourNameLower = tour.name.toLowerCase();
+            // Check if tour name contains main keyword or any alias
+            if (tourNameLower.includes(mainKey) || aliases.some(a => tourNameLower.includes(a))) {
+              return tour;
+            }
+          }
+        }
+      }
+    }
+    
+    // Finally try tour name contains keyword from start of line
+    const firstWord = lowerText.split(/[\s\(\-:]/)[0];
+    if (firstWord && firstWord.length >= 3) {
+      for (const tour of tourTypes.filter(t => t.isEnabled)) {
+        const tourNameLower = tour.name.toLowerCase();
+        if (tourNameLower.includes(firstWord)) {
+          return tour;
+        }
       }
     }
     
