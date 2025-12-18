@@ -908,8 +908,8 @@ export default function WarehouseScreen() {
 
       <Modal visible={showItemModal} transparent animationType="slide">
         <View style={styles.modalOverlay}>
-          <ScrollView>
-            <View style={styles.modalContent}>
+          <View style={styles.modalContent}>
+            <ScrollView>
               <ThemedText style={styles.modalTitle}>
                 {editingItem ? "Редактировать" : "Новое оборудование"}
               </ThemedText>
@@ -976,15 +976,15 @@ export default function WarehouseScreen() {
                   <ThemedText style={[styles.buttonText, { color: "#FFF" }]}>Сохранить</ThemedText>
                 </Pressable>
               </View>
-            </View>
-          </ScrollView>
+            </ScrollView>
+          </View>
         </View>
       </Modal>
 
       <Modal visible={showMovementModal} transparent animationType="slide">
         <View style={styles.modalOverlay}>
-          <ScrollView>
-            <View style={styles.modalContent}>
+          <View style={styles.modalContent}>
+            <ScrollView>
               <ThemedText style={styles.modalTitle}>
                 Движение: {selectedItem?.name}
               </ThemedText>
@@ -1041,8 +1041,8 @@ export default function WarehouseScreen() {
                   <ThemedText style={[styles.buttonText, { color: "#FFF" }]}>Сохранить</ThemedText>
                 </Pressable>
               </View>
-            </View>
-          </ScrollView>
+            </ScrollView>
+          </View>
         </View>
       </Modal>
     </ThemedView>
