@@ -86,12 +86,32 @@ export function getCurrentSupabaseUrl(): string {
 
 export type UserRole = 'admin' | 'manager' | 'radio_dispatcher';
 
+export type PermissionKey = 
+  | 'radio_guides'
+  | 'allocation'
+  | 'chat'
+  | 'dispatching_notes'
+  | 'excursion_notes'
+  | 'view_other_managers';
+
+export const PERMISSION_DEFINITIONS: Record<PermissionKey, string> = {
+  radio_guides: 'Радиогиды',
+  allocation: 'Распределение',
+  chat: 'Чат',
+  dispatching_notes: 'Заметки диспетчера',
+  excursion_notes: 'Заметки к экскурсиям',
+  view_other_managers: 'Просмотр данных коллег',
+};
+
+export type ManagerPermissions = Partial<Record<PermissionKey, boolean>>;
+
 export interface Profile {
   id: string;
   email: string;
   display_name: string;
   role: UserRole;
   is_active: boolean;
+  permissions?: ManagerPermissions;
   created_at: string;
   updated_at: string;
 }
