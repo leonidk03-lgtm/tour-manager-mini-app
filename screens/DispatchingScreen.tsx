@@ -593,7 +593,14 @@ export default function DispatchingScreen() {
                 hapticFeedback.medium();
                 noteInputRef.current?.blur();
                 Keyboard.dismiss();
-                setTimeout(() => setShowFullscreenNote(true), 300);
+                const subscription = Keyboard.addListener('keyboardDidHide', () => {
+                  subscription.remove();
+                  setShowFullscreenNote(true);
+                });
+                setTimeout(() => {
+                  subscription.remove();
+                  setShowFullscreenNote(true);
+                }, 400);
               }}
             >
               <Icon name="plus" size={16} color={theme.buttonText} />
@@ -628,7 +635,14 @@ export default function DispatchingScreen() {
               hapticFeedback.light();
               noteInputRef.current?.blur();
               Keyboard.dismiss();
-              setTimeout(() => setShowFullscreenNote(true), 300);
+              const subscription = Keyboard.addListener('keyboardDidHide', () => {
+                subscription.remove();
+                setShowFullscreenNote(true);
+              });
+              setTimeout(() => {
+                subscription.remove();
+                setShowFullscreenNote(true);
+              }, 400);
             }}
           >
             <Icon name="edit-3" size={14} color={theme.textSecondary} />
