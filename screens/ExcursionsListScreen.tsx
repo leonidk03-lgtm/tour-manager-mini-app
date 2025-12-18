@@ -76,7 +76,8 @@ export default function ExcursionsListScreen() {
   const [allocatedBuses, setAllocatedBuses] = useState<AllocatedBus[]>([]);
   
   const calculateRoundedReceivers = (totalParticipants: number): number => {
-    return Math.ceil(totalParticipants / 5) * 5;
+    const roundedUp = Math.ceil(totalParticipants / 5) * 5;
+    return totalParticipants % 5 === 0 ? roundedUp + 5 : roundedUp;
   };
   
   const availableKits = radioGuideKits.filter(kit => kit.status === 'available');
