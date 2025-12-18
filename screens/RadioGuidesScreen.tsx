@@ -20,7 +20,7 @@ import { ScreenScrollView } from "@/components/ScreenScrollView";
 import { PermissionGate } from "@/components/PermissionGate";
 import { Spacing, BorderRadius } from "@/constants/theme";
 import { useTheme } from "@/hooks/useTheme";
-import { useData, RadioGuideKit, RadioGuideAssignment, BatteryLevel } from "@/contexts/DataContext";
+import { useData, RadioGuideKit, RadioGuideAssignment, BatteryLevel, EquipmentItem } from "@/contexts/DataContext";
 import { useAuth } from "@/contexts/AuthContext";
 
 const BatteryIcon = ({ level, color, size = 24 }: { level: BatteryLevel; color: string; size?: number }) => {
@@ -75,6 +75,8 @@ export default function RadioGuidesScreen() {
     addEquipmentLoss,
     excursions,
     tourTypes,
+    equipmentItems,
+    addEquipmentMovement,
   } = useData();
   
   const getExcursionInfo = (excursionId: string | null | undefined) => {
@@ -129,6 +131,7 @@ export default function RadioGuidesScreen() {
   const [lossReason, setLossReason] = useState("");
   const [showShortageForm, setShowShortageForm] = useState(false);
   const [selectedExcursionId, setSelectedExcursionId] = useState<string | null>(null);
+  const [selectedLossItemId, setSelectedLossItemId] = useState<string | null>(null);
   
   const [selectedDate, setSelectedDate] = useState(() => new Date().toISOString().split("T")[0]);
   const [showDatePicker, setShowDatePicker] = useState(false);
@@ -295,6 +298,7 @@ export default function RadioGuidesScreen() {
     setShowShortageForm(false);
     setSelectedExcursionId(null);
     setShowGuidePicker(false);
+    setSelectedLossItemId(null);
   };
 
   const openAddModal = () => {
@@ -436,13 +440,45 @@ export default function RadioGuidesScreen() {
       return;
     }
 
+    if (!selectedLossItemId) {
+      Alert.alert("Ошибка", "Выберите позицию оборудования из склада");
+      return;
+    }
+
+    const lossItem = equipmentItems.find(i => i.id === selectedLossItemId);
+    if (lossItem && missing > lossItem.quantity) {
+      Alert.alert(
+        "Предупреждение", 
+        `На складе только ${lossItem.quantity} шт. "${lossItem.name}". Продолжить списание ${missing} шт.?`,
+        [
+          { text: "Отмена", style: "cancel" },
+          { text: "Продолжить", onPress: () => executeReturnWithShortage(missing) }
+        ]
+      );
+      return;
+    }
+
+    await executeReturnWithShortage(missing);
+  };
+
+  const executeReturnWithShortage = async (missing: number) => {
+    if (!selectedAssignment || !selectedKit || !selectedLossItemId) return;
+
     const returned = selectedAssignment.receiversIssued - missing;
 
     try {
       await returnRadioGuide(selectedAssignment.id, returned, lossReason.trim());
       
-      // Try to record the loss, but don't fail if it doesn't work
+      // Create loss movement on warehouse
       try {
+        await addEquipmentMovement({
+          itemId: selectedLossItemId,
+          type: 'loss',
+          quantity: missing,
+          note: `Утеря из сумки #${selectedKit.bagNumber}. Экскурсовод: ${selectedAssignment.guideName}. Причина: ${lossReason.trim()}`,
+        });
+        
+        // Also record in equipment_losses for tracking
         await addEquipmentLoss({
           assignmentId: selectedAssignment.id,
           kitId: selectedKit.id,
@@ -454,7 +490,7 @@ export default function RadioGuidesScreen() {
         console.warn("Could not record equipment loss:", lossErr);
         Alert.alert(
           "Внимание",
-          "Радиогид принят, но запись о потере не сохранена. Обратитесь к администратору.",
+          "Радиогид принят, но запись о потере на складе не сохранена. Обратитесь к администратору.",
           [{ text: "OK" }]
         );
       }
@@ -1252,6 +1288,33 @@ export default function RadioGuidesScreen() {
             <>
               <View style={styles.inputGroup}>
                 <ThemedText style={[styles.label, { color: theme.textSecondary }]}>
+                  Что потеряно? *
+                </ThemedText>
+                <ScrollView horizontal showsHorizontalScrollIndicator={false} style={{ marginTop: Spacing.xs }}>
+                  <View style={{ flexDirection: 'row', gap: Spacing.xs }}>
+                    {equipmentItems.map((item) => (
+                      <Pressable
+                        key={item.id}
+                        style={[
+                          styles.categoryButton,
+                          { 
+                            backgroundColor: selectedLossItemId === item.id ? theme.primary : theme.backgroundSecondary,
+                            borderColor: selectedLossItemId === item.id ? theme.primary : theme.border,
+                          },
+                        ]}
+                        onPress={() => setSelectedLossItemId(item.id)}
+                      >
+                        <ThemedText style={{ color: selectedLossItemId === item.id ? theme.buttonText : theme.text, fontSize: 13 }}>
+                          {item.name}
+                        </ThemedText>
+                      </Pressable>
+                    ))}
+                  </View>
+                </ScrollView>
+              </View>
+
+              <View style={styles.inputGroup}>
+                <ThemedText style={[styles.label, { color: theme.textSecondary }]}>
                   Сколько не хватает? *
                 </ThemedText>
                 <TextInput
@@ -1568,6 +1631,12 @@ const styles = StyleSheet.create({
     padding: Spacing.md,
     borderRadius: BorderRadius.sm,
     gap: Spacing.sm,
+  },
+  categoryButton: {
+    paddingHorizontal: Spacing.md,
+    paddingVertical: Spacing.sm,
+    borderRadius: BorderRadius.sm,
+    borderWidth: 1,
   },
   returnButtonText: {
     fontSize: 16,

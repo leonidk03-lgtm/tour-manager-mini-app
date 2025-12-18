@@ -246,7 +246,7 @@ export interface EquipmentItem {
   updatedAt: string;
 }
 
-export type EquipmentMovementType = 'receipt' | 'writeoff' | 'repair_out' | 'repair_in' | 'found' | 'adjustment';
+export type EquipmentMovementType = 'receipt' | 'writeoff' | 'repair_out' | 'repair_in' | 'found' | 'adjustment' | 'loss';
 
 export interface EquipmentMovement {
   id: string;
@@ -2552,6 +2552,9 @@ export function DataProvider({ children }: { children: ReactNode }) {
           case 'writeoff':
             newQuantity -= movement.quantity;
             newWrittenOff += movement.quantity;
+            break;
+          case 'loss':
+            newQuantity -= movement.quantity;
             break;
           case 'repair_out':
             newQuantity -= movement.quantity;

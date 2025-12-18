@@ -22,7 +22,7 @@ import { useData, EquipmentCategory, EquipmentItem, EquipmentMovement } from "@/
 import { useAuth } from "@/contexts/AuthContext";
 
 type TabType = "inventory" | "movements" | "categories";
-type MovementType = "receipt" | "writeoff" | "repair_out" | "repair_in" | "found" | "adjustment";
+type MovementType = "receipt" | "writeoff" | "repair_out" | "repair_in" | "found" | "adjustment" | "loss";
 
 const MOVEMENT_LABELS: Record<MovementType, string> = {
   receipt: "Поступление",
@@ -31,6 +31,7 @@ const MOVEMENT_LABELS: Record<MovementType, string> = {
   repair_in: "Из ремонта",
   found: "Найдено",
   adjustment: "Корректировка",
+  loss: "Утеря",
 };
 
 const MOVEMENT_COLORS: Record<MovementType, string> = {
@@ -40,6 +41,7 @@ const MOVEMENT_COLORS: Record<MovementType, string> = {
   repair_in: "#2196F3",
   found: "#9C27B0",
   adjustment: "#607D8B",
+  loss: "#E91E63",
 };
 
 export default function WarehouseScreen() {
