@@ -322,12 +322,12 @@ export function AuthProvider({ children }: { children: ReactNode }) {
   };
 
   const refreshManagers = async () => {
-    if (!isAdmin && profile?.role !== 'admin') return;
+    if (!user) return;
 
     try {
       const { data, error } = await supabase
         .from('profiles')
-        .select('*')
+        .select('id, email, display_name, role, is_active')
         .order('created_at', { ascending: false });
 
       if (!error && data) {

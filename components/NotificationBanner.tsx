@@ -80,7 +80,7 @@ export function NotificationBanner() {
       await markNotificationAsRead(visibleNotification.id);
       hideBanner();
       if (visibleNotification.type === 'chat') {
-        navigation.navigate('SettingsTab', { screen: 'Chat' });
+        navigation.navigate('ChatTab', { screen: 'Chat' });
       }
     }
   };
