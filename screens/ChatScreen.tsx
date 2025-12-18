@@ -484,6 +484,7 @@ const styles = StyleSheet.create({
     paddingHorizontal: Spacing.md,
     paddingVertical: Spacing.sm,
     borderRadius: BorderRadius.lg,
+    minWidth: 80,
   },
   senderRow: {
     flexDirection: "row",
@@ -497,14 +498,13 @@ const styles = StyleSheet.create({
   messageText: {
     lineHeight: Typography.body.lineHeight,
   },
-  messageTime: {
-    flex: 1,
-  },
+  messageTime: {},
   messageFooter: {
     flexDirection: "row",
     alignItems: "center",
+    justifyContent: "space-between",
     marginTop: Spacing.xs,
-    gap: Spacing.sm,
+    gap: Spacing.md,
   },
   replyButton: {
     padding: 2,
