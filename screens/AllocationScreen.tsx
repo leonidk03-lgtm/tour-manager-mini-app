@@ -5,6 +5,7 @@ import { Icon } from "@/components/Icon";
 import { ThemedText } from "@/components/ThemedText";
 import { ThemedView } from "@/components/ThemedView";
 import { ScreenKeyboardAwareScrollView } from "@/components/ScreenKeyboardAwareScrollView";
+import { PermissionGate } from "@/components/PermissionGate";
 import { Spacing, BorderRadius } from "@/constants/theme";
 import { useTheme } from "@/hooks/useTheme";
 import { useData, TourType } from "@/contexts/DataContext";
@@ -933,6 +934,7 @@ export default function AllocationScreen() {
   };
 
   return (
+    <PermissionGate permission="allocation">
     <ScreenKeyboardAwareScrollView>
       {/* Header Actions */}
       <View style={styles.headerActions}>
@@ -1729,6 +1731,7 @@ export default function AllocationScreen() {
         </View>
       </Modal>
     </ScreenKeyboardAwareScrollView>
+    </PermissionGate>
   );
 }
 

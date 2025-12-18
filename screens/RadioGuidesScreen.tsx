@@ -16,6 +16,7 @@ import { Icon } from "@/components/Icon";
 import { ThemedText } from "@/components/ThemedText";
 import { ThemedView } from "@/components/ThemedView";
 import { ScreenScrollView } from "@/components/ScreenScrollView";
+import { PermissionGate } from "@/components/PermissionGate";
 import { Spacing, BorderRadius } from "@/constants/theme";
 import { useTheme } from "@/hooks/useTheme";
 import { useData, RadioGuideKit, RadioGuideAssignment } from "@/contexts/DataContext";
@@ -536,6 +537,7 @@ export default function RadioGuidesScreen() {
   const todayIssuedKits = issuedKits.filter(k => !k.isOverdue);
 
   return (
+    <PermissionGate permission="radio_guides">
     <>
       <ScreenScrollView>
         <View style={styles.container}>
@@ -741,11 +743,12 @@ export default function RadioGuidesScreen() {
           </ThemedView>
         </View>
       </Modal>
-      
     </>
+    </PermissionGate>
   );
+}
 
-  function renderFormContent() {
+const styles = StyleSheet.create({
     if (modalMode === "add" || modalMode === "edit") {
       return (
         <View style={styles.form}>
@@ -1135,7 +1138,12 @@ export default function RadioGuidesScreen() {
     }
 
     return null;
-  }
+  };
+
+  return renderModalContent();
+    </>
+    </PermissionGate>
+  );
 }
 
 const styles = StyleSheet.create({

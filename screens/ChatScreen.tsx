@@ -5,6 +5,7 @@ import { useBottomTabBarHeight } from "@react-navigation/bottom-tabs";
 import { Icon } from "@/components/Icon";
 import { ThemedText } from "@/components/ThemedText";
 import { ThemedView } from "@/components/ThemedView";
+import { PermissionGate } from "@/components/PermissionGate";
 import { useTheme } from "@/hooks/useTheme";
 import { useData, ChatMessage } from "@/contexts/DataContext";
 import { useAuth } from "@/contexts/AuthContext";
@@ -143,6 +144,7 @@ export default function ChatScreen() {
   };
 
   return (
+    <PermissionGate permission="chat">
     <ThemedView style={styles.container}>
       <KeyboardAvoidingView
         style={styles.flex}
@@ -219,6 +221,7 @@ export default function ChatScreen() {
         </View>
       </KeyboardAvoidingView>
     </ThemedView>
+    </PermissionGate>
   );
 }
 
