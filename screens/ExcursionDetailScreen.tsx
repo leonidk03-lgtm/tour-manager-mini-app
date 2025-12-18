@@ -582,15 +582,17 @@ export default function ExcursionDetailScreen() {
         animationType="fade"
         onRequestClose={() => setFullscreenNote(null)}
       >
-        <View style={styles.fullscreenNoteBackdrop}>
-          <Pressable 
-            style={StyleSheet.absoluteFill} 
-            onPress={() => setFullscreenNote(null)} 
-          />
-          <ThemedView style={[styles.fullscreenNoteContainer, { backgroundColor: theme.backgroundDefault }]}>
+        <Pressable 
+          style={styles.fullscreenNoteBackdrop}
+          onPress={() => setFullscreenNote(null)}
+        >
+          <View 
+            style={[styles.fullscreenNoteContainer, { backgroundColor: theme.backgroundDefault }]}
+            onStartShouldSetResponder={() => true}
+          >
             <View style={styles.fullscreenNoteHeader}>
               <ThemedText style={styles.fullscreenNoteTitle}>Заметка</ThemedText>
-              <Pressable onPress={() => setFullscreenNote(null)}>
+              <Pressable onPress={() => setFullscreenNote(null)} hitSlop={10}>
                 <Icon name="x" size={24} color={theme.text} />
               </Pressable>
             </View>
@@ -619,8 +621,8 @@ export default function ExcursionDetailScreen() {
                 </View>
               </View>
             </ScrollView>
-          </ThemedView>
-        </View>
+          </View>
+        </Pressable>
       </Modal>
     </ScreenScrollView>
   );
