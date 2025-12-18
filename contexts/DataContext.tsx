@@ -223,6 +223,42 @@ export interface NotificationSettings {
   transactionsEnabled: boolean;
 }
 
+export type EquipmentCategoryType = 'equipment' | 'consumable';
+
+export interface EquipmentCategory {
+  id: string;
+  name: string;
+  type: EquipmentCategoryType;
+  unit: string;
+  isActive: boolean;
+  createdAt: string;
+}
+
+export interface EquipmentItem {
+  id: string;
+  categoryId: string;
+  name: string;
+  quantity: number;
+  inRepair: number;
+  writtenOff: number;
+  minQuantity: number;
+  createdAt: string;
+  updatedAt: string;
+}
+
+export type EquipmentMovementType = 'receipt' | 'writeoff' | 'repair_out' | 'repair_in' | 'found' | 'adjustment';
+
+export interface EquipmentMovement {
+  id: string;
+  itemId: string;
+  type: EquipmentMovementType;
+  quantity: number;
+  note: string | null;
+  managerId: string | null;
+  managerName: string | null;
+  createdAt: string;
+}
+
 interface DataContextType {
   tourTypes: TourType[];
   addTourType: (tourType: Omit<TourType, 'id'>) => Promise<void>;
@@ -288,6 +324,16 @@ interface DataContextType {
   clearNetworkError: () => void;
   refreshData: () => Promise<void>;
   refreshPriceList: () => Promise<void>;
+  equipmentCategories: EquipmentCategory[];
+  equipmentItems: EquipmentItem[];
+  equipmentMovements: EquipmentMovement[];
+  addEquipmentCategory: (category: Omit<EquipmentCategory, 'id' | 'createdAt'>) => Promise<void>;
+  updateEquipmentCategory: (id: string, category: Partial<EquipmentCategory>) => Promise<void>;
+  deleteEquipmentCategory: (id: string) => Promise<void>;
+  addEquipmentItem: (item: Omit<EquipmentItem, 'id' | 'createdAt' | 'updatedAt'>) => Promise<void>;
+  updateEquipmentItem: (id: string, item: Partial<EquipmentItem>) => Promise<void>;
+  deleteEquipmentItem: (id: string) => Promise<void>;
+  addEquipmentMovement: (movement: Omit<EquipmentMovement, 'id' | 'createdAt' | 'managerId' | 'managerName'>) => Promise<void>;
 }
 
 const DataContext = createContext<DataContextType | undefined>(undefined);
@@ -314,6 +360,9 @@ export function DataProvider({ children }: { children: ReactNode }) {
     excursionsEnabled: true,
     transactionsEnabled: true,
   });
+  const [equipmentCategories, setEquipmentCategories] = useState<EquipmentCategory[]>([]);
+  const [equipmentItems, setEquipmentItems] = useState<EquipmentItem[]>([]);
+  const [equipmentMovements, setEquipmentMovements] = useState<EquipmentMovement[]>([]);
   const [isLoading, setIsLoading] = useState(true);
   const [networkError, setNetworkError] = useState<string | null>(null);
   const [isOffline, setIsOffline] = useState(false);
@@ -634,6 +683,81 @@ export function DataProvider({ children }: { children: ReactNode }) {
       managerId: l.manager_id,
       managerName: l.manager_name,
       bagNumber: l.radio_guide_kits?.bag_number,
+    })));
+  }, []);
+
+  const fetchEquipmentCategories = useCallback(async (): Promise<void> => {
+    const { data, error } = await supabase
+      .from('equipment_categories')
+      .select('*')
+      .order('name');
+
+    if (error) {
+      if (error.code === 'PGRST205' || error.code === '42P01') {
+        return;
+      }
+      throw error;
+    }
+
+    setEquipmentCategories((data || []).map(c => ({
+      id: c.id,
+      name: c.name,
+      type: c.type as EquipmentCategoryType,
+      unit: c.unit,
+      isActive: c.is_active,
+      createdAt: c.created_at,
+    })));
+  }, []);
+
+  const fetchEquipmentItems = useCallback(async (): Promise<void> => {
+    const { data, error } = await supabase
+      .from('equipment_items')
+      .select('*')
+      .order('name');
+
+    if (error) {
+      if (error.code === 'PGRST205' || error.code === '42P01') {
+        return;
+      }
+      throw error;
+    }
+
+    setEquipmentItems((data || []).map(i => ({
+      id: i.id,
+      categoryId: i.category_id,
+      name: i.name,
+      quantity: i.quantity,
+      inRepair: i.in_repair,
+      writtenOff: i.written_off,
+      minQuantity: i.min_quantity,
+      createdAt: i.created_at,
+      updatedAt: i.updated_at,
+    })));
+  }, []);
+
+  const fetchEquipmentMovements = useCallback(async (): Promise<void> => {
+    const { data, error } = await supabase
+      .from('equipment_movements')
+      .select('*')
+      .order('created_at', { ascending: false })
+      .limit(500);
+
+    if (error) {
+      if (error.code === 'PGRST205' || error.code === '42P01') {
+        return;
+      }
+      throw error;
+    }
+
+    setEquipmentMovements((data || []).map(m => ({
+      id: m.id,
+      itemId: m.item_id,
+      type: m.type as EquipmentMovementType,
+      quantity: m.quantity,
+      note: m.note,
+      managerId: m.manager_id,
+      managerName: m.manager_name,
+      createdAt: m.created_at,
     })));
   }, []);
 
@@ -1301,6 +1425,9 @@ export function DataProvider({ children }: { children: ReactNode }) {
         fetchDispatchingNotes(),
         fetchExcursionNotes(),
         fetchChatMessages(),
+        fetchEquipmentCategories(),
+        fetchEquipmentItems(),
+        fetchEquipmentMovements(),
       ]);
       
       const hasErrors = results.some(r => r.status === 'rejected');
@@ -1325,7 +1452,7 @@ export function DataProvider({ children }: { children: ReactNode }) {
     } finally {
       setIsLoading(false);
     }
-  }, [fetchTourTypes, fetchAdditionalServices, fetchExcursions, fetchTransactions, fetchActivities, fetchDeletedItems, fetchRadioGuideKits, fetchRadioGuideAssignments, fetchEquipmentLosses]);
+  }, [fetchTourTypes, fetchAdditionalServices, fetchExcursions, fetchTransactions, fetchActivities, fetchDeletedItems, fetchRadioGuideKits, fetchRadioGuideAssignments, fetchEquipmentLosses, fetchEquipmentCategories, fetchEquipmentItems, fetchEquipmentMovements]);
 
   // Load shared data (price list, radio kits, settings) when user is authenticated
   useEffect(() => {
@@ -1337,6 +1464,9 @@ export function DataProvider({ children }: { children: ReactNode }) {
         fetchRadioGuideAssignments(),
         fetchEquipmentLosses(),
         fetchSettings(),
+        fetchEquipmentCategories(),
+        fetchEquipmentItems(),
+        fetchEquipmentMovements(),
       ]).then(() => {
         setIsOffline(false);
         setNetworkError(null);
@@ -1344,7 +1474,7 @@ export function DataProvider({ children }: { children: ReactNode }) {
         setIsOffline(true);
       });
     }
-  }, [user, fetchTourTypes, fetchAdditionalServices, fetchRadioGuideKits, fetchRadioGuideAssignments, fetchEquipmentLosses, fetchSettings]);
+  }, [user, fetchTourTypes, fetchAdditionalServices, fetchRadioGuideKits, fetchRadioGuideAssignments, fetchEquipmentLosses, fetchSettings, fetchEquipmentCategories, fetchEquipmentItems, fetchEquipmentMovements]);
 
   // Load user-specific data when profile is available
   useEffect(() => {
@@ -2266,6 +2396,180 @@ export function DataProvider({ children }: { children: ReactNode }) {
     }
   };
 
+  const addEquipmentCategory = async (category: Omit<EquipmentCategory, 'id' | 'createdAt'>) => {
+    try {
+      const { error } = await supabase.from('equipment_categories').insert({
+        name: category.name,
+        type: category.type,
+        unit: category.unit,
+        is_active: category.isActive,
+      });
+
+      if (error) throw error;
+      await fetchEquipmentCategories();
+    } catch (err) {
+      console.error('Error adding equipment category:', err);
+      throw err;
+    }
+  };
+
+  const updateEquipmentCategory = async (id: string, category: Partial<EquipmentCategory>) => {
+    try {
+      const updateData: Record<string, unknown> = {};
+      if (category.name !== undefined) updateData.name = category.name;
+      if (category.type !== undefined) updateData.type = category.type;
+      if (category.unit !== undefined) updateData.unit = category.unit;
+      if (category.isActive !== undefined) updateData.is_active = category.isActive;
+
+      const { error } = await supabase
+        .from('equipment_categories')
+        .update(updateData)
+        .eq('id', id);
+
+      if (error) throw error;
+      await fetchEquipmentCategories();
+    } catch (err) {
+      console.error('Error updating equipment category:', err);
+      throw err;
+    }
+  };
+
+  const deleteEquipmentCategory = async (id: string) => {
+    try {
+      const { error } = await supabase
+        .from('equipment_categories')
+        .delete()
+        .eq('id', id);
+
+      if (error) throw error;
+      await fetchEquipmentCategories();
+      await fetchEquipmentItems();
+    } catch (err) {
+      console.error('Error deleting equipment category:', err);
+      throw err;
+    }
+  };
+
+  const addEquipmentItem = async (item: Omit<EquipmentItem, 'id' | 'createdAt' | 'updatedAt'>) => {
+    try {
+      const { error } = await supabase.from('equipment_items').insert({
+        category_id: item.categoryId,
+        name: item.name,
+        quantity: item.quantity,
+        in_repair: item.inRepair,
+        written_off: item.writtenOff,
+        min_quantity: item.minQuantity,
+      });
+
+      if (error) throw error;
+      await fetchEquipmentItems();
+    } catch (err) {
+      console.error('Error adding equipment item:', err);
+      throw err;
+    }
+  };
+
+  const updateEquipmentItem = async (id: string, item: Partial<EquipmentItem>) => {
+    try {
+      const updateData: Record<string, unknown> = { updated_at: new Date().toISOString() };
+      if (item.categoryId !== undefined) updateData.category_id = item.categoryId;
+      if (item.name !== undefined) updateData.name = item.name;
+      if (item.quantity !== undefined) updateData.quantity = item.quantity;
+      if (item.inRepair !== undefined) updateData.in_repair = item.inRepair;
+      if (item.writtenOff !== undefined) updateData.written_off = item.writtenOff;
+      if (item.minQuantity !== undefined) updateData.min_quantity = item.minQuantity;
+
+      const { error } = await supabase
+        .from('equipment_items')
+        .update(updateData)
+        .eq('id', id);
+
+      if (error) throw error;
+      await fetchEquipmentItems();
+    } catch (err) {
+      console.error('Error updating equipment item:', err);
+      throw err;
+    }
+  };
+
+  const deleteEquipmentItem = async (id: string) => {
+    try {
+      const { error } = await supabase
+        .from('equipment_items')
+        .delete()
+        .eq('id', id);
+
+      if (error) throw error;
+      await fetchEquipmentItems();
+      await fetchEquipmentMovements();
+    } catch (err) {
+      console.error('Error deleting equipment item:', err);
+      throw err;
+    }
+  };
+
+  const addEquipmentMovement = async (movement: Omit<EquipmentMovement, 'id' | 'createdAt' | 'managerId' | 'managerName'>) => {
+    if (!currentUser) throw new Error('No user');
+
+    try {
+      const { error } = await supabase.from('equipment_movements').insert({
+        item_id: movement.itemId,
+        type: movement.type,
+        quantity: movement.quantity,
+        note: movement.note,
+        manager_id: currentUser.id,
+        manager_name: currentUser.name,
+      });
+
+      if (error) throw error;
+
+      const item = equipmentItems.find(i => i.id === movement.itemId);
+      if (item) {
+        let newQuantity = item.quantity;
+        let newInRepair = item.inRepair;
+        let newWrittenOff = item.writtenOff;
+
+        switch (movement.type) {
+          case 'receipt':
+          case 'found':
+            newQuantity += movement.quantity;
+            break;
+          case 'writeoff':
+            newQuantity -= movement.quantity;
+            newWrittenOff += movement.quantity;
+            break;
+          case 'repair_out':
+            newQuantity -= movement.quantity;
+            newInRepair += movement.quantity;
+            break;
+          case 'repair_in':
+            newQuantity += movement.quantity;
+            newInRepair -= movement.quantity;
+            break;
+          case 'adjustment':
+            newQuantity = movement.quantity;
+            break;
+        }
+
+        await supabase
+          .from('equipment_items')
+          .update({
+            quantity: Math.max(0, newQuantity),
+            in_repair: Math.max(0, newInRepair),
+            written_off: Math.max(0, newWrittenOff),
+            updated_at: new Date().toISOString(),
+          })
+          .eq('id', movement.itemId);
+      }
+
+      await fetchEquipmentItems();
+      await fetchEquipmentMovements();
+    } catch (err) {
+      console.error('Error adding equipment movement:', err);
+      throw err;
+    }
+  };
+
   return (
     <DataContext.Provider
       value={{
@@ -2333,6 +2637,16 @@ export function DataProvider({ children }: { children: ReactNode }) {
         clearNetworkError,
         refreshData,
         refreshPriceList,
+        equipmentCategories,
+        equipmentItems,
+        equipmentMovements,
+        addEquipmentCategory,
+        updateEquipmentCategory,
+        deleteEquipmentCategory,
+        addEquipmentItem,
+        updateEquipmentItem,
+        deleteEquipmentItem,
+        addEquipmentMovement,
       }}
     >
       {children}
