@@ -946,7 +946,11 @@ export default function WarehouseScreen() {
 
   return (
     <ThemedView style={{ flex: 1 }}>
-      <ScreenScrollView contentContainerStyle={styles.container}>
+      <ScrollView 
+        style={{ flex: 1 }}
+        contentContainerStyle={[styles.container, { paddingBottom: insets.bottom + 100 }]}
+        showsVerticalScrollIndicator={true}
+      >
         <View style={styles.tabContainer}>
           <Pressable
             style={[styles.tab, activeTab === "inventory" && styles.tabActive]}
@@ -977,7 +981,7 @@ export default function WarehouseScreen() {
         {activeTab === "inventory" && renderInventoryTab()}
         {activeTab === "movements" && renderMovementsTab()}
         {activeTab === "categories" && renderCategoriesTab()}
-      </ScreenScrollView>
+      </ScrollView>
 
       {(activeTab === "inventory" || activeTab === "categories") && (
         <Pressable
