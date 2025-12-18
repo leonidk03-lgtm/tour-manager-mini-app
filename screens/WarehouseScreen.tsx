@@ -8,6 +8,7 @@ import {
   Modal,
   ScrollView,
   Platform,
+  KeyboardAvoidingView,
 } from "react-native";
 import { useSafeAreaInsets } from "react-native-safe-area-context";
 import DateTimePicker, { DateTimePickerEvent } from "@react-native-community/datetimepicker";
@@ -996,7 +997,10 @@ export default function WarehouseScreen() {
       )}
 
       <Modal visible={showCategoryModal} transparent animationType="slide">
-        <View style={styles.modalOverlay}>
+        <KeyboardAvoidingView 
+          behavior={Platform.OS === "ios" ? "padding" : "height"}
+          style={styles.modalOverlay}
+        >
           <View style={styles.modalContent}>
             <ThemedText style={styles.modalTitle}>
               {editingCategory ? "Редактировать категорию" : "Новая категория"}
@@ -1055,11 +1059,14 @@ export default function WarehouseScreen() {
               </Pressable>
             </View>
           </View>
-        </View>
+        </KeyboardAvoidingView>
       </Modal>
 
       <Modal visible={showItemModal} transparent animationType="slide">
-        <View style={styles.modalOverlay}>
+        <KeyboardAvoidingView 
+          behavior={Platform.OS === "ios" ? "padding" : "height"}
+          style={styles.modalOverlay}
+        >
           <View style={styles.modalContent}>
             <ScrollView keyboardShouldPersistTaps="handled">
               <ThemedText style={styles.modalTitle}>
@@ -1130,11 +1137,14 @@ export default function WarehouseScreen() {
               </View>
             </ScrollView>
           </View>
-        </View>
+        </KeyboardAvoidingView>
       </Modal>
 
       <Modal visible={showMovementModal} transparent animationType="slide">
-        <View style={styles.modalOverlay}>
+        <KeyboardAvoidingView 
+          behavior={Platform.OS === "ios" ? "padding" : "height"}
+          style={styles.modalOverlay}
+        >
           <View style={styles.modalContent}>
             <ScrollView keyboardShouldPersistTaps="handled">
               <ThemedText style={styles.modalTitle}>
@@ -1195,7 +1205,7 @@ export default function WarehouseScreen() {
               </View>
             </ScrollView>
           </View>
-        </View>
+        </KeyboardAvoidingView>
       </Modal>
     </ThemedView>
   );
