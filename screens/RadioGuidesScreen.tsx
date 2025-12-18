@@ -45,7 +45,7 @@ type ModalMode = "add" | "edit" | "issue" | "return" | null;
 
 export default function RadioGuidesScreen() {
   const { theme } = useTheme();
-  const { isAdmin, isRadioDispatcher, signOut, profile } = useAuth();
+  const { isAdmin, isRadioDispatcher, signOut, profile, hasPermission } = useAuth();
   const {
     radioGuideKits,
     radioGuideAssignments,
@@ -514,7 +514,7 @@ export default function RadioGuidesScreen() {
           </ThemedText>
         </Pressable>
         
-        {isAdmin ? (
+        {hasPermission('radio_guides_edit') ? (
           <>
             <Pressable
               style={[styles.iconButton, { borderColor: theme.border }]}
@@ -689,7 +689,7 @@ export default function RadioGuidesScreen() {
         </View>
       </ScreenScrollView>
 
-      {isAdmin ? (
+      {hasPermission('radio_guides_add') ? (
         <Pressable
           style={[styles.fab, { backgroundColor: theme.primary }]}
           onPress={openAddModal}

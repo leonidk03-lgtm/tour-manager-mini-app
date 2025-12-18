@@ -88,6 +88,8 @@ export type UserRole = 'admin' | 'manager' | 'radio_dispatcher';
 
 export type PermissionKey = 
   | 'radio_guides'
+  | 'radio_guides_add'
+  | 'radio_guides_edit'
   | 'allocation'
   | 'chat'
   | 'dispatching_notes'
@@ -98,6 +100,8 @@ export type PermissionKey =
 
 export const PERMISSION_DEFINITIONS: Record<PermissionKey, string> = {
   radio_guides: 'Радиогиды',
+  radio_guides_add: 'Добавление сумок',
+  radio_guides_edit: 'Редактирование сумок',
   allocation: 'Распределение',
   chat: 'Чат',
   dispatching_notes: 'Отправление',
