@@ -590,7 +590,7 @@ export default function ExcursionDetailScreen() {
           setFullscreenNote(null);
         }}>
           <View style={styles.fullscreenNoteBackdrop}>
-            <TouchableWithoutFeedback onPress={Keyboard.dismiss}>
+            <Pressable onPress={(e) => e.stopPropagation()}>
               <ThemedView style={[styles.fullscreenNoteContainer, { backgroundColor: theme.backgroundDefault }]}>
                 <View style={styles.fullscreenNoteHeader}>
                   <ThemedText style={styles.fullscreenNoteTitle}>Заметка</ThemedText>
@@ -627,7 +627,7 @@ export default function ExcursionDetailScreen() {
                   </View>
                 </ScrollView>
               </ThemedView>
-            </TouchableWithoutFeedback>
+            </Pressable>
           </View>
         </TouchableWithoutFeedback>
       </Modal>

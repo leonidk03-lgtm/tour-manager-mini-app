@@ -60,6 +60,7 @@ export default function DispatchingScreen() {
   const webViewRefs = useRef<{ [key: string]: WebViewType | null }>({});
   const prevNoteRef = useRef("");
   const processedCodesRef = useRef<Set<string>>(new Set());
+  const noteInputRef = useRef<TextInput>(null);
 
   const activeTab = tabs.find(t => t.id === activeTabId) || tabs[0];
 
@@ -590,8 +591,9 @@ export default function DispatchingScreen() {
               ]}
               onPress={() => {
                 hapticFeedback.medium();
+                noteInputRef.current?.blur();
                 Keyboard.dismiss();
-                setTimeout(() => setShowFullscreenNote(true), 250);
+                setTimeout(() => setShowFullscreenNote(true), 300);
               }}
             >
               <Icon name="plus" size={16} color={theme.buttonText} />
@@ -612,6 +614,7 @@ export default function DispatchingScreen() {
 
         <View style={[styles.noteInputContainer, { backgroundColor: theme.backgroundSecondary, flex: 1 }]}>
           <TextInput
+            ref={noteInputRef}
             style={[styles.noteInput, { color: theme.text, flex: 1 }]}
             placeholder="Быстрая заметка... (1234. для поиска)"
             placeholderTextColor={theme.textSecondary}
@@ -623,8 +626,9 @@ export default function DispatchingScreen() {
             style={[styles.expandButton, { backgroundColor: theme.backgroundTertiary }]}
             onPress={() => {
               hapticFeedback.light();
+              noteInputRef.current?.blur();
               Keyboard.dismiss();
-              setTimeout(() => setShowFullscreenNote(true), 250);
+              setTimeout(() => setShowFullscreenNote(true), 300);
             }}
           >
             <Icon name="edit-3" size={14} color={theme.textSecondary} />
