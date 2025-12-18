@@ -582,47 +582,45 @@ export default function ExcursionDetailScreen() {
         animationType="fade"
         onRequestClose={() => setFullscreenNote(null)}
       >
-        <Pressable 
-          style={styles.fullscreenNoteBackdrop}
-          onPress={() => setFullscreenNote(null)}
-        >
-          <View 
-            style={[styles.fullscreenNoteContainer, { backgroundColor: theme.backgroundDefault }]}
-            onStartShouldSetResponder={() => true}
-          >
-            <View style={styles.fullscreenNoteHeader}>
-              <ThemedText style={styles.fullscreenNoteTitle}>Заметка</ThemedText>
-              <Pressable onPress={() => setFullscreenNote(null)} hitSlop={10}>
-                <Icon name="x" size={24} color={theme.text} />
-              </Pressable>
-            </View>
-            <ScrollView style={styles.fullscreenNoteScroll} contentContainerStyle={{ flexGrow: 1 }}>
-              <View style={styles.fullscreenNoteContent}>
-                <ThemedText style={styles.fullscreenNoteText}>
-                  {fullscreenNote?.text}
-                </ThemedText>
-                <View style={styles.fullscreenNoteMeta}>
-                  {isAdmin && fullscreenNote?.managerName ? (
-                    <ThemedText style={[styles.noteAuthor, { color: theme.primary }]}>
-                      {fullscreenNote.managerName}
-                    </ThemedText>
-                  ) : null}
-                  {fullscreenNote?.createdAt ? (
-                    <ThemedText style={[styles.noteDate, { color: theme.textSecondary }]}>
-                      {new Date(fullscreenNote.createdAt).toLocaleString("ru-RU", {
-                        day: "2-digit",
-                        month: "2-digit",
-                        year: "numeric",
-                        hour: "2-digit",
-                        minute: "2-digit",
-                      })}
-                    </ThemedText>
-                  ) : null}
+        <TouchableWithoutFeedback onPress={() => setFullscreenNote(null)}>
+          <View style={styles.fullscreenNoteBackdrop}>
+            <TouchableWithoutFeedback>
+              <View style={[styles.fullscreenNoteContainer, { backgroundColor: theme.backgroundDefault }]}>
+                <View style={styles.fullscreenNoteHeader}>
+                  <ThemedText style={styles.fullscreenNoteTitle}>Заметка</ThemedText>
+                  <Pressable onPress={() => setFullscreenNote(null)} hitSlop={10}>
+                    <Icon name="x" size={24} color={theme.text} />
+                  </Pressable>
                 </View>
+                <ScrollView style={styles.fullscreenNoteScroll}>
+                  <View style={styles.fullscreenNoteContent}>
+                    <ThemedText style={styles.fullscreenNoteText}>
+                      {fullscreenNote?.text}
+                    </ThemedText>
+                    <View style={styles.fullscreenNoteMeta}>
+                      {isAdmin && fullscreenNote?.managerName ? (
+                        <ThemedText style={[styles.noteAuthor, { color: theme.primary }]}>
+                          {fullscreenNote.managerName}
+                        </ThemedText>
+                      ) : null}
+                      {fullscreenNote?.createdAt ? (
+                        <ThemedText style={[styles.noteDate, { color: theme.textSecondary }]}>
+                          {new Date(fullscreenNote.createdAt).toLocaleString("ru-RU", {
+                            day: "2-digit",
+                            month: "2-digit",
+                            year: "numeric",
+                            hour: "2-digit",
+                            minute: "2-digit",
+                          })}
+                        </ThemedText>
+                      ) : null}
+                    </View>
+                  </View>
+                </ScrollView>
               </View>
-            </ScrollView>
+            </TouchableWithoutFeedback>
           </View>
-        </Pressable>
+        </TouchableWithoutFeedback>
       </Modal>
     </ScreenScrollView>
   );
@@ -815,7 +813,8 @@ const styles = StyleSheet.create({
     fontWeight: "600",
   },
   fullscreenNoteScroll: {
-    flex: 1,
+    minHeight: 100,
+    maxHeight: 400,
   },
   fullscreenNoteContent: {
     padding: Spacing.lg,
