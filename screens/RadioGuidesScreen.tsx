@@ -76,24 +76,26 @@ export default function RadioGuidesScreen() {
   const getBatteryInfo = (level: BatteryLevel) => {
     switch (level) {
       case 'full':
-        return { color: theme.success, icon: 'battery' as const, label: 'Полный' };
+        return { color: theme.success, label: 'Полный заряд' };
       case 'half':
-        return { color: theme.warning, icon: 'battery' as const, label: 'Средний' };
+        return { color: theme.warning, label: 'Средний заряд' };
       case 'low':
-        return { color: theme.error, icon: 'battery' as const, label: 'Низкий' };
+        return { color: theme.error, label: 'Низкий заряд' };
       default:
-        return { color: theme.success, icon: 'battery' as const, label: 'Полный' };
+        return { color: theme.success, label: 'Полный заряд' };
     }
   };
 
   const handleBatteryChange = async (kit: RadioGuideKit, newLevel: BatteryLevel) => {
     try {
       await updateRadioGuideKit(kit.id, { batteryLevel: newLevel });
+      setBatteryPickerKit(null);
     } catch (err) {
       Alert.alert("Ошибка", "Не удалось обновить уровень заряда");
     }
   };
 
+  const [batteryPickerKit, setBatteryPickerKit] = useState<RadioGuideKit | null>(null);
   const [modalMode, setModalMode] = useState<ModalMode>(null);
   const [selectedKit, setSelectedKit] = useState<RadioGuideKit | null>(null);
   const [selectedAssignment, setSelectedAssignment] = useState<RadioGuideAssignment | null>(null);
@@ -512,7 +514,6 @@ export default function RadioGuidesScreen() {
   
   const renderAvailableKit = (kit: RadioGuideKit) => {
     const batteryInfo = getBatteryInfo(kit.batteryLevel);
-    const batteryLevels: BatteryLevel[] = ['full', 'half', 'low'];
     
     return (
       <ThemedView
@@ -532,31 +533,22 @@ export default function RadioGuidesScreen() {
               </View>
             </View>
           </View>
-          <View style={styles.batteryContainer}>
-            {batteryLevels.map((level) => {
-              const info = getBatteryInfo(level);
-              const isActive = kit.batteryLevel === level;
-              return (
-                <Pressable
-                  key={level}
-                  style={[
-                    styles.batteryButton,
-                    { 
-                      backgroundColor: isActive ? info.color + "30" : "transparent",
-                      borderColor: isActive ? info.color : theme.border,
-                    },
-                  ]}
-                  onPress={() => handleBatteryChange(kit, level)}
-                >
-                  <Icon 
-                    name={level === 'full' ? 'battery-charging' : level === 'half' ? 'battery' : 'battery'} 
-                    size={16} 
-                    color={info.color} 
-                  />
-                </Pressable>
-              );
-            })}
-          </View>
+          <Pressable
+            style={[
+              styles.batteryIndicator,
+              { 
+                backgroundColor: batteryInfo.color + "20",
+                borderColor: batteryInfo.color,
+              },
+            ]}
+            onPress={() => setBatteryPickerKit(kit)}
+          >
+            <View style={[styles.batteryDot, { backgroundColor: batteryInfo.color }]} />
+            <ThemedText style={[styles.batteryText, { color: batteryInfo.color }]}>
+              {kit.batteryLevel === 'full' ? '100%' : kit.batteryLevel === 'half' ? '50%' : '20%'}
+            </ThemedText>
+            <Icon name="chevron-down" size={14} color={batteryInfo.color} />
+          </Pressable>
         </View>
         
         {kit.notes ? (
@@ -707,7 +699,7 @@ export default function RadioGuidesScreen() {
                   ]}
                   onPress={() => setSortByBattery(!sortByBattery)}
                 >
-                  <Icon name="battery" size={14} color={sortByBattery ? theme.primary : theme.textSecondary} />
+                  <Icon name="zap" size={14} color={sortByBattery ? theme.primary : theme.textSecondary} />
                   <ThemedText style={{ fontSize: 12, color: sortByBattery ? theme.primary : theme.textSecondary }}>
                     {sortByBattery ? "По заряду" : "По номеру"}
                   </ThemedText>
@@ -777,6 +769,50 @@ export default function RadioGuidesScreen() {
           <Icon name="plus" size={24} color={theme.buttonText} />
         </Pressable>
       ) : null}
+
+      <Modal
+        visible={batteryPickerKit !== null}
+        animationType="fade"
+        transparent
+        onRequestClose={() => setBatteryPickerKit(null)}
+      >
+        <View style={styles.modalOverlay}>
+          <Pressable style={styles.modalBackdrop} onPress={() => setBatteryPickerKit(null)} />
+          <ThemedView style={[styles.batteryPickerModal, { backgroundColor: theme.backgroundDefault }]}>
+            <View style={styles.modalHeader}>
+              <ThemedText style={styles.modalTitle}>Уровень заряда</ThemedText>
+              <Pressable onPress={() => setBatteryPickerKit(null)}>
+                <Icon name="x" size={24} color={theme.text} />
+              </Pressable>
+            </View>
+            {(['full', 'half', 'low'] as BatteryLevel[]).map((level) => {
+              const info = getBatteryInfo(level);
+              const isSelected = batteryPickerKit?.batteryLevel === level;
+              return (
+                <Pressable
+                  key={level}
+                  style={[
+                    styles.batteryOption,
+                    { 
+                      backgroundColor: isSelected ? info.color + "20" : "transparent",
+                      borderColor: isSelected ? info.color : theme.border,
+                    },
+                  ]}
+                  onPress={() => batteryPickerKit && handleBatteryChange(batteryPickerKit, level)}
+                >
+                  <View style={[styles.batteryOptionDot, { backgroundColor: info.color }]} />
+                  <ThemedText style={[styles.batteryOptionText, { color: isSelected ? info.color : theme.text }]}>
+                    {info.label}
+                  </ThemedText>
+                  {isSelected ? (
+                    <Icon name="check" size={18} color={info.color} />
+                  ) : null}
+                </Pressable>
+              );
+            })}
+          </ThemedView>
+        </View>
+      </Modal>
 
       <Modal
         visible={modalMode !== null}
@@ -1302,14 +1338,55 @@ const styles = StyleSheet.create({
     borderRadius: BorderRadius.sm,
     borderWidth: 1,
   },
-  batteryContainer: {
+  batteryIndicator: {
     flexDirection: "row",
+    alignItems: "center",
     gap: Spacing.xs,
-  },
-  batteryButton: {
-    padding: Spacing.xs,
-    borderRadius: BorderRadius.xs,
+    paddingHorizontal: Spacing.sm,
+    paddingVertical: Spacing.xs,
+    borderRadius: BorderRadius.sm,
     borderWidth: 1,
+  },
+  batteryDot: {
+    width: 8,
+    height: 8,
+    borderRadius: 4,
+  },
+  batteryText: {
+    fontSize: 12,
+    fontWeight: "500",
+  },
+  batteryPickerModal: {
+    borderRadius: BorderRadius.md,
+    padding: Spacing.lg,
+    width: "80%",
+    maxWidth: 300,
+  },
+  batteryOption: {
+    flexDirection: "row",
+    alignItems: "center",
+    gap: Spacing.md,
+    paddingVertical: Spacing.md,
+    paddingHorizontal: Spacing.md,
+    borderRadius: BorderRadius.sm,
+    borderWidth: 1,
+    marginTop: Spacing.sm,
+  },
+  batteryOptionDot: {
+    width: 12,
+    height: 12,
+    borderRadius: 6,
+  },
+  batteryOptionText: {
+    flex: 1,
+    fontSize: 16,
+  },
+  modalBackdrop: {
+    position: "absolute",
+    top: 0,
+    left: 0,
+    right: 0,
+    bottom: 0,
   },
   emptyContainer: {
     alignItems: "center",
