@@ -105,10 +105,13 @@ export default function RadioGuidesScreen() {
   };
 
   const handleBatteryChange = async (kit: RadioGuideKit, newLevel: BatteryLevel) => {
+    console.log("[RadioGuides] handleBatteryChange called:", kit.id, newLevel);
     try {
       await updateRadioGuideKit(kit.id, { batteryLevel: newLevel });
+      console.log("[RadioGuides] Battery update successful");
       setBatteryPickerKit(null);
     } catch (err) {
+      console.error("[RadioGuides] Battery update error:", err);
       Alert.alert("Ошибка", "Не удалось обновить уровень заряда");
     }
   };
@@ -582,8 +585,11 @@ export default function RadioGuidesScreen() {
               <Icon name="chevron-down" size={14} color={batteryInfo.color} />
             </Pressable>
             
-            {batteryPickerKit?.id === kit.id ? (
-              <View style={[styles.batteryDropdown, { backgroundColor: theme.backgroundDefault, borderColor: theme.border }]}>
+            {isDropdownOpen ? (
+              <Pressable 
+                style={[styles.batteryDropdown, { backgroundColor: theme.backgroundDefault, borderColor: theme.border }]}
+                onPress={(e) => e.stopPropagation()}
+              >
                 {(['full', 'half', 'low'] as BatteryLevel[]).map((level) => {
                   const info = getBatteryInfo(level);
                   const isSelected = kit.batteryLevel === level;
@@ -594,7 +600,10 @@ export default function RadioGuidesScreen() {
                         styles.batteryDropdownItem,
                         isSelected && { backgroundColor: info.color + "20" },
                       ]}
-                      onPress={() => handleBatteryChange(kit, level)}
+                      onPress={(e) => {
+                        e.stopPropagation();
+                        handleBatteryChange(kit, level);
+                      }}
                     >
                       <BatteryIcon level={level} color={info.color} size={24} />
                       <ThemedText style={[styles.batteryDropdownText, { color: isSelected ? info.color : theme.text }]}>
@@ -604,7 +613,7 @@ export default function RadioGuidesScreen() {
                     </Pressable>
                   );
                 })}
-              </View>
+              </Pressable>
             ) : null}
           </View>
         </View>
