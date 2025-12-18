@@ -92,14 +92,18 @@ export type PermissionKey =
   | 'chat'
   | 'dispatching_notes'
   | 'excursion_notes'
+  | 'excursions'
+  | 'finances'
   | 'view_other_managers';
 
 export const PERMISSION_DEFINITIONS: Record<PermissionKey, string> = {
   radio_guides: 'Радиогиды',
   allocation: 'Распределение',
   chat: 'Чат',
-  dispatching_notes: 'Заметки диспетчера',
+  dispatching_notes: 'Отправление',
   excursion_notes: 'Заметки к экскурсиям',
+  excursions: 'Экскурсии',
+  finances: 'Финансы',
   view_other_managers: 'Просмотр данных коллег',
 };
 

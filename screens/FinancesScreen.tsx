@@ -5,6 +5,7 @@ import DateTimePicker from "@react-native-community/datetimepicker";
 import { ThemedText } from "@/components/ThemedText";
 import { ThemedView } from "@/components/ThemedView";
 import { ScreenScrollView } from "@/components/ScreenScrollView";
+import { PermissionGate } from "@/components/PermissionGate";
 import { ScreenKeyboardAwareScrollView } from "@/components/ScreenKeyboardAwareScrollView";
 import { StatCard } from "@/components/StatCard";
 import { NetworkErrorBanner } from "@/components/NetworkErrorBanner";
@@ -134,6 +135,7 @@ export default function FinancesScreen() {
   };
 
   return (
+    <PermissionGate permission="finances">
     <>
       <ScreenScrollView>
         <NetworkErrorBanner />
@@ -466,6 +468,7 @@ export default function FinancesScreen() {
         </ThemedView>
       </Modal>
     </>
+    </PermissionGate>
   );
 }
 

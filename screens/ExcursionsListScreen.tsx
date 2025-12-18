@@ -7,6 +7,7 @@ import { KeyboardAwareScrollView } from "react-native-keyboard-controller";
 import { ThemedText } from "@/components/ThemedText";
 import { ThemedView } from "@/components/ThemedView";
 import { ScreenScrollView } from "@/components/ScreenScrollView";
+import { PermissionGate } from "@/components/PermissionGate";
 import { ExcursionCard } from "@/components/ExcursionCard";
 import { AddExcursionForm } from "@/components/AddExcursionForm";
 import { NetworkErrorBanner } from "@/components/NetworkErrorBanner";
@@ -395,6 +396,7 @@ export default function ExcursionsListScreen() {
   };
 
   return (
+    <PermissionGate permission="excursions">
     <>
       <ScreenScrollView>
         <NetworkErrorBanner />
@@ -758,6 +760,7 @@ export default function ExcursionsListScreen() {
         </View>
       </Modal>
     </>
+    </PermissionGate>
   );
 }
 
