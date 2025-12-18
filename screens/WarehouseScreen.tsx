@@ -10,9 +10,6 @@ import {
   Platform,
 } from "react-native";
 import { useSafeAreaInsets } from "react-native-safe-area-context";
-import { KeyboardAwareScrollView } from "react-native-keyboard-controller";
-
-const ModalScrollView = Platform.OS === "web" ? ScrollView : KeyboardAwareScrollView;
 import DateTimePicker, { DateTimePickerEvent } from "@react-native-community/datetimepicker";
 import { Icon } from "@/components/Icon";
 import { ThemedText } from "@/components/ThemedText";
@@ -1065,7 +1062,7 @@ export default function WarehouseScreen() {
       <Modal visible={showItemModal} transparent animationType="slide">
         <View style={styles.modalOverlay}>
           <View style={styles.modalContent}>
-            <ModalScrollView>
+            <ScrollView>
               <ThemedText style={styles.modalTitle}>
                 {editingItem ? "Редактировать" : "Новое оборудование"}
               </ThemedText>
@@ -1132,7 +1129,7 @@ export default function WarehouseScreen() {
                   <ThemedText style={[styles.buttonText, { color: "#FFF" }]}>Сохранить</ThemedText>
                 </Pressable>
               </View>
-            </ModalScrollView>
+            </ScrollView>
           </View>
         </View>
       </Modal>
@@ -1140,7 +1137,7 @@ export default function WarehouseScreen() {
       <Modal visible={showMovementModal} transparent animationType="slide">
         <View style={styles.modalOverlay}>
           <View style={styles.modalContent}>
-            <ModalScrollView>
+            <ScrollView>
               <ThemedText style={styles.modalTitle}>
                 Движение: {selectedItem?.name}
               </ThemedText>
@@ -1197,7 +1194,7 @@ export default function WarehouseScreen() {
                   <ThemedText style={[styles.buttonText, { color: "#FFF" }]}>Сохранить</ThemedText>
                 </Pressable>
               </View>
-            </ModalScrollView>
+            </ScrollView>
           </View>
         </View>
       </Modal>
