@@ -565,6 +565,17 @@ const SVG_ICONS: Record<string, (size: number, color: string) => React.ReactNode
       <Path d="M16 8v5a3 3 0 0 0 6 0V12a10 10 0 1 0-3.92 7.94" />
     </Svg>
   ),
+  "square": (s, c) => (
+    <Svg width={s} height={s} viewBox="0 0 24 24" fill="none" stroke={c} strokeWidth={2} strokeLinecap="round" strokeLinejoin="round">
+      <Rect x="3" y="3" width="18" height="18" rx="2" ry="2" />
+    </Svg>
+  ),
+  "check-square": (s, c) => (
+    <Svg width={s} height={s} viewBox="0 0 24 24" fill="none" stroke={c} strokeWidth={2} strokeLinecap="round" strokeLinejoin="round">
+      <Polyline points="9 11 12 14 22 4" />
+      <Path d="M21 12v7a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h11" />
+    </Svg>
+  ),
 };
 
 export function Icon({ name, size = 24, color = "#FFFFFF", style }: IconProps) {
