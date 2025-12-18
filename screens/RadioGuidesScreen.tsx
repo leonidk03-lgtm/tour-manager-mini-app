@@ -746,9 +746,8 @@ export default function RadioGuidesScreen() {
     </>
     </PermissionGate>
   );
-}
 
-const styles = StyleSheet.create({
+  function renderFormContent() {
     if (modalMode === "add" || modalMode === "edit") {
       return (
         <View style={styles.form}>
@@ -1138,12 +1137,7 @@ const styles = StyleSheet.create({
     }
 
     return null;
-  };
-
-  return renderModalContent();
-    </>
-    </PermissionGate>
-  );
+  }
 }
 
 const styles = StyleSheet.create({
