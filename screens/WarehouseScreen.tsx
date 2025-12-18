@@ -757,6 +757,13 @@ export default function WarehouseScreen() {
         filteredItems.map((item) => {
           const category = getCategoryById(item.categoryId);
           const isLow = item.quantity <= item.minQuantity && item.minQuantity > 0;
+          const lossCount = equipmentMovements
+            .filter(m => m.itemId === item.id && m.type === 'loss')
+            .reduce((sum, m) => sum + m.quantity, 0);
+          const foundCount = equipmentMovements
+            .filter(m => m.itemId === item.id && m.type === 'found')
+            .reduce((sum, m) => sum + m.quantity, 0);
+          const netLoss = lossCount - foundCount;
           
           return (
             <View key={item.id} style={styles.card}>
@@ -787,6 +794,14 @@ export default function WarehouseScreen() {
                     <Icon name="trash-2" size={14} color={theme.error} />
                     <ThemedText style={[styles.statLabel, { color: theme.error }]}>
                       Списано: {item.writtenOff}
+                    </ThemedText>
+                  </View>
+                )}
+                {netLoss > 0 && (
+                  <View style={styles.statItem}>
+                    <Icon name="alert-circle" size={14} color={MOVEMENT_COLORS.loss} />
+                    <ThemedText style={[styles.statLabel, { color: MOVEMENT_COLORS.loss }]}>
+                      Утеряно: {netLoss}
                     </ThemedText>
                   </View>
                 )}
