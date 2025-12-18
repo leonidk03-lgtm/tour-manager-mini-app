@@ -107,7 +107,6 @@ export default function WarehouseScreen() {
   const [categoryType, setCategoryType] = useState<"equipment" | "consumable">("equipment");
   const [categoryUnit, setCategoryUnit] = useState("шт");
   const [categoryIcon, setCategoryIcon] = useState<string | null>(null);
-  const [categoryTrackLoss, setCategoryTrackLoss] = useState(true);
   const [categoryAutoWriteoff, setCategoryAutoWriteoff] = useState(false);
   const [categoryAutoWriteoffSourceId, setCategoryAutoWriteoffSourceId] = useState<string | null>(null);
   
@@ -115,6 +114,7 @@ export default function WarehouseScreen() {
   const [itemCategoryId, setItemCategoryId] = useState("");
   const [itemQuantity, setItemQuantity] = useState("");
   const [itemMinQuantity, setItemMinQuantity] = useState("");
+  const [itemTrackLoss, setItemTrackLoss] = useState(true);
   
   const [movementType, setMovementType] = useState<MovementType>("receipt");
   const [movementQuantity, setMovementQuantity] = useState("");
@@ -183,7 +183,6 @@ export default function WarehouseScreen() {
     setCategoryType("equipment");
     setCategoryUnit("шт");
     setCategoryIcon(null);
-    setCategoryTrackLoss(true);
     setCategoryAutoWriteoff(false);
     setCategoryAutoWriteoffSourceId(null);
     setEditingCategory(null);
@@ -194,6 +193,7 @@ export default function WarehouseScreen() {
     setItemCategoryId("");
     setItemQuantity("");
     setItemMinQuantity("");
+    setItemTrackLoss(true);
     setEditingItem(null);
   };
 
@@ -217,7 +217,6 @@ export default function WarehouseScreen() {
           type: categoryType,
           unit: categoryUnit.trim(),
           icon: categoryIcon,
-          trackLoss: categoryTrackLoss,
           autoWriteoff: categoryAutoWriteoff,
           autoWriteoffSourceId: categoryAutoWriteoffSourceId,
         });
@@ -227,7 +226,6 @@ export default function WarehouseScreen() {
           type: categoryType,
           unit: categoryUnit.trim(),
           icon: categoryIcon,
-          trackLoss: categoryTrackLoss,
           autoWriteoff: categoryAutoWriteoff,
           autoWriteoffSourceId: categoryAutoWriteoffSourceId,
           isActive: true,
@@ -286,6 +284,7 @@ export default function WarehouseScreen() {
           name: itemName.trim(),
           categoryId: itemCategoryId,
           minQuantity,
+          trackLoss: itemTrackLoss,
         });
       } else {
         await addEquipmentItem({
@@ -295,6 +294,7 @@ export default function WarehouseScreen() {
           inRepair: 0,
           writtenOff: 0,
           minQuantity,
+          trackLoss: itemTrackLoss,
         });
       }
       setShowItemModal(false);
@@ -367,7 +367,6 @@ export default function WarehouseScreen() {
     setCategoryType(category.type);
     setCategoryUnit(category.unit);
     setCategoryIcon(category.icon);
-    setCategoryTrackLoss(category.trackLoss);
     setCategoryAutoWriteoff(category.autoWriteoff);
     setCategoryAutoWriteoffSourceId(category.autoWriteoffSourceId);
     setShowCategoryModal(true);
@@ -379,6 +378,7 @@ export default function WarehouseScreen() {
     setItemCategoryId(item.categoryId);
     setItemQuantity(item.quantity.toString());
     setItemMinQuantity(item.minQuantity.toString());
+    setItemTrackLoss(item.trackLoss);
     setShowItemModal(true);
   };
 
@@ -1213,16 +1213,6 @@ export default function WarehouseScreen() {
               </View>
             </ScrollView>
 
-            <Pressable
-              style={styles.checkboxRow}
-              onPress={() => setCategoryTrackLoss(!categoryTrackLoss)}
-            >
-              <View style={[styles.checkbox, categoryTrackLoss && { backgroundColor: theme.primary, borderColor: theme.primary }]}>
-                {categoryTrackLoss ? <Icon name="check" size={14} color="#FFF" /> : null}
-              </View>
-              <ThemedText style={styles.checkboxLabel}>Учитывать утери при возврате радиогидов</ThemedText>
-            </Pressable>
-
             {categoryType === "consumable" && (
               <>
                 <Pressable
@@ -1343,6 +1333,16 @@ export default function WarehouseScreen() {
                 placeholderTextColor={theme.textSecondary}
                 keyboardType="number-pad"
               />
+
+              <Pressable
+                style={styles.checkboxRow}
+                onPress={() => setItemTrackLoss(!itemTrackLoss)}
+              >
+                <View style={[styles.checkbox, itemTrackLoss && { backgroundColor: theme.primary, borderColor: theme.primary }]}>
+                  {itemTrackLoss ? <Icon name="check" size={14} color="#FFF" /> : null}
+                </View>
+                <ThemedText style={styles.checkboxLabel}>Учитывать утери при возврате радиогидов</ThemedText>
+              </Pressable>
 
               <View style={styles.buttonRow}>
                 <Pressable

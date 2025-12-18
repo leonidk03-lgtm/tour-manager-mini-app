@@ -232,7 +232,6 @@ export interface EquipmentCategory {
   type: EquipmentCategoryType;
   unit: string;
   icon: string | null;
-  trackLoss: boolean;
   autoWriteoff: boolean;
   autoWriteoffSourceId: string | null;
   isActive: boolean;
@@ -247,6 +246,7 @@ export interface EquipmentItem {
   inRepair: number;
   writtenOff: number;
   minQuantity: number;
+  trackLoss: boolean;
   createdAt: string;
   updatedAt: string;
 }
@@ -711,7 +711,6 @@ export function DataProvider({ children }: { children: ReactNode }) {
       type: c.type as EquipmentCategoryType,
       unit: c.unit,
       icon: c.icon || null,
-      trackLoss: c.track_loss ?? true,
       autoWriteoff: c.auto_writeoff ?? false,
       autoWriteoffSourceId: c.auto_writeoff_source_id || null,
       isActive: c.is_active,
@@ -740,6 +739,7 @@ export function DataProvider({ children }: { children: ReactNode }) {
       inRepair: i.in_repair,
       writtenOff: i.written_off,
       minQuantity: i.min_quantity,
+      trackLoss: i.track_loss ?? true,
       createdAt: i.created_at,
       updatedAt: i.updated_at,
     })));
@@ -2464,7 +2464,6 @@ export function DataProvider({ children }: { children: ReactNode }) {
         type: category.type,
         unit: category.unit,
         icon: category.icon,
-        track_loss: category.trackLoss,
         auto_writeoff: category.autoWriteoff,
         auto_writeoff_source_id: category.autoWriteoffSourceId,
         is_active: category.isActive,
@@ -2485,7 +2484,6 @@ export function DataProvider({ children }: { children: ReactNode }) {
       if (category.type !== undefined) updateData.type = category.type;
       if (category.unit !== undefined) updateData.unit = category.unit;
       if (category.icon !== undefined) updateData.icon = category.icon;
-      if (category.trackLoss !== undefined) updateData.track_loss = category.trackLoss;
       if (category.autoWriteoff !== undefined) updateData.auto_writeoff = category.autoWriteoff;
       if (category.autoWriteoffSourceId !== undefined) updateData.auto_writeoff_source_id = category.autoWriteoffSourceId;
       if (category.isActive !== undefined) updateData.is_active = category.isActive;
@@ -2528,6 +2526,7 @@ export function DataProvider({ children }: { children: ReactNode }) {
         in_repair: item.inRepair,
         written_off: item.writtenOff,
         min_quantity: item.minQuantity,
+        track_loss: item.trackLoss,
       });
 
       if (error) throw error;
@@ -2547,6 +2546,7 @@ export function DataProvider({ children }: { children: ReactNode }) {
       if (item.inRepair !== undefined) updateData.in_repair = item.inRepair;
       if (item.writtenOff !== undefined) updateData.written_off = item.writtenOff;
       if (item.minQuantity !== undefined) updateData.min_quantity = item.minQuantity;
+      if (item.trackLoss !== undefined) updateData.track_loss = item.trackLoss;
 
       const { error } = await supabase
         .from('equipment_items')
