@@ -1,4 +1,5 @@
 import { View, StyleSheet } from "react-native";
+import { useSafeAreaInsets } from "react-native-safe-area-context";
 import { ThemedText } from "@/components/ThemedText";
 import { ThemedView } from "@/components/ThemedView";
 import { Icon } from "@/components/Icon";
@@ -15,13 +16,14 @@ interface PermissionGateProps {
 export function PermissionGate({ permission, children }: PermissionGateProps) {
   const { theme } = useTheme();
   const { hasPermission, isAdmin } = useAuth();
+  const insets = useSafeAreaInsets();
 
   if (isAdmin || hasPermission(permission)) {
     return <>{children}</>;
   }
 
   return (
-    <View style={[styles.container, { backgroundColor: theme.backgroundRoot }]}>
+    <View style={[styles.container, { backgroundColor: theme.backgroundRoot, paddingTop: insets.top + Spacing.xl, paddingBottom: insets.bottom + Spacing.xl }]}>
       <ThemedView style={[styles.card, { backgroundColor: theme.backgroundSecondary }]}>
         <View style={[styles.iconContainer, { backgroundColor: theme.error + '20' }]}>
           <Icon name="lock" size={32} color={theme.error} />
