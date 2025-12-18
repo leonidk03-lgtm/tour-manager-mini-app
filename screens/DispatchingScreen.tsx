@@ -11,6 +11,7 @@ import * as Clipboard from "expo-clipboard";
 import { BlurView } from "expo-blur";
 import { ThemedText } from "@/components/ThemedText";
 import { ThemedView } from "@/components/ThemedView";
+import { PermissionGate } from "@/components/PermissionGate";
 import { useTheme } from "@/hooks/useTheme";
 import { useData, DispatchingNote, Excursion } from "@/contexts/DataContext";
 import { useAuth } from "@/contexts/AuthContext";
@@ -544,6 +545,7 @@ export default function DispatchingScreen() {
   );
 
   return (
+    <PermissionGate permission="dispatching_notes">
     <View style={[styles.container, { backgroundColor: theme.backgroundRoot }]}>
       <TouchableWithoutFeedback onPress={dismissKeyboard} accessible={false}>
         <View style={[styles.notesContainer, { paddingTop: Spacing.md }]}>
@@ -1079,6 +1081,7 @@ export default function DispatchingScreen() {
         </View>
       </Modal>
     </View>
+    </PermissionGate>
   );
 }
 
