@@ -76,8 +76,15 @@ export default function RadioGuidesScreen() {
     excursions,
     tourTypes,
     equipmentItems,
+    equipmentCategories,
     addEquipmentMovement,
   } = useData();
+
+  const trackableLossItems = useMemo(() => {
+    const trackableCategories = equipmentCategories.filter(c => c.trackLoss);
+    const trackableCategoryIds = new Set(trackableCategories.map(c => c.id));
+    return equipmentItems.filter(item => trackableCategoryIds.has(item.categoryId));
+  }, [equipmentItems, equipmentCategories]);
   
   const getExcursionInfo = (excursionId: string | null | undefined) => {
     if (!excursionId) return null;
@@ -344,6 +351,7 @@ export default function RadioGuidesScreen() {
           bagNumber: num,
           status: "available",
           notes: notes.trim() || null,
+          batteryLevel: "full",
         });
       } else if (modalMode === "edit" && selectedKit) {
         await updateRadioGuideKit(selectedKit.id, {
@@ -1293,7 +1301,7 @@ export default function RadioGuidesScreen() {
                 </ThemedText>
                 <ScrollView horizontal showsHorizontalScrollIndicator={false} style={{ marginTop: Spacing.xs }}>
                   <View style={{ flexDirection: 'row', gap: Spacing.xs }}>
-                    {equipmentItems.map((item) => (
+                    {trackableLossItems.map((item) => (
                       <Pressable
                         key={item.id}
                         style={[
