@@ -1,5 +1,6 @@
 import { useState, useEffect, useRef } from "react";
 import { View, StyleSheet, Pressable, Animated } from "react-native";
+import AsyncStorage from "@react-native-async-storage/async-storage";
 import { ThemedText } from "@/components/ThemedText";
 import { Icon } from "@/components/Icon";
 import { useTheme } from "@/hooks/useTheme";
@@ -7,37 +8,60 @@ import { useData, AppNotification } from "@/contexts/DataContext";
 import { Spacing, BorderRadius } from "@/constants/theme";
 import { useSafeAreaInsets } from "react-native-safe-area-context";
 
+const SHOWN_NOTIFICATIONS_KEY = "shown_notification_ids";
+
 export function NotificationBanner() {
   const { theme } = useTheme();
   const insets = useSafeAreaInsets();
   const { notifications, markNotificationAsRead } = useData();
   const [visibleNotification, setVisibleNotification] = useState<AppNotification | null>(null);
+  const [shownIds, setShownIds] = useState<Set<string>>(new Set());
   const slideAnim = useRef(new Animated.Value(-100)).current;
-  const lastNotificationIdRef = useRef<string | null>(null);
+  const isInitialized = useRef(false);
 
   useEffect(() => {
-    const unreadNotifications = notifications.filter(n => !n.isRead);
+    AsyncStorage.getItem(SHOWN_NOTIFICATIONS_KEY).then(data => {
+      if (data) {
+        try {
+          const ids = JSON.parse(data) as string[];
+          setShownIds(new Set(ids));
+        } catch {}
+      }
+      isInitialized.current = true;
+    });
+  }, []);
+
+  const saveShownId = async (id: string) => {
+    const newShownIds = new Set(shownIds);
+    newShownIds.add(id);
+    const idsArray = Array.from(newShownIds).slice(-100);
+    setShownIds(new Set(idsArray));
+    await AsyncStorage.setItem(SHOWN_NOTIFICATIONS_KEY, JSON.stringify(idsArray));
+  };
+
+  useEffect(() => {
+    if (!isInitialized.current) return;
+    
+    const unreadNotifications = notifications.filter(n => !n.isRead && !shownIds.has(n.id));
     if (unreadNotifications.length > 0) {
       const latestUnread = unreadNotifications[0];
-      if (latestUnread.id !== lastNotificationIdRef.current) {
-        lastNotificationIdRef.current = latestUnread.id;
-        setVisibleNotification(latestUnread);
-        
-        Animated.spring(slideAnim, {
-          toValue: 0,
-          useNativeDriver: true,
-          tension: 50,
-          friction: 8,
-        }).start();
+      saveShownId(latestUnread.id);
+      setVisibleNotification(latestUnread);
+      
+      Animated.spring(slideAnim, {
+        toValue: 0,
+        useNativeDriver: true,
+        tension: 50,
+        friction: 8,
+      }).start();
 
-        const timer = setTimeout(() => {
-          hideBanner();
-        }, 4000);
+      const timer = setTimeout(() => {
+        hideBanner();
+      }, 4000);
 
-        return () => clearTimeout(timer);
-      }
+      return () => clearTimeout(timer);
     }
-  }, [notifications]);
+  }, [notifications, shownIds]);
 
   const hideBanner = () => {
     Animated.timing(slideAnim, {
