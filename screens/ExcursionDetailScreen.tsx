@@ -29,7 +29,7 @@ export default function ExcursionDetailScreen() {
   const navigation = useNavigation();
   const { excursionId } = route.params as { excursionId: string };
   const { excursions, tourTypes, additionalServices, deleteExcursion, updateExcursion, getExcursionNotes, addExcursionNote, deleteExcursionNote, dispatchingNotes } = useData();
-  const { isAdmin, profile } = useAuth();
+  const { isAdmin, profile, hasPermission } = useAuth();
   const [showEditModal, setShowEditModal] = useState(false);
   const [editKey, setEditKey] = useState(0);
   const [isDeleting, setIsDeleting] = useState(false);
@@ -368,7 +368,7 @@ export default function ExcursionDetailScreen() {
           </ThemedView>
         ) : null}
 
-        {(canAddNote || visibleNotes.length > 0 || isAdmin) ? (
+        {(hasPermission('excursion_notes') || isAdmin) && (canAddNote || visibleNotes.length > 0 || isAdmin) ? (
           <ThemedView
             style={[
               styles.card,
