@@ -58,12 +58,6 @@ export default function WarehouseScreen() {
     addEquipmentMovement,
   } = useData();
 
-  console.log("WarehouseScreen data:", {
-    categories: equipmentCategories.length,
-    items: equipmentItems.length,
-    movements: equipmentMovements.length,
-  });
-
   const [activeTab, setActiveTab] = useState<TabType>("inventory");
   const [showCategoryModal, setShowCategoryModal] = useState(false);
   const [showItemModal, setShowItemModal] = useState(false);

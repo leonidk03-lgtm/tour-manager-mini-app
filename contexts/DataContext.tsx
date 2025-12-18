@@ -692,11 +692,8 @@ export function DataProvider({ children }: { children: ReactNode }) {
       .select('*')
       .order('name');
 
-    console.log("fetchEquipmentCategories result:", { data, error });
-
     if (error) {
       if (error.code === 'PGRST205' || error.code === '42P01') {
-        console.log("fetchEquipmentCategories - table not found, skipping");
         return;
       }
       throw error;
@@ -1593,6 +1590,21 @@ export function DataProvider({ children }: { children: ReactNode }) {
         'postgres_changes',
         { event: '*', schema: 'public', table: 'equipment_losses' },
         () => safeFetch(fetchEquipmentLosses)
+      )
+      .on(
+        'postgres_changes',
+        { event: '*', schema: 'public', table: 'equipment_categories' },
+        () => safeFetch(fetchEquipmentCategories)
+      )
+      .on(
+        'postgres_changes',
+        { event: '*', schema: 'public', table: 'equipment_items' },
+        () => safeFetch(fetchEquipmentItems)
+      )
+      .on(
+        'postgres_changes',
+        { event: '*', schema: 'public', table: 'equipment_movements' },
+        () => safeFetch(fetchEquipmentMovements)
       )
       .on(
         'postgres_changes',
