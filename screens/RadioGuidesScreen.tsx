@@ -470,33 +470,28 @@ export default function RadioGuidesScreen() {
       await returnRadioGuide(selectedAssignment.id, returned, lossReason.trim());
       
       // Create loss movement on warehouse
-      console.log("Starting warehouse loss recording...", { selectedLossItemId, missing, kitId: selectedKit.id });
-      
       try {
-        console.log("Calling addEquipmentMovement...");
         await addEquipmentMovement({
           itemId: selectedLossItemId,
           type: 'loss',
           quantity: missing,
           note: `Утеря из сумки #${selectedKit.bagNumber}. Экскурсовод: ${selectedAssignment.guideName}. Причина: ${lossReason.trim()}`,
         });
-        console.log("addEquipmentMovement completed successfully");
         
         // Also record in equipment_losses for tracking
-        console.log("Calling addEquipmentLoss...");
         await addEquipmentLoss({
           assignmentId: selectedAssignment.id,
           kitId: selectedKit.id,
           guideName: selectedAssignment.guideName,
           missingCount: missing,
           reason: lossReason.trim(),
+          equipmentItemId: selectedLossItemId,
         });
-        console.log("addEquipmentLoss completed successfully");
       } catch (lossErr) {
         console.error("Could not record equipment loss:", lossErr);
         Alert.alert(
           "Внимание",
-          `Радиогид принят, но запись о потере на складе не сохранена: ${lossErr}`,
+          "Радиогид принят, но запись о потере на складе не сохранена. Обратитесь к администратору.",
           [{ text: "OK" }]
         );
       }

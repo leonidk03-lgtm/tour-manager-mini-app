@@ -158,6 +158,7 @@ export interface EquipmentLoss {
   managerId: string;
   managerName: string;
   bagNumber?: number;
+  equipmentItemId?: string | null;
 }
 
 export interface ChatMessage {
@@ -683,6 +684,7 @@ export function DataProvider({ children }: { children: ReactNode }) {
       managerId: l.manager_id,
       managerName: l.manager_name,
       bagNumber: l.radio_guide_kits?.bag_number,
+      equipmentItemId: l.equipment_item_id,
     })));
   }, []);
 
@@ -2332,6 +2334,7 @@ export function DataProvider({ children }: { children: ReactNode }) {
         status: 'lost',
         manager_id: currentUser.id,
         manager_name: currentUser.name,
+        equipment_item_id: loss.equipmentItemId || null,
       });
 
       if (error) throw error;
@@ -2363,6 +2366,8 @@ export function DataProvider({ children }: { children: ReactNode }) {
 
   const markLossAsFound = async (id: string, notes?: string) => {
     try {
+      const loss = equipmentLosses.find(l => l.id === id);
+      
       const { error } = await supabase
         .from('equipment_losses')
         .update({
@@ -2373,6 +2378,39 @@ export function DataProvider({ children }: { children: ReactNode }) {
         .eq('id', id);
 
       if (error) throw error;
+      
+      // Create "found" movement on warehouse to restore quantity
+      if (loss?.equipmentItemId && currentUser) {
+        try {
+          const kit = radioGuideKits.find(k => k.id === loss.kitId);
+          await supabase.from('equipment_movements').insert({
+            item_id: loss.equipmentItemId,
+            type: 'found',
+            quantity: loss.missingCount,
+            note: `Найдено оборудование из сумки #${kit?.bagNumber || '?'}. ${notes ? `Комментарий: ${notes}` : ''}`,
+            manager_id: currentUser.id,
+            manager_name: currentUser.name,
+          });
+          
+          // Update item quantity
+          const item = equipmentItems.find(i => i.id === loss.equipmentItemId);
+          if (item) {
+            await supabase
+              .from('equipment_items')
+              .update({
+                quantity: item.quantity + loss.missingCount,
+                updated_at: new Date().toISOString(),
+              })
+              .eq('id', loss.equipmentItemId);
+          }
+          
+          await fetchEquipmentItems();
+          await fetchEquipmentMovements();
+        } catch (warehouseErr) {
+          console.warn('Could not restore warehouse quantity:', warehouseErr);
+        }
+      }
+      
       await fetchEquipmentLosses();
     } catch (err) {
       console.error('Error marking loss as found:', err);
