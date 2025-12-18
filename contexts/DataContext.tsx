@@ -169,6 +169,9 @@ export interface ChatMessage {
   replyToId: string | null;
   replyToMessage: string | null;
   replyToSenderName: string | null;
+  recipientId: string | null;
+  recipientName: string | null;
+  mentions: string[];
 }
 
 export interface AllocationBus {
@@ -268,7 +271,7 @@ interface DataContextType {
   deleteExcursionNote: (id: string) => Promise<void>;
   getExcursionNotes: (excursionId: string) => ExcursionNote[];
   chatMessages: ChatMessage[];
-  sendChatMessage: (message: string, replyTo?: ChatMessage) => Promise<void>;
+  sendChatMessage: (message: string, options?: { replyTo?: ChatMessage; recipientId?: string; recipientName?: string; mentions?: string[] }) => Promise<void>;
   clearChatHistory: () => Promise<void>;
   notifications: AppNotification[];
   unreadNotificationCount: number;
@@ -1022,6 +1025,9 @@ export function DataProvider({ children }: { children: ReactNode }) {
         replyToId: m.reply_to_id || null,
         replyToMessage: m.reply_to_message || null,
         replyToSenderName: m.reply_to_sender_name || null,
+        recipientId: m.recipient_id || null,
+        recipientName: m.recipient_name || null,
+        mentions: m.mentions || [],
       }));
       
       setChatMessages(messages);
@@ -1030,7 +1036,7 @@ export function DataProvider({ children }: { children: ReactNode }) {
     }
   }, [user]);
 
-  const sendChatMessage = async (message: string, replyTo?: ChatMessage) => {
+  const sendChatMessage = async (message: string, options?: { replyTo?: ChatMessage; recipientId?: string; recipientName?: string; mentions?: string[] }) => {
     if (!user || !profile) throw new Error('Not authenticated');
     
     try {
@@ -1040,10 +1046,19 @@ export function DataProvider({ children }: { children: ReactNode }) {
         message,
       };
       
-      if (replyTo) {
-        insertData.reply_to_id = replyTo.id;
-        insertData.reply_to_message = replyTo.message.substring(0, 100);
-        insertData.reply_to_sender_name = replyTo.senderName;
+      if (options?.replyTo) {
+        insertData.reply_to_id = options.replyTo.id;
+        insertData.reply_to_message = options.replyTo.message.substring(0, 100);
+        insertData.reply_to_sender_name = options.replyTo.senderName;
+      }
+      
+      if (options?.recipientId) {
+        insertData.recipient_id = options.recipientId;
+        insertData.recipient_name = options.recipientName || null;
+      }
+      
+      if (options?.mentions && options.mentions.length > 0) {
+        insertData.mentions = options.mentions;
       }
       
       const { error } = await supabase
@@ -1472,16 +1487,25 @@ export function DataProvider({ children }: { children: ReactNode }) {
             sender_name?: string; 
             message?: string;
             reply_to_id?: string;
+            recipient_id?: string;
+            mentions?: string[];
           };
           
           // Skip own messages
           if (!newMessage.sender_id || newMessage.sender_id === user?.id) return;
           
-          // Full access users get all notifications
-          // Limited access users only get notifications for replies to their messages
-          let shouldNotify = hasFullAccess;
+          // Check if user is directly targeted (recipient or mentioned)
+          const isRecipient = newMessage.recipient_id === user?.id;
+          const isMentioned = newMessage.mentions?.includes(user?.id || '') || false;
           
-          if (!hasFullAccess && newMessage.reply_to_id) {
+          // Full access users get all notifications
+          // Limited access users only get notifications for:
+          // - Replies to their messages
+          // - Messages directly addressed to them (recipient)
+          // - Messages where they are mentioned
+          let shouldNotify = hasFullAccess || isRecipient || isMentioned;
+          
+          if (!shouldNotify && !hasFullAccess && newMessage.reply_to_id) {
             // Check if this is a reply to current user's message
             const { data: repliedMessage } = await supabase
               .from('chat_messages')
@@ -1497,7 +1521,13 @@ export function DataProvider({ children }: { children: ReactNode }) {
           if (shouldNotify) {
             const senderName = newMessage.sender_name || 'Пользователь';
             const messagePreview = newMessage.message?.substring(0, 50) || '';
-            await addNotification('chat', `Новое сообщение от ${senderName}`, messagePreview);
+            let notificationTitle = `Новое сообщение от ${senderName}`;
+            if (isRecipient) {
+              notificationTitle = `${senderName} написал вам`;
+            } else if (isMentioned) {
+              notificationTitle = `${senderName} упомянул вас`;
+            }
+            await addNotification('chat', notificationTitle, messagePreview);
           }
         }
       )

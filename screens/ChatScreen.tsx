@@ -1,5 +1,5 @@
 import { useState, useRef, useCallback, useEffect, useMemo } from "react";
-import { View, StyleSheet, TextInput, Pressable, FlatList, Alert, KeyboardAvoidingView, Platform } from "react-native";
+import { View, StyleSheet, TextInput, Pressable, FlatList, Alert, KeyboardAvoidingView, Platform, Modal, ScrollView } from "react-native";
 import { useSafeAreaInsets } from "react-native-safe-area-context";
 import { useBottomTabBarHeight } from "@react-navigation/bottom-tabs";
 import { Icon } from "@/components/Icon";
@@ -21,9 +21,26 @@ export default function ChatScreen() {
   const [message, setMessage] = useState("");
   const [isSending, setIsSending] = useState(false);
   const [replyTo, setReplyTo] = useState<ChatMessage | null>(null);
+  const [recipient, setRecipient] = useState<{ id: string; name: string } | null>(null);
+  const [showRecipientPicker, setShowRecipientPicker] = useState(false);
   const flatListRef = useRef<FlatList>(null);
   
   const canViewAll = isAdmin || hasPermission('chat_view_all');
+  
+  const activeManagers = useMemo(() => {
+    return managers.filter(m => m.isActive && m.id !== profile?.id);
+  }, [managers, profile]);
+  
+  const parseMentions = useCallback((text: string): string[] => {
+    const mentionedIds = new Set<string>();
+    managers.forEach(m => {
+      const namePattern = `@${m.name}`;
+      if (text.toLowerCase().includes(namePattern.toLowerCase())) {
+        mentionedIds.add(m.id);
+      }
+    });
+    return Array.from(mentionedIds);
+  }, [managers]);
   
   const filteredMessages = useMemo(() => {
     if (canViewAll) return chatMessages;
@@ -35,7 +52,9 @@ export default function ChatScreen() {
     
     return chatMessages.filter(m => 
       m.senderId === profile.id ||
-      (m.replyToId && myMessageIds.has(m.replyToId))
+      (m.replyToId && myMessageIds.has(m.replyToId)) ||
+      m.recipientId === profile.id ||
+      (m.mentions && m.mentions.includes(profile.id))
     );
   }, [chatMessages, profile, canViewAll]);
 
@@ -57,9 +76,20 @@ export default function ChatScreen() {
     hapticFeedback.light();
     setIsSending(true);
     try {
-      await sendChatMessage(message.trim(), replyTo || undefined);
+      const mentions = parseMentions(message.trim());
+      const options: { replyTo?: ChatMessage; recipientId?: string; recipientName?: string; mentions?: string[] } = {};
+      if (replyTo) options.replyTo = replyTo;
+      if (recipient) {
+        options.recipientId = recipient.id;
+        options.recipientName = recipient.name;
+      }
+      if (mentions.length > 0) {
+        options.mentions = mentions;
+      }
+      await sendChatMessage(message.trim(), Object.keys(options).length > 0 ? options : undefined);
       setMessage("");
       setReplyTo(null);
+      setRecipient(null);
       scrollToBottom();
     } catch (error) {
       Alert.alert("Ошибка", "Не удалось отправить сообщение");
@@ -233,6 +263,19 @@ export default function ChatScreen() {
           }
         />
 
+        {recipient ? (
+          <View style={[styles.recipientBar, { backgroundColor: theme.backgroundSecondary, borderLeftColor: theme.success }]}>
+            <View style={styles.replyBarContent}>
+              <ThemedText type="small" style={{ color: theme.success, fontWeight: '600' }}>
+                Кому: {recipient.name}
+              </ThemedText>
+            </View>
+            <Pressable onPress={() => setRecipient(null)} style={styles.replyBarClose} hitSlop={8}>
+              <Icon name="x" size={18} color={theme.textSecondary} />
+            </Pressable>
+          </View>
+        ) : null}
+        
         {replyTo ? (
           <View style={[styles.replyBar, { backgroundColor: theme.backgroundSecondary, borderLeftColor: theme.primary }]}>
             <View style={styles.replyBarContent}>
@@ -250,6 +293,14 @@ export default function ChatScreen() {
         ) : null}
         
         <View style={[styles.inputContainer, { paddingBottom: tabBarHeight + Spacing.lg, backgroundColor: theme.backgroundDefault }]}>
+          {canViewAll ? (
+            <Pressable 
+              onPress={() => setShowRecipientPicker(true)} 
+              style={[styles.recipientButton, { backgroundColor: theme.backgroundSecondary }]}
+            >
+              <Icon name="at-sign" size={20} color={recipient ? theme.success : theme.textSecondary} />
+            </Pressable>
+          ) : null}
           <TextInput
             style={[
               styles.input,
@@ -284,6 +335,49 @@ export default function ChatScreen() {
           </Pressable>
         </View>
       </KeyboardAvoidingView>
+      
+      <Modal
+        visible={showRecipientPicker}
+        transparent
+        animationType="fade"
+        onRequestClose={() => setShowRecipientPicker(false)}
+      >
+        <View style={styles.modalOverlay}>
+          <ThemedView style={[styles.modalContent, { backgroundColor: theme.backgroundSecondary }]}>
+            <View style={styles.modalHeader}>
+              <ThemedText style={styles.modalTitle}>Написать менеджеру</ThemedText>
+              <Pressable onPress={() => setShowRecipientPicker(false)}>
+                <Icon name="x" size={24} color={theme.text} />
+              </Pressable>
+            </View>
+            <ScrollView style={styles.managerList}>
+              {activeManagers.map((m) => (
+                <Pressable
+                  key={m.id}
+                  style={[styles.managerItem, { borderBottomColor: theme.border }]}
+                  onPress={() => {
+                    setRecipient({ id: m.id, name: m.name });
+                    setShowRecipientPicker(false);
+                    hapticFeedback.light();
+                  }}
+                >
+                  <View style={[styles.managerAvatar, { backgroundColor: theme.primary + '20' }]}>
+                    <ThemedText style={{ color: theme.primary, fontWeight: '600' }}>
+                      {m.name.charAt(0).toUpperCase()}
+                    </ThemedText>
+                  </View>
+                  <ThemedText style={styles.managerName}>{m.name}</ThemedText>
+                </Pressable>
+              ))}
+              {activeManagers.length === 0 ? (
+                <ThemedText style={[styles.emptyText, { color: theme.textSecondary, textAlign: 'center', padding: Spacing.lg }]}>
+                  Нет доступных менеджеров
+                </ThemedText>
+              ) : null}
+            </ScrollView>
+          </ThemedView>
+        </View>
+      </Modal>
     </ThemedView>
     </PermissionGate>
   );
@@ -417,5 +511,67 @@ const styles = StyleSheet.create({
     borderRadius: BorderRadius.full,
     justifyContent: "center",
     alignItems: "center",
+  },
+  recipientBar: {
+    flexDirection: "row",
+    alignItems: "center",
+    borderLeftWidth: 3,
+    borderRadius: BorderRadius.sm,
+    paddingHorizontal: Spacing.md,
+    paddingVertical: Spacing.sm,
+    marginHorizontal: Spacing.md,
+    marginBottom: Spacing.xs,
+  },
+  recipientButton: {
+    width: 40,
+    height: 40,
+    borderRadius: BorderRadius.full,
+    justifyContent: "center",
+    alignItems: "center",
+    marginRight: Spacing.sm,
+  },
+  modalOverlay: {
+    flex: 1,
+    backgroundColor: "rgba(0,0,0,0.5)",
+    justifyContent: "center",
+    alignItems: "center",
+    padding: Spacing.lg,
+  },
+  modalContent: {
+    width: "100%",
+    maxWidth: 400,
+    maxHeight: "70%",
+    borderRadius: BorderRadius.lg,
+    padding: Spacing.lg,
+  },
+  modalHeader: {
+    flexDirection: "row",
+    justifyContent: "space-between",
+    alignItems: "center",
+    marginBottom: Spacing.md,
+  },
+  modalTitle: {
+    fontSize: 18,
+    fontWeight: "600",
+  },
+  managerList: {
+    maxHeight: 300,
+  },
+  managerItem: {
+    flexDirection: "row",
+    alignItems: "center",
+    paddingVertical: Spacing.md,
+    borderBottomWidth: 1,
+  },
+  managerAvatar: {
+    width: 40,
+    height: 40,
+    borderRadius: 20,
+    justifyContent: "center",
+    alignItems: "center",
+    marginRight: Spacing.md,
+  },
+  managerName: {
+    fontSize: 16,
   },
 });
