@@ -105,13 +105,46 @@ export const PERMISSION_DEFINITIONS: Record<PermissionKey, string> = {
   radio_guides_edit: 'Редактирование сумок',
   allocation: 'Распределение',
   chat: 'Чат',
-  chat_view_all: 'Видеть все сообщения',
+  chat_view_all: 'Полный доступ',
   dispatching_notes: 'Отправление',
   excursion_notes: 'Заметки к экскурсиям',
   excursions: 'Экскурсии',
   finances: 'Финансы',
   view_other_managers: 'Просмотр данных коллег',
 };
+
+export interface PermissionGroup {
+  key: PermissionKey;
+  label: string;
+  description?: string;
+  children?: { key: PermissionKey; label: string; description?: string }[];
+}
+
+export const PERMISSION_GROUPS: PermissionGroup[] = [
+  {
+    key: 'radio_guides',
+    label: 'Радиогиды',
+    description: 'Доступ к разделу',
+    children: [
+      { key: 'radio_guides_add', label: 'Добавление сумок' },
+      { key: 'radio_guides_edit', label: 'Редактирование сумок' },
+    ],
+  },
+  {
+    key: 'chat',
+    label: 'Чат',
+    description: 'Доступ к разделу',
+    children: [
+      { key: 'chat_view_all', label: 'Полный доступ', description: 'Видит все сообщения (иначе только свои и ответы)' },
+    ],
+  },
+  { key: 'allocation', label: 'Распределение' },
+  { key: 'dispatching_notes', label: 'Отправление' },
+  { key: 'excursion_notes', label: 'Заметки к экскурсиям' },
+  { key: 'excursions', label: 'Экскурсии' },
+  { key: 'finances', label: 'Финансы' },
+  { key: 'view_other_managers', label: 'Просмотр данных коллег' },
+];
 
 export type ManagerPermissions = Partial<Record<PermissionKey, boolean>>;
 

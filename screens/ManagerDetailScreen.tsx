@@ -1,5 +1,5 @@
 import { useState, useMemo } from "react";
-import { View, StyleSheet, Pressable, TextInput, Alert, Modal, Switch } from "react-native";
+import { View, StyleSheet, Pressable, TextInput, Alert, Modal, Switch, ScrollView } from "react-native";
 import { Icon } from "@/components/Icon";
 import { useRoute, RouteProp } from "@react-navigation/native";
 import { ThemedText } from "@/components/ThemedText";
@@ -11,7 +11,7 @@ import { useData } from "@/contexts/DataContext";
 import { useAuth } from "@/contexts/AuthContext";
 import { calculateExcursionRevenue } from "@/utils/calculations";
 import { SettingsStackParamList } from "@/navigation/SettingsStackNavigator";
-import { PermissionKey, PERMISSION_DEFINITIONS, ManagerPermissions } from "@/lib/supabase";
+import { PermissionKey, PERMISSION_GROUPS, ManagerPermissions } from "@/lib/supabase";
 
 type PeriodFilter = "day" | "week" | "month" | "all";
 
@@ -348,31 +348,63 @@ export default function ManagerDetailScreen() {
                 {latestManager.display_name}
               </ThemedText>
               
-              {(Object.keys(PERMISSION_DEFINITIONS) as PermissionKey[]).map((key) => (
-                <View
-                  key={key}
-                  style={[styles.permissionRow, { borderBottomColor: theme.border }]}
-                >
-                  <ThemedText style={styles.permissionLabel}>
-                    {PERMISSION_DEFINITIONS[key]}
-                  </ThemedText>
-                  <Switch
-                    value={permissions[key] === true}
-                    onValueChange={async (value) => {
-                      const newPermissions: ManagerPermissions = {
-                        ...permissions,
-                        [key]: value,
-                      };
-                      const { error } = await updateManagerPermissions(manager.id, newPermissions);
-                      if (error) {
-                        Alert.alert("Ошибка", error);
-                      }
-                    }}
-                    trackColor={{ false: theme.border, true: theme.primary + '80' }}
-                    thumbColor={permissions[key] ? theme.primary : theme.textSecondary}
-                  />
-                </View>
-              ))}
+              <ScrollView style={styles.permissionsScroll} showsVerticalScrollIndicator={false}>
+                {PERMISSION_GROUPS.map((group) => (
+                  <View key={group.key} style={styles.permissionGroup}>
+                    <View style={[styles.permissionRow, { borderBottomColor: theme.border }]}>
+                      <View style={styles.permissionLabelContainer}>
+                        <ThemedText style={styles.permissionLabel}>{group.label}</ThemedText>
+                        {group.description ? (
+                          <ThemedText style={[styles.permissionDescription, { color: theme.textSecondary }]}>
+                            {group.description}
+                          </ThemedText>
+                        ) : null}
+                      </View>
+                      <Switch
+                        value={permissions[group.key] === true}
+                        onValueChange={async (value) => {
+                          const newPermissions: ManagerPermissions = { ...permissions, [group.key]: value };
+                          if (!value && group.children) {
+                            group.children.forEach(child => {
+                              newPermissions[child.key] = false;
+                            });
+                          }
+                          const { error } = await updateManagerPermissions(manager.id, newPermissions);
+                          if (error) Alert.alert("Ошибка", error);
+                        }}
+                        trackColor={{ false: theme.border, true: theme.primary + '80' }}
+                        thumbColor={permissions[group.key] ? theme.primary : theme.textSecondary}
+                      />
+                    </View>
+                    {group.children && permissions[group.key] ? (
+                      <View style={styles.childPermissions}>
+                        {group.children.map((child) => (
+                          <View key={child.key} style={[styles.permissionRow, styles.childPermissionRow, { borderBottomColor: theme.border }]}>
+                            <View style={styles.permissionLabelContainer}>
+                              <ThemedText style={styles.childPermissionLabel}>{child.label}</ThemedText>
+                              {child.description ? (
+                                <ThemedText style={[styles.permissionDescription, { color: theme.textSecondary }]}>
+                                  {child.description}
+                                </ThemedText>
+                              ) : null}
+                            </View>
+                            <Switch
+                              value={permissions[child.key] === true}
+                              onValueChange={async (value) => {
+                                const newPermissions: ManagerPermissions = { ...permissions, [child.key]: value };
+                                const { error } = await updateManagerPermissions(manager.id, newPermissions);
+                                if (error) Alert.alert("Ошибка", error);
+                              }}
+                              trackColor={{ false: theme.border, true: theme.primary + '80' }}
+                              thumbColor={permissions[child.key] ? theme.primary : theme.textSecondary}
+                            />
+                          </View>
+                        ))}
+                      </View>
+                    ) : null}
+                  </View>
+                ))}
+              </ScrollView>
               
               <Pressable
                 style={[styles.modalButton, { backgroundColor: theme.primary, marginTop: Spacing.lg }]}
@@ -832,5 +864,29 @@ const styles = StyleSheet.create({
   },
   permissionLabel: {
     fontSize: 15,
+    fontWeight: "500",
+  },
+  permissionsScroll: {
+    maxHeight: 400,
+  },
+  permissionGroup: {
+    marginBottom: Spacing.xs,
+  },
+  permissionLabelContainer: {
+    flex: 1,
+    marginRight: Spacing.md,
+  },
+  permissionDescription: {
+    fontSize: 12,
+    marginTop: 2,
+  },
+  childPermissions: {
+    paddingLeft: Spacing.lg,
+  },
+  childPermissionRow: {
+    paddingVertical: Spacing.sm,
+  },
+  childPermissionLabel: {
+    fontSize: 14,
   },
 });
