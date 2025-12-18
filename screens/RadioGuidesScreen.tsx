@@ -459,6 +459,7 @@ export default function RadioGuidesScreen() {
     const { kit, assignment, isOverdue } = item;
     const excInfo = getExcursionInfo(assignment.excursionId);
     const issuedDate = new Date(assignment.issuedAt).toLocaleDateString("ru-RU", { day: "numeric", month: "short" });
+    const batteryInfo = getBatteryInfo(kit.batteryLevel);
     
     return (
       <ThemedView
@@ -480,6 +481,9 @@ export default function RadioGuidesScreen() {
                 </View>
               ) : null}
             </View>
+          </View>
+          <View style={[styles.batteryIndicatorSmall, { backgroundColor: batteryInfo.color + "20", borderColor: batteryInfo.color }]}>
+            <BatteryIcon level={kit.batteryLevel} color={batteryInfo.color} size={24} />
           </View>
         </View>
         
@@ -1352,6 +1356,12 @@ const styles = StyleSheet.create({
     alignItems: "center",
     gap: Spacing.xs,
     paddingHorizontal: Spacing.sm,
+    paddingVertical: Spacing.xs,
+    borderRadius: BorderRadius.sm,
+    borderWidth: 1,
+  },
+  batteryIndicatorSmall: {
+    paddingHorizontal: Spacing.xs,
     paddingVertical: Spacing.xs,
     borderRadius: BorderRadius.sm,
     borderWidth: 1,
