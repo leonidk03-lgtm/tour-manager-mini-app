@@ -49,10 +49,13 @@ export default function ChatScreen() {
     const myMessageIds = new Set(
       chatMessages.filter(m => m.senderId === profile.id).map(m => m.id)
     );
+    const messagesAddressedToMe = new Set(
+      chatMessages.filter(m => m.recipientId === profile.id).map(m => m.id)
+    );
     
     return chatMessages.filter(m => 
       m.senderId === profile.id ||
-      (m.replyToId && myMessageIds.has(m.replyToId)) ||
+      (m.replyToId && (myMessageIds.has(m.replyToId) || messagesAddressedToMe.has(m.replyToId))) ||
       m.recipientId === profile.id ||
       (m.mentions && m.mentions.includes(profile.id))
     );
@@ -101,6 +104,17 @@ export default function ChatScreen() {
   const handleReply = (msg: ChatMessage) => {
     hapticFeedback.light();
     setReplyTo(msg);
+    if (msg.recipientId === profile?.id && msg.senderId) {
+      const sender = managers.find(m => m.id === msg.senderId);
+      if (sender) {
+        setRecipient({ id: sender.id, name: sender.name });
+      }
+    } else if (msg.recipientId && msg.senderId === profile?.id) {
+      const originalRecipient = managers.find(m => m.id === msg.recipientId);
+      if (originalRecipient) {
+        setRecipient({ id: originalRecipient.id, name: originalRecipient.name });
+      }
+    }
   };
   
   const cancelReply = () => {
