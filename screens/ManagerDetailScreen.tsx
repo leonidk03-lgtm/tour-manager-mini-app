@@ -1,5 +1,5 @@
 import { useState, useMemo } from "react";
-import { View, StyleSheet, Pressable, TextInput, Alert, Modal } from "react-native";
+import { View, StyleSheet, Pressable, TextInput, Alert, Modal, Switch } from "react-native";
 import { Icon } from "@/components/Icon";
 import { useRoute, RouteProp } from "@react-navigation/native";
 import { ThemedText } from "@/components/ThemedText";
@@ -11,6 +11,7 @@ import { useData } from "@/contexts/DataContext";
 import { useAuth } from "@/contexts/AuthContext";
 import { calculateExcursionRevenue } from "@/utils/calculations";
 import { SettingsStackParamList } from "@/navigation/SettingsStackNavigator";
+import { PermissionKey, PERMISSION_DEFINITIONS, ManagerPermissions } from "@/lib/supabase";
 
 type PeriodFilter = "day" | "week" | "month" | "all";
 
@@ -37,12 +38,19 @@ export default function ManagerDetailScreen() {
   const route = useRoute<RouteProp<SettingsStackParamList, "ManagerDetail">>();
   const { manager } = route.params;
   const { excursions, transactions, tourTypes, additionalServices, radioGuideAssignments, radioGuideKits } = useData();
-  const { sendPasswordReset, updateManagerDisplayName, refreshManagers, isAdmin } = useAuth();
+  const { sendPasswordReset, updateManagerDisplayName, updateManagerPermissions, refreshManagers, isAdmin, managers } = useAuth();
   const [period, setPeriod] = useState<PeriodFilter>("all");
   const [isEditingName, setIsEditingName] = useState(false);
   const [newDisplayName, setNewDisplayName] = useState(manager.display_name);
   const [isSaving, setIsSaving] = useState(false);
   const [currentManager, setCurrentManager] = useState(manager);
+  const [showPermissions, setShowPermissions] = useState(false);
+
+  const latestManager = useMemo(() => {
+    return managers.find(m => m.id === manager.id) || currentManager;
+  }, [managers, manager.id, currentManager]);
+
+  const permissions = (latestManager.permissions || {}) as ManagerPermissions;
 
   const handleSendPasswordReset = async () => {
     Alert.alert(
@@ -241,26 +249,41 @@ export default function ManagerDetailScreen() {
         </ThemedView>
 
         {isAdmin ? (
-          <View style={styles.actionsRow}>
-            <Pressable
-              style={[styles.actionButton, { backgroundColor: theme.backgroundSecondary }]}
-              onPress={() => setIsEditingName(true)}
-            >
-              <Icon name="edit-2" size={18} color={theme.primary} />
-              <ThemedText style={[styles.actionButtonText, { color: theme.primary }]}>
-                Изменить имя
-              </ThemedText>
-            </Pressable>
-            <Pressable
-              style={[styles.actionButton, { backgroundColor: theme.backgroundSecondary }]}
-              onPress={handleSendPasswordReset}
-            >
-              <Icon name="key" size={18} color={theme.warning} />
-              <ThemedText style={[styles.actionButtonText, { color: theme.warning }]}>
-                Сбросить пароль
-              </ThemedText>
-            </Pressable>
-          </View>
+          <>
+            <View style={styles.actionsRow}>
+              <Pressable
+                style={[styles.actionButton, { backgroundColor: theme.backgroundSecondary }]}
+                onPress={() => setIsEditingName(true)}
+              >
+                <Icon name="edit-2" size={18} color={theme.primary} />
+                <ThemedText style={[styles.actionButtonText, { color: theme.primary }]}>
+                  Изменить имя
+                </ThemedText>
+              </Pressable>
+              <Pressable
+                style={[styles.actionButton, { backgroundColor: theme.backgroundSecondary }]}
+                onPress={handleSendPasswordReset}
+              >
+                <Icon name="key" size={18} color={theme.warning} />
+                <ThemedText style={[styles.actionButtonText, { color: theme.warning }]}>
+                  Сбросить пароль
+                </ThemedText>
+              </Pressable>
+            </View>
+            
+            {currentManager.role !== 'admin' ? (
+              <Pressable
+                style={[styles.permissionsButton, { backgroundColor: theme.backgroundSecondary }]}
+                onPress={() => setShowPermissions(true)}
+              >
+                <Icon name="shield" size={18} color={theme.primary} />
+                <ThemedText style={[styles.actionButtonText, { color: theme.primary }]}>
+                  Права доступа
+                </ThemedText>
+                <Icon name="chevron-right" size={18} color={theme.textSecondary} />
+              </Pressable>
+            ) : null}
+          </>
         ) : null}
 
         <Modal
@@ -303,6 +326,60 @@ export default function ManagerDetailScreen() {
                   </ThemedText>
                 </Pressable>
               </View>
+            </ThemedView>
+          </View>
+        </Modal>
+
+        <Modal
+          visible={showPermissions}
+          transparent
+          animationType="fade"
+          onRequestClose={() => setShowPermissions(false)}
+        >
+          <View style={styles.modalOverlay}>
+            <ThemedView style={[styles.modalContent, { backgroundColor: theme.backgroundSecondary, maxHeight: '80%' }]}>
+              <View style={styles.permissionsHeader}>
+                <ThemedText style={styles.modalTitle}>Права доступа</ThemedText>
+                <Pressable onPress={() => setShowPermissions(false)}>
+                  <Icon name="x" size={24} color={theme.text} />
+                </Pressable>
+              </View>
+              <ThemedText style={[styles.permissionsSubtitle, { color: theme.textSecondary }]}>
+                {latestManager.display_name}
+              </ThemedText>
+              
+              {(Object.keys(PERMISSION_DEFINITIONS) as PermissionKey[]).map((key) => (
+                <View
+                  key={key}
+                  style={[styles.permissionRow, { borderBottomColor: theme.border }]}
+                >
+                  <ThemedText style={styles.permissionLabel}>
+                    {PERMISSION_DEFINITIONS[key]}
+                  </ThemedText>
+                  <Switch
+                    value={permissions[key] === true}
+                    onValueChange={async (value) => {
+                      const newPermissions: ManagerPermissions = {
+                        ...permissions,
+                        [key]: value,
+                      };
+                      const { error } = await updateManagerPermissions(manager.id, newPermissions);
+                      if (error) {
+                        Alert.alert("Ошибка", error);
+                      }
+                    }}
+                    trackColor={{ false: theme.border, true: theme.primary + '80' }}
+                    thumbColor={permissions[key] ? theme.primary : theme.textSecondary}
+                  />
+                </View>
+              ))}
+              
+              <Pressable
+                style={[styles.modalButton, { backgroundColor: theme.primary, marginTop: Spacing.lg }]}
+                onPress={() => setShowPermissions(false)}
+              >
+                <ThemedText style={{ color: theme.buttonText }}>Готово</ThemedText>
+              </Pressable>
             </ThemedView>
           </View>
         </Modal>
@@ -727,5 +804,33 @@ const styles = StyleSheet.create({
     paddingVertical: Spacing.md,
     borderRadius: BorderRadius.sm,
     alignItems: "center",
+  },
+  permissionsButton: {
+    flexDirection: "row",
+    alignItems: "center",
+    justifyContent: "space-between",
+    paddingVertical: Spacing.md,
+    paddingHorizontal: Spacing.md,
+    borderRadius: BorderRadius.sm,
+    gap: Spacing.sm,
+  },
+  permissionsHeader: {
+    flexDirection: "row",
+    justifyContent: "space-between",
+    alignItems: "center",
+  },
+  permissionsSubtitle: {
+    fontSize: 14,
+    marginTop: -Spacing.sm,
+  },
+  permissionRow: {
+    flexDirection: "row",
+    justifyContent: "space-between",
+    alignItems: "center",
+    paddingVertical: Spacing.md,
+    borderBottomWidth: 1,
+  },
+  permissionLabel: {
+    fontSize: 15,
   },
 });
