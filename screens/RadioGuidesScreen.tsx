@@ -1,4 +1,4 @@
-import { useState, useMemo, useEffect, useCallback } from "react";
+import { useState, useMemo, useEffect, useCallback, useRef } from "react";
 import {
   View,
   StyleSheet,
@@ -8,10 +8,12 @@ import {
   Modal,
   ScrollView,
   Platform,
+  LayoutRectangle,
 } from "react-native";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import { useFocusEffect } from "@react-navigation/native";
 import { KeyboardAwareScrollView } from "react-native-keyboard-controller";
+import Svg, { Rect, Path } from "react-native-svg";
 import { Icon } from "@/components/Icon";
 import { ThemedText } from "@/components/ThemedText";
 import { ThemedView } from "@/components/ThemedView";
@@ -21,6 +23,22 @@ import { Spacing, BorderRadius } from "@/constants/theme";
 import { useTheme } from "@/hooks/useTheme";
 import { useData, RadioGuideKit, RadioGuideAssignment, BatteryLevel } from "@/contexts/DataContext";
 import { useAuth } from "@/contexts/AuthContext";
+
+const BatteryIcon = ({ level, color, size = 24 }: { level: BatteryLevel; color: string; size?: number }) => {
+  const segments = level === 'full' ? 3 : level === 'half' ? 2 : 1;
+  const width = size;
+  const height = size * 0.5;
+  
+  return (
+    <Svg width={width} height={height} viewBox="0 0 24 12">
+      <Rect x="0" y="0" width="20" height="12" rx="2" stroke={color} strokeWidth="1.5" fill="none" />
+      <Path d="M21 3 L21 9 L23 9 L23 3 Z" fill={color} />
+      {segments >= 1 && <Rect x="2" y="2" width="4.5" height="8" rx="1" fill={color} />}
+      {segments >= 2 && <Rect x="7.5" y="2" width="4.5" height="8" rx="1" fill={color} />}
+      {segments >= 3 && <Rect x="13" y="2" width="4.5" height="8" rx="1" fill={color} />}
+    </Svg>
+  );
+};
 
 interface AllocationGuide {
   id: string;
@@ -96,6 +114,7 @@ export default function RadioGuidesScreen() {
   };
 
   const [batteryPickerKit, setBatteryPickerKit] = useState<RadioGuideKit | null>(null);
+  const [batteryDropdownPosition, setBatteryDropdownPosition] = useState<{ top: number; right: number } | null>(null);
   const [modalMode, setModalMode] = useState<ModalMode>(null);
   const [selectedKit, setSelectedKit] = useState<RadioGuideKit | null>(null);
   const [selectedAssignment, setSelectedAssignment] = useState<RadioGuideAssignment | null>(null);
@@ -533,22 +552,55 @@ export default function RadioGuidesScreen() {
               </View>
             </View>
           </View>
-          <Pressable
-            style={[
-              styles.batteryIndicator,
-              { 
-                backgroundColor: batteryInfo.color + "20",
-                borderColor: batteryInfo.color,
-              },
-            ]}
-            onPress={() => setBatteryPickerKit(kit)}
-          >
-            <View style={[styles.batteryDot, { backgroundColor: batteryInfo.color }]} />
-            <ThemedText style={[styles.batteryText, { color: batteryInfo.color }]}>
-              {kit.batteryLevel === 'full' ? '100%' : kit.batteryLevel === 'half' ? '50%' : '20%'}
-            </ThemedText>
-            <Icon name="chevron-down" size={14} color={batteryInfo.color} />
-          </Pressable>
+          <View>
+            <Pressable
+              style={[
+                styles.batteryIndicator,
+                { 
+                  backgroundColor: batteryInfo.color + "20",
+                  borderColor: batteryInfo.color,
+                },
+              ]}
+              onPress={(e) => {
+                (e.target as any).measure?.((x: number, y: number, width: number, height: number, pageX: number, pageY: number) => {
+                  setBatteryDropdownPosition({ top: pageY + height + 4, right: 16 });
+                  setBatteryPickerKit(kit);
+                });
+                if (Platform.OS === 'web') {
+                  setBatteryDropdownPosition({ top: 0, right: 0 });
+                  setBatteryPickerKit(kit);
+                }
+              }}
+            >
+              <BatteryIcon level={kit.batteryLevel} color={batteryInfo.color} size={28} />
+              <Icon name="chevron-down" size={14} color={batteryInfo.color} />
+            </Pressable>
+            
+            {batteryPickerKit?.id === kit.id ? (
+              <View style={[styles.batteryDropdown, { backgroundColor: theme.backgroundDefault, borderColor: theme.border }]}>
+                {(['full', 'half', 'low'] as BatteryLevel[]).map((level) => {
+                  const info = getBatteryInfo(level);
+                  const isSelected = kit.batteryLevel === level;
+                  return (
+                    <Pressable
+                      key={level}
+                      style={[
+                        styles.batteryDropdownItem,
+                        isSelected && { backgroundColor: info.color + "20" },
+                      ]}
+                      onPress={() => handleBatteryChange(kit, level)}
+                    >
+                      <BatteryIcon level={level} color={info.color} size={24} />
+                      <ThemedText style={[styles.batteryDropdownText, { color: isSelected ? info.color : theme.text }]}>
+                        {info.label}
+                      </ThemedText>
+                      {isSelected ? <Icon name="check" size={16} color={info.color} /> : null}
+                    </Pressable>
+                  );
+                })}
+              </View>
+            ) : null}
+          </View>
         </View>
         
         {kit.notes ? (
@@ -594,7 +646,7 @@ export default function RadioGuidesScreen() {
   return (
     <PermissionGate permission="radio_guides">
     <>
-      <ScreenScrollView>
+      <ScreenScrollView onTouchStart={() => batteryPickerKit && setBatteryPickerKit(null)}>
         <View style={styles.container}>
           <View style={styles.statsRow}>
             <Pressable 
@@ -769,50 +821,6 @@ export default function RadioGuidesScreen() {
           <Icon name="plus" size={24} color={theme.buttonText} />
         </Pressable>
       ) : null}
-
-      <Modal
-        visible={batteryPickerKit !== null}
-        animationType="fade"
-        transparent
-        onRequestClose={() => setBatteryPickerKit(null)}
-      >
-        <View style={styles.modalOverlay}>
-          <Pressable style={styles.modalBackdrop} onPress={() => setBatteryPickerKit(null)} />
-          <ThemedView style={[styles.batteryPickerModal, { backgroundColor: theme.backgroundDefault }]}>
-            <View style={styles.modalHeader}>
-              <ThemedText style={styles.modalTitle}>Уровень заряда</ThemedText>
-              <Pressable onPress={() => setBatteryPickerKit(null)}>
-                <Icon name="x" size={24} color={theme.text} />
-              </Pressable>
-            </View>
-            {(['full', 'half', 'low'] as BatteryLevel[]).map((level) => {
-              const info = getBatteryInfo(level);
-              const isSelected = batteryPickerKit?.batteryLevel === level;
-              return (
-                <Pressable
-                  key={level}
-                  style={[
-                    styles.batteryOption,
-                    { 
-                      backgroundColor: isSelected ? info.color + "20" : "transparent",
-                      borderColor: isSelected ? info.color : theme.border,
-                    },
-                  ]}
-                  onPress={() => batteryPickerKit && handleBatteryChange(batteryPickerKit, level)}
-                >
-                  <View style={[styles.batteryOptionDot, { backgroundColor: info.color }]} />
-                  <ThemedText style={[styles.batteryOptionText, { color: isSelected ? info.color : theme.text }]}>
-                    {info.label}
-                  </ThemedText>
-                  {isSelected ? (
-                    <Icon name="check" size={18} color={info.color} />
-                  ) : null}
-                </Pressable>
-              );
-            })}
-          </ThemedView>
-        </View>
-      </Modal>
 
       <Modal
         visible={modalMode !== null}
@@ -1271,6 +1279,7 @@ const styles = StyleSheet.create({
     flexDirection: "row",
     justifyContent: "space-between",
     alignItems: "flex-start",
+    zIndex: 10,
   },
   kitInfo: {
     flex: 1,
@@ -1347,46 +1356,33 @@ const styles = StyleSheet.create({
     borderRadius: BorderRadius.sm,
     borderWidth: 1,
   },
-  batteryDot: {
-    width: 8,
-    height: 8,
-    borderRadius: 4,
-  },
-  batteryText: {
-    fontSize: 12,
-    fontWeight: "500",
-  },
-  batteryPickerModal: {
-    borderRadius: BorderRadius.md,
-    padding: Spacing.lg,
-    width: "80%",
-    maxWidth: 300,
-  },
-  batteryOption: {
-    flexDirection: "row",
-    alignItems: "center",
-    gap: Spacing.md,
-    paddingVertical: Spacing.md,
-    paddingHorizontal: Spacing.md,
+  batteryDropdown: {
+    position: "absolute",
+    top: "100%",
+    right: 0,
+    marginTop: 4,
     borderRadius: BorderRadius.sm,
     borderWidth: 1,
-    marginTop: Spacing.sm,
+    padding: Spacing.xs,
+    zIndex: 1000,
+    minWidth: 160,
+    shadowColor: "#000",
+    shadowOffset: { width: 0, height: 2 },
+    shadowOpacity: 0.25,
+    shadowRadius: 4,
+    elevation: 5,
   },
-  batteryOptionDot: {
-    width: 12,
-    height: 12,
-    borderRadius: 6,
+  batteryDropdownItem: {
+    flexDirection: "row",
+    alignItems: "center",
+    gap: Spacing.sm,
+    paddingVertical: Spacing.sm,
+    paddingHorizontal: Spacing.sm,
+    borderRadius: BorderRadius.xs,
   },
-  batteryOptionText: {
+  batteryDropdownText: {
     flex: 1,
-    fontSize: 16,
-  },
-  modalBackdrop: {
-    position: "absolute",
-    top: 0,
-    left: 0,
-    right: 0,
-    bottom: 0,
+    fontSize: 14,
   },
   emptyContainer: {
     alignItems: "center",
