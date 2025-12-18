@@ -400,15 +400,11 @@ export function AddExcursionForm({ excursion, onSave, onCancel }: AddExcursionFo
                     onPress={() => toggleService(service.id)}
                     style={styles.checkboxRow}
                   >
-                    <View
-                      style={[
-                        styles.checkbox,
-                        { borderColor: theme.inputBorder },
-                        selected && { backgroundColor: isNegativePrice ? theme.error : theme.primary },
-                      ]}
-                    >
-                      {selected ? <Icon name="check" size={16} color="#fff" /> : null}
-                    </View>
+                    <Icon
+                      name={selected ? "check-square" : "square"}
+                      size={20}
+                      color={selected ? (isNegativePrice ? theme.error : theme.primary) : theme.textSecondary}
+                    />
                     <View style={styles.serviceLabelContainer}>
                       <ThemedText style={styles.serviceLabel}>{service.name}</ThemedText>
                       <ThemedText style={[styles.servicePrice, { color: isNegativePrice ? theme.error : theme.success }]}>
