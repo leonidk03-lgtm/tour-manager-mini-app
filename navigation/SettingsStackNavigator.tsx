@@ -15,6 +15,7 @@ import RadioGuidesReportScreen from "@/screens/RadioGuidesReportScreen";
 import ExportDataScreen from "@/screens/ExportDataScreen";
 import DailyReportScreen from "@/screens/DailyReportScreen";
 import NotificationsScreen from "@/screens/NotificationsScreen";
+import WarehouseScreen from "@/screens/WarehouseScreen";
 import { getCommonScreenOptions } from "./screenOptions";
 import { useTheme } from "@/hooks/useTheme";
 import { Profile } from "@/lib/supabase";
@@ -36,6 +37,7 @@ export type SettingsStackParamList = {
   ExportData: undefined;
   DailyReport: undefined;
   Notifications: undefined;
+  Warehouse: undefined;
 };
 
 const Stack = createNativeStackNavigator<SettingsStackParamList>();
@@ -127,6 +129,11 @@ export default function SettingsStackNavigator() {
         name="Notifications"
         component={NotificationsScreen}
         options={{ title: "Уведомления" }}
+      />
+      <Stack.Screen
+        name="Warehouse"
+        component={WarehouseScreen}
+        options={{ title: "Склад" }}
       />
     </Stack.Navigator>
   );
