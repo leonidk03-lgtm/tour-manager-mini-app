@@ -1,5 +1,6 @@
 import { useState, useMemo } from "react";
-import { View, StyleSheet, Pressable } from "react-native";
+import { View, StyleSheet, Pressable, Modal, Platform } from "react-native";
+import DateTimePicker from "@react-native-community/datetimepicker";
 import { Icon } from "@/components/Icon";
 import { ThemedText } from "@/components/ThemedText";
 import { ThemedView } from "@/components/ThemedView";
@@ -9,7 +10,7 @@ import { useTheme } from "@/hooks/useTheme";
 import { useData } from "@/contexts/DataContext";
 import { useAuth } from "@/contexts/AuthContext";
 
-type Period = "day" | "week" | "month" | "year" | "all";
+type Period = "day" | "week" | "month" | "year" | "all" | "custom";
 
 const periodLabels: Record<Period, string> = {
   day: "День",
@@ -17,6 +18,7 @@ const periodLabels: Record<Period, string> = {
   month: "Месяц",
   year: "Год",
   all: "Всё время",
+  custom: "Период",
 };
 
 export default function RadioGuidesReportScreen() {
@@ -24,6 +26,13 @@ export default function RadioGuidesReportScreen() {
   const { isAdmin } = useAuth();
   const { radioGuideKits, radioGuideAssignments, equipmentLosses } = useData();
   const [period, setPeriod] = useState<Period>("month");
+  const [customFrom, setCustomFrom] = useState<Date>(new Date());
+  const [customTo, setCustomTo] = useState<Date>(new Date());
+  const [showDatePicker, setShowDatePicker] = useState<"from" | "to" | null>(null);
+
+  const formatShortDate = (date: Date) => {
+    return date.toLocaleDateString("ru-RU", { day: "numeric", month: "short" });
+  };
 
   if (!isAdmin) {
     return (
@@ -57,6 +66,12 @@ export default function RadioGuidesReportScreen() {
         const yearAgo = new Date(now);
         yearAgo.setFullYear(now.getFullYear() - 1);
         return itemDate >= yearAgo;
+      case "custom":
+        const fromDate = new Date(customFrom);
+        fromDate.setHours(0, 0, 0, 0);
+        const toDate = new Date(customTo);
+        toDate.setHours(23, 59, 59, 999);
+        return itemDate >= fromDate && itemDate <= toDate;
       default:
         return true;
     }
@@ -142,7 +157,7 @@ export default function RadioGuidesReportScreen() {
       guideList,
       kitList,
     };
-  }, [radioGuideKits, radioGuideAssignments, equipmentLosses, period]);
+  }, [radioGuideKits, radioGuideAssignments, equipmentLosses, period, customFrom, customTo]);
 
   return (
     <ScreenScrollView>
@@ -151,7 +166,12 @@ export default function RadioGuidesReportScreen() {
           {(Object.keys(periodLabels) as Period[]).map((p) => (
             <Pressable
               key={p}
-              onPress={() => setPeriod(p)}
+              onPress={() => {
+                setPeriod(p);
+                if (p === "custom") {
+                  setShowDatePicker("from");
+                }
+              }}
               style={[
                 styles.periodButton,
                 {
@@ -166,11 +186,95 @@ export default function RadioGuidesReportScreen() {
                   { color: period === p ? theme.buttonText : theme.text },
                 ]}
               >
-                {periodLabels[p]}
+                {p === "custom" && period === "custom" 
+                  ? `${formatShortDate(customFrom)} - ${formatShortDate(customTo)}`
+                  : periodLabels[p]}
               </ThemedText>
             </Pressable>
           ))}
         </View>
+
+        {period === "custom" ? (
+          <View style={[styles.customDateRow, { backgroundColor: theme.backgroundSecondary, borderRadius: BorderRadius.xs }]}>
+            <Pressable 
+              style={[styles.datePickButton, { borderColor: theme.border }]}
+              onPress={() => setShowDatePicker("from")}
+            >
+              <Icon name="calendar" size={16} color={theme.textSecondary} />
+              <ThemedText style={{ color: theme.text }}>{formatShortDate(customFrom)}</ThemedText>
+            </Pressable>
+            <ThemedText style={{ color: theme.textSecondary }}>—</ThemedText>
+            <Pressable 
+              style={[styles.datePickButton, { borderColor: theme.border }]}
+              onPress={() => setShowDatePicker("to")}
+            >
+              <Icon name="calendar" size={16} color={theme.textSecondary} />
+              <ThemedText style={{ color: theme.text }}>{formatShortDate(customTo)}</ThemedText>
+            </Pressable>
+          </View>
+        ) : null}
+
+        {showDatePicker ? (
+          Platform.OS === "ios" ? (
+            <Modal visible={!!showDatePicker} transparent animationType="fade">
+              <View style={styles.dateModalOverlay}>
+                <Pressable style={styles.dateModalBackdrop} onPress={() => setShowDatePicker(null)} />
+                <ThemedView style={[styles.datePickerModal, { backgroundColor: theme.backgroundDefault }]}>
+                  <View style={styles.datePickerHeader}>
+                    <ThemedText style={styles.datePickerTitle}>
+                      {showDatePicker === "from" ? "Дата начала" : "Дата окончания"}
+                    </ThemedText>
+                    <Pressable onPress={() => {
+                      if (showDatePicker === "from") {
+                        setShowDatePicker("to");
+                      } else {
+                        setShowDatePicker(null);
+                      }
+                    }}>
+                      <ThemedText style={{ color: theme.primary, fontWeight: "600" }}>
+                        {showDatePicker === "from" ? "Далее" : "Готово"}
+                      </ThemedText>
+                    </Pressable>
+                  </View>
+                  <DateTimePicker
+                    value={showDatePicker === "from" ? customFrom : customTo}
+                    mode="date"
+                    display="spinner"
+                    onChange={(e, date) => {
+                      if (date) {
+                        if (showDatePicker === "from") {
+                          setCustomFrom(date);
+                        } else {
+                          setCustomTo(date);
+                        }
+                      }
+                    }}
+                    locale="ru"
+                  />
+                </ThemedView>
+              </View>
+            </Modal>
+          ) : (
+            <DateTimePicker
+              value={showDatePicker === "from" ? customFrom : customTo}
+              mode="date"
+              display="default"
+              onChange={(e, date) => {
+                if (date) {
+                  if (showDatePicker === "from") {
+                    setCustomFrom(date);
+                    setShowDatePicker("to");
+                  } else {
+                    setCustomTo(date);
+                    setShowDatePicker(null);
+                  }
+                } else {
+                  setShowDatePicker(null);
+                }
+              }}
+            />
+          )
+        ) : null}
 
         <ThemedView
           style={[styles.summaryCard, { borderColor: theme.border, borderRadius: BorderRadius.sm }]}
@@ -552,5 +656,46 @@ const styles = StyleSheet.create({
   },
   kitStat: {
     fontSize: 14,
+  },
+  customDateRow: {
+    flexDirection: "row",
+    alignItems: "center",
+    justifyContent: "center",
+    gap: Spacing.md,
+    padding: Spacing.md,
+  },
+  datePickButton: {
+    flexDirection: "row",
+    alignItems: "center",
+    gap: Spacing.sm,
+    paddingHorizontal: Spacing.md,
+    paddingVertical: Spacing.sm,
+    borderWidth: 1,
+    borderRadius: BorderRadius.xs,
+  },
+  dateModalOverlay: {
+    flex: 1,
+    justifyContent: "center",
+    alignItems: "center",
+  },
+  dateModalBackdrop: {
+    ...StyleSheet.absoluteFillObject,
+    backgroundColor: "rgba(0,0,0,0.5)",
+  },
+  datePickerModal: {
+    borderRadius: BorderRadius.md,
+    padding: Spacing.lg,
+    width: "90%",
+    maxWidth: 400,
+  },
+  datePickerHeader: {
+    flexDirection: "row",
+    justifyContent: "space-between",
+    alignItems: "center",
+    marginBottom: Spacing.md,
+  },
+  datePickerTitle: {
+    fontSize: 18,
+    fontWeight: "600",
   },
 });
