@@ -44,6 +44,26 @@ const MOVEMENT_COLORS: Record<MovementType, string> = {
   loss: "#E91E63",
 };
 
+const getEquipmentIcon = (name: string, categoryType?: "equipment" | "consumable"): string => {
+  const lowerName = name.toLowerCase();
+  if (lowerName.includes("приемник") || lowerName.includes("приёмник") || lowerName.includes("ресивер")) {
+    return "receiver";
+  }
+  if (lowerName.includes("передатчик") || lowerName.includes("трансмиттер")) {
+    return "transmitter";
+  }
+  if (lowerName.includes("наушник") || lowerName.includes("гарнитур")) {
+    return "headphones";
+  }
+  if (lowerName.includes("микрофон")) {
+    return "mic";
+  }
+  if (categoryType === "consumable" || lowerName.includes("расходн") || lowerName.includes("батарейк") || lowerName.includes("аккумулятор")) {
+    return "supplies";
+  }
+  return "package";
+};
+
 export default function WarehouseScreen() {
   const { theme } = useTheme();
   const { isAdmin } = useAuth();
@@ -432,6 +452,22 @@ export default function WarehouseScreen() {
       fontSize: 12,
       fontWeight: "500",
     },
+    itemTitleRow: {
+      flexDirection: "row",
+      alignItems: "center",
+      flex: 1,
+      gap: Spacing.sm,
+    },
+    itemIconContainer: {
+      width: 40,
+      height: 40,
+      borderRadius: BorderRadius.sm,
+      justifyContent: "center",
+      alignItems: "center",
+    },
+    itemTitleText: {
+      flex: 1,
+    },
     statsRow: {
       flexDirection: "row",
       gap: Spacing.md,
@@ -765,20 +801,28 @@ export default function WarehouseScreen() {
             .reduce((sum, m) => sum + m.quantity, 0);
           const netLoss = lossCount - foundCount;
           
+          const iconName = getEquipmentIcon(item.name, category?.type);
+          
           return (
             <View key={item.id} style={styles.card}>
               <View style={styles.cardHeader}>
-                <ThemedText style={styles.cardTitle}>{item.name}</ThemedText>
+                <View style={styles.itemTitleRow}>
+                  <View style={[styles.itemIconContainer, { backgroundColor: theme.primary + "20" }]}>
+                    <Icon name={iconName} size={20} color={theme.primary} />
+                  </View>
+                  <View style={styles.itemTitleText}>
+                    <ThemedText style={styles.cardTitle}>{item.name}</ThemedText>
+                    <ThemedText style={styles.cardSubtitle}>
+                      {category?.name || "Без категории"}
+                    </ThemedText>
+                  </View>
+                </View>
                 <View style={[styles.badge, { backgroundColor: isLow ? theme.error + "30" : theme.success + "30" }]}>
                   <ThemedText style={[styles.badgeText, { color: isLow ? theme.error : theme.success }]}>
                     {item.quantity} {category?.unit || "шт"}
                   </ThemedText>
                 </View>
               </View>
-              
-              <ThemedText style={styles.cardSubtitle}>
-                {category?.name || "Без категории"}
-              </ThemedText>
 
               <View style={styles.statsRow}>
                 {item.inRepair > 0 && (

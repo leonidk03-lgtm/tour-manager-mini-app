@@ -582,6 +582,39 @@ const SVG_ICONS: Record<string, (size: number, color: string) => React.ReactNode
       <Line x1="23" y1="13" x2="23" y2="11" />
     </Svg>
   ),
+  "mic": (s, c) => (
+    <Svg width={s} height={s} viewBox="0 0 24 24" fill="none" stroke={c} strokeWidth={2} strokeLinecap="round" strokeLinejoin="round">
+      <Path d="M12 1a3 3 0 0 0-3 3v8a3 3 0 0 0 6 0V4a3 3 0 0 0-3-3z" />
+      <Path d="M19 10v2a7 7 0 0 1-14 0v-2" />
+      <Line x1="12" y1="19" x2="12" y2="23" />
+      <Line x1="8" y1="23" x2="16" y2="23" />
+    </Svg>
+  ),
+  "receiver": (s, c) => (
+    <Svg width={s} height={s} viewBox="0 0 24 24" fill="none" stroke={c} strokeWidth={2} strokeLinecap="round" strokeLinejoin="round">
+      <Rect x="4" y="8" width="16" height="12" rx="2" />
+      <Circle cx="12" cy="14" r="3" />
+      <Line x1="12" y1="2" x2="12" y2="5" />
+      <Path d="M8 5l4-3 4 3" />
+    </Svg>
+  ),
+  "transmitter": (s, c) => (
+    <Svg width={s} height={s} viewBox="0 0 24 24" fill="none" stroke={c} strokeWidth={2} strokeLinecap="round" strokeLinejoin="round">
+      <Rect x="4" y="8" width="16" height="12" rx="2" />
+      <Circle cx="12" cy="14" r="2" />
+      <Path d="M8.5 10.5a5 5 0 0 1 7 0" />
+      <Path d="M6 8a8 8 0 0 1 12 0" />
+      <Line x1="12" y1="2" x2="12" y2="6" />
+    </Svg>
+  ),
+  "supplies": (s, c) => (
+    <Svg width={s} height={s} viewBox="0 0 24 24" fill="none" stroke={c} strokeWidth={2} strokeLinecap="round" strokeLinejoin="round">
+      <Path d="M21 16V8a2 2 0 0 0-1-1.73l-7-4a2 2 0 0 0-2 0l-7 4A2 2 0 0 0 3 8v8a2 2 0 0 0 1 1.73l7 4a2 2 0 0 0 2 0l7-4A2 2 0 0 0 21 16z" />
+      <Line x1="12" y1="12" x2="12" y2="22" />
+      <Line x1="3.27" y1="7" x2="12" y2="12" />
+      <Line x1="12" y1="12" x2="20.73" y2="7" />
+    </Svg>
+  ),
 };
 
 export function Icon({ name, size = 24, color = "#FFFFFF", style }: IconProps) {
