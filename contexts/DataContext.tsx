@@ -98,12 +98,14 @@ export interface DeletedItem {
 }
 
 export type RadioGuideKitStatus = 'available' | 'issued' | 'maintenance';
+export type BatteryLevel = 'full' | 'half' | 'low';
 
 export interface RadioGuideKit {
   id: string;
   bagNumber: number;
   status: RadioGuideKitStatus;
   notes: string | null;
+  batteryLevel: BatteryLevel;
 }
 
 export interface RadioGuideAssignment {
@@ -571,6 +573,7 @@ export function DataProvider({ children }: { children: ReactNode }) {
       bagNumber: k.bag_number,
       status: k.status as RadioGuideKitStatus,
       notes: k.notes,
+      batteryLevel: (k.battery_level as BatteryLevel) || 'full',
     })));
   }, []);
 
@@ -1932,6 +1935,7 @@ export function DataProvider({ children }: { children: ReactNode }) {
           bag_number: kit.bagNumber,
           status: kit.status,
           notes: kit.notes,
+          battery_level: kit.batteryLevel || 'full',
         });
 
       if (error) throw error;
@@ -1948,6 +1952,7 @@ export function DataProvider({ children }: { children: ReactNode }) {
       if (kit.bagNumber !== undefined) updateData.bag_number = kit.bagNumber;
       if (kit.status !== undefined) updateData.status = kit.status;
       if (kit.notes !== undefined) updateData.notes = kit.notes;
+      if (kit.batteryLevel !== undefined) updateData.battery_level = kit.batteryLevel;
 
       const { error } = await supabase
         .from('radio_guide_kits')

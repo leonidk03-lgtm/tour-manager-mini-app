@@ -19,7 +19,7 @@ import { ScreenScrollView } from "@/components/ScreenScrollView";
 import { PermissionGate } from "@/components/PermissionGate";
 import { Spacing, BorderRadius } from "@/constants/theme";
 import { useTheme } from "@/hooks/useTheme";
-import { useData, RadioGuideKit, RadioGuideAssignment } from "@/contexts/DataContext";
+import { useData, RadioGuideKit, RadioGuideAssignment, BatteryLevel } from "@/contexts/DataContext";
 import { useAuth } from "@/contexts/AuthContext";
 
 interface AllocationGuide {
@@ -73,6 +73,27 @@ export default function RadioGuidesScreen() {
     };
   };
 
+  const getBatteryInfo = (level: BatteryLevel) => {
+    switch (level) {
+      case 'full':
+        return { color: theme.success, icon: 'battery' as const, label: 'Полный' };
+      case 'half':
+        return { color: theme.warning, icon: 'battery' as const, label: 'Средний' };
+      case 'low':
+        return { color: theme.error, icon: 'battery' as const, label: 'Низкий' };
+      default:
+        return { color: theme.success, icon: 'battery' as const, label: 'Полный' };
+    }
+  };
+
+  const handleBatteryChange = async (kit: RadioGuideKit, newLevel: BatteryLevel) => {
+    try {
+      await updateRadioGuideKit(kit.id, { batteryLevel: newLevel });
+    } catch (err) {
+      Alert.alert("Ошибка", "Не удалось обновить уровень заряда");
+    }
+  };
+
   const [modalMode, setModalMode] = useState<ModalMode>(null);
   const [selectedKit, setSelectedKit] = useState<RadioGuideKit | null>(null);
   const [selectedAssignment, setSelectedAssignment] = useState<RadioGuideAssignment | null>(null);
@@ -90,6 +111,7 @@ export default function RadioGuidesScreen() {
   const [selectedDate, setSelectedDate] = useState(() => new Date().toISOString().split("T")[0]);
   const [showDatePicker, setShowDatePicker] = useState(false);
   const [activeFilter, setActiveFilter] = useState<"all" | "issued" | "overdue" | "available">("all");
+  const [sortByBattery, setSortByBattery] = useState(false);
   
   // Allocation data integration
   const [allocationBuses, setAllocationBuses] = useState<AllocationBus[]>([]);
@@ -184,6 +206,8 @@ export default function RadioGuidesScreen() {
     const overdue: Array<{ kit: RadioGuideKit; assignment: RadioGuideAssignment }> = [];
     const available: RadioGuideKit[] = [];
     
+    const batteryOrder: Record<BatteryLevel, number> = { low: 0, half: 1, full: 2 };
+    
     radioGuideKits.forEach(kit => {
       const activeAssignment = getActiveAssignment(kit.id);
       if (activeAssignment) {
@@ -201,10 +225,19 @@ export default function RadioGuidesScreen() {
     
     issued.sort((a, b) => a.kit.bagNumber - b.kit.bagNumber);
     overdue.sort((a, b) => a.kit.bagNumber - b.kit.bagNumber);
-    available.sort((a, b) => a.bagNumber - b.bagNumber);
+    
+    if (sortByBattery) {
+      available.sort((a, b) => {
+        const batteryDiff = batteryOrder[b.batteryLevel] - batteryOrder[a.batteryLevel];
+        if (batteryDiff !== 0) return batteryDiff;
+        return a.bagNumber - b.bagNumber;
+      });
+    } else {
+      available.sort((a, b) => a.bagNumber - b.bagNumber);
+    }
     
     return { issuedKits: issued, overdueKits: overdue, availableKits: available };
-  }, [radioGuideKits, getActiveAssignment, today]);
+  }, [radioGuideKits, getActiveAssignment, today, sortByBattery]);
   
   const formatDate = (dateStr: string) => {
     const date = new Date(dateStr);
@@ -477,62 +510,92 @@ export default function RadioGuidesScreen() {
     );
   };
   
-  const renderAvailableKit = (kit: RadioGuideKit) => (
-    <ThemedView
-      style={[
-        styles.kitCard,
-        { backgroundColor: theme.backgroundSecondary, borderColor: theme.border },
-      ]}
-    >
-      <View style={styles.kitHeader}>
-        <View style={styles.kitInfo}>
-          <ThemedText style={styles.kitNumber}>Сумка #{kit.bagNumber}</ThemedText>
-          <View style={styles.kitMeta}>
-            <View style={[styles.statusBadge, { backgroundColor: theme.success + "20" }]}>
-              <ThemedText style={[styles.statusText, { color: theme.success }]}>
-                Доступна
-              </ThemedText>
+  const renderAvailableKit = (kit: RadioGuideKit) => {
+    const batteryInfo = getBatteryInfo(kit.batteryLevel);
+    const batteryLevels: BatteryLevel[] = ['full', 'half', 'low'];
+    
+    return (
+      <ThemedView
+        style={[
+          styles.kitCard,
+          { backgroundColor: theme.backgroundSecondary, borderColor: theme.border },
+        ]}
+      >
+        <View style={styles.kitHeader}>
+          <View style={styles.kitInfo}>
+            <ThemedText style={styles.kitNumber}>Сумка #{kit.bagNumber}</ThemedText>
+            <View style={styles.kitMeta}>
+              <View style={[styles.statusBadge, { backgroundColor: theme.success + "20" }]}>
+                <ThemedText style={[styles.statusText, { color: theme.success }]}>
+                  Доступна
+                </ThemedText>
+              </View>
             </View>
           </View>
+          <View style={styles.batteryContainer}>
+            {batteryLevels.map((level) => {
+              const info = getBatteryInfo(level);
+              const isActive = kit.batteryLevel === level;
+              return (
+                <Pressable
+                  key={level}
+                  style={[
+                    styles.batteryButton,
+                    { 
+                      backgroundColor: isActive ? info.color + "30" : "transparent",
+                      borderColor: isActive ? info.color : theme.border,
+                    },
+                  ]}
+                  onPress={() => handleBatteryChange(kit, level)}
+                >
+                  <Icon 
+                    name={level === 'full' ? 'battery-charging' : level === 'half' ? 'battery' : 'battery'} 
+                    size={16} 
+                    color={info.color} 
+                  />
+                </Pressable>
+              );
+            })}
+          </View>
         </View>
-      </View>
-      
-      {kit.notes ? (
-        <ThemedText style={[styles.kitNotes, { color: theme.textSecondary }]}>
-          {kit.notes}
-        </ThemedText>
-      ) : null}
-      
-      <View style={styles.kitActions}>
-        <Pressable
-          style={[styles.actionButton, { backgroundColor: theme.primary }]}
-          onPress={() => openIssueModal(kit)}
-        >
-          <Icon name="send" size={16} color={theme.buttonText} />
-          <ThemedText style={[styles.actionButtonText, { color: theme.buttonText }]}>
-            Выдать
-          </ThemedText>
-        </Pressable>
         
-        {hasPermission('radio_guides_edit') ? (
-          <>
-            <Pressable
-              style={[styles.iconButton, { borderColor: theme.border }]}
-              onPress={() => openEditModal(kit)}
-            >
-              <Icon name="edit-2" size={18} color={theme.primary} />
-            </Pressable>
-            <Pressable
-              style={[styles.iconButton, { borderColor: theme.border }]}
-              onPress={() => handleDeleteKit(kit)}
-            >
-              <Icon name="trash-2" size={18} color={theme.error} />
-            </Pressable>
-          </>
+        {kit.notes ? (
+          <ThemedText style={[styles.kitNotes, { color: theme.textSecondary }]}>
+            {kit.notes}
+          </ThemedText>
         ) : null}
-      </View>
-    </ThemedView>
-  );
+        
+        <View style={styles.kitActions}>
+          <Pressable
+            style={[styles.actionButton, { backgroundColor: theme.primary }]}
+            onPress={() => openIssueModal(kit)}
+          >
+            <Icon name="send" size={16} color={theme.buttonText} />
+            <ThemedText style={[styles.actionButtonText, { color: theme.buttonText }]}>
+              Выдать
+            </ThemedText>
+          </Pressable>
+          
+          {hasPermission('radio_guides_edit') ? (
+            <>
+              <Pressable
+                style={[styles.iconButton, { borderColor: theme.border }]}
+                onPress={() => openEditModal(kit)}
+              >
+                <Icon name="edit-2" size={18} color={theme.primary} />
+              </Pressable>
+              <Pressable
+                style={[styles.iconButton, { borderColor: theme.border }]}
+                onPress={() => handleDeleteKit(kit)}
+              >
+                <Icon name="trash-2" size={18} color={theme.error} />
+              </Pressable>
+            </>
+          ) : null}
+        </View>
+      </ThemedView>
+    );
+  };
 
   const todayIssuedKits = issuedKits.filter(k => !k.isOverdue);
 
@@ -627,11 +690,28 @@ export default function RadioGuidesScreen() {
           
           {(activeFilter === "all" || activeFilter === "available") ? (
             <View style={styles.section}>
-              <View style={styles.sectionHeader}>
-                <Icon name="check-circle" size={18} color={theme.success} />
-                <ThemedText style={[styles.sectionTitle, { color: theme.text }]}>
-                  Доступные ({availableKits.length})
-                </ThemedText>
+              <View style={styles.sectionHeaderRow}>
+                <View style={styles.sectionHeader}>
+                  <Icon name="check-circle" size={18} color={theme.success} />
+                  <ThemedText style={[styles.sectionTitle, { color: theme.text }]}>
+                    Доступные ({availableKits.length})
+                  </ThemedText>
+                </View>
+                <Pressable
+                  style={[
+                    styles.sortButton,
+                    { 
+                      backgroundColor: sortByBattery ? theme.primary + "20" : "transparent",
+                      borderColor: sortByBattery ? theme.primary : theme.border,
+                    },
+                  ]}
+                  onPress={() => setSortByBattery(!sortByBattery)}
+                >
+                  <Icon name="battery" size={14} color={sortByBattery ? theme.primary : theme.textSecondary} />
+                  <ThemedText style={{ fontSize: 12, color: sortByBattery ? theme.primary : theme.textSecondary }}>
+                    {sortByBattery ? "По заряду" : "По номеру"}
+                  </ThemedText>
+                </Pressable>
               </View>
               {availableKits.length > 0 ? (
                 <View style={styles.kitsList}>
@@ -1222,6 +1302,15 @@ const styles = StyleSheet.create({
     borderRadius: BorderRadius.sm,
     borderWidth: 1,
   },
+  batteryContainer: {
+    flexDirection: "row",
+    gap: Spacing.xs,
+  },
+  batteryButton: {
+    padding: Spacing.xs,
+    borderRadius: BorderRadius.xs,
+    borderWidth: 1,
+  },
   emptyContainer: {
     alignItems: "center",
     paddingVertical: Spacing["2xl"],
@@ -1383,11 +1472,25 @@ const styles = StyleSheet.create({
   section: {
     gap: Spacing.sm,
   },
+  sectionHeaderRow: {
+    flexDirection: "row",
+    alignItems: "center",
+    justifyContent: "space-between",
+  },
   sectionHeader: {
     flexDirection: "row",
     alignItems: "center",
     gap: Spacing.sm,
     paddingVertical: Spacing.xs,
+  },
+  sortButton: {
+    flexDirection: "row",
+    alignItems: "center",
+    gap: Spacing.xs,
+    paddingHorizontal: Spacing.sm,
+    paddingVertical: Spacing.xs,
+    borderRadius: BorderRadius.sm,
+    borderWidth: 1,
   },
   sectionTitle: {
     fontSize: 16,
