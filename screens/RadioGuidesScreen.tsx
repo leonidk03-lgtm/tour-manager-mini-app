@@ -1,4 +1,4 @@
-import { useState, useMemo, useEffect, useCallback, useRef } from "react";
+import { useState, useMemo, useEffect, useCallback } from "react";
 import {
   View,
   StyleSheet,
@@ -8,7 +8,6 @@ import {
   Modal,
   ScrollView,
   Platform,
-  LayoutRectangle,
 } from "react-native";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import { useFocusEffect } from "@react-navigation/native";
@@ -117,7 +116,6 @@ export default function RadioGuidesScreen() {
   };
 
   const [batteryPickerKit, setBatteryPickerKit] = useState<RadioGuideKit | null>(null);
-  const [batteryDropdownPosition, setBatteryDropdownPosition] = useState<{ top: number; right: number } | null>(null);
   const [modalMode, setModalMode] = useState<ModalMode>(null);
   const [selectedKit, setSelectedKit] = useState<RadioGuideKit | null>(null);
   const [selectedAssignment, setSelectedAssignment] = useState<RadioGuideAssignment | null>(null);
@@ -570,15 +568,8 @@ export default function RadioGuidesScreen() {
                   borderColor: batteryInfo.color,
                 },
               ]}
-              onPress={(e) => {
-                (e.target as any).measure?.((x: number, y: number, width: number, height: number, pageX: number, pageY: number) => {
-                  setBatteryDropdownPosition({ top: pageY + height + 4, right: 16 });
-                  setBatteryPickerKit(kit);
-                });
-                if (Platform.OS === 'web') {
-                  setBatteryDropdownPosition({ top: 0, right: 0 });
-                  setBatteryPickerKit(kit);
-                }
+              onPress={() => {
+                setBatteryPickerKit(batteryPickerKit?.id === kit.id ? null : kit);
               }}
             >
               <BatteryIcon level={kit.batteryLevel} color={batteryInfo.color} size={28} />
@@ -661,7 +652,7 @@ export default function RadioGuidesScreen() {
   return (
     <PermissionGate permission="radio_guides">
     <>
-      <ScreenScrollView>
+      <ScreenScrollView onScroll={() => batteryPickerKit && setBatteryPickerKit(null)}>
         <View style={styles.container}>
           <View style={styles.statsRow}>
             <Pressable 
@@ -828,12 +819,6 @@ export default function RadioGuidesScreen() {
         </View>
       </ScreenScrollView>
 
-      {batteryPickerKit ? (
-        <Pressable 
-          style={styles.dropdownBackdrop} 
-          onPress={() => setBatteryPickerKit(null)}
-        />
-      ) : null}
 
       {hasPermission('radio_guides_add') ? (
         <Pressable
@@ -1411,14 +1396,6 @@ const styles = StyleSheet.create({
   batteryDropdownText: {
     flex: 1,
     fontSize: 14,
-  },
-  dropdownBackdrop: {
-    position: "absolute",
-    top: 0,
-    left: 0,
-    right: 0,
-    bottom: 0,
-    zIndex: 999,
   },
   emptyContainer: {
     alignItems: "center",
