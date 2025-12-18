@@ -9,6 +9,7 @@ import {
   ScrollView,
   Platform,
 } from "react-native";
+import { useSafeAreaInsets } from "react-native-safe-area-context";
 import DateTimePicker, { DateTimePickerEvent } from "@react-native-community/datetimepicker";
 import { Icon } from "@/components/Icon";
 import { ThemedText } from "@/components/ThemedText";
@@ -43,6 +44,7 @@ const MOVEMENT_COLORS: Record<MovementType, string> = {
 export default function WarehouseScreen() {
   const { theme } = useTheme();
   const { isAdmin } = useAuth();
+  const insets = useSafeAreaInsets();
   const {
     equipmentCategories,
     equipmentItems,
@@ -438,7 +440,7 @@ export default function WarehouseScreen() {
     },
     fab: {
       position: "absolute",
-      bottom: Spacing.xl,
+      bottom: insets.bottom + 80 + Spacing.md,
       right: Spacing.xl,
       width: 56,
       height: 56,
@@ -451,6 +453,7 @@ export default function WarehouseScreen() {
       shadowOffset: { width: 0, height: 2 },
       shadowOpacity: 0.25,
       shadowRadius: 4,
+      zIndex: 100,
     },
     modalOverlay: {
       flex: 1,
