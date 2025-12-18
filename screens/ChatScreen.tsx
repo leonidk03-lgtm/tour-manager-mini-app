@@ -233,22 +233,23 @@ export default function ChatScreen() {
           }
         />
 
-        <View style={[styles.inputContainer, { paddingBottom: tabBarHeight + Spacing.sm, backgroundColor: theme.backgroundDefault }]}>
-          {replyTo ? (
-            <View style={[styles.replyBar, { backgroundColor: theme.backgroundSecondary, borderLeftColor: theme.primary }]}>
-              <View style={styles.replyBarContent}>
-                <ThemedText type="small" style={{ color: theme.primary, fontWeight: '600' }}>
-                  {replyTo.senderName}
-                </ThemedText>
-                <ThemedText type="small" style={{ color: theme.textSecondary }} numberOfLines={1}>
-                  {replyTo.message}
-                </ThemedText>
-              </View>
-              <Pressable onPress={cancelReply} style={styles.replyBarClose} hitSlop={8}>
-                <Icon name="x" size={18} color={theme.textSecondary} />
-              </Pressable>
+        {replyTo ? (
+          <View style={[styles.replyBar, { backgroundColor: theme.backgroundSecondary, borderLeftColor: theme.primary }]}>
+            <View style={styles.replyBarContent}>
+              <ThemedText type="small" style={{ color: theme.primary, fontWeight: '600' }}>
+                {replyTo.senderName}
+              </ThemedText>
+              <ThemedText type="small" style={{ color: theme.textSecondary }} numberOfLines={1}>
+                {replyTo.message}
+              </ThemedText>
             </View>
-          ) : null}
+            <Pressable onPress={cancelReply} style={styles.replyBarClose} hitSlop={8}>
+              <Icon name="x" size={18} color={theme.textSecondary} />
+            </Pressable>
+          </View>
+        ) : null}
+        
+        <View style={[styles.inputContainer, { paddingBottom: tabBarHeight + Spacing.lg, backgroundColor: theme.backgroundDefault }]}>
           <TextInput
             style={[
               styles.input,
@@ -369,9 +370,10 @@ const styles = StyleSheet.create({
     alignItems: "center",
     borderLeftWidth: 3,
     borderRadius: BorderRadius.sm,
-    paddingHorizontal: Spacing.sm,
-    paddingVertical: Spacing.xs,
-    marginBottom: Spacing.sm,
+    paddingHorizontal: Spacing.md,
+    paddingVertical: Spacing.sm,
+    marginHorizontal: Spacing.md,
+    marginBottom: Spacing.xs,
   },
   replyBarContent: {
     flex: 1,

@@ -1462,8 +1462,10 @@ export function DataProvider({ children }: { children: ReactNode }) {
         async (payload) => {
           await safeFetch(fetchChatMessages);
           // Create notification for new chat message from other users
+          // Only if user has chat access permission
+          const hasChatAccess = profile?.role === 'admin' || profile?.permissions?.chat === true;
           const newMessage = payload.new as { sender_id?: string; sender_name?: string; message?: string };
-          if (newMessage.sender_id && newMessage.sender_id !== user?.id && notificationSettings.chatEnabled) {
+          if (hasChatAccess && newMessage.sender_id && newMessage.sender_id !== user?.id && notificationSettings.chatEnabled) {
             const senderName = newMessage.sender_name || 'Пользователь';
             const messagePreview = newMessage.message?.substring(0, 50) || '';
             await addNotification('chat', `Новое сообщение от ${senderName}`, messagePreview);
