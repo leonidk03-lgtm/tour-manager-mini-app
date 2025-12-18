@@ -1058,10 +1058,27 @@ export default function RadioGuidesScreen() {
                   Без экскурсии
                 </ThemedText>
               </Pressable>
-              {todayExcursions.map(exc => (
+              {todayExcursions.map(exc => {
+                const totalParticipants = 
+                  (exc.fullPriceCount || 0) + 
+                  (exc.discountedCount || 0) + 
+                  (exc.freeCount || 0) + 
+                  (exc.tourPackageCount || 0) + 
+                  (exc.byTourCount || 0) + 
+                  (exc.paidCount || 0);
+                return (
                 <Pressable
                   key={exc.id}
-                  onPress={() => setSelectedExcursionId(exc.id)}
+                  onPress={() => {
+                    setSelectedExcursionId(exc.id);
+                    if (totalParticipants > 0) {
+                      const roundedUp = Math.ceil(totalParticipants / 5) * 5;
+                      const receiversCount = totalParticipants % 5 === 0 
+                        ? roundedUp + 5 
+                        : roundedUp;
+                      setReceiversIssued(receiversCount.toString());
+                    }
+                  }}
                   style={[
                     styles.excursionOption,
                     {
@@ -1082,7 +1099,8 @@ export default function RadioGuidesScreen() {
                     </ThemedText>
                   </View>
                 </Pressable>
-              ))}
+              );
+              })}
               {todayExcursions.length === 0 ? (
                 <ThemedText style={{ color: theme.textSecondary, padding: Spacing.sm, fontStyle: "italic" }}>
                   Нет экскурсий на сегодня
