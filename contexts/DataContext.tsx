@@ -231,6 +231,7 @@ export interface EquipmentCategory {
   name: string;
   type: EquipmentCategoryType;
   unit: string;
+  icon: string | null;
   isActive: boolean;
   createdAt: string;
 }
@@ -706,6 +707,7 @@ export function DataProvider({ children }: { children: ReactNode }) {
       name: c.name,
       type: c.type as EquipmentCategoryType,
       unit: c.unit,
+      icon: c.icon || null,
       isActive: c.is_active,
       createdAt: c.created_at,
     })));
@@ -2455,6 +2457,7 @@ export function DataProvider({ children }: { children: ReactNode }) {
         name: category.name,
         type: category.type,
         unit: category.unit,
+        icon: category.icon,
         is_active: category.isActive,
       });
 
@@ -2472,6 +2475,7 @@ export function DataProvider({ children }: { children: ReactNode }) {
       if (category.name !== undefined) updateData.name = category.name;
       if (category.type !== undefined) updateData.type = category.type;
       if (category.unit !== undefined) updateData.unit = category.unit;
+      if (category.icon !== undefined) updateData.icon = category.icon;
       if (category.isActive !== undefined) updateData.is_active = category.isActive;
 
       const { error } = await supabase

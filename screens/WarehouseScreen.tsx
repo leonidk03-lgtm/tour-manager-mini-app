@@ -44,7 +44,21 @@ const MOVEMENT_COLORS: Record<MovementType, string> = {
   loss: "#E91E63",
 };
 
-const getEquipmentIcon = (name: string, categoryType?: "equipment" | "consumable"): string => {
+const AVAILABLE_ICONS = [
+  { id: "receiver", label: "Приемник" },
+  { id: "transmitter", label: "Передатчик" },
+  { id: "headphones", label: "Наушники" },
+  { id: "mic", label: "Микрофон" },
+  { id: "supplies", label: "Расходники" },
+  { id: "package", label: "Коробка" },
+  { id: "battery", label: "Батарея" },
+  { id: "radio", label: "Радио" },
+  { id: "tool", label: "Инструмент" },
+  { id: "box", label: "Ящик" },
+];
+
+const getEquipmentIcon = (name: string, categoryType?: "equipment" | "consumable", categoryIcon?: string | null): string => {
+  if (categoryIcon) return categoryIcon;
   const lowerName = name.toLowerCase();
   if (lowerName.includes("приемник") || lowerName.includes("приёмник") || lowerName.includes("ресивер")) {
     return "receiver";
@@ -92,6 +106,7 @@ export default function WarehouseScreen() {
   const [categoryName, setCategoryName] = useState("");
   const [categoryType, setCategoryType] = useState<"equipment" | "consumable">("equipment");
   const [categoryUnit, setCategoryUnit] = useState("шт");
+  const [categoryIcon, setCategoryIcon] = useState<string | null>(null);
   
   const [itemName, setItemName] = useState("");
   const [itemCategoryId, setItemCategoryId] = useState("");
@@ -164,6 +179,7 @@ export default function WarehouseScreen() {
     setCategoryName("");
     setCategoryType("equipment");
     setCategoryUnit("шт");
+    setCategoryIcon(null);
     setEditingCategory(null);
   };
 
@@ -194,12 +210,14 @@ export default function WarehouseScreen() {
           name: categoryName.trim(),
           type: categoryType,
           unit: categoryUnit.trim(),
+          icon: categoryIcon,
         });
       } else {
         await addEquipmentCategory({
           name: categoryName.trim(),
           type: categoryType,
           unit: categoryUnit.trim(),
+          icon: categoryIcon,
           isActive: true,
         });
       }
@@ -336,6 +354,7 @@ export default function WarehouseScreen() {
     setCategoryName(category.name);
     setCategoryType(category.type);
     setCategoryUnit(category.unit);
+    setCategoryIcon(category.icon);
     setShowCategoryModal(true);
   };
 
@@ -467,6 +486,29 @@ export default function WarehouseScreen() {
     },
     itemTitleText: {
       flex: 1,
+    },
+    iconScrollView: {
+      maxHeight: 80,
+      marginBottom: Spacing.sm,
+    },
+    iconGrid: {
+      flexDirection: "row",
+      gap: Spacing.sm,
+      paddingVertical: Spacing.xs,
+    },
+    iconOption: {
+      width: 64,
+      height: 64,
+      borderRadius: BorderRadius.sm,
+      justifyContent: "center",
+      alignItems: "center",
+      borderWidth: 1,
+      borderColor: "transparent",
+    },
+    iconLabel: {
+      fontSize: 9,
+      marginTop: 2,
+      textAlign: "center",
     },
     statsRow: {
       flexDirection: "row",
@@ -801,7 +843,7 @@ export default function WarehouseScreen() {
             .reduce((sum, m) => sum + m.quantity, 0);
           const netLoss = lossCount - foundCount;
           
-          const iconName = getEquipmentIcon(item.name, category?.type);
+          const iconName = getEquipmentIcon(item.name, category?.type, category?.icon);
           
           return (
             <View key={item.id} style={styles.card}>
@@ -1104,6 +1146,28 @@ export default function WarehouseScreen() {
               placeholder="шт, пара, комплект..."
               placeholderTextColor={theme.textSecondary}
             />
+
+            <ThemedText style={styles.inputLabel}>Иконка</ThemedText>
+            <ScrollView horizontal showsHorizontalScrollIndicator={false} style={styles.iconScrollView}>
+              <View style={styles.iconGrid}>
+                {AVAILABLE_ICONS.map((icon) => (
+                  <Pressable
+                    key={icon.id}
+                    style={[
+                      styles.iconOption,
+                      { backgroundColor: categoryIcon === icon.id ? theme.primary + "30" : theme.backgroundSecondary },
+                      categoryIcon === icon.id && { borderColor: theme.primary, borderWidth: 2 },
+                    ]}
+                    onPress={() => setCategoryIcon(icon.id)}
+                  >
+                    <Icon name={icon.id} size={24} color={categoryIcon === icon.id ? theme.primary : theme.text} />
+                    <ThemedText style={[styles.iconLabel, categoryIcon === icon.id && { color: theme.primary }]}>
+                      {icon.label}
+                    </ThemedText>
+                  </Pressable>
+                ))}
+              </View>
+            </ScrollView>
 
             <View style={styles.buttonRow}>
               <Pressable
