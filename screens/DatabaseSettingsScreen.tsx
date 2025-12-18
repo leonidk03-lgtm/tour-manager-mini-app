@@ -209,7 +209,7 @@ export default function DatabaseSettingsScreen() {
             onPress={handleSave}
             disabled={isSaving}
           >
-            <Icon name="save" size={18} color={theme.buttonText} />
+            <Icon name="check" size={18} color={theme.buttonText} />
             <ThemedText style={[styles.buttonText, { color: theme.buttonText }]}>
               {isSaving ? "Сохранение..." : "Сохранить Supabase"}
             </ThemedText>
@@ -268,7 +268,7 @@ export default function DatabaseSettingsScreen() {
             ]}
             onPress={handleSaveDispatchUrl}
           >
-            <Icon name="save" size={18} color={theme.buttonText} />
+            <Icon name="check" size={18} color={theme.buttonText} />
             <ThemedText style={[styles.buttonText, { color: theme.buttonText }]}>
               Сохранить URL
             </ThemedText>

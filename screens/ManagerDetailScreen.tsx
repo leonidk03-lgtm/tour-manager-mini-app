@@ -592,7 +592,7 @@ export default function ManagerDetailScreen() {
             <ThemedView
               style={[styles.emptyState, { backgroundColor: theme.backgroundSecondary }]}
             >
-              <Icon name="radio" size={32} color={theme.textSecondary} />
+              <Icon name="speaker" size={32} color={theme.textSecondary} />
               <ThemedText style={[styles.emptyText, { color: theme.textSecondary }]}>
                 Нет выдач радиогидов за выбранный период
               </ThemedText>
@@ -609,7 +609,7 @@ export default function ManagerDetailScreen() {
                 <View style={styles.itemHeader}>
                   <View style={styles.transactionType}>
                     <Icon
-                      name={assignment.returnedAt ? "check-circle" : "radio"}
+                      name={assignment.returnedAt ? "check-circle" : "speaker"}
                       size={16}
                       color={assignment.returnedAt ? theme.success : theme.primary}
                     />

@@ -576,7 +576,7 @@ export default function DailyReportScreen() {
 
               {reportData.radioGuideParticipants > 0 ? (
                 <View style={styles.radioGuideRow}>
-                  <Icon name="radio" size={16} color={theme.primary} />
+                  <Icon name="speaker" size={16} color={theme.primary} />
                   <ThemedText style={{ color: theme.textSecondary, marginLeft: Spacing.xs }}>
                     Радиогиды: {reportData.radioGuideParticipants} шт. = {formatMoney(reportData.radioGuideTotal)}р
                   </ThemedText>
@@ -735,7 +735,7 @@ export default function DailyReportScreen() {
             onPress={saveReportData}
             disabled={saving}
           >
-            <Icon name="save" size={20} color={hasUnsavedChanges ? "#fff" : theme.textSecondary} />
+            <Icon name="check" size={20} color={hasUnsavedChanges ? "#fff" : theme.textSecondary} />
             <ThemedText style={[styles.buttonText, { color: hasUnsavedChanges ? "#fff" : theme.textSecondary }]}>
               {saving ? "Сохранение..." : "Сохранить"}
             </ThemedText>

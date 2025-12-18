@@ -190,7 +190,7 @@ export default function SettingsScreen() {
             >
               <View style={styles.settingItem}>
                 <View style={styles.settingLeft}>
-                  <Icon name="radio" size={20} color={theme.textSecondary} />
+                  <Icon name="speaker" size={20} color={theme.textSecondary} />
                   <ThemedText style={styles.settingText}>Радиогиды</ThemedText>
                 </View>
                 <Icon name="chevron-right" size={20} color={theme.textSecondary} />
