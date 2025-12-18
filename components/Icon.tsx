@@ -559,6 +559,12 @@ const SVG_ICONS: Record<string, (size: number, color: string) => React.ReactNode
       <Path d="M20 20v-7a4 4 0 0 0-4-4H4" />
     </Svg>
   ),
+  "at-sign": (s, c) => (
+    <Svg width={s} height={s} viewBox="0 0 24 24" fill="none" stroke={c} strokeWidth={2} strokeLinecap="round" strokeLinejoin="round">
+      <Circle cx="12" cy="12" r="4" />
+      <Path d="M16 8v5a3 3 0 0 0 6 0V12a10 10 0 1 0-3.92 7.94" />
+    </Svg>
+  ),
 };
 
 export function Icon({ name, size = 24, color = "#FFFFFF", style }: IconProps) {
