@@ -107,6 +107,9 @@ export default function WarehouseScreen() {
   const [categoryType, setCategoryType] = useState<"equipment" | "consumable">("equipment");
   const [categoryUnit, setCategoryUnit] = useState("шт");
   const [categoryIcon, setCategoryIcon] = useState<string | null>(null);
+  const [categoryTrackLoss, setCategoryTrackLoss] = useState(true);
+  const [categoryAutoWriteoff, setCategoryAutoWriteoff] = useState(false);
+  const [categoryAutoWriteoffSourceId, setCategoryAutoWriteoffSourceId] = useState<string | null>(null);
   
   const [itemName, setItemName] = useState("");
   const [itemCategoryId, setItemCategoryId] = useState("");
@@ -180,6 +183,9 @@ export default function WarehouseScreen() {
     setCategoryType("equipment");
     setCategoryUnit("шт");
     setCategoryIcon(null);
+    setCategoryTrackLoss(true);
+    setCategoryAutoWriteoff(false);
+    setCategoryAutoWriteoffSourceId(null);
     setEditingCategory(null);
   };
 
@@ -211,6 +217,9 @@ export default function WarehouseScreen() {
           type: categoryType,
           unit: categoryUnit.trim(),
           icon: categoryIcon,
+          trackLoss: categoryTrackLoss,
+          autoWriteoff: categoryAutoWriteoff,
+          autoWriteoffSourceId: categoryAutoWriteoffSourceId,
         });
       } else {
         await addEquipmentCategory({
@@ -218,6 +227,9 @@ export default function WarehouseScreen() {
           type: categoryType,
           unit: categoryUnit.trim(),
           icon: categoryIcon,
+          trackLoss: categoryTrackLoss,
+          autoWriteoff: categoryAutoWriteoff,
+          autoWriteoffSourceId: categoryAutoWriteoffSourceId,
           isActive: true,
         });
       }
@@ -355,6 +367,9 @@ export default function WarehouseScreen() {
     setCategoryType(category.type);
     setCategoryUnit(category.unit);
     setCategoryIcon(category.icon);
+    setCategoryTrackLoss(category.trackLoss);
+    setCategoryAutoWriteoff(category.autoWriteoff);
+    setCategoryAutoWriteoffSourceId(category.autoWriteoffSourceId);
     setShowCategoryModal(true);
   };
 
@@ -509,6 +524,35 @@ export default function WarehouseScreen() {
       fontSize: 9,
       marginTop: 2,
       textAlign: "center",
+    },
+    checkboxRow: {
+      flexDirection: "row",
+      alignItems: "center",
+      gap: Spacing.sm,
+      paddingVertical: Spacing.sm,
+    },
+    checkbox: {
+      width: 22,
+      height: 22,
+      borderRadius: 4,
+      borderWidth: 2,
+      borderColor: theme.textSecondary,
+      justifyContent: "center",
+      alignItems: "center",
+    },
+    checkboxLabel: {
+      fontSize: 14,
+      flex: 1,
+    },
+    sourceOption: {
+      paddingHorizontal: Spacing.md,
+      paddingVertical: Spacing.sm,
+      borderRadius: BorderRadius.sm,
+      borderWidth: 1,
+      borderColor: "transparent",
+    },
+    sourceOptionText: {
+      fontSize: 13,
     },
     statsRow: {
       flexDirection: "row",
@@ -1168,6 +1212,60 @@ export default function WarehouseScreen() {
                 ))}
               </View>
             </ScrollView>
+
+            <Pressable
+              style={styles.checkboxRow}
+              onPress={() => setCategoryTrackLoss(!categoryTrackLoss)}
+            >
+              <View style={[styles.checkbox, categoryTrackLoss && { backgroundColor: theme.primary, borderColor: theme.primary }]}>
+                {categoryTrackLoss ? <Icon name="check" size={14} color="#FFF" /> : null}
+              </View>
+              <ThemedText style={styles.checkboxLabel}>Учитывать утери при возврате радиогидов</ThemedText>
+            </Pressable>
+
+            {categoryType === "consumable" && (
+              <>
+                <Pressable
+                  style={styles.checkboxRow}
+                  onPress={() => setCategoryAutoWriteoff(!categoryAutoWriteoff)}
+                >
+                  <View style={[styles.checkbox, categoryAutoWriteoff && { backgroundColor: theme.primary, borderColor: theme.primary }]}>
+                    {categoryAutoWriteoff ? <Icon name="check" size={14} color="#FFF" /> : null}
+                  </View>
+                  <ThemedText style={styles.checkboxLabel}>Автосписание по количеству выдач</ThemedText>
+                </Pressable>
+
+                {categoryAutoWriteoff && (
+                  <>
+                    <ThemedText style={styles.inputLabel}>Источник для подсчёта</ThemedText>
+                    <ScrollView horizontal showsHorizontalScrollIndicator={false} style={{ marginBottom: Spacing.sm }}>
+                      <View style={{ flexDirection: "row", gap: Spacing.xs }}>
+                        {equipmentCategories
+                          .filter(c => c.type === "equipment" && c.id !== editingCategory?.id)
+                          .map((cat) => (
+                            <Pressable
+                              key={cat.id}
+                              style={[
+                                styles.sourceOption,
+                                { backgroundColor: categoryAutoWriteoffSourceId === cat.id ? theme.primary + "30" : theme.backgroundSecondary },
+                                categoryAutoWriteoffSourceId === cat.id && { borderColor: theme.primary, borderWidth: 1 },
+                              ]}
+                              onPress={() => setCategoryAutoWriteoffSourceId(cat.id)}
+                            >
+                              <ThemedText style={[
+                                styles.sourceOptionText,
+                                categoryAutoWriteoffSourceId === cat.id && { color: theme.primary }
+                              ]}>
+                                {cat.name}
+                              </ThemedText>
+                            </Pressable>
+                          ))}
+                      </View>
+                    </ScrollView>
+                  </>
+                )}
+              </>
+            )}
 
             <View style={styles.buttonRow}>
               <Pressable

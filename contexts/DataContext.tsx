@@ -232,6 +232,9 @@ export interface EquipmentCategory {
   type: EquipmentCategoryType;
   unit: string;
   icon: string | null;
+  trackLoss: boolean;
+  autoWriteoff: boolean;
+  autoWriteoffSourceId: string | null;
   isActive: boolean;
   createdAt: string;
 }
@@ -708,6 +711,9 @@ export function DataProvider({ children }: { children: ReactNode }) {
       type: c.type as EquipmentCategoryType,
       unit: c.unit,
       icon: c.icon || null,
+      trackLoss: c.track_loss ?? true,
+      autoWriteoff: c.auto_writeoff ?? false,
+      autoWriteoffSourceId: c.auto_writeoff_source_id || null,
       isActive: c.is_active,
       createdAt: c.created_at,
     })));
@@ -2458,6 +2464,9 @@ export function DataProvider({ children }: { children: ReactNode }) {
         type: category.type,
         unit: category.unit,
         icon: category.icon,
+        track_loss: category.trackLoss,
+        auto_writeoff: category.autoWriteoff,
+        auto_writeoff_source_id: category.autoWriteoffSourceId,
         is_active: category.isActive,
       });
 
@@ -2476,6 +2485,9 @@ export function DataProvider({ children }: { children: ReactNode }) {
       if (category.type !== undefined) updateData.type = category.type;
       if (category.unit !== undefined) updateData.unit = category.unit;
       if (category.icon !== undefined) updateData.icon = category.icon;
+      if (category.trackLoss !== undefined) updateData.track_loss = category.trackLoss;
+      if (category.autoWriteoff !== undefined) updateData.auto_writeoff = category.autoWriteoff;
+      if (category.autoWriteoffSourceId !== undefined) updateData.auto_writeoff_source_id = category.autoWriteoffSourceId;
       if (category.isActive !== undefined) updateData.is_active = category.isActive;
 
       const { error } = await supabase
