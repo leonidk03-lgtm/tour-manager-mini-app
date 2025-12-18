@@ -823,7 +823,7 @@ export default function WarehouseScreen() {
         {activeTab === "categories" && renderCategoriesTab()}
       </ScreenScrollView>
 
-      {isAdmin && (activeTab === "inventory" || activeTab === "categories") && (
+      {(activeTab === "inventory" || activeTab === "categories") && (
         <Pressable
           style={styles.fab}
           onPress={() => {
