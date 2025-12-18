@@ -576,6 +576,12 @@ const SVG_ICONS: Record<string, (size: number, color: string) => React.ReactNode
       <Path d="M21 12v7a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h11" />
     </Svg>
   ),
+  "battery": (s, c) => (
+    <Svg width={s} height={s} viewBox="0 0 24 24" fill="none" stroke={c} strokeWidth={2} strokeLinecap="round" strokeLinejoin="round">
+      <Rect x="1" y="6" width="18" height="12" rx="2" ry="2" />
+      <Line x1="23" y1="13" x2="23" y2="11" />
+    </Svg>
+  ),
 };
 
 export function Icon({ name, size = 24, color = "#FFFFFF", style }: IconProps) {

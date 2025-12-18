@@ -134,6 +134,7 @@ export default function RadioGuidesScreen() {
   const [showDatePicker, setShowDatePicker] = useState(false);
   const [activeFilter, setActiveFilter] = useState<"all" | "issued" | "overdue" | "available">("all");
   const [sortByBattery, setSortByBattery] = useState(false);
+  const [searchQuery, setSearchQuery] = useState("");
   
   // Allocation data integration
   const [allocationBuses, setAllocationBuses] = useState<AllocationBus[]>([]);
@@ -258,8 +259,17 @@ export default function RadioGuidesScreen() {
       available.sort((a, b) => a.bagNumber - b.bagNumber);
     }
     
-    return { issuedKits: issued, overdueKits: overdue, availableKits: available };
-  }, [radioGuideKits, getActiveAssignment, today, sortByBattery]);
+    const filterBySearch = (bagNum: number) => {
+      if (!searchQuery.trim()) return true;
+      return bagNum.toString().includes(searchQuery.trim());
+    };
+    
+    return { 
+      issuedKits: issued.filter(i => filterBySearch(i.kit.bagNumber)), 
+      overdueKits: overdue.filter(o => filterBySearch(o.kit.bagNumber)), 
+      availableKits: available.filter(a => filterBySearch(a.bagNumber)) 
+    };
+  }, [radioGuideKits, getActiveAssignment, today, sortByBattery, searchQuery]);
   
   const formatDate = (dateStr: string) => {
     const date = new Date(dateStr);
@@ -654,6 +664,22 @@ export default function RadioGuidesScreen() {
     <>
       <ScreenScrollView onScroll={() => batteryPickerKit && setBatteryPickerKit(null)}>
         <View style={styles.container}>
+          <View style={[styles.searchContainer, { backgroundColor: theme.backgroundSecondary, borderColor: theme.border }]}>
+            <Icon name="search" size={18} color={theme.textSecondary} />
+            <TextInput
+              style={[styles.searchInput, { color: theme.text }]}
+              placeholder="Поиск по номеру сумки..."
+              placeholderTextColor={theme.textSecondary}
+              value={searchQuery}
+              onChangeText={setSearchQuery}
+            />
+            {searchQuery ? (
+              <Pressable onPress={() => setSearchQuery("")}>
+                <Icon name="x" size={18} color={theme.textSecondary} />
+              </Pressable>
+            ) : null}
+          </View>
+          
           <View style={styles.statsRow}>
             <Pressable 
               style={[
@@ -1294,6 +1320,20 @@ const styles = StyleSheet.create({
   container: {
     padding: Spacing.lg,
     gap: Spacing.md,
+  },
+  searchContainer: {
+    flexDirection: "row",
+    alignItems: "center",
+    paddingHorizontal: Spacing.md,
+    paddingVertical: Spacing.sm,
+    borderRadius: BorderRadius.sm,
+    borderWidth: 1,
+    gap: Spacing.sm,
+  },
+  searchInput: {
+    flex: 1,
+    fontSize: 16,
+    paddingVertical: Spacing.xs,
   },
   kitCard: {
     padding: Spacing.md,
