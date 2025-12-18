@@ -822,7 +822,7 @@ const styles = StyleSheet.create({
     fontWeight: "600",
   },
   fullscreenNoteScroll: {
-    maxHeight: "100%",
+    flex: 1,
   },
   fullscreenNoteContent: {
     padding: Spacing.lg,

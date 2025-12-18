@@ -1,5 +1,5 @@
 import { useState, useEffect, useRef, useMemo } from "react";
-import { View, StyleSheet, TextInput, Pressable, Platform, Modal, FlatList, Alert, Keyboard, TouchableWithoutFeedback } from "react-native";
+import { View, StyleSheet, TextInput, Pressable, Platform, Modal, FlatList, Alert, Keyboard, TouchableWithoutFeedback, ScrollView } from "react-native";
 import { WebView, WebViewMessageEvent } from "react-native-webview";
 import type WebViewType from "react-native-webview";
 import { Icon } from "@/components/Icon";
@@ -591,7 +591,7 @@ export default function DispatchingScreen() {
               onPress={() => {
                 hapticFeedback.medium();
                 Keyboard.dismiss();
-                setTimeout(() => setShowFullscreenNote(true), 100);
+                setTimeout(() => setShowFullscreenNote(true), 250);
               }}
             >
               <Icon name="plus" size={16} color={theme.buttonText} />
@@ -624,7 +624,7 @@ export default function DispatchingScreen() {
             onPress={() => {
               hapticFeedback.light();
               Keyboard.dismiss();
-              setTimeout(() => setShowFullscreenNote(true), 100);
+              setTimeout(() => setShowFullscreenNote(true), 250);
             }}
           >
             <Icon name="edit-3" size={14} color={theme.textSecondary} />
@@ -938,15 +938,17 @@ export default function DispatchingScreen() {
               </ThemedText>
             </Pressable>
           </View>
-          <TextInput
-            style={[styles.fullscreenNoteInput, { color: theme.text }]}
-            placeholder="Введите заметку... (1234. для поиска)"
-            placeholderTextColor={theme.textSecondary}
-            value={currentNote}
-            onChangeText={handleNoteChange}
-            multiline
-            autoFocus
-          />
+          <ScrollView style={{ flex: 1 }} keyboardShouldPersistTaps="handled">
+            <TextInput
+              style={[styles.fullscreenNoteInput, { color: theme.text, minHeight: 300 }]}
+              placeholder="Введите заметку... (1234. для поиска)"
+              placeholderTextColor={theme.textSecondary}
+              value={currentNote}
+              onChangeText={handleNoteChange}
+              multiline
+              autoFocus
+            />
+          </ScrollView>
         </ThemedView>
       </Modal>
 
