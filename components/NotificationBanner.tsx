@@ -1,6 +1,7 @@
 import { useState, useEffect, useRef } from "react";
 import { View, StyleSheet, Pressable, Animated } from "react-native";
 import AsyncStorage from "@react-native-async-storage/async-storage";
+import { useNavigation } from "@react-navigation/native";
 import { ThemedText } from "@/components/ThemedText";
 import { Icon } from "@/components/Icon";
 import { useTheme } from "@/hooks/useTheme";
@@ -13,6 +14,7 @@ const SHOWN_NOTIFICATIONS_KEY = "shown_notification_ids";
 export function NotificationBanner() {
   const { theme } = useTheme();
   const insets = useSafeAreaInsets();
+  const navigation = useNavigation<any>();
   const { notifications, markNotificationAsRead } = useData();
   const [visibleNotification, setVisibleNotification] = useState<AppNotification | null>(null);
   const [shownIds, setShownIds] = useState<Set<string>>(new Set());
@@ -77,6 +79,9 @@ export function NotificationBanner() {
     if (visibleNotification) {
       await markNotificationAsRead(visibleNotification.id);
       hideBanner();
+      if (visibleNotification.type === 'chat') {
+        navigation.navigate('SettingsTab', { screen: 'Chat' });
+      }
     }
   };
 
