@@ -640,7 +640,7 @@ export default function ExcursionsListScreen() {
             navigation.navigate('RadioGuides' as never);
           }}
         >
-          <Icon name="volume-2" size={20} color={theme.primary} />
+          <Icon name="radio" size={20} color={theme.primary} />
         </Pressable>
         <Pressable
           style={({ pressed }) => [

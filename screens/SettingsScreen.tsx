@@ -130,7 +130,7 @@ export default function SettingsScreen() {
                 >
                   <View style={styles.settingItem}>
                     <View style={styles.settingLeft}>
-                      <Icon name="tag" size={20} color={theme.textSecondary} />
+                      <Icon name="file-text" size={20} color={theme.textSecondary} />
                       <ThemedText style={styles.settingText}>Цены на билеты</ThemedText>
                     </View>
                     <Icon name="chevron-right" size={20} color={theme.textSecondary} />
@@ -190,7 +190,7 @@ export default function SettingsScreen() {
             >
               <View style={styles.settingItem}>
                 <View style={styles.settingLeft}>
-                  <Icon name="volume-2" size={20} color={theme.textSecondary} />
+                  <Icon name="radio" size={20} color={theme.textSecondary} />
                   <ThemedText style={styles.settingText}>Радиогиды</ThemedText>
                 </View>
                 <Icon name="chevron-right" size={20} color={theme.textSecondary} />
@@ -216,7 +216,7 @@ export default function SettingsScreen() {
             >
               <View style={styles.settingItem}>
                 <View style={styles.settingLeft}>
-                  <Icon name="bell" size={20} color={theme.textSecondary} />
+                  <Icon name="mail" size={20} color={theme.textSecondary} />
                   <ThemedText style={styles.settingText}>Уведомления</ThemedText>
                 </View>
                 <Icon name="chevron-right" size={20} color={theme.textSecondary} />
@@ -231,7 +231,7 @@ export default function SettingsScreen() {
                 >
                   <View style={styles.settingItem}>
                     <View style={styles.settingLeft}>
-                      <Icon name="hard-drive" size={20} color={theme.textSecondary} />
+                      <Icon name="server" size={20} color={theme.textSecondary} />
                       <ThemedText style={styles.settingText}>База данных</ThemedText>
                     </View>
                     <Icon name="chevron-right" size={20} color={theme.textSecondary} />
@@ -247,7 +247,7 @@ export default function SettingsScreen() {
                 >
                   <View style={styles.settingItem}>
                     <View style={styles.settingLeft}>
-                      <Icon name="volume-2" size={20} color={theme.textSecondary} />
+                      <Icon name="radio" size={20} color={theme.textSecondary} />
                       <ThemedText style={styles.settingText}>Стоимость радиогида</ThemedText>
                     </View>
                     <ThemedText style={{ color: theme.primary, fontWeight: "600" }}>

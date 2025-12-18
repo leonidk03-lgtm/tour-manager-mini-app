@@ -1050,7 +1050,7 @@ export default function RadioGuidesScreen() {
                 ]}
               >
                 <Icon
-                  name={!selectedExcursionId ? "check-circle" : "circle"}
+                  name={!selectedExcursionId ? "check-circle" : "minus-circle"}
                   size={18}
                   color={!selectedExcursionId ? theme.primary : theme.textSecondary}
                 />
@@ -1088,7 +1088,7 @@ export default function RadioGuidesScreen() {
                   ]}
                 >
                   <Icon
-                    name={selectedExcursionId === exc.id ? "check-circle" : "circle"}
+                    name={selectedExcursionId === exc.id ? "check-circle" : "minus-circle"}
                     size={18}
                     color={selectedExcursionId === exc.id ? theme.primary : theme.textSecondary}
                   />

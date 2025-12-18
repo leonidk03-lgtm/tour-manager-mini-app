@@ -225,7 +225,7 @@ export default function ChatScreen() {
               </ThemedText>
               {!isOwn ? (
                 <Pressable onPress={() => handleReply(item)} style={styles.replyButton} hitSlop={8}>
-                  <Icon name="corner-up-left" size={14} color={theme.textSecondary} />
+                  <Icon name="arrow-left" size={14} color={theme.textSecondary} />
                 </Pressable>
               ) : null}
             </View>
