@@ -286,7 +286,7 @@ export default function WarehouseScreen() {
       return;
     }
 
-    if (movementType === "writeoff" || movementType === "repair_out") {
+    if (movementType === "writeoff" || movementType === "repair_out" || movementType === "loss") {
       if (qty > selectedItem.quantity) {
         Alert.alert("Ошибка", "Недостаточно на складе");
         return;
@@ -880,7 +880,7 @@ export default function WarehouseScreen() {
                 </View>
                 <View style={[styles.movementBadge, { backgroundColor: color + "30" }]}>
                   <ThemedText style={[styles.badgeText, { color }]}>
-                    {movement.type === "writeoff" || movement.type === "repair_out" ? "-" : "+"}
+                    {movement.type === "writeoff" || movement.type === "repair_out" || movement.type === "loss" ? "-" : "+"}
                     {movement.quantity} {MOVEMENT_LABELS[movement.type]}
                   </ThemedText>
                 </View>
