@@ -65,6 +65,15 @@ export default function ExcursionDetailScreen() {
     return excursionNotesData;
   }, [isAdmin, isExcursionToday, excursionNotesData]);
 
+  // Filter dispatching notes - show only today's notes
+  const todayDispatchingNotes = useMemo(() => {
+    const today = new Date().toISOString().split("T")[0];
+    return dispatchingNotes.filter(note => {
+      const noteDate = new Date(note.createdAt).toISOString().split("T")[0];
+      return noteDate === today;
+    });
+  }, [dispatchingNotes]);
+
   const handleAddNote = async () => {
     if (!noteText.trim() || isAddingNote) return;
     setIsAddingNote(true);
@@ -523,11 +532,11 @@ export default function ExcursionDetailScreen() {
                 <Icon name="x" size={24} color={theme.text} />
               </Pressable>
             </View>
-            {dispatchingNotes.length === 0 ? (
+            {todayDispatchingNotes.length === 0 ? (
               <View style={styles.emptyNotes}>
                 <Icon name="file-text" size={48} color={theme.textSecondary} />
                 <ThemedText style={{ color: theme.textSecondary, marginTop: Spacing.md }}>
-                  Нет личных заметок
+                  Нет заметок на сегодня
                 </ThemedText>
                 <ThemedText style={{ color: theme.textSecondary, fontSize: 12, marginTop: Spacing.xs }}>
                   Добавьте заметки на вкладке "Отправление"
@@ -535,7 +544,7 @@ export default function ExcursionDetailScreen() {
               </View>
             ) : (
               <FlatList
-                data={dispatchingNotes}
+                data={todayDispatchingNotes}
                 keyExtractor={(item) => item.id}
                 renderItem={({ item }) => (
                   <Pressable
