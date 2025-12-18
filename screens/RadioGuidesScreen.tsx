@@ -994,11 +994,11 @@ export default function RadioGuidesScreen() {
                         (selectedExc.byTourCount || 0) + 
                         (selectedExc.paidCount || 0);
                       if (totalParticipants > 0) {
-                        // 1 receiver per 5 participants, +1 spare if exactly divisible by 5
-                        const baseReceivers = Math.ceil(totalParticipants / 5);
+                        // Round up to nearest 5, add 5 more if already divisible by 5
+                        const roundedUp = Math.ceil(totalParticipants / 5) * 5;
                         const receiversCount = totalParticipants % 5 === 0 
-                          ? baseReceivers + 1 
-                          : baseReceivers;
+                          ? roundedUp + 5 
+                          : roundedUp;
                         setReceiversIssued(receiversCount.toString());
                       }
                     }
