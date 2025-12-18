@@ -537,12 +537,14 @@ export default function RadioGuidesScreen() {
   
   const renderAvailableKit = (kit: RadioGuideKit) => {
     const batteryInfo = getBatteryInfo(kit.batteryLevel);
+    const isDropdownOpen = batteryPickerKit?.id === kit.id;
     
     return (
       <ThemedView
         style={[
           styles.kitCard,
           { backgroundColor: theme.backgroundSecondary, borderColor: theme.border },
+          isDropdownOpen && { zIndex: 1000 },
         ]}
       >
         <View style={styles.kitHeader}>
