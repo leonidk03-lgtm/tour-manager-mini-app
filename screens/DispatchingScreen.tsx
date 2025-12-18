@@ -590,6 +590,7 @@ export default function DispatchingScreen() {
               ]}
               onPress={() => {
                 hapticFeedback.medium();
+                Keyboard.dismiss();
                 setShowFullscreenNote(true);
               }}
             >
@@ -622,6 +623,7 @@ export default function DispatchingScreen() {
             style={[styles.expandButton, { backgroundColor: theme.backgroundTertiary }]}
             onPress={() => {
               hapticFeedback.light();
+              Keyboard.dismiss();
               setShowFullscreenNote(true);
             }}
           >
