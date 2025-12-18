@@ -348,24 +348,10 @@ export default function FinancesScreen() {
 
       <Modal visible={showAddModal} animationType="slide" presentationStyle="pageSheet">
         <ThemedView style={[styles.modalContainer, { backgroundColor: theme.backgroundRoot }]}>
-          <View style={[styles.modalHeader, { borderBottomColor: theme.border }]}>
-            <Pressable
-              onPress={() => {
-                setShowAddModal(false);
-                setFormDescription("");
-                setFormAmount("");
-                setFormDate(new Date().toISOString().split("T")[0]);
-              }}
-              style={styles.modalButton}
-            >
-              <ThemedText style={{ color: theme.primary }}>Отмена</ThemedText>
-            </Pressable>
+          <View style={[styles.modalHeaderCentered, { borderBottomColor: theme.border }]}>
             <ThemedText style={styles.modalTitle}>
               {formType === "expense" ? "Новый расход" : "Новый доход"}
             </ThemedText>
-            <Pressable onPress={() => { hapticFeedback.light(); handleAddTransaction(); }} style={styles.modalButton}>
-              <ThemedText style={{ color: theme.primary, fontWeight: "600" }}>Сохранить</ThemedText>
-            </Pressable>
           </View>
           <ScreenKeyboardAwareScrollView>
             <View style={styles.modalContent}>
@@ -462,6 +448,26 @@ export default function FinancesScreen() {
                     />
                   )
                 ) : null}
+              </View>
+              
+              <View style={styles.modalActions}>
+                <Pressable
+                  onPress={() => {
+                    setShowAddModal(false);
+                    setFormDescription("");
+                    setFormAmount("");
+                    setFormDate(new Date().toISOString().split("T")[0]);
+                  }}
+                  style={[styles.actionButton, styles.cancelButton, { borderColor: theme.border }]}
+                >
+                  <ThemedText style={{ color: theme.text }}>Отмена</ThemedText>
+                </Pressable>
+                <Pressable 
+                  onPress={() => { hapticFeedback.light(); handleAddTransaction(); }} 
+                  style={[styles.actionButton, styles.saveButton, { backgroundColor: theme.primary }]}
+                >
+                  <ThemedText style={{ color: "#fff", fontWeight: "600" }}>Сохранить</ThemedText>
+                </Pressable>
               </View>
             </View>
           </ScreenKeyboardAwareScrollView>
@@ -576,6 +582,12 @@ const styles = StyleSheet.create({
     paddingVertical: Spacing.md,
     borderBottomWidth: 1,
   },
+  modalHeaderCentered: {
+    alignItems: "center",
+    paddingHorizontal: Spacing.lg,
+    paddingVertical: Spacing.md,
+    borderBottomWidth: 1,
+  },
   modalButton: {
     minWidth: 70,
   },
@@ -583,6 +595,22 @@ const styles = StyleSheet.create({
     fontSize: 17,
     fontWeight: "600",
   },
+  modalActions: {
+    flexDirection: "row",
+    gap: Spacing.md,
+    marginTop: Spacing.xl,
+  },
+  actionButton: {
+    flex: 1,
+    paddingVertical: Spacing.md,
+    borderRadius: BorderRadius.sm,
+    alignItems: "center",
+    justifyContent: "center",
+  },
+  cancelButton: {
+    borderWidth: 1,
+  },
+  saveButton: {},
   modalContent: {
     padding: Spacing.lg,
     gap: Spacing.lg,
