@@ -1462,10 +1462,39 @@ export function DataProvider({ children }: { children: ReactNode }) {
         async (payload) => {
           await safeFetch(fetchChatMessages);
           // Create notification for new chat message from other users
-          // Only if user has chat access permission
+          // Check permissions: no chat access = no notifications
           const hasChatAccess = profile?.role === 'admin' || profile?.permissions?.chat === true;
-          const newMessage = payload.new as { sender_id?: string; sender_name?: string; message?: string };
-          if (hasChatAccess && newMessage.sender_id && newMessage.sender_id !== user?.id && notificationSettings.chatEnabled) {
+          if (!hasChatAccess || !notificationSettings.chatEnabled) return;
+          
+          const hasFullAccess = profile?.role === 'admin' || profile?.permissions?.chat_view_all === true;
+          const newMessage = payload.new as { 
+            sender_id?: string; 
+            sender_name?: string; 
+            message?: string;
+            reply_to_id?: string;
+          };
+          
+          // Skip own messages
+          if (!newMessage.sender_id || newMessage.sender_id === user?.id) return;
+          
+          // Full access users get all notifications
+          // Limited access users only get notifications for replies to their messages
+          let shouldNotify = hasFullAccess;
+          
+          if (!hasFullAccess && newMessage.reply_to_id) {
+            // Check if this is a reply to current user's message
+            const { data: repliedMessage } = await supabase
+              .from('chat_messages')
+              .select('sender_id')
+              .eq('id', newMessage.reply_to_id)
+              .single();
+            
+            if (repliedMessage?.sender_id === user?.id) {
+              shouldNotify = true;
+            }
+          }
+          
+          if (shouldNotify) {
             const senderName = newMessage.sender_name || 'Пользователь';
             const messagePreview = newMessage.message?.substring(0, 50) || '';
             await addNotification('chat', `Новое сообщение от ${senderName}`, messagePreview);
