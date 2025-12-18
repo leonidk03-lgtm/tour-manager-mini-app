@@ -1,5 +1,5 @@
-import { createContext, useContext, useState, useEffect, ReactNode } from 'react';
-import { supabase, Profile, UserRole, initSupabaseFromStorage } from '@/lib/supabase';
+import { createContext, useContext, useState, useEffect, ReactNode, useCallback } from 'react';
+import { supabase, Profile, UserRole, initSupabaseFromStorage, PermissionKey, ManagerPermissions } from '@/lib/supabase';
 import { Session, User } from '@supabase/supabase-js';
 
 interface AuthContextType {
@@ -9,6 +9,7 @@ interface AuthContextType {
   isLoading: boolean;
   isAdmin: boolean;
   isRadioDispatcher: boolean;
+  hasPermission: (key: PermissionKey) => boolean;
   signIn: (email: string, password: string) => Promise<{ error: string | null }>;
   signOut: () => Promise<void>;
   createManager: (email: string, password: string, displayName: string, role?: UserRole) => Promise<{ error: string | null }>;
@@ -18,6 +19,7 @@ interface AuthContextType {
   updateOwnProfile: (data: { password?: string; displayName?: string }) => Promise<{ error: string | null }>;
   sendPasswordReset: (email: string) => Promise<{ error: string | null }>;
   updateManagerDisplayName: (managerId: string, displayName: string) => Promise<{ error: string | null }>;
+  updateManagerPermissions: (managerId: string, permissions: ManagerPermissions) => Promise<{ error: string | null }>;
   managers: Profile[];
   refreshManagers: () => Promise<void>;
 }
@@ -33,6 +35,12 @@ export function AuthProvider({ children }: { children: ReactNode }) {
 
   const isAdmin = profile?.role === 'admin';
   const isRadioDispatcher = profile?.role === 'radio_dispatcher';
+
+  const hasPermission = useCallback((key: PermissionKey): boolean => {
+    if (isAdmin) return true;
+    if (!profile?.permissions) return false;
+    return profile.permissions[key] === true;
+  }, [profile, isAdmin]);
 
   useEffect(() => {
     const initAuth = async () => {
@@ -330,6 +338,31 @@ export function AuthProvider({ children }: { children: ReactNode }) {
     }
   };
 
+  const updateManagerPermissions = async (
+    managerId: string,
+    permissions: ManagerPermissions
+  ): Promise<{ error: string | null }> => {
+    if (!isAdmin) {
+      return { error: 'Только администратор может изменять права доступа' };
+    }
+
+    try {
+      const { error } = await supabase
+        .from('profiles')
+        .update({ permissions, updated_at: new Date().toISOString() })
+        .eq('id', managerId);
+
+      if (error) {
+        return { error: error.message };
+      }
+
+      await refreshManagers();
+      return { error: null };
+    } catch (err) {
+      return { error: 'Ошибка при обновлении прав доступа' };
+    }
+  };
+
   return (
     <AuthContext.Provider
       value={{
@@ -339,6 +372,7 @@ export function AuthProvider({ children }: { children: ReactNode }) {
         isLoading,
         isAdmin,
         isRadioDispatcher,
+        hasPermission,
         signIn,
         signOut,
         createManager,
@@ -348,6 +382,7 @@ export function AuthProvider({ children }: { children: ReactNode }) {
         updateOwnProfile,
         sendPasswordReset,
         updateManagerDisplayName,
+        updateManagerPermissions,
         managers,
         refreshManagers,
       }}
