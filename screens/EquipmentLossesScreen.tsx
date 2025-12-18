@@ -179,7 +179,7 @@ export default function EquipmentLossesScreen() {
             </ThemedText>
           </View>
           <View style={styles.infoRow}>
-            <Icon name="wifi" size={14} color={theme.textSecondary} />
+            <Icon name="radio" size={14} color={theme.textSecondary} />
             <ThemedText style={[styles.infoText, { color: theme.text }]}>
               {loss.missingCount} шт.
             </ThemedText>

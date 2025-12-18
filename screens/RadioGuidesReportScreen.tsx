@@ -204,7 +204,7 @@ export default function RadioGuidesReportScreen() {
           </View>
 
           <View style={[styles.infoRow, { backgroundColor: theme.backgroundSecondary, borderRadius: BorderRadius.xs }]}>
-            <Icon name="wifi" size={18} color={theme.textSecondary} />
+            <Icon name="radio" size={18} color={theme.textSecondary} />
             <ThemedText style={[styles.infoText, { color: theme.textSecondary }]}>
               Всего приёмников: {stats.totalReceivers}
             </ThemedText>

@@ -576,7 +576,7 @@ export default function DailyReportScreen() {
 
               {reportData.radioGuideParticipants > 0 ? (
                 <View style={styles.radioGuideRow}>
-                  <Icon name="wifi" size={16} color={theme.primary} />
+                  <Icon name="radio" size={16} color={theme.primary} />
                   <ThemedText style={{ color: theme.textSecondary, marginLeft: Spacing.xs }}>
                     Радиогиды: {reportData.radioGuideParticipants} шт. = {formatMoney(reportData.radioGuideTotal)}р
                   </ThemedText>
