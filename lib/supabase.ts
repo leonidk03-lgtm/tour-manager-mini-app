@@ -92,6 +92,7 @@ export type PermissionKey =
   | 'radio_guides_edit'
   | 'allocation'
   | 'chat'
+  | 'chat_view_all'
   | 'dispatching_notes'
   | 'excursion_notes'
   | 'excursions'
@@ -104,6 +105,7 @@ export const PERMISSION_DEFINITIONS: Record<PermissionKey, string> = {
   radio_guides_edit: 'Редактирование сумок',
   allocation: 'Распределение',
   chat: 'Чат',
+  chat_view_all: 'Видеть все сообщения',
   dispatching_notes: 'Отправление',
   excursion_notes: 'Заметки к экскурсиям',
   excursions: 'Экскурсии',

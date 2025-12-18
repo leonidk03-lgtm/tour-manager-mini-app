@@ -1,4 +1,4 @@
-import { useState, useRef, useCallback, useEffect } from "react";
+import { useState, useRef, useCallback, useEffect, useMemo } from "react";
 import { View, StyleSheet, TextInput, Pressable, FlatList, Alert, KeyboardAvoidingView, Platform } from "react-native";
 import { useSafeAreaInsets } from "react-native-safe-area-context";
 import { useBottomTabBarHeight } from "@react-navigation/bottom-tabs";
@@ -17,10 +17,27 @@ export default function ChatScreen() {
   const insets = useSafeAreaInsets();
   const tabBarHeight = useBottomTabBarHeight();
   const { chatMessages, sendChatMessage, clearChatHistory, managers } = useData();
-  const { profile, isAdmin } = useAuth();
+  const { profile, isAdmin, hasPermission } = useAuth();
   const [message, setMessage] = useState("");
   const [isSending, setIsSending] = useState(false);
+  const [replyTo, setReplyTo] = useState<ChatMessage | null>(null);
   const flatListRef = useRef<FlatList>(null);
+  
+  const canViewAll = isAdmin || hasPermission('chat_view_all');
+  
+  const filteredMessages = useMemo(() => {
+    if (canViewAll) return chatMessages;
+    if (!profile) return [];
+    
+    const myMessageIds = new Set(
+      chatMessages.filter(m => m.senderId === profile.id).map(m => m.id)
+    );
+    
+    return chatMessages.filter(m => 
+      m.senderId === profile.id ||
+      (m.replyToId && myMessageIds.has(m.replyToId))
+    );
+  }, [chatMessages, profile, canViewAll]);
 
   const scrollToBottom = useCallback(() => {
     if (flatListRef.current && chatMessages.length > 0) {
@@ -40,14 +57,24 @@ export default function ChatScreen() {
     hapticFeedback.light();
     setIsSending(true);
     try {
-      await sendChatMessage(message.trim());
+      await sendChatMessage(message.trim(), replyTo || undefined);
       setMessage("");
+      setReplyTo(null);
       scrollToBottom();
     } catch (error) {
       Alert.alert("Ошибка", "Не удалось отправить сообщение");
     } finally {
       setIsSending(false);
     }
+  };
+  
+  const handleReply = (msg: ChatMessage) => {
+    hapticFeedback.light();
+    setReplyTo(msg);
+  };
+  
+  const cancelReply = () => {
+    setReplyTo(null);
   };
 
   const handleClearHistory = () => {
@@ -100,7 +127,7 @@ export default function ChatScreen() {
   const renderMessage = ({ item, index }: { item: ChatMessage; index: number }) => {
     const isOwn = item.senderId === profile?.id;
     const showDateHeader = index === 0 || 
-      formatDate(chatMessages[index - 1].createdAt) !== formatDate(item.createdAt);
+      formatDate(filteredMessages[index - 1]?.createdAt) !== formatDate(item.createdAt);
     
     return (
       <>
@@ -111,7 +138,11 @@ export default function ChatScreen() {
             </ThemedText>
           </View>
         ) : null}
-        <View style={[styles.messageBubbleContainer, isOwn ? styles.ownMessage : styles.otherMessage]}>
+        <Pressable 
+          style={[styles.messageBubbleContainer, isOwn ? styles.ownMessage : styles.otherMessage]}
+          onLongPress={() => handleReply(item)}
+          delayLongPress={300}
+        >
           <View
             style={[
               styles.messageBubble,
@@ -120,6 +151,16 @@ export default function ChatScreen() {
                 : { backgroundColor: theme.backgroundSecondary },
             ]}
           >
+            {item.replyToMessage ? (
+              <View style={[styles.replyPreview, { borderLeftColor: isOwn ? 'rgba(255,255,255,0.5)' : theme.primary }]}>
+                <ThemedText type="small" style={[styles.replyName, isOwn ? { color: 'rgba(255,255,255,0.8)' } : { color: theme.primary }]}>
+                  {item.replyToSenderName}
+                </ThemedText>
+                <ThemedText type="small" style={[styles.replyText, isOwn ? { color: 'rgba(255,255,255,0.7)' } : { color: theme.textSecondary }]} numberOfLines={1}>
+                  {item.replyToMessage}
+                </ThemedText>
+              </View>
+            ) : null}
             {!isOwn ? (
               <ThemedText type="small" style={[styles.senderName, { color: theme.primary }]}>
                 {getSenderName(item)}
@@ -131,14 +172,21 @@ export default function ChatScreen() {
             >
               {item.message}
             </ThemedText>
-            <ThemedText
-              type="small"
-              style={[styles.messageTime, isOwn ? { color: "rgba(255,255,255,0.7)" } : { color: theme.textSecondary }]}
-            >
-              {formatTime(item.createdAt)}
-            </ThemedText>
+            <View style={styles.messageFooter}>
+              <ThemedText
+                type="small"
+                style={[styles.messageTime, isOwn ? { color: "rgba(255,255,255,0.7)" } : { color: theme.textSecondary }]}
+              >
+                {formatTime(item.createdAt)}
+              </ThemedText>
+              {!isOwn ? (
+                <Pressable onPress={() => handleReply(item)} style={styles.replyButton} hitSlop={8}>
+                  <Icon name="corner-up-left" size={14} color={theme.textSecondary} />
+                </Pressable>
+              ) : null}
+            </View>
           </View>
-        </View>
+        </Pressable>
       </>
     );
   };
@@ -164,7 +212,7 @@ export default function ChatScreen() {
         
         <FlatList
           ref={flatListRef}
-          data={chatMessages}
+          data={filteredMessages}
           keyExtractor={(item) => item.id}
           renderItem={renderMessage}
           contentContainerStyle={[
@@ -176,7 +224,7 @@ export default function ChatScreen() {
             <View style={styles.emptyContainer}>
               <Icon name="message-circle" size={48} color={theme.textSecondary} />
               <ThemedText type="body" style={[styles.emptyText, { color: theme.textSecondary }]}>
-                Нет сообщений
+                {canViewAll ? "Нет сообщений" : "У вас пока нет сообщений"}
               </ThemedText>
               <ThemedText type="small" style={[styles.emptySubtext, { color: theme.textSecondary }]}>
                 Напишите первое сообщение
@@ -186,6 +234,21 @@ export default function ChatScreen() {
         />
 
         <View style={[styles.inputContainer, { paddingBottom: tabBarHeight + Spacing.sm, backgroundColor: theme.backgroundDefault }]}>
+          {replyTo ? (
+            <View style={[styles.replyBar, { backgroundColor: theme.backgroundSecondary, borderLeftColor: theme.primary }]}>
+              <View style={styles.replyBarContent}>
+                <ThemedText type="small" style={{ color: theme.primary, fontWeight: '600' }}>
+                  {replyTo.senderName}
+                </ThemedText>
+                <ThemedText type="small" style={{ color: theme.textSecondary }} numberOfLines={1}>
+                  {replyTo.message}
+                </ThemedText>
+              </View>
+              <Pressable onPress={cancelReply} style={styles.replyBarClose} hitSlop={8}>
+                <Icon name="x" size={18} color={theme.textSecondary} />
+              </Pressable>
+            </View>
+          ) : null}
           <TextInput
             style={[
               styles.input,
@@ -281,8 +344,41 @@ const styles = StyleSheet.create({
     lineHeight: Typography.body.lineHeight,
   },
   messageTime: {
+    flex: 1,
+  },
+  messageFooter: {
+    flexDirection: "row",
+    alignItems: "center",
     marginTop: Spacing.xs,
-    alignSelf: "flex-end",
+    gap: Spacing.sm,
+  },
+  replyButton: {
+    padding: 2,
+  },
+  replyPreview: {
+    borderLeftWidth: 2,
+    paddingLeft: Spacing.sm,
+    marginBottom: Spacing.xs,
+  },
+  replyName: {
+    fontWeight: "600",
+  },
+  replyText: {},
+  replyBar: {
+    flexDirection: "row",
+    alignItems: "center",
+    borderLeftWidth: 3,
+    borderRadius: BorderRadius.sm,
+    paddingHorizontal: Spacing.sm,
+    paddingVertical: Spacing.xs,
+    marginBottom: Spacing.sm,
+  },
+  replyBarContent: {
+    flex: 1,
+    gap: 2,
+  },
+  replyBarClose: {
+    padding: Spacing.xs,
   },
   emptyContainer: {
     flex: 1,

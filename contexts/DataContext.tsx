@@ -166,6 +166,9 @@ export interface ChatMessage {
   senderName: string;
   message: string;
   createdAt: string;
+  replyToId: string | null;
+  replyToMessage: string | null;
+  replyToSenderName: string | null;
 }
 
 export interface AllocationBus {
@@ -265,7 +268,7 @@ interface DataContextType {
   deleteExcursionNote: (id: string) => Promise<void>;
   getExcursionNotes: (excursionId: string) => ExcursionNote[];
   chatMessages: ChatMessage[];
-  sendChatMessage: (message: string) => Promise<void>;
+  sendChatMessage: (message: string, replyTo?: ChatMessage) => Promise<void>;
   clearChatHistory: () => Promise<void>;
   notifications: AppNotification[];
   unreadNotificationCount: number;
@@ -1016,6 +1019,9 @@ export function DataProvider({ children }: { children: ReactNode }) {
         senderName: m.sender_name,
         message: m.message,
         createdAt: m.created_at,
+        replyToId: m.reply_to_id || null,
+        replyToMessage: m.reply_to_message || null,
+        replyToSenderName: m.reply_to_sender_name || null,
       }));
       
       setChatMessages(messages);
@@ -1024,17 +1030,25 @@ export function DataProvider({ children }: { children: ReactNode }) {
     }
   }, [user]);
 
-  const sendChatMessage = async (message: string) => {
+  const sendChatMessage = async (message: string, replyTo?: ChatMessage) => {
     if (!user || !profile) throw new Error('Not authenticated');
     
     try {
+      const insertData: Record<string, unknown> = {
+        sender_id: user.id,
+        sender_name: profile.display_name,
+        message,
+      };
+      
+      if (replyTo) {
+        insertData.reply_to_id = replyTo.id;
+        insertData.reply_to_message = replyTo.message.substring(0, 100);
+        insertData.reply_to_sender_name = replyTo.senderName;
+      }
+      
       const { error } = await supabase
         .from('chat_messages')
-        .insert({
-          sender_id: user.id,
-          sender_name: profile.display_name,
-          message,
-        });
+        .insert(insertData);
 
       if (error) throw error;
     } catch (err) {
