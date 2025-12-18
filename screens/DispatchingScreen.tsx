@@ -591,7 +591,7 @@ export default function DispatchingScreen() {
               onPress={() => {
                 hapticFeedback.medium();
                 Keyboard.dismiss();
-                setShowFullscreenNote(true);
+                setTimeout(() => setShowFullscreenNote(true), 100);
               }}
             >
               <Icon name="plus" size={16} color={theme.buttonText} />
@@ -624,7 +624,7 @@ export default function DispatchingScreen() {
             onPress={() => {
               hapticFeedback.light();
               Keyboard.dismiss();
-              setShowFullscreenNote(true);
+              setTimeout(() => setShowFullscreenNote(true), 100);
             }}
           >
             <Icon name="edit-3" size={14} color={theme.textSecondary} />
