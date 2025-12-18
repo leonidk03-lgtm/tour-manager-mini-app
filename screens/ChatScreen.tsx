@@ -183,10 +183,30 @@ export default function ChatScreen() {
     return date.toLocaleDateString("ru-RU", { day: "numeric", month: "long" });
   };
 
+  const getMessageType = (msg: ChatMessage): 'public' | 'private' | 'mention' => {
+    if (msg.recipientId) return 'private';
+    if (msg.mentions && msg.mentions.length > 0) return 'mention';
+    return 'public';
+  };
+
+  const getMessageBgColor = (msg: ChatMessage, isOwn: boolean): string => {
+    if (isOwn) return theme.primary;
+    const msgType = getMessageType(msg);
+    switch (msgType) {
+      case 'private':
+        return '#3D2E5C';
+      case 'mention':
+        return '#2E4A3D';
+      default:
+        return theme.backgroundSecondary;
+    }
+  };
+
   const renderMessage = ({ item, index }: { item: ChatMessage; index: number }) => {
     const isOwn = item.senderId === profile?.id;
     const showDateHeader = index === 0 || 
       formatDate(filteredMessages[index - 1]?.createdAt) !== formatDate(item.createdAt);
+    const msgType = getMessageType(item);
     
     return (
       <>
@@ -205,9 +225,7 @@ export default function ChatScreen() {
           <View
             style={[
               styles.messageBubble,
-              isOwn
-                ? { backgroundColor: theme.primary }
-                : { backgroundColor: theme.backgroundSecondary },
+              { backgroundColor: getMessageBgColor(item, isOwn) },
             ]}
           >
             {item.replyToMessage ? (
@@ -221,9 +239,16 @@ export default function ChatScreen() {
               </View>
             ) : null}
             {!isOwn ? (
-              <ThemedText type="small" style={[styles.senderName, { color: getSenderColor(item.senderId) }]}>
-                {getSenderName(item)}
-              </ThemedText>
+              <View style={styles.senderRow}>
+                <ThemedText type="small" style={[styles.senderName, { color: getSenderColor(item.senderId) }]}>
+                  {getSenderName(item)}
+                </ThemedText>
+                {msgType === 'private' ? (
+                  <Icon name="lock" size={12} color="#9575CD" />
+                ) : msgType === 'mention' ? (
+                  <Icon name="at-sign" size={12} color="#81C784" />
+                ) : null}
+              </View>
             ) : null}
             <ThemedText
               type="body"
@@ -460,8 +485,13 @@ const styles = StyleSheet.create({
     paddingVertical: Spacing.sm,
     borderRadius: BorderRadius.lg,
   },
-  senderName: {
+  senderRow: {
+    flexDirection: "row",
+    alignItems: "center",
+    gap: Spacing.xs,
     marginBottom: Spacing.xs,
+  },
+  senderName: {
     fontWeight: "600",
   },
   messageText: {
