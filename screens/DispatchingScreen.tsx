@@ -956,17 +956,21 @@ export default function DispatchingScreen() {
               </ThemedText>
             </Pressable>
           </View>
-          <ScrollView style={{ flex: 1 }} keyboardShouldPersistTaps="handled">
-            <TextInput
-              style={[styles.fullscreenNoteInput, { color: theme.text, minHeight: 300 }]}
-              placeholder="Введите заметку... (1234. для поиска)"
-              placeholderTextColor={theme.textSecondary}
-              value={currentNote}
-              onChangeText={handleNoteChange}
-              multiline
-              autoFocus
-            />
-          </ScrollView>
+          <TouchableWithoutFeedback onPress={Keyboard.dismiss} accessible={false}>
+            <View style={{ flex: 1 }}>
+              <ScrollView style={{ flex: 1 }} keyboardShouldPersistTaps="handled">
+                <TextInput
+                  style={[styles.fullscreenNoteInput, { color: theme.text, minHeight: 300 }]}
+                  placeholder="Введите заметку... (1234. для поиска)"
+                  placeholderTextColor={theme.textSecondary}
+                  value={currentNote}
+                  onChangeText={handleNoteChange}
+                  multiline
+                  autoFocus
+                />
+              </ScrollView>
+            </View>
+          </TouchableWithoutFeedback>
         </ThemedView>
       </Modal>
 

@@ -580,51 +580,47 @@ export default function ExcursionDetailScreen() {
         visible={fullscreenNote !== null}
         transparent
         animationType="fade"
-        onRequestClose={() => {
-          Keyboard.dismiss();
-          setFullscreenNote(null);
-        }}
+        onRequestClose={() => setFullscreenNote(null)}
       >
-        <Pressable 
-          style={styles.fullscreenNoteBackdrop}
-          onPress={() => setFullscreenNote(null)}
-        >
-          <Pressable onPress={() => {}}>
-            <ThemedView style={[styles.fullscreenNoteContainer, { backgroundColor: theme.backgroundDefault }]}>
-              <View style={styles.fullscreenNoteHeader}>
-                <ThemedText style={styles.fullscreenNoteTitle}>Заметка</ThemedText>
-                <Pressable onPress={() => setFullscreenNote(null)}>
-                  <Icon name="x" size={24} color={theme.text} />
-                </Pressable>
-              </View>
-              <ScrollView style={styles.fullscreenNoteScroll} contentContainerStyle={{ flexGrow: 1 }}>
-                <View style={styles.fullscreenNoteContent}>
-                  <ThemedText style={styles.fullscreenNoteText}>
-                    {fullscreenNote?.text}
-                  </ThemedText>
-                  <View style={styles.fullscreenNoteMeta}>
-                    {isAdmin && fullscreenNote?.managerName ? (
-                      <ThemedText style={[styles.noteAuthor, { color: theme.primary }]}>
-                        {fullscreenNote.managerName}
-                      </ThemedText>
-                    ) : null}
-                    {fullscreenNote?.createdAt ? (
-                      <ThemedText style={[styles.noteDate, { color: theme.textSecondary }]}>
-                        {new Date(fullscreenNote.createdAt).toLocaleString("ru-RU", {
-                          day: "2-digit",
-                          month: "2-digit",
-                          year: "numeric",
-                          hour: "2-digit",
-                          minute: "2-digit",
-                        })}
-                      </ThemedText>
-                    ) : null}
-                  </View>
+        <View style={styles.fullscreenNoteBackdrop}>
+          <Pressable 
+            style={StyleSheet.absoluteFill} 
+            onPress={() => setFullscreenNote(null)} 
+          />
+          <ThemedView style={[styles.fullscreenNoteContainer, { backgroundColor: theme.backgroundDefault }]}>
+            <View style={styles.fullscreenNoteHeader}>
+              <ThemedText style={styles.fullscreenNoteTitle}>Заметка</ThemedText>
+              <Pressable onPress={() => setFullscreenNote(null)}>
+                <Icon name="x" size={24} color={theme.text} />
+              </Pressable>
+            </View>
+            <ScrollView style={styles.fullscreenNoteScroll} contentContainerStyle={{ flexGrow: 1 }}>
+              <View style={styles.fullscreenNoteContent}>
+                <ThemedText style={styles.fullscreenNoteText}>
+                  {fullscreenNote?.text}
+                </ThemedText>
+                <View style={styles.fullscreenNoteMeta}>
+                  {isAdmin && fullscreenNote?.managerName ? (
+                    <ThemedText style={[styles.noteAuthor, { color: theme.primary }]}>
+                      {fullscreenNote.managerName}
+                    </ThemedText>
+                  ) : null}
+                  {fullscreenNote?.createdAt ? (
+                    <ThemedText style={[styles.noteDate, { color: theme.textSecondary }]}>
+                      {new Date(fullscreenNote.createdAt).toLocaleString("ru-RU", {
+                        day: "2-digit",
+                        month: "2-digit",
+                        year: "numeric",
+                        hour: "2-digit",
+                        minute: "2-digit",
+                      })}
+                    </ThemedText>
+                  ) : null}
                 </View>
-              </ScrollView>
-            </ThemedView>
-          </Pressable>
-        </Pressable>
+              </View>
+            </ScrollView>
+          </ThemedView>
+        </View>
       </Modal>
     </ScreenScrollView>
   );
