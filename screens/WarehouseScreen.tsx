@@ -1062,7 +1062,7 @@ export default function WarehouseScreen() {
       <Modal visible={showItemModal} transparent animationType="slide">
         <View style={styles.modalOverlay}>
           <View style={styles.modalContent}>
-            <ScrollView>
+            <ScrollView style={{ flex: 1 }} nestedScrollEnabled={true} showsVerticalScrollIndicator={true} keyboardShouldPersistTaps="handled">
               <ThemedText style={styles.modalTitle}>
                 {editingItem ? "Редактировать" : "Новое оборудование"}
               </ThemedText>
@@ -1137,7 +1137,7 @@ export default function WarehouseScreen() {
       <Modal visible={showMovementModal} transparent animationType="slide">
         <View style={styles.modalOverlay}>
           <View style={styles.modalContent}>
-            <ScrollView>
+            <ScrollView style={{ flex: 1 }} nestedScrollEnabled={true} showsVerticalScrollIndicator={true} keyboardShouldPersistTaps="handled">
               <ThemedText style={styles.modalTitle}>
                 Движение: {selectedItem?.name}
               </ThemedText>
