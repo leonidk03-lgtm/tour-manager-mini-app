@@ -348,7 +348,6 @@ export default function WarehouseScreen() {
 
   const styles = StyleSheet.create({
     container: {
-      flex: 1,
       padding: Spacing.md,
     },
     tabContainer: {
@@ -946,11 +945,7 @@ export default function WarehouseScreen() {
 
   return (
     <ThemedView style={{ flex: 1 }}>
-      <ScrollView 
-        style={{ flex: 1 }}
-        contentContainerStyle={[styles.container, { paddingBottom: insets.bottom + 100 }]}
-        showsVerticalScrollIndicator={true}
-      >
+      <ScreenScrollView contentContainerStyle={styles.container}>
         <View style={styles.tabContainer}>
           <Pressable
             style={[styles.tab, activeTab === "inventory" && styles.tabActive]}
@@ -981,7 +976,7 @@ export default function WarehouseScreen() {
         {activeTab === "inventory" && renderInventoryTab()}
         {activeTab === "movements" && renderMovementsTab()}
         {activeTab === "categories" && renderCategoriesTab()}
-      </ScrollView>
+      </ScreenScrollView>
 
       {(activeTab === "inventory" || activeTab === "categories") && (
         <Pressable
@@ -1066,7 +1061,7 @@ export default function WarehouseScreen() {
       <Modal visible={showItemModal} transparent animationType="slide">
         <View style={styles.modalOverlay}>
           <View style={styles.modalContent}>
-            <ScrollView style={{ flex: 1 }} nestedScrollEnabled={true} showsVerticalScrollIndicator={true} keyboardShouldPersistTaps="handled">
+            <ScrollView keyboardShouldPersistTaps="handled">
               <ThemedText style={styles.modalTitle}>
                 {editingItem ? "Редактировать" : "Новое оборудование"}
               </ThemedText>
@@ -1141,7 +1136,7 @@ export default function WarehouseScreen() {
       <Modal visible={showMovementModal} transparent animationType="slide">
         <View style={styles.modalOverlay}>
           <View style={styles.modalContent}>
-            <ScrollView style={{ flex: 1 }} nestedScrollEnabled={true} showsVerticalScrollIndicator={true} keyboardShouldPersistTaps="handled">
+            <ScrollView keyboardShouldPersistTaps="handled">
               <ThemedText style={styles.modalTitle}>
                 Движение: {selectedItem?.name}
               </ThemedText>
