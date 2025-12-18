@@ -339,6 +339,7 @@ interface DataContextType {
   updateEquipmentItem: (id: string, item: Partial<EquipmentItem>) => Promise<void>;
   deleteEquipmentItem: (id: string) => Promise<void>;
   addEquipmentMovement: (movement: Omit<EquipmentMovement, 'id' | 'createdAt' | 'managerId' | 'managerName'>) => Promise<void>;
+  processAutoWriteoff: (date?: Date) => Promise<{ processed: number; items: Array<{ name: string; quantity: number }> }>;
 }
 
 const DataContext = createContext<DataContextType | undefined>(undefined);
@@ -2642,6 +2643,66 @@ export function DataProvider({ children }: { children: ReactNode }) {
     }
   };
 
+  const processAutoWriteoff = async (date?: Date): Promise<{ processed: number; items: Array<{ name: string; quantity: number }> }> => {
+    if (!currentUser) throw new Error('No user');
+
+    const targetDate = date || new Date();
+    const dateStr = targetDate.toISOString().split('T')[0];
+
+    const todayAssignments = radioGuideAssignments.filter(a => 
+      a.issuedAt.startsWith(dateStr)
+    );
+    const totalReceiversIssued = todayAssignments.reduce((sum, a) => sum + a.receiversIssued, 0);
+
+    if (totalReceiversIssued === 0) {
+      return { processed: 0, items: [] };
+    }
+
+    const autoWriteoffCategories = equipmentCategories.filter(c => c.autoWriteoff && c.autoWriteoffSourceId);
+    const processedItems: Array<{ name: string; quantity: number }> = [];
+
+    for (const category of autoWriteoffCategories) {
+      const itemsInCategory = equipmentItems.filter(i => i.categoryId === category.id);
+      
+      for (const item of itemsInCategory) {
+        if (item.quantity <= 0) continue;
+
+        const quantityToWriteoff = Math.min(totalReceiversIssued, item.quantity);
+
+        try {
+          const { error } = await supabase.from('equipment_movements').insert({
+            item_id: item.id,
+            type: 'writeoff',
+            quantity: quantityToWriteoff,
+            note: `Автосписание за ${dateStr} (выдано ${totalReceiversIssued} приёмников)`,
+            manager_id: currentUser.id,
+            manager_name: currentUser.name,
+          });
+
+          if (error) throw error;
+
+          await supabase
+            .from('equipment_items')
+            .update({ 
+              quantity: item.quantity - quantityToWriteoff,
+              written_off: item.writtenOff + quantityToWriteoff,
+              updated_at: new Date().toISOString() 
+            })
+            .eq('id', item.id);
+
+          processedItems.push({ name: item.name, quantity: quantityToWriteoff });
+        } catch (err) {
+          console.error(`Error auto-writeoff for ${item.name}:`, err);
+        }
+      }
+    }
+
+    await fetchEquipmentItems();
+    await fetchEquipmentMovements();
+
+    return { processed: totalReceiversIssued, items: processedItems };
+  };
+
   return (
     <DataContext.Provider
       value={{
@@ -2719,6 +2780,7 @@ export function DataProvider({ children }: { children: ReactNode }) {
         updateEquipmentItem,
         deleteEquipmentItem,
         addEquipmentMovement,
+        processAutoWriteoff,
       }}
     >
       {children}

@@ -93,6 +93,7 @@ export default function WarehouseScreen() {
     updateEquipmentItem,
     deleteEquipmentItem,
     addEquipmentMovement,
+    processAutoWriteoff,
   } = useData();
 
   const [activeTab, setActiveTab] = useState<TabType>("inventory");
@@ -123,6 +124,7 @@ export default function WarehouseScreen() {
   const [filterDate, setFilterDate] = useState<Date | null>(null);
   const [showDatePicker, setShowDatePicker] = useState(false);
   const [searchQuery, setSearchQuery] = useState("");
+  const [isProcessingWriteoff, setIsProcessingWriteoff] = useState(false);
 
   const getCategoryById = (id: string) => equipmentCategories.find(c => c.id === id);
 
@@ -359,6 +361,43 @@ export default function WarehouseScreen() {
     } catch (err) {
       Alert.alert("Ошибка", "Не удалось сохранить движение");
     }
+  };
+
+  const handleAutoWriteoff = async () => {
+    const autoWriteoffCategories = equipmentCategories.filter(c => c.autoWriteoff);
+    if (autoWriteoffCategories.length === 0) {
+      Alert.alert("Нет настроек", "Нет категорий с включённым автосписанием. Создайте категорию типа 'Расходник' и включите автосписание.");
+      return;
+    }
+
+    Alert.alert(
+      "Провести автосписание?",
+      "Расходники будут списаны по количеству выданных приёмников за сегодня.",
+      [
+        { text: "Отмена", style: "cancel" },
+        {
+          text: "Провести",
+          onPress: async () => {
+            setIsProcessingWriteoff(true);
+            try {
+              const result = await processAutoWriteoff();
+              if (result.processed === 0) {
+                Alert.alert("Нет данных", "Сегодня не было выдач приёмников.");
+              } else if (result.items.length === 0) {
+                Alert.alert("Нет расходников", "Нет расходников для списания или они уже закончились.");
+              } else {
+                const itemsList = result.items.map(i => `${i.name}: ${i.quantity} шт.`).join("\n");
+                Alert.alert("Готово", `Списано по ${result.processed} выданным приёмникам:\n\n${itemsList}`);
+              }
+            } catch (err) {
+              Alert.alert("Ошибка", "Не удалось провести автосписание");
+            } finally {
+              setIsProcessingWriteoff(false);
+            }
+          },
+        },
+      ]
+    );
   };
 
   const openEditCategory = (category: EquipmentCategory) => {
@@ -717,6 +756,17 @@ export default function WarehouseScreen() {
       borderRadius: BorderRadius.md,
       backgroundColor: theme.backgroundSecondary,
     },
+    autoWriteoffButton: {
+      flexDirection: "row",
+      alignItems: "center",
+      gap: Spacing.xs,
+      paddingHorizontal: Spacing.sm,
+      paddingVertical: Spacing.xs,
+      borderRadius: BorderRadius.md,
+      backgroundColor: theme.warning + "20",
+      borderWidth: 1,
+      borderColor: theme.warning + "40",
+    },
     emptyText: {
       textAlign: "center",
       color: theme.textSecondary,
@@ -985,6 +1035,19 @@ export default function WarehouseScreen() {
         {filterDate && (
           <Pressable onPress={() => setFilterDate(null)}>
             <Icon name="x" size={18} color={theme.textSecondary} />
+          </Pressable>
+        )}
+        <View style={{ flex: 1 }} />
+        {isAdmin && (
+          <Pressable
+            style={[styles.autoWriteoffButton, isProcessingWriteoff && { opacity: 0.5 }]}
+            onPress={handleAutoWriteoff}
+            disabled={isProcessingWriteoff}
+          >
+            <Icon name="zap" size={14} color={theme.warning} />
+            <ThemedText style={{ color: theme.warning, fontSize: 12 }}>
+              Автосписание
+            </ThemedText>
           </Pressable>
         )}
       </View>
