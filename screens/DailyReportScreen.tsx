@@ -576,7 +576,7 @@ export default function DailyReportScreen() {
 
               {reportData.radioGuideParticipants > 0 ? (
                 <View style={styles.radioGuideRow}>
-                  <Icon name="speaker" size={16} color={theme.primary} />
+                  <Icon name="volume-2" size={16} color={theme.primary} />
                   <ThemedText style={{ color: theme.textSecondary, marginLeft: Spacing.xs }}>
                     Радиогиды: {reportData.radioGuideParticipants} шт. = {formatMoney(reportData.radioGuideTotal)}р
                   </ThemedText>
@@ -620,7 +620,7 @@ export default function DailyReportScreen() {
 
             <CollapsibleSection 
               title="Финансовая сводка" 
-              icon="dollar-sign"
+              icon="tag"
               defaultExpanded={true}
             >
               <View style={styles.summaryRow}>
@@ -645,7 +645,7 @@ export default function DailyReportScreen() {
 
             <CollapsibleSection 
               title="Ручной ввод" 
-              icon="edit"
+              icon="edit-2"
               defaultExpanded={true}
             >
               <View style={styles.inputRow}>

@@ -179,7 +179,7 @@ export default function RadioGuidesReportScreen() {
 
           <View style={styles.statsGrid}>
             <View style={[styles.statItem, { backgroundColor: theme.primary + "20" }]}>
-              <Icon name="briefcase" size={24} color={theme.primary} />
+              <Icon name="package" size={24} color={theme.primary} />
               <ThemedText style={styles.statValue}>{stats.totalKits}</ThemedText>
               <ThemedText style={[styles.statLabel, { color: theme.textSecondary }]}>
                 Всего сумок
@@ -204,7 +204,7 @@ export default function RadioGuidesReportScreen() {
           </View>
 
           <View style={[styles.infoRow, { backgroundColor: theme.backgroundSecondary, borderRadius: BorderRadius.xs }]}>
-            <Icon name="headphones" size={18} color={theme.textSecondary} />
+            <Icon name="volume-2" size={18} color={theme.textSecondary} />
             <ThemedText style={[styles.infoText, { color: theme.textSecondary }]}>
               Всего приёмников: {stats.totalReceivers}
             </ThemedText>
@@ -234,7 +234,7 @@ export default function RadioGuidesReportScreen() {
             </View>
 
             <View style={[styles.activityItem, { borderColor: theme.border }]}>
-              <Icon name="clock" size={20} color={theme.warning} />
+              <Icon name="loader" size={20} color={theme.warning} />
               <ThemedText style={styles.activityValue}>{stats.pending}</ThemedText>
               <ThemedText style={[styles.activityLabel, { color: theme.textSecondary }]}>
                 Не возвр.

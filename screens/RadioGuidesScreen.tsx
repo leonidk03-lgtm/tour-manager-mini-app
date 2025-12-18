@@ -757,7 +757,7 @@ export default function RadioGuidesScreen() {
                   ]}
                   onPress={() => setSortByBattery(!sortByBattery)}
                 >
-                  <Icon name="zap" size={14} color={sortByBattery ? theme.primary : theme.textSecondary} />
+                  <Icon name="battery" size={14} color={sortByBattery ? theme.primary : theme.textSecondary} />
                   <ThemedText style={{ fontSize: 12, color: sortByBattery ? theme.primary : theme.textSecondary }}>
                     {sortByBattery ? "По заряду" : "По номеру"}
                   </ThemedText>
