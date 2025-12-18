@@ -661,7 +661,7 @@ export default function RadioGuidesScreen() {
   return (
     <PermissionGate permission="radio_guides">
     <>
-      <ScreenScrollView onTouchStart={() => batteryPickerKit && setBatteryPickerKit(null)}>
+      <ScreenScrollView>
         <View style={styles.container}>
           <View style={styles.statsRow}>
             <Pressable 
@@ -827,6 +827,13 @@ export default function RadioGuidesScreen() {
           ) : null}
         </View>
       </ScreenScrollView>
+
+      {batteryPickerKit ? (
+        <Pressable 
+          style={styles.dropdownBackdrop} 
+          onPress={() => setBatteryPickerKit(null)}
+        />
+      ) : null}
 
       {hasPermission('radio_guides_add') ? (
         <Pressable
@@ -1385,13 +1392,13 @@ const styles = StyleSheet.create({
     borderRadius: BorderRadius.sm,
     borderWidth: 1,
     padding: Spacing.xs,
-    zIndex: 1000,
+    zIndex: 10000,
     minWidth: 160,
     shadowColor: "#000",
     shadowOffset: { width: 0, height: 2 },
     shadowOpacity: 0.25,
     shadowRadius: 4,
-    elevation: 5,
+    elevation: 10,
   },
   batteryDropdownItem: {
     flexDirection: "row",
@@ -1404,6 +1411,14 @@ const styles = StyleSheet.create({
   batteryDropdownText: {
     flex: 1,
     fontSize: 14,
+  },
+  dropdownBackdrop: {
+    position: "absolute",
+    top: 0,
+    left: 0,
+    right: 0,
+    bottom: 0,
+    zIndex: 999,
   },
   emptyContainer: {
     alignItems: "center",
