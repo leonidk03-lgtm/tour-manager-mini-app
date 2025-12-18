@@ -112,6 +112,31 @@ export default function WarehouseScreen() {
     return equipmentItems.filter(i => i.quantity <= i.minQuantity && i.minQuantity > 0);
   }, [equipmentItems]);
 
+  const categoryStats = useMemo(() => {
+    return equipmentCategories.map(cat => {
+      const items = equipmentItems.filter(i => i.categoryId === cat.id);
+      const totalQuantity = items.reduce((sum, i) => sum + i.quantity, 0);
+      const totalInRepair = items.reduce((sum, i) => sum + i.inRepair, 0);
+      const totalWrittenOff = items.reduce((sum, i) => sum + i.writtenOff, 0);
+      const lowStockCount = items.filter(i => i.quantity <= i.minQuantity && i.minQuantity > 0).length;
+      return {
+        category: cat,
+        itemCount: items.length,
+        totalQuantity,
+        totalInRepair,
+        totalWrittenOff,
+        lowStockCount,
+      };
+    });
+  }, [equipmentCategories, equipmentItems]);
+
+  const totalStats = useMemo(() => {
+    const totalQuantity = equipmentItems.reduce((sum, i) => sum + i.quantity, 0);
+    const totalInRepair = equipmentItems.reduce((sum, i) => sum + i.inRepair, 0);
+    const totalWrittenOff = equipmentItems.reduce((sum, i) => sum + i.writtenOff, 0);
+    return { totalQuantity, totalInRepair, totalWrittenOff, itemCount: equipmentItems.length };
+  }, [equipmentItems]);
+
   const resetCategoryForm = () => {
     setCategoryName("");
     setCategoryType("equipment");
@@ -573,10 +598,135 @@ export default function WarehouseScreen() {
       color: theme.textSecondary,
       marginTop: Spacing.xl,
     },
+    summarySection: {
+      marginBottom: Spacing.md,
+    },
+    summaryTitle: {
+      fontSize: 14,
+      fontWeight: "600",
+      color: theme.textSecondary,
+      marginBottom: Spacing.sm,
+    },
+    summaryGrid: {
+      flexDirection: "row",
+      flexWrap: "wrap",
+      gap: Spacing.sm,
+    },
+    summaryCard: {
+      backgroundColor: theme.backgroundSecondary,
+      borderRadius: BorderRadius.md,
+      padding: Spacing.sm,
+      minWidth: "47%",
+      flex: 1,
+    },
+    summaryCardHeader: {
+      flexDirection: "row",
+      justifyContent: "space-between",
+      alignItems: "center",
+      marginBottom: Spacing.xs,
+    },
+    summaryCardTitle: {
+      fontSize: 13,
+      fontWeight: "600",
+      color: theme.text,
+      flex: 1,
+    },
+    summaryCardValue: {
+      fontSize: 18,
+      fontWeight: "700",
+      color: theme.primary,
+    },
+    summaryCardStats: {
+      flexDirection: "row",
+      flexWrap: "wrap",
+      gap: Spacing.xs,
+    },
+    summaryCardStat: {
+      fontSize: 11,
+      color: theme.textSecondary,
+    },
+    totalCard: {
+      backgroundColor: theme.primary + "15",
+      borderRadius: BorderRadius.md,
+      padding: Spacing.md,
+      marginBottom: Spacing.md,
+    },
+    totalCardRow: {
+      flexDirection: "row",
+      justifyContent: "space-around",
+    },
+    totalCardItem: {
+      alignItems: "center",
+    },
+    totalCardLabel: {
+      fontSize: 12,
+      color: theme.textSecondary,
+    },
+    totalCardValue: {
+      fontSize: 20,
+      fontWeight: "700",
+      color: theme.text,
+    },
   });
 
   const renderInventoryTab = () => (
     <View>
+      {/* Общая сводка */}
+      <View style={styles.totalCard}>
+        <View style={styles.totalCardRow}>
+          <View style={styles.totalCardItem}>
+            <ThemedText style={styles.totalCardValue}>{totalStats.itemCount}</ThemedText>
+            <ThemedText style={styles.totalCardLabel}>Позиций</ThemedText>
+          </View>
+          <View style={styles.totalCardItem}>
+            <ThemedText style={styles.totalCardValue}>{totalStats.totalQuantity}</ThemedText>
+            <ThemedText style={styles.totalCardLabel}>На складе</ThemedText>
+          </View>
+          <View style={styles.totalCardItem}>
+            <ThemedText style={[styles.totalCardValue, { color: theme.warning }]}>{totalStats.totalInRepair}</ThemedText>
+            <ThemedText style={styles.totalCardLabel}>В ремонте</ThemedText>
+          </View>
+          <View style={styles.totalCardItem}>
+            <ThemedText style={[styles.totalCardValue, { color: theme.error }]}>{totalStats.totalWrittenOff}</ThemedText>
+            <ThemedText style={styles.totalCardLabel}>Списано</ThemedText>
+          </View>
+        </View>
+      </View>
+
+      {/* Сводка по категориям */}
+      {categoryStats.length > 0 && (
+        <View style={styles.summarySection}>
+          <ThemedText style={styles.summaryTitle}>По категориям</ThemedText>
+          <View style={styles.summaryGrid}>
+            {categoryStats.map((stat) => (
+              <View key={stat.category.id} style={styles.summaryCard}>
+                <View style={styles.summaryCardHeader}>
+                  <ThemedText style={styles.summaryCardTitle} numberOfLines={1}>
+                    {stat.category.name}
+                  </ThemedText>
+                  <ThemedText style={styles.summaryCardValue}>{stat.totalQuantity}</ThemedText>
+                </View>
+                <View style={styles.summaryCardStats}>
+                  <ThemedText style={styles.summaryCardStat}>
+                    {stat.itemCount} поз.
+                  </ThemedText>
+                  {stat.totalInRepair > 0 ? (
+                    <ThemedText style={[styles.summaryCardStat, { color: theme.warning }]}>
+                      {stat.totalInRepair} рем.
+                    </ThemedText>
+                  ) : null}
+                  {stat.lowStockCount > 0 ? (
+                    <ThemedText style={[styles.summaryCardStat, { color: theme.error }]}>
+                      {stat.lowStockCount} мало
+                    </ThemedText>
+                  ) : null}
+                </View>
+              </View>
+            ))}
+          </View>
+        </View>
+      )}
+
       <View style={styles.searchContainer}>
         <Icon name="search" size={20} color={theme.textSecondary} />
         <TextInput
