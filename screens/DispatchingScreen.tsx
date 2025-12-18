@@ -315,7 +315,7 @@ export default function DispatchingScreen() {
         const phones: string[] = data.phones || [];
         if (phones.length === 0) {
           hapticFeedback.error();
-          Alert.alert("Обзвон", "Нет номеров для обзвона.\n\nВсе клиенты отмечены (зелёные).");
+          Alert.alert("Обзвон", "Нет номеров для обзвона.\n\nВсе клиенты либо отмечены (зелёные), либо количество = 0.");
         } else {
           const text = phones.join('\n');
           await Clipboard.setStringAsync(text);
@@ -743,7 +743,7 @@ export default function DispatchingScreen() {
                       var countCell = cells[6];
                       var phone = phoneCell ? phoneCell.innerText.trim() : '';
                       var count = parseInt(countCell ? countCell.innerText.trim() : '0') || 0;
-                      if (phone && phone.startsWith('+')) {
+                      if (phone && phone.startsWith('+') && count > 0) {
                         phones.push(phone + ' (' + count + ')');
                       }
                     });
