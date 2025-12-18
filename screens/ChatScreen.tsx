@@ -149,6 +149,21 @@ export default function ChatScreen() {
     return manager?.name || "Неизвестный";
   };
 
+  const senderColors = [
+    "#E57373", "#F06292", "#BA68C8", "#9575CD", "#7986CB",
+    "#64B5F6", "#4FC3F7", "#4DD0E1", "#4DB6AC", "#81C784",
+    "#AED581", "#DCE775", "#FFD54F", "#FFB74D", "#FF8A65",
+  ];
+
+  const getSenderColor = (senderId: string): string => {
+    let hash = 0;
+    for (let i = 0; i < senderId.length; i++) {
+      hash = senderId.charCodeAt(i) + ((hash << 5) - hash);
+    }
+    const index = Math.abs(hash) % senderColors.length;
+    return senderColors[index];
+  };
+
   const formatTime = (dateStr: string): string => {
     const date = new Date(dateStr);
     return date.toLocaleTimeString("ru-RU", { hour: "2-digit", minute: "2-digit" });
@@ -196,8 +211,8 @@ export default function ChatScreen() {
             ]}
           >
             {item.replyToMessage ? (
-              <View style={[styles.replyPreview, { borderLeftColor: isOwn ? 'rgba(255,255,255,0.5)' : theme.primary }]}>
-                <ThemedText type="small" style={[styles.replyName, isOwn ? { color: 'rgba(255,255,255,0.8)' } : { color: theme.primary }]}>
+              <View style={[styles.replyPreview, { borderLeftColor: isOwn ? 'rgba(255,255,255,0.5)' : getSenderColor(item.replyToId || item.senderId) }]}>
+                <ThemedText type="small" style={[styles.replyName, isOwn ? { color: 'rgba(255,255,255,0.8)' } : { color: getSenderColor(item.replyToId || item.senderId) }]}>
                   {item.replyToSenderName}
                 </ThemedText>
                 <ThemedText type="small" style={[styles.replyText, isOwn ? { color: 'rgba(255,255,255,0.7)' } : { color: theme.textSecondary }]} numberOfLines={1}>
@@ -206,7 +221,7 @@ export default function ChatScreen() {
               </View>
             ) : null}
             {!isOwn ? (
-              <ThemedText type="small" style={[styles.senderName, { color: theme.primary }]}>
+              <ThemedText type="small" style={[styles.senderName, { color: getSenderColor(item.senderId) }]}>
                 {getSenderName(item)}
               </ThemedText>
             ) : null}
@@ -291,9 +306,9 @@ export default function ChatScreen() {
         ) : null}
         
         {replyTo ? (
-          <View style={[styles.replyBar, { backgroundColor: theme.backgroundSecondary, borderLeftColor: theme.primary }]}>
+          <View style={[styles.replyBar, { backgroundColor: theme.backgroundSecondary, borderLeftColor: getSenderColor(replyTo.senderId) }]}>
             <View style={styles.replyBarContent}>
-              <ThemedText type="small" style={{ color: theme.primary, fontWeight: '600' }}>
+              <ThemedText type="small" style={{ color: getSenderColor(replyTo.senderId), fontWeight: '600' }}>
                 {replyTo.senderName}
               </ThemedText>
               <ThemedText type="small" style={{ color: theme.textSecondary }} numberOfLines={1}>
