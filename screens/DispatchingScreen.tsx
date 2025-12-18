@@ -740,7 +740,7 @@ export default function DispatchingScreen() {
                           combinedBg.includes('34, 139') ||
                           combinedBg.includes('50, 205')) return;
                       var phoneCell = cells[3];
-                      var countCell = cells[4];
+                      var countCell = cells[6];
                       var phone = phoneCell ? phoneCell.innerText.trim() : '';
                       var count = parseInt(countCell ? countCell.innerText.trim() : '0') || 0;
                       if (phone && phone.startsWith('+') && count > 0) {
