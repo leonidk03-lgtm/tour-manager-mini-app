@@ -85,9 +85,7 @@ export function AuthProvider({ children }: { children: ReactNode }) {
         setProfile(null);
       } else {
         setProfile(data as Profile);
-        if (data?.role === 'admin') {
-          refreshManagers();
-        }
+        refreshManagers();
       }
     } catch (err) {
       console.error('Error fetching profile:', err);
@@ -322,12 +320,10 @@ export function AuthProvider({ children }: { children: ReactNode }) {
   };
 
   const refreshManagers = async () => {
-    if (!user) return;
-
     try {
       const { data, error } = await supabase
         .from('profiles')
-        .select('id, email, display_name, role, is_active')
+        .select('*')
         .order('created_at', { ascending: false });
 
       if (!error && data) {
