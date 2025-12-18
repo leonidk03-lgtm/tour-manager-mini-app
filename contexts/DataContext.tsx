@@ -692,8 +692,11 @@ export function DataProvider({ children }: { children: ReactNode }) {
       .select('*')
       .order('name');
 
+    console.log("fetchEquipmentCategories result:", { data, error });
+
     if (error) {
       if (error.code === 'PGRST205' || error.code === '42P01') {
+        console.log("fetchEquipmentCategories - table not found, skipping");
         return;
       }
       throw error;
