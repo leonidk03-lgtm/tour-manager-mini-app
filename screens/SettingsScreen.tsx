@@ -190,7 +190,7 @@ export default function SettingsScreen() {
             >
               <View style={styles.settingItem}>
                 <View style={styles.settingLeft}>
-                  <Icon name="radio" size={20} color={theme.textSecondary} />
+                  <Icon name="mic" size={20} color={theme.textSecondary} />
                   <ThemedText style={styles.settingText}>Радиогиды</ThemedText>
                 </View>
                 <Icon name="chevron-right" size={20} color={theme.textSecondary} />
@@ -231,7 +231,7 @@ export default function SettingsScreen() {
                 >
                   <View style={styles.settingItem}>
                     <View style={styles.settingLeft}>
-                      <Icon name="server" size={20} color={theme.textSecondary} />
+                      <Icon name="folder" size={20} color={theme.textSecondary} />
                       <ThemedText style={styles.settingText}>База данных</ThemedText>
                     </View>
                     <Icon name="chevron-right" size={20} color={theme.textSecondary} />
@@ -247,7 +247,7 @@ export default function SettingsScreen() {
                 >
                   <View style={styles.settingItem}>
                     <View style={styles.settingLeft}>
-                      <Icon name="radio" size={20} color={theme.textSecondary} />
+                      <Icon name="mic" size={20} color={theme.textSecondary} />
                       <ThemedText style={styles.settingText}>Стоимость радиогида</ThemedText>
                     </View>
                     <ThemedText style={{ color: theme.primary, fontWeight: "600" }}>

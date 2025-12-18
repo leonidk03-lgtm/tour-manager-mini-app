@@ -204,7 +204,7 @@ export default function RadioGuidesReportScreen() {
           </View>
 
           <View style={[styles.infoRow, { backgroundColor: theme.backgroundSecondary, borderRadius: BorderRadius.xs }]}>
-            <Icon name="radio" size={18} color={theme.textSecondary} />
+            <Icon name="mic" size={18} color={theme.textSecondary} />
             <ThemedText style={[styles.infoText, { color: theme.textSecondary }]}>
               Всего приёмников: {stats.totalReceivers}
             </ThemedText>
@@ -218,7 +218,7 @@ export default function RadioGuidesReportScreen() {
 
           <View style={styles.activityGrid}>
             <View style={[styles.activityItem, { borderColor: theme.border }]}>
-              <Icon name="arrow-up-circle" size={20} color={theme.success} />
+              <Icon name="upload" size={20} color={theme.success} />
               <ThemedText style={styles.activityValue}>{stats.totalIssues}</ThemedText>
               <ThemedText style={[styles.activityLabel, { color: theme.textSecondary }]}>
                 Выдач
@@ -226,7 +226,7 @@ export default function RadioGuidesReportScreen() {
             </View>
 
             <View style={[styles.activityItem, { borderColor: theme.border }]}>
-              <Icon name="arrow-down-circle" size={20} color={theme.primary} />
+              <Icon name="download" size={20} color={theme.primary} />
               <ThemedText style={styles.activityValue}>{stats.totalReturns}</ThemedText>
               <ThemedText style={[styles.activityLabel, { color: theme.textSecondary }]}>
                 Возвратов

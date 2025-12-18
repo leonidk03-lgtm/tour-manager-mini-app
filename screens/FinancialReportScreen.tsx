@@ -232,7 +232,7 @@ export default function FinancialReportScreen() {
 
           <View style={styles.detailRow}>
             <View style={styles.detailLeft}>
-              <Icon name="arrow-down-circle" size={18} color={theme.textSecondary} />
+              <Icon name="download" size={18} color={theme.textSecondary} />
               <ThemedText style={styles.detailLabel}>Прочие доходы</ThemedText>
             </View>
             <ThemedText style={styles.detailValue}>{formatMoney(stats.transactionIncome)}</ThemedText>
@@ -256,7 +256,7 @@ export default function FinancialReportScreen() {
 
           <View style={styles.detailRow}>
             <View style={styles.detailLeft}>
-              <Icon name="arrow-up-circle" size={18} color={theme.textSecondary} />
+              <Icon name="upload" size={18} color={theme.textSecondary} />
               <ThemedText style={styles.detailLabel}>Прочие расходы</ThemedText>
             </View>
             <ThemedText style={styles.detailValue}>{formatMoney(stats.transactionExpenses)}</ThemedText>

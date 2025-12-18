@@ -256,7 +256,7 @@ export default function ExcursionsListScreen() {
             ]}
           >
             <Icon
-              name={selectedKit?.id === kit.id ? "check-circle" : "circle"}
+              name={selectedKit?.id === kit.id ? "check-circle" : "minus-circle"}
               size={20}
               color={selectedKit?.id === kit.id ? theme.primary : theme.textSecondary}
             />
@@ -640,7 +640,7 @@ export default function ExcursionsListScreen() {
             navigation.navigate('RadioGuides' as never);
           }}
         >
-          <Icon name="radio" size={20} color={theme.primary} />
+          <Icon name="mic" size={20} color={theme.primary} />
         </Pressable>
         <Pressable
           style={({ pressed }) => [
