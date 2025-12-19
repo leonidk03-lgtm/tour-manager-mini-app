@@ -1,4 +1,4 @@
-import { useState, useMemo } from "react";
+import { useState, useMemo, useEffect } from "react";
 import {
   View,
   StyleSheet,
@@ -40,16 +40,18 @@ export default function AddRentalOrderScreen() {
   const [showClientPicker, setShowClientPicker] = useState(false);
 
   useEffect(() => {
-    if (selectedClient) {
-      const updatedClient = rentalClients.find(c => c.id === selectedClient.id);
+    setSelectedClient(prev => {
+      if (!prev) return prev;
+      const updatedClient = rentalClients.find(c => c.id === prev.id);
       if (updatedClient && (
-        updatedClient.assignedManagerId !== selectedClient.assignedManagerId ||
-        updatedClient.assignedManagerName !== selectedClient.assignedManagerName
+        updatedClient.assignedManagerId !== prev.assignedManagerId ||
+        updatedClient.assignedManagerName !== prev.assignedManagerName
       )) {
-        setSelectedClient(updatedClient);
+        return updatedClient;
       }
-    }
-  }, [rentalClients, selectedClient]);
+      return prev;
+    });
+  }, [rentalClients]);
   const [clientSearch, setClientSearch] = useState("");
 
   const [startDate, setStartDate] = useState(new Date());
