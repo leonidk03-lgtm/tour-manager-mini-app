@@ -113,6 +113,7 @@ interface RentalContextType {
   getManagerCommissions: (managerId: string) => RentalCommission[];
   markCommissionPaid: (commissionId: string) => Promise<void>;
   markManagerCommissionsPaid: (managerId: string) => Promise<void>;
+  payManagerCommissions: (managerId: string, amount: number) => Promise<void>;
   refreshData: () => Promise<void>;
 }
 
@@ -577,6 +578,76 @@ export function RentalProvider({ children }: { children: ReactNode }) {
     await fetchRentalCommissions();
   };
 
+  const payManagerCommissions = async (managerId: string, amount: number) => {
+    const pendingCommissions = rentalCommissions
+      .filter(c => c.recipientId === managerId && c.status === 'pending')
+      .sort((a, b) => new Date(a.createdAt).getTime() - new Date(b.createdAt).getTime());
+
+    if (pendingCommissions.length === 0) return;
+
+    let remainingAmount = amount;
+    const now = new Date().toISOString();
+    const commissionsToMarkPaid: string[] = [];
+    let commissionToSplit: { id: string; paidPortion: number; remainingPortion: number; original: RentalCommission } | null = null;
+
+    for (const commission of pendingCommissions) {
+      if (remainingAmount <= 0) break;
+
+      if (remainingAmount >= commission.amount) {
+        commissionsToMarkPaid.push(commission.id);
+        remainingAmount -= commission.amount;
+      } else {
+        commissionToSplit = {
+          id: commission.id,
+          paidPortion: remainingAmount,
+          remainingPortion: commission.amount - remainingAmount,
+          original: commission,
+        };
+        remainingAmount = 0;
+      }
+    }
+
+    if (commissionsToMarkPaid.length > 0) {
+      const { error } = await supabase
+        .from('rental_commissions')
+        .update({ status: 'paid', paid_at: now })
+        .in('id', commissionsToMarkPaid);
+
+      if (error) throw error;
+    }
+
+    if (commissionToSplit) {
+      const { error: updateError } = await supabase
+        .from('rental_commissions')
+        .update({ 
+          status: 'paid', 
+          paid_at: now,
+          amount: commissionToSplit.paidPortion 
+        })
+        .eq('id', commissionToSplit.id);
+
+      if (updateError) throw updateError;
+
+      const { error: insertError } = await supabase
+        .from('rental_commissions')
+        .insert({
+          order_id: commissionToSplit.original.orderId,
+          order_number: commissionToSplit.original.orderNumber,
+          recipient_id: commissionToSplit.original.recipientId,
+          recipient_name: commissionToSplit.original.recipientName,
+          role: commissionToSplit.original.role,
+          amount: commissionToSplit.remainingPortion,
+          basis_amount: commissionToSplit.original.basisAmount,
+          percentage: commissionToSplit.original.percentage,
+          status: 'pending',
+        });
+
+      if (insertError) throw insertError;
+    }
+
+    await fetchRentalCommissions();
+  };
+
   const createCommissionsForOrder = async (orderId: string, totalPrice: number) => {
     const order = rentalOrders.find(o => o.id === orderId);
     if (!order) return;
@@ -679,6 +750,7 @@ export function RentalProvider({ children }: { children: ReactNode }) {
         getManagerCommissions,
         markCommissionPaid,
         markManagerCommissionsPaid,
+        payManagerCommissions,
         refreshData,
       }}
     >

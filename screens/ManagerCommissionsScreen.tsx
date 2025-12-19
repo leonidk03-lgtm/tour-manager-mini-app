@@ -1,5 +1,5 @@
 import { useState, useMemo } from "react";
-import { View, StyleSheet, Pressable, SectionList, Alert } from "react-native";
+import { View, StyleSheet, Pressable, SectionList, Alert, Modal, TextInput, KeyboardAvoidingView, Platform } from "react-native";
 import { useSafeAreaInsets } from "react-native-safe-area-context";
 import { useRoute, RouteProp } from "@react-navigation/native";
 import { Icon } from "@/components/Icon";
@@ -28,8 +28,10 @@ export default function ManagerCommissionsScreen() {
   const route = useRoute<RouteParams>();
   const { paddingTop, scrollInsetBottom } = useScreenInsets();
   const { isAdmin } = useAuth();
-  const { rentalCommissions, markManagerCommissionsPaid } = useRental();
+  const { rentalCommissions, markManagerCommissionsPaid, payManagerCommissions } = useRental();
   const [isPaying, setIsPaying] = useState(false);
+  const [showPayModal, setShowPayModal] = useState(false);
+  const [payAmount, setPayAmount] = useState("");
 
   const { managerId, managerName } = route.params;
 
@@ -97,29 +99,38 @@ export default function ManagerCommissionsScreen() {
     });
   };
 
-  const handlePayAll = () => {
-    Alert.alert(
-      "Выплатить баланс",
-      `Выплатить ${pendingCommissions.length} комиссий на сумму ${totalBalance.toLocaleString("ru-RU")}₽?`,
-      [
-        { text: "Отмена", style: "cancel" },
-        {
-          text: "Выплатить",
-          onPress: async () => {
-            hapticFeedback.medium();
-            setIsPaying(true);
-            try {
-              await markManagerCommissionsPaid(managerId);
-            } catch (error) {
-              console.error("Failed to pay commissions:", error);
-              Alert.alert("Ошибка", "Не удалось выплатить комиссии");
-            } finally {
-              setIsPaying(false);
-            }
-          },
-        },
-      ]
-    );
+  const handleOpenPayModal = () => {
+    setPayAmount(totalBalance.toString());
+    setShowPayModal(true);
+  };
+
+  const handleConfirmPay = async () => {
+    const amount = parseFloat(payAmount.replace(",", "."));
+    if (isNaN(amount) || amount <= 0) {
+      Alert.alert("Ошибка", "Введите корректную сумму");
+      return;
+    }
+    if (amount > totalBalance) {
+      Alert.alert("Ошибка", "Сумма не может превышать баланс");
+      return;
+    }
+
+    hapticFeedback.medium();
+    setIsPaying(true);
+    setShowPayModal(false);
+
+    try {
+      if (amount === totalBalance) {
+        await markManagerCommissionsPaid(managerId);
+      } else {
+        await payManagerCommissions(managerId, amount);
+      }
+    } catch (error) {
+      console.error("Failed to pay commissions:", error);
+      Alert.alert("Ошибка", "Не удалось выплатить комиссии");
+    } finally {
+      setIsPaying(false);
+    }
   };
 
   const renderSectionHeader = ({ section }: { section: MonthSection }) => (
@@ -170,7 +181,7 @@ export default function ManagerCommissionsScreen() {
 
         {isAdmin && totalBalance > 0 && activeTab === "accruals" ? (
           <Pressable
-            onPress={handlePayAll}
+            onPress={handleOpenPayModal}
             disabled={isPaying}
             style={({ pressed }) => [
               styles.payButton,
@@ -182,7 +193,7 @@ export default function ManagerCommissionsScreen() {
           >
             <Icon name="check-circle" size={18} color="#fff" />
             <ThemedText style={styles.payButtonText}>
-              {isPaying ? "Выплата..." : "Выплатить баланс"}
+              {isPaying ? "Выплата..." : "Выплатить"}
             </ThemedText>
           </Pressable>
         ) : null}
@@ -250,6 +261,78 @@ export default function ManagerCommissionsScreen() {
         }
         contentContainerStyle={{ paddingBottom: scrollInsetBottom }}
       />
+
+      <Modal
+        visible={showPayModal}
+        transparent
+        animationType="fade"
+        onRequestClose={() => setShowPayModal(false)}
+      >
+        <KeyboardAvoidingView 
+          behavior={Platform.OS === "ios" ? "padding" : "height"}
+          style={styles.modalOverlay}
+        >
+          <Pressable 
+            style={styles.modalBackdrop} 
+            onPress={() => setShowPayModal(false)} 
+          />
+          <View style={[styles.modalContent, { backgroundColor: theme.backgroundSecondary }]}>
+            <ThemedText style={styles.modalTitle}>Выплата комиссии</ThemedText>
+            
+            <View style={styles.modalBalanceRow}>
+              <ThemedText style={[styles.modalLabel, { color: theme.textSecondary }]}>
+                Баланс к выплате:
+              </ThemedText>
+              <ThemedText style={[styles.modalBalanceValue, { color: theme.primary }]}>
+                {totalBalance.toLocaleString("ru-RU")}₽
+              </ThemedText>
+            </View>
+
+            <ThemedText style={[styles.modalLabel, { color: theme.textSecondary }]}>
+              Сумма выплаты:
+            </ThemedText>
+            <TextInput
+              style={[
+                styles.modalInput,
+                { 
+                  backgroundColor: theme.backgroundRoot,
+                  color: theme.text,
+                  borderColor: theme.border,
+                },
+              ]}
+              value={payAmount}
+              onChangeText={setPayAmount}
+              keyboardType="numeric"
+              placeholder="Введите сумму"
+              placeholderTextColor={theme.textSecondary}
+              selectTextOnFocus
+            />
+
+            <View style={styles.modalButtons}>
+              <Pressable
+                onPress={() => setShowPayModal(false)}
+                style={({ pressed }) => [
+                  styles.modalButton,
+                  { backgroundColor: theme.backgroundRoot, opacity: pressed ? 0.7 : 1 },
+                ]}
+              >
+                <ThemedText style={styles.modalButtonText}>Отмена</ThemedText>
+              </Pressable>
+              <Pressable
+                onPress={handleConfirmPay}
+                style={({ pressed }) => [
+                  styles.modalButton,
+                  { backgroundColor: theme.success, opacity: pressed ? 0.7 : 1 },
+                ]}
+              >
+                <ThemedText style={[styles.modalButtonText, { color: "#fff" }]}>
+                  Выплатить
+                </ThemedText>
+              </Pressable>
+            </View>
+          </View>
+        </KeyboardAvoidingView>
+      </Modal>
     </View>
   );
 }
@@ -376,5 +459,63 @@ const styles = StyleSheet.create({
   emptyText: {
     fontSize: 16,
     marginTop: Spacing.md,
+  },
+  modalOverlay: {
+    flex: 1,
+    justifyContent: "center",
+    alignItems: "center",
+  },
+  modalBackdrop: {
+    ...StyleSheet.absoluteFillObject,
+    backgroundColor: "rgba(0,0,0,0.6)",
+  },
+  modalContent: {
+    width: "85%",
+    maxWidth: 400,
+    borderRadius: BorderRadius.md,
+    padding: Spacing.lg,
+  },
+  modalTitle: {
+    fontSize: 18,
+    fontWeight: "600",
+    marginBottom: Spacing.lg,
+    textAlign: "center",
+  },
+  modalBalanceRow: {
+    flexDirection: "row",
+    justifyContent: "space-between",
+    alignItems: "center",
+    marginBottom: Spacing.md,
+  },
+  modalLabel: {
+    fontSize: 14,
+    marginBottom: Spacing.xs,
+  },
+  modalBalanceValue: {
+    fontSize: 18,
+    fontWeight: "700",
+  },
+  modalInput: {
+    borderWidth: 1,
+    borderRadius: BorderRadius.sm,
+    paddingHorizontal: Spacing.md,
+    paddingVertical: Spacing.sm,
+    fontSize: 18,
+    fontWeight: "600",
+    marginBottom: Spacing.lg,
+  },
+  modalButtons: {
+    flexDirection: "row",
+    gap: Spacing.sm,
+  },
+  modalButton: {
+    flex: 1,
+    paddingVertical: Spacing.sm,
+    borderRadius: BorderRadius.sm,
+    alignItems: "center",
+  },
+  modalButtonText: {
+    fontSize: 16,
+    fontWeight: "600",
   },
 });
