@@ -143,9 +143,10 @@ export default function RentalClientsScreen() {
       setShowModal(false);
       resetForm();
       hapticFeedback.success();
-    } catch (error) {
+    } catch (error: any) {
       console.error("Error saving client:", error);
-      Alert.alert("Ошибка", "Не удалось сохранить клиента");
+      const errorMessage = error?.message || error?.toString() || "Неизвестная ошибка";
+      Alert.alert("Ошибка", `Не удалось сохранить клиента: ${errorMessage}`);
     }
   };
 
