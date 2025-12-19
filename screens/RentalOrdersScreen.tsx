@@ -16,6 +16,7 @@ import { useNavigation, NavigationProp } from "@react-navigation/native";
 import { Icon } from "@/components/Icon";
 import { ThemedText } from "@/components/ThemedText";
 import { ThemedView } from "@/components/ThemedView";
+import { PaymentModal } from "@/components/PaymentModal";
 import { Spacing, BorderRadius } from "@/constants/theme";
 import { useTheme } from "@/hooks/useTheme";
 import { useRental, RentalOrder, RentalOrderStatus } from "@/contexts/RentalContext";
@@ -36,10 +37,12 @@ export default function RentalOrdersScreen() {
   const { theme } = useTheme();
   const navigation = useNavigation<NavigationProp<SettingsStackParamList>>();
   const insets = useSafeAreaInsets();
-  const { rentalOrders, rentalClients, updateRentalOrder } = useRental();
+  const { rentalOrders, rentalClients, updateRentalOrder, addRentalPayment, getOrderPayments } = useRental();
 
   const [searchQuery, setSearchQuery] = useState("");
   const [activeFilter, setActiveFilter] = useState<FilterType>("срок");
+  const [paymentModalVisible, setPaymentModalVisible] = useState(false);
+  const [selectedOrderForPayment, setSelectedOrderForPayment] = useState<RentalOrder | null>(null);
 
   const formatDate = (dateStr: string): string => {
     const date = new Date(dateStr);
@@ -141,6 +144,20 @@ export default function RentalOrdersScreen() {
     }
   };
 
+  const handleStatusSelection = async (order: RentalOrder, newStatus: RentalOrderStatus) => {
+    if (newStatus === "completed") {
+      setSelectedOrderForPayment(order);
+      setPaymentModalVisible(true);
+    } else {
+      try {
+        await updateRentalOrder(order.id, { status: newStatus });
+        hapticFeedback.success();
+      } catch (error) {
+        console.error("Error updating status:", error);
+      }
+    }
+  };
+
   const handleStatusChange = (order: RentalOrder) => {
     hapticFeedback.selection();
     const statuses: RentalOrderStatus[] = ["new", "issued", "returned", "completed", "cancelled"];
@@ -152,15 +169,10 @@ export default function RentalOrdersScreen() {
           options: ["Отмена", ...statusLabels],
           cancelButtonIndex: 0,
         },
-        async (buttonIndex) => {
+        (buttonIndex) => {
           if (buttonIndex > 0) {
             const newStatus = statuses[buttonIndex - 1];
-            try {
-              await updateRentalOrder(order.id, { status: newStatus });
-              hapticFeedback.success();
-            } catch (error) {
-              console.error("Error updating status:", error);
-            }
+            handleStatusSelection(order, newStatus);
           }
         }
       );
@@ -169,17 +181,32 @@ export default function RentalOrdersScreen() {
         { text: "Отмена", style: "cancel" },
         ...statuses.map(status => ({
           text: STATUS_CONFIG[status].label,
-          onPress: async () => {
-            try {
-              await updateRentalOrder(order.id, { status });
-              hapticFeedback.success();
-            } catch (error) {
-              console.error("Error updating status:", error);
-            }
-          },
+          onPress: () => handleStatusSelection(order, status),
         })),
       ]);
     }
+  };
+
+  const handlePaymentSubmit = async (data: { amount: number; method: string; notes: string }) => {
+    if (!selectedOrderForPayment) return;
+    
+    await addRentalPayment({
+      orderId: selectedOrderForPayment.id,
+      type: "final",
+      amount: data.amount,
+      notes: data.notes || `Оплата (${data.method === "cash" ? "наличные" : data.method === "card" ? "карта" : "перевод"})`,
+    });
+    
+    await updateRentalOrder(selectedOrderForPayment.id, { status: "completed" });
+    setPaymentModalVisible(false);
+    setSelectedOrderForPayment(null);
+  };
+
+  const getOrderTotalPaid = (orderId: string): number => {
+    const payments = getOrderPayments(orderId);
+    return payments
+      .filter(p => p.type !== "refund" && p.type !== "service_expense")
+      .reduce((sum, p) => sum + p.amount, 0);
   };
 
   const renderOrderItem = ({ item }: { item: RentalOrder }) => {
@@ -370,6 +397,21 @@ export default function RentalOrdersScreen() {
       >
         <Icon name="plus" size={24} color="#fff" />
       </Pressable>
+
+      {selectedOrderForPayment ? (
+        <PaymentModal
+          visible={paymentModalVisible}
+          onClose={() => {
+            setPaymentModalVisible(false);
+            setSelectedOrderForPayment(null);
+          }}
+          onSubmit={handlePaymentSubmit}
+          orderTotal={selectedOrderForPayment.totalPrice}
+          totalPaid={getOrderTotalPaid(selectedOrderForPayment.id)}
+          clientName={selectedOrderForPayment.clientName || getClientName(selectedOrderForPayment.clientId)}
+          orderNumber={selectedOrderForPayment.orderNumber}
+        />
+      ) : null}
     </ThemedView>
   );
 }
