@@ -189,7 +189,16 @@ export default function AddRentalOrderScreen() {
       navigation.goBack();
     } catch (error: unknown) {
       console.error("Error saving order:", error);
-      const errorMessage = error instanceof Error ? error.message : String(error);
+      let errorMessage = "Неизвестная ошибка";
+      if (error instanceof Error) {
+        errorMessage = error.message;
+      } else if (error && typeof error === "object" && "message" in error) {
+        errorMessage = String((error as { message: unknown }).message);
+      } else if (error && typeof error === "object" && "details" in error) {
+        errorMessage = String((error as { details: unknown }).details);
+      } else if (typeof error === "string") {
+        errorMessage = error;
+      }
       Alert.alert("Ошибка", `${isEditMode ? "Не удалось обновить заказ" : "Не удалось создать заказ"}: ${errorMessage}`);
     }
   };
