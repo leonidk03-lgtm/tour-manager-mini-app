@@ -20,6 +20,7 @@ import { PaymentModal } from "@/components/PaymentModal";
 import { Spacing, BorderRadius } from "@/constants/theme";
 import { useTheme } from "@/hooks/useTheme";
 import { useRental, RentalOrder, RentalOrderStatus } from "@/contexts/RentalContext";
+import { useAuth } from "@/contexts/AuthContext";
 import { SettingsStackParamList } from "@/navigation/SettingsStackNavigator";
 import { hapticFeedback } from "@/utils/haptics";
 
@@ -38,6 +39,7 @@ export default function RentalOrdersScreen() {
   const navigation = useNavigation<NavigationProp<SettingsStackParamList>>();
   const insets = useSafeAreaInsets();
   const { rentalOrders, rentalClients, updateRentalOrder, addRentalPayment, getOrderPayments } = useRental();
+  const { managers } = useAuth();
 
   const [searchQuery, setSearchQuery] = useState("");
   const [activeFilter, setActiveFilter] = useState<FilterType>("срок");
@@ -214,6 +216,10 @@ export default function RentalOrdersScreen() {
     const clientName = item.clientName || getClientName(item.clientId);
     const clientPhone = item.clientPhone || getClientPhone(item.clientId);
 
+    const client = rentalClients.find(c => c.id === item.clientId);
+    const ownerManager = client?.assignedManagerId ? managers.find(m => m.id === client.assignedManagerId) : null;
+    const executorManager = item.executorId ? managers.find(m => m.id === item.executorId) : null;
+
     const equipmentParts = [];
     if (item.kitCount > 0) equipmentParts.push(`${item.kitCount} комп.`);
     if (item.transmitterCount > 0) equipmentParts.push(`${item.transmitterCount} пер.`);
@@ -264,6 +270,26 @@ export default function RentalOrdersScreen() {
                 {equipmentText}
               </ThemedText>
             </View>
+            {(ownerManager || executorManager) ? (
+              <View style={styles.managersRow}>
+                {ownerManager ? (
+                  <View style={styles.managerTag}>
+                    <Icon name="user" size={12} color={theme.primary} />
+                    <ThemedText style={[styles.managerTagText, { color: theme.textSecondary }]}>
+                      {ownerManager.display_name?.split(" ")[0] || "Менеджер"}
+                    </ThemedText>
+                  </View>
+                ) : null}
+                {executorManager ? (
+                  <View style={styles.managerTag}>
+                    <Icon name="truck" size={12} color={theme.success} />
+                    <ThemedText style={[styles.managerTagText, { color: theme.textSecondary }]}>
+                      {executorManager.display_name?.split(" ")[0] || "Исполнитель"}
+                    </ThemedText>
+                  </View>
+                ) : null}
+              </View>
+            ) : null}
           </View>
           <View style={styles.orderPriceBlock}>
             <ThemedText style={[styles.priceText, { color: theme.primary }]}>
@@ -512,6 +538,21 @@ const styles = StyleSheet.create({
     alignItems: "center",
     flexWrap: "wrap",
     gap: Spacing.sm,
+  },
+  managersRow: {
+    flexDirection: "row",
+    alignItems: "center",
+    flexWrap: "wrap",
+    gap: Spacing.sm,
+    marginTop: 4,
+  },
+  managerTag: {
+    flexDirection: "row",
+    alignItems: "center",
+    gap: 4,
+  },
+  managerTagText: {
+    fontSize: 13,
   },
   dateText: {
     fontSize: 15,
