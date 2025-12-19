@@ -187,9 +187,10 @@ export default function AddRentalOrderScreen() {
 
       hapticFeedback.success();
       navigation.goBack();
-    } catch (error) {
+    } catch (error: unknown) {
       console.error("Error saving order:", error);
-      Alert.alert("Ошибка", isEditMode ? "Не удалось обновить заказ" : "Не удалось создать заказ");
+      const errorMessage = error instanceof Error ? error.message : String(error);
+      Alert.alert("Ошибка", `${isEditMode ? "Не удалось обновить заказ" : "Не удалось создать заказ"}: ${errorMessage}`);
     }
   };
 
