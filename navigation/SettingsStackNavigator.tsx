@@ -21,6 +21,7 @@ import RentalOrdersScreen from "@/screens/RentalOrdersScreen";
 import AddRentalOrderScreen from "@/screens/AddRentalOrderScreen";
 import RentalOrderDetailScreen from "@/screens/RentalOrderDetailScreen";
 import RentalClientDetailScreen from "@/screens/RentalClientDetailScreen";
+import RentalCommissionsScreen from "@/screens/RentalCommissionsScreen";
 import { getCommonScreenOptions } from "./screenOptions";
 import { useTheme } from "@/hooks/useTheme";
 import { Profile } from "@/lib/supabase";
@@ -48,6 +49,7 @@ export type SettingsStackParamList = {
   RentalClientDetail: { clientId: string };
   RentalOrderDetail: { orderId: string };
   AddRentalOrder: { clientId?: string } | undefined;
+  RentalCommissions: undefined;
 };
 
 const Stack = createNativeStackNavigator<SettingsStackParamList>();
@@ -169,6 +171,11 @@ export default function SettingsStackNavigator() {
         name="RentalClientDetail"
         component={RentalClientDetailScreen}
         options={{ title: "Клиент" }}
+      />
+      <Stack.Screen
+        name="RentalCommissions"
+        component={RentalCommissionsScreen}
+        options={{ title: "Комиссии" }}
       />
     </Stack.Navigator>
   );

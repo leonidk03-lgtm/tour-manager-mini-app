@@ -38,13 +38,16 @@ export default function ManagerDetailScreen() {
   const route = useRoute<RouteProp<SettingsStackParamList, "ManagerDetail">>();
   const { manager } = route.params;
   const { excursions, transactions, tourTypes, additionalServices, radioGuideAssignments, radioGuideKits } = useData();
-  const { sendPasswordReset, updateManagerDisplayName, updateManagerPermissions, refreshManagers, isAdmin, managers } = useAuth();
+  const { sendPasswordReset, updateManagerDisplayName, updateManagerPermissions, updateManagerCommissions, refreshManagers, isAdmin, managers } = useAuth();
   const [period, setPeriod] = useState<PeriodFilter>("all");
   const [isEditingName, setIsEditingName] = useState(false);
   const [newDisplayName, setNewDisplayName] = useState(manager.display_name);
   const [isSaving, setIsSaving] = useState(false);
   const [currentManager, setCurrentManager] = useState(manager);
   const [showPermissions, setShowPermissions] = useState(false);
+  const [showCommissions, setShowCommissions] = useState(false);
+  const [ownerCommission, setOwnerCommission] = useState(String(manager.owner_commission_percent ?? 20));
+  const [executorCommission, setExecutorCommission] = useState(String(manager.executor_commission_percent ?? 10));
 
   const latestManager = useMemo(() => {
     return managers.find(m => m.id === manager.id) || currentManager;
@@ -272,16 +275,35 @@ export default function ManagerDetailScreen() {
             </View>
             
             {currentManager.role !== 'admin' ? (
-              <Pressable
-                style={[styles.permissionsButton, { backgroundColor: theme.backgroundSecondary }]}
-                onPress={() => setShowPermissions(true)}
-              >
-                <Icon name="shield" size={18} color={theme.primary} />
-                <ThemedText style={[styles.actionButtonText, { color: theme.primary }]}>
-                  Права доступа
-                </ThemedText>
-                <Icon name="chevron-right" size={18} color={theme.textSecondary} />
-              </Pressable>
+              <>
+                <Pressable
+                  style={[styles.permissionsButton, { backgroundColor: theme.backgroundSecondary }]}
+                  onPress={() => setShowPermissions(true)}
+                >
+                  <Icon name="shield" size={18} color={theme.primary} />
+                  <ThemedText style={[styles.actionButtonText, { color: theme.primary }]}>
+                    Права доступа
+                  </ThemedText>
+                  <Icon name="chevron-right" size={18} color={theme.textSecondary} />
+                </Pressable>
+                <Pressable
+                  style={[styles.permissionsButton, { backgroundColor: theme.backgroundSecondary, marginTop: Spacing.sm }]}
+                  onPress={() => {
+                    setOwnerCommission(String(latestManager.owner_commission_percent ?? 20));
+                    setExecutorCommission(String(latestManager.executor_commission_percent ?? 10));
+                    setShowCommissions(true);
+                  }}
+                >
+                  <Icon name="percent" size={18} color={theme.success} />
+                  <ThemedText style={[styles.actionButtonText, { color: theme.success }]}>
+                    Комиссии
+                  </ThemedText>
+                  <ThemedText style={{ color: theme.textSecondary, marginLeft: 'auto', marginRight: Spacing.sm }}>
+                    {latestManager.owner_commission_percent ?? 20}% / {latestManager.executor_commission_percent ?? 10}%
+                  </ThemedText>
+                  <Icon name="chevron-right" size={18} color={theme.textSecondary} />
+                </Pressable>
+              </>
             ) : null}
           </>
         ) : null}
@@ -412,6 +434,96 @@ export default function ManagerDetailScreen() {
               >
                 <ThemedText style={{ color: theme.buttonText }}>Готово</ThemedText>
               </Pressable>
+            </ThemedView>
+          </View>
+        </Modal>
+
+        <Modal
+          visible={showCommissions}
+          transparent
+          animationType="fade"
+          onRequestClose={() => setShowCommissions(false)}
+        >
+          <View style={styles.modalOverlay}>
+            <ThemedView style={[styles.modalContent, { backgroundColor: theme.backgroundSecondary }]}>
+              <ThemedText style={styles.modalTitle}>Настройка комиссий</ThemedText>
+              <ThemedText style={[styles.permissionsSubtitle, { color: theme.textSecondary, marginBottom: Spacing.md }]}>
+                {latestManager.display_name}
+              </ThemedText>
+              
+              <View style={styles.commissionRow}>
+                <View style={styles.commissionLabel}>
+                  <ThemedText style={styles.permissionLabel}>Владелец клиента</ThemedText>
+                  <ThemedText style={[styles.permissionDescription, { color: theme.textSecondary }]}>
+                    Комиссия за заказы своих клиентов
+                  </ThemedText>
+                </View>
+                <View style={[styles.commissionInputContainer, { backgroundColor: theme.backgroundTertiary, borderColor: theme.border }]}>
+                  <TextInput
+                    style={[styles.commissionInput, { color: theme.text }]}
+                    value={ownerCommission}
+                    onChangeText={setOwnerCommission}
+                    keyboardType="numeric"
+                    maxLength={3}
+                    placeholderTextColor={theme.textSecondary}
+                  />
+                  <ThemedText style={{ color: theme.textSecondary }}>%</ThemedText>
+                </View>
+              </View>
+
+              <View style={styles.commissionRow}>
+                <View style={styles.commissionLabel}>
+                  <ThemedText style={styles.permissionLabel}>Исполнитель</ThemedText>
+                  <ThemedText style={[styles.permissionDescription, { color: theme.textSecondary }]}>
+                    Комиссия за доставку/выдачу
+                  </ThemedText>
+                </View>
+                <View style={[styles.commissionInputContainer, { backgroundColor: theme.backgroundTertiary, borderColor: theme.border }]}>
+                  <TextInput
+                    style={[styles.commissionInput, { color: theme.text }]}
+                    value={executorCommission}
+                    onChangeText={setExecutorCommission}
+                    keyboardType="numeric"
+                    maxLength={3}
+                    placeholderTextColor={theme.textSecondary}
+                  />
+                  <ThemedText style={{ color: theme.textSecondary }}>%</ThemedText>
+                </View>
+              </View>
+
+              <View style={styles.modalButtons}>
+                <Pressable
+                  style={[styles.modalButton, { backgroundColor: theme.backgroundTertiary }]}
+                  onPress={() => setShowCommissions(false)}
+                >
+                  <ThemedText>Отмена</ThemedText>
+                </Pressable>
+                <Pressable
+                  style={[styles.modalButton, { backgroundColor: theme.primary }]}
+                  onPress={async () => {
+                    const owner = parseInt(ownerCommission, 10);
+                    const executor = parseInt(executorCommission, 10);
+                    if (isNaN(owner) || isNaN(executor) || owner < 0 || executor < 0 || owner > 100 || executor > 100) {
+                      Alert.alert("Ошибка", "Введите корректные проценты (0-100)");
+                      return;
+                    }
+                    setIsSaving(true);
+                    const { error } = await updateManagerCommissions(manager.id, owner, executor);
+                    setIsSaving(false);
+                    if (error) {
+                      Alert.alert("Ошибка", error);
+                    } else {
+                      setShowCommissions(false);
+                      await refreshManagers();
+                    }
+                  }}
+                  disabled={isSaving}
+                >
+                  <ThemedText style={{ color: theme.buttonText }}>
+                    {isSaving ? "Сохранение..." : "Сохранить"}
+                  </ThemedText>
+                </Pressable>
+              </View>
             </ThemedView>
           </View>
         </Modal>
@@ -888,5 +1000,29 @@ const styles = StyleSheet.create({
   },
   childPermissionLabel: {
     fontSize: 14,
+  },
+  commissionRow: {
+    flexDirection: "row",
+    justifyContent: "space-between",
+    alignItems: "center",
+    marginBottom: Spacing.md,
+  },
+  commissionLabel: {
+    flex: 1,
+    marginRight: Spacing.md,
+  },
+  commissionInputContainer: {
+    flexDirection: "row",
+    alignItems: "center",
+    borderWidth: 1,
+    borderRadius: BorderRadius.sm,
+    paddingHorizontal: Spacing.md,
+    paddingVertical: Spacing.sm,
+    gap: Spacing.xs,
+  },
+  commissionInput: {
+    width: 40,
+    fontSize: 16,
+    textAlign: "center",
   },
 });

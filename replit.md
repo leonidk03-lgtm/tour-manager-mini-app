@@ -41,6 +41,25 @@ Key screens include:
 - **NotificationsScreen**: In-app notification center and settings.
 - **WarehouseScreen**: Inventory management for equipment and consumables, including low stock alerts and movement tracking.
 
+### Rental CRM Module
+The rental module provides comprehensive equipment rental management:
+- **RentalClientsScreen**: Client management (individuals and companies) with contact info and assigned managers.
+- **RentalOrdersScreen**: Order list with status filters, quick status changes, and phone contact options (call, WhatsApp, Telegram).
+- **RentalOrderDetailScreen**: Detailed order view with payment history, equipment tracking, and status management.
+- **AddRentalOrderScreen**: Order creation with client selection, equipment counts, pricing, and executor assignment.
+- **RentalCommissionsScreen**: View and manage manager commissions from completed orders.
+
+### Commission System
+Automatic commission calculation when orders are marked as paid:
+- **Owner Commission**: Percentage earned by the manager who owns the client (default 20%).
+- **Executor Commission**: Percentage earned by the manager who delivers/picks up equipment (default 10%).
+- If the same manager is both owner and executor, percentages combine.
+- Commission percentages are configurable per manager in the Admin Panel (ManagerDetailScreen).
+- Commissions are tracked in `rental_commissions` table with pending/paid status.
+- Admins can mark commissions as paid from RentalCommissionsScreen.
+
+**Database Setup**: Execute `sql/rental_commissions_setup.sql` in Supabase SQL Editor to create the commissions table and add commission fields to profiles.
+
 ### Platform-Specific Considerations
 The app implements platform-specific UI adjustments (e.g., iOS blur effects, Android edge-to-edge layout) and web fallbacks for native-only features. Replit deployment includes custom dev and build scripts with environment variable usage.
 

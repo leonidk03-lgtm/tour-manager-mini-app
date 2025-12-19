@@ -20,6 +20,7 @@ interface AuthContextType {
   sendPasswordReset: (email: string) => Promise<{ error: string | null }>;
   updateManagerDisplayName: (managerId: string, displayName: string) => Promise<{ error: string | null }>;
   updateManagerPermissions: (managerId: string, permissions: ManagerPermissions) => Promise<{ error: string | null }>;
+  updateManagerCommissions: (managerId: string, ownerPercent: number, executorPercent: number) => Promise<{ error: string | null }>;
   managers: Profile[];
   refreshManagers: () => Promise<void>;
 }
@@ -385,6 +386,36 @@ export function AuthProvider({ children }: { children: ReactNode }) {
     }
   };
 
+  const updateManagerCommissions = async (
+    managerId: string,
+    ownerPercent: number,
+    executorPercent: number
+  ): Promise<{ error: string | null }> => {
+    if (!isAdmin) {
+      return { error: 'Только администратор может изменять комиссии' };
+    }
+
+    try {
+      const { error } = await supabase
+        .from('profiles')
+        .update({
+          owner_commission_percent: ownerPercent,
+          executor_commission_percent: executorPercent,
+          updated_at: new Date().toISOString()
+        })
+        .eq('id', managerId);
+
+      if (error) {
+        return { error: error.message };
+      }
+
+      await refreshManagers();
+      return { error: null };
+    } catch (err) {
+      return { error: 'Ошибка при обновлении комиссий' };
+    }
+  };
+
   return (
     <AuthContext.Provider
       value={{
@@ -405,6 +436,7 @@ export function AuthProvider({ children }: { children: ReactNode }) {
         sendPasswordReset,
         updateManagerDisplayName,
         updateManagerPermissions,
+        updateManagerCommissions,
         managers,
         refreshManagers,
       }}
