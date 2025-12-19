@@ -19,6 +19,7 @@ import { ScreenKeyboardAwareScrollView } from "@/components/ScreenKeyboardAwareS
 import { Spacing, BorderRadius } from "@/constants/theme";
 import { useTheme } from "@/hooks/useTheme";
 import { useRental, RentalClient } from "@/contexts/RentalContext";
+import { useAuth } from "@/contexts/AuthContext";
 import { SettingsStackParamList } from "@/navigation/SettingsStackNavigator";
 import { hapticFeedback } from "@/utils/haptics";
 
@@ -30,6 +31,7 @@ export default function AddRentalOrderScreen() {
   const route = useRoute<RouteParams>();
   const insets = useSafeAreaInsets();
   const { rentalClients, addRentalOrder } = useRental();
+  const { profile } = useAuth();
 
   const initialClientId = route.params?.clientId;
   const initialClient = initialClientId ? rentalClients.find(c => c.id === initialClientId) : null;
@@ -132,8 +134,8 @@ export default function AddRentalOrderScreen() {
         receiverNotes: receiverNotes.trim() || null,
         managerId: null,
         managerName: null,
-        executorId: null,
-        executorName: null,
+        executorId: profile?.id || null,
+        executorName: profile?.display_name || profile?.email || null,
       });
 
       hapticFeedback.success();
