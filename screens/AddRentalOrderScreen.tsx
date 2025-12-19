@@ -38,6 +38,18 @@ export default function AddRentalOrderScreen() {
 
   const [selectedClient, setSelectedClient] = useState<RentalClient | null>(initialClient || null);
   const [showClientPicker, setShowClientPicker] = useState(false);
+
+  useEffect(() => {
+    if (selectedClient) {
+      const updatedClient = rentalClients.find(c => c.id === selectedClient.id);
+      if (updatedClient && (
+        updatedClient.assignedManagerId !== selectedClient.assignedManagerId ||
+        updatedClient.assignedManagerName !== selectedClient.assignedManagerName
+      )) {
+        setSelectedClient(updatedClient);
+      }
+    }
+  }, [rentalClients, selectedClient]);
   const [clientSearch, setClientSearch] = useState("");
 
   const [startDate, setStartDate] = useState(new Date());
@@ -117,10 +129,6 @@ export default function AddRentalOrderScreen() {
     hapticFeedback.selection();
 
     try {
-      const ownerManager = selectedClient.assignedManagerId 
-        ? managers.find(m => m.id === selectedClient.assignedManagerId) 
-        : null;
-
       await addRentalOrder({
         clientId: selectedClient.id,
         status: "new",
@@ -141,7 +149,7 @@ export default function AddRentalOrderScreen() {
         executorId: profile?.id || null,
         executorName: profile?.display_name || profile?.email || null,
         ownerManagerId: selectedClient.assignedManagerId || null,
-        ownerManagerName: ownerManager?.display_name || null,
+        ownerManagerName: selectedClient.assignedManagerName || null,
       });
 
       hapticFeedback.success();
