@@ -53,7 +53,7 @@ export default function RentalOrderDetailScreen() {
   const payments = order ? getOrderPayments(order.id) : [];
   const history = order ? getOrderHistory(order.id) : [];
 
-  const ownerManager = client?.assignedManagerId ? managers.find(m => m.id === client.assignedManagerId) : null;
+  const ownerManager = order?.ownerManagerId ? managers.find(m => m.id === order.ownerManagerId) : null;
   const executorManager = order?.executorId ? managers.find(m => m.id === order.executorId) : null;
 
   const [showStatusModal, setShowStatusModal] = useState(false);
@@ -146,13 +146,20 @@ export default function RentalOrderDetailScreen() {
   };
 
   const handleManagerSelect = async (managerId: string | null) => {
-    if (!order || !client) return;
+    if (!order) return;
     hapticFeedback.selection();
+    const selectedManager = managerId ? managers.find(m => m.id === managerId) : null;
     try {
       if (managerSelectType === "owner") {
-        await updateRentalClient(client.id, { assignedManagerId: managerId });
+        await updateRentalOrder(order.id, { 
+          ownerManagerId: managerId,
+          ownerManagerName: selectedManager?.display_name || null 
+        });
       } else {
-        await updateRentalOrder(order.id, { executorId: managerId });
+        await updateRentalOrder(order.id, { 
+          executorId: managerId,
+          executorName: selectedManager?.display_name || null 
+        });
       }
       setShowManagerModal(false);
       hapticFeedback.success();
@@ -533,7 +540,7 @@ export default function RentalOrderDetailScreen() {
               </Pressable>
               {managers.map(manager => {
                 const isActive = managerSelectType === "owner"
-                  ? client?.assignedManagerId === manager.id
+                  ? order?.ownerManagerId === manager.id
                   : order?.executorId === manager.id;
                 return (
                   <Pressable

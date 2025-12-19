@@ -48,6 +48,8 @@ export interface RentalOrder {
   managerName: string | null;
   executorId: string | null;
   executorName: string | null;
+  ownerManagerId: string | null;
+  ownerManagerName: string | null;
   createdAt: string;
   updatedAt: string;
 }
@@ -197,6 +199,8 @@ export function RentalProvider({ children }: { children: ReactNode }) {
         managerName: o.manager_name,
         executorId: o.executor_id,
         executorName: o.executor_name,
+        ownerManagerId: o.owner_manager_id,
+        ownerManagerName: o.owner_manager_name,
         createdAt: o.created_at,
         updatedAt: o.updated_at,
       })));
@@ -436,6 +440,8 @@ export function RentalProvider({ children }: { children: ReactNode }) {
         manager_name: profile?.display_name || profile?.email || null,
         executor_id: order.executorId,
         executor_name: order.executorName,
+        owner_manager_id: order.ownerManagerId,
+        owner_manager_name: order.ownerManagerName,
       })
       .select()
       .single();
@@ -465,6 +471,8 @@ export function RentalProvider({ children }: { children: ReactNode }) {
     if (order.receiverNotes !== undefined) updateData.receiver_notes = order.receiverNotes;
     if (order.executorId !== undefined) updateData.executor_id = order.executorId;
     if (order.executorName !== undefined) updateData.executor_name = order.executorName;
+    if (order.ownerManagerId !== undefined) updateData.owner_manager_id = order.ownerManagerId;
+    if (order.ownerManagerName !== undefined) updateData.owner_manager_name = order.ownerManagerName;
 
     const { error } = await supabase
       .from('rental_orders')
@@ -652,11 +660,10 @@ export function RentalProvider({ children }: { children: ReactNode }) {
     const order = rentalOrders.find(o => o.id === orderId);
     if (!order) return;
 
-    const client = rentalClients.find(c => c.id === order.clientId);
-    if (!client || !client.assignedManagerId) return;
-
-    const ownerId = client.assignedManagerId;
+    const ownerId = order.ownerManagerId;
     const executorId = order.executorId;
+    
+    if (!ownerId && !executorId) return;
 
     const { data: profiles } = await supabase
       .from('profiles')

@@ -216,8 +216,7 @@ export default function RentalOrdersScreen() {
     const clientName = item.clientName || getClientName(item.clientId);
     const clientPhone = item.clientPhone || getClientPhone(item.clientId);
 
-    const client = rentalClients.find(c => c.id === item.clientId);
-    const ownerManager = client?.assignedManagerId ? managers.find(m => m.id === client.assignedManagerId) : null;
+    const ownerManager = item.ownerManagerId ? managers.find(m => m.id === item.ownerManagerId) : null;
     const executorManager = item.executorId ? managers.find(m => m.id === item.executorId) : null;
 
     const equipmentParts = [];
