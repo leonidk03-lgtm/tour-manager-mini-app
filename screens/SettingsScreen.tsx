@@ -15,7 +15,7 @@ import { hapticFeedback } from "@/utils/haptics";
 export default function SettingsScreen() {
   const { theme } = useTheme();
   const navigation = useNavigation<NavigationProp<SettingsStackParamList>>();
-  const { profile, isAdmin, isRadioDispatcher, signOut } = useAuth();
+  const { profile, isAdmin, isRadioDispatcher, hasPermission, signOut } = useAuth();
   const { radioGuidePrice, updateRadioGuidePrice } = useData();
 
   const [showPriceModal, setShowPriceModal] = useState(false);
@@ -209,19 +209,23 @@ export default function SettingsScreen() {
                 <Icon name="chevron-right" size={20} color={theme.textSecondary} />
               </View>
             </Pressable>
-            <View style={[styles.divider, { backgroundColor: theme.border }]} />
-            <Pressable
-              onPress={() => { hapticFeedback.selection(); navigation.navigate("Warehouse"); }}
-              style={({ pressed }) => ({ opacity: pressed ? 0.7 : 1 })}
-            >
-              <View style={styles.settingItem}>
-                <View style={styles.settingLeft}>
-                  <Icon name="package" size={20} color={theme.textSecondary} />
-                  <ThemedText style={styles.settingText}>Склад</ThemedText>
-                </View>
-                <Icon name="chevron-right" size={20} color={theme.textSecondary} />
-              </View>
-            </Pressable>
+            {(isAdmin || hasPermission('warehouse')) ? (
+              <>
+                <View style={[styles.divider, { backgroundColor: theme.border }]} />
+                <Pressable
+                  onPress={() => { hapticFeedback.selection(); navigation.navigate("Warehouse"); }}
+                  style={({ pressed }) => ({ opacity: pressed ? 0.7 : 1 })}
+                >
+                  <View style={styles.settingItem}>
+                    <View style={styles.settingLeft}>
+                      <Icon name="package" size={20} color={theme.textSecondary} />
+                      <ThemedText style={styles.settingText}>Склад</ThemedText>
+                    </View>
+                    <Icon name="chevron-right" size={20} color={theme.textSecondary} />
+                  </View>
+                </Pressable>
+              </>
+            ) : null}
             <View style={[styles.divider, { backgroundColor: theme.border }]} />
             <Pressable
               onPress={() => { hapticFeedback.selection(); navigation.navigate("Notifications"); }}
