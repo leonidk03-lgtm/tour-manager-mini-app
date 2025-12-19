@@ -6,6 +6,10 @@ import {
   TextInput,
   FlatList,
   SectionList,
+  Linking,
+  Alert,
+  ActionSheetIOS,
+  Platform,
 } from "react-native";
 import { useSafeAreaInsets } from "react-native-safe-area-context";
 import { useNavigation, NavigationProp } from "@react-navigation/native";
@@ -32,7 +36,7 @@ export default function RentalOrdersScreen() {
   const { theme } = useTheme();
   const navigation = useNavigation<NavigationProp<SettingsStackParamList>>();
   const insets = useSafeAreaInsets();
-  const { rentalOrders, rentalClients } = useRental();
+  const { rentalOrders, rentalClients, updateRentalOrder } = useRental();
 
   const [searchQuery, setSearchQuery] = useState("");
   const [activeFilter, setActiveFilter] = useState<FilterType>("срок");
@@ -56,7 +60,7 @@ export default function RentalOrdersScreen() {
     let result = [...rentalOrders];
 
     if (activeFilter === "срок") {
-      result = result.filter(o => isUpcoming(o) && o.status !== "completed" && o.status !== "cancelled");
+      result = result.filter(o => o.status === "new");
       result.sort((a, b) => new Date(a.startDate).getTime() - new Date(b.startDate).getTime());
     } else if (activeFilter !== "all") {
       result = result.filter(o => o.status === activeFilter);
@@ -107,9 +111,81 @@ export default function RentalOrdersScreen() {
     return rentalClients.find(c => c.id === clientId)?.phone || null;
   };
 
+  const handlePhonePress = (phone: string) => {
+    hapticFeedback.selection();
+    const cleanPhone = phone.replace(/[^0-9+]/g, "");
+    
+    if (Platform.OS === "ios") {
+      ActionSheetIOS.showActionSheetWithOptions(
+        {
+          options: ["Отмена", "Позвонить", "WhatsApp", "Telegram"],
+          cancelButtonIndex: 0,
+        },
+        (buttonIndex) => {
+          if (buttonIndex === 1) {
+            Linking.openURL(`tel:${cleanPhone}`);
+          } else if (buttonIndex === 2) {
+            Linking.openURL(`https://wa.me/${cleanPhone.replace("+", "")}`);
+          } else if (buttonIndex === 3) {
+            Linking.openURL(`tg://resolve?phone=${cleanPhone.replace("+", "")}`);
+          }
+        }
+      );
+    } else {
+      Alert.alert("Связаться", `Выберите способ связи с ${phone}`, [
+        { text: "Отмена", style: "cancel" },
+        { text: "Позвонить", onPress: () => Linking.openURL(`tel:${cleanPhone}`) },
+        { text: "WhatsApp", onPress: () => Linking.openURL(`https://wa.me/${cleanPhone.replace("+", "")}`) },
+        { text: "Telegram", onPress: () => Linking.openURL(`tg://resolve?phone=${cleanPhone.replace("+", "")}`) },
+      ]);
+    }
+  };
+
+  const handleStatusChange = (order: RentalOrder) => {
+    hapticFeedback.selection();
+    const statuses: RentalOrderStatus[] = ["new", "issued", "returned", "completed", "cancelled"];
+    const statusLabels = statuses.map(s => STATUS_CONFIG[s].label);
+    
+    if (Platform.OS === "ios") {
+      ActionSheetIOS.showActionSheetWithOptions(
+        {
+          options: ["Отмена", ...statusLabels],
+          cancelButtonIndex: 0,
+        },
+        async (buttonIndex) => {
+          if (buttonIndex > 0) {
+            const newStatus = statuses[buttonIndex - 1];
+            try {
+              await updateRentalOrder(order.id, { status: newStatus });
+              hapticFeedback.success();
+            } catch (error) {
+              console.error("Error updating status:", error);
+            }
+          }
+        }
+      );
+    } else {
+      Alert.alert("Изменить статус", "Выберите новый статус", [
+        { text: "Отмена", style: "cancel" },
+        ...statuses.map(status => ({
+          text: STATUS_CONFIG[status].label,
+          onPress: async () => {
+            try {
+              await updateRentalOrder(order.id, { status });
+              hapticFeedback.success();
+            } catch (error) {
+              console.error("Error updating status:", error);
+            }
+          },
+        })),
+      ]);
+    }
+  };
+
   const renderOrderItem = ({ item }: { item: RentalOrder }) => {
     const statusConfig = STATUS_CONFIG[item.status];
     const clientName = item.clientName || getClientName(item.clientId);
+    const clientPhone = item.clientPhone || getClientPhone(item.clientId);
 
     const equipmentParts = [];
     if (item.kitCount > 0) equipmentParts.push(`${item.kitCount} комп.`);
@@ -126,17 +202,33 @@ export default function RentalOrdersScreen() {
         ]}
       >
         <View style={styles.orderRow}>
-          <View style={[styles.statusIndicator, { backgroundColor: statusConfig.color }]} />
+          <Pressable
+            onPress={(e) => {
+              e.stopPropagation();
+              handleStatusChange(item);
+            }}
+            style={[styles.statusIndicator, { backgroundColor: statusConfig.color }]}
+          />
           <View style={styles.orderMainInfo}>
             <View style={styles.orderTopRow}>
               <ThemedText style={styles.orderNumber}>#{item.orderNumber}</ThemedText>
-              <ThemedText style={[styles.statusLabel, { color: statusConfig.color }]}>
-                {statusConfig.label}
-              </ThemedText>
+              <Pressable onPress={() => handleStatusChange(item)}>
+                <ThemedText style={[styles.statusLabel, { color: statusConfig.color }]}>
+                  {statusConfig.label}
+                </ThemedText>
+              </Pressable>
             </View>
             <ThemedText style={styles.clientName} numberOfLines={1}>
               {clientName}
             </ThemedText>
+            {clientPhone ? (
+              <Pressable onPress={() => handlePhonePress(clientPhone)} style={styles.phoneRow}>
+                <Icon name="phone" size={14} color={theme.primary} />
+                <ThemedText style={[styles.phoneText, { color: theme.primary }]}>
+                  {clientPhone}
+                </ThemedText>
+              </Pressable>
+            ) : null}
             <View style={styles.orderMetaRow}>
               <ThemedText style={[styles.dateText, { color: theme.textSecondary }]}>
                 {formatDate(item.startDate)} — {formatDate(item.endDate)}
@@ -361,7 +453,17 @@ const styles = StyleSheet.create({
   clientName: {
     fontSize: 18,
     fontWeight: "600",
+    marginBottom: 4,
+  },
+  phoneRow: {
+    flexDirection: "row",
+    alignItems: "center",
+    gap: Spacing.xs,
     marginBottom: 6,
+  },
+  phoneText: {
+    fontSize: 15,
+    fontWeight: "500",
   },
   orderMetaRow: {
     flexDirection: "row",
