@@ -28,7 +28,8 @@ export default function ManagerCommissionsScreen() {
   const route = useRoute<RouteParams>();
   const { paddingTop, scrollInsetBottom } = useScreenInsets();
   const { isAdmin } = useAuth();
-  const { rentalCommissions, markCommissionPaid } = useRental();
+  const { rentalCommissions, markManagerCommissionsPaid } = useRental();
+  const [isPaying, setIsPaying] = useState(false);
 
   const { managerId, managerName } = route.params;
 
@@ -96,20 +97,24 @@ export default function ManagerCommissionsScreen() {
     });
   };
 
-  const handleMarkPaid = async (commission: RentalCommission) => {
+  const handlePayAll = () => {
     Alert.alert(
-      "Подтверждение",
-      `Отметить комиссию ${commission.amount}₽ как выплаченную?`,
+      "Выплатить баланс",
+      `Выплатить ${pendingCommissions.length} комиссий на сумму ${totalBalance.toLocaleString("ru-RU")}₽?`,
       [
         { text: "Отмена", style: "cancel" },
         {
           text: "Выплатить",
           onPress: async () => {
             hapticFeedback.medium();
+            setIsPaying(true);
             try {
-              await markCommissionPaid(commission.id);
+              await markManagerCommissionsPaid(managerId);
             } catch (error) {
-              console.error("Failed to mark commission paid:", error);
+              console.error("Failed to pay commissions:", error);
+              Alert.alert("Ошибка", "Не удалось выплатить комиссии");
+            } finally {
+              setIsPaying(false);
             }
           },
         },
@@ -130,16 +135,7 @@ export default function ManagerCommissionsScreen() {
     const roleLabel = item.role === "owner" ? "Обработка заказа" : "Услуга в заказе";
     
     return (
-      <Pressable
-        onPress={() => isAdmin && activeTab === "accruals" ? handleMarkPaid(item) : null}
-        style={({ pressed }) => [
-          styles.row,
-          { 
-            backgroundColor: theme.backgroundSecondary,
-            opacity: pressed && isAdmin && activeTab === "accruals" ? 0.7 : 1,
-          },
-        ]}
-      >
+      <View style={[styles.row, { backgroundColor: theme.backgroundSecondary }]}>
         <View style={styles.rowDate}>
           <ThemedText style={[styles.dateText, { color: theme.textSecondary }]}>
             {formatDateTime(item.createdAt)}
@@ -160,7 +156,7 @@ export default function ManagerCommissionsScreen() {
             {item.amount.toLocaleString("ru-RU", { minimumFractionDigits: 2, maximumFractionDigits: 2 })}
           </ThemedText>
         </View>
-      </Pressable>
+      </View>
     );
   };
 
@@ -171,6 +167,25 @@ export default function ManagerCommissionsScreen() {
         <ThemedText style={[styles.balanceValue, { color: theme.text }]}>
           {totalBalance.toLocaleString("ru-RU", { minimumFractionDigits: 2, maximumFractionDigits: 2 })}₽
         </ThemedText>
+
+        {isAdmin && totalBalance > 0 && activeTab === "accruals" ? (
+          <Pressable
+            onPress={handlePayAll}
+            disabled={isPaying}
+            style={({ pressed }) => [
+              styles.payButton,
+              { 
+                backgroundColor: theme.success,
+                opacity: pressed || isPaying ? 0.7 : 1,
+              },
+            ]}
+          >
+            <Icon name="check-circle" size={18} color="#fff" />
+            <ThemedText style={styles.payButtonText}>
+              {isPaying ? "Выплата..." : "Выплатить баланс"}
+            </ThemedText>
+          </Pressable>
+        ) : null}
 
         <View style={styles.tabsContainer}>
           <Pressable
@@ -255,6 +270,21 @@ const styles = StyleSheet.create({
     fontSize: 28,
     fontWeight: "700",
     marginBottom: Spacing.md,
+  },
+  payButton: {
+    flexDirection: "row",
+    alignItems: "center",
+    justifyContent: "center",
+    paddingVertical: Spacing.sm,
+    paddingHorizontal: Spacing.lg,
+    borderRadius: BorderRadius.sm,
+    marginBottom: Spacing.md,
+    gap: Spacing.sm,
+  },
+  payButtonText: {
+    color: "#fff",
+    fontSize: 16,
+    fontWeight: "600",
   },
   tabsContainer: {
     flexDirection: "row",

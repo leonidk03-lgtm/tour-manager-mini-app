@@ -112,6 +112,7 @@ interface RentalContextType {
   getClientOrders: (clientId: string) => RentalOrder[];
   getManagerCommissions: (managerId: string) => RentalCommission[];
   markCommissionPaid: (commissionId: string) => Promise<void>;
+  markManagerCommissionsPaid: (managerId: string) => Promise<void>;
   refreshData: () => Promise<void>;
 }
 
@@ -565,6 +566,17 @@ export function RentalProvider({ children }: { children: ReactNode }) {
     await fetchRentalCommissions();
   };
 
+  const markManagerCommissionsPaid = async (managerId: string) => {
+    const { error } = await supabase
+      .from('rental_commissions')
+      .update({ status: 'paid', paid_at: new Date().toISOString() })
+      .eq('recipient_id', managerId)
+      .eq('status', 'pending');
+
+    if (error) throw error;
+    await fetchRentalCommissions();
+  };
+
   const createCommissionsForOrder = async (orderId: string, totalPrice: number) => {
     const order = rentalOrders.find(o => o.id === orderId);
     if (!order) return;
@@ -666,6 +678,7 @@ export function RentalProvider({ children }: { children: ReactNode }) {
         getClientOrders,
         getManagerCommissions,
         markCommissionPaid,
+        markManagerCommissionsPaid,
         refreshData,
       }}
     >
