@@ -299,11 +299,9 @@ export default function RentalOrderDetailScreen() {
             </View>
             <View style={styles.infoItem}>
               <ThemedText style={[styles.infoLabel, { color: theme.textSecondary }]}>Комплектов</ThemedText>
-              <ThemedText style={styles.infoValue}>{order.kitCount}</ThemedText>
-            </View>
-            <View style={styles.infoItem}>
-              <ThemedText style={[styles.infoLabel, { color: theme.textSecondary }]}>Запасных</ThemedText>
-              <ThemedText style={styles.infoValue}>{order.spareReceiverCount || 0}</ThemedText>
+              <ThemedText style={styles.infoValue}>
+                {order.kitCount}{(order.spareReceiverCount || 0) > 0 ? ` + ${order.spareReceiverCount} зап.` : ""}
+              </ThemedText>
             </View>
             <View style={styles.infoItem}>
               <ThemedText style={[styles.infoLabel, { color: theme.textSecondary }]}>Передатчик</ThemedText>
