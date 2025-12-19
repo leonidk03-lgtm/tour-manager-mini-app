@@ -88,7 +88,12 @@ export default function RentalOrdersScreen() {
   const renderOrderItem = ({ item }: { item: RentalOrder }) => {
     const statusConfig = STATUS_CONFIG[item.status];
     const clientName = item.clientName || getClientName(item.clientId);
-    const clientPhone = item.clientPhone || getClientPhone(item.clientId);
+
+    const equipmentParts = [];
+    if (item.kitCount > 0) equipmentParts.push(`${item.kitCount} комп.`);
+    if (item.transmitterCount > 0) equipmentParts.push(`${item.transmitterCount} пер.`);
+    if (item.microphoneCount > 0) equipmentParts.push(`${item.microphoneCount} мик.`);
+    const equipmentText = equipmentParts.join(" / ") || "—";
 
     return (
       <Pressable
@@ -98,71 +103,42 @@ export default function RentalOrdersScreen() {
           { backgroundColor: theme.backgroundSecondary, opacity: pressed ? 0.8 : 1 },
         ]}
       >
-        <View style={styles.orderHeader}>
-          <View style={styles.orderInfo}>
-            <View style={styles.orderTitleRow}>
-              <ThemedText style={styles.orderNumber}>
-                #{item.orderNumber}
+        <View style={styles.orderRow}>
+          <View style={[styles.statusIndicator, { backgroundColor: statusConfig.color }]} />
+          <View style={styles.orderMainInfo}>
+            <View style={styles.orderTopRow}>
+              <ThemedText style={styles.orderNumber}>#{item.orderNumber}</ThemedText>
+              <ThemedText style={[styles.statusLabel, { color: statusConfig.color }]}>
+                {statusConfig.label}
               </ThemedText>
-              <View style={[styles.statusBadge, { backgroundColor: statusConfig.color + "20" }]}>
-                <ThemedText style={[styles.statusText, { color: statusConfig.color }]}>
-                  {statusConfig.label}
-                </ThemedText>
-              </View>
             </View>
             <ThemedText style={styles.clientName} numberOfLines={1}>
               {clientName}
             </ThemedText>
-            {clientPhone ? (
-              <ThemedText style={[styles.clientPhone, { color: theme.textSecondary }]}>
-                {clientPhone}
+            <View style={styles.orderMetaRow}>
+              <ThemedText style={[styles.dateText, { color: theme.textSecondary }]}>
+                {formatDate(item.startDate)} — {formatDate(item.endDate)}
               </ThemedText>
-            ) : null}
+              <ThemedText style={[styles.equipmentText, { color: theme.textSecondary }]}>
+                {equipmentText}
+              </ThemedText>
+            </View>
           </View>
-          <View style={styles.orderPrice}>
+          <View style={styles.orderPriceBlock}>
             <ThemedText style={[styles.priceText, { color: theme.primary }]}>
-              {item.totalPrice.toLocaleString("ru-RU")}₽
+              {item.totalPrice.toLocaleString("ru-RU")}
             </ThemedText>
-            <ThemedText style={[styles.daysText, { color: theme.textSecondary }]}>
-              {item.daysCount} дн.
-            </ThemedText>
+            <ThemedText style={[styles.priceCurrency, { color: theme.primary }]}>₽</ThemedText>
           </View>
         </View>
-
-        <View style={[styles.divider, { backgroundColor: theme.border }]} />
-
-        <View style={styles.orderDetails}>
-          <View style={styles.detailRow}>
-            <Icon name="calendar" size={14} color={theme.textSecondary} />
-            <ThemedText style={[styles.detailText, { color: theme.textSecondary }]}>
-              {formatDate(item.startDate)} - {formatDate(item.endDate)}
+        {item.receiverNotes ? (
+          <View style={[styles.notesRow, { borderTopColor: theme.border }]}>
+            <Icon name="message-circle" size={12} color={theme.textSecondary} />
+            <ThemedText style={[styles.notesText, { color: theme.textSecondary }]} numberOfLines={1}>
+              {item.receiverNotes}
             </ThemedText>
           </View>
-          <View style={styles.detailRow}>
-            <Icon name="radio" size={14} color={theme.textSecondary} />
-            <ThemedText style={[styles.detailText, { color: theme.textSecondary }]}>
-              {item.kitCount} шт.
-              {item.transmitterCount > 0 ? ` • ${item.transmitterCount} перед.` : ""}
-              {item.microphoneCount > 0 ? ` • ${item.microphoneCount} микр.` : ""}
-            </ThemedText>
-          </View>
-          {item.receiverNotes ? (
-            <View style={styles.detailRow}>
-              <Icon name="file-text" size={14} color={theme.textSecondary} />
-              <ThemedText style={[styles.detailText, { color: theme.textSecondary }]} numberOfLines={1}>
-                {item.receiverNotes}
-              </ThemedText>
-            </View>
-          ) : null}
-          {item.managerName ? (
-            <View style={styles.detailRow}>
-              <Icon name="user" size={14} color={theme.textSecondary} />
-              <ThemedText style={[styles.detailText, { color: theme.textSecondary }]}>
-                {item.managerName}
-              </ThemedText>
-            </View>
-          ) : null}
-        </View>
+        ) : null}
       </Pressable>
     );
   };
@@ -301,70 +277,79 @@ const styles = StyleSheet.create({
     gap: Spacing.sm,
   },
   orderCard: {
-    padding: Spacing.md,
-    borderRadius: BorderRadius.lg,
-    marginBottom: Spacing.sm,
+    borderRadius: BorderRadius.md,
+    marginBottom: Spacing.xs,
+    overflow: "hidden",
   },
-  orderHeader: {
+  orderRow: {
     flexDirection: "row",
-    justifyContent: "space-between",
-    alignItems: "flex-start",
+    alignItems: "center",
+    paddingVertical: Spacing.sm,
+    paddingRight: Spacing.md,
   },
-  orderInfo: {
+  statusIndicator: {
+    width: 4,
+    alignSelf: "stretch",
+    marginRight: Spacing.sm,
+  },
+  orderMainInfo: {
     flex: 1,
+    paddingRight: Spacing.sm,
   },
-  orderTitleRow: {
+  orderTopRow: {
     flexDirection: "row",
     alignItems: "center",
     gap: Spacing.sm,
-    marginBottom: Spacing.xs,
+    marginBottom: 2,
   },
   orderNumber: {
-    fontSize: 16,
+    fontSize: 15,
     fontWeight: "700",
   },
-  statusBadge: {
-    paddingHorizontal: Spacing.sm,
-    paddingVertical: 2,
-    borderRadius: BorderRadius.sm,
-  },
-  statusText: {
-    fontSize: 11,
+  statusLabel: {
+    fontSize: 12,
     fontWeight: "600",
   },
   clientName: {
-    fontSize: 15,
-    fontWeight: "500",
+    fontSize: 16,
+    fontWeight: "600",
+    marginBottom: 4,
   },
-  clientPhone: {
-    fontSize: 13,
-    marginTop: 2,
-  },
-  orderPrice: {
-    alignItems: "flex-end",
-  },
-  priceText: {
-    fontSize: 18,
-    fontWeight: "700",
-  },
-  daysText: {
-    fontSize: 12,
-    marginTop: 2,
-  },
-  divider: {
-    height: 1,
-    marginVertical: Spacing.sm,
-  },
-  orderDetails: {
-    gap: Spacing.xs,
-  },
-  detailRow: {
+  orderMetaRow: {
     flexDirection: "row",
     alignItems: "center",
-    gap: Spacing.sm,
+    gap: Spacing.md,
   },
-  detailText: {
+  dateText: {
     fontSize: 13,
+  },
+  equipmentText: {
+    fontSize: 13,
+  },
+  orderPriceBlock: {
+    flexDirection: "row",
+    alignItems: "baseline",
+  },
+  priceText: {
+    fontSize: 20,
+    fontWeight: "700",
+  },
+  priceCurrency: {
+    fontSize: 14,
+    fontWeight: "600",
+    marginLeft: 2,
+  },
+  notesRow: {
+    flexDirection: "row",
+    alignItems: "center",
+    gap: Spacing.xs,
+    paddingHorizontal: Spacing.sm,
+    paddingVertical: Spacing.xs,
+    borderTopWidth: 1,
+    marginLeft: 4,
+  },
+  notesText: {
+    fontSize: 12,
     flex: 1,
   },
   emptyContainer: {
