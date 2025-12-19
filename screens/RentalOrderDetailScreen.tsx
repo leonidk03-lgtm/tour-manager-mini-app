@@ -17,10 +17,12 @@ import { ScreenScrollView } from "@/components/ScreenScrollView";
 import { Spacing, BorderRadius } from "@/constants/theme";
 import { useTheme } from "@/hooks/useTheme";
 import { useRental, RentalOrderStatus, RentalPaymentType } from "@/contexts/RentalContext";
+import { useAuth } from "@/contexts/AuthContext";
 import { SettingsStackParamList } from "@/navigation/SettingsStackNavigator";
 import { hapticFeedback } from "@/utils/haptics";
 
 type RouteParams = RouteProp<SettingsStackParamList, "RentalOrderDetail">;
+type ManagerSelectType = "owner" | "executor";
 
 const STATUS_CONFIG: Record<RentalOrderStatus, { label: string; color: string; icon: string }> = {
   new: { label: "Новый", color: "#2196F3", icon: "clock" },
@@ -42,7 +44,8 @@ export default function RentalOrderDetailScreen() {
   const navigation = useNavigation();
   const route = useRoute<RouteParams>();
   const insets = useSafeAreaInsets();
-  const { rentalOrders, rentalClients, updateOrderStatus, addRentalPayment, getOrderPayments, getOrderHistory, deleteRentalOrder } = useRental();
+  const { rentalOrders, rentalClients, updateRentalOrder, updateRentalClient, updateOrderStatus, addRentalPayment, getOrderPayments, getOrderHistory, deleteRentalOrder } = useRental();
+  const { managers } = useAuth();
 
   const orderId = route.params?.orderId;
   const order = rentalOrders.find(o => o.id === orderId);
@@ -50,8 +53,13 @@ export default function RentalOrderDetailScreen() {
   const payments = order ? getOrderPayments(order.id) : [];
   const history = order ? getOrderHistory(order.id) : [];
 
+  const ownerManager = client?.assignedManagerId ? managers.find(m => m.id === client.assignedManagerId) : null;
+  const executorManager = order?.executorId ? managers.find(m => m.id === order.executorId) : null;
+
   const [showStatusModal, setShowStatusModal] = useState(false);
   const [showPaymentModal, setShowPaymentModal] = useState(false);
+  const [showManagerModal, setShowManagerModal] = useState(false);
+  const [managerSelectType, setManagerSelectType] = useState<ManagerSelectType>("owner");
   const [paymentType, setPaymentType] = useState<RentalPaymentType>("prepayment");
   const [paymentAmount, setPaymentAmount] = useState("");
   const [paymentNotes, setPaymentNotes] = useState("");
@@ -132,6 +140,27 @@ export default function RentalOrderDetailScreen() {
     );
   };
 
+  const openManagerSelect = (type: ManagerSelectType) => {
+    setManagerSelectType(type);
+    setShowManagerModal(true);
+  };
+
+  const handleManagerSelect = async (managerId: string | null) => {
+    if (!order || !client) return;
+    hapticFeedback.selection();
+    try {
+      if (managerSelectType === "owner") {
+        await updateRentalClient(client.id, { assignedManagerId: managerId });
+      } else {
+        await updateRentalOrder(order.id, { executorId: managerId });
+      }
+      setShowManagerModal(false);
+      hapticFeedback.success();
+    } catch (error) {
+      Alert.alert("Ошибка", "Не удалось изменить менеджера");
+    }
+  };
+
   if (!order) {
     return (
       <ThemedView style={[styles.container, styles.center]}>
@@ -192,6 +221,48 @@ export default function RentalOrderDetailScreen() {
           ) : (
             <ThemedText style={{ color: theme.textSecondary }}>Клиент не найден</ThemedText>
           )}
+        </View>
+
+        <View style={[styles.card, { backgroundColor: theme.backgroundSecondary }]}>
+          <ThemedText style={[styles.sectionTitle, { color: theme.textSecondary }]}>
+            Менеджеры
+          </ThemedText>
+          
+          <Pressable
+            style={[styles.managerRow, { borderColor: theme.border }]}
+            onPress={() => openManagerSelect("owner")}
+          >
+            <View style={styles.managerLabel}>
+              <Icon name="user" size={16} color={theme.primary} />
+              <ThemedText style={[styles.managerLabelText, { color: theme.textSecondary }]}>
+                Менеджер клиента
+              </ThemedText>
+            </View>
+            <View style={styles.managerValue}>
+              <ThemedText style={ownerManager ? styles.managerName : { color: theme.textSecondary }}>
+                {ownerManager?.display_name || "Не назначен"}
+              </ThemedText>
+              <Icon name="chevron-right" size={16} color={theme.textSecondary} />
+            </View>
+          </Pressable>
+
+          <Pressable
+            style={[styles.managerRow, { borderColor: theme.border, borderTopWidth: 0 }]}
+            onPress={() => openManagerSelect("executor")}
+          >
+            <View style={styles.managerLabel}>
+              <Icon name="truck" size={16} color={theme.success} />
+              <ThemedText style={[styles.managerLabelText, { color: theme.textSecondary }]}>
+                Исполнитель
+              </ThemedText>
+            </View>
+            <View style={styles.managerValue}>
+              <ThemedText style={executorManager ? styles.managerName : { color: theme.textSecondary }}>
+                {executorManager?.display_name || "Не назначен"}
+              </ThemedText>
+              <Icon name="chevron-right" size={16} color={theme.textSecondary} />
+            </View>
+          </Pressable>
         </View>
 
         <View style={[styles.card, { backgroundColor: theme.backgroundSecondary }]}>
@@ -436,6 +507,56 @@ export default function RentalOrderDetailScreen() {
             </ScrollView>
           </View>
         </View>
+      </Modal>
+
+      <Modal visible={showManagerModal} animationType="fade" transparent>
+        <Pressable style={styles.modalOverlay} onPress={() => setShowManagerModal(false)}>
+          <View style={[styles.statusModalContent, { backgroundColor: theme.backgroundDefault, maxHeight: "60%" }]}>
+            <ThemedText style={styles.modalTitle}>
+              {managerSelectType === "owner" ? "Менеджер клиента" : "Исполнитель"}
+            </ThemedText>
+            <ScrollView>
+              <Pressable
+                onPress={() => handleManagerSelect(null)}
+                style={[
+                  styles.statusOption,
+                  { backgroundColor: (managerSelectType === "owner" ? !ownerManager : !executorManager) ? theme.primary + "20" : "transparent" },
+                ]}
+              >
+                <Icon name="user-x" size={20} color={theme.textSecondary} />
+                <ThemedText style={[styles.statusOptionText, { color: theme.textSecondary }]}>
+                  Не назначен
+                </ThemedText>
+                {(managerSelectType === "owner" ? !ownerManager : !executorManager) ? (
+                  <Icon name="check" size={20} color={theme.primary} />
+                ) : null}
+              </Pressable>
+              {managers.filter(m => m.role !== "admin").map(manager => {
+                const isActive = managerSelectType === "owner"
+                  ? client?.assignedManagerId === manager.id
+                  : order?.executorId === manager.id;
+                return (
+                  <Pressable
+                    key={manager.id}
+                    onPress={() => handleManagerSelect(manager.id)}
+                    style={[
+                      styles.statusOption,
+                      { backgroundColor: isActive ? theme.primary + "20" : "transparent" },
+                    ]}
+                  >
+                    <Icon name="user" size={20} color={theme.primary} />
+                    <ThemedText style={[styles.statusOptionText, { color: theme.text }]}>
+                      {manager.display_name}
+                    </ThemedText>
+                    {isActive ? (
+                      <Icon name="check" size={20} color={theme.primary} />
+                    ) : null}
+                  </Pressable>
+                );
+              })}
+            </ScrollView>
+          </View>
+        </Pressable>
       </Modal>
     </ThemedView>
   );
@@ -705,5 +826,31 @@ const styles = StyleSheet.create({
     borderRadius: BorderRadius.md,
     alignItems: "center",
     marginBottom: Spacing.xl,
+  },
+  managerRow: {
+    flexDirection: "row",
+    justifyContent: "space-between",
+    alignItems: "center",
+    paddingVertical: Spacing.md,
+    paddingHorizontal: Spacing.sm,
+    borderWidth: 1,
+    borderRadius: BorderRadius.sm,
+  },
+  managerLabel: {
+    flexDirection: "row",
+    alignItems: "center",
+    gap: Spacing.sm,
+  },
+  managerLabelText: {
+    fontSize: 13,
+  },
+  managerValue: {
+    flexDirection: "row",
+    alignItems: "center",
+    gap: Spacing.xs,
+  },
+  managerName: {
+    fontSize: 14,
+    fontWeight: "500",
   },
 });
