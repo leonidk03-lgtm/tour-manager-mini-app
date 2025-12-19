@@ -531,7 +531,7 @@ export default function RentalOrderDetailScreen() {
                   <Icon name="check" size={20} color={theme.primary} />
                 ) : null}
               </Pressable>
-              {managers.filter(m => m.role !== "admin").map(manager => {
+              {managers.map(manager => {
                 const isActive = managerSelectType === "owner"
                   ? client?.assignedManagerId === manager.id
                   : order?.executorId === manager.id;

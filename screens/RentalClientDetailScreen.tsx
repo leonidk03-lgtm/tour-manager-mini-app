@@ -482,7 +482,7 @@ export default function RentalClientDetailScreen() {
             </View>
 
             <FlatList
-              data={[{ id: null, display_name: "Без менеджера" }, ...managers.filter(m => m.role !== "admin")]}
+              data={[{ id: null, display_name: "Без менеджера" }, ...managers]}
               keyExtractor={(item) => item.id || "none"}
               renderItem={({ item }) => (
                 <Pressable
