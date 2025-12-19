@@ -154,9 +154,9 @@ export default function RentalOrdersScreen() {
           </View>
         </View>
         {item.receiverNotes ? (
-          <View style={[styles.notesRow, { borderTopColor: theme.border }]}>
-            <Icon name="message-circle" size={12} color={theme.textSecondary} />
-            <ThemedText style={[styles.notesText, { color: theme.textSecondary }]} numberOfLines={1}>
+          <View style={[styles.notesRow, { backgroundColor: theme.primary + "15" }]}>
+            <Icon name="message-circle" size={16} color={theme.primary} />
+            <ThemedText style={styles.notesText} numberOfLines={2}>
               {item.receiverNotes}
             </ThemedText>
           </View>
@@ -392,16 +392,19 @@ const styles = StyleSheet.create({
   },
   notesRow: {
     flexDirection: "row",
-    alignItems: "center",
+    alignItems: "flex-start",
     gap: Spacing.sm,
     paddingHorizontal: Spacing.md,
     paddingVertical: Spacing.sm,
-    borderTopWidth: 1,
-    marginLeft: 5,
+    marginHorizontal: Spacing.sm,
+    marginBottom: Spacing.sm,
+    borderRadius: BorderRadius.sm,
   },
   notesText: {
-    fontSize: 14,
+    fontSize: 15,
+    fontWeight: "500",
     flex: 1,
+    lineHeight: 20,
   },
   emptyContainer: {
     flex: 1,
