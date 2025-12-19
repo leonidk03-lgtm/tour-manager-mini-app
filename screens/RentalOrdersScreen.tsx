@@ -5,6 +5,7 @@ import {
   Pressable,
   TextInput,
   FlatList,
+  SectionList,
 } from "react-native";
 import { useSafeAreaInsets } from "react-native-safe-area-context";
 import { useNavigation, NavigationProp } from "@react-navigation/native";
@@ -34,7 +35,7 @@ export default function RentalOrdersScreen() {
   const { rentalOrders, rentalClients } = useRental();
 
   const [searchQuery, setSearchQuery] = useState("");
-  const [activeFilter, setActiveFilter] = useState<FilterType>("all");
+  const [activeFilter, setActiveFilter] = useState<FilterType>("срок");
 
   const formatDate = (dateStr: string): string => {
     const date = new Date(dateStr);
@@ -76,6 +77,27 @@ export default function RentalOrdersScreen() {
 
     return result;
   }, [rentalOrders, rentalClients, activeFilter, searchQuery]);
+
+  const groupedOrders = useMemo(() => {
+    if (activeFilter !== "срок") return [];
+    
+    const groups: { [key: string]: RentalOrder[] } = {};
+    filteredOrders.forEach(order => {
+      const dateKey = formatDate(order.startDate);
+      if (!groups[dateKey]) {
+        groups[dateKey] = [];
+      }
+      groups[dateKey].push(order);
+    });
+
+    return Object.entries(groups)
+      .sort((a, b) => {
+        const dateA = new Date(filteredOrders.find(o => formatDate(o.startDate) === a[0])?.startDate || "");
+        const dateB = new Date(filteredOrders.find(o => formatDate(o.startDate) === b[0])?.startDate || "");
+        return dateA.getTime() - dateB.getTime();
+      })
+      .map(([title, data]) => ({ title, data }));
+  }, [filteredOrders, activeFilter]);
 
   const getClientName = (clientId: string): string => {
     return rentalClients.find(c => c.id === clientId)?.name || "Неизвестный клиент";
@@ -203,23 +225,49 @@ export default function RentalOrdersScreen() {
         />
       </View>
 
-      <FlatList
-        data={filteredOrders}
-        keyExtractor={(item) => item.id}
-        renderItem={renderOrderItem}
-        contentContainerStyle={[
-          styles.listContent,
-          { paddingBottom: insets.bottom + 80 },
-        ]}
-        ListEmptyComponent={
-          <View style={styles.emptyContainer}>
-            <Icon name="file-text" size={48} color={theme.textSecondary} />
-            <ThemedText style={[styles.emptyText, { color: theme.textSecondary }]}>
-              {searchQuery ? "Заказы не найдены" : "Нет заказов"}
-            </ThemedText>
-          </View>
-        }
-      />
+      {activeFilter === "срок" ? (
+        <SectionList
+          sections={groupedOrders}
+          keyExtractor={(item) => item.id}
+          renderItem={({ item }) => renderOrderItem({ item })}
+          renderSectionHeader={({ section: { title } }) => (
+            <View style={[styles.sectionHeader, { backgroundColor: theme.backgroundDefault }]}>
+              <ThemedText style={styles.sectionHeaderText}>{title}</ThemedText>
+            </View>
+          )}
+          contentContainerStyle={[
+            styles.listContent,
+            { paddingBottom: insets.bottom + 80 },
+          ]}
+          stickySectionHeadersEnabled
+          ListEmptyComponent={
+            <View style={styles.emptyContainer}>
+              <Icon name="file-text" size={48} color={theme.textSecondary} />
+              <ThemedText style={[styles.emptyText, { color: theme.textSecondary }]}>
+                Нет предстоящих заказов
+              </ThemedText>
+            </View>
+          }
+        />
+      ) : (
+        <FlatList
+          data={filteredOrders}
+          keyExtractor={(item) => item.id}
+          renderItem={renderOrderItem}
+          contentContainerStyle={[
+            styles.listContent,
+            { paddingBottom: insets.bottom + 80 },
+          ]}
+          ListEmptyComponent={
+            <View style={styles.emptyContainer}>
+              <Icon name="file-text" size={48} color={theme.textSecondary} />
+              <ThemedText style={[styles.emptyText, { color: theme.textSecondary }]}>
+                {searchQuery ? "Заказы не найдены" : "Нет заказов"}
+              </ThemedText>
+            </View>
+          }
+        />
+      )}
 
       <Pressable
         onPress={() => navigation.navigate("AddRentalOrder")}
@@ -375,5 +423,14 @@ const styles = StyleSheet.create({
     shadowOffset: { width: 0, height: 2 },
     shadowOpacity: 0.25,
     shadowRadius: 4,
+  },
+  sectionHeader: {
+    paddingHorizontal: Spacing.md,
+    paddingVertical: Spacing.sm,
+    marginBottom: Spacing.xs,
+  },
+  sectionHeaderText: {
+    fontSize: 18,
+    fontWeight: "700",
   },
 });
