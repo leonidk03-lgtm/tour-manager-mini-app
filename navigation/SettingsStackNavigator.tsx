@@ -49,7 +49,7 @@ export type SettingsStackParamList = {
   RentalOrders: undefined;
   RentalClientDetail: { clientId: string };
   RentalOrderDetail: { orderId: string };
-  AddRentalOrder: { clientId?: string } | undefined;
+  AddRentalOrder: { clientId?: string; orderId?: string } | undefined;
   RentalCommissions: undefined;
   ManagerCommissions: { managerId: string; managerName: string };
 };

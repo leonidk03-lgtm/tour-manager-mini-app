@@ -36,6 +36,7 @@ export interface RentalOrder {
   endDate: string;
   daysCount: number;
   kitCount: number;
+  spareReceiverCount: number;
   transmitterCount: number;
   microphoneCount: number;
   bagNumber: string | null;
@@ -187,6 +188,7 @@ export function RentalProvider({ children }: { children: ReactNode }) {
         endDate: o.end_date,
         daysCount: o.days_count,
         kitCount: o.kit_count,
+        spareReceiverCount: o.spare_receiver_count || 0,
         transmitterCount: o.transmitter_count,
         microphoneCount: o.microphone_count,
         bagNumber: o.bag_number,
@@ -428,6 +430,7 @@ export function RentalProvider({ children }: { children: ReactNode }) {
         end_date: order.endDate,
         days_count: order.daysCount,
         kit_count: order.kitCount,
+        spare_receiver_count: order.spareReceiverCount || 0,
         transmitter_count: order.transmitterCount,
         microphone_count: order.microphoneCount,
         bag_number: order.bagNumber,
@@ -461,6 +464,7 @@ export function RentalProvider({ children }: { children: ReactNode }) {
     if (order.endDate !== undefined) updateData.end_date = order.endDate;
     if (order.daysCount !== undefined) updateData.days_count = order.daysCount;
     if (order.kitCount !== undefined) updateData.kit_count = order.kitCount;
+    if (order.spareReceiverCount !== undefined) updateData.spare_receiver_count = order.spareReceiverCount;
     if (order.transmitterCount !== undefined) updateData.transmitter_count = order.transmitterCount;
     if (order.microphoneCount !== undefined) updateData.microphone_count = order.microphoneCount;
     if (order.bagNumber !== undefined) updateData.bag_number = order.bagNumber;

@@ -30,11 +30,19 @@ export default function AddRentalOrderScreen() {
   const navigation = useNavigation();
   const route = useRoute<RouteParams>();
   const insets = useSafeAreaInsets();
-  const { rentalClients, addRentalOrder } = useRental();
+  const { rentalClients, rentalOrders, addRentalOrder, updateRentalOrder } = useRental();
   const { profile, managers } = useAuth();
 
   const initialClientId = route.params?.clientId;
-  const initialClient = initialClientId ? rentalClients.find(c => c.id === initialClientId) : null;
+  const orderId = route.params?.orderId;
+  const existingOrder = orderId ? rentalOrders.find(o => o.id === orderId) : null;
+  const isEditMode = !!existingOrder;
+
+  const initialClient = existingOrder 
+    ? rentalClients.find(c => c.id === existingOrder.clientId) 
+    : initialClientId 
+      ? rentalClients.find(c => c.id === initialClientId) 
+      : null;
 
   const [selectedClient, setSelectedClient] = useState<RentalClient | null>(initialClient || null);
   const [showClientPicker, setShowClientPicker] = useState(false);
@@ -54,19 +62,22 @@ export default function AddRentalOrderScreen() {
   }, [rentalClients]);
   const [clientSearch, setClientSearch] = useState("");
 
-  const [startDate, setStartDate] = useState(new Date());
-  const [endDate, setEndDate] = useState(new Date());
+  const [startDate, setStartDate] = useState(existingOrder ? new Date(existingOrder.startDate) : new Date());
+  const [endDate, setEndDate] = useState(existingOrder ? new Date(existingOrder.endDate) : new Date());
   const [showStartPicker, setShowStartPicker] = useState(false);
   const [showEndPicker, setShowEndPicker] = useState(false);
 
-  const [kitCount, setKitCount] = useState("");
-  const [transmitterCount, setTransmitterCount] = useState("1");
-  const [microphoneCount, setMicrophoneCount] = useState("1");
-  const [bagNumber, setBagNumber] = useState("");
-  const [isCharged, setIsCharged] = useState(false);
-  const [pricePerUnit, setPricePerUnit] = useState(selectedClient?.defaultPrice?.toString() || "100");
-  const [prepayment, setPrepayment] = useState("0");
-  const [receiverNotes, setReceiverNotes] = useState("");
+  const [kitCount, setKitCount] = useState(existingOrder?.kitCount?.toString() || "");
+  const [spareReceiverCount, setSpareReceiverCount] = useState(
+    existingOrder ? (existingOrder.spareReceiverCount?.toString() ?? "0") : "0"
+  );
+  const [transmitterCount, setTransmitterCount] = useState(existingOrder?.transmitterCount?.toString() || "1");
+  const [microphoneCount, setMicrophoneCount] = useState(existingOrder?.microphoneCount?.toString() || "1");
+  const [bagNumber, setBagNumber] = useState(existingOrder?.bagNumber || "");
+  const [isCharged, setIsCharged] = useState(existingOrder?.isCharged || false);
+  const [pricePerUnit, setPricePerUnit] = useState(existingOrder?.pricePerUnit?.toString() || selectedClient?.defaultPrice?.toString() || "100");
+  const [prepayment, setPrepayment] = useState(existingOrder?.prepayment?.toString() || "0");
+  const [receiverNotes, setReceiverNotes] = useState(existingOrder?.receiverNotes || "");
 
   const daysCount = useMemo(() => {
     const diffTime = endDate.getTime() - startDate.getTime();
@@ -131,34 +142,54 @@ export default function AddRentalOrderScreen() {
     hapticFeedback.selection();
 
     try {
-      await addRentalOrder({
-        clientId: selectedClient.id,
-        status: "new",
-        startDate: startDate.toISOString(),
-        endDate: endDate.toISOString(),
-        daysCount,
-        kitCount: kits,
-        transmitterCount: parseInt(transmitterCount) || 0,
-        microphoneCount: parseInt(microphoneCount) || 0,
-        bagNumber: bagNumber.trim() || null,
-        isCharged,
-        pricePerUnit: parseFloat(pricePerUnit) || 100,
-        totalPrice,
-        prepayment: parseFloat(prepayment) || 0,
-        receiverNotes: receiverNotes.trim() || null,
-        managerId: null,
-        managerName: null,
-        executorId: profile?.id || null,
-        executorName: profile?.display_name || profile?.email || null,
-        ownerManagerId: selectedClient.assignedManagerId || null,
-        ownerManagerName: selectedClient.assignedManagerName || null,
-      });
+      if (isEditMode && orderId) {
+        await updateRentalOrder(orderId, {
+          clientId: selectedClient.id,
+          startDate: startDate.toISOString(),
+          endDate: endDate.toISOString(),
+          daysCount,
+          kitCount: kits,
+          spareReceiverCount: parseInt(spareReceiverCount) || 0,
+          transmitterCount: parseInt(transmitterCount) || 0,
+          microphoneCount: parseInt(microphoneCount) || 0,
+          bagNumber: bagNumber.trim() || null,
+          isCharged,
+          pricePerUnit: parseFloat(pricePerUnit) || 100,
+          totalPrice,
+          prepayment: parseFloat(prepayment) || 0,
+          receiverNotes: receiverNotes.trim() || null,
+        });
+      } else {
+        await addRentalOrder({
+          clientId: selectedClient.id,
+          status: "new",
+          startDate: startDate.toISOString(),
+          endDate: endDate.toISOString(),
+          daysCount,
+          kitCount: kits,
+          spareReceiverCount: parseInt(spareReceiverCount) || 0,
+          transmitterCount: parseInt(transmitterCount) || 0,
+          microphoneCount: parseInt(microphoneCount) || 0,
+          bagNumber: bagNumber.trim() || null,
+          isCharged,
+          pricePerUnit: parseFloat(pricePerUnit) || 100,
+          totalPrice,
+          prepayment: parseFloat(prepayment) || 0,
+          receiverNotes: receiverNotes.trim() || null,
+          managerId: null,
+          managerName: null,
+          executorId: profile?.id || null,
+          executorName: profile?.display_name || profile?.email || null,
+          ownerManagerId: selectedClient.assignedManagerId || null,
+          ownerManagerName: selectedClient.assignedManagerName || null,
+        });
+      }
 
       hapticFeedback.success();
       navigation.goBack();
     } catch (error) {
-      console.error("Error creating order:", error);
-      Alert.alert("Ошибка", "Не удалось создать заказ");
+      console.error("Error saving order:", error);
+      Alert.alert("Ошибка", isEditMode ? "Не удалось обновить заказ" : "Не удалось создать заказ");
     }
   };
 
@@ -244,7 +275,7 @@ export default function AddRentalOrderScreen() {
           <View style={styles.inputRow}>
             <View style={styles.inputColumn}>
               <ThemedText style={[styles.inputLabel, { color: theme.textSecondary }]}>
-                Комплектация *
+                Комплекты *
               </ThemedText>
               <TextInput
                 style={[styles.input, { backgroundColor: theme.backgroundSecondary, color: theme.text }]}
@@ -255,6 +286,22 @@ export default function AddRentalOrderScreen() {
                 keyboardType="numeric"
               />
             </View>
+            <View style={styles.inputColumn}>
+              <ThemedText style={[styles.inputLabel, { color: theme.textSecondary }]}>
+                Запасные
+              </ThemedText>
+              <TextInput
+                style={[styles.input, { backgroundColor: theme.backgroundSecondary, color: theme.text }]}
+                value={spareReceiverCount}
+                onChangeText={setSpareReceiverCount}
+                placeholder="0"
+                placeholderTextColor={theme.textSecondary}
+                keyboardType="numeric"
+              />
+            </View>
+          </View>
+
+          <View style={styles.inputRow}>
             <View style={styles.inputColumn}>
               <ThemedText style={[styles.inputLabel, { color: theme.textSecondary }]}>
                 Передатчик

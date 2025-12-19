@@ -192,16 +192,24 @@ export default function RentalOrderDetailScreen() {
                 {order.totalPrice.toLocaleString("ru-RU")}₽
               </ThemedText>
             </View>
-            <Pressable
-              onPress={() => setShowStatusModal(true)}
-              style={[styles.statusBadge, { backgroundColor: statusConfig.color + "20" }]}
-            >
-              <Icon name={statusConfig.icon as "clock"} size={16} color={statusConfig.color} />
-              <ThemedText style={[styles.statusText, { color: statusConfig.color }]}>
-                {statusConfig.label}
-              </ThemedText>
-              <Icon name="chevron-down" size={14} color={statusConfig.color} />
-            </Pressable>
+            <View style={styles.headerActions}>
+              <Pressable
+                onPress={() => (navigation as any).navigate("AddRentalOrder", { orderId: order.id })}
+                style={[styles.editButton, { backgroundColor: theme.primary + "20" }]}
+              >
+                <Icon name="edit-2" size={16} color={theme.primary} />
+              </Pressable>
+              <Pressable
+                onPress={() => setShowStatusModal(true)}
+                style={[styles.statusBadge, { backgroundColor: statusConfig.color + "20" }]}
+              >
+                <Icon name={statusConfig.icon as "clock"} size={16} color={statusConfig.color} />
+                <ThemedText style={[styles.statusText, { color: statusConfig.color }]}>
+                  {statusConfig.label}
+                </ThemedText>
+                <Icon name="chevron-down" size={14} color={statusConfig.color} />
+              </Pressable>
+            </View>
           </View>
         </View>
 
@@ -290,8 +298,12 @@ export default function RentalOrderDetailScreen() {
               <ThemedText style={styles.infoValue}>{formatDate(order.endDate)}</ThemedText>
             </View>
             <View style={styles.infoItem}>
-              <ThemedText style={[styles.infoLabel, { color: theme.textSecondary }]}>Комплектация</ThemedText>
+              <ThemedText style={[styles.infoLabel, { color: theme.textSecondary }]}>Комплектов</ThemedText>
               <ThemedText style={styles.infoValue}>{order.kitCount}</ThemedText>
+            </View>
+            <View style={styles.infoItem}>
+              <ThemedText style={[styles.infoLabel, { color: theme.textSecondary }]}>Запасных</ThemedText>
+              <ThemedText style={styles.infoValue}>{order.spareReceiverCount || 0}</ThemedText>
             </View>
             <View style={styles.infoItem}>
               <ThemedText style={[styles.infoLabel, { color: theme.textSecondary }]}>Передатчик</ThemedText>
@@ -598,6 +610,18 @@ const styles = StyleSheet.create({
     fontSize: 24,
     fontWeight: "700",
     marginTop: Spacing.xs,
+  },
+  headerActions: {
+    flexDirection: "row",
+    alignItems: "flex-start",
+    gap: Spacing.sm,
+  },
+  editButton: {
+    width: 36,
+    height: 36,
+    borderRadius: BorderRadius.md,
+    justifyContent: "center",
+    alignItems: "center",
   },
   statusBadge: {
     flexDirection: "row",
