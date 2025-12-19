@@ -31,7 +31,7 @@ export default function AddRentalOrderScreen() {
   const route = useRoute<RouteParams>();
   const insets = useSafeAreaInsets();
   const { rentalClients, addRentalOrder } = useRental();
-  const { profile } = useAuth();
+  const { profile, managers } = useAuth();
 
   const initialClientId = route.params?.clientId;
   const initialClient = initialClientId ? rentalClients.find(c => c.id === initialClientId) : null;
@@ -117,6 +117,10 @@ export default function AddRentalOrderScreen() {
     hapticFeedback.selection();
 
     try {
+      const ownerManager = selectedClient.assignedManagerId 
+        ? managers.find(m => m.id === selectedClient.assignedManagerId) 
+        : null;
+
       await addRentalOrder({
         clientId: selectedClient.id,
         status: "new",
@@ -136,6 +140,8 @@ export default function AddRentalOrderScreen() {
         managerName: null,
         executorId: profile?.id || null,
         executorName: profile?.display_name || profile?.email || null,
+        ownerManagerId: selectedClient.assignedManagerId || null,
+        ownerManagerName: ownerManager?.display_name || null,
       });
 
       hapticFeedback.success();
