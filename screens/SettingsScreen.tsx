@@ -226,6 +226,37 @@ export default function SettingsScreen() {
                 </Pressable>
               </>
             ) : null}
+            {(isAdmin || hasPermission('rental')) ? (
+              <>
+                <View style={[styles.divider, { backgroundColor: theme.border }]} />
+                <ThemedText style={[styles.sectionTitle, { color: theme.textSecondary }]}>Аренда</ThemedText>
+                <Pressable
+                  onPress={() => { hapticFeedback.selection(); navigation.navigate("RentalClients"); }}
+                  style={({ pressed }) => ({ opacity: pressed ? 0.7 : 1 })}
+                >
+                  <View style={styles.settingItem}>
+                    <View style={styles.settingLeft}>
+                      <Icon name="users" size={20} color={theme.textSecondary} />
+                      <ThemedText style={styles.settingText}>Клиенты</ThemedText>
+                    </View>
+                    <Icon name="chevron-right" size={20} color={theme.textSecondary} />
+                  </View>
+                </Pressable>
+                <View style={[styles.divider, { backgroundColor: theme.border }]} />
+                <Pressable
+                  onPress={() => { hapticFeedback.selection(); navigation.navigate("RentalOrders"); }}
+                  style={({ pressed }) => ({ opacity: pressed ? 0.7 : 1 })}
+                >
+                  <View style={styles.settingItem}>
+                    <View style={styles.settingLeft}>
+                      <Icon name="file-text" size={20} color={theme.textSecondary} />
+                      <ThemedText style={styles.settingText}>Заказы</ThemedText>
+                    </View>
+                    <Icon name="chevron-right" size={20} color={theme.textSecondary} />
+                  </View>
+                </Pressable>
+              </>
+            ) : null}
             <View style={[styles.divider, { backgroundColor: theme.border }]} />
             <Pressable
               onPress={() => { hapticFeedback.selection(); navigation.navigate("Notifications"); }}

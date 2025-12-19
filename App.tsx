@@ -11,6 +11,7 @@ import { ErrorBoundary } from "@/components/ErrorBoundary";
 import { NotificationBanner } from "@/components/NotificationBanner";
 import { DataProvider } from "@/contexts/DataContext";
 import { AuthProvider } from "@/contexts/AuthContext";
+import { RentalProvider } from "@/contexts/RentalContext";
 
 export default function App() {
   return (
@@ -20,10 +21,12 @@ export default function App() {
           <KeyboardProvider>
             <AuthProvider>
               <DataProvider>
-                <NavigationContainer>
-                  <RootNavigator />
-                  <NotificationBanner />
-                </NavigationContainer>
+                <RentalProvider>
+                  <NavigationContainer>
+                    <RootNavigator />
+                    <NotificationBanner />
+                  </NavigationContainer>
+                </RentalProvider>
               </DataProvider>
             </AuthProvider>
             <StatusBar style="auto" />

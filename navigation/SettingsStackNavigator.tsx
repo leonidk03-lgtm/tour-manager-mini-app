@@ -16,6 +16,11 @@ import ExportDataScreen from "@/screens/ExportDataScreen";
 import DailyReportScreen from "@/screens/DailyReportScreen";
 import NotificationsScreen from "@/screens/NotificationsScreen";
 import WarehouseScreen from "@/screens/WarehouseScreen";
+import RentalClientsScreen from "@/screens/RentalClientsScreen";
+import RentalOrdersScreen from "@/screens/RentalOrdersScreen";
+import AddRentalOrderScreen from "@/screens/AddRentalOrderScreen";
+import RentalOrderDetailScreen from "@/screens/RentalOrderDetailScreen";
+import RentalClientDetailScreen from "@/screens/RentalClientDetailScreen";
 import { getCommonScreenOptions } from "./screenOptions";
 import { useTheme } from "@/hooks/useTheme";
 import { Profile } from "@/lib/supabase";
@@ -38,6 +43,11 @@ export type SettingsStackParamList = {
   DailyReport: undefined;
   Notifications: undefined;
   Warehouse: undefined;
+  RentalClients: undefined;
+  RentalOrders: undefined;
+  RentalClientDetail: { clientId: string };
+  RentalOrderDetail: { orderId: string };
+  AddRentalOrder: { clientId?: string } | undefined;
 };
 
 const Stack = createNativeStackNavigator<SettingsStackParamList>();
@@ -134,6 +144,31 @@ export default function SettingsStackNavigator() {
         name="Warehouse"
         component={WarehouseScreen}
         options={{ title: "Склад" }}
+      />
+      <Stack.Screen
+        name="RentalClients"
+        component={RentalClientsScreen}
+        options={{ title: "Клиенты" }}
+      />
+      <Stack.Screen
+        name="RentalOrders"
+        component={RentalOrdersScreen}
+        options={{ title: "Заказы" }}
+      />
+      <Stack.Screen
+        name="AddRentalOrder"
+        component={AddRentalOrderScreen}
+        options={{ title: "Новый заказ" }}
+      />
+      <Stack.Screen
+        name="RentalOrderDetail"
+        component={RentalOrderDetailScreen}
+        options={{ title: "Детали заказа" }}
+      />
+      <Stack.Screen
+        name="RentalClientDetail"
+        component={RentalClientDetailScreen}
+        options={{ title: "Клиент" }}
       />
     </Stack.Navigator>
   );

@@ -98,7 +98,8 @@ export type PermissionKey =
   | 'excursions'
   | 'finances'
   | 'view_other_managers'
-  | 'warehouse';
+  | 'warehouse'
+  | 'rental';
 
 export const PERMISSION_DEFINITIONS: Record<PermissionKey, string> = {
   radio_guides: 'Радиогиды',
@@ -113,6 +114,7 @@ export const PERMISSION_DEFINITIONS: Record<PermissionKey, string> = {
   finances: 'Финансы',
   view_other_managers: 'Просмотр данных коллег',
   warehouse: 'Склад',
+  rental: 'Аренда',
 };
 
 export interface PermissionGroup {
@@ -147,6 +149,7 @@ export const PERMISSION_GROUPS: PermissionGroup[] = [
   { key: 'finances', label: 'Финансы' },
   { key: 'view_other_managers', label: 'Просмотр данных коллег' },
   { key: 'warehouse', label: 'Склад' },
+  { key: 'rental', label: 'Аренда', description: 'Доступ к модулю аренды радиогидов' },
 ];
 
 export type ManagerPermissions = Partial<Record<PermissionKey, boolean>>;
