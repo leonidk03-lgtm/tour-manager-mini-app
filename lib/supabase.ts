@@ -161,6 +161,8 @@ export interface Profile {
   role: UserRole;
   is_active: boolean;
   permissions?: ManagerPermissions;
+  owner_commission_percent?: number;
+  executor_commission_percent?: number;
   created_at: string;
   updated_at: string;
 }

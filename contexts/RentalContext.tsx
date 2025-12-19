@@ -74,11 +74,29 @@ export interface RentalOrderHistory {
   createdAt: string;
 }
 
+export type CommissionRole = 'owner' | 'executor';
+
+export interface RentalCommission {
+  id: string;
+  orderId: string;
+  orderNumber: number;
+  recipientId: string;
+  recipientName: string;
+  role: CommissionRole;
+  amount: number;
+  basisAmount: number;
+  percentage: number;
+  status: 'pending' | 'paid';
+  paidAt: string | null;
+  createdAt: string;
+}
+
 interface RentalContextType {
   rentalClients: RentalClient[];
   rentalOrders: RentalOrder[];
   rentalPayments: RentalPayment[];
   rentalOrderHistory: RentalOrderHistory[];
+  rentalCommissions: RentalCommission[];
   isLoading: boolean;
   addRentalClient: (client: Omit<RentalClient, 'id' | 'createdAt' | 'updatedAt'>) => Promise<string>;
   updateRentalClient: (id: string, client: Partial<RentalClient>) => Promise<void>;
@@ -92,6 +110,8 @@ interface RentalContextType {
   getOrderPayments: (orderId: string) => RentalPayment[];
   getOrderHistory: (orderId: string) => RentalOrderHistory[];
   getClientOrders: (clientId: string) => RentalOrder[];
+  getManagerCommissions: (managerId: string) => RentalCommission[];
+  markCommissionPaid: (commissionId: string) => Promise<void>;
   refreshData: () => Promise<void>;
 }
 
@@ -104,6 +124,7 @@ export function RentalProvider({ children }: { children: ReactNode }) {
   const [rentalOrders, setRentalOrders] = useState<RentalOrder[]>([]);
   const [rentalPayments, setRentalPayments] = useState<RentalPayment[]>([]);
   const [rentalOrderHistory, setRentalOrderHistory] = useState<RentalOrderHistory[]>([]);
+  const [rentalCommissions, setRentalCommissions] = useState<RentalCommission[]>([]);
   const [isLoading, setIsLoading] = useState(true);
 
   const fetchRentalClients = useCallback(async () => {
@@ -230,6 +251,38 @@ export function RentalProvider({ children }: { children: ReactNode }) {
     }
   }, [user]);
 
+  const fetchRentalCommissions = useCallback(async () => {
+    if (!user) return;
+    try {
+      const { data, error } = await supabase
+        .from('rental_commissions')
+        .select('*')
+        .order('created_at', { ascending: false });
+
+      if (error) {
+        console.log('Commissions table may not exist yet:', error.message);
+        return;
+      }
+
+      setRentalCommissions((data || []).map(c => ({
+        id: c.id,
+        orderId: c.order_id,
+        orderNumber: c.order_number,
+        recipientId: c.recipient_id,
+        recipientName: c.recipient_name,
+        role: c.role as CommissionRole,
+        amount: c.amount,
+        basisAmount: c.basis_amount,
+        percentage: c.percentage,
+        status: c.status,
+        paidAt: c.paid_at,
+        createdAt: c.created_at,
+      })));
+    } catch (error) {
+      console.error('Error fetching rental commissions:', error);
+    }
+  }, [user]);
+
   const refreshData = useCallback(async () => {
     setIsLoading(true);
     await Promise.all([
@@ -237,9 +290,10 @@ export function RentalProvider({ children }: { children: ReactNode }) {
       fetchRentalOrders(),
       fetchRentalPayments(),
       fetchRentalOrderHistory(),
+      fetchRentalCommissions(),
     ]);
     setIsLoading(false);
-  }, [fetchRentalClients, fetchRentalOrders, fetchRentalPayments, fetchRentalOrderHistory]);
+  }, [fetchRentalClients, fetchRentalOrders, fetchRentalPayments, fetchRentalOrderHistory, fetchRentalCommissions]);
 
   useEffect(() => {
     if (user) {
@@ -497,6 +551,114 @@ export function RentalProvider({ children }: { children: ReactNode }) {
     return rentalOrders.filter(o => o.clientId === clientId);
   };
 
+  const getManagerCommissions = (managerId: string): RentalCommission[] => {
+    return rentalCommissions.filter(c => c.recipientId === managerId);
+  };
+
+  const markCommissionPaid = async (commissionId: string) => {
+    const { error } = await supabase
+      .from('rental_commissions')
+      .update({ status: 'paid', paid_at: new Date().toISOString() })
+      .eq('id', commissionId);
+
+    if (error) throw error;
+    await fetchRentalCommissions();
+  };
+
+  const createCommissionsForOrder = async (orderId: string, totalPrice: number) => {
+    const order = rentalOrders.find(o => o.id === orderId);
+    if (!order) return;
+
+    const client = rentalClients.find(c => c.id === order.clientId);
+    if (!client || !client.assignedManagerId) return;
+
+    const ownerId = client.assignedManagerId;
+    const executorId = order.executorId;
+
+    const { data: profiles } = await supabase
+      .from('profiles')
+      .select('id, display_name, owner_commission_percent, executor_commission_percent')
+      .in('id', [ownerId, executorId].filter(Boolean) as string[]);
+
+    if (!profiles || profiles.length === 0) return;
+
+    const ownerProfile = profiles.find(p => p.id === ownerId);
+    const executorProfile = executorId ? profiles.find(p => p.id === executorId) : null;
+
+    const ownerPercent = ownerProfile?.owner_commission_percent ?? 20;
+    const executorPercent = executorProfile?.executor_commission_percent ?? 10;
+
+    const commissionsToInsert: any[] = [];
+
+    if (ownerProfile) {
+      commissionsToInsert.push({
+        order_id: orderId,
+        order_number: order.orderNumber,
+        recipient_id: ownerId,
+        recipient_name: ownerProfile.display_name || 'Менеджер',
+        role: 'owner',
+        amount: Math.round((totalPrice * ownerPercent) / 100),
+        basis_amount: totalPrice,
+        percentage: ownerPercent,
+        status: 'pending',
+      });
+    }
+
+    if (executorId && executorProfile && executorId !== ownerId) {
+      commissionsToInsert.push({
+        order_id: orderId,
+        order_number: order.orderNumber,
+        recipient_id: executorId,
+        recipient_name: executorProfile.display_name || 'Исполнитель',
+        role: 'executor',
+        amount: Math.round((totalPrice * executorPercent) / 100),
+        basis_amount: totalPrice,
+        percentage: executorPercent,
+        status: 'pending',
+      });
+    }
+
+    if (executorId && executorId === ownerId && ownerProfile) {
+      const combinedPercent = ownerPercent + executorPercent;
+      commissionsToInsert.length = 0;
+      commissionsToInsert.push({
+        order_id: orderId,
+        order_number: order.orderNumber,
+        recipient_id: ownerId,
+        recipient_name: ownerProfile.display_name || 'Менеджер',
+        role: 'owner',
+        amount: Math.round((totalPrice * combinedPercent) / 100),
+        basis_amount: totalPrice,
+        percentage: combinedPercent,
+        status: 'pending',
+      });
+    }
+
+    if (commissionsToInsert.length > 0) {
+      const { error } = await supabase
+        .from('rental_commissions')
+        .insert(commissionsToInsert);
+
+      if (error) {
+        console.error('Error creating commissions:', error);
+      } else {
+        await addOrderHistory(orderId, `Начислены комиссии: ${commissionsToInsert.map(c => `${c.recipient_name} ${c.amount}₽`).join(', ')}`);
+        await fetchRentalCommissions();
+      }
+    }
+  };
+
+  const addRentalPaymentWithCommissions = async (payment: Omit<RentalPayment, 'id' | 'createdAt' | 'managerId' | 'managerName'>) => {
+    await addRentalPayment(payment);
+
+    if (payment.type === 'final') {
+      const order = rentalOrders.find(o => o.id === payment.orderId);
+      if (order) {
+        await createCommissionsForOrder(payment.orderId, order.totalPrice);
+      }
+    }
+  };
+
   return (
     <RentalContext.Provider
       value={{
@@ -504,6 +666,7 @@ export function RentalProvider({ children }: { children: ReactNode }) {
         rentalOrders,
         rentalPayments,
         rentalOrderHistory,
+        rentalCommissions,
         isLoading,
         addRentalClient,
         updateRentalClient,
@@ -512,11 +675,13 @@ export function RentalProvider({ children }: { children: ReactNode }) {
         updateRentalOrder,
         deleteRentalOrder,
         updateOrderStatus,
-        addRentalPayment,
+        addRentalPayment: addRentalPaymentWithCommissions,
         deleteRentalPayment,
         getOrderPayments,
         getOrderHistory,
         getClientOrders,
+        getManagerCommissions,
+        markCommissionPaid,
         refreshData,
       }}
     >
