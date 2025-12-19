@@ -1,159 +1,103 @@
 import { useMemo } from "react";
 import { View, StyleSheet, Pressable, FlatList } from "react-native";
-import { useSafeAreaInsets } from "react-native-safe-area-context";
+import { useNavigation, NavigationProp } from "@react-navigation/native";
 import { Icon } from "@/components/Icon";
 import { ThemedText } from "@/components/ThemedText";
 import { ThemedView } from "@/components/ThemedView";
 import { Spacing, BorderRadius } from "@/constants/theme";
 import { useTheme } from "@/hooks/useTheme";
 import { useAuth } from "@/contexts/AuthContext";
-import { useRental, RentalCommission } from "@/contexts/RentalContext";
+import { Profile } from "@/lib/supabase";
+import { useRental } from "@/contexts/RentalContext";
 import { hapticFeedback } from "@/utils/haptics";
 import { useScreenInsets } from "@/hooks/useScreenInsets";
+import { SettingsStackParamList } from "@/navigation/SettingsStackNavigator";
+
+interface ManagerWithCommissions {
+  manager: Profile;
+  pendingAmount: number;
+  pendingCount: number;
+  totalPaid: number;
+}
 
 export default function RentalCommissionsScreen() {
   const { theme } = useTheme();
-  const insets = useSafeAreaInsets();
-  const { paddingTop, paddingBottom, scrollInsetBottom } = useScreenInsets();
-  const { profile, isAdmin } = useAuth();
-  const { rentalCommissions, getManagerCommissions, markCommissionPaid } = useRental();
+  const navigation = useNavigation<NavigationProp<SettingsStackParamList>>();
+  const { paddingTop, scrollInsetBottom } = useScreenInsets();
+  const { isAdmin, profile, managers } = useAuth();
+  const { rentalCommissions } = useRental();
 
-  const displayedCommissions = useMemo(() => {
-    if (isAdmin) {
-      return rentalCommissions;
-    }
-    return profile ? getManagerCommissions(profile.id) : [];
-  }, [isAdmin, profile, rentalCommissions, getManagerCommissions]);
+  const managersWithCommissions = useMemo(() => {
+    const managersList = managers.filter(m => m.role !== "admin");
+    
+    return managersList.map(manager => {
+      const managerCommissions = rentalCommissions.filter(c => c.recipientId === manager.id);
+      const pendingCommissions = managerCommissions.filter(c => c.status === "pending");
+      const paidCommissions = managerCommissions.filter(c => c.status === "paid");
+      
+      return {
+        manager,
+        pendingAmount: pendingCommissions.reduce((sum, c) => sum + c.amount, 0),
+        pendingCount: pendingCommissions.length,
+        totalPaid: paidCommissions.reduce((sum, c) => sum + c.amount, 0),
+      };
+    }).sort((a, b) => b.pendingAmount - a.pendingAmount);
+  }, [managers, rentalCommissions]);
 
-  const pendingCommissions = useMemo(() => {
-    return displayedCommissions.filter(c => c.status === "pending");
-  }, [displayedCommissions]);
+  const totalPendingAll = useMemo(() => {
+    return managersWithCommissions.reduce((sum, m) => sum + m.pendingAmount, 0);
+  }, [managersWithCommissions]);
 
-  const paidCommissions = useMemo(() => {
-    return displayedCommissions.filter(c => c.status === "paid");
-  }, [displayedCommissions]);
-
-  const totalPending = useMemo(() => {
-    return pendingCommissions.reduce((sum, c) => sum + c.amount, 0);
-  }, [pendingCommissions]);
-
-  const formatDate = (dateStr: string): string => {
-    return new Date(dateStr).toLocaleDateString("ru-RU", {
-      day: "2-digit",
-      month: "2-digit",
-      year: "numeric",
+  const handleSelectManager = (item: ManagerWithCommissions) => {
+    hapticFeedback.selection();
+    navigation.navigate("ManagerCommissions", {
+      managerId: item.manager.id,
+      managerName: item.manager.display_name || item.manager.email || "Менеджер",
     });
   };
 
-  const handleMarkPaid = async (commission: RentalCommission) => {
-    hapticFeedback.medium();
-    try {
-      await markCommissionPaid(commission.id);
-    } catch (error) {
-      console.error("Failed to mark commission paid:", error);
-    }
-  };
-
-  const renderCommission = ({ item }: { item: RentalCommission }) => {
-    const roleLabel = item.role === "owner" ? "Владелец клиента" : "Исполнитель";
-    const isPending = item.status === "pending";
+  const renderManager = ({ item }: { item: ManagerWithCommissions }) => {
+    const initials = (item.manager.display_name || item.manager.email || "M")
+      .slice(0, 2)
+      .toUpperCase();
 
     return (
-      <ThemedView
-        style={[
-          styles.card,
-          {
-            borderColor: theme.border,
-            borderRadius: BorderRadius.sm,
-          },
+      <Pressable
+        onPress={() => handleSelectManager(item)}
+        style={({ pressed }) => [
+          styles.managerCard,
+          { backgroundColor: theme.backgroundSecondary, opacity: pressed ? 0.7 : 1 },
         ]}
       >
-        <View style={styles.cardHeader}>
-          <View style={styles.orderInfo}>
-            <Icon
-              name="hash"
-              size={14}
-              color={theme.textSecondary}
-              style={{ marginRight: 4 }}
-            />
-            <ThemedText style={[styles.orderNumber, { color: theme.textSecondary }]}>
-              {item.orderNumber}
-            </ThemedText>
-          </View>
-          <View
-            style={[
-              styles.statusBadge,
-              { backgroundColor: isPending ? theme.warning : theme.success },
-            ]}
-          >
-            <ThemedText style={[styles.statusText, { color: "#fff" }]}>
-              {isPending ? "К выплате" : "Выплачено"}
-            </ThemedText>
-          </View>
+        <View style={[styles.avatar, { backgroundColor: theme.primary }]}>
+          <ThemedText style={styles.avatarText}>{initials}</ThemedText>
+        </View>
+        
+        <View style={styles.managerInfo}>
+          <ThemedText style={styles.managerName} numberOfLines={1}>
+            {item.manager.display_name || item.manager.email}
+          </ThemedText>
+          <ThemedText style={[styles.managerStats, { color: theme.textSecondary }]}>
+            {item.pendingCount > 0 
+              ? `${item.pendingCount} начислений к выплате`
+              : "Нет начислений"}
+          </ThemedText>
         </View>
 
-        <View style={styles.cardContent}>
-          <View style={styles.infoRow}>
-            <ThemedText style={[styles.label, { color: theme.textSecondary }]}>
-              Получатель:
+        <View style={styles.amountContainer}>
+          {item.pendingAmount > 0 ? (
+            <ThemedText style={[styles.pendingAmount, { color: theme.primary }]}>
+              {item.pendingAmount.toLocaleString("ru-RU")}₽
             </ThemedText>
-            <ThemedText style={styles.value}>{item.recipientName}</ThemedText>
-          </View>
-          <View style={styles.infoRow}>
-            <ThemedText style={[styles.label, { color: theme.textSecondary }]}>
-              Роль:
+          ) : (
+            <ThemedText style={[styles.pendingAmount, { color: theme.textSecondary }]}>
+              0₽
             </ThemedText>
-            <ThemedText style={styles.value}>{roleLabel}</ThemedText>
-          </View>
-          <View style={styles.infoRow}>
-            <ThemedText style={[styles.label, { color: theme.textSecondary }]}>
-              База расчёта:
-            </ThemedText>
-            <ThemedText style={styles.value}>{item.basisAmount}₽</ThemedText>
-          </View>
-          <View style={styles.infoRow}>
-            <ThemedText style={[styles.label, { color: theme.textSecondary }]}>
-              Процент:
-            </ThemedText>
-            <ThemedText style={styles.value}>{item.percentage}%</ThemedText>
-          </View>
-          <View style={styles.infoRow}>
-            <ThemedText style={[styles.label, { color: theme.textSecondary }]}>
-              Сумма:
-            </ThemedText>
-            <ThemedText style={[styles.amount, { color: theme.primary }]}>
-              {item.amount}₽
-            </ThemedText>
-          </View>
-          <View style={styles.infoRow}>
-            <ThemedText style={[styles.label, { color: theme.textSecondary }]}>
-              Дата:
-            </ThemedText>
-            <ThemedText style={styles.value}>{formatDate(item.createdAt)}</ThemedText>
-          </View>
-          {item.paidAt ? (
-            <View style={styles.infoRow}>
-              <ThemedText style={[styles.label, { color: theme.textSecondary }]}>
-                Выплачено:
-              </ThemedText>
-              <ThemedText style={styles.value}>{formatDate(item.paidAt)}</ThemedText>
-            </View>
-          ) : null}
+          )}
         </View>
 
-        {isAdmin && isPending ? (
-          <Pressable
-            style={({ pressed }) => [
-              styles.payButton,
-              { backgroundColor: theme.success, opacity: pressed ? 0.7 : 1 },
-            ]}
-            onPress={() => handleMarkPaid(item)}
-          >
-            <Icon name="check" size={16} color="#fff" />
-            <ThemedText style={styles.payButtonText}>Отметить выплаченной</ThemedText>
-          </Pressable>
-        ) : null}
-      </ThemedView>
+        <Icon name="chevron-right" size={20} color={theme.textSecondary} />
+      </Pressable>
     );
   };
 
@@ -165,57 +109,46 @@ export default function RentalCommissionsScreen() {
           { borderColor: theme.border, borderRadius: BorderRadius.sm },
         ]}
       >
-        <View style={styles.summaryRow}>
-          <ThemedText style={[styles.summaryLabel, { color: theme.textSecondary }]}>
-            К выплате:
-          </ThemedText>
-          <ThemedText style={[styles.summaryValue, { color: theme.primary }]}>
-            {totalPending}₽
-          </ThemedText>
-        </View>
-        <View style={styles.summaryRow}>
-          <ThemedText style={[styles.summaryLabel, { color: theme.textSecondary }]}>
-            Ожидающих:
-          </ThemedText>
-          <ThemedText style={styles.summaryCount}>{pendingCommissions.length}</ThemedText>
-        </View>
-        <View style={styles.summaryRow}>
-          <ThemedText style={[styles.summaryLabel, { color: theme.textSecondary }]}>
-            Выплачено:
-          </ThemedText>
-          <ThemedText style={styles.summaryCount}>{paidCommissions.length}</ThemedText>
-        </View>
+        <ThemedText style={[styles.summaryLabel, { color: theme.textSecondary }]}>
+          Всего к выплате
+        </ThemedText>
+        <ThemedText style={[styles.summaryValue, { color: theme.primary }]}>
+          {totalPendingAll.toLocaleString("ru-RU")}₽
+        </ThemedText>
       </ThemedView>
 
-      {pendingCommissions.length > 0 ? (
-        <ThemedText style={styles.sectionTitle}>Ожидающие выплаты</ThemedText>
-      ) : null}
+      <ThemedText style={[styles.sectionTitle, { color: theme.textSecondary }]}>
+        Менеджеры
+      </ThemedText>
     </View>
   );
 
-  const allCommissions = [...pendingCommissions, ...paidCommissions];
+  if (!isAdmin && profile) {
+    navigation.navigate("ManagerCommissions", {
+      managerId: profile.id,
+      managerName: profile.display_name || profile.email || "Менеджер",
+    });
+    return null;
+  }
 
   return (
     <View style={[styles.container, { backgroundColor: theme.backgroundRoot }]}>
       <FlatList
-        data={allCommissions}
-        renderItem={renderCommission}
-        keyExtractor={(item) => item.id}
+        data={managersWithCommissions}
+        renderItem={renderManager}
+        keyExtractor={(item) => item.manager.id}
         ListHeaderComponent={renderHeader}
         ListEmptyComponent={
           <View style={styles.emptyContainer}>
-            <Icon name="dollar-sign" size={48} color={theme.textSecondary} />
+            <Icon name="users" size={48} color={theme.textSecondary} />
             <ThemedText style={[styles.emptyText, { color: theme.textSecondary }]}>
-              Нет комиссий
+              Нет менеджеров
             </ThemedText>
           </View>
         }
         contentContainerStyle={[
           styles.listContent,
-          {
-            paddingTop: paddingTop,
-            paddingBottom: scrollInsetBottom,
-          },
+          { paddingTop: paddingTop, paddingBottom: scrollInsetBottom },
         ]}
         showsVerticalScrollIndicator={false}
       />
@@ -234,91 +167,61 @@ const styles = StyleSheet.create({
     marginBottom: Spacing.md,
   },
   summaryCard: {
-    padding: Spacing.md,
+    padding: Spacing.lg,
     borderWidth: 1,
-    marginBottom: Spacing.md,
-  },
-  summaryRow: {
-    flexDirection: "row",
-    justifyContent: "space-between",
+    marginBottom: Spacing.lg,
     alignItems: "center",
-    marginBottom: Spacing.xs,
   },
   summaryLabel: {
     fontSize: 14,
+    marginBottom: Spacing.xs,
   },
   summaryValue: {
-    fontSize: 20,
+    fontSize: 32,
     fontWeight: "700",
-  },
-  summaryCount: {
-    fontSize: 16,
-    fontWeight: "600",
   },
   sectionTitle: {
-    fontSize: 16,
-    fontWeight: "600",
-    marginBottom: Spacing.sm,
-  },
-  card: {
-    borderWidth: 1,
-    marginBottom: Spacing.sm,
-    overflow: "hidden",
-  },
-  cardHeader: {
-    flexDirection: "row",
-    justifyContent: "space-between",
-    alignItems: "center",
-    padding: Spacing.sm,
-    borderBottomWidth: 1,
-    borderBottomColor: "rgba(255,255,255,0.1)",
-  },
-  orderInfo: {
-    flexDirection: "row",
-    alignItems: "center",
-  },
-  orderNumber: {
-    fontSize: 14,
-    fontWeight: "500",
-  },
-  statusBadge: {
-    paddingHorizontal: Spacing.sm,
-    paddingVertical: 2,
-    borderRadius: BorderRadius.xs,
-  },
-  statusText: {
-    fontSize: 12,
-    fontWeight: "600",
-  },
-  cardContent: {
-    padding: Spacing.sm,
-  },
-  infoRow: {
-    flexDirection: "row",
-    justifyContent: "space-between",
-    alignItems: "center",
-    marginBottom: 4,
-  },
-  label: {
     fontSize: 13,
-  },
-  value: {
-    fontSize: 14,
     fontWeight: "500",
+    textTransform: "uppercase",
+    marginBottom: Spacing.sm,
   },
-  amount: {
-    fontSize: 16,
-    fontWeight: "700",
-  },
-  payButton: {
+  managerCard: {
     flexDirection: "row",
+    alignItems: "center",
+    padding: Spacing.md,
+    borderRadius: BorderRadius.sm,
+    marginBottom: Spacing.sm,
+  },
+  avatar: {
+    width: 44,
+    height: 44,
+    borderRadius: 22,
     alignItems: "center",
     justifyContent: "center",
-    padding: Spacing.sm,
-    gap: 8,
+    marginRight: Spacing.md,
   },
-  payButtonText: {
+  avatarText: {
     color: "#fff",
+    fontSize: 16,
+    fontWeight: "600",
+  },
+  managerInfo: {
+    flex: 1,
+  },
+  managerName: {
+    fontSize: 16,
+    fontWeight: "500",
+    marginBottom: 2,
+  },
+  managerStats: {
+    fontSize: 13,
+  },
+  amountContainer: {
+    marginRight: Spacing.sm,
+  },
+  pendingAmount: {
+    fontSize: 16,
     fontWeight: "600",
   },
   emptyContainer: {
