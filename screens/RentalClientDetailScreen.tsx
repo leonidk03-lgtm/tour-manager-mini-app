@@ -19,6 +19,7 @@ import { ScreenScrollView } from "@/components/ScreenScrollView";
 import { Spacing, BorderRadius } from "@/constants/theme";
 import { useTheme } from "@/hooks/useTheme";
 import { useRental, RentalOrder, RentalOrderStatus } from "@/contexts/RentalContext";
+import { useAuth } from "@/contexts/AuthContext";
 import { SettingsStackParamList } from "@/navigation/SettingsStackNavigator";
 import { hapticFeedback } from "@/utils/haptics";
 
@@ -38,11 +39,13 @@ export default function RentalClientDetailScreen() {
   const route = useRoute<RouteParams>();
   const insets = useSafeAreaInsets();
   const { rentalClients, rentalOrders, updateRentalClient, deleteRentalClient } = useRental();
+  const { managers } = useAuth();
 
   const clientId = route.params?.clientId;
   const client = rentalClients.find(c => c.id === clientId);
 
   const [showEditModal, setShowEditModal] = useState(false);
+  const [showManagerModal, setShowManagerModal] = useState(false);
   const [editName, setEditName] = useState(client?.name || "");
   const [editPhone, setEditPhone] = useState(client?.phone || "");
   const [editEmail, setEditEmail] = useState(client?.email || "");
@@ -136,6 +139,22 @@ export default function RentalClientDetailScreen() {
       Alert.alert("Ошибка", "Не удалось обновить статус клиента");
     }
   };
+
+  const handleSelectManager = async (managerId: string | null) => {
+    if (!client) return;
+    hapticFeedback.selection();
+    try {
+      await updateRentalClient(client.id, { assignedManagerId: managerId });
+      setShowManagerModal(false);
+      hapticFeedback.success();
+    } catch (error) {
+      Alert.alert("Ошибка", "Не удалось назначить менеджера");
+    }
+  };
+
+  const assignedManager = client?.assignedManagerId 
+    ? managers.find(m => m.id === client.assignedManagerId) 
+    : null;
 
   if (!client) {
     return (
@@ -242,6 +261,20 @@ export default function RentalClientDetailScreen() {
               </ThemedText>
             </View>
           ) : null}
+
+          <Pressable
+            onPress={() => setShowManagerModal(true)}
+            style={[styles.managerRow, { backgroundColor: theme.backgroundTertiary }]}
+          >
+            <View style={styles.managerInfo}>
+              <Icon name="user" size={16} color={theme.primary} />
+              <ThemedText style={{ color: theme.textSecondary }}>Менеджер:</ThemedText>
+              <ThemedText style={{ color: assignedManager ? theme.text : theme.textSecondary, fontWeight: "500" }}>
+                {assignedManager?.display_name || "Не назначен"}
+              </ThemedText>
+            </View>
+            <Icon name="chevron-right" size={18} color={theme.textSecondary} />
+          </Pressable>
         </View>
 
         <View style={[styles.statsCard, { backgroundColor: theme.backgroundSecondary }]}>
@@ -434,6 +467,48 @@ export default function RentalClientDetailScreen() {
                 <ThemedText style={{ color: "#fff", fontWeight: "600" }}>Сохранить</ThemedText>
               </Pressable>
             </View>
+          </View>
+        </View>
+      </Modal>
+
+      <Modal visible={showManagerModal} animationType="slide" transparent>
+        <View style={[styles.modalOverlay, { justifyContent: "flex-end" }]}>
+          <View style={[styles.modalContent, { backgroundColor: theme.backgroundDefault, maxHeight: "70%" }]}>
+            <View style={styles.modalHeader}>
+              <ThemedText style={styles.modalTitle}>Выберите менеджера</ThemedText>
+              <Pressable onPress={() => setShowManagerModal(false)}>
+                <Icon name="x" size={24} color={theme.textSecondary} />
+              </Pressable>
+            </View>
+
+            <FlatList
+              data={[{ id: null, display_name: "Без менеджера" }, ...managers.filter(m => m.role !== "admin")]}
+              keyExtractor={(item) => item.id || "none"}
+              renderItem={({ item }) => (
+                <Pressable
+                  onPress={() => handleSelectManager(item.id)}
+                  style={[
+                    styles.managerOption,
+                    { 
+                      backgroundColor: client?.assignedManagerId === item.id 
+                        ? theme.primary + "20" 
+                        : theme.backgroundSecondary 
+                    },
+                  ]}
+                >
+                  <View style={[styles.managerAvatar, { backgroundColor: item.id ? theme.primary : theme.textSecondary }]}>
+                    <Icon name={item.id ? "user" : "user-x"} size={16} color="#fff" />
+                  </View>
+                  <ThemedText style={styles.managerOptionName}>
+                    {item.display_name || "Без имени"}
+                  </ThemedText>
+                  {client?.assignedManagerId === item.id ? (
+                    <Icon name="check" size={20} color={theme.primary} />
+                  ) : null}
+                </Pressable>
+              )}
+              contentContainerStyle={{ paddingBottom: insets.bottom + Spacing.md }}
+            />
           </View>
         </View>
       </Modal>
@@ -700,5 +775,39 @@ const styles = StyleSheet.create({
     paddingVertical: Spacing.md,
     borderRadius: BorderRadius.md,
     alignItems: "center",
+  },
+  managerRow: {
+    flexDirection: "row",
+    justifyContent: "space-between",
+    alignItems: "center",
+    padding: Spacing.sm,
+    borderRadius: BorderRadius.md,
+    marginTop: Spacing.md,
+  },
+  managerInfo: {
+    flexDirection: "row",
+    alignItems: "center",
+    gap: Spacing.sm,
+  },
+  managerOption: {
+    flexDirection: "row",
+    alignItems: "center",
+    gap: Spacing.md,
+    padding: Spacing.md,
+    marginHorizontal: Spacing.md,
+    marginBottom: Spacing.sm,
+    borderRadius: BorderRadius.md,
+  },
+  managerAvatar: {
+    width: 32,
+    height: 32,
+    borderRadius: 16,
+    justifyContent: "center",
+    alignItems: "center",
+  },
+  managerOptionName: {
+    flex: 1,
+    fontSize: 16,
+    fontWeight: "500",
   },
 });
