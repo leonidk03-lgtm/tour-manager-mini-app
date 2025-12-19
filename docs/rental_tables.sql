@@ -13,7 +13,7 @@ CREATE TABLE IF NOT EXISTS rental_clients (
   inn TEXT,
   kpp TEXT,
   default_price NUMERIC DEFAULT 100,
-  assigned_manager_id UUID REFERENCES managers(id) ON DELETE SET NULL,
+  assigned_manager_id UUID REFERENCES profiles(id) ON DELETE SET NULL,
   notes TEXT,
   is_active BOOLEAN DEFAULT true,
   created_at TIMESTAMPTZ DEFAULT NOW(),
@@ -38,9 +38,9 @@ CREATE TABLE IF NOT EXISTS rental_orders (
   total_price NUMERIC NOT NULL DEFAULT 0,
   prepayment NUMERIC DEFAULT 0,
   receiver_notes TEXT,
-  manager_id UUID REFERENCES managers(id) ON DELETE SET NULL,
+  manager_id UUID REFERENCES profiles(id) ON DELETE SET NULL,
   manager_name TEXT,
-  executor_id UUID REFERENCES managers(id) ON DELETE SET NULL,
+  executor_id UUID REFERENCES profiles(id) ON DELETE SET NULL,
   executor_name TEXT,
   created_at TIMESTAMPTZ DEFAULT NOW(),
   updated_at TIMESTAMPTZ DEFAULT NOW()
@@ -52,7 +52,7 @@ CREATE TABLE IF NOT EXISTS rental_payments (
   order_id UUID NOT NULL REFERENCES rental_orders(id) ON DELETE CASCADE,
   type TEXT NOT NULL CHECK (type IN ('prepayment', 'refund', 'service_expense', 'final')),
   amount NUMERIC NOT NULL,
-  manager_id UUID REFERENCES managers(id) ON DELETE SET NULL,
+  manager_id UUID REFERENCES profiles(id) ON DELETE SET NULL,
   manager_name TEXT,
   notes TEXT,
   created_at TIMESTAMPTZ DEFAULT NOW()
@@ -63,7 +63,7 @@ CREATE TABLE IF NOT EXISTS rental_order_history (
   id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
   order_id UUID NOT NULL REFERENCES rental_orders(id) ON DELETE CASCADE,
   action TEXT NOT NULL,
-  manager_id UUID REFERENCES managers(id) ON DELETE SET NULL,
+  manager_id UUID REFERENCES profiles(id) ON DELETE SET NULL,
   manager_name TEXT,
   created_at TIMESTAMPTZ DEFAULT NOW()
 );
@@ -130,7 +130,7 @@ CREATE POLICY "Enable read for authenticated users" ON rental_order_history
 CREATE POLICY "Enable insert for authenticated users" ON rental_order_history
   FOR INSERT TO authenticated WITH CHECK (true);
 
--- Триггер для обновления updated_at
+-- Триггер для обновления updated_at (если еще не существует)
 CREATE OR REPLACE FUNCTION update_updated_at_column()
 RETURNS TRIGGER AS $$
 BEGIN
@@ -139,10 +139,12 @@ BEGIN
 END;
 $$ language 'plpgsql';
 
+DROP TRIGGER IF EXISTS update_rental_clients_updated_at ON rental_clients;
 CREATE TRIGGER update_rental_clients_updated_at
   BEFORE UPDATE ON rental_clients
   FOR EACH ROW EXECUTE FUNCTION update_updated_at_column();
 
+DROP TRIGGER IF EXISTS update_rental_orders_updated_at ON rental_orders;
 CREATE TRIGGER update_rental_orders_updated_at
   BEFORE UPDATE ON rental_orders
   FOR EACH ROW EXECUTE FUNCTION update_updated_at_column();
