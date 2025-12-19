@@ -508,13 +508,16 @@ export default function ManagerDetailScreen() {
                       return;
                     }
                     setIsSaving(true);
-                    const { error } = await updateManagerCommissions(manager.id, owner, executor);
-                    setIsSaving(false);
-                    if (error) {
-                      Alert.alert("Ошибка", error);
-                    } else {
-                      setShowCommissions(false);
-                      await refreshManagers();
+                    try {
+                      const { error } = await updateManagerCommissions(latestManager.id, owner, executor);
+                      if (error) {
+                        Alert.alert("Ошибка", error);
+                      } else {
+                        setShowCommissions(false);
+                        await refreshManagers();
+                      }
+                    } finally {
+                      setIsSaving(false);
                     }
                   }}
                   disabled={isSaving}
