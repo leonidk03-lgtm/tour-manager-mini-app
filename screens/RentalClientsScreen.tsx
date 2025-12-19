@@ -364,7 +364,7 @@ export default function RentalClientsScreen() {
         onPress={() => handleOpenModal()}
         style={[
           styles.fab,
-          { backgroundColor: theme.primary, bottom: insets.bottom + Spacing.xl },
+          { backgroundColor: theme.primary, bottom: insets.bottom + 80 },
         ]}
       >
         <Icon name="plus" size={24} color="#fff" />

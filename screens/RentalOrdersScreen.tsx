@@ -417,7 +417,7 @@ export default function RentalOrdersScreen() {
         onPress={() => navigation.navigate("AddRentalOrder")}
         style={[
           styles.fab,
-          { backgroundColor: theme.primary, bottom: insets.bottom + Spacing.xl },
+          { backgroundColor: theme.primary, bottom: insets.bottom + 80 },
         ]}
       >
         <Icon name="plus" size={24} color="#fff" />
