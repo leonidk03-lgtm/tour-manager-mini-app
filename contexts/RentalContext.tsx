@@ -577,7 +577,7 @@ export function RentalProvider({ children }: { children: ReactNode }) {
 
     const { data: profiles } = await supabase
       .from('profiles')
-      .select('id, display_name, owner_commission_percent, executor_commission_percent')
+      .select('id, display_name, role, owner_commission_percent, executor_commission_percent')
       .in('id', [ownerId, executorId].filter(Boolean) as string[]);
 
     if (!profiles || profiles.length === 0) return;
@@ -590,7 +590,7 @@ export function RentalProvider({ children }: { children: ReactNode }) {
 
     const commissionsToInsert: any[] = [];
 
-    if (ownerProfile) {
+    if (ownerProfile && ownerProfile.role !== 'admin') {
       commissionsToInsert.push({
         order_id: orderId,
         order_number: order.orderNumber,
@@ -604,7 +604,7 @@ export function RentalProvider({ children }: { children: ReactNode }) {
       });
     }
 
-    if (executorId && executorProfile && executorId !== ownerId) {
+    if (executorId && executorProfile && executorProfile.role !== 'admin') {
       commissionsToInsert.push({
         order_id: orderId,
         order_number: order.orderNumber,
@@ -614,22 +614,6 @@ export function RentalProvider({ children }: { children: ReactNode }) {
         amount: Math.round((totalPrice * executorPercent) / 100),
         basis_amount: totalPrice,
         percentage: executorPercent,
-        status: 'pending',
-      });
-    }
-
-    if (executorId && executorId === ownerId && ownerProfile) {
-      const combinedPercent = ownerPercent + executorPercent;
-      commissionsToInsert.length = 0;
-      commissionsToInsert.push({
-        order_id: orderId,
-        order_number: order.orderNumber,
-        recipient_id: ownerId,
-        recipient_name: ownerProfile.display_name || 'Менеджер',
-        role: 'owner',
-        amount: Math.round((totalPrice * combinedPercent) / 100),
-        basis_amount: totalPrice,
-        percentage: combinedPercent,
         status: 'pending',
       });
     }
