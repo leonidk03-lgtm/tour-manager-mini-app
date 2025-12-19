@@ -300,7 +300,7 @@ export default function RentalOrderDetailScreen() {
             <View style={styles.infoItem}>
               <ThemedText style={[styles.infoLabel, { color: theme.textSecondary }]}>Комплектов</ThemedText>
               <ThemedText style={styles.infoValue}>
-                {order.kitCount}{(order.spareReceiverCount || 0) > 0 ? ` + ${order.spareReceiverCount} зап.` : ""}
+                {(order.kitCount || 0) + (order.spareReceiverCount || 0)}
               </ThemedText>
             </View>
             <View style={styles.infoItem}>

@@ -220,7 +220,8 @@ export default function RentalOrdersScreen() {
     const executorManager = item.executorId ? managers.find(m => m.id === item.executorId) : null;
 
     const equipmentParts = [];
-    if (item.kitCount > 0) equipmentParts.push(`${item.kitCount} комп.`);
+    const totalReceivers = (item.kitCount || 0) + (item.spareReceiverCount || 0);
+    if (totalReceivers > 0) equipmentParts.push(`${totalReceivers} комп.`);
     if (item.transmitterCount > 0) equipmentParts.push(`${item.transmitterCount} пер.`);
     if (item.microphoneCount > 0) equipmentParts.push(`${item.microphoneCount} мик.`);
     const equipmentText = equipmentParts.join(" / ") || "—";
