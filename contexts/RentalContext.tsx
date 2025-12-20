@@ -575,20 +575,13 @@ export function RentalProvider({ children }: { children: ReactNode }) {
     
     const client = rentalClients.find(c => c.id === order.clientId);
     if (profile) {
-      const activityData = {
+      await supabase.from('activities').insert({
         manager_id: profile.id,
         manager_name: profile.display_name,
         type: 'rental_order_created',
         description: `создал заказ аренды для ${client?.name || 'клиента'}`,
         target_id: data.id,
-      };
-      console.log('[RentalContext] Inserting activity:', activityData);
-      const { error: activityError } = await supabase.from('activities').insert(activityData);
-      if (activityError) {
-        console.error('[RentalContext] Activity insert error:', activityError);
-      } else {
-        console.log('[RentalContext] Activity inserted successfully');
-      }
+      });
     }
 
     await fetchRentalOrders();
