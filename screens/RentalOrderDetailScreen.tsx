@@ -7,6 +7,8 @@ import {
   TextInput,
   Modal,
   ScrollView,
+  KeyboardAvoidingView,
+  Platform,
 } from "react-native";
 import { useSafeAreaInsets } from "react-native-safe-area-context";
 import { useNavigation, useRoute, RouteProp } from "@react-navigation/native";
@@ -751,21 +753,25 @@ export default function RentalOrderDetailScreen() {
       </Modal>
 
       <Modal visible={showLossModal} animationType="slide" transparent>
-        <View style={[styles.modalOverlay, { justifyContent: "flex-end" }]}>
-          <View style={[styles.paymentModalContent, { backgroundColor: theme.backgroundDefault }]}>
-            <View style={styles.modalHeader}>
-              <ThemedText style={styles.modalTitle}>Зарегистрировать утерю</ThemedText>
-              <Pressable onPress={() => {
-                setShowLossModal(false);
-                setSelectedLossItem(null);
-                setLossCount("");
-                setLossReason("");
-              }}>
-                <Icon name="x" size={24} color={theme.text} />
-              </Pressable>
-            </View>
+        <KeyboardAvoidingView 
+          behavior={Platform.OS === "ios" ? "padding" : "height"}
+          style={{ flex: 1, justifyContent: "flex-end" }}
+        >
+          <View style={[styles.modalOverlay, { justifyContent: "flex-end", flex: 1 }]}>
+            <View style={[styles.paymentModalContent, { backgroundColor: theme.backgroundDefault }]}>
+              <View style={styles.modalHeader}>
+                <ThemedText style={styles.modalTitle}>Зарегистрировать утерю</ThemedText>
+                <Pressable onPress={() => {
+                  setShowLossModal(false);
+                  setSelectedLossItem(null);
+                  setLossCount("");
+                  setLossReason("");
+                }}>
+                  <Icon name="x" size={24} color={theme.text} />
+                </Pressable>
+              </View>
 
-            <ScrollView style={styles.paymentModalScroll}>
+              <ScrollView style={styles.paymentModalScroll} keyboardShouldPersistTaps="handled">
               <ThemedText style={[styles.inputLabel, { color: theme.textSecondary }]}>
                 Тип оборудования
               </ThemedText>
@@ -840,9 +846,10 @@ export default function RentalOrderDetailScreen() {
               <ThemedText style={{ color: "#fff", fontWeight: "600" }}>
                 Зарегистрировать утерю
               </ThemedText>
-            </Pressable>
+              </Pressable>
+            </View>
           </View>
-        </View>
+        </KeyboardAvoidingView>
       </Modal>
     </ThemedView>
   );

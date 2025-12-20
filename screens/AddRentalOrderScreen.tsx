@@ -8,6 +8,7 @@ import {
   Modal,
   FlatList,
   Platform,
+  KeyboardAvoidingView,
 } from "react-native";
 import { useSafeAreaInsets } from "react-native-safe-area-context";
 import { useNavigation, useRoute, RouteProp } from "@react-navigation/native";
@@ -842,33 +843,37 @@ export default function AddRentalOrderScreen() {
       </Modal>
 
       <Modal visible={showBagPicker} animationType="slide" transparent>
-        <View style={[styles.modalOverlay, { backgroundColor: "rgba(0,0,0,0.5)" }]}>
-          <View style={[styles.modalContent, { backgroundColor: theme.backgroundDefault }]}>
-            <View style={styles.modalHeader}>
-              <ThemedText style={styles.modalTitle}>Выберите сумку</ThemedText>
-              <Pressable onPress={() => { setShowBagPicker(false); setBagSearchQuery(""); }}>
-                <Icon name="x" size={24} color={theme.text} />
-              </Pressable>
-            </View>
-
-            <View style={[styles.bagSearchBox, { backgroundColor: theme.backgroundSecondary }]}>
-              <Icon name="search" size={18} color={theme.textSecondary} />
-              <TextInput
-                style={[styles.bagSearchInput, { color: theme.text }]}
-                value={bagSearchQuery}
-                onChangeText={setBagSearchQuery}
-                placeholder="Поиск по номеру сумки..."
-                placeholderTextColor={theme.textSecondary}
-                keyboardType="number-pad"
-              />
-              {bagSearchQuery ? (
-                <Pressable onPress={() => setBagSearchQuery("")}>
-                  <Icon name="x" size={18} color={theme.textSecondary} />
+        <KeyboardAvoidingView 
+          behavior={Platform.OS === "ios" ? "padding" : "height"}
+          style={{ flex: 1 }}
+        >
+          <View style={[styles.modalOverlay, { backgroundColor: "rgba(0,0,0,0.5)" }]}>
+            <View style={[styles.modalContent, { backgroundColor: theme.backgroundDefault }]}>
+              <View style={styles.modalHeader}>
+                <ThemedText style={styles.modalTitle}>Выберите сумку</ThemedText>
+                <Pressable onPress={() => { setShowBagPicker(false); setBagSearchQuery(""); }}>
+                  <Icon name="x" size={24} color={theme.text} />
                 </Pressable>
-              ) : null}
-            </View>
+              </View>
 
-            <FlatList
+              <View style={[styles.bagSearchBox, { backgroundColor: theme.backgroundSecondary }]}>
+                <Icon name="search" size={18} color={theme.textSecondary} />
+                <TextInput
+                  style={[styles.bagSearchInput, { color: theme.text }]}
+                  value={bagSearchQuery}
+                  onChangeText={setBagSearchQuery}
+                  placeholder="Поиск по номеру сумки..."
+                  placeholderTextColor={theme.textSecondary}
+                  keyboardType="number-pad"
+                />
+                {bagSearchQuery ? (
+                  <Pressable onPress={() => setBagSearchQuery("")}>
+                    <Icon name="x" size={18} color={theme.textSecondary} />
+                  </Pressable>
+                ) : null}
+              </View>
+
+              <FlatList
               data={bagSearchQuery.trim() ? availableBagsForRental.filter(k => k.bagNumber.toString().includes(bagSearchQuery.trim())) : availableBagsForRental}
               keyExtractor={(item) => item.id}
               contentContainerStyle={{ padding: Spacing.md }}
@@ -911,9 +916,10 @@ export default function AddRentalOrderScreen() {
                   </ThemedText>
                 </View>
               }
-            />
+              />
+            </View>
           </View>
-        </View>
+        </KeyboardAvoidingView>
       </Modal>
     </ThemedView>
   );
