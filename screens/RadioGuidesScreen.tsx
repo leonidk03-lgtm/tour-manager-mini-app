@@ -79,7 +79,7 @@ export default function RadioGuidesScreen() {
     equipmentItems,
     addEquipmentMovement,
   } = useData();
-  const { rentalOrders, rentalClients } = useRental();
+  const { rentalOrders, rentalClients, updateRentalOrder } = useRental();
 
   const trackableLossItems = useMemo(() => {
     return equipmentItems.filter(item => item.trackLoss);
@@ -144,6 +144,14 @@ export default function RadioGuidesScreen() {
   const [activeFilter, setActiveFilter] = useState<"all" | "issued" | "overdue" | "available">("all");
   const [sortByBattery, setSortByBattery] = useState(false);
   const [searchQuery, setSearchQuery] = useState("");
+  
+  // Rental return states
+  const [rentalReturnModalVisible, setRentalReturnModalVisible] = useState(false);
+  const [selectedRentalKit, setSelectedRentalKit] = useState<RadioGuideKit | null>(null);
+  const [selectedRentalOrder, setSelectedRentalOrder] = useState<RentalOrder | null>(null);
+  const [rentalLossItemId, setRentalLossItemId] = useState<string | null>(null);
+  const [rentalMissingCount, setRentalMissingCount] = useState("");
+  const [rentalLossReason, setRentalLossReason] = useState("");
   
   // Allocation data integration
   const [allocationBuses, setAllocationBuses] = useState<AllocationBus[]>([]);
@@ -550,6 +558,117 @@ export default function RadioGuidesScreen() {
     }
   };
 
+  // Rental return functions
+  const openRentalReturnModal = (kit: RadioGuideKit, order: RentalOrder) => {
+    const client = rentalClients.find(c => c.id === order.clientId);
+    const clientName = order.clientName || client?.name || "Клиент";
+    
+    Alert.alert(
+      "Приём оборудования",
+      `Заказ #${order.orderNumber}\nКлиент: ${clientName}\n\nВсё оборудование на месте?`,
+      [
+        { text: "Отмена", style: "cancel" },
+        {
+          text: "Да, всё на месте",
+          onPress: () => handleRentalReturnAllOk(kit, order),
+        },
+        {
+          text: "Нет, есть недостача",
+          style: "destructive",
+          onPress: () => {
+            setSelectedRentalKit(kit);
+            setSelectedRentalOrder(order);
+            setRentalLossItemId(null);
+            setRentalMissingCount("");
+            setRentalLossReason("");
+            setRentalReturnModalVisible(true);
+          },
+        },
+      ]
+    );
+  };
+
+  const handleRentalReturnAllOk = async (kit: RadioGuideKit, order: RentalOrder) => {
+    try {
+      // Free the bag
+      await updateRadioGuideKit(kit.id, { status: "available" });
+      
+      // Update order status to returned
+      await updateRentalOrder(order.id, { status: "returned" });
+      
+      Alert.alert("Успешно", `Оборудование по заказу #${order.orderNumber} принято`);
+    } catch (err) {
+      console.error("Error returning rental:", err);
+      Alert.alert("Ошибка", "Не удалось принять оборудование");
+    }
+  };
+
+  const handleRentalReturnWithLoss = async () => {
+    if (!selectedRentalKit || !selectedRentalOrder) return;
+
+    const missing = parseInt(rentalMissingCount);
+    if (isNaN(missing) || missing <= 0) {
+      Alert.alert("Ошибка", "Введите количество недостающего оборудования");
+      return;
+    }
+
+    if (!rentalLossReason.trim()) {
+      Alert.alert("Ошибка", "Укажите причину недостачи");
+      return;
+    }
+
+    if (!rentalLossItemId) {
+      Alert.alert("Ошибка", "Выберите тип оборудования");
+      return;
+    }
+
+    const lossItem = equipmentItems.find(i => i.id === rentalLossItemId);
+    const client = rentalClients.find(c => c.id === selectedRentalOrder.clientId);
+    const clientName = selectedRentalOrder.clientName || client?.name || "Клиент";
+
+    try {
+      // Create loss movement on warehouse
+      await addEquipmentMovement({
+        itemId: rentalLossItemId,
+        type: 'loss',
+        quantity: missing,
+        note: `Утеря из аренды. Заказ #${selectedRentalOrder.orderNumber}. Клиент: ${clientName}. Причина: ${rentalLossReason.trim()}`,
+      });
+      
+      // Record in equipment_losses for tracking
+      await addEquipmentLoss({
+        assignmentId: null,
+        kitId: null,
+        rentalOrderId: selectedRentalOrder.id,
+        guideName: clientName,
+        missingCount: missing,
+        reason: rentalLossReason.trim(),
+        equipmentItemId: rentalLossItemId,
+      });
+
+      // Free the bag
+      await updateRadioGuideKit(selectedRentalKit.id, { status: "available" });
+      
+      // Update order status to returned
+      await updateRentalOrder(selectedRentalOrder.id, { status: "returned" });
+      
+      setRentalReturnModalVisible(false);
+      setSelectedRentalKit(null);
+      setSelectedRentalOrder(null);
+      
+      Alert.alert("Успешно", `Оборудование принято. Зафиксирована утеря: ${lossItem?.name || "оборудование"} - ${missing} шт.`);
+    } catch (err) {
+      console.error("Error returning rental with loss:", err);
+      Alert.alert("Ошибка", "Не удалось принять оборудование");
+    }
+  };
+
+  // Get rental loss items filtered by order content
+  const getRentalLossItems = useMemo(() => {
+    if (!selectedRentalOrder) return trackableLossItems;
+    return trackableLossItems;
+  }, [selectedRentalOrder, trackableLossItems]);
+
   const renderIssuedKit = (item: { kit: RadioGuideKit; assignment: RadioGuideAssignment; isOverdue: boolean }) => {
     const { kit, assignment, isOverdue } = item;
     const excInfo = getExcursionInfo(assignment.excursionId);
@@ -687,6 +806,18 @@ export default function RadioGuidesScreen() {
           <ThemedText style={styles.assignmentValue}>
             {startDate} — {endDate}
           </ThemedText>
+        </View>
+        
+        <View style={styles.kitActions}>
+          <Pressable
+            style={[styles.actionButton, { backgroundColor: theme.success }]}
+            onPress={() => openRentalReturnModal(kit, order)}
+          >
+            <Icon name="download" size={16} color={theme.buttonText} />
+            <ThemedText style={[styles.actionButtonText, { color: theme.buttonText }]}>
+              Принять
+            </ThemedText>
+          </Pressable>
         </View>
       </ThemedView>
     );
@@ -1060,9 +1191,153 @@ export default function RadioGuidesScreen() {
           </ThemedView>
         </View>
       </Modal>
+
+      <Modal
+        visible={rentalReturnModalVisible}
+        animationType="slide"
+        transparent
+        onRequestClose={() => setRentalReturnModalVisible(false)}
+      >
+        <View style={styles.modalOverlay}>
+          <ThemedView
+            style={[styles.modalContent, { backgroundColor: theme.backgroundDefault }]}
+          >
+            <View style={styles.modalHeader}>
+              <ThemedText style={styles.modalTitle}>
+                Регистрация недостачи
+              </ThemedText>
+              <Pressable onPress={() => setRentalReturnModalVisible(false)}>
+                <Icon name="x" size={24} color={theme.text} />
+              </Pressable>
+            </View>
+
+            {Platform.OS === "web" ? (
+              <ScrollView
+                style={styles.formScroll}
+                contentContainerStyle={styles.formScrollContent}
+                keyboardShouldPersistTaps="handled"
+              >
+                {renderRentalLossForm()}
+              </ScrollView>
+            ) : (
+              <KeyboardAwareScrollView
+                style={styles.formScroll}
+                contentContainerStyle={styles.formScrollContent}
+                keyboardShouldPersistTaps="handled"
+              >
+                {renderRentalLossForm()}
+              </KeyboardAwareScrollView>
+            )}
+          </ThemedView>
+        </View>
+      </Modal>
     </>
     </PermissionGate>
   );
+
+  function renderRentalLossForm() {
+    const client = selectedRentalOrder ? rentalClients.find(c => c.id === selectedRentalOrder.clientId) : null;
+    const clientName = selectedRentalOrder?.clientName || client?.name || "Клиент";
+    
+    return (
+      <View style={styles.form}>
+        <View style={[styles.infoBox, { backgroundColor: theme.warning + "10", borderColor: theme.warning }]}>
+          <Icon name="alert-triangle" size={18} color={theme.warning} />
+          <ThemedText style={{ color: theme.warning, marginLeft: Spacing.sm, flex: 1 }}>
+            Заказ #{selectedRentalOrder?.orderNumber} ({clientName})
+          </ThemedText>
+        </View>
+
+        <View style={styles.inputGroup}>
+          <ThemedText style={[styles.label, { color: theme.textSecondary }]}>
+            Тип оборудования
+          </ThemedText>
+          <View style={styles.excursionsList}>
+            {getRentalLossItems.map((item) => (
+              <Pressable
+                key={item.id}
+                onPress={() => setRentalLossItemId(item.id)}
+                style={[
+                  styles.excursionOption,
+                  {
+                    backgroundColor: rentalLossItemId === item.id ? theme.error + "20" : theme.backgroundSecondary,
+                    borderColor: rentalLossItemId === item.id ? theme.error : theme.border,
+                  },
+                ]}
+              >
+                <Icon
+                  name={rentalLossItemId === item.id ? "check-circle" : "circle"}
+                  size={18}
+                  color={rentalLossItemId === item.id ? theme.error : theme.textSecondary}
+                />
+                <View style={{ flex: 1, marginLeft: Spacing.sm }}>
+                  <ThemedText style={{ color: rentalLossItemId === item.id ? theme.error : theme.text }}>
+                    {item.name}
+                  </ThemedText>
+                  <ThemedText style={{ color: theme.textSecondary, fontSize: 12 }}>
+                    На складе: {item.quantity} шт.
+                  </ThemedText>
+                </View>
+              </Pressable>
+            ))}
+          </View>
+        </View>
+
+        <View style={styles.inputGroup}>
+          <ThemedText style={[styles.label, { color: theme.textSecondary }]}>
+            Количество недостающего оборудования
+          </ThemedText>
+          <TextInput
+            style={[
+              styles.input,
+              { backgroundColor: theme.backgroundSecondary, borderColor: theme.border, color: theme.text },
+            ]}
+            value={rentalMissingCount}
+            onChangeText={setRentalMissingCount}
+            placeholder="0"
+            placeholderTextColor={theme.textSecondary}
+            keyboardType="number-pad"
+          />
+        </View>
+
+        <View style={styles.inputGroup}>
+          <ThemedText style={[styles.label, { color: theme.textSecondary }]}>
+            Причина недостачи
+          </ThemedText>
+          <TextInput
+            style={[
+              styles.input,
+              styles.multilineInput,
+              { backgroundColor: theme.backgroundSecondary, borderColor: theme.border, color: theme.text },
+            ]}
+            value={rentalLossReason}
+            onChangeText={setRentalLossReason}
+            placeholder="Укажите причину..."
+            placeholderTextColor={theme.textSecondary}
+            multiline
+            numberOfLines={3}
+          />
+        </View>
+
+        <View style={styles.buttonRow}>
+          <Pressable
+            style={[styles.cancelButton, { borderColor: theme.border }]}
+            onPress={() => setRentalReturnModalVisible(false)}
+          >
+            <ThemedText style={{ color: theme.text }}>Отмена</ThemedText>
+          </Pressable>
+          <Pressable
+            style={[styles.saveButton, { backgroundColor: theme.error, flex: 1 }]}
+            onPress={handleRentalReturnWithLoss}
+          >
+            <ThemedText style={[styles.saveButtonText, { color: theme.buttonText }]}>
+              Зафиксировать утерю
+            </ThemedText>
+          </Pressable>
+        </View>
+      </View>
+    );
+  }
 
   function renderFormContent() {
     if (modalMode === "add" || modalMode === "edit") {
@@ -1961,5 +2236,26 @@ const styles = StyleSheet.create({
   guidePickerBusText: {
     fontSize: 12,
     fontWeight: "600",
+  },
+  infoBox: {
+    flexDirection: "row",
+    alignItems: "center",
+    padding: Spacing.md,
+    borderRadius: BorderRadius.md,
+    borderWidth: 1,
+    marginBottom: Spacing.md,
+  },
+  buttonRow: {
+    flexDirection: "row",
+    gap: Spacing.md,
+    marginTop: Spacing.md,
+  },
+  cancelButton: {
+    paddingVertical: Spacing.md,
+    paddingHorizontal: Spacing.lg,
+    borderRadius: BorderRadius.md,
+    borderWidth: 1,
+    alignItems: "center",
+    justifyContent: "center",
   },
 });

@@ -66,6 +66,10 @@ Automatic commission calculation when orders are marked as paid:
 Equipment losses can be registered from both excursion radio guide assignments and rental orders:
 - From RadioGuidesScreen for excursion-related losses (linked via assignment_id/kit_id)
 - From RentalOrderDetailScreen for rental-related losses (linked via rental_order_id)
+- **Rental Return in RadioGuidesScreen**: "Accept" button on rental cards triggers equipment return workflow
+  - Shows confirmation dialog: "Everything in place?"
+  - If yes: frees the bag and marks order as "returned"
+  - If no: opens loss registration modal for the rental order
 - Both integrate with WarehouseScreen inventory via equipment_movements table
 - Losses are tracked in equipment_losses table with nullable assignment_id, kit_id, and rental_order_id fields
 - **EquipmentLossesScreen**: Central hub for viewing and managing all equipment losses
