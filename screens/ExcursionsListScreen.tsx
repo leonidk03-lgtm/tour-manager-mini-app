@@ -37,6 +37,7 @@ const STORAGE_KEY_BUSES = "@allocation_buses";
 const STORAGE_KEY_GUIDES = "@allocation_guides";
 const STORAGE_KEY_DATE = "@allocation_date";
 import { useAuth } from "@/contexts/AuthContext";
+import { useRental } from "@/contexts/RentalContext";
 import { hapticFeedback } from "@/utils/haptics";
 import {
   calculateExcursionRevenue,
@@ -55,6 +56,7 @@ export default function ExcursionsListScreen() {
   const { theme } = useTheme();
   const navigation = useNavigation<NavigationProp<ExcursionsStackParamList>>();
   const { excursions, tourTypes, additionalServices, addExcursion, radioGuideKits, issueRadioGuide, getExcursionNotes, radioGuideAssignments } = useData();
+  const { rentalOrders } = useRental();
   const { isAdmin } = useAuth();
   const [selectedDate, setSelectedDate] = useState(new Date().toISOString().split("T")[0]);
   const [searchQuery, setSearchQuery] = useState("");
@@ -80,7 +82,33 @@ export default function ExcursionsListScreen() {
     return totalParticipants % 5 === 0 ? roundedUp + 5 : roundedUp;
   };
   
-  const availableKits = radioGuideKits.filter(kit => kit.status === 'available');
+  const availableKits = useMemo(() => {
+    const today = new Date().toISOString().split("T")[0];
+    
+    // Get bag numbers in active rentals
+    const rentalBagNumbers = new Set<number>();
+    rentalOrders.filter(o => o.status === "issued").forEach(order => {
+      if (order.bagNumber) {
+        order.bagNumber.split(",").forEach(bagStr => {
+          const bagNum = parseInt(bagStr.trim());
+          if (!isNaN(bagNum)) rentalBagNumbers.add(bagNum);
+        });
+      }
+    });
+    
+    // Get kit IDs with overdue assignments
+    const overdueKitIds = new Set<string>();
+    radioGuideAssignments.filter(a => a.returnedAt === null).forEach(a => {
+      const issuedDate = a.issuedAt.split("T")[0];
+      if (issuedDate < today) overdueKitIds.add(a.kitId);
+    });
+    
+    return radioGuideKits.filter(kit => 
+      kit.status === 'available' && 
+      !rentalBagNumbers.has(kit.bagNumber) &&
+      !overdueKitIds.has(kit.id)
+    );
+  }, [radioGuideKits, rentalOrders, radioGuideAssignments]);
   
   // Load allocated guides and buses from AsyncStorage when modal opens
   useEffect(() => {

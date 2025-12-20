@@ -33,7 +33,7 @@ export default function AddRentalOrderScreen() {
   const insets = useSafeAreaInsets();
   const { rentalClients, rentalOrders, rentalServices, getOrderServices, addRentalOrder, updateRentalOrder, isLoading: isRentalLoading } = useRental();
   const { profile, managers } = useAuth();
-  const { radioGuideKits, isLoading: isDataLoading } = useData();
+  const { radioGuideKits, radioGuideAssignments, isLoading: isDataLoading } = useData();
 
   const initialClientId = route.params?.clientId;
   const orderId = route.params?.orderId;
@@ -121,6 +121,36 @@ export default function AddRentalOrderScreen() {
   const activeServices = useMemo(() => {
     return rentalServices.filter(s => s.isActive);
   }, [rentalServices]);
+
+  // Filter available bags: exclude rented and overdue
+  const availableBagsForRental = useMemo(() => {
+    const today = new Date().toISOString().split("T")[0];
+    
+    // Get bag numbers in active rentals (excluding current order being edited)
+    const rentalBagNumbers = new Set<number>();
+    rentalOrders.filter(o => o.status === "issued" && o.id !== orderId).forEach(order => {
+      if (order.bagNumber) {
+        order.bagNumber.split(",").forEach(bagStr => {
+          const bagNum = parseInt(bagStr.trim());
+          if (!isNaN(bagNum)) rentalBagNumbers.add(bagNum);
+        });
+      }
+    });
+    
+    // Get kit IDs with overdue assignments
+    const overdueKitIds = new Set<string>();
+    radioGuideAssignments.filter(a => a.returnedAt === null).forEach(a => {
+      const issuedDate = a.issuedAt.split("T")[0];
+      if (issuedDate < today) overdueKitIds.add(a.kitId);
+    });
+    
+    return radioGuideKits.filter(kit => 
+      kit.status === 'available' && 
+      !rentalBagNumbers.has(kit.bagNumber) &&
+      !overdueKitIds.has(kit.id) &&
+      !selectedBags.find(b => b.id === kit.id)
+    );
+  }, [radioGuideKits, rentalOrders, radioGuideAssignments, selectedBags, orderId]);
 
   const servicesTotal = useMemo(() => {
     let total = 0;
@@ -821,7 +851,7 @@ export default function AddRentalOrderScreen() {
             </View>
 
             <FlatList
-              data={radioGuideKits.filter(k => k.status === 'available' && !selectedBags.find(b => b.id === k.id))}
+              data={availableBagsForRental}
               keyExtractor={(item) => item.id}
               contentContainerStyle={{ padding: Spacing.md }}
               renderItem={({ item }) => {
