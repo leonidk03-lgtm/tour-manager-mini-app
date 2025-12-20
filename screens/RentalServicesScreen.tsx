@@ -77,8 +77,10 @@ export default function RentalServicesScreen() {
         Alert.alert("Успешно", "Услуга добавлена");
       }
       setModalVisible(false);
-    } catch (error) {
-      Alert.alert("Ошибка", "Не удалось сохранить услугу");
+    } catch (error: unknown) {
+      console.error("Error saving service:", error);
+      const message = error instanceof Error ? error.message : "Не удалось сохранить услугу";
+      Alert.alert("Ошибка", message);
     }
   };
 
