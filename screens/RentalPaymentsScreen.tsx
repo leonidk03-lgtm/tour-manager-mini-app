@@ -43,8 +43,8 @@ export default function RentalPaymentsScreen() {
   const [showFilters, setShowFilters] = useState(false);
   const [startDate, setStartDate] = useState<Date | null>(null);
   const [endDate, setEndDate] = useState<Date | null>(null);
-  const [showStartPicker, setShowStartPicker] = useState(false);
-  const [showEndPicker, setShowEndPicker] = useState(false);
+  const [activePicker, setActivePicker] = useState<'start' | 'end' | null>(null);
+  const [draftDate, setDraftDate] = useState<Date>(new Date());
   const [searchQuery, setSearchQuery] = useState('');
 
   const paymentsWithOrders = useMemo((): PaymentWithOrder[] => {
@@ -510,8 +510,8 @@ export default function RentalPaymentsScreen() {
                   <Pressable
                     style={[styles.dateButton, { backgroundColor: theme.backgroundSecondary, borderColor: theme.border }]}
                     onPress={() => {
-                      setShowFilters(false);
-                      setTimeout(() => setShowStartPicker(true), 100);
+                      setDraftDate(startDate || new Date());
+                      setActivePicker('start');
                     }}
                   >
                     <Icon name="calendar" size={16} color={theme.textSecondary} />
@@ -523,8 +523,8 @@ export default function RentalPaymentsScreen() {
                   <Pressable
                     style={[styles.dateButton, { backgroundColor: theme.backgroundSecondary, borderColor: theme.border }]}
                     onPress={() => {
-                      setShowFilters(false);
-                      setTimeout(() => setShowEndPicker(true), 100);
+                      setDraftDate(endDate || new Date());
+                      setActivePicker('end');
                     }}
                   >
                     <Icon name="calendar" size={16} color={theme.textSecondary} />
@@ -554,30 +554,45 @@ export default function RentalPaymentsScreen() {
         </View>
       </Modal>
 
-      {showStartPicker && Platform.OS !== 'web' ? (
-        <DateTimePicker
-          value={startDate || new Date()}
-          mode="date"
-          display="default"
-          onChange={(event, date) => {
-            setShowStartPicker(false);
-            if (date) setStartDate(date);
-            setShowFilters(true);
-          }}
-        />
-      ) : null}
-
-      {showEndPicker && Platform.OS !== 'web' ? (
-        <DateTimePicker
-          value={endDate || new Date()}
-          mode="date"
-          display="default"
-          onChange={(event, date) => {
-            setShowEndPicker(false);
-            if (date) setEndDate(date);
-            setShowFilters(true);
-          }}
-        />
+      {activePicker && Platform.OS !== 'web' ? (
+        <Modal visible transparent animationType="fade">
+          <View style={styles.modalOverlay}>
+            <ThemedView style={[styles.datePickerModal, { backgroundColor: theme.backgroundDefault }]}>
+              <ThemedText style={styles.modalTitle}>
+                {activePicker === 'start' ? 'Начальная дата' : 'Конечная дата'}
+              </ThemedText>
+              <DateTimePicker
+                value={draftDate}
+                mode="date"
+                display="spinner"
+                onChange={(event, date) => {
+                  if (date) setDraftDate(date);
+                }}
+              />
+              <View style={styles.datePickerActions}>
+                <Pressable
+                  style={[styles.datePickerBtn, { backgroundColor: theme.backgroundSecondary }]}
+                  onPress={() => setActivePicker(null)}
+                >
+                  <ThemedText style={{ color: theme.text }}>Отмена</ThemedText>
+                </Pressable>
+                <Pressable
+                  style={[styles.datePickerBtn, { backgroundColor: theme.primary }]}
+                  onPress={() => {
+                    if (activePicker === 'start') {
+                      setStartDate(draftDate);
+                    } else {
+                      setEndDate(draftDate);
+                    }
+                    setActivePicker(null);
+                  }}
+                >
+                  <ThemedText style={{ color: theme.buttonText }}>Выбрать</ThemedText>
+                </Pressable>
+              </View>
+            </ThemedView>
+          </View>
+        </Modal>
       ) : null}
 
     </>
@@ -827,5 +842,23 @@ const styles = StyleSheet.create({
   webDatePickerRow: {
     flexDirection: 'row',
     alignItems: 'center',
+  },
+  datePickerModal: {
+    padding: Spacing.xl,
+    borderRadius: BorderRadius.md,
+    alignItems: 'center',
+    minWidth: 300,
+  },
+  datePickerActions: {
+    flexDirection: 'row',
+    gap: Spacing.md,
+    marginTop: Spacing.lg,
+  },
+  datePickerBtn: {
+    flex: 1,
+    alignItems: 'center',
+    paddingVertical: Spacing.md,
+    paddingHorizontal: Spacing.lg,
+    borderRadius: BorderRadius.sm,
   },
 });
