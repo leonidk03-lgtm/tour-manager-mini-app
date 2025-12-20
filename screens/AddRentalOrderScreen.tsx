@@ -69,8 +69,9 @@ export default function AddRentalOrderScreen() {
 
   const [kitCount, setKitCount] = useState(existingOrder?.kitCount?.toString() || "");
   const [spareReceiverCount, setSpareReceiverCount] = useState(
-    existingOrder ? (existingOrder.spareReceiverCount?.toString() ?? "0") : "0"
+    existingOrder ? (existingOrder.spareReceiverCount?.toString() ?? "0") : "1"
   );
+  const [spareReceiverAutoSet, setSpareReceiverAutoSet] = useState(!existingOrder);
   const [transmitterCount, setTransmitterCount] = useState(existingOrder?.transmitterCount?.toString() || "1");
   const [microphoneCount, setMicrophoneCount] = useState(existingOrder?.microphoneCount?.toString() || "1");
   const [bagNumber, setBagNumber] = useState(existingOrder?.bagNumber || "");
@@ -88,6 +89,10 @@ export default function AddRentalOrderScreen() {
     return initial;
   });
 
+  const [oneTimeServices, setOneTimeServices] = useState<{ name: string; price: number }[]>([]);
+  const [newOneTimeName, setNewOneTimeName] = useState("");
+  const [newOneTimePrice, setNewOneTimePrice] = useState("");
+
   const activeServices = useMemo(() => {
     return rentalServices.filter(s => s.isActive);
   }, [rentalServices]);
@@ -100,18 +105,42 @@ export default function AddRentalOrderScreen() {
         total += service.price * quantity;
       }
     });
+    oneTimeServices.forEach(s => {
+      total += s.price;
+    });
     return total;
-  }, [selectedServices, rentalServices]);
+  }, [selectedServices, rentalServices, oneTimeServices]);
 
-  const handleServiceQuantityChange = (serviceId: string, delta: number) => {
+  const handleAddOneTimeService = () => {
+    const name = newOneTimeName.trim();
+    const price = parseInt(newOneTimePrice, 10) || 0;
+    if (!name) {
+      Alert.alert("Ошибка", "Введите название услуги");
+      return;
+    }
+    if (price <= 0) {
+      Alert.alert("Ошибка", "Введите корректную цену");
+      return;
+    }
+    setOneTimeServices(prev => [...prev, { name, price }]);
+    setNewOneTimeName("");
+    setNewOneTimePrice("");
+    hapticFeedback.selection();
+  };
+
+  const handleRemoveOneTimeService = (index: number) => {
+    setOneTimeServices(prev => prev.filter((_, i) => i !== index));
+    hapticFeedback.selection();
+  };
+
+  const handleServiceQuantityInput = (serviceId: string, value: string) => {
+    const qty = parseInt(value, 10) || 0;
     setSelectedServices(prev => {
-      const currentQty = prev[serviceId] || 0;
-      const newQty = Math.max(0, currentQty + delta);
-      if (newQty === 0) {
+      if (qty <= 0) {
         const { [serviceId]: _, ...rest } = prev;
         return rest;
       }
-      return { ...prev, [serviceId]: newQty };
+      return { ...prev, [serviceId]: qty };
     });
   };
 
@@ -120,6 +149,17 @@ export default function AddRentalOrderScreen() {
     const diffDays = Math.ceil(diffTime / (1000 * 60 * 60 * 24)) + 1;
     return Math.max(1, diffDays);
   }, [startDate, endDate]);
+
+  useEffect(() => {
+    if (spareReceiverAutoSet) {
+      setSpareReceiverCount(daysCount >= 2 ? "2" : "1");
+    }
+  }, [daysCount, spareReceiverAutoSet]);
+
+  const handleSpareReceiverChange = (value: string) => {
+    setSpareReceiverCount(value);
+    setSpareReceiverAutoSet(false);
+  };
 
   const equipmentPrice = useMemo(() => {
     const kits = parseInt(kitCount) || 0;
@@ -347,8 +387,8 @@ export default function AddRentalOrderScreen() {
               <TextInput
                 style={[styles.input, { backgroundColor: theme.backgroundSecondary, color: theme.text }]}
                 value={spareReceiverCount}
-                onChangeText={setSpareReceiverCount}
-                placeholder="0"
+                onChangeText={handleSpareReceiverChange}
+                placeholder="1"
                 placeholderTextColor={theme.textSecondary}
                 keyboardType="numeric"
               />
@@ -434,36 +474,76 @@ export default function AddRentalOrderScreen() {
                       {service.price.toLocaleString("ru-RU")} р.
                     </ThemedText>
                   </View>
-                  <View style={styles.quantityControls}>
-                    <Pressable
-                      onPress={() => handleServiceQuantityChange(service.id, -1)}
-                      style={[styles.qtyButton, { backgroundColor: theme.backgroundSecondary, opacity: qty === 0 ? 0.3 : 1 }]}
-                      disabled={qty === 0}
-                    >
-                      <Icon name="minus" size={18} color={theme.text} />
-                    </Pressable>
-                    <ThemedText style={styles.qtyText}>{qty}</ThemedText>
-                    <Pressable
-                      onPress={() => handleServiceQuantityChange(service.id, 1)}
-                      style={[styles.qtyButton, { backgroundColor: theme.primary }]}
-                    >
-                      <Icon name="plus" size={18} color="#FFFFFF" />
-                    </Pressable>
-                  </View>
+                  <TextInput
+                    style={[styles.serviceQtyInput, { backgroundColor: theme.backgroundTertiary, color: theme.text, borderColor: theme.border }]}
+                    value={qty > 0 ? qty.toString() : ""}
+                    onChangeText={(value) => handleServiceQuantityInput(service.id, value)}
+                    placeholder="0"
+                    placeholderTextColor={theme.textSecondary}
+                    keyboardType="numeric"
+                  />
                 </View>
               );
             })}
 
-            {servicesTotal > 0 ? (
-              <View style={[styles.serviceSubtotal, { borderTopColor: theme.border }]}>
-                <ThemedText style={{ color: theme.textSecondary }}>Услуги:</ThemedText>
-                <ThemedText style={{ color: theme.success, fontWeight: "600" }}>
-                  +{servicesTotal.toLocaleString("ru-RU")}₽
-                </ThemedText>
-              </View>
-            ) : null}
           </View>
         ) : null}
+
+        <View style={[styles.card, { backgroundColor: theme.backgroundSecondary }]}>
+          <ThemedText style={[styles.sectionTitle, { color: theme.textSecondary }]}>
+            Разовые услуги (без комиссии)
+          </ThemedText>
+
+          {oneTimeServices.map((service, index) => (
+            <View key={index} style={styles.serviceRow}>
+              <View style={styles.serviceInfo}>
+                <ThemedText style={styles.serviceName}>{service.name}</ThemedText>
+                <ThemedText style={[styles.servicePrice, { color: theme.success }]}>
+                  {service.price.toLocaleString("ru-RU")} р.
+                </ThemedText>
+              </View>
+              <Pressable
+                onPress={() => handleRemoveOneTimeService(index)}
+                style={[styles.removeBtn, { backgroundColor: theme.error + "20" }]}
+              >
+                <Icon name="x" size={16} color={theme.error} />
+              </Pressable>
+            </View>
+          ))}
+
+          <View style={styles.addOneTimeRow}>
+            <TextInput
+              style={[styles.oneTimeNameInput, { backgroundColor: theme.backgroundTertiary, color: theme.text, borderColor: theme.border }]}
+              value={newOneTimeName}
+              onChangeText={setNewOneTimeName}
+              placeholder="Название"
+              placeholderTextColor={theme.textSecondary}
+            />
+            <TextInput
+              style={[styles.oneTimePriceInput, { backgroundColor: theme.backgroundTertiary, color: theme.text, borderColor: theme.border }]}
+              value={newOneTimePrice}
+              onChangeText={setNewOneTimePrice}
+              placeholder="Цена"
+              placeholderTextColor={theme.textSecondary}
+              keyboardType="numeric"
+            />
+            <Pressable
+              onPress={handleAddOneTimeService}
+              style={[styles.addOneTimeBtn, { backgroundColor: theme.primary }]}
+            >
+              <Icon name="plus" size={18} color="#FFFFFF" />
+            </Pressable>
+          </View>
+
+          {servicesTotal > 0 ? (
+            <View style={[styles.serviceSubtotal, { borderTopColor: theme.border }]}>
+              <ThemedText style={{ color: theme.textSecondary }}>Услуги:</ThemedText>
+              <ThemedText style={{ color: theme.success, fontWeight: "600" }}>
+                +{servicesTotal.toLocaleString("ru-RU")}₽
+              </ThemedText>
+            </View>
+          ) : null}
+        </View>
 
         <View style={[styles.card, { backgroundColor: theme.backgroundSecondary }]}>
           <ThemedText style={[styles.sectionTitle, { color: theme.textSecondary }]}>
@@ -917,5 +997,50 @@ const styles = StyleSheet.create({
     paddingTop: Spacing.md,
     marginTop: Spacing.sm,
     borderTopWidth: StyleSheet.hairlineWidth,
+  },
+  serviceQtyInput: {
+    width: 60,
+    height: 36,
+    borderRadius: BorderRadius.sm,
+    borderWidth: 1,
+    textAlign: "center",
+    fontSize: 14,
+  },
+  removeBtn: {
+    width: 32,
+    height: 32,
+    borderRadius: 16,
+    justifyContent: "center",
+    alignItems: "center",
+  },
+  addOneTimeRow: {
+    flexDirection: "row",
+    alignItems: "center",
+    gap: Spacing.sm,
+    marginTop: Spacing.sm,
+  },
+  oneTimeNameInput: {
+    flex: 1,
+    height: 40,
+    borderRadius: BorderRadius.sm,
+    borderWidth: 1,
+    paddingHorizontal: Spacing.sm,
+    fontSize: 14,
+  },
+  oneTimePriceInput: {
+    width: 80,
+    height: 40,
+    borderRadius: BorderRadius.sm,
+    borderWidth: 1,
+    paddingHorizontal: Spacing.sm,
+    fontSize: 14,
+    textAlign: "center",
+  },
+  addOneTimeBtn: {
+    width: 40,
+    height: 40,
+    borderRadius: BorderRadius.sm,
+    justifyContent: "center",
+    alignItems: "center",
   },
 });
