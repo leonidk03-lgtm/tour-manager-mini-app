@@ -470,7 +470,42 @@ export default function RentalPaymentsScreen() {
               <ThemedText style={[styles.filterLabel, { color: theme.textSecondary }]}>
                 Период
               </ThemedText>
-              {Platform.OS === 'web' ? (
+              {activePicker ? (
+                <View style={styles.inlineDatePickerContainer}>
+                  <ThemedText style={[styles.filterLabel, { color: theme.primary, marginBottom: Spacing.sm }]}>
+                    {activePicker === 'start' ? 'Выберите начальную дату:' : 'Выберите конечную дату:'}
+                  </ThemedText>
+                  <DateTimePicker
+                    value={draftDate}
+                    mode="date"
+                    display="spinner"
+                    onChange={(event, date) => {
+                      if (date) setDraftDate(date);
+                    }}
+                  />
+                  <View style={styles.datePickerActions}>
+                    <Pressable
+                      style={[styles.datePickerBtn, { backgroundColor: theme.backgroundSecondary }]}
+                      onPress={() => setActivePicker(null)}
+                    >
+                      <ThemedText style={{ color: theme.text }}>Отмена</ThemedText>
+                    </Pressable>
+                    <Pressable
+                      style={[styles.datePickerBtn, { backgroundColor: theme.primary }]}
+                      onPress={() => {
+                        if (activePicker === 'start') {
+                          setStartDate(draftDate);
+                        } else {
+                          setEndDate(draftDate);
+                        }
+                        setActivePicker(null);
+                      }}
+                    >
+                      <ThemedText style={{ color: theme.buttonText }}>Выбрать</ThemedText>
+                    </Pressable>
+                  </View>
+                </View>
+              ) : Platform.OS === 'web' ? (
                 <View style={styles.webDatePickerContainer}>
                   <View style={styles.webDatePickerRow}>
                     <ThemedText style={{ color: theme.textSecondary, marginRight: Spacing.sm }}>С:</ThemedText>
@@ -554,46 +589,6 @@ export default function RentalPaymentsScreen() {
         </View>
       </Modal>
 
-      {activePicker && Platform.OS !== 'web' ? (
-        <Modal visible transparent animationType="fade">
-          <View style={styles.modalOverlay}>
-            <ThemedView style={[styles.datePickerModal, { backgroundColor: theme.backgroundDefault }]}>
-              <ThemedText style={styles.modalTitle}>
-                {activePicker === 'start' ? 'Начальная дата' : 'Конечная дата'}
-              </ThemedText>
-              <DateTimePicker
-                value={draftDate}
-                mode="date"
-                display="spinner"
-                onChange={(event, date) => {
-                  if (date) setDraftDate(date);
-                }}
-              />
-              <View style={styles.datePickerActions}>
-                <Pressable
-                  style={[styles.datePickerBtn, { backgroundColor: theme.backgroundSecondary }]}
-                  onPress={() => setActivePicker(null)}
-                >
-                  <ThemedText style={{ color: theme.text }}>Отмена</ThemedText>
-                </Pressable>
-                <Pressable
-                  style={[styles.datePickerBtn, { backgroundColor: theme.primary }]}
-                  onPress={() => {
-                    if (activePicker === 'start') {
-                      setStartDate(draftDate);
-                    } else {
-                      setEndDate(draftDate);
-                    }
-                    setActivePicker(null);
-                  }}
-                >
-                  <ThemedText style={{ color: theme.buttonText }}>Выбрать</ThemedText>
-                </Pressable>
-              </View>
-            </ThemedView>
-          </View>
-        </Modal>
-      ) : null}
 
     </>
   );
@@ -843,11 +838,9 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
     alignItems: 'center',
   },
-  datePickerModal: {
-    padding: Spacing.xl,
-    borderRadius: BorderRadius.md,
+  inlineDatePickerContainer: {
     alignItems: 'center',
-    minWidth: 300,
+    paddingVertical: Spacing.md,
   },
   datePickerActions: {
     flexDirection: 'row',
