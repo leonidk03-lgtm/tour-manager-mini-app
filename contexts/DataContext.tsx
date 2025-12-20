@@ -84,6 +84,7 @@ export interface Manager {
 export interface Activity {
   id: string;
   type: "excursion_added" | "transaction_added" | "excursion_deleted" | "transaction_deleted" | "radio_issued" | "radio_returned" | "rental_order_created" | "rental_order_updated" | "rental_order_issued" | "rental_order_returned" | "rental_order_completed" | "equipment_loss_registered" | "equipment_loss_found";
+  managerId: string;
   managerName: string;
   description: string;
   date: string;
@@ -591,6 +592,7 @@ export function DataProvider({ children }: { children: ReactNode }) {
     setActivities((data || []).map(a => ({
       id: a.id,
       type: a.type,
+      managerId: a.manager_id,
       managerName: a.manager_name,
       description: a.description,
       date: a.timestamp?.split('T')[0] || '',
