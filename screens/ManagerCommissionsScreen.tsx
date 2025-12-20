@@ -1,23 +1,25 @@
 import { useState, useMemo } from "react";
-import { View, StyleSheet, Pressable, FlatList, Alert, Modal, TextInput, KeyboardAvoidingView, Platform } from "react-native";
+import { View, StyleSheet, Pressable, SectionList, Alert, Modal, TextInput, KeyboardAvoidingView, Platform } from "react-native";
 import { useRoute, RouteProp } from "@react-navigation/native";
 import { Icon } from "@/components/Icon";
 import { ThemedText } from "@/components/ThemedText";
+import { ThemedView } from "@/components/ThemedView";
 import { Spacing, BorderRadius } from "@/constants/theme";
 import { useTheme } from "@/hooks/useTheme";
 import { useAuth } from "@/contexts/AuthContext";
-import { useRental } from "@/contexts/RentalContext";
+import { useRental, RentalCommission } from "@/contexts/RentalContext";
 import { hapticFeedback } from "@/utils/haptics";
 import { useScreenInsets } from "@/hooks/useScreenInsets";
 import { SettingsStackParamList } from "@/navigation/SettingsStackNavigator";
 
 type RouteParams = RouteProp<SettingsStackParamList, "ManagerCommissions">;
 
-interface MonthData {
-  key: string;
-  monthName: string;
-  year: number;
-  total: number;
+type TabType = "accruals" | "payments";
+
+interface MonthSection {
+  title: string;
+  monthTotal: number;
+  data: RentalCommission[];
 }
 
 export default function ManagerCommissionsScreen() {
@@ -30,7 +32,9 @@ export default function ManagerCommissionsScreen() {
   const [showPayModal, setShowPayModal] = useState(false);
   const [payAmount, setPayAmount] = useState("");
 
-  const { managerId } = route.params;
+  const { managerId, managerName } = route.params;
+
+  const [activeTab, setActiveTab] = useState<TabType>("accruals");
 
   const managerCommissions = useMemo(() => {
     return rentalCommissions.filter(c => c.recipientId === managerId);
@@ -40,47 +44,63 @@ export default function ManagerCommissionsScreen() {
     return managerCommissions.filter(c => c.status === "pending");
   }, [managerCommissions]);
 
+  const paidCommissions = useMemo(() => {
+    return managerCommissions.filter(c => c.status === "paid");
+  }, [managerCommissions]);
+
   const totalBalance = useMemo(() => {
     return pendingCommissions.reduce((sum, c) => sum + c.amount, 0);
   }, [pendingCommissions]);
 
-  const totalPaid = useMemo(() => {
-    return managerCommissions
-      .filter(c => c.status === "paid")
-      .reduce((sum, c) => sum + c.amount, 0);
-  }, [managerCommissions]);
-
-  const monthlyData = useMemo(() => {
-    const groups: { [key: string]: { total: number; year: number; month: number } } = {};
+  const groupByMonth = (commissions: RentalCommission[]): MonthSection[] => {
+    const groups: { [key: string]: RentalCommission[] } = {};
     
-    pendingCommissions.forEach(c => {
+    commissions.forEach(c => {
       const date = new Date(c.createdAt);
-      const year = date.getFullYear();
-      const month = date.getMonth();
-      const monthKey = `${year}-${String(month + 1).padStart(2, "0")}`;
-      
+      const monthKey = `${date.getFullYear()}-${String(date.getMonth() + 1).padStart(2, "0")}`;
       if (!groups[monthKey]) {
-        groups[monthKey] = { total: 0, year, month };
+        groups[monthKey] = [];
       }
-      groups[monthKey].total += c.amount;
+      groups[monthKey].push(c);
     });
 
-    const monthNames = [
-      "Январь", "Февраль", "Март", "Апрель", "Май", "Июнь",
-      "Июль", "Август", "Сентябрь", "Октябрь", "Ноябрь", "Декабрь"
-    ];
+    const sections: MonthSection[] = Object.keys(groups)
+      .sort((a, b) => b.localeCompare(a))
+      .map(key => {
+        const items = groups[key].sort((a, b) => 
+          new Date(b.createdAt).getTime() - new Date(a.createdAt).getTime()
+        );
+        const monthTotal = items.reduce((sum, c) => sum + c.amount, 0);
+        const date = new Date(key + "-01");
+        const monthName = date.toLocaleDateString("ru-RU", { month: "long", year: "numeric" });
+        return {
+          title: monthName.charAt(0).toUpperCase() + monthName.slice(1),
+          monthTotal,
+          data: items,
+        };
+      });
 
-    const result: MonthData[] = Object.entries(groups)
-      .sort((a, b) => b[0].localeCompare(a[0]))
-      .map(([key, data]) => ({
-        key,
-        monthName: monthNames[data.month],
-        year: data.year,
-        total: data.total,
-      }));
+    return sections;
+  };
 
-    return result;
-  }, [pendingCommissions]);
+  const sections = useMemo(() => {
+    const commissions = activeTab === "accruals" ? pendingCommissions : paidCommissions;
+    return groupByMonth(commissions);
+  }, [activeTab, pendingCommissions, paidCommissions]);
+
+  const formatDateTime = (dateStr: string): string => {
+    const date = new Date(dateStr);
+    return date.toLocaleDateString("ru-RU", {
+      day: "2-digit",
+      month: "2-digit",
+      hour: "2-digit",
+      minute: "2-digit",
+    });
+  };
+
+  const formatCurrency = (amount: number) => {
+    return amount.toLocaleString("ru-RU", { minimumFractionDigits: 2, maximumFractionDigits: 2 }) + "₽";
+  };
 
   const handleOpenPayModal = () => {
     setPayAmount(totalBalance.toString());
@@ -108,7 +128,6 @@ export default function ManagerCommissionsScreen() {
       } else {
         await payManagerCommissions(managerId, amount);
       }
-      hapticFeedback.success();
     } catch (error) {
       console.error("Failed to pay commissions:", error);
       Alert.alert("Ошибка", "Не удалось выплатить комиссии");
@@ -117,81 +136,134 @@ export default function ManagerCommissionsScreen() {
     }
   };
 
-  const formatCurrency = (amount: number) => {
-    return amount.toLocaleString("ru-RU", { minimumFractionDigits: 2, maximumFractionDigits: 2 }) + "₽";
-  };
-
-  const renderMonthItem = ({ item }: { item: MonthData }) => (
-    <View style={[styles.monthCard, { backgroundColor: theme.backgroundSecondary }]}>
-      <View style={styles.monthInfo}>
-        <ThemedText style={styles.monthName}>{item.monthName}</ThemedText>
-        <ThemedText style={[styles.monthYear, { color: theme.textSecondary }]}>{item.year}</ThemedText>
-      </View>
-      <ThemedText style={[styles.monthAmount, { color: theme.primary }]}>
-        {formatCurrency(item.total)}
+  const renderSectionHeader = ({ section }: { section: MonthSection }) => (
+    <View style={[styles.sectionHeader, { backgroundColor: theme.backgroundRoot }]}>
+      <ThemedText style={styles.sectionTitle}>{section.title}</ThemedText>
+      <ThemedText style={[styles.sectionTotal, { color: theme.primary }]}>
+        {formatCurrency(section.monthTotal)}
       </ThemedText>
     </View>
   );
 
+  const renderCommission = ({ item }: { item: RentalCommission }) => {
+    const roleLabel = item.role === "owner" ? "Обработка заказа" : "Услуга в заказе";
+    
+    return (
+      <View style={[styles.row, { backgroundColor: theme.backgroundSecondary }]}>
+        <View style={styles.rowDate}>
+          <ThemedText style={[styles.dateText, { color: theme.textSecondary }]}>
+            {formatDateTime(item.createdAt)}
+          </ThemedText>
+        </View>
+        <View style={styles.rowBasis}>
+          <ThemedText style={[styles.basisText, { color: theme.primary }]}>
+            {roleLabel} #{item.orderNumber}
+          </ThemedText>
+        </View>
+        <View style={styles.rowInfo}>
+          <ThemedText style={[styles.infoText, { color: theme.textSecondary }]}>
+            Аренда радиооборудования ({item.percentage}%)
+          </ThemedText>
+        </View>
+        <View style={styles.rowAmount}>
+          <ThemedText style={styles.amountText}>
+            {item.amount.toLocaleString("ru-RU", { minimumFractionDigits: 2, maximumFractionDigits: 2 })}
+          </ThemedText>
+        </View>
+      </View>
+    );
+  };
+
   return (
     <View style={[styles.container, { backgroundColor: theme.backgroundRoot }]}>
       <View style={[styles.header, { paddingTop: paddingTop }]}>
-        <View style={[styles.balanceCard, { backgroundColor: theme.backgroundSecondary }]}>
-          <ThemedText style={[styles.balanceLabel, { color: theme.textSecondary }]}>
-            Начислено комиссии
-          </ThemedText>
-          <ThemedText style={[styles.balanceValue, { color: theme.text }]}>
-            {formatCurrency(totalBalance)}
-          </ThemedText>
-          
-          {totalPaid > 0 ? (
-            <ThemedText style={[styles.paidInfo, { color: theme.success }]}>
-              Выплачено ранее: {formatCurrency(totalPaid)}
-            </ThemedText>
-          ) : null}
+        <ThemedText style={styles.balanceLabel}>Баланс</ThemedText>
+        <ThemedText style={[styles.balanceValue, { color: theme.text }]}>
+          {formatCurrency(totalBalance)}
+        </ThemedText>
 
-          {isAdmin && totalBalance > 0 ? (
-            <Pressable
-              onPress={handleOpenPayModal}
-              disabled={isPaying}
-              style={({ pressed }) => [
-                styles.payButton,
-                { 
-                  backgroundColor: theme.success,
-                  opacity: pressed || isPaying ? 0.7 : 1,
-                },
-              ]}
-            >
-              <Icon name="credit-card" size={18} color="#fff" />
-              <ThemedText style={styles.payButtonText}>
-                {isPaying ? "Выплата..." : "Сделать выплату"}
-              </ThemedText>
-            </Pressable>
-          ) : null}
+        {isAdmin && totalBalance > 0 && activeTab === "accruals" ? (
+          <Pressable
+            onPress={handleOpenPayModal}
+            disabled={isPaying}
+            style={({ pressed }) => [
+              styles.payButton,
+              { 
+                backgroundColor: theme.success,
+                opacity: pressed || isPaying ? 0.7 : 1,
+              },
+            ]}
+          >
+            <Icon name="check-circle" size={18} color="#fff" />
+            <ThemedText style={styles.payButtonText}>
+              {isPaying ? "Выплата..." : "Выплатить"}
+            </ThemedText>
+          </Pressable>
+        ) : null}
+
+        <View style={styles.tabsContainer}>
+          <Pressable
+            onPress={() => { hapticFeedback.selection(); setActiveTab("accruals"); }}
+            style={[
+              styles.tab,
+              activeTab === "accruals" && { borderBottomColor: theme.primary, borderBottomWidth: 2 },
+            ]}
+          >
+            <ThemedText style={[
+              styles.tabText,
+              { color: activeTab === "accruals" ? theme.primary : theme.textSecondary },
+            ]}>
+              Начисления
+            </ThemedText>
+          </Pressable>
+          <Pressable
+            onPress={() => { hapticFeedback.selection(); setActiveTab("payments"); }}
+            style={[
+              styles.tab,
+              activeTab === "payments" && { borderBottomColor: theme.primary, borderBottomWidth: 2 },
+            ]}
+          >
+            <ThemedText style={[
+              styles.tabText,
+              { color: activeTab === "payments" ? theme.primary : theme.textSecondary },
+            ]}>
+              Выплаты
+            </ThemedText>
+          </Pressable>
         </View>
       </View>
 
-      {monthlyData.length > 0 ? (
-        <View style={styles.monthsSection}>
-          <ThemedText style={[styles.sectionTitle, { color: theme.textSecondary }]}>
-            По месяцам
-          </ThemedText>
-          <FlatList
-            data={monthlyData}
-            renderItem={renderMonthItem}
-            keyExtractor={(item) => item.key}
-            contentContainerStyle={{ paddingBottom: scrollInsetBottom }}
-            showsVerticalScrollIndicator={false}
-          />
-        </View>
-      ) : (
-        <View style={styles.emptyContainer}>
-          <Icon name="dollar-sign" size={48} color={theme.textSecondary} />
-          <ThemedText style={[styles.emptyText, { color: theme.textSecondary }]}>
-            Нет начислений
-          </ThemedText>
-        </View>
-      )}
+      <View style={[styles.tableHeader, { backgroundColor: theme.backgroundSecondary }]}>
+        <ThemedText style={[styles.columnHeader, styles.colDate, { color: theme.textSecondary }]}>
+          Дата
+        </ThemedText>
+        <ThemedText style={[styles.columnHeader, styles.colBasis, { color: theme.textSecondary }]}>
+          Основание
+        </ThemedText>
+        <ThemedText style={[styles.columnHeader, styles.colInfo, { color: theme.textSecondary }]}>
+          Информация
+        </ThemedText>
+        <ThemedText style={[styles.columnHeader, styles.colAmount, { color: theme.textSecondary }]}>
+          Сумма, ₽
+        </ThemedText>
+      </View>
+
+      <SectionList
+        sections={sections}
+        renderItem={renderCommission}
+        renderSectionHeader={renderSectionHeader}
+        keyExtractor={(item) => item.id}
+        stickySectionHeadersEnabled
+        ListEmptyComponent={
+          <View style={styles.emptyContainer}>
+            <Icon name="dollar-sign" size={48} color={theme.textSecondary} />
+            <ThemedText style={[styles.emptyText, { color: theme.textSecondary }]}>
+              {activeTab === "accruals" ? "Нет начислений" : "Нет выплат"}
+            </ThemedText>
+          </View>
+        }
+        contentContainerStyle={{ paddingBottom: scrollInsetBottom }}
+      />
 
       <Modal
         visible={showPayModal}
@@ -212,7 +284,7 @@ export default function ManagerCommissionsScreen() {
             
             <View style={styles.modalBalanceRow}>
               <ThemedText style={[styles.modalLabel, { color: theme.textSecondary }]}>
-                К выплате:
+                Баланс к выплате:
               </ThemedText>
               <ThemedText style={[styles.modalBalanceValue, { color: theme.primary }]}>
                 {formatCurrency(totalBalance)}
@@ -274,33 +346,25 @@ const styles = StyleSheet.create({
   },
   header: {
     paddingHorizontal: Spacing.md,
-    paddingBottom: Spacing.md,
-  },
-  balanceCard: {
-    borderRadius: BorderRadius.md,
-    padding: Spacing.lg,
-    alignItems: "center",
+    paddingBottom: Spacing.sm,
   },
   balanceLabel: {
     fontSize: 14,
-    marginBottom: Spacing.xs,
+    opacity: 0.7,
   },
   balanceValue: {
-    fontSize: 36,
+    fontSize: 28,
     fontWeight: "700",
-  },
-  paidInfo: {
-    fontSize: 13,
-    marginTop: Spacing.sm,
+    marginBottom: Spacing.md,
   },
   payButton: {
     flexDirection: "row",
     alignItems: "center",
     justifyContent: "center",
     paddingVertical: Spacing.sm,
-    paddingHorizontal: Spacing.xl,
+    paddingHorizontal: Spacing.lg,
     borderRadius: BorderRadius.sm,
-    marginTop: Spacing.lg,
+    marginBottom: Spacing.md,
     gap: Spacing.sm,
   },
   payButtonText: {
@@ -308,44 +372,92 @@ const styles = StyleSheet.create({
     fontSize: 16,
     fontWeight: "600",
   },
-  monthsSection: {
-    flex: 1,
-    paddingHorizontal: Spacing.md,
+  tabsContainer: {
+    flexDirection: "row",
+    gap: Spacing.lg,
   },
-  sectionTitle: {
-    fontSize: 14,
+  tab: {
+    paddingBottom: Spacing.sm,
+  },
+  tabText: {
+    fontSize: 16,
     fontWeight: "500",
-    marginBottom: Spacing.sm,
-    textTransform: "uppercase",
   },
-  monthCard: {
+  tableHeader: {
+    flexDirection: "row",
+    paddingHorizontal: Spacing.md,
+    paddingVertical: Spacing.sm,
+  },
+  columnHeader: {
+    fontSize: 12,
+    fontWeight: "500",
+  },
+  colDate: {
+    width: 80,
+  },
+  colBasis: {
+    flex: 1,
+  },
+  colInfo: {
+    flex: 1.5,
+  },
+  colAmount: {
+    width: 80,
+    textAlign: "right",
+  },
+  sectionHeader: {
     flexDirection: "row",
     justifyContent: "space-between",
     alignItems: "center",
-    padding: Spacing.md,
-    borderRadius: BorderRadius.sm,
-    marginBottom: Spacing.sm,
+    paddingHorizontal: Spacing.md,
+    paddingVertical: Spacing.sm,
   },
-  monthInfo: {
-    flexDirection: "row",
-    alignItems: "baseline",
-    gap: Spacing.sm,
-  },
-  monthName: {
+  sectionTitle: {
     fontSize: 16,
     fontWeight: "600",
   },
-  monthYear: {
-    fontSize: 14,
+  sectionTotal: {
+    fontSize: 16,
+    fontWeight: "600",
   },
-  monthAmount: {
-    fontSize: 18,
-    fontWeight: "700",
+  row: {
+    flexDirection: "row",
+    paddingHorizontal: Spacing.md,
+    paddingVertical: Spacing.sm,
+    borderBottomWidth: 1,
+    borderBottomColor: "rgba(255,255,255,0.05)",
+  },
+  rowDate: {
+    width: 80,
+  },
+  dateText: {
+    fontSize: 12,
+  },
+  rowBasis: {
+    flex: 1,
+  },
+  basisText: {
+    fontSize: 13,
+  },
+  rowInfo: {
+    flex: 1.5,
+  },
+  infoText: {
+    fontSize: 12,
+  },
+  rowAmount: {
+    width: 80,
+    alignItems: "flex-end",
+  },
+  amountText: {
+    fontSize: 14,
+    fontWeight: "500",
   },
   emptyContainer: {
     flex: 1,
     alignItems: "center",
     justifyContent: "center",
+    paddingVertical: Spacing["5xl"],
   },
   emptyText: {
     fontSize: 16,
