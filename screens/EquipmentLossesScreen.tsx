@@ -23,10 +23,17 @@ export default function EquipmentLossesScreen() {
   const { isAdmin } = useAuth();
   const {
     equipmentLosses,
+    equipmentItems,
     updateEquipmentLoss,
     markLossAsFound,
     deleteEquipmentLoss,
   } = useData();
+  
+  const getEquipmentName = (itemId: string | null | undefined): string => {
+    if (!itemId) return "Оборудование";
+    const item = equipmentItems.find(i => i.id === itemId);
+    return item?.name || "Оборудование";
+  };
 
   const [filter, setFilter] = useState<FilterType>("lost");
   const [editModalVisible, setEditModalVisible] = useState(false);
@@ -148,11 +155,11 @@ export default function EquipmentLossesScreen() {
             <View
               style={[
                 styles.bagBadge,
-                { backgroundColor: theme.primary },
+                { backgroundColor: loss.rentalOrderId ? theme.warning : theme.primary },
               ]}
             >
               <ThemedText style={[styles.bagNumber, { color: theme.buttonText }]}>
-                Сумка {loss.bagNumber || "?"}
+                {loss.rentalOrderId ? "Аренда" : `Сумка ${loss.bagNumber || "?"}`}
               </ThemedText>
             </View>
             <View
@@ -181,7 +188,7 @@ export default function EquipmentLossesScreen() {
           <View style={styles.infoRow}>
             <Icon name="radio" size={14} color={theme.textSecondary} />
             <ThemedText style={[styles.infoText, { color: theme.text }]}>
-              {loss.missingCount} шт.
+              {getEquipmentName(loss.equipmentItemId)}: {loss.missingCount} шт.
             </ThemedText>
           </View>
           <View style={styles.infoRow}>

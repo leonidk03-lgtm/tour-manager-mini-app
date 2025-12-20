@@ -68,6 +68,13 @@ Equipment losses can be registered from both excursion radio guide assignments a
 - From RentalOrderDetailScreen for rental-related losses (linked via rental_order_id)
 - Both integrate with WarehouseScreen inventory via equipment_movements table
 - Losses are tracked in equipment_losses table with nullable assignment_id, kit_id, and rental_order_id fields
+- **EquipmentLossesScreen**: Central hub for viewing and managing all equipment losses
+  - Displays losses from both excursions (by bag number) and rentals (marked as "Rental")
+  - Shows equipment type name, quantity, reason, and manager who registered the loss
+  - Filter by status: Lost, Found, or All
+  - Statistics showing total lost, found, and outstanding items
+  - **Recovery tracking**: Mark lost equipment as found with optional notes
+  - When equipment is marked as found, quantity is automatically restored to warehouse inventory
 
 ### Platform-Specific Considerations
 The app implements platform-specific UI adjustments (e.g., iOS blur effects, Android edge-to-edge layout) and web fallbacks for native-only features. Replit deployment includes custom dev and build scripts with environment variable usage.

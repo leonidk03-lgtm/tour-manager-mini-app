@@ -2394,12 +2394,20 @@ export function DataProvider({ children }: { children: ReactNode }) {
       // Create "found" movement on warehouse to restore quantity
       if (loss?.equipmentItemId && currentUser) {
         try {
-          const kit = radioGuideKits.find(k => k.id === loss.kitId);
+          // Determine source description (bag for excursions, order for rentals)
+          let sourceDescription = '';
+          if (loss.rentalOrderId) {
+            sourceDescription = `аренды (${loss.guideName})`;
+          } else {
+            const kit = radioGuideKits.find(k => k.id === loss.kitId);
+            sourceDescription = `сумки #${kit?.bagNumber || loss.bagNumber || '?'}`;
+          }
+          
           await supabase.from('equipment_movements').insert({
             item_id: loss.equipmentItemId,
             type: 'found',
             quantity: loss.missingCount,
-            note: `Найдено оборудование из сумки #${kit?.bagNumber || '?'}. ${notes ? `Комментарий: ${notes}` : ''}`,
+            note: `Найдено оборудование из ${sourceDescription}. ${notes ? `Комментарий: ${notes}` : ''}`,
             manager_id: currentUser.id,
             manager_name: currentUser.name,
           });
