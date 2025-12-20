@@ -24,6 +24,7 @@ import RentalClientDetailScreen from "@/screens/RentalClientDetailScreen";
 import RentalCommissionsScreen from "@/screens/RentalCommissionsScreen";
 import ManagerCommissionsScreen from "@/screens/ManagerCommissionsScreen";
 import RentalServicesScreen from "@/screens/RentalServicesScreen";
+import RentalPaymentsScreen from "@/screens/RentalPaymentsScreen";
 import { getCommonScreenOptions } from "./screenOptions";
 import { useTheme } from "@/hooks/useTheme";
 import { Profile } from "@/lib/supabase";
@@ -54,6 +55,7 @@ export type SettingsStackParamList = {
   RentalCommissions: undefined;
   ManagerCommissions: { managerId: string; managerName: string };
   RentalServices: undefined;
+  RentalPayments: undefined;
 };
 
 const Stack = createNativeStackNavigator<SettingsStackParamList>();
@@ -190,6 +192,11 @@ export default function SettingsStackNavigator() {
         name="RentalServices"
         component={RentalServicesScreen}
         options={{ title: "Услуги аренды" }}
+      />
+      <Stack.Screen
+        name="RentalPayments"
+        component={RentalPaymentsScreen}
+        options={{ title: "Платежи" }}
       />
     </Stack.Navigator>
   );
