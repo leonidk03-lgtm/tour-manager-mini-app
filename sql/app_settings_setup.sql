@@ -31,5 +31,5 @@ CREATE POLICY "Allow admins to update settings"
 -- Insert default values
 INSERT INTO app_settings (key, value) VALUES 
   ('radio_guide_price', '80'),
-  ('rental_cost_per_kit_per_day', '50')
+  ('rental_cost_per_receiver', '17')
 ON CONFLICT (key) DO NOTHING;

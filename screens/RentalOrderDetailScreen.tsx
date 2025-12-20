@@ -49,7 +49,7 @@ export default function RentalOrderDetailScreen() {
   const insets = useSafeAreaInsets();
   const { rentalOrders, rentalClients, rentalOrderServices, updateRentalOrder, updateRentalClient, updateOrderStatus, addRentalPayment, getOrderPayments, getOrderHistory, deleteRentalOrder } = useRental();
   const { managers, isAdmin } = useAuth();
-  const { equipmentItems, equipmentCategories, addEquipmentMovement, addEquipmentLoss, rentalCostPerKitPerDay } = useData();
+  const { equipmentItems, equipmentCategories, addEquipmentMovement, addEquipmentLoss, rentalCostPerReceiver } = useData();
 
   const orderId = route.params?.orderId;
   const order = rentalOrders.find(o => o.id === orderId);
@@ -558,16 +558,16 @@ export default function RentalOrderDetailScreen() {
             <View style={[styles.profitSection, { borderTopColor: theme.border }]}>
               <View style={styles.priceRow}>
                 <ThemedText style={{ color: theme.textSecondary, fontSize: 13 }}>
-                  Себестоимость ({order.kitCount} x {rentalCostPerKitPerDay}₽ x {order.daysCount} дн.)
+                  Себестоимость ({order.kitCount + order.spareReceiverCount} прм. x {rentalCostPerReceiver}₽)
                 </ThemedText>
                 <ThemedText style={{ color: theme.error, fontSize: 13 }}>
-                  -{(order.kitCount * order.daysCount * rentalCostPerKitPerDay).toLocaleString("ru-RU")}₽
+                  -{((order.kitCount + order.spareReceiverCount) * rentalCostPerReceiver).toLocaleString("ru-RU")}₽
                 </ThemedText>
               </View>
               <View style={styles.priceRow}>
                 <ThemedText style={{ fontWeight: "600" }}>Прибыль:</ThemedText>
                 <ThemedText style={{ fontWeight: "700", color: theme.primary }}>
-                  {Math.max(0, order.totalPrice - (order.kitCount * order.daysCount * rentalCostPerKitPerDay)).toLocaleString("ru-RU")}₽
+                  {Math.max(0, order.totalPrice - ((order.kitCount + order.spareReceiverCount) * rentalCostPerReceiver)).toLocaleString("ru-RU")}₽
                 </ThemedText>
               </View>
             </View>

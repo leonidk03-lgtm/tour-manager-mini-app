@@ -16,12 +16,12 @@ export default function SettingsScreen() {
   const { theme } = useTheme();
   const navigation = useNavigation<NavigationProp<SettingsStackParamList>>();
   const { profile, isAdmin, isRadioDispatcher, hasPermission, signOut } = useAuth();
-  const { radioGuidePrice, updateRadioGuidePrice, rentalCostPerKitPerDay, updateRentalCostPerKitPerDay } = useData();
+  const { radioGuidePrice, updateRadioGuidePrice, rentalCostPerReceiver, updateRentalCostPerReceiver } = useData();
 
   const [showPriceModal, setShowPriceModal] = useState(false);
   const [priceInput, setPriceInput] = useState(String(radioGuidePrice));
   const [showCostModal, setShowCostModal] = useState(false);
-  const [costInput, setCostInput] = useState(String(rentalCostPerKitPerDay));
+  const [costInput, setCostInput] = useState(String(rentalCostPerReceiver));
   const [saving, setSaving] = useState(false);
 
   const handleSavePrice = async () => {
@@ -50,9 +50,9 @@ export default function SettingsScreen() {
     }
     setSaving(true);
     try {
-      await updateRentalCostPerKitPerDay(newCost);
+      await updateRentalCostPerReceiver(newCost);
       setShowCostModal(false);
-      Alert.alert("Сохранено", "Себестоимость комплекта обновлена");
+      Alert.alert("Сохранено", "Себестоимость приёмника обновлена");
     } catch (err) {
       Alert.alert("Ошибка", "Не удалось сохранить");
     } finally {
@@ -382,7 +382,7 @@ export default function SettingsScreen() {
                 <View style={[styles.divider, { backgroundColor: theme.border }]} />
                 <Pressable
                   onPress={() => {
-                    setCostInput(String(rentalCostPerKitPerDay));
+                    setCostInput(String(rentalCostPerReceiver));
                     setShowCostModal(true);
                   }}
                   style={({ pressed }) => ({ opacity: pressed ? 0.7 : 1 })}
@@ -390,10 +390,10 @@ export default function SettingsScreen() {
                   <View style={styles.settingItem}>
                     <View style={styles.settingLeft}>
                       <Icon name="package" size={20} color={theme.textSecondary} />
-                      <ThemedText style={styles.settingText}>Себестоимость комплекта</ThemedText>
+                      <ThemedText style={styles.settingText}>Себестоимость приёмника</ThemedText>
                     </View>
                     <ThemedText style={{ color: theme.primary, fontWeight: "600" }}>
-                      {rentalCostPerKitPerDay}₽/день
+                      {rentalCostPerReceiver}₽
                     </ThemedText>
                   </View>
                 </Pressable>
@@ -498,9 +498,9 @@ export default function SettingsScreen() {
             style={[styles.modalContent, { backgroundColor: theme.backgroundSecondary }]}
             onPress={(e) => e.stopPropagation()}
           >
-            <ThemedText style={styles.modalTitle}>Себестоимость комплекта</ThemedText>
+            <ThemedText style={styles.modalTitle}>Себестоимость приёмника</ThemedText>
             <ThemedText style={[styles.modalSubtitle, { color: theme.textSecondary }]}>
-              Стоимость 1 комплекта в день для расчёта прибыли и комиссий
+              Стоимость 1 приёмника для расчёта прибыли и комиссий (независимо от дней аренды)
             </ThemedText>
             <TextInput
               style={[styles.priceInput, { backgroundColor: theme.backgroundRoot, color: theme.text, borderColor: theme.border }]}
