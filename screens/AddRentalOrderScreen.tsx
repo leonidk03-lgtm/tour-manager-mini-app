@@ -27,6 +27,26 @@ import { hapticFeedback } from "@/utils/haptics";
 
 type RouteParams = RouteProp<SettingsStackParamList, "AddRentalOrder">;
 
+interface EquipmentBlock {
+  id: string;
+  kitCount: string;
+  spareReceiverCount: string;
+  transmitterCount: string;
+  microphoneCount: string;
+  selectedBag: RadioGuideKit | null;
+  unmatchedBagNumber: number | null;
+}
+
+const createEmptyBlock = (): EquipmentBlock => ({
+  id: Date.now().toString() + Math.random().toString(36).substr(2, 9),
+  kitCount: "",
+  spareReceiverCount: "1",
+  transmitterCount: "1",
+  microphoneCount: "1",
+  selectedBag: null,
+  unmatchedBagNumber: null,
+});
+
 export default function AddRentalOrderScreen() {
   const { theme } = useTheme();
   const navigation = useNavigation();
@@ -71,39 +91,50 @@ export default function AddRentalOrderScreen() {
   const [showStartPicker, setShowStartPicker] = useState(false);
   const [showEndPicker, setShowEndPicker] = useState(false);
 
-  const [kitCount, setKitCount] = useState(existingOrder?.kitCount?.toString() || "");
-  const [spareReceiverCount, setSpareReceiverCount] = useState(
-    existingOrder ? (existingOrder.spareReceiverCount?.toString() ?? "0") : "1"
-  );
-  const [spareReceiverAutoSet, setSpareReceiverAutoSet] = useState(!existingOrder);
-  const [transmitterCount, setTransmitterCount] = useState(existingOrder?.transmitterCount?.toString() || "1");
-  const [microphoneCount, setMicrophoneCount] = useState(existingOrder?.microphoneCount?.toString() || "1");
-  const [selectedBags, setSelectedBags] = useState<RadioGuideKit[]>([]);
+  const [equipmentBlocks, setEquipmentBlocks] = useState<EquipmentBlock[]>([createEmptyBlock()]);
+  const [activeBlockId, setActiveBlockId] = useState<string | null>(null);
   const [showBagPicker, setShowBagPicker] = useState(false);
   const [bagSearchQuery, setBagSearchQuery] = useState("");
-  const [bagsInitialized, setBagsInitialized] = useState(false);
-  const [unmatchedBagNumbers, setUnmatchedBagNumbers] = useState<number[]>([]);
+  const [blocksInitialized, setBlocksInitialized] = useState(false);
 
   useEffect(() => {
-    if (bagsInitialized) return;
+    if (blocksInitialized) return;
     
     const dataReady = !isDataLoading && !isRentalLoading;
     if (!dataReady) return;
     
-    if (orderId) {
-      if (!existingOrder) return;
+    if (orderId && existingOrder) {
+      const bagNumbers = existingOrder.bagNumber 
+        ? existingOrder.bagNumber.split(',').map(s => parseInt(s.trim())).filter(n => !isNaN(n))
+        : [];
       
-      if (existingOrder.bagNumber) {
-        const bagNumbers = existingOrder.bagNumber.split(',').map(s => parseInt(s.trim())).filter(n => !isNaN(n));
-        const foundBags = radioGuideKits.filter(k => bagNumbers.includes(k.bagNumber));
-        const foundBagNumbers = foundBags.map(b => b.bagNumber);
-        const unmatched = bagNumbers.filter(n => !foundBagNumbers.includes(n));
-        setSelectedBags(foundBags);
-        setUnmatchedBagNumbers(unmatched);
+      if (bagNumbers.length > 0) {
+        const blocks: EquipmentBlock[] = bagNumbers.map((bagNum, index) => {
+          const foundBag = radioGuideKits.find(k => k.bagNumber === bagNum);
+          const isFirstBlock = index === 0;
+          return {
+            id: Date.now().toString() + Math.random().toString(36).substr(2, 9),
+            kitCount: isFirstBlock ? (existingOrder.kitCount?.toString() || "") : "",
+            spareReceiverCount: isFirstBlock ? (existingOrder.spareReceiverCount?.toString() ?? "0") : "1",
+            transmitterCount: isFirstBlock ? (existingOrder.transmitterCount?.toString() || "1") : "1",
+            microphoneCount: isFirstBlock ? (existingOrder.microphoneCount?.toString() || "1") : "1",
+            selectedBag: foundBag || null,
+            unmatchedBagNumber: foundBag ? null : bagNum,
+          };
+        });
+        setEquipmentBlocks(blocks.length > 0 ? blocks : [createEmptyBlock()]);
+      } else {
+        setEquipmentBlocks([{
+          ...createEmptyBlock(),
+          kitCount: existingOrder.kitCount?.toString() || "",
+          spareReceiverCount: existingOrder.spareReceiverCount?.toString() ?? "0",
+          transmitterCount: existingOrder.transmitterCount?.toString() || "1",
+          microphoneCount: existingOrder.microphoneCount?.toString() || "1",
+        }]);
       }
     }
-    setBagsInitialized(true);
-  }, [radioGuideKits, existingOrder, bagsInitialized, isDataLoading, isRentalLoading, orderId]);
+    setBlocksInitialized(true);
+  }, [radioGuideKits, existingOrder, blocksInitialized, isDataLoading, isRentalLoading, orderId]);
   const [pricePerUnit, setPricePerUnit] = useState(existingOrder?.pricePerUnit?.toString() || selectedClient?.defaultPrice?.toString() || "100");
   const [prepayment, setPrepayment] = useState(existingOrder?.prepayment?.toString() || "0");
   const [receiverNotes, setReceiverNotes] = useState(existingOrder?.receiverNotes || "");
@@ -124,6 +155,10 @@ export default function AddRentalOrderScreen() {
   const activeServices = useMemo(() => {
     return rentalServices.filter(s => s.isActive);
   }, [rentalServices]);
+
+  const selectedBagsFromBlocks = useMemo(() => {
+    return equipmentBlocks.filter(b => b.selectedBag).map(b => b.selectedBag as RadioGuideKit);
+  }, [equipmentBlocks]);
 
   // Filter available bags: exclude rented and overdue
   const availableBagsForRental = useMemo(() => {
@@ -151,9 +186,9 @@ export default function AddRentalOrderScreen() {
       kit.status === 'available' && 
       !rentalBagNumbers.has(kit.bagNumber) &&
       !overdueKitIds.has(kit.id) &&
-      !selectedBags.find(b => b.id === kit.id)
+      !selectedBagsFromBlocks.find(b => b.id === kit.id)
     );
-  }, [radioGuideKits, rentalOrders, radioGuideAssignments, selectedBags, orderId]);
+  }, [radioGuideKits, rentalOrders, radioGuideAssignments, selectedBagsFromBlocks, orderId]);
 
   const servicesTotal = useMemo(() => {
     let total = 0;
@@ -208,22 +243,63 @@ export default function AddRentalOrderScreen() {
     return Math.max(1, diffDays);
   }, [startDate, endDate]);
 
-  useEffect(() => {
-    if (spareReceiverAutoSet) {
-      setSpareReceiverCount(daysCount >= 2 ? "2" : "1");
-    }
-  }, [daysCount, spareReceiverAutoSet]);
+  const totalKitCount = useMemo(() => {
+    return equipmentBlocks.reduce((sum, block) => sum + (parseInt(block.kitCount) || 0), 0);
+  }, [equipmentBlocks]);
 
-  const handleSpareReceiverChange = (value: string) => {
-    setSpareReceiverCount(value);
-    setSpareReceiverAutoSet(false);
+  const totalSpareReceiverCount = useMemo(() => {
+    return equipmentBlocks.reduce((sum, block) => sum + (parseInt(block.spareReceiverCount) || 0), 0);
+  }, [equipmentBlocks]);
+
+  const totalTransmitterCount = useMemo(() => {
+    return equipmentBlocks.reduce((sum, block) => sum + (parseInt(block.transmitterCount) || 0), 0);
+  }, [equipmentBlocks]);
+
+  const totalMicrophoneCount = useMemo(() => {
+    return equipmentBlocks.reduce((sum, block) => sum + (parseInt(block.microphoneCount) || 0), 0);
+  }, [equipmentBlocks]);
+
+  const updateBlock = (blockId: string, updates: Partial<EquipmentBlock>) => {
+    setEquipmentBlocks(prev => prev.map(b => b.id === blockId ? { ...b, ...updates } : b));
+  };
+
+  const addEquipmentBlock = () => {
+    hapticFeedback.selection();
+    setEquipmentBlocks(prev => [...prev, createEmptyBlock()]);
+  };
+
+  const removeEquipmentBlock = (blockId: string) => {
+    hapticFeedback.selection();
+    setEquipmentBlocks(prev => {
+      if (prev.length <= 1) return prev;
+      return prev.filter(b => b.id !== blockId);
+    });
+  };
+
+  const openBagPickerForBlock = (blockId: string) => {
+    setActiveBlockId(blockId);
+    setBagSearchQuery("");
+    setShowBagPicker(true);
+  };
+
+  const selectBagForBlock = (bag: RadioGuideKit) => {
+    if (activeBlockId) {
+      updateBlock(activeBlockId, { selectedBag: bag, unmatchedBagNumber: null });
+    }
+    setShowBagPicker(false);
+    setActiveBlockId(null);
+    hapticFeedback.selection();
+  };
+
+  const clearBagForBlock = (blockId: string) => {
+    updateBlock(blockId, { selectedBag: null, unmatchedBagNumber: null });
+    hapticFeedback.selection();
   };
 
   const equipmentPrice = useMemo(() => {
-    const kits = parseInt(kitCount) || 0;
     const price = parseFloat(pricePerUnit) || 0;
-    return kits * price * daysCount;
-  }, [kitCount, pricePerUnit, daysCount]);
+    return totalKitCount * price * daysCount;
+  }, [totalKitCount, pricePerUnit, daysCount]);
 
   const totalPrice = useMemo(() => {
     return equipmentPrice + servicesTotal;
@@ -271,8 +347,7 @@ export default function AddRentalOrderScreen() {
       return;
     }
 
-    const kits = parseInt(kitCount) || 0;
-    if (kits <= 0) {
+    if (totalKitCount <= 0) {
       Alert.alert("Ошибка", "Введите количество комплектов");
       return;
     }
@@ -283,6 +358,12 @@ export default function AddRentalOrderScreen() {
       .filter(([_, qty]) => qty > 0)
       .map(([serviceId, quantity]) => ({ serviceId, quantity }));
 
+    const allBagNumbers: number[] = [];
+    equipmentBlocks.forEach(block => {
+      if (block.selectedBag) allBagNumbers.push(block.selectedBag.bagNumber);
+      if (block.unmatchedBagNumber) allBagNumbers.push(block.unmatchedBagNumber);
+    });
+
     try {
       if (isEditMode && orderId) {
         await updateRentalOrder(orderId, {
@@ -290,14 +371,12 @@ export default function AddRentalOrderScreen() {
           startDate: startDate.toISOString(),
           endDate: endDate.toISOString(),
           daysCount,
-          kitCount: kits,
-          spareReceiverCount: parseInt(spareReceiverCount) || 0,
-          transmitterCount: parseInt(transmitterCount) || 0,
-          microphoneCount: parseInt(microphoneCount) || 0,
-          bagNumber: [...selectedBags.map(b => b.bagNumber), ...unmatchedBagNumbers].length > 0 
-            ? [...selectedBags.map(b => b.bagNumber), ...unmatchedBagNumbers].join(', ') 
-            : null,
-          isCharged: selectedBags.length > 0 && selectedBags.every(b => b.batteryLevel === 'full'),
+          kitCount: totalKitCount,
+          spareReceiverCount: totalSpareReceiverCount,
+          transmitterCount: totalTransmitterCount,
+          microphoneCount: totalMicrophoneCount,
+          bagNumber: allBagNumbers.length > 0 ? allBagNumbers.join(', ') : null,
+          isCharged: selectedBagsFromBlocks.length > 0 && selectedBagsFromBlocks.every(b => b.batteryLevel === 'full'),
           pricePerUnit: parseFloat(pricePerUnit) || 100,
           totalPrice,
           prepayment: parseFloat(prepayment) || 0,
@@ -310,14 +389,12 @@ export default function AddRentalOrderScreen() {
           startDate: startDate.toISOString(),
           endDate: endDate.toISOString(),
           daysCount,
-          kitCount: kits,
-          spareReceiverCount: parseInt(spareReceiverCount) || 0,
-          transmitterCount: parseInt(transmitterCount) || 0,
-          microphoneCount: parseInt(microphoneCount) || 0,
-          bagNumber: [...selectedBags.map(b => b.bagNumber), ...unmatchedBagNumbers].length > 0 
-            ? [...selectedBags.map(b => b.bagNumber), ...unmatchedBagNumbers].join(', ') 
-            : null,
-          isCharged: selectedBags.length > 0 && selectedBags.every(b => b.batteryLevel === 'full'),
+          kitCount: totalKitCount,
+          spareReceiverCount: totalSpareReceiverCount,
+          transmitterCount: totalTransmitterCount,
+          microphoneCount: totalMicrophoneCount,
+          bagNumber: allBagNumbers.length > 0 ? allBagNumbers.join(', ') : null,
+          isCharged: selectedBagsFromBlocks.length > 0 && selectedBagsFromBlocks.every(b => b.batteryLevel === 'full'),
           pricePerUnit: parseFloat(pricePerUnit) || 100,
           totalPrice,
           prepayment: parseFloat(prepayment) || 0,
@@ -423,141 +500,171 @@ export default function AddRentalOrderScreen() {
           </View>
         </View>
 
-        <View style={[styles.card, { backgroundColor: theme.backgroundSecondary }]}>
-          <ThemedText style={[styles.sectionTitle, { color: theme.textSecondary }]}>
-            Оборудование
-          </ThemedText>
+        {equipmentBlocks.map((block, blockIndex) => (
+          <View key={block.id} style={[styles.card, { backgroundColor: theme.backgroundSecondary }]}>
+            <View style={styles.equipmentBlockHeader}>
+              <ThemedText style={[styles.sectionTitle, { color: theme.textSecondary }]}>
+                Оборудование {equipmentBlocks.length > 1 ? `#${blockIndex + 1}` : ""}
+              </ThemedText>
+              {equipmentBlocks.length > 1 ? (
+                <Pressable
+                  onPress={() => removeEquipmentBlock(block.id)}
+                  style={[styles.removeBlockBtn, { backgroundColor: theme.error + "20" }]}
+                >
+                  <Icon name="trash-2" size={16} color={theme.error} />
+                </Pressable>
+              ) : null}
+            </View>
 
-          <View style={styles.inputRow}>
-            <View style={styles.inputColumn}>
-              <ThemedText style={[styles.inputLabel, { color: theme.textSecondary }]}>
-                Комплекты *
-              </ThemedText>
-              <TextInput
-                style={[styles.input, { backgroundColor: theme.backgroundSecondary, color: theme.text }]}
-                value={kitCount}
-                onChangeText={setKitCount}
-                placeholder="0"
-                placeholderTextColor={theme.textSecondary}
-                keyboardType="numeric"
-              />
-            </View>
-            <View style={styles.inputColumn}>
-              <ThemedText style={[styles.inputLabel, { color: theme.textSecondary }]}>
-                Запасные
-              </ThemedText>
-              <TextInput
-                style={[styles.input, { backgroundColor: theme.backgroundSecondary, color: theme.text }]}
-                value={spareReceiverCount}
-                onChangeText={handleSpareReceiverChange}
-                placeholder="1"
-                placeholderTextColor={theme.textSecondary}
-                keyboardType="numeric"
-              />
-            </View>
-          </View>
-
-          <View style={styles.inputRow}>
-            <View style={styles.inputColumn}>
-              <ThemedText style={[styles.inputLabel, { color: theme.textSecondary }]}>
-                Передатчик
-              </ThemedText>
-              <TextInput
-                style={[styles.input, { backgroundColor: theme.backgroundSecondary, color: theme.text }]}
-                value={transmitterCount}
-                onChangeText={setTransmitterCount}
-                placeholder="1"
-                placeholderTextColor={theme.textSecondary}
-                keyboardType="numeric"
-              />
-            </View>
-            <View style={styles.inputColumn}>
-              <ThemedText style={[styles.inputLabel, { color: theme.textSecondary }]}>
-                Микрофон
-              </ThemedText>
-              <TextInput
-                style={[styles.input, { backgroundColor: theme.backgroundSecondary, color: theme.text }]}
-                value={microphoneCount}
-                onChangeText={setMicrophoneCount}
-                placeholder="1"
-                placeholderTextColor={theme.textSecondary}
-                keyboardType="numeric"
-              />
-            </View>
-          </View>
-
-          <View style={styles.bagSection}>
-            <View style={styles.bagHeader}>
-              <ThemedText style={[styles.inputLabel, { color: theme.textSecondary }]}>
-                Сумки с оборудованием
-              </ThemedText>
-              <Pressable
-                onPress={() => setShowBagPicker(true)}
-                style={[styles.addBagButton, { backgroundColor: theme.primary + "20" }]}
-              >
-                <Icon name="plus" size={16} color={theme.primary} />
-                <ThemedText style={[styles.addBagText, { color: theme.primary }]}>
-                  Добавить
+            <View style={styles.inputRow}>
+              <View style={styles.inputColumn}>
+                <ThemedText style={[styles.inputLabel, { color: theme.textSecondary }]}>
+                  Комплекты *
                 </ThemedText>
-              </Pressable>
-            </View>
-            {selectedBags.length > 0 || unmatchedBagNumbers.length > 0 ? (
-              <View style={styles.selectedBagsContainer}>
-                {selectedBags.map((bag) => {
-                  const batteryColor = bag.batteryLevel === 'full' ? theme.success : 
-                    bag.batteryLevel === 'half' ? theme.warning : theme.error;
-                  const batteryIcon = bag.batteryLevel === 'full' ? 'battery' : 
-                    bag.batteryLevel === 'half' ? 'battery' : 'battery';
-                  return (
-                    <View key={bag.id} style={[styles.selectedBagChip, { backgroundColor: theme.backgroundTertiary }]}>
-                      <ThemedText style={styles.bagChipText}>
-                        Сумка {bag.bagNumber}
-                      </ThemedText>
-                      <View style={styles.batteryIndicator}>
-                        <Icon name={batteryIcon} size={14} color={batteryColor} />
-                        <ThemedText style={[styles.batteryText, { color: batteryColor }]}>
-                          {bag.batteryLevel === 'full' ? '100%' : bag.batteryLevel === 'half' ? '50%' : 'Низкий'}
-                        </ThemedText>
-                      </View>
-                      <Pressable
-                        onPress={() => {
-                          setSelectedBags(prev => prev.filter(b => b.id !== bag.id));
-                          hapticFeedback.selection();
-                        }}
-                        hitSlop={8}
-                      >
-                        <Icon name="x" size={16} color={theme.textSecondary} />
-                      </Pressable>
-                    </View>
-                  );
-                })}
-                {unmatchedBagNumbers.map((bagNum) => (
-                  <View key={`unmatched-${bagNum}`} style={[styles.selectedBagChip, { backgroundColor: theme.warning + "30" }]}>
-                    <ThemedText style={styles.bagChipText}>
-                      Сумка {bagNum}
-                    </ThemedText>
-                    <ThemedText style={[styles.batteryText, { color: theme.warning }]}>
-                      (не найдена)
-                    </ThemedText>
-                    <Pressable
-                      onPress={() => {
-                        setUnmatchedBagNumbers(prev => prev.filter(n => n !== bagNum));
-                        hapticFeedback.selection();
-                      }}
-                      hitSlop={8}
-                    >
-                      <Icon name="x" size={16} color={theme.textSecondary} />
-                    </Pressable>
-                  </View>
-                ))}
+                <TextInput
+                  style={[styles.input, { backgroundColor: theme.backgroundSecondary, color: theme.text }]}
+                  value={block.kitCount}
+                  onChangeText={(value) => updateBlock(block.id, { kitCount: value })}
+                  placeholder="0"
+                  placeholderTextColor={theme.textSecondary}
+                  keyboardType="numeric"
+                />
               </View>
-            ) : (
-              <ThemedText style={[styles.noBagsText, { color: theme.textSecondary }]}>
-                Сумки не выбраны
+              <View style={styles.inputColumn}>
+                <ThemedText style={[styles.inputLabel, { color: theme.textSecondary }]}>
+                  Запасные
+                </ThemedText>
+                <TextInput
+                  style={[styles.input, { backgroundColor: theme.backgroundSecondary, color: theme.text }]}
+                  value={block.spareReceiverCount}
+                  onChangeText={(value) => updateBlock(block.id, { spareReceiverCount: value })}
+                  placeholder="1"
+                  placeholderTextColor={theme.textSecondary}
+                  keyboardType="numeric"
+                />
+              </View>
+            </View>
+
+            <View style={styles.inputRow}>
+              <View style={styles.inputColumn}>
+                <ThemedText style={[styles.inputLabel, { color: theme.textSecondary }]}>
+                  Передатчик
+                </ThemedText>
+                <TextInput
+                  style={[styles.input, { backgroundColor: theme.backgroundSecondary, color: theme.text }]}
+                  value={block.transmitterCount}
+                  onChangeText={(value) => updateBlock(block.id, { transmitterCount: value })}
+                  placeholder="1"
+                  placeholderTextColor={theme.textSecondary}
+                  keyboardType="numeric"
+                />
+              </View>
+              <View style={styles.inputColumn}>
+                <ThemedText style={[styles.inputLabel, { color: theme.textSecondary }]}>
+                  Микрофон
+                </ThemedText>
+                <TextInput
+                  style={[styles.input, { backgroundColor: theme.backgroundSecondary, color: theme.text }]}
+                  value={block.microphoneCount}
+                  onChangeText={(value) => updateBlock(block.id, { microphoneCount: value })}
+                  placeholder="1"
+                  placeholderTextColor={theme.textSecondary}
+                  keyboardType="numeric"
+                />
+              </View>
+            </View>
+
+            <View style={styles.bagSection}>
+              <ThemedText style={[styles.inputLabel, { color: theme.textSecondary }]}>
+                Сумка
               </ThemedText>
-            )}
+              {block.selectedBag ? (
+                <View style={[styles.selectedBagChip, { backgroundColor: theme.backgroundTertiary }]}>
+                  <ThemedText style={styles.bagChipText}>
+                    Сумка {block.selectedBag.bagNumber}
+                  </ThemedText>
+                  <View style={styles.batteryIndicator}>
+                    <Icon 
+                      name="battery" 
+                      size={14} 
+                      color={block.selectedBag.batteryLevel === 'full' ? theme.success : 
+                        block.selectedBag.batteryLevel === 'half' ? theme.warning : theme.error} 
+                    />
+                    <ThemedText style={[styles.batteryText, { 
+                      color: block.selectedBag.batteryLevel === 'full' ? theme.success : 
+                        block.selectedBag.batteryLevel === 'half' ? theme.warning : theme.error 
+                    }]}>
+                      {block.selectedBag.batteryLevel === 'full' ? '100%' : block.selectedBag.batteryLevel === 'half' ? '50%' : 'Низкий'}
+                    </ThemedText>
+                  </View>
+                  <Pressable onPress={() => clearBagForBlock(block.id)} hitSlop={8}>
+                    <Icon name="x" size={16} color={theme.textSecondary} />
+                  </Pressable>
+                </View>
+              ) : block.unmatchedBagNumber ? (
+                <View style={[styles.selectedBagChip, { backgroundColor: theme.warning + "30" }]}>
+                  <ThemedText style={styles.bagChipText}>
+                    Сумка {block.unmatchedBagNumber}
+                  </ThemedText>
+                  <ThemedText style={[styles.batteryText, { color: theme.warning }]}>
+                    (не найдена)
+                  </ThemedText>
+                  <Pressable onPress={() => clearBagForBlock(block.id)} hitSlop={8}>
+                    <Icon name="x" size={16} color={theme.textSecondary} />
+                  </Pressable>
+                </View>
+              ) : (
+                <Pressable
+                  onPress={() => openBagPickerForBlock(block.id)}
+                  style={[styles.selectBagButton, { backgroundColor: theme.backgroundTertiary }]}
+                >
+                  <Icon name="briefcase" size={18} color={theme.textSecondary} />
+                  <ThemedText style={{ color: theme.textSecondary }}>Выбрать сумку</ThemedText>
+                </Pressable>
+              )}
+            </View>
           </View>
-        </View>
+        ))}
+
+        <Pressable
+          onPress={addEquipmentBlock}
+          style={[styles.addBlockButton, { backgroundColor: theme.primary + "15", borderColor: theme.primary }]}
+        >
+          <Icon name="plus" size={20} color={theme.primary} />
+          <ThemedText style={[styles.addBlockText, { color: theme.primary }]}>
+            Добавить ещё оборудование
+          </ThemedText>
+        </Pressable>
+
+        {equipmentBlocks.length > 1 ? (
+          <View style={[styles.card, { backgroundColor: theme.backgroundSecondary }]}>
+            <ThemedText style={[styles.sectionTitle, { color: theme.textSecondary }]}>
+              Итого оборудования
+            </ThemedText>
+            <View style={styles.totalsRow}>
+              <View style={styles.totalItem}>
+                <ThemedText style={[styles.totalValue, { color: theme.primary }]}>{totalKitCount}</ThemedText>
+                <ThemedText style={[styles.totalLabel, { color: theme.textSecondary }]}>компл.</ThemedText>
+              </View>
+              <View style={styles.totalItem}>
+                <ThemedText style={[styles.totalValue, { color: theme.text }]}>{totalSpareReceiverCount}</ThemedText>
+                <ThemedText style={[styles.totalLabel, { color: theme.textSecondary }]}>запас.</ThemedText>
+              </View>
+              <View style={styles.totalItem}>
+                <ThemedText style={[styles.totalValue, { color: theme.text }]}>{totalTransmitterCount}</ThemedText>
+                <ThemedText style={[styles.totalLabel, { color: theme.textSecondary }]}>перед.</ThemedText>
+              </View>
+              <View style={styles.totalItem}>
+                <ThemedText style={[styles.totalValue, { color: theme.text }]}>{totalMicrophoneCount}</ThemedText>
+                <ThemedText style={[styles.totalLabel, { color: theme.textSecondary }]}>микр.</ThemedText>
+              </View>
+              <View style={styles.totalItem}>
+                <ThemedText style={[styles.totalValue, { color: theme.text }]}>{selectedBagsFromBlocks.length}</ThemedText>
+                <ThemedText style={[styles.totalLabel, { color: theme.textSecondary }]}>сумок</ThemedText>
+              </View>
+            </View>
+          </View>
+        ) : null}
 
         {activeServices.length > 0 ? (
           <View style={[styles.card, { backgroundColor: theme.backgroundSecondary }]}>
@@ -883,11 +990,7 @@ export default function AddRentalOrderScreen() {
                   item.batteryLevel === 'half' ? theme.warning : theme.error;
                 return (
                   <Pressable
-                    onPress={() => {
-                      setSelectedBags(prev => [...prev, item]);
-                      setShowBagPicker(false);
-                      hapticFeedback.selection();
-                    }}
+                    onPress={() => selectBagForBlock(item)}
                     style={[styles.bagItem, { backgroundColor: theme.backgroundSecondary }]}
                   >
                     <View style={[styles.bagIcon, { backgroundColor: theme.primary + "20" }]}>
@@ -1321,5 +1424,54 @@ const styles = StyleSheet.create({
     flex: 1,
     fontSize: 15,
     paddingVertical: Spacing.xs,
+  },
+  equipmentBlockHeader: {
+    flexDirection: "row",
+    justifyContent: "space-between",
+    alignItems: "center",
+    marginBottom: Spacing.sm,
+  },
+  removeBlockBtn: {
+    padding: Spacing.xs,
+    borderRadius: BorderRadius.sm,
+  },
+  selectBagButton: {
+    flexDirection: "row",
+    alignItems: "center",
+    padding: Spacing.md,
+    borderRadius: BorderRadius.md,
+    gap: Spacing.sm,
+  },
+  addBlockButton: {
+    flexDirection: "row",
+    alignItems: "center",
+    justifyContent: "center",
+    padding: Spacing.md,
+    borderRadius: BorderRadius.md,
+    borderWidth: 1,
+    borderStyle: "dashed",
+    gap: Spacing.sm,
+  },
+  addBlockText: {
+    fontSize: 15,
+    fontWeight: "500",
+  },
+  totalsRow: {
+    flexDirection: "row",
+    justifyContent: "space-around",
+    flexWrap: "wrap",
+  },
+  totalItem: {
+    alignItems: "center",
+    paddingHorizontal: Spacing.sm,
+    paddingVertical: Spacing.xs,
+  },
+  totalValue: {
+    fontSize: 18,
+    fontWeight: "700",
+  },
+  totalLabel: {
+    fontSize: 11,
+    marginTop: 2,
   },
 });
