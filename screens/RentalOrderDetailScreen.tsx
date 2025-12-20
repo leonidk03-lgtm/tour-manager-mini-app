@@ -44,7 +44,7 @@ export default function RentalOrderDetailScreen() {
   const navigation = useNavigation();
   const route = useRoute<RouteParams>();
   const insets = useSafeAreaInsets();
-  const { rentalOrders, rentalClients, updateRentalOrder, updateRentalClient, updateOrderStatus, addRentalPayment, getOrderPayments, getOrderHistory, deleteRentalOrder } = useRental();
+  const { rentalOrders, rentalClients, rentalOrderServices, updateRentalOrder, updateRentalClient, updateOrderStatus, addRentalPayment, getOrderPayments, getOrderHistory, deleteRentalOrder } = useRental();
   const { managers } = useAuth();
 
   const orderId = route.params?.orderId;
@@ -55,6 +55,9 @@ export default function RentalOrderDetailScreen() {
 
   const ownerManager = order?.ownerManagerId ? managers.find(m => m.id === order.ownerManagerId) : null;
   const executorManager = order?.executorId ? managers.find(m => m.id === order.executorId) : null;
+  const orderServices = order ? rentalOrderServices.filter(s => s.orderId === order.id) : [];
+  const servicesTotal = orderServices.reduce((sum, s) => sum + s.price * s.quantity, 0);
+  const equipmentPrice = order ? order.totalPrice - servicesTotal : 0;
 
   const [showStatusModal, setShowStatusModal] = useState(false);
   const [showPaymentModal, setShowPaymentModal] = useState(false);
@@ -330,6 +333,49 @@ export default function RentalOrderDetailScreen() {
               </ThemedText>
             </View>
           ) : null}
+        </View>
+
+        <View style={[styles.card, { backgroundColor: theme.backgroundSecondary }]}>
+          <ThemedText style={[styles.sectionTitle, { color: theme.textSecondary }]}>
+            Стоимость
+          </ThemedText>
+          
+          <View style={styles.priceRow}>
+            <ThemedText style={{ color: theme.textSecondary }}>
+              Оборудование ({order.kitCount} x {order.pricePerUnit.toLocaleString("ru-RU")}₽ x {order.daysCount} дн.)
+            </ThemedText>
+            <ThemedText style={{ fontWeight: "500" }}>
+              {equipmentPrice.toLocaleString("ru-RU")}₽
+            </ThemedText>
+          </View>
+
+          {orderServices.length > 0 ? (
+            <View style={styles.servicesSection}>
+              {orderServices.map(service => (
+                <View key={service.id} style={styles.priceRow}>
+                  <ThemedText style={{ color: theme.textSecondary }}>
+                    {service.serviceName} x {service.quantity}
+                  </ThemedText>
+                  <ThemedText style={{ fontWeight: "500" }}>
+                    {(service.price * service.quantity).toLocaleString("ru-RU")}₽
+                  </ThemedText>
+                </View>
+              ))}
+              <View style={[styles.priceRow, { marginTop: Spacing.xs }]}>
+                <ThemedText style={{ color: theme.textSecondary }}>Услуги:</ThemedText>
+                <ThemedText style={{ fontWeight: "500", color: theme.success }}>
+                  +{servicesTotal.toLocaleString("ru-RU")}₽
+                </ThemedText>
+              </View>
+            </View>
+          ) : null}
+
+          <View style={[styles.totalPriceRow, { borderTopColor: theme.border }]}>
+            <ThemedText style={styles.totalLabel}>Итого:</ThemedText>
+            <ThemedText style={[styles.totalValue, { color: theme.success }]}>
+              {order.totalPrice.toLocaleString("ru-RU")}₽
+            </ThemedText>
+          </View>
         </View>
 
         <View style={[styles.card, { backgroundColor: theme.backgroundSecondary }]}>
@@ -712,6 +758,32 @@ const styles = StyleSheet.create({
   notesText: {
     flex: 1,
     fontSize: 13,
+  },
+  priceRow: {
+    flexDirection: "row",
+    justifyContent: "space-between",
+    alignItems: "center",
+    paddingVertical: Spacing.xs,
+  },
+  servicesSection: {
+    marginTop: Spacing.xs,
+    paddingTop: Spacing.xs,
+  },
+  totalPriceRow: {
+    flexDirection: "row",
+    justifyContent: "space-between",
+    alignItems: "center",
+    marginTop: Spacing.sm,
+    paddingTop: Spacing.sm,
+    borderTopWidth: StyleSheet.hairlineWidth,
+  },
+  totalLabel: {
+    fontSize: 16,
+    fontWeight: "600",
+  },
+  totalValue: {
+    fontSize: 20,
+    fontWeight: "700",
   },
   paymentsList: {
     gap: Spacing.sm,
