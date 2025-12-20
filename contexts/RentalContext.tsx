@@ -98,6 +98,7 @@ export interface RentalService {
   id: string;
   name: string;
   price: number;
+  commissionPercent: number;
   isActive: boolean;
   createdAt: string;
   updatedAt: string;
@@ -110,6 +111,7 @@ export interface RentalOrderService {
   serviceName: string;
   price: number;
   quantity: number;
+  commissionPercent: number;
   createdAt: string;
 }
 
@@ -335,6 +337,7 @@ export function RentalProvider({ children }: { children: ReactNode }) {
         id: s.id,
         name: s.name,
         price: s.price,
+        commissionPercent: s.commission_percent ?? 10,
         isActive: s.is_active,
         createdAt: s.created_at,
         updatedAt: s.updated_at,
@@ -364,6 +367,7 @@ export function RentalProvider({ children }: { children: ReactNode }) {
         serviceName: os.service_name,
         price: os.price,
         quantity: os.quantity,
+        commissionPercent: os.commission_percent ?? 10,
         createdAt: os.created_at,
       })));
     } catch (error) {
@@ -517,6 +521,7 @@ export function RentalProvider({ children }: { children: ReactNode }) {
           service_name: service?.name || 'Услуга',
           price: service?.price || 0,
           quantity: s.quantity,
+          commission_percent: service?.commissionPercent ?? 10,
         };
       });
 
@@ -801,7 +806,6 @@ export function RentalProvider({ children }: { children: ReactNode }) {
 
     const ownerPercent = ownerProfile?.owner_commission_percent ?? 20;
     const executorPercent = executorProfile?.executor_commission_percent ?? 10;
-    const servicePercent = executorProfile?.service_commission_percent ?? 10;
 
     const { data: orderServicesData } = await supabase
       .from('rental_order_services')
@@ -844,18 +848,30 @@ export function RentalProvider({ children }: { children: ReactNode }) {
         status: 'pending',
       });
 
-      if (servicesTotal > 0) {
-        commissionsToInsert.push({
-          order_id: orderId,
-          order_number: order.orderNumber,
-          recipient_id: executorId,
-          recipient_name: executorProfile.display_name || 'Исполнитель',
-          role: 'service',
-          amount: Math.round((servicesTotal * servicePercent) / 100),
-          basis_amount: servicesTotal,
-          percentage: servicePercent,
-          status: 'pending',
-        });
+      if (orderServicesData && orderServicesData.length > 0) {
+        let totalServiceCommission = 0;
+        let totalServiceBasis = 0;
+        for (const s of orderServicesData) {
+          const price = typeof s.price === 'number' ? s.price : parseFloat(s.price) || 0;
+          const qty = typeof s.quantity === 'number' ? s.quantity : parseInt(s.quantity) || 1;
+          const commPercent = typeof s.commission_percent === 'number' ? s.commission_percent : parseFloat(s.commission_percent) || 10;
+          const serviceCost = price * qty;
+          totalServiceBasis += serviceCost;
+          totalServiceCommission += Math.round((serviceCost * commPercent) / 100);
+        }
+        if (totalServiceCommission > 0) {
+          commissionsToInsert.push({
+            order_id: orderId,
+            order_number: order.orderNumber,
+            recipient_id: executorId,
+            recipient_name: executorProfile.display_name || 'Исполнитель',
+            role: 'service',
+            amount: totalServiceCommission,
+            basis_amount: totalServiceBasis,
+            percentage: 0,
+            status: 'pending',
+          });
+        }
       }
     }
 
@@ -890,6 +906,7 @@ export function RentalProvider({ children }: { children: ReactNode }) {
       .insert({
         name: service.name,
         price: service.price,
+        commission_percent: service.commissionPercent ?? 10,
         is_active: service.isActive,
       })
       .select()
@@ -904,6 +921,7 @@ export function RentalProvider({ children }: { children: ReactNode }) {
     const updateData: Record<string, unknown> = {};
     if (service.name !== undefined) updateData.name = service.name;
     if (service.price !== undefined) updateData.price = service.price;
+    if (service.commissionPercent !== undefined) updateData.commission_percent = service.commissionPercent;
     if (service.isActive !== undefined) updateData.is_active = service.isActive;
     updateData.updated_at = new Date().toISOString();
 

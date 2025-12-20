@@ -3,6 +3,7 @@ CREATE TABLE IF NOT EXISTS rental_services (
   id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
   name TEXT NOT NULL,
   price DECIMAL(10,2) NOT NULL DEFAULT 0,
+  commission_percent DECIMAL(5,2) NOT NULL DEFAULT 10,
   is_active BOOLEAN NOT NULL DEFAULT true,
   created_at TIMESTAMPTZ DEFAULT NOW(),
   updated_at TIMESTAMPTZ DEFAULT NOW()
@@ -33,6 +34,7 @@ CREATE TABLE IF NOT EXISTS rental_order_services (
   service_name TEXT NOT NULL,
   price DECIMAL(10,2) NOT NULL,
   quantity INTEGER NOT NULL DEFAULT 1,
+  commission_percent DECIMAL(5,2) NOT NULL DEFAULT 10,
   created_at TIMESTAMPTZ DEFAULT NOW()
 );
 
@@ -53,5 +55,8 @@ CREATE POLICY "Allow authenticated update" ON rental_order_services
 CREATE POLICY "Allow authenticated delete" ON rental_order_services
   FOR DELETE TO authenticated USING (true);
 
--- Add service commission percentage to profiles table
-ALTER TABLE profiles ADD COLUMN IF NOT EXISTS service_commission_percent DECIMAL(5,2) DEFAULT 10;
+-- Add commission_percent column to rental_services if not exists (for existing tables)
+ALTER TABLE rental_services ADD COLUMN IF NOT EXISTS commission_percent DECIMAL(5,2) NOT NULL DEFAULT 10;
+
+-- Add commission_percent column to rental_order_services if not exists (for existing tables)
+ALTER TABLE rental_order_services ADD COLUMN IF NOT EXISTS commission_percent DECIMAL(5,2) NOT NULL DEFAULT 10;
