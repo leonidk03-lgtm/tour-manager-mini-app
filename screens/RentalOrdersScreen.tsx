@@ -41,7 +41,7 @@ export default function RentalOrdersScreen() {
   const insets = useSafeAreaInsets();
   const { rentalOrders, rentalClients, updateRentalOrder, addRentalPayment, getOrderPayments } = useRental();
   const { managers } = useAuth();
-  const { radioGuideKits } = useData();
+  const { radioGuideKits, equipmentLosses } = useData();
 
   const [searchQuery, setSearchQuery] = useState("");
   const [activeFilter, setActiveFilter] = useState<FilterType>("срок");
@@ -228,6 +228,8 @@ export default function RentalOrdersScreen() {
     if (item.microphoneCount > 0) equipmentParts.push(`${item.microphoneCount} мик.`);
     const equipmentText = equipmentParts.join(" / ") || "—";
 
+    const hasLosses = equipmentLosses.some(loss => loss.rentalOrderId === item.id && loss.status === "lost");
+
     return (
       <Pressable
         onPress={() => navigation.navigate("RentalOrderDetail", { orderId: item.id })}
@@ -236,6 +238,11 @@ export default function RentalOrdersScreen() {
           { backgroundColor: theme.backgroundSecondary, opacity: pressed ? 0.8 : 1 },
         ]}
       >
+        {hasLosses ? (
+          <View style={[styles.lossIndicator, { backgroundColor: theme.error }]}>
+            <Icon name="alert-triangle" size={12} color="#fff" />
+          </View>
+        ) : null}
         <View style={styles.orderRow}>
           <Pressable
             onPress={() => handleStatusChange(item)}
@@ -672,5 +679,16 @@ const styles = StyleSheet.create({
   sectionHeaderText: {
     fontSize: 18,
     fontWeight: "700",
+  },
+  lossIndicator: {
+    position: "absolute",
+    top: 8,
+    right: 8,
+    width: 22,
+    height: 22,
+    borderRadius: 11,
+    justifyContent: "center",
+    alignItems: "center",
+    zIndex: 10,
   },
 });
