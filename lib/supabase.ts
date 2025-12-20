@@ -163,6 +163,7 @@ export interface Profile {
   permissions?: ManagerPermissions;
   owner_commission_percent?: number;
   executor_commission_percent?: number;
+  service_commission_percent?: number;
   created_at: string;
   updated_at: string;
 }

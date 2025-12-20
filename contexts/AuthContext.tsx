@@ -20,7 +20,7 @@ interface AuthContextType {
   sendPasswordReset: (email: string) => Promise<{ error: string | null }>;
   updateManagerDisplayName: (managerId: string, displayName: string) => Promise<{ error: string | null }>;
   updateManagerPermissions: (managerId: string, permissions: ManagerPermissions) => Promise<{ error: string | null }>;
-  updateManagerCommissions: (managerId: string, ownerPercent: number, executorPercent: number) => Promise<{ error: string | null }>;
+  updateManagerCommissions: (managerId: string, ownerPercent: number, executorPercent: number, servicePercent?: number) => Promise<{ error: string | null }>;
   managers: Profile[];
   refreshManagers: () => Promise<void>;
 }
@@ -389,20 +389,26 @@ export function AuthProvider({ children }: { children: ReactNode }) {
   const updateManagerCommissions = async (
     managerId: string,
     ownerPercent: number,
-    executorPercent: number
+    executorPercent: number,
+    servicePercent?: number
   ): Promise<{ error: string | null }> => {
     if (!isAdmin) {
       return { error: 'Только администратор может изменять комиссии' };
     }
 
     try {
+      const updateData: Record<string, unknown> = {
+        owner_commission_percent: ownerPercent,
+        executor_commission_percent: executorPercent,
+        updated_at: new Date().toISOString()
+      };
+      if (servicePercent !== undefined) {
+        updateData.service_commission_percent = servicePercent;
+      }
+
       const { error } = await supabase
         .from('profiles')
-        .update({
-          owner_commission_percent: ownerPercent,
-          executor_commission_percent: executorPercent,
-          updated_at: new Date().toISOString()
-        })
+        .update(updateData)
         .eq('id', managerId);
 
       if (error) {

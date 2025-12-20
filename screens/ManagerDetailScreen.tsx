@@ -48,6 +48,7 @@ export default function ManagerDetailScreen() {
   const [showCommissions, setShowCommissions] = useState(false);
   const [ownerCommission, setOwnerCommission] = useState(String(manager.owner_commission_percent ?? 20));
   const [executorCommission, setExecutorCommission] = useState(String(manager.executor_commission_percent ?? 10));
+  const [serviceCommission, setServiceCommission] = useState(String(manager.service_commission_percent ?? 10));
 
   const latestManager = useMemo(() => {
     return managers.find(m => m.id === manager.id) || currentManager;
@@ -491,6 +492,26 @@ export default function ManagerDetailScreen() {
                 </View>
               </View>
 
+              <View style={styles.commissionRow}>
+                <View style={styles.commissionLabel}>
+                  <ThemedText style={styles.permissionLabel}>Услуги</ThemedText>
+                  <ThemedText style={[styles.permissionDescription, { color: theme.textSecondary }]}>
+                    Комиссия за доп. услуги в заказах
+                  </ThemedText>
+                </View>
+                <View style={[styles.commissionInputContainer, { backgroundColor: theme.backgroundTertiary, borderColor: theme.border }]}>
+                  <TextInput
+                    style={[styles.commissionInput, { color: theme.text }]}
+                    value={serviceCommission}
+                    onChangeText={setServiceCommission}
+                    keyboardType="numeric"
+                    maxLength={3}
+                    placeholderTextColor={theme.textSecondary}
+                  />
+                  <ThemedText style={{ color: theme.textSecondary }}>%</ThemedText>
+                </View>
+              </View>
+
               <View style={styles.modalButtons}>
                 <Pressable
                   style={[styles.modalButton, { backgroundColor: theme.backgroundTertiary }]}
@@ -503,13 +524,14 @@ export default function ManagerDetailScreen() {
                   onPress={async () => {
                     const owner = parseInt(ownerCommission, 10);
                     const executor = parseInt(executorCommission, 10);
-                    if (isNaN(owner) || isNaN(executor) || owner < 0 || executor < 0 || owner > 100 || executor > 100) {
+                    const service = parseInt(serviceCommission, 10);
+                    if (isNaN(owner) || isNaN(executor) || isNaN(service) || owner < 0 || executor < 0 || service < 0 || owner > 100 || executor > 100 || service > 100) {
                       Alert.alert("Ошибка", "Введите корректные проценты (0-100)");
                       return;
                     }
                     setIsSaving(true);
                     try {
-                      const { error } = await updateManagerCommissions(latestManager.id, owner, executor);
+                      const { error } = await updateManagerCommissions(latestManager.id, owner, executor, service);
                       if (error) {
                         Alert.alert("Ошибка", error);
                       } else {

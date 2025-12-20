@@ -146,7 +146,12 @@ export default function ManagerCommissionsScreen() {
   );
 
   const renderCommission = ({ item }: { item: RentalCommission }) => {
-    const roleLabel = item.role === "owner" ? "Обработка заказа" : "Услуга в заказе";
+    const roleLabels: Record<string, string> = {
+      owner: "Владелец клиента",
+      executor: "Исполнитель",
+      service: "Доп. услуги",
+    };
+    const roleLabel = roleLabels[item.role] || "Комиссия";
     
     return (
       <View style={[styles.row, { backgroundColor: theme.backgroundSecondary }]}>
@@ -162,7 +167,7 @@ export default function ManagerCommissionsScreen() {
         </View>
         <View style={styles.rowInfo}>
           <ThemedText style={[styles.infoText, { color: theme.textSecondary }]}>
-            Аренда радиооборудования ({item.percentage}%)
+            {item.role === 'service' ? 'Доп. услуги' : 'Аренда оборудования'} ({item.percentage}%)
           </ThemedText>
         </View>
         <View style={styles.rowAmount}>

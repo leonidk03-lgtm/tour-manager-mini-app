@@ -54,4 +54,4 @@ CREATE POLICY "Allow authenticated delete" ON rental_order_services
   FOR DELETE TO authenticated USING (true);
 
 -- Add service commission percentage to profiles table
-ALTER TABLE profiles ADD COLUMN IF NOT EXISTS service_commission_percentage DECIMAL(5,2) DEFAULT 10;
+ALTER TABLE profiles ADD COLUMN IF NOT EXISTS service_commission_percent DECIMAL(5,2) DEFAULT 10;

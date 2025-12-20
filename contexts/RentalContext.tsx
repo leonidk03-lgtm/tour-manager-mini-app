@@ -77,7 +77,7 @@ export interface RentalOrderHistory {
   createdAt: string;
 }
 
-export type CommissionRole = 'owner' | 'executor';
+export type CommissionRole = 'owner' | 'executor' | 'service';
 
 export interface RentalCommission {
   id: string;
@@ -791,7 +791,7 @@ export function RentalProvider({ children }: { children: ReactNode }) {
 
     const { data: profiles } = await supabase
       .from('profiles')
-      .select('id, display_name, role, owner_commission_percent, executor_commission_percent')
+      .select('id, display_name, role, owner_commission_percent, executor_commission_percent, service_commission_percent')
       .in('id', [ownerId, executorId].filter(Boolean) as string[]);
 
     if (!profiles || profiles.length === 0) return;
@@ -801,6 +801,19 @@ export function RentalProvider({ children }: { children: ReactNode }) {
 
     const ownerPercent = ownerProfile?.owner_commission_percent ?? 20;
     const executorPercent = executorProfile?.executor_commission_percent ?? 10;
+    const servicePercent = executorProfile?.service_commission_percent ?? 10;
+
+    const { data: orderServicesData } = await supabase
+      .from('rental_order_services')
+      .select('*')
+      .eq('order_id', orderId);
+
+    const servicesTotal = (orderServicesData || []).reduce((sum, s) => {
+      const price = typeof s.price === 'number' ? s.price : parseFloat(s.price) || 0;
+      const qty = typeof s.quantity === 'number' ? s.quantity : parseInt(s.quantity) || 1;
+      return sum + (price * qty);
+    }, 0);
+    const equipmentPrice = totalPrice;
 
     const commissionsToInsert: any[] = [];
 
@@ -811,8 +824,8 @@ export function RentalProvider({ children }: { children: ReactNode }) {
         recipient_id: ownerId,
         recipient_name: ownerProfile.display_name || 'Менеджер',
         role: 'owner',
-        amount: Math.round((totalPrice * ownerPercent) / 100),
-        basis_amount: totalPrice,
+        amount: Math.round((equipmentPrice * ownerPercent) / 100),
+        basis_amount: equipmentPrice,
         percentage: ownerPercent,
         status: 'pending',
       });
@@ -825,11 +838,25 @@ export function RentalProvider({ children }: { children: ReactNode }) {
         recipient_id: executorId,
         recipient_name: executorProfile.display_name || 'Исполнитель',
         role: 'executor',
-        amount: Math.round((totalPrice * executorPercent) / 100),
-        basis_amount: totalPrice,
+        amount: Math.round((equipmentPrice * executorPercent) / 100),
+        basis_amount: equipmentPrice,
         percentage: executorPercent,
         status: 'pending',
       });
+
+      if (servicesTotal > 0) {
+        commissionsToInsert.push({
+          order_id: orderId,
+          order_number: order.orderNumber,
+          recipient_id: executorId,
+          recipient_name: executorProfile.display_name || 'Исполнитель',
+          role: 'service',
+          amount: Math.round((servicesTotal * servicePercent) / 100),
+          basis_amount: servicesTotal,
+          percentage: servicePercent,
+          status: 'pending',
+        });
+      }
     }
 
     if (commissionsToInsert.length > 0) {
