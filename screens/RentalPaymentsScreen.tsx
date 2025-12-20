@@ -1,5 +1,5 @@
 import { useState, useMemo, useCallback } from "react";
-import { View, StyleSheet, Pressable, Modal, TextInput } from "react-native";
+import { View, StyleSheet, Pressable, Modal, TextInput, Platform } from "react-native";
 import { useNavigation, NavigationProp } from "@react-navigation/native";
 import DateTimePicker from "@react-native-community/datetimepicker";
 import { Icon } from "@/components/Icon";
@@ -511,7 +511,7 @@ export default function RentalPaymentsScreen() {
         </View>
       </Modal>
 
-      {showStartPicker ? (
+      {showStartPicker && Platform.OS !== 'web' ? (
         <DateTimePicker
           value={startDate || new Date()}
           mode="date"
@@ -523,7 +523,7 @@ export default function RentalPaymentsScreen() {
         />
       ) : null}
 
-      {showEndPicker ? (
+      {showEndPicker && Platform.OS !== 'web' ? (
         <DateTimePicker
           value={endDate || new Date()}
           mode="date"
@@ -533,6 +533,36 @@ export default function RentalPaymentsScreen() {
             if (date) setEndDate(date);
           }}
         />
+      ) : null}
+
+      {Platform.OS === 'web' && (showStartPicker || showEndPicker) ? (
+        <Modal visible transparent animationType="fade" onRequestClose={() => { setShowStartPicker(false); setShowEndPicker(false); }}>
+          <View style={styles.modalOverlay}>
+            <ThemedView style={[styles.webDatePickerModal, { backgroundColor: theme.backgroundDefault }]}>
+              <ThemedText style={styles.modalTitle}>
+                {showStartPicker ? 'Начальная дата' : 'Конечная дата'}
+              </ThemedText>
+              <DateTimePicker
+                value={(showStartPicker ? startDate : endDate) || new Date()}
+                mode="date"
+                display="spinner"
+                onChange={(event, date) => {
+                  if (showStartPicker) {
+                    if (date) setStartDate(date);
+                  } else {
+                    if (date) setEndDate(date);
+                  }
+                }}
+              />
+              <Pressable
+                style={[styles.modalButton, { backgroundColor: theme.primary, marginTop: Spacing.md }]}
+                onPress={() => { setShowStartPicker(false); setShowEndPicker(false); }}
+              >
+                <ThemedText style={{ color: theme.buttonText }}>Готово</ThemedText>
+              </Pressable>
+            </ThemedView>
+          </View>
+        </Modal>
       ) : null}
     </>
   );
@@ -774,5 +804,11 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     paddingVertical: Spacing.md,
     borderRadius: BorderRadius.sm,
+  },
+  webDatePickerModal: {
+    padding: Spacing.xl,
+    borderRadius: BorderRadius.md,
+    alignItems: 'center',
+    minWidth: 300,
   },
 });

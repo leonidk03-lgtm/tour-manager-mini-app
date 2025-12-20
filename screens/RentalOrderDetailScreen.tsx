@@ -68,6 +68,7 @@ export default function RentalOrderDetailScreen() {
   const [showManagerModal, setShowManagerModal] = useState(false);
   const [managerSelectType, setManagerSelectType] = useState<ManagerSelectType>("owner");
   const [paymentType, setPaymentType] = useState<RentalPaymentType>("prepayment");
+  const [paymentMethod, setPaymentMethod] = useState<"cash" | "card" | "transfer">("cash");
   const [paymentAmount, setPaymentAmount] = useState("");
   const [paymentNotes, setPaymentNotes] = useState("");
 
@@ -144,12 +145,14 @@ export default function RentalOrderDetailScreen() {
       await addRentalPayment({
         orderId: order.id,
         type: paymentType,
+        method: paymentMethod,
         amount,
         notes: paymentNotes.trim() || null,
       });
       setShowPaymentModal(false);
       setPaymentAmount("");
       setPaymentNotes("");
+      setPaymentMethod("cash");
       hapticFeedback.success();
     } catch (error) {
       Alert.alert("Ошибка", "Не удалось добавить платёж");
@@ -662,6 +665,34 @@ export default function RentalOrderDetailScreen() {
                     >
                       <ThemedText style={{ color: isActive ? config.color : theme.textSecondary, fontSize: 12 }}>
                         {config.label}
+                      </ThemedText>
+                    </Pressable>
+                  );
+                })}
+              </View>
+
+              <ThemedText style={[styles.inputLabel, { color: theme.textSecondary, marginTop: Spacing.md }]}>
+                Способ оплаты
+              </ThemedText>
+              <View style={styles.paymentTypeRow}>
+                {([
+                  { key: 'cash' as const, label: 'Наличные', icon: 'dollar-sign' },
+                  { key: 'card' as const, label: 'Карта', icon: 'credit-card' },
+                  { key: 'transfer' as const, label: 'Перевод', icon: 'send' },
+                ]).map(method => {
+                  const isActive = paymentMethod === method.key;
+                  return (
+                    <Pressable
+                      key={method.key}
+                      onPress={() => setPaymentMethod(method.key)}
+                      style={[
+                        styles.paymentTypeBtn,
+                        { backgroundColor: isActive ? theme.primary + "20" : theme.backgroundSecondary },
+                      ]}
+                    >
+                      <Icon name={method.icon as any} size={14} color={isActive ? theme.primary : theme.textSecondary} />
+                      <ThemedText style={{ color: isActive ? theme.primary : theme.textSecondary, fontSize: 12 }}>
+                        {method.label}
                       </ThemedText>
                     </Pressable>
                   );

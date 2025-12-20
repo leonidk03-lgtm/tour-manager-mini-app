@@ -197,8 +197,9 @@ export default function RentalOrdersScreen() {
     await addRentalPayment({
       orderId: selectedOrderForPayment.id,
       type: "final",
+      method: data.method as "cash" | "card" | "transfer",
       amount: data.amount,
-      notes: data.notes || `Оплата (${data.method === "cash" ? "наличные" : data.method === "card" ? "карта" : "перевод"})`,
+      notes: data.notes || null,
     });
     
     await updateRentalOrder(selectedOrderForPayment.id, { status: "completed" });
