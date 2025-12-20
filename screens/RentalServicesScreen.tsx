@@ -24,6 +24,7 @@ export default function RentalServicesScreen() {
   const [editingService, setEditingService] = useState<RentalService | null>(null);
   const [serviceName, setServiceName] = useState("");
   const [servicePrice, setServicePrice] = useState("");
+  const [serviceCommission, setServiceCommission] = useState("10");
 
   const onRefresh = useCallback(async () => {
     setRefreshing(true);
@@ -35,6 +36,7 @@ export default function RentalServicesScreen() {
     setEditingService(null);
     setServiceName("");
     setServicePrice("");
+    setServiceCommission("10");
     setModalVisible(true);
   };
 
@@ -42,12 +44,14 @@ export default function RentalServicesScreen() {
     setEditingService(service);
     setServiceName(service.name);
     setServicePrice(service.price.toString());
+    setServiceCommission(service.commissionPercent.toString());
     setModalVisible(true);
   };
 
   const handleSaveService = async () => {
     const name = serviceName.trim();
     const price = parseInt(servicePrice, 10) || 0;
+    const commissionPercent = parseInt(serviceCommission, 10) || 10;
 
     if (!name) {
       Alert.alert("Ошибка", "Введите название услуги");
@@ -59,12 +63,17 @@ export default function RentalServicesScreen() {
       return;
     }
 
+    if (commissionPercent < 0 || commissionPercent > 100) {
+      Alert.alert("Ошибка", "Комиссия должна быть от 0 до 100%");
+      return;
+    }
+
     try {
       if (editingService) {
-        await updateRentalService(editingService.id, { name, price });
+        await updateRentalService(editingService.id, { name, price, commissionPercent });
         Alert.alert("Сохранено", "Услуга успешно обновлена");
       } else {
-        await addRentalService({ name, price, isActive: true });
+        await addRentalService({ name, price, commissionPercent, isActive: true });
         Alert.alert("Успешно", "Услуга добавлена");
       }
       setModalVisible(false);
@@ -156,9 +165,14 @@ export default function RentalServicesScreen() {
                 <View style={styles.cardHeader}>
                   <View style={{ flex: 1 }}>
                     <ThemedText style={styles.cardTitle}>{service.name}</ThemedText>
-                    <ThemedText style={[styles.cardPrice, { color: theme.success }]}>
-                      {service.price.toLocaleString("ru-RU")} р.
-                    </ThemedText>
+                    <View style={{ flexDirection: "row", alignItems: "center", gap: Spacing.md }}>
+                      <ThemedText style={[styles.cardPrice, { color: theme.success }]}>
+                        {service.price.toLocaleString("ru-RU")} р.
+                      </ThemedText>
+                      <ThemedText style={[styles.cardCommission, { color: theme.primary }]}>
+                        {service.commissionPercent}%
+                      </ThemedText>
+                    </View>
                   </View>
                   <Switch
                     value={service.isActive}
@@ -261,6 +275,27 @@ export default function RentalServicesScreen() {
                   keyboardType="numeric"
                 />
               </View>
+
+              <View style={styles.inputGroup}>
+                <ThemedText style={[styles.inputLabel, { color: theme.textSecondary }]}>
+                  Комиссия исполнителю (%)
+                </ThemedText>
+                <TextInput
+                  style={[
+                    styles.input,
+                    {
+                      backgroundColor: theme.backgroundSecondary,
+                      color: theme.text,
+                      borderColor: theme.border,
+                    },
+                  ]}
+                  value={serviceCommission}
+                  onChangeText={setServiceCommission}
+                  placeholder="10"
+                  placeholderTextColor={theme.textTertiary}
+                  keyboardType="numeric"
+                />
+              </View>
             </View>
 
             <View style={styles.modalActions}>
@@ -342,6 +377,10 @@ const styles = StyleSheet.create({
   cardPrice: {
     fontSize: 18,
     fontWeight: "600",
+  },
+  cardCommission: {
+    fontSize: 14,
+    fontWeight: "500",
   },
   cardActions: {
     flexDirection: "row",
