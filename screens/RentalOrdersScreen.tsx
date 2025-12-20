@@ -21,6 +21,7 @@ import { Spacing, BorderRadius } from "@/constants/theme";
 import { useTheme } from "@/hooks/useTheme";
 import { useRental, RentalOrder, RentalOrderStatus } from "@/contexts/RentalContext";
 import { useAuth } from "@/contexts/AuthContext";
+import { useData } from "@/contexts/DataContext";
 import { SettingsStackParamList } from "@/navigation/SettingsStackNavigator";
 import { hapticFeedback } from "@/utils/haptics";
 
@@ -40,6 +41,7 @@ export default function RentalOrdersScreen() {
   const insets = useSafeAreaInsets();
   const { rentalOrders, rentalClients, updateRentalOrder, addRentalPayment, getOrderPayments } = useRental();
   const { managers } = useAuth();
+  const { radioGuideKits } = useData();
 
   const [searchQuery, setSearchQuery] = useState("");
   const [activeFilter, setActiveFilter] = useState<FilterType>("срок");
@@ -288,6 +290,33 @@ export default function RentalOrdersScreen() {
                     </ThemedText>
                   </View>
                 ) : null}
+              </View>
+            ) : null}
+            {item.bagNumber ? (
+              <View style={styles.bagsRow}>
+                <Icon name="briefcase" size={12} color={theme.textSecondary} />
+                {item.bagNumber.split(",").map((bagStr, idx) => {
+                  const bagNum = parseInt(bagStr.trim());
+                  const kit = radioGuideKits.find(k => k.bagNumber === bagNum);
+                  const getBatteryInfo = () => {
+                    if (!kit) return { color: theme.textSecondary, icon: "help-circle" as const };
+                    switch (kit.batteryLevel) {
+                      case "full": return { color: theme.success, icon: "battery" as const };
+                      case "half": return { color: theme.warning, icon: "battery" as const };
+                      case "low": return { color: theme.error, icon: "battery" as const };
+                      default: return { color: theme.textSecondary, icon: "battery" as const };
+                    }
+                  };
+                  const batteryInfo = getBatteryInfo();
+                  return (
+                    <View key={idx} style={[styles.bagChip, { backgroundColor: batteryInfo.color + "20" }]}>
+                      <ThemedText style={[styles.bagChipText, { color: batteryInfo.color }]}>
+                        {bagNum}
+                      </ThemedText>
+                      <Icon name={batteryInfo.icon} size={10} color={batteryInfo.color} />
+                    </View>
+                  );
+                })}
               </View>
             ) : null}
           </View>
@@ -553,6 +582,25 @@ const styles = StyleSheet.create({
   },
   managerTagText: {
     fontSize: 13,
+  },
+  bagsRow: {
+    flexDirection: "row",
+    alignItems: "center",
+    flexWrap: "wrap",
+    gap: 6,
+    marginTop: 4,
+  },
+  bagChip: {
+    flexDirection: "row",
+    alignItems: "center",
+    gap: 3,
+    paddingHorizontal: 6,
+    paddingVertical: 2,
+    borderRadius: BorderRadius.sm,
+  },
+  bagChipText: {
+    fontSize: 12,
+    fontWeight: "600",
   },
   dateText: {
     fontSize: 15,
