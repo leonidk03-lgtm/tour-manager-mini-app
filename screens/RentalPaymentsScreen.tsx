@@ -470,27 +470,64 @@ export default function RentalPaymentsScreen() {
               <ThemedText style={[styles.filterLabel, { color: theme.textSecondary }]}>
                 Период
               </ThemedText>
-              <View style={styles.dateRow}>
-                <Pressable
-                  style={[styles.dateButton, { backgroundColor: theme.backgroundSecondary, borderColor: theme.border }]}
-                  onPress={() => setShowStartPicker(true)}
-                >
-                  <Icon name="calendar" size={16} color={theme.textSecondary} />
-                  <ThemedText style={{ color: startDate ? theme.text : theme.textSecondary }}>
-                    {startDate ? formatDate(startDate.toISOString()) : 'С'}
-                  </ThemedText>
-                </Pressable>
-                <ThemedText style={{ color: theme.textSecondary }}>—</ThemedText>
-                <Pressable
-                  style={[styles.dateButton, { backgroundColor: theme.backgroundSecondary, borderColor: theme.border }]}
-                  onPress={() => setShowEndPicker(true)}
-                >
-                  <Icon name="calendar" size={16} color={theme.textSecondary} />
-                  <ThemedText style={{ color: endDate ? theme.text : theme.textSecondary }}>
-                    {endDate ? formatDate(endDate.toISOString()) : 'По'}
-                  </ThemedText>
-                </Pressable>
-              </View>
+              {Platform.OS === 'web' ? (
+                <View style={styles.webDatePickerContainer}>
+                  <View style={styles.webDatePickerRow}>
+                    <ThemedText style={{ color: theme.textSecondary, marginRight: Spacing.sm }}>С:</ThemedText>
+                    <DateTimePicker
+                      value={startDate || new Date()}
+                      mode="date"
+                      display="default"
+                      onChange={(event, date) => {
+                        if (date) setStartDate(date);
+                      }}
+                    />
+                    {startDate ? (
+                      <Pressable onPress={() => setStartDate(null)} style={{ marginLeft: Spacing.sm }}>
+                        <Icon name="x-circle" size={20} color={theme.textSecondary} />
+                      </Pressable>
+                    ) : null}
+                  </View>
+                  <View style={[styles.webDatePickerRow, { marginTop: Spacing.sm }]}>
+                    <ThemedText style={{ color: theme.textSecondary, marginRight: Spacing.sm }}>По:</ThemedText>
+                    <DateTimePicker
+                      value={endDate || new Date()}
+                      mode="date"
+                      display="default"
+                      onChange={(event, date) => {
+                        if (date) setEndDate(date);
+                      }}
+                    />
+                    {endDate ? (
+                      <Pressable onPress={() => setEndDate(null)} style={{ marginLeft: Spacing.sm }}>
+                        <Icon name="x-circle" size={20} color={theme.textSecondary} />
+                      </Pressable>
+                    ) : null}
+                  </View>
+                </View>
+              ) : (
+                <View style={styles.dateRow}>
+                  <Pressable
+                    style={[styles.dateButton, { backgroundColor: theme.backgroundSecondary, borderColor: theme.border }]}
+                    onPress={() => setShowStartPicker(true)}
+                  >
+                    <Icon name="calendar" size={16} color={theme.textSecondary} />
+                    <ThemedText style={{ color: startDate ? theme.text : theme.textSecondary }}>
+                      {startDate ? formatDate(startDate.toISOString()) : 'С'}
+                    </ThemedText>
+                  </Pressable>
+                  <ThemedText style={{ color: theme.textSecondary }}>—</ThemedText>
+                  <Pressable
+                    style={[styles.dateButton, { backgroundColor: theme.backgroundSecondary, borderColor: theme.border }]}
+                    onPress={() => setShowEndPicker(true)}
+                  >
+                    <Icon name="calendar" size={16} color={theme.textSecondary} />
+                    <ThemedText style={{ color: endDate ? theme.text : theme.textSecondary }}>
+                      {endDate ? formatDate(endDate.toISOString()) : 'По'}
+                    </ThemedText>
+                  </Pressable>
+                </View>
+              )}
             </View>
 
             <View style={styles.modalActions}>
@@ -535,35 +572,6 @@ export default function RentalPaymentsScreen() {
         />
       ) : null}
 
-      {Platform.OS === 'web' && (showStartPicker || showEndPicker) ? (
-        <Modal visible transparent animationType="fade" onRequestClose={() => { setShowStartPicker(false); setShowEndPicker(false); }}>
-          <View style={styles.modalOverlay}>
-            <ThemedView style={[styles.webDatePickerModal, { backgroundColor: theme.backgroundDefault }]}>
-              <ThemedText style={styles.modalTitle}>
-                {showStartPicker ? 'Начальная дата' : 'Конечная дата'}
-              </ThemedText>
-              <DateTimePicker
-                value={(showStartPicker ? startDate : endDate) || new Date()}
-                mode="date"
-                display="spinner"
-                onChange={(event, date) => {
-                  if (showStartPicker) {
-                    if (date) setStartDate(date);
-                  } else {
-                    if (date) setEndDate(date);
-                  }
-                }}
-              />
-              <Pressable
-                style={[styles.modalButton, { backgroundColor: theme.primary, marginTop: Spacing.md }]}
-                onPress={() => { setShowStartPicker(false); setShowEndPicker(false); }}
-              >
-                <ThemedText style={{ color: theme.buttonText }}>Готово</ThemedText>
-              </Pressable>
-            </ThemedView>
-          </View>
-        </Modal>
-      ) : null}
     </>
   );
 }
@@ -805,10 +813,11 @@ const styles = StyleSheet.create({
     paddingVertical: Spacing.md,
     borderRadius: BorderRadius.sm,
   },
-  webDatePickerModal: {
-    padding: Spacing.xl,
-    borderRadius: BorderRadius.md,
+  webDatePickerContainer: {
+    gap: Spacing.xs,
+  },
+  webDatePickerRow: {
+    flexDirection: 'row',
     alignItems: 'center',
-    minWidth: 300,
   },
 });
