@@ -48,8 +48,8 @@ export default function RentalOrderDetailScreen() {
   const route = useRoute<RouteParams>();
   const insets = useSafeAreaInsets();
   const { rentalOrders, rentalClients, rentalOrderServices, updateRentalOrder, updateRentalClient, updateOrderStatus, addRentalPayment, getOrderPayments, getOrderHistory, deleteRentalOrder } = useRental();
-  const { managers } = useAuth();
-  const { equipmentItems, equipmentCategories, addEquipmentMovement, addEquipmentLoss } = useData();
+  const { managers, isAdmin } = useAuth();
+  const { equipmentItems, equipmentCategories, addEquipmentMovement, addEquipmentLoss, rentalCostPerKitPerDay } = useData();
 
   const orderId = route.params?.orderId;
   const order = rentalOrders.find(o => o.id === orderId);
@@ -553,6 +553,25 @@ export default function RentalOrderDetailScreen() {
               {order.totalPrice.toLocaleString("ru-RU")}₽
             </ThemedText>
           </View>
+
+          {isAdmin ? (
+            <View style={[styles.profitSection, { borderTopColor: theme.border }]}>
+              <View style={styles.priceRow}>
+                <ThemedText style={{ color: theme.textSecondary, fontSize: 13 }}>
+                  Себестоимость ({order.kitCount} x {rentalCostPerKitPerDay}₽ x {order.daysCount} дн.)
+                </ThemedText>
+                <ThemedText style={{ color: theme.error, fontSize: 13 }}>
+                  -{(order.kitCount * order.daysCount * rentalCostPerKitPerDay).toLocaleString("ru-RU")}₽
+                </ThemedText>
+              </View>
+              <View style={styles.priceRow}>
+                <ThemedText style={{ fontWeight: "600" }}>Прибыль:</ThemedText>
+                <ThemedText style={{ fontWeight: "700", color: theme.primary }}>
+                  {Math.max(0, order.totalPrice - (order.kitCount * order.daysCount * rentalCostPerKitPerDay)).toLocaleString("ru-RU")}₽
+                </ThemedText>
+              </View>
+            </View>
+          ) : null}
         </View>
 
         <View style={[styles.card, { backgroundColor: theme.backgroundSecondary }]}>
@@ -1100,6 +1119,12 @@ const styles = StyleSheet.create({
     marginTop: Spacing.sm,
     paddingTop: Spacing.sm,
     borderTopWidth: StyleSheet.hairlineWidth,
+  },
+  profitSection: {
+    marginTop: Spacing.sm,
+    paddingTop: Spacing.sm,
+    borderTopWidth: StyleSheet.hairlineWidth,
+    gap: Spacing.xs,
   },
   totalLabel: {
     fontSize: 16,

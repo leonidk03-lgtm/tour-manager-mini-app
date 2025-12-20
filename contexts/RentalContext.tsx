@@ -875,7 +875,16 @@ export function RentalProvider({ children }: { children: ReactNode }) {
       const qty = typeof s.quantity === 'number' ? s.quantity : parseInt(s.quantity) || 1;
       return sum + (price * qty);
     }, 0);
-    const equipmentPrice = totalPrice;
+
+    const { data: costSetting } = await supabase
+      .from('app_settings')
+      .select('value')
+      .eq('key', 'rental_cost_per_kit_per_day')
+      .single();
+    
+    const costPerKitPerDay = costSetting ? Number(costSetting.value) || 50 : 50;
+    const totalCost = order.kitCount * order.daysCount * costPerKitPerDay;
+    const profit = Math.max(0, totalPrice - totalCost);
 
     const commissionsToInsert: any[] = [];
 
@@ -886,8 +895,8 @@ export function RentalProvider({ children }: { children: ReactNode }) {
         recipient_id: ownerId,
         recipient_name: ownerProfile.display_name || 'Менеджер',
         role: 'owner',
-        amount: Math.round((equipmentPrice * ownerPercent) / 100),
-        basis_amount: equipmentPrice,
+        amount: Math.round((profit * ownerPercent) / 100),
+        basis_amount: profit,
         percentage: ownerPercent,
         status: 'pending',
       });
@@ -900,8 +909,8 @@ export function RentalProvider({ children }: { children: ReactNode }) {
         recipient_id: executorId,
         recipient_name: executorProfile.display_name || 'Исполнитель',
         role: 'executor',
-        amount: Math.round((equipmentPrice * executorPercent) / 100),
-        basis_amount: equipmentPrice,
+        amount: Math.round((profit * executorPercent) / 100),
+        basis_amount: profit,
         percentage: executorPercent,
         status: 'pending',
       });
@@ -941,7 +950,7 @@ export function RentalProvider({ children }: { children: ReactNode }) {
       if (error) {
         console.error('Error creating commissions:', error);
       } else {
-        await addOrderHistory(orderId, `Начислены комиссии: ${commissionsToInsert.map(c => `${c.recipient_name} ${c.amount}₽`).join(', ')}`);
+        await addOrderHistory(orderId, `Начислены комиссии (прибыль ${profit}₽): ${commissionsToInsert.map(c => `${c.recipient_name} ${c.amount}₽`).join(', ')}`);
         await fetchRentalCommissions();
       }
     }

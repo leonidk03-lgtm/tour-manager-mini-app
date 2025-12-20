@@ -62,10 +62,16 @@ Orders can have multiple equipment blocks, each with independent equipment count
 
 ### Commission System
 Automatic commission calculation when orders are marked as paid:
-- **Owner Commission**: Percentage earned by the manager who owns the client (default 20%).
-- **Executor Commission**: Percentage earned by the manager who delivers/picks up equipment (default 10%).
+- **Profit-Based Calculation**: Commissions are calculated from profit, not total revenue.
+  - Cost = kitCount x daysCount x costPerKitPerDay (configurable in Settings, default 50₽)
+  - Profit = totalPrice - Cost
+  - Commissions are percentages of profit
+- **Owner Commission**: Percentage earned by the manager who owns the client (default 20% of profit).
+- **Executor Commission**: Percentage earned by the manager who delivers/picks up equipment (default 10% of profit).
 - If the same manager is both owner and executor, percentages combine.
 - Commission percentages are configurable per manager in the Admin Panel (ManagerDetailScreen).
+- Cost per kit per day is configurable in Settings (admin only) via "Себестоимость комплекта".
+- Order detail screen shows profit calculation (cost and profit) for admins.
 - Commissions are tracked in `rental_commissions` table with pending/paid status.
 - Admins can mark commissions as paid from RentalCommissionsScreen.
 

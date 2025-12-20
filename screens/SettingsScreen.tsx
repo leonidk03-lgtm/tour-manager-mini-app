@@ -16,10 +16,12 @@ export default function SettingsScreen() {
   const { theme } = useTheme();
   const navigation = useNavigation<NavigationProp<SettingsStackParamList>>();
   const { profile, isAdmin, isRadioDispatcher, hasPermission, signOut } = useAuth();
-  const { radioGuidePrice, updateRadioGuidePrice } = useData();
+  const { radioGuidePrice, updateRadioGuidePrice, rentalCostPerKitPerDay, updateRentalCostPerKitPerDay } = useData();
 
   const [showPriceModal, setShowPriceModal] = useState(false);
   const [priceInput, setPriceInput] = useState(String(radioGuidePrice));
+  const [showCostModal, setShowCostModal] = useState(false);
+  const [costInput, setCostInput] = useState(String(rentalCostPerKitPerDay));
   const [saving, setSaving] = useState(false);
 
   const handleSavePrice = async () => {
@@ -33,6 +35,24 @@ export default function SettingsScreen() {
       await updateRadioGuidePrice(newPrice);
       setShowPriceModal(false);
       Alert.alert("Сохранено", "Стоимость аренды радиогида обновлена");
+    } catch (err) {
+      Alert.alert("Ошибка", "Не удалось сохранить");
+    } finally {
+      setSaving(false);
+    }
+  };
+
+  const handleSaveCost = async () => {
+    const newCost = parseInt(costInput, 10);
+    if (isNaN(newCost) || newCost < 0) {
+      Alert.alert("Ошибка", "Введите корректную сумму");
+      return;
+    }
+    setSaving(true);
+    try {
+      await updateRentalCostPerKitPerDay(newCost);
+      setShowCostModal(false);
+      Alert.alert("Сохранено", "Себестоимость комплекта обновлена");
     } catch (err) {
       Alert.alert("Ошибка", "Не удалось сохранить");
     } finally {
@@ -359,6 +379,24 @@ export default function SettingsScreen() {
                     </ThemedText>
                   </View>
                 </Pressable>
+                <View style={[styles.divider, { backgroundColor: theme.border }]} />
+                <Pressable
+                  onPress={() => {
+                    setCostInput(String(rentalCostPerKitPerDay));
+                    setShowCostModal(true);
+                  }}
+                  style={({ pressed }) => ({ opacity: pressed ? 0.7 : 1 })}
+                >
+                  <View style={styles.settingItem}>
+                    <View style={styles.settingLeft}>
+                      <Icon name="package" size={20} color={theme.textSecondary} />
+                      <ThemedText style={styles.settingText}>Себестоимость комплекта</ThemedText>
+                    </View>
+                    <ThemedText style={{ color: theme.primary, fontWeight: "600" }}>
+                      {rentalCostPerKitPerDay}₽/день
+                    </ThemedText>
+                  </View>
+                </Pressable>
               </>
             ) : null}
           </ThemedView>
@@ -435,6 +473,53 @@ export default function SettingsScreen() {
               <Pressable
                 style={[styles.modalButton, { backgroundColor: theme.primary }]}
                 onPress={handleSavePrice}
+                disabled={saving}
+              >
+                <ThemedText style={{ color: theme.buttonText }}>
+                  {saving ? "Сохранение..." : "Сохранить"}
+                </ThemedText>
+              </Pressable>
+            </View>
+          </Pressable>
+        </Pressable>
+      </Modal>
+
+      <Modal
+        visible={showCostModal}
+        transparent
+        animationType="fade"
+        onRequestClose={() => setShowCostModal(false)}
+      >
+        <Pressable
+          style={styles.modalOverlay}
+          onPress={() => setShowCostModal(false)}
+        >
+          <Pressable
+            style={[styles.modalContent, { backgroundColor: theme.backgroundSecondary }]}
+            onPress={(e) => e.stopPropagation()}
+          >
+            <ThemedText style={styles.modalTitle}>Себестоимость комплекта</ThemedText>
+            <ThemedText style={[styles.modalSubtitle, { color: theme.textSecondary }]}>
+              Стоимость 1 комплекта в день для расчёта прибыли и комиссий
+            </ThemedText>
+            <TextInput
+              style={[styles.priceInput, { backgroundColor: theme.backgroundRoot, color: theme.text, borderColor: theme.border }]}
+              value={costInput}
+              onChangeText={setCostInput}
+              keyboardType="numeric"
+              placeholder="Введите сумму"
+              placeholderTextColor={theme.textSecondary}
+            />
+            <View style={styles.modalButtons}>
+              <Pressable
+                style={[styles.modalButton, { backgroundColor: theme.backgroundRoot }]}
+                onPress={() => setShowCostModal(false)}
+              >
+                <ThemedText>Отмена</ThemedText>
+              </Pressable>
+              <Pressable
+                style={[styles.modalButton, { backgroundColor: theme.primary }]}
+                onPress={handleSaveCost}
                 disabled={saving}
               >
                 <ThemedText style={{ color: theme.buttonText }}>

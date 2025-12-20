@@ -304,6 +304,8 @@ interface DataContextType {
   deleteEquipmentLoss: (id: string) => Promise<void>;
   radioGuidePrice: number;
   updateRadioGuidePrice: (price: number) => Promise<void>;
+  rentalCostPerKitPerDay: number;
+  updateRentalCostPerKitPerDay: (cost: number) => Promise<void>;
   dispatchingNotes: DispatchingNote[];
   addDispatchingNote: (text: string) => Promise<void>;
   updateDispatchingNote: (id: string, text: string, linkedExcursionId?: string | null) => Promise<void>;
@@ -359,6 +361,7 @@ export function DataProvider({ children }: { children: ReactNode }) {
   const [radioGuideAssignments, setRadioGuideAssignments] = useState<RadioGuideAssignment[]>([]);
   const [equipmentLosses, setEquipmentLosses] = useState<EquipmentLoss[]>([]);
   const [radioGuidePrice, setRadioGuidePrice] = useState<number>(80);
+  const [rentalCostPerKitPerDay, setRentalCostPerKitPerDay] = useState<number>(50);
   const [dispatchingNotes, setDispatchingNotes] = useState<DispatchingNote[]>([]);
   const [excursionNotes, setExcursionNotes] = useState<ExcursionNote[]>([]);
   const [chatMessages, setChatMessages] = useState<ChatMessage[]>([]);
@@ -809,6 +812,43 @@ export function DataProvider({ children }: { children: ReactNode }) {
       setRadioGuidePrice(price);
     } catch (err) {
       console.error('Error updating radio guide price:', err);
+      throw err;
+    }
+  };
+
+  const fetchRentalCostPerKitPerDay = useCallback(async (): Promise<void> => {
+    const { data, error } = await supabase
+      .from('app_settings')
+      .select('*')
+      .eq('key', 'rental_cost_per_kit_per_day')
+      .single();
+
+    if (error) {
+      if (error.code === 'PGRST116' || error.code === 'PGRST205') {
+        return;
+      }
+      throw error;
+    }
+
+    if (data) {
+      setRentalCostPerKitPerDay(Number(data.value) || 50);
+    }
+  }, []);
+
+  const updateRentalCostPerKitPerDay = async (cost: number) => {
+    try {
+      const { error } = await supabase
+        .from('app_settings')
+        .upsert({ 
+          key: 'rental_cost_per_kit_per_day', 
+          value: String(cost),
+          updated_at: new Date().toISOString()
+        });
+
+      if (error) throw error;
+      setRentalCostPerKitPerDay(cost);
+    } catch (err) {
+      console.error('Error updating rental cost per kit per day:', err);
       throw err;
     }
   };
@@ -1479,6 +1519,7 @@ export function DataProvider({ children }: { children: ReactNode }) {
         fetchRadioGuideAssignments(),
         fetchEquipmentLosses(),
         fetchSettings(),
+        fetchRentalCostPerKitPerDay(),
         fetchEquipmentCategories(),
         fetchEquipmentItems(),
         fetchEquipmentMovements(),
@@ -1489,7 +1530,7 @@ export function DataProvider({ children }: { children: ReactNode }) {
         setIsOffline(true);
       });
     }
-  }, [user, fetchTourTypes, fetchAdditionalServices, fetchRadioGuideKits, fetchRadioGuideAssignments, fetchEquipmentLosses, fetchSettings, fetchEquipmentCategories, fetchEquipmentItems, fetchEquipmentMovements]);
+  }, [user, fetchTourTypes, fetchAdditionalServices, fetchRadioGuideKits, fetchRadioGuideAssignments, fetchEquipmentLosses, fetchSettings, fetchRentalCostPerKitPerDay, fetchEquipmentCategories, fetchEquipmentItems, fetchEquipmentMovements]);
 
   // Load user-specific data when profile is available
   useEffect(() => {
@@ -2777,6 +2818,8 @@ export function DataProvider({ children }: { children: ReactNode }) {
         deleteEquipmentLoss,
         radioGuidePrice,
         updateRadioGuidePrice,
+        rentalCostPerKitPerDay,
+        updateRentalCostPerKitPerDay,
         dispatchingNotes,
         addDispatchingNote,
         updateDispatchingNote,
