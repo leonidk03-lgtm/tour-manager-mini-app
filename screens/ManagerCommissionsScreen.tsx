@@ -176,7 +176,7 @@ export default function ManagerCommissionsScreen() {
 
   return (
     <View style={[styles.container, { backgroundColor: theme.backgroundRoot }]}>
-      <View style={[styles.header, { paddingTop: paddingTop }]}>
+      <View style={styles.header}>
         <ThemedText style={styles.balanceLabel}>Баланс</ThemedText>
         <ThemedText style={[styles.balanceValue, { color: theme.text }]}>
           {formatCurrency(totalBalance)}
@@ -346,6 +346,7 @@ const styles = StyleSheet.create({
   },
   header: {
     paddingHorizontal: Spacing.md,
+    paddingTop: Spacing.md,
     paddingBottom: Spacing.sm,
   },
   balanceLabel: {
