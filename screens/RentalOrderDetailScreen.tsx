@@ -18,6 +18,7 @@ import { Spacing, BorderRadius } from "@/constants/theme";
 import { useTheme } from "@/hooks/useTheme";
 import { useRental, RentalOrderStatus, RentalPaymentType } from "@/contexts/RentalContext";
 import { useAuth } from "@/contexts/AuthContext";
+import { useData, EquipmentItem } from "@/contexts/DataContext";
 import { SettingsStackParamList } from "@/navigation/SettingsStackNavigator";
 import { hapticFeedback } from "@/utils/haptics";
 
@@ -46,6 +47,7 @@ export default function RentalOrderDetailScreen() {
   const insets = useSafeAreaInsets();
   const { rentalOrders, rentalClients, rentalOrderServices, updateRentalOrder, updateRentalClient, updateOrderStatus, addRentalPayment, getOrderPayments, getOrderHistory, deleteRentalOrder } = useRental();
   const { managers } = useAuth();
+  const { equipmentItems, equipmentCategories, addEquipmentMovement, addEquipmentLoss } = useData();
 
   const orderId = route.params?.orderId;
   const order = rentalOrders.find(o => o.id === orderId);
@@ -66,6 +68,17 @@ export default function RentalOrderDetailScreen() {
   const [paymentType, setPaymentType] = useState<RentalPaymentType>("prepayment");
   const [paymentAmount, setPaymentAmount] = useState("");
   const [paymentNotes, setPaymentNotes] = useState("");
+
+  // Loss tracking states
+  const [showLossModal, setShowLossModal] = useState(false);
+  const [selectedLossItem, setSelectedLossItem] = useState<EquipmentItem | null>(null);
+  const [lossCount, setLossCount] = useState("");
+  const [lossReason, setLossReason] = useState("");
+
+  // Get equipment items that can be tracked for loss (receivers, transmitters, etc.)
+  const trackableLossItems = useMemo(() => {
+    return equipmentItems.filter(item => item.trackLoss);
+  }, [equipmentItems]);
 
   const totalPaid = useMemo(() => {
     return payments.reduce((sum, p) => {
@@ -168,6 +181,54 @@ export default function RentalOrderDetailScreen() {
       hapticFeedback.success();
     } catch (error) {
       Alert.alert("Ошибка", "Не удалось изменить менеджера");
+    }
+  };
+
+  const handleAddLoss = async () => {
+    if (!order || !selectedLossItem) return;
+    
+    const count = parseInt(lossCount);
+    if (!count || count <= 0) {
+      Alert.alert("Ошибка", "Введите количество утерянного оборудования");
+      return;
+    }
+    
+    if (!lossReason.trim()) {
+      Alert.alert("Ошибка", "Укажите причину утери");
+      return;
+    }
+    
+    hapticFeedback.selection();
+    
+    try {
+      // Record loss movement on warehouse
+      await addEquipmentMovement({
+        itemId: selectedLossItem.id,
+        type: 'loss',
+        quantity: count,
+        note: `Утеря из аренды #${order.orderNumber}. Клиент: ${order.clientName || client?.name || "Не указан"}. Причина: ${lossReason.trim()}`,
+      });
+      
+      // Record in equipment_losses for tracking
+      await addEquipmentLoss({
+        assignmentId: null,
+        kitId: null,
+        guideName: order.clientName || client?.name || "Клиент аренды",
+        missingCount: count,
+        reason: lossReason.trim(),
+        equipmentItemId: selectedLossItem.id,
+        rentalOrderId: order.id,
+      });
+      
+      setShowLossModal(false);
+      setSelectedLossItem(null);
+      setLossCount("");
+      setLossReason("");
+      hapticFeedback.success();
+      Alert.alert("Успех", "Утеря оборудования зарегистрирована");
+    } catch (error) {
+      console.error("Error adding loss:", error);
+      Alert.alert("Ошибка", "Не удалось зарегистрировать утерю");
     }
   };
 
@@ -462,6 +523,25 @@ export default function RentalOrderDetailScreen() {
           )}
         </View>
 
+        {(order.status === "issued" || order.status === "returned") && trackableLossItems.length > 0 ? (
+          <View style={[styles.card, { backgroundColor: theme.backgroundSecondary }]}>
+            <View style={styles.sectionHeader}>
+              <ThemedText style={[styles.sectionTitle, { color: theme.textSecondary }]}>
+                Утеря оборудования
+              </ThemedText>
+            </View>
+            <Pressable
+              onPress={() => setShowLossModal(true)}
+              style={[styles.lossButton, { backgroundColor: theme.error + "15", borderColor: theme.error }]}
+            >
+              <Icon name="alert-triangle" size={18} color={theme.error} />
+              <ThemedText style={{ color: theme.error, fontWeight: "500" }}>
+                Зарегистрировать утерю
+              </ThemedText>
+            </Pressable>
+          </View>
+        ) : null}
+
         <Pressable
           onPress={handleDelete}
           style={[styles.deleteBtn, { backgroundColor: theme.error + "15" }]}
@@ -620,6 +700,101 @@ export default function RentalOrderDetailScreen() {
             </ScrollView>
           </View>
         </Pressable>
+      </Modal>
+
+      <Modal visible={showLossModal} animationType="slide" transparent>
+        <View style={[styles.modalOverlay, { justifyContent: "flex-end" }]}>
+          <View style={[styles.paymentModalContent, { backgroundColor: theme.backgroundDefault }]}>
+            <View style={styles.modalHeader}>
+              <ThemedText style={styles.modalTitle}>Зарегистрировать утерю</ThemedText>
+              <Pressable onPress={() => {
+                setShowLossModal(false);
+                setSelectedLossItem(null);
+                setLossCount("");
+                setLossReason("");
+              }}>
+                <Icon name="x" size={24} color={theme.text} />
+              </Pressable>
+            </View>
+
+            <ScrollView style={styles.paymentModalScroll}>
+              <ThemedText style={[styles.inputLabel, { color: theme.textSecondary }]}>
+                Тип оборудования
+              </ThemedText>
+              <View style={styles.lossItemsGrid}>
+                {trackableLossItems.map(item => {
+                  const category = equipmentCategories.find(c => c.id === item.categoryId);
+                  const isActive = selectedLossItem?.id === item.id;
+                  return (
+                    <Pressable
+                      key={item.id}
+                      onPress={() => setSelectedLossItem(item)}
+                      style={[
+                        styles.lossItemBtn,
+                        { 
+                          backgroundColor: isActive ? theme.error + "20" : theme.backgroundSecondary,
+                          borderColor: isActive ? theme.error : theme.border,
+                        },
+                      ]}
+                    >
+                      <ThemedText style={{ color: isActive ? theme.error : theme.text, fontSize: 13 }}>
+                        {item.name}
+                      </ThemedText>
+                      <ThemedText style={{ color: theme.textSecondary, fontSize: 11 }}>
+                        В наличии: {item.quantity}
+                      </ThemedText>
+                    </Pressable>
+                  );
+                })}
+              </View>
+
+              {selectedLossItem ? (
+                <>
+                  <ThemedText style={[styles.inputLabel, { color: theme.textSecondary, marginTop: Spacing.md }]}>
+                    Количество утерянных
+                  </ThemedText>
+                  <TextInput
+                    value={lossCount}
+                    onChangeText={setLossCount}
+                    style={[styles.textInput, { backgroundColor: theme.backgroundSecondary, color: theme.text, borderColor: theme.border }]}
+                    placeholder="Введите количество"
+                    placeholderTextColor={theme.textSecondary}
+                    keyboardType="numeric"
+                  />
+
+                  <ThemedText style={[styles.inputLabel, { color: theme.textSecondary, marginTop: Spacing.md }]}>
+                    Причина утери
+                  </ThemedText>
+                  <TextInput
+                    value={lossReason}
+                    onChangeText={setLossReason}
+                    style={[styles.textInput, styles.textArea, { backgroundColor: theme.backgroundSecondary, color: theme.text, borderColor: theme.border }]}
+                    placeholder="Опишите причину"
+                    placeholderTextColor={theme.textSecondary}
+                    multiline
+                    numberOfLines={3}
+                  />
+                </>
+              ) : null}
+            </ScrollView>
+
+            <Pressable
+              onPress={handleAddLoss}
+              style={[
+                styles.submitBtn,
+                { 
+                  backgroundColor: selectedLossItem && lossCount && lossReason.trim() ? theme.error : theme.border,
+                  marginBottom: insets.bottom + Spacing.md,
+                },
+              ]}
+              disabled={!selectedLossItem || !lossCount || !lossReason.trim()}
+            >
+              <ThemedText style={{ color: "#fff", fontWeight: "600" }}>
+                Зарегистрировать утерю
+              </ThemedText>
+            </Pressable>
+          </View>
+        </View>
       </Modal>
     </ThemedView>
   );
@@ -953,5 +1128,43 @@ const styles = StyleSheet.create({
   managerName: {
     fontSize: 14,
     fontWeight: "500",
+  },
+  lossButton: {
+    flexDirection: "row",
+    alignItems: "center",
+    justifyContent: "center",
+    gap: Spacing.sm,
+    padding: Spacing.md,
+    borderRadius: BorderRadius.md,
+    borderWidth: 1,
+  },
+  lossItemsGrid: {
+    flexDirection: "row",
+    flexWrap: "wrap",
+    gap: Spacing.sm,
+  },
+  lossItemBtn: {
+    paddingHorizontal: Spacing.md,
+    paddingVertical: Spacing.sm,
+    borderRadius: BorderRadius.md,
+    borderWidth: 1,
+    minWidth: 100,
+  },
+  textInput: {
+    paddingHorizontal: Spacing.md,
+    paddingVertical: Spacing.sm,
+    borderRadius: BorderRadius.md,
+    borderWidth: 1,
+    fontSize: 15,
+  },
+  textArea: {
+    minHeight: 80,
+    textAlignVertical: "top",
+  },
+  submitBtn: {
+    paddingVertical: Spacing.md,
+    borderRadius: BorderRadius.md,
+    alignItems: "center",
+    marginHorizontal: Spacing.md,
   },
 });

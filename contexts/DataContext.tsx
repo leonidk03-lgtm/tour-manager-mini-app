@@ -146,8 +146,8 @@ export interface ExcursionNote {
 
 export interface EquipmentLoss {
   id: string;
-  assignmentId: string;
-  kitId: string;
+  assignmentId: string | null;
+  kitId: string | null;
   guideName: string;
   missingCount: number;
   reason: string;
@@ -159,6 +159,7 @@ export interface EquipmentLoss {
   managerName: string;
   bagNumber?: number;
   equipmentItemId?: string | null;
+  rentalOrderId?: string | null;
 }
 
 export interface ChatMessage {
@@ -690,6 +691,7 @@ export function DataProvider({ children }: { children: ReactNode }) {
       managerName: l.manager_name,
       bagNumber: l.radio_guide_kits?.bag_number,
       equipmentItemId: l.equipment_item_id,
+      rentalOrderId: l.rental_order_id,
     })));
   }, []);
 
@@ -2330,13 +2332,13 @@ export function DataProvider({ children }: { children: ReactNode }) {
     return radioGuideAssignments.find(a => a.kitId === kitId && !a.returnedAt);
   };
 
-  const addEquipmentLoss = async (loss: Omit<EquipmentLoss, 'id' | 'createdAt' | 'foundAt' | 'foundNotes' | 'status' | 'managerId' | 'managerName'>) => {
+  const addEquipmentLoss = async (loss: Omit<EquipmentLoss, 'id' | 'createdAt' | 'foundAt' | 'foundNotes' | 'status' | 'managerId' | 'managerName' | 'bagNumber'>) => {
     if (!currentUser) throw new Error('No user');
 
     try {
       const { error } = await supabase.from('equipment_losses').insert({
-        assignment_id: loss.assignmentId,
-        kit_id: loss.kitId,
+        assignment_id: loss.assignmentId || null,
+        kit_id: loss.kitId || null,
         guide_name: loss.guideName,
         missing_count: loss.missingCount,
         reason: loss.reason,
@@ -2344,6 +2346,7 @@ export function DataProvider({ children }: { children: ReactNode }) {
         manager_id: currentUser.id,
         manager_name: currentUser.name,
         equipment_item_id: loss.equipmentItemId || null,
+        rental_order_id: loss.rentalOrderId || null,
       });
 
       if (error) throw error;
