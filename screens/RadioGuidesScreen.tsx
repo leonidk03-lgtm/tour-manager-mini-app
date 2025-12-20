@@ -346,6 +346,20 @@ export default function RadioGuidesScreen() {
   };
 
   const openIssueModal = (kit: RadioGuideKit) => {
+    // Check if kit is in active rental
+    if (rentalBagMap.has(kit.bagNumber)) {
+      const order = rentalBagMap.get(kit.bagNumber);
+      Alert.alert("Недоступно", `Сумка #${kit.bagNumber} сейчас в аренде (заказ #${order?.orderNumber || ""})`);
+      return;
+    }
+    
+    // Check if kit is overdue
+    const isOverdue = overdueKits.some(o => o.kit.id === kit.id);
+    if (isOverdue) {
+      Alert.alert("Недоступно", `Сумка #${kit.bagNumber} просрочена. Сначала примите её.`);
+      return;
+    }
+    
     setSelectedKit(kit);
     setReceiversIssued("");
     setModalMode("issue");

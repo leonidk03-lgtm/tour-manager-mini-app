@@ -238,16 +238,17 @@ export default function RentalOrdersScreen() {
       >
         <View style={styles.orderRow}>
           <Pressable
-            onPress={(e) => {
-              e.stopPropagation();
-              handleStatusChange(item);
-            }}
+            onPress={() => handleStatusChange(item)}
+            hitSlop={{ top: 10, bottom: 10, left: 10, right: 10 }}
             style={[styles.statusIndicator, { backgroundColor: statusConfig.color }]}
           />
           <View style={styles.orderMainInfo}>
             <View style={styles.orderTopRow}>
               <ThemedText style={styles.orderNumber}>#{item.orderNumber}</ThemedText>
-              <Pressable onPress={() => handleStatusChange(item)}>
+              <Pressable 
+                onPress={() => handleStatusChange(item)}
+                hitSlop={{ top: 8, bottom: 8, left: 8, right: 8 }}
+              >
                 <ThemedText style={[styles.statusLabel, { color: statusConfig.color }]}>
                   {statusConfig.label}
                 </ThemedText>
