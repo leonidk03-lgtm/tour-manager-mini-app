@@ -268,6 +268,23 @@ export default function SettingsScreen() {
                     <Icon name="chevron-right" size={20} color={theme.textSecondary} />
                   </View>
                 </Pressable>
+                {isAdmin ? (
+                  <>
+                    <View style={[styles.divider, { backgroundColor: theme.border }]} />
+                    <Pressable
+                      onPress={() => { hapticFeedback.selection(); navigation.navigate("RentalServices"); }}
+                      style={({ pressed }) => ({ opacity: pressed ? 0.7 : 1 })}
+                    >
+                      <View style={styles.settingItem}>
+                        <View style={styles.settingLeft}>
+                          <Icon name="gift" size={20} color={theme.textSecondary} />
+                          <ThemedText style={styles.settingText}>Услуги аренды</ThemedText>
+                        </View>
+                        <Icon name="chevron-right" size={20} color={theme.textSecondary} />
+                      </View>
+                    </Pressable>
+                  </>
+                ) : null}
               </>
             ) : null}
             <View style={[styles.divider, { backgroundColor: theme.border }]} />
