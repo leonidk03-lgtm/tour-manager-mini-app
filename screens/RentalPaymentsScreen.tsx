@@ -509,7 +509,10 @@ export default function RentalPaymentsScreen() {
                 <View style={styles.dateRow}>
                   <Pressable
                     style={[styles.dateButton, { backgroundColor: theme.backgroundSecondary, borderColor: theme.border }]}
-                    onPress={() => setShowStartPicker(true)}
+                    onPress={() => {
+                      setShowFilters(false);
+                      setTimeout(() => setShowStartPicker(true), 100);
+                    }}
                   >
                     <Icon name="calendar" size={16} color={theme.textSecondary} />
                     <ThemedText style={{ color: startDate ? theme.text : theme.textSecondary }}>
@@ -519,7 +522,10 @@ export default function RentalPaymentsScreen() {
                   <ThemedText style={{ color: theme.textSecondary }}>—</ThemedText>
                   <Pressable
                     style={[styles.dateButton, { backgroundColor: theme.backgroundSecondary, borderColor: theme.border }]}
-                    onPress={() => setShowEndPicker(true)}
+                    onPress={() => {
+                      setShowFilters(false);
+                      setTimeout(() => setShowEndPicker(true), 100);
+                    }}
                   >
                     <Icon name="calendar" size={16} color={theme.textSecondary} />
                     <ThemedText style={{ color: endDate ? theme.text : theme.textSecondary }}>
@@ -556,6 +562,7 @@ export default function RentalPaymentsScreen() {
           onChange={(event, date) => {
             setShowStartPicker(false);
             if (date) setStartDate(date);
+            setShowFilters(true);
           }}
         />
       ) : null}
@@ -568,6 +575,7 @@ export default function RentalPaymentsScreen() {
           onChange={(event, date) => {
             setShowEndPicker(false);
             if (date) setEndDate(date);
+            setShowFilters(true);
           }}
         />
       ) : null}
