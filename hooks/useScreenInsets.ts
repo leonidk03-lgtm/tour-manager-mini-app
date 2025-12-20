@@ -10,7 +10,7 @@ export function useScreenInsets() {
   const tabBarHeight = useBottomTabBarHeight();
 
   return {
-    paddingTop: headerHeight > 0 ? headerHeight + Spacing.md : insets.top + Spacing.md,
+    paddingTop: headerHeight > 0 ? Spacing.md : insets.top + Spacing.md,
     paddingBottom: tabBarHeight + Spacing.md,
     scrollInsetBottom: insets.bottom + 16,
   };

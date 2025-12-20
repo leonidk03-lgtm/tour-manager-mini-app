@@ -177,12 +177,12 @@ export default function SettingsStackNavigator() {
       <Stack.Screen
         name="RentalCommissions"
         component={RentalCommissionsScreen}
-        options={{ title: "Комиссии", headerTransparent: false }}
+        options={{ title: "Комиссии" }}
       />
       <Stack.Screen
         name="ManagerCommissions"
         component={ManagerCommissionsScreen}
-        options={({ route }) => ({ title: route.params.managerName, headerTransparent: false })}
+        options={({ route }) => ({ title: route.params.managerName })}
       />
     </Stack.Navigator>
   );

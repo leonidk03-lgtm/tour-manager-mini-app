@@ -1,6 +1,7 @@
 import { useMemo } from "react";
 import { View, StyleSheet, Pressable, FlatList } from "react-native";
 import { useNavigation, NavigationProp } from "@react-navigation/native";
+import { useSafeAreaInsets } from "react-native-safe-area-context";
 import { Icon } from "@/components/Icon";
 import { ThemedText } from "@/components/ThemedText";
 import { ThemedView } from "@/components/ThemedView";
@@ -10,7 +11,6 @@ import { useAuth } from "@/contexts/AuthContext";
 import { Profile } from "@/lib/supabase";
 import { useRental } from "@/contexts/RentalContext";
 import { hapticFeedback } from "@/utils/haptics";
-import { useScreenInsets } from "@/hooks/useScreenInsets";
 import { SettingsStackParamList } from "@/navigation/SettingsStackNavigator";
 
 interface ManagerWithCommissions {
@@ -23,7 +23,7 @@ interface ManagerWithCommissions {
 export default function RentalCommissionsScreen() {
   const { theme } = useTheme();
   const navigation = useNavigation<NavigationProp<SettingsStackParamList>>();
-  const { paddingTop, scrollInsetBottom } = useScreenInsets();
+  const insets = useSafeAreaInsets();
   const { isAdmin, profile, managers } = useAuth();
   const { rentalCommissions } = useRental();
 
@@ -148,7 +148,7 @@ export default function RentalCommissionsScreen() {
         }
         contentContainerStyle={[
           styles.listContent,
-          { paddingTop: Spacing.md, paddingBottom: scrollInsetBottom },
+          { paddingBottom: insets.bottom + Spacing.md },
         ]}
         showsVerticalScrollIndicator={false}
       />

@@ -1,6 +1,7 @@
 import { useState, useMemo } from "react";
 import { View, StyleSheet, Pressable, SectionList, Alert, Modal, TextInput, KeyboardAvoidingView, Platform } from "react-native";
 import { useRoute, RouteProp } from "@react-navigation/native";
+import { useSafeAreaInsets } from "react-native-safe-area-context";
 import { Icon } from "@/components/Icon";
 import { ThemedText } from "@/components/ThemedText";
 import { ThemedView } from "@/components/ThemedView";
@@ -9,7 +10,6 @@ import { useTheme } from "@/hooks/useTheme";
 import { useAuth } from "@/contexts/AuthContext";
 import { useRental, RentalCommission } from "@/contexts/RentalContext";
 import { hapticFeedback } from "@/utils/haptics";
-import { useScreenInsets } from "@/hooks/useScreenInsets";
 import { SettingsStackParamList } from "@/navigation/SettingsStackNavigator";
 
 type RouteParams = RouteProp<SettingsStackParamList, "ManagerCommissions">;
@@ -25,7 +25,7 @@ interface MonthSection {
 export default function ManagerCommissionsScreen() {
   const { theme } = useTheme();
   const route = useRoute<RouteParams>();
-  const { paddingTop, scrollInsetBottom } = useScreenInsets();
+  const insets = useSafeAreaInsets();
   const { isAdmin } = useAuth();
   const { rentalCommissions, markManagerCommissionsPaid, payManagerCommissions } = useRental();
   const [isPaying, setIsPaying] = useState(false);
@@ -262,7 +262,7 @@ export default function ManagerCommissionsScreen() {
             </ThemedText>
           </View>
         }
-        contentContainerStyle={{ paddingBottom: scrollInsetBottom }}
+        contentContainerStyle={{ paddingBottom: insets.bottom + Spacing.md }}
       />
 
       <Modal
