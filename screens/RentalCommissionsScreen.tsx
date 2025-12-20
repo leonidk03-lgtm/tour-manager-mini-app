@@ -148,7 +148,7 @@ export default function RentalCommissionsScreen() {
         }
         contentContainerStyle={[
           styles.listContent,
-          { paddingTop: paddingTop, paddingBottom: scrollInsetBottom },
+          { paddingTop: Spacing.md, paddingBottom: scrollInsetBottom },
         ]}
         showsVerticalScrollIndicator={false}
       />
