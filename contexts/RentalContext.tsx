@@ -864,7 +864,7 @@ export function RentalProvider({ children }: { children: ReactNode }) {
 
     const { data: profiles, error: profilesError } = await supabase
       .from('profiles')
-      .select('id, display_name, role, owner_commission_percent, executor_commission_percent, service_commission_percent')
+      .select('id, display_name, role, owner_commission_percent, executor_commission_percent')
       .in('id', [ownerId, executorId].filter(Boolean) as string[]);
 
     console.log('[Commission] Profiles loaded:', profiles, 'error:', profilesError);
