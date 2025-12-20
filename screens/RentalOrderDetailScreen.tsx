@@ -75,10 +75,28 @@ export default function RentalOrderDetailScreen() {
   const [lossCount, setLossCount] = useState("");
   const [lossReason, setLossReason] = useState("");
 
-  // Get equipment items that can be tracked for loss (receivers, transmitters, etc.)
+  // Get equipment items that can be tracked for loss based on order contents
+  // For rentals: receivers = kitCount, transmitters = microphoneCount
   const trackableLossItems = useMemo(() => {
-    return equipmentItems.filter(item => item.trackLoss);
-  }, [equipmentItems]);
+    if (!order) return [];
+    
+    // Filter items that are trackable and have quantity in this order
+    return equipmentItems.filter(item => {
+      if (!item.trackLoss) return false;
+      
+      const name = item.name.toLowerCase();
+      // Receivers - limit by kitCount
+      if (name.includes("приемник") || name.includes("receiver")) {
+        return order.kitCount > 0;
+      }
+      // Transmitters - limit by microphoneCount
+      if (name.includes("передатчик") || name.includes("transmitter") || name.includes("микрофон")) {
+        return order.microphoneCount > 0;
+      }
+      // Other trackable items
+      return true;
+    });
+  }, [equipmentItems, order]);
 
   const totalPaid = useMemo(() => {
     return payments.reduce((sum, p) => {
@@ -184,12 +202,42 @@ export default function RentalOrderDetailScreen() {
     }
   };
 
+  // Calculate max loss count based on equipment type and order contents
+  const getMaxLossCount = (item: EquipmentItem): number => {
+    if (!order) return 0;
+    const name = item.name.toLowerCase();
+    
+    // Receivers - limit by kitCount
+    if (name.includes("приемник") || name.includes("receiver")) {
+      return order.kitCount;
+    }
+    // Transmitters - limit by microphoneCount
+    if (name.includes("передатчик") || name.includes("transmitter") || name.includes("микрофон")) {
+      return order.microphoneCount;
+    }
+    // For other items, use warehouse quantity as max
+    return item.quantity;
+  };
+
   const handleAddLoss = async () => {
     if (!order || !selectedLossItem) return;
     
     const count = parseInt(lossCount);
     if (!count || count <= 0) {
       Alert.alert("Ошибка", "Введите количество утерянного оборудования");
+      return;
+    }
+    
+    // Validate count against order contents
+    const maxCount = getMaxLossCount(selectedLossItem);
+    if (count > maxCount) {
+      Alert.alert("Ошибка", `Максимальное количество для утери: ${maxCount} шт.`);
+      return;
+    }
+    
+    // Validate count against warehouse quantity
+    if (count > selectedLossItem.quantity) {
+      Alert.alert("Ошибка", `На складе доступно только ${selectedLossItem.quantity} шт.`);
       return;
     }
     
@@ -741,7 +789,7 @@ export default function RentalOrderDetailScreen() {
                         {item.name}
                       </ThemedText>
                       <ThemedText style={{ color: theme.textSecondary, fontSize: 11 }}>
-                        В наличии: {item.quantity}
+                        Макс.: {getMaxLossCount(item)} шт.
                       </ThemedText>
                     </Pressable>
                   );
@@ -751,13 +799,13 @@ export default function RentalOrderDetailScreen() {
               {selectedLossItem ? (
                 <>
                   <ThemedText style={[styles.inputLabel, { color: theme.textSecondary, marginTop: Spacing.md }]}>
-                    Количество утерянных
+                    Количество утерянных (макс. {getMaxLossCount(selectedLossItem)})
                   </ThemedText>
                   <TextInput
                     value={lossCount}
                     onChangeText={setLossCount}
                     style={[styles.textInput, { backgroundColor: theme.backgroundSecondary, color: theme.text, borderColor: theme.border }]}
-                    placeholder="Введите количество"
+                    placeholder={`Максимум: ${getMaxLossCount(selectedLossItem)}`}
                     placeholderTextColor={theme.textSecondary}
                     keyboardType="numeric"
                   />

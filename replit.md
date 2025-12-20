@@ -45,7 +45,7 @@ Key screens include:
 The rental module provides comprehensive equipment rental management:
 - **RentalClientsScreen**: Client management (individuals and companies) with contact info and assigned managers.
 - **RentalOrdersScreen**: Order list with status filters, quick status changes, and phone contact options (call, WhatsApp, Telegram).
-- **RentalOrderDetailScreen**: Detailed order view with payment history, equipment tracking, and status management.
+- **RentalOrderDetailScreen**: Detailed order view with payment history, equipment tracking, status management, and equipment loss registration.
 - **AddRentalOrderScreen**: Order creation with client selection, equipment counts, pricing, and executor assignment.
 - **RentalCommissionsScreen**: View and manage manager commissions from completed orders.
 
@@ -58,7 +58,16 @@ Automatic commission calculation when orders are marked as paid:
 - Commissions are tracked in `rental_commissions` table with pending/paid status.
 - Admins can mark commissions as paid from RentalCommissionsScreen.
 
-**Database Setup**: Execute `sql/rental_commissions_setup.sql` in Supabase SQL Editor to create the commissions table and add commission fields to profiles.
+**Database Setup**: 
+- Execute `sql/rental_commissions_setup.sql` in Supabase SQL Editor to create the commissions table and add commission fields to profiles.
+- Execute `sql/equipment_losses_rental_update.sql` to add rental_order_id column to equipment_losses table for tracking losses from rental orders.
+
+### Equipment Loss Tracking
+Equipment losses can be registered from both excursion radio guide assignments and rental orders:
+- From RadioGuidesScreen for excursion-related losses (linked via assignment_id/kit_id)
+- From RentalOrderDetailScreen for rental-related losses (linked via rental_order_id)
+- Both integrate with WarehouseScreen inventory via equipment_movements table
+- Losses are tracked in equipment_losses table with nullable assignment_id, kit_id, and rental_order_id fields
 
 ### Platform-Specific Considerations
 The app implements platform-specific UI adjustments (e.g., iOS blur effects, Android edge-to-edge layout) and web fallbacks for native-only features. Replit deployment includes custom dev and build scripts with environment variable usage.
