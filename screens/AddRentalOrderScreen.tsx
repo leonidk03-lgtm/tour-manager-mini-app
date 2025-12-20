@@ -78,6 +78,7 @@ export default function AddRentalOrderScreen() {
   const [microphoneCount, setMicrophoneCount] = useState(existingOrder?.microphoneCount?.toString() || "1");
   const [selectedBags, setSelectedBags] = useState<RadioGuideKit[]>([]);
   const [showBagPicker, setShowBagPicker] = useState(false);
+  const [bagSearchQuery, setBagSearchQuery] = useState("");
   const [bagsInitialized, setBagsInitialized] = useState(false);
   const [unmatchedBagNumbers, setUnmatchedBagNumbers] = useState<number[]>([]);
 
@@ -845,13 +846,30 @@ export default function AddRentalOrderScreen() {
           <View style={[styles.modalContent, { backgroundColor: theme.backgroundDefault }]}>
             <View style={styles.modalHeader}>
               <ThemedText style={styles.modalTitle}>Выберите сумку</ThemedText>
-              <Pressable onPress={() => setShowBagPicker(false)}>
+              <Pressable onPress={() => { setShowBagPicker(false); setBagSearchQuery(""); }}>
                 <Icon name="x" size={24} color={theme.text} />
               </Pressable>
             </View>
 
+            <View style={[styles.bagSearchBox, { backgroundColor: theme.backgroundSecondary }]}>
+              <Icon name="search" size={18} color={theme.textSecondary} />
+              <TextInput
+                style={[styles.bagSearchInput, { color: theme.text }]}
+                value={bagSearchQuery}
+                onChangeText={setBagSearchQuery}
+                placeholder="Поиск по номеру сумки..."
+                placeholderTextColor={theme.textSecondary}
+                keyboardType="number-pad"
+              />
+              {bagSearchQuery ? (
+                <Pressable onPress={() => setBagSearchQuery("")}>
+                  <Icon name="x" size={18} color={theme.textSecondary} />
+                </Pressable>
+              ) : null}
+            </View>
+
             <FlatList
-              data={availableBagsForRental}
+              data={bagSearchQuery.trim() ? availableBagsForRental.filter(k => k.bagNumber.toString().includes(bagSearchQuery.trim())) : availableBagsForRental}
               keyExtractor={(item) => item.id}
               contentContainerStyle={{ padding: Spacing.md }}
               renderItem={({ item }) => {
@@ -1281,5 +1299,20 @@ const styles = StyleSheet.create({
   },
   batteryLabel: {
     fontSize: 13,
+  },
+  bagSearchBox: {
+    flexDirection: "row",
+    alignItems: "center",
+    marginHorizontal: Spacing.md,
+    marginBottom: Spacing.sm,
+    paddingHorizontal: Spacing.md,
+    paddingVertical: Spacing.sm,
+    borderRadius: BorderRadius.md,
+    gap: Spacing.sm,
+  },
+  bagSearchInput: {
+    flex: 1,
+    fontSize: 15,
+    paddingVertical: Spacing.xs,
   },
 });

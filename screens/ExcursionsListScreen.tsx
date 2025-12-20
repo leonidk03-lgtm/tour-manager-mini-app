@@ -76,6 +76,7 @@ export default function ExcursionsListScreen() {
   const [guidePickerMode, setGuidePickerMode] = useState(false);
   const [allocatedGuides, setAllocatedGuides] = useState<AllocatedGuide[]>([]);
   const [allocatedBuses, setAllocatedBuses] = useState<AllocatedBus[]>([]);
+  const [bagSearchQuery, setBagSearchQuery] = useState("");
   
   const calculateRoundedReceivers = (totalParticipants: number): number => {
     const roundedUp = Math.ceil(totalParticipants / 5) * 5;
@@ -265,13 +266,35 @@ export default function ExcursionsListScreen() {
     resetRadioGuideForm();
   };
   
+  const filteredAvailableKits = useMemo(() => {
+    if (!bagSearchQuery.trim()) return availableKits;
+    const query = bagSearchQuery.trim();
+    return availableKits.filter(kit => kit.bagNumber.toString().includes(query));
+  }, [availableKits, bagSearchQuery]);
+
   const renderRadioGuideFormContent = () => (
     <>
       <ThemedText style={[styles.radioGuideLabel, { color: theme.textSecondary }]}>
         Выберите сумку
       </ThemedText>
+      <View style={[styles.bagSearchContainer, { backgroundColor: theme.backgroundSecondary, borderColor: theme.border }]}>
+        <Icon name="search" size={18} color={theme.textSecondary} />
+        <TextInput
+          style={[styles.bagSearchInput, { color: theme.text }]}
+          value={bagSearchQuery}
+          onChangeText={setBagSearchQuery}
+          placeholder="Поиск по номеру сумки..."
+          placeholderTextColor={theme.textSecondary}
+          keyboardType="number-pad"
+        />
+        {bagSearchQuery ? (
+          <Pressable onPress={() => setBagSearchQuery("")}>
+            <Icon name="x" size={18} color={theme.textSecondary} />
+          </Pressable>
+        ) : null}
+      </View>
       <View style={styles.kitsList}>
-        {availableKits.map(kit => (
+        {filteredAvailableKits.map(kit => (
           <Pressable
             key={kit.id}
             onPress={() => setSelectedKit(kit)}
@@ -291,9 +314,9 @@ export default function ExcursionsListScreen() {
             <ThemedText style={styles.kitOptionText}>Сумка #{kit.bagNumber}</ThemedText>
           </Pressable>
         ))}
-        {availableKits.length === 0 ? (
+        {filteredAvailableKits.length === 0 ? (
           <ThemedText style={{ color: theme.textSecondary, textAlign: "center", padding: Spacing.lg }}>
-            Нет доступных сумок
+            {bagSearchQuery ? "Сумка не найдена" : "Нет доступных сумок"}
           </ThemedText>
         ) : null}
       </View>
@@ -983,6 +1006,22 @@ const styles = StyleSheet.create({
   },
   kitsList: {
     gap: Spacing.xs,
+    maxHeight: 200,
+  },
+  bagSearchContainer: {
+    flexDirection: "row",
+    alignItems: "center",
+    paddingHorizontal: Spacing.md,
+    paddingVertical: Spacing.sm,
+    borderRadius: BorderRadius.sm,
+    borderWidth: 1,
+    gap: Spacing.sm,
+    marginBottom: Spacing.sm,
+  },
+  bagSearchInput: {
+    flex: 1,
+    fontSize: 15,
+    paddingVertical: Spacing.xs,
   },
   kitOption: {
     flexDirection: "row",
