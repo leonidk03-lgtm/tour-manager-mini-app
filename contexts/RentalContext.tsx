@@ -25,6 +25,14 @@ export interface RentalClient {
 
 export type RentalOrderStatus = 'new' | 'issued' | 'returned' | 'completed' | 'cancelled';
 
+export interface EquipmentBlock {
+  bagNumber: string;
+  kitCount: number;
+  spareReceiverCount: number;
+  transmitterCount: number;
+  microphoneCount: number;
+}
+
 export interface RentalOrder {
   id: string;
   orderNumber: number;
@@ -51,6 +59,7 @@ export interface RentalOrder {
   executorName: string | null;
   ownerManagerId: string | null;
   ownerManagerName: string | null;
+  equipmentBlocks: EquipmentBlock[] | null;
   createdAt: string;
   updatedAt: string;
 }
@@ -234,6 +243,7 @@ export function RentalProvider({ children }: { children: ReactNode }) {
         executorName: o.executor_name,
         ownerManagerId: o.owner_manager_id,
         ownerManagerName: o.owner_manager_name,
+        equipmentBlocks: o.equipment_blocks as EquipmentBlock[] | null,
         createdAt: o.created_at,
         updatedAt: o.updated_at,
       })));
@@ -564,6 +574,7 @@ export function RentalProvider({ children }: { children: ReactNode }) {
         executor_name: order.executorName,
         owner_manager_id: order.ownerManagerId,
         owner_manager_name: order.ownerManagerName,
+        equipment_blocks: order.equipmentBlocks || null,
       })
       .select()
       .single();
@@ -612,6 +623,7 @@ export function RentalProvider({ children }: { children: ReactNode }) {
     if (order.executorName !== undefined) updateData.executor_name = order.executorName;
     if (order.ownerManagerId !== undefined) updateData.owner_manager_id = order.ownerManagerId;
     if (order.ownerManagerName !== undefined) updateData.owner_manager_name = order.ownerManagerName;
+    if (order.equipmentBlocks !== undefined) updateData.equipment_blocks = order.equipmentBlocks;
 
     const { error } = await supabase
       .from('rental_orders')

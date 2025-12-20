@@ -19,7 +19,7 @@ import { ThemedView } from "@/components/ThemedView";
 import { ScreenKeyboardAwareScrollView } from "@/components/ScreenKeyboardAwareScrollView";
 import { Spacing, BorderRadius } from "@/constants/theme";
 import { useTheme } from "@/hooks/useTheme";
-import { useRental, RentalClient, RentalService } from "@/contexts/RentalContext";
+import { useRental, RentalClient, RentalService, EquipmentBlock as DbEquipmentBlock } from "@/contexts/RentalContext";
 import { useAuth } from "@/contexts/AuthContext";
 import { useData, RadioGuideKit } from "@/contexts/DataContext";
 import { SettingsStackParamList } from "@/navigation/SettingsStackNavigator";
@@ -105,33 +105,50 @@ export default function AddRentalOrderScreen() {
     if (!dataReady) return;
     
     if (orderId && existingOrder) {
-      const bagNumbers = existingOrder.bagNumber 
-        ? existingOrder.bagNumber.split(',').map(s => parseInt(s.trim())).filter(n => !isNaN(n))
-        : [];
-      
-      if (bagNumbers.length > 0) {
-        const blocks: EquipmentBlock[] = bagNumbers.map((bagNum, index) => {
-          const foundBag = radioGuideKits.find(k => k.bagNumber === bagNum);
-          const isFirstBlock = index === 0;
+      if (existingOrder.equipmentBlocks && existingOrder.equipmentBlocks.length > 0) {
+        const blocks: EquipmentBlock[] = existingOrder.equipmentBlocks.map((dbBlock) => {
+          const bagNum = parseInt(dbBlock.bagNumber);
+          const foundBag = !isNaN(bagNum) ? radioGuideKits.find(k => k.bagNumber === bagNum) : null;
           return {
             id: Date.now().toString() + Math.random().toString(36).substr(2, 9),
-            kitCount: isFirstBlock ? (existingOrder.kitCount?.toString() || "") : "",
-            spareReceiverCount: isFirstBlock ? (existingOrder.spareReceiverCount?.toString() ?? "0") : "1",
-            transmitterCount: isFirstBlock ? (existingOrder.transmitterCount?.toString() || "1") : "1",
-            microphoneCount: isFirstBlock ? (existingOrder.microphoneCount?.toString() || "1") : "1",
+            kitCount: dbBlock.kitCount?.toString() || "",
+            spareReceiverCount: dbBlock.spareReceiverCount?.toString() ?? "0",
+            transmitterCount: dbBlock.transmitterCount?.toString() || "1",
+            microphoneCount: dbBlock.microphoneCount?.toString() || "1",
             selectedBag: foundBag || null,
-            unmatchedBagNumber: foundBag ? null : bagNum,
+            unmatchedBagNumber: foundBag ? null : (!isNaN(bagNum) ? bagNum : null),
           };
         });
         setEquipmentBlocks(blocks.length > 0 ? blocks : [createEmptyBlock()]);
       } else {
-        setEquipmentBlocks([{
-          ...createEmptyBlock(),
-          kitCount: existingOrder.kitCount?.toString() || "",
-          spareReceiverCount: existingOrder.spareReceiverCount?.toString() ?? "0",
-          transmitterCount: existingOrder.transmitterCount?.toString() || "1",
-          microphoneCount: existingOrder.microphoneCount?.toString() || "1",
-        }]);
+        const bagNumbers = existingOrder.bagNumber 
+          ? existingOrder.bagNumber.split(',').map(s => parseInt(s.trim())).filter(n => !isNaN(n))
+          : [];
+        
+        if (bagNumbers.length > 0) {
+          const blocks: EquipmentBlock[] = bagNumbers.map((bagNum, index) => {
+            const foundBag = radioGuideKits.find(k => k.bagNumber === bagNum);
+            const isFirstBlock = index === 0;
+            return {
+              id: Date.now().toString() + Math.random().toString(36).substr(2, 9),
+              kitCount: isFirstBlock ? (existingOrder.kitCount?.toString() || "") : "",
+              spareReceiverCount: isFirstBlock ? (existingOrder.spareReceiverCount?.toString() ?? "0") : "1",
+              transmitterCount: isFirstBlock ? (existingOrder.transmitterCount?.toString() || "1") : "1",
+              microphoneCount: isFirstBlock ? (existingOrder.microphoneCount?.toString() || "1") : "1",
+              selectedBag: foundBag || null,
+              unmatchedBagNumber: foundBag ? null : bagNum,
+            };
+          });
+          setEquipmentBlocks(blocks.length > 0 ? blocks : [createEmptyBlock()]);
+        } else {
+          setEquipmentBlocks([{
+            ...createEmptyBlock(),
+            kitCount: existingOrder.kitCount?.toString() || "",
+            spareReceiverCount: existingOrder.spareReceiverCount?.toString() ?? "0",
+            transmitterCount: existingOrder.transmitterCount?.toString() || "1",
+            microphoneCount: existingOrder.microphoneCount?.toString() || "1",
+          }]);
+        }
       }
     }
     setBlocksInitialized(true);
@@ -383,6 +400,14 @@ export default function AddRentalOrderScreen() {
       if (block.unmatchedBagNumber) allBagNumbers.push(block.unmatchedBagNumber);
     });
 
+    const blocksToSave: DbEquipmentBlock[] = equipmentBlocks.map(block => ({
+      bagNumber: block.selectedBag?.bagNumber?.toString() || block.unmatchedBagNumber?.toString() || "",
+      kitCount: parseInt(block.kitCount) || 0,
+      spareReceiverCount: parseInt(block.spareReceiverCount) || 0,
+      transmitterCount: parseInt(block.transmitterCount) || 0,
+      microphoneCount: parseInt(block.microphoneCount) || 0,
+    }));
+
     try {
       if (isEditMode && orderId) {
         await updateRentalOrder(orderId, {
@@ -400,6 +425,7 @@ export default function AddRentalOrderScreen() {
           totalPrice,
           prepayment: parseFloat(prepayment) || 0,
           receiverNotes: receiverNotes.trim() || null,
+          equipmentBlocks: blocksToSave,
         }, servicesToSave);
       } else {
         await addRentalOrder({
@@ -424,6 +450,7 @@ export default function AddRentalOrderScreen() {
           executorName: profile?.display_name || profile?.email || null,
           ownerManagerId: selectedClient.assignedManagerId || null,
           ownerManagerName: selectedClient.assignedManagerName || null,
+          equipmentBlocks: blocksToSave,
         }, servicesToSave);
       }
 
