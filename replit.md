@@ -45,9 +45,20 @@ Key screens include:
 The rental module provides comprehensive equipment rental management:
 - **RentalClientsScreen**: Client management (individuals and companies) with contact info and assigned managers.
 - **RentalOrdersScreen**: Order list with status filters, quick status changes, and phone contact options (call, WhatsApp, Telegram).
-- **RentalOrderDetailScreen**: Detailed order view with payment history, equipment tracking, status management, and equipment loss registration.
-- **AddRentalOrderScreen**: Order creation with client selection, equipment counts, pricing, and executor assignment.
+- **RentalOrderDetailScreen**: Detailed order view with payment history, equipment tracking, status management, equipment loss registration, and equipment blocks breakdown display.
+- **AddRentalOrderScreen**: Order creation with client selection, multiple equipment blocks support (each block with independent kit counts, spare receivers, transmitters, microphones, and bag selection), pricing, and executor assignment.
 - **RentalCommissionsScreen**: View and manage manager commissions from completed orders.
+
+### Multi-Block Equipment Orders
+Orders can have multiple equipment blocks, each with independent equipment counts and one bag assignment:
+- Each block stores: bagNumber, kitCount, spareReceiverCount, transmitterCount, microphoneCount
+- Auto-fill for spare receivers: 1 spare for 1-day rentals, 2 spares for 2+ day rentals
+- Equipment blocks are persisted in `equipment_blocks` JSONB column for accurate round-trip editing
+- Legacy orders (without equipment_blocks) fall back to aggregated totals with bag number parsing
+- Order detail screen displays "Разбивка по сумкам" section when multiple blocks exist
+
+**Database Setup**:
+- Execute `sql/equipment_blocks_update.sql` in Supabase SQL Editor to add the equipment_blocks column
 
 ### Commission System
 Automatic commission calculation when orders are marked as paid:
