@@ -572,6 +572,18 @@ export function RentalProvider({ children }: { children: ReactNode }) {
     }
 
     await addOrderHistory(data.id, 'Заказ создан');
+    
+    const client = rentalClients.find(c => c.id === order.clientId);
+    if (profile) {
+      await supabase.from('activities').insert({
+        manager_id: profile.id,
+        manager_name: profile.display_name,
+        type: 'rental_order_created',
+        description: `создал заказ аренды для ${client?.name || 'клиента'}`,
+        target_id: data.id,
+      });
+    }
+
     await fetchRentalOrders();
     return data.id;
   };
@@ -609,7 +621,37 @@ export function RentalProvider({ children }: { children: ReactNode }) {
       await saveOrderServices(id, services);
     }
 
+    const currentOrder = rentalOrders.find(o => o.id === id);
+    const client = rentalClients.find(c => c.id === currentOrder?.clientId);
+    
+    let activityType: 'rental_order_updated' | 'rental_order_issued' | 'rental_order_returned' | 'rental_order_completed' = 'rental_order_updated';
+    let activityDescription = `обновил заказ аренды для ${client?.name || 'клиента'}`;
+    
+    if (order.status && currentOrder?.status !== order.status) {
+      if (order.status === 'issued') {
+        activityType = 'rental_order_issued';
+        activityDescription = `выдал заказ аренды для ${client?.name || 'клиента'}`;
+      } else if (order.status === 'returned') {
+        activityType = 'rental_order_returned';
+        activityDescription = `принял возврат аренды от ${client?.name || 'клиента'}`;
+      } else if (order.status === 'completed') {
+        activityType = 'rental_order_completed';
+        activityDescription = `завершил заказ аренды для ${client?.name || 'клиента'}`;
+      }
+    }
+    
     await addOrderHistory(id, 'Заказ обновлён');
+    
+    if (profile) {
+      await supabase.from('activities').insert({
+        manager_id: profile.id,
+        manager_name: profile.display_name,
+        type: activityType,
+        description: activityDescription,
+        target_id: id,
+      });
+    }
+
     await fetchRentalOrders();
   };
 

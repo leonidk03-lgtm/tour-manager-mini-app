@@ -83,7 +83,7 @@ export interface Manager {
 
 export interface Activity {
   id: string;
-  type: "excursion_added" | "transaction_added" | "excursion_deleted" | "transaction_deleted" | "radio_issued" | "radio_returned";
+  type: "excursion_added" | "transaction_added" | "excursion_deleted" | "transaction_deleted" | "radio_issued" | "radio_returned" | "rental_order_created" | "rental_order_updated" | "rental_order_issued" | "rental_order_returned" | "rental_order_completed" | "equipment_loss_registered" | "equipment_loss_found";
   managerName: string;
   description: string;
   date: string;
@@ -2350,7 +2350,17 @@ export function DataProvider({ children }: { children: ReactNode }) {
       });
 
       if (error) throw error;
-      await fetchEquipmentLosses();
+
+      const equipmentItem = equipmentItems.find(i => i.id === loss.equipmentItemId);
+      await supabase.from('activities').insert({
+        manager_id: currentUser.id,
+        manager_name: currentUser.name,
+        type: 'equipment_loss_registered',
+        description: `зарегистрировал утерю: ${equipmentItem?.name || 'оборудование'} (${loss.missingCount} шт.)`,
+        target_id: loss.assignmentId || loss.rentalOrderId || null,
+      });
+
+      await Promise.all([fetchEquipmentLosses(), fetchActivities()]);
     } catch (err) {
       console.error('Error adding equipment loss:', err);
       throw err;
@@ -2430,8 +2440,19 @@ export function DataProvider({ children }: { children: ReactNode }) {
           console.warn('Could not restore warehouse quantity:', warehouseErr);
         }
       }
+
+      const equipmentItem = equipmentItems.find(i => i.id === loss?.equipmentItemId);
+      if (currentUser) {
+        await supabase.from('activities').insert({
+          manager_id: currentUser.id,
+          manager_name: currentUser.name,
+          type: 'equipment_loss_found',
+          description: `отметил найденным: ${equipmentItem?.name || 'оборудование'} (${loss?.missingCount || 0} шт.)`,
+          target_id: id,
+        });
+      }
       
-      await fetchEquipmentLosses();
+      await Promise.all([fetchEquipmentLosses(), fetchActivities()]);
     } catch (err) {
       console.error('Error marking loss as found:', err);
       throw err;

@@ -7,8 +7,9 @@ import { ThemedView } from "@/components/ThemedView";
 import { ScreenScrollView } from "@/components/ScreenScrollView";
 import { Spacing, BorderRadius } from "@/constants/theme";
 import { useTheme } from "@/hooks/useTheme";
-import { useData } from "@/contexts/DataContext";
+import { useData, Activity } from "@/contexts/DataContext";
 import { useAuth } from "@/contexts/AuthContext";
+import { useRental } from "@/contexts/RentalContext";
 import { calculateExcursionRevenue } from "@/utils/calculations";
 import { SettingsStackParamList } from "@/navigation/SettingsStackNavigator";
 import { PermissionKey, PERMISSION_GROUPS, ManagerPermissions } from "@/lib/supabase";
@@ -37,7 +38,8 @@ export default function ManagerDetailScreen() {
   const { theme } = useTheme();
   const route = useRoute<RouteProp<SettingsStackParamList, "ManagerDetail">>();
   const { manager } = route.params;
-  const { excursions, transactions, tourTypes, additionalServices, radioGuideAssignments, radioGuideKits } = useData();
+  const { excursions, transactions, tourTypes, additionalServices, radioGuideAssignments, radioGuideKits, activities, equipmentLosses } = useData();
+  const { rentalOrders } = useRental();
   const { sendPasswordReset, updateManagerDisplayName, updateManagerPermissions, updateManagerCommissions, refreshManagers, isAdmin, managers } = useAuth();
   const [period, setPeriod] = useState<PeriodFilter>("all");
   const [isEditingName, setIsEditingName] = useState(false);
@@ -132,6 +134,43 @@ export default function ManagerDetailScreen() {
       .filter(a => a.managerId === manager.id && filterByPeriod(a.issuedAt))
       .sort((a, b) => new Date(b.issuedAt).getTime() - new Date(a.issuedAt).getTime());
   }, [radioGuideAssignments, manager.id, period]);
+
+  const managerActivities = useMemo(() => {
+    return activities
+      .filter(a => a.managerName === manager.display_name && filterByPeriod(a.timestamp))
+      .sort((a, b) => new Date(b.timestamp).getTime() - new Date(a.timestamp).getTime());
+  }, [activities, manager.display_name, period]);
+
+  const managerRentalOrders = useMemo(() => {
+    return rentalOrders
+      .filter(o => (o.managerId === manager.id || o.executorId === manager.id || o.ownerManagerId === manager.id) && filterByPeriod(o.createdAt))
+      .sort((a, b) => new Date(b.createdAt).getTime() - new Date(a.createdAt).getTime());
+  }, [rentalOrders, manager.id, period]);
+
+  const managerLosses = useMemo(() => {
+    return equipmentLosses
+      .filter(l => l.managerId === manager.id && filterByPeriod(l.createdAt))
+      .sort((a, b) => new Date(b.createdAt).getTime() - new Date(a.createdAt).getTime());
+  }, [equipmentLosses, manager.id, period]);
+
+  const getActivityIcon = (type: Activity['type']): { name: string; color: string } => {
+    switch (type) {
+      case 'excursion_added': return { name: 'plus-circle', color: theme.success };
+      case 'excursion_deleted': return { name: 'trash-2', color: theme.error };
+      case 'transaction_added': return { name: 'dollar-sign', color: theme.success };
+      case 'transaction_deleted': return { name: 'trash-2', color: theme.error };
+      case 'radio_issued': return { name: 'radio', color: theme.primary };
+      case 'radio_returned': return { name: 'check-circle', color: theme.success };
+      case 'rental_order_created': return { name: 'briefcase', color: theme.primary };
+      case 'rental_order_updated': return { name: 'edit', color: theme.warning };
+      case 'rental_order_issued': return { name: 'send', color: theme.success };
+      case 'rental_order_returned': return { name: 'rotate-ccw', color: theme.warning };
+      case 'rental_order_completed': return { name: 'check-square', color: theme.success };
+      case 'equipment_loss_registered': return { name: 'alert-triangle', color: theme.error };
+      case 'equipment_loss_found': return { name: 'check-circle', color: theme.success };
+      default: return { name: 'activity', color: theme.textSecondary };
+    }
+  };
 
   const getKitBagNumber = (kitId: string) => {
     const kit = radioGuideKits.find(k => k.id === kitId);
@@ -750,6 +789,56 @@ export default function ManagerDetailScreen() {
           {managerRadioAssignments.length > 10 ? (
             <ThemedText style={[styles.moreText, { color: theme.textSecondary }]}>
               ... и ещё {managerRadioAssignments.length - 10}
+            </ThemedText>
+          ) : null}
+        </View>
+
+        <View style={styles.section}>
+          <ThemedText style={styles.sectionTitle}>
+            Журнал активности ({managerActivities.length})
+          </ThemedText>
+          {managerActivities.length === 0 ? (
+            <ThemedView
+              style={[styles.emptyState, { backgroundColor: theme.backgroundSecondary }]}
+            >
+              <Icon name="activity" size={32} color={theme.textSecondary} />
+              <ThemedText style={[styles.emptyText, { color: theme.textSecondary }]}>
+                Нет активности за выбранный период
+              </ThemedText>
+            </ThemedView>
+          ) : (
+            managerActivities.slice(0, 15).map((activity) => {
+              const iconData = getActivityIcon(activity.type);
+              return (
+                <ThemedView
+                  key={activity.id}
+                  style={[
+                    styles.itemCard,
+                    { backgroundColor: theme.backgroundSecondary, borderColor: theme.border },
+                  ]}
+                >
+                  <View style={styles.itemHeader}>
+                    <View style={styles.transactionType}>
+                      <Icon
+                        name={iconData.name as any}
+                        size={16}
+                        color={iconData.color}
+                      />
+                      <ThemedText style={[styles.itemTitle, { flex: 1 }]}>
+                        {activity.description}
+                      </ThemedText>
+                    </View>
+                    <ThemedText style={[styles.itemDate, { color: theme.textSecondary }]}>
+                      {formatDate(activity.timestamp)}
+                    </ThemedText>
+                  </View>
+                </ThemedView>
+              );
+            })
+          )}
+          {managerActivities.length > 15 ? (
+            <ThemedText style={[styles.moreText, { color: theme.textSecondary }]}>
+              ... и ещё {managerActivities.length - 15}
             </ThemedText>
           ) : null}
         </View>
