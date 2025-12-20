@@ -1,5 +1,6 @@
 -- Create app_settings table for storing application configuration
 -- Run this in Supabase SQL Editor
+-- Safe to run multiple times (idempotent)
 
 CREATE TABLE IF NOT EXISTS app_settings (
   key TEXT PRIMARY KEY,
@@ -9,6 +10,10 @@ CREATE TABLE IF NOT EXISTS app_settings (
 
 -- Enable RLS
 ALTER TABLE app_settings ENABLE ROW LEVEL SECURITY;
+
+-- Drop and recreate policies (safe for re-run)
+DROP POLICY IF EXISTS "Allow authenticated users to read settings" ON app_settings;
+DROP POLICY IF EXISTS "Allow admins to update settings" ON app_settings;
 
 -- Allow all authenticated users to read settings
 CREATE POLICY "Allow authenticated users to read settings"
