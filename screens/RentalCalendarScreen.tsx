@@ -233,8 +233,9 @@ export default function RentalCalendarScreen() {
 
         <View style={styles.calendarGrid}>
           {calendarDays.map((day, index) => {
-            const hasOrders = day.kitCount > 0;
-            const loadLevel = day.kitCount >= 10 ? "high" : day.kitCount >= 5 ? "medium" : "low";
+            const orderCount = day.orders.length;
+            const hasOrders = orderCount > 0;
+            const loadLevel = orderCount >= 4 ? "high" : orderCount >= 2 ? "medium" : "low";
             
             return (
               <Pressable
@@ -275,19 +276,19 @@ export default function RentalCalendarScreen() {
         </View>
 
         <View style={styles.legendContainer}>
-          <ThemedText style={[styles.legendTitle, { color: theme.textSecondary }]}>Комплектов в аренде:</ThemedText>
+          <ThemedText style={[styles.legendTitle, { color: theme.textSecondary }]}>Заказов на день:</ThemedText>
           <View style={styles.legendItems}>
             <View style={styles.legendItem}>
               <View style={[styles.legendDot, { backgroundColor: "#4CAF50" }]} />
-              <ThemedText style={[styles.legendText, { color: theme.textSecondary }]}>1-4 (низкая)</ThemedText>
+              <ThemedText style={[styles.legendText, { color: theme.textSecondary }]}>1</ThemedText>
             </View>
             <View style={styles.legendItem}>
               <View style={[styles.legendDot, { backgroundColor: "#FF9800" }]} />
-              <ThemedText style={[styles.legendText, { color: theme.textSecondary }]}>5-9 (средняя)</ThemedText>
+              <ThemedText style={[styles.legendText, { color: theme.textSecondary }]}>2-3</ThemedText>
             </View>
             <View style={styles.legendItem}>
               <View style={[styles.legendDot, { backgroundColor: "#F44336" }]} />
-              <ThemedText style={[styles.legendText, { color: theme.textSecondary }]}>10+ (высокая)</ThemedText>
+              <ThemedText style={[styles.legendText, { color: theme.textSecondary }]}>4+</ThemedText>
             </View>
           </View>
         </View>
