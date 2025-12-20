@@ -22,6 +22,7 @@ import { Spacing, BorderRadius } from "@/constants/theme";
 import { useTheme } from "@/hooks/useTheme";
 import { useData, RadioGuideKit, RadioGuideAssignment, BatteryLevel, EquipmentItem } from "@/contexts/DataContext";
 import { useAuth } from "@/contexts/AuthContext";
+import { useRental, RentalOrder } from "@/contexts/RentalContext";
 
 const BatteryIcon = ({ level, color, size = 24 }: { level: BatteryLevel; color: string; size?: number }) => {
   const segments = level === 'full' ? 3 : level === 'half' ? 2 : 1;
@@ -78,6 +79,7 @@ export default function RadioGuidesScreen() {
     equipmentItems,
     addEquipmentMovement,
   } = useData();
+  const { rentalOrders, rentalClients } = useRental();
 
   const trackableLossItems = useMemo(() => {
     return equipmentItems.filter(item => item.trackLoss);
@@ -230,16 +232,38 @@ export default function RadioGuidesScreen() {
   }, [excursions, tourTypes, selectedDate]);
   
   const today = new Date().toISOString().split("T")[0];
+
+  const activeRentalOrders = useMemo(() => {
+    return rentalOrders.filter(o => o.status === "issued");
+  }, [rentalOrders]);
+
+  const rentalBagMap = useMemo(() => {
+    const map = new Map<number, RentalOrder>();
+    activeRentalOrders.forEach(order => {
+      if (order.bagNumber) {
+        order.bagNumber.split(",").forEach(bagStr => {
+          const bagNum = parseInt(bagStr.trim());
+          if (!isNaN(bagNum)) {
+            map.set(bagNum, order);
+          }
+        });
+      }
+    });
+    return map;
+  }, [activeRentalOrders]);
   
-  const { issuedKits, overdueKits, availableKits } = useMemo(() => {
+  const { issuedKits, overdueKits, availableKits, rentalIssuedKits } = useMemo(() => {
     const issued: Array<{ kit: RadioGuideKit; assignment: RadioGuideAssignment; isOverdue: boolean }> = [];
     const overdue: Array<{ kit: RadioGuideKit; assignment: RadioGuideAssignment }> = [];
+    const rentalIssued: Array<{ kit: RadioGuideKit; order: RentalOrder }> = [];
     const available: RadioGuideKit[] = [];
     
     const batteryOrder: Record<BatteryLevel, number> = { low: 0, half: 1, full: 2 };
     
     radioGuideKits.forEach(kit => {
       const activeAssignment = getActiveAssignment(kit.id);
+      const rentalOrder = rentalBagMap.get(kit.bagNumber);
+      
       if (activeAssignment) {
         const issuedDate = activeAssignment.issuedAt.split("T")[0];
         const isOverdue = issuedDate < today;
@@ -248,6 +272,8 @@ export default function RadioGuidesScreen() {
           overdue.push({ kit, assignment: activeAssignment });
         }
         issued.push({ kit, assignment: activeAssignment, isOverdue });
+      } else if (rentalOrder) {
+        rentalIssued.push({ kit, order: rentalOrder });
       } else if (kit.status === "available") {
         available.push(kit);
       }
@@ -255,6 +281,7 @@ export default function RadioGuidesScreen() {
     
     issued.sort((a, b) => a.kit.bagNumber - b.kit.bagNumber);
     overdue.sort((a, b) => a.kit.bagNumber - b.kit.bagNumber);
+    rentalIssued.sort((a, b) => a.kit.bagNumber - b.kit.bagNumber);
     
     if (sortByBattery) {
       available.sort((a, b) => {
@@ -274,9 +301,10 @@ export default function RadioGuidesScreen() {
     return { 
       issuedKits: issued.filter(i => filterBySearch(i.kit.bagNumber)), 
       overdueKits: overdue.filter(o => filterBySearch(o.kit.bagNumber)), 
-      availableKits: available.filter(a => filterBySearch(a.bagNumber)) 
+      availableKits: available.filter(a => filterBySearch(a.bagNumber)),
+      rentalIssuedKits: rentalIssued.filter(r => filterBySearch(r.kit.bagNumber))
     };
-  }, [radioGuideKits, getActiveAssignment, today, sortByBattery, searchQuery]);
+  }, [radioGuideKits, getActiveAssignment, today, sortByBattery, searchQuery, rentalBagMap]);
   
   const formatDate = (dateStr: string) => {
     const date = new Date(dateStr);
@@ -587,6 +615,68 @@ export default function RadioGuidesScreen() {
       </ThemedView>
     );
   };
+
+  const renderRentalIssuedKit = (item: { kit: RadioGuideKit; order: RentalOrder }) => {
+    const { kit, order } = item;
+    const client = rentalClients.find(c => c.id === order.clientId);
+    const clientName = order.clientName || client?.name || "Клиент";
+    const totalReceivers = (order.kitCount || 0) + (order.spareReceiverCount || 0);
+    const startDate = new Date(order.startDate).toLocaleDateString("ru-RU", { day: "numeric", month: "short" });
+    const endDate = new Date(order.endDate).toLocaleDateString("ru-RU", { day: "numeric", month: "short" });
+    const batteryInfo = getBatteryInfo(kit.batteryLevel);
+    
+    return (
+      <ThemedView
+        key={`rental-${kit.id}`}
+        style={[
+          styles.kitCard,
+          { 
+            backgroundColor: theme.primary + "10", 
+            borderColor: theme.primary 
+          },
+        ]}
+      >
+        <View style={styles.kitHeader}>
+          <View style={styles.kitInfo}>
+            <View style={styles.kitTitleRow}>
+              <ThemedText style={styles.kitNumber}>Сумка #{kit.bagNumber}</ThemedText>
+              <View style={[styles.rentalBadge, { backgroundColor: theme.primary }]}>
+                <ThemedText style={styles.rentalBadgeText}>Аренда</ThemedText>
+              </View>
+            </View>
+          </View>
+          <View style={[styles.batteryIndicatorSmall, { backgroundColor: batteryInfo.color + "20", borderColor: batteryInfo.color }]}>
+            <BatteryIcon level={kit.batteryLevel} color={batteryInfo.color} size={24} />
+          </View>
+        </View>
+        
+        <View style={[styles.assignmentInfo, { backgroundColor: theme.backgroundTertiary }]}>
+          <ThemedText style={[styles.assignmentLabel, { color: theme.textSecondary }]}>
+            Заказчик:
+          </ThemedText>
+          <ThemedText style={[styles.assignmentValue, { color: theme.primary }]}>
+            {clientName}
+          </ThemedText>
+          <ThemedText style={[styles.assignmentLabel, { color: theme.textSecondary }]}>
+            Заказ:
+          </ThemedText>
+          <ThemedText style={styles.assignmentValue}>#{order.orderNumber}</ThemedText>
+          <ThemedText style={[styles.assignmentLabel, { color: theme.textSecondary }]}>
+            Приёмников:
+          </ThemedText>
+          <ThemedText style={styles.assignmentValue}>
+            {totalReceivers} шт.
+          </ThemedText>
+          <ThemedText style={[styles.assignmentLabel, { color: theme.textSecondary }]}>
+            Период:
+          </ThemedText>
+          <ThemedText style={styles.assignmentValue}>
+            {startDate} — {endDate}
+          </ThemedText>
+        </View>
+      </ThemedView>
+    );
+  };
   
   const renderAvailableKit = (kit: RadioGuideKit) => {
     const batteryInfo = getBatteryInfo(kit.batteryLevel);
@@ -802,6 +892,20 @@ export default function RadioGuidesScreen() {
                     {renderIssuedKit(item)}
                   </View>
                 ))}
+              </View>
+            </View>
+          ) : null}
+
+          {(activeFilter === "all" || activeFilter === "issued") && rentalIssuedKits.length > 0 ? (
+            <View style={styles.section}>
+              <View style={styles.sectionHeader}>
+                <Icon name="briefcase" size={18} color={theme.primary} />
+                <ThemedText style={[styles.sectionTitle, { color: theme.text }]}>
+                  В аренде ({rentalIssuedKits.length})
+                </ThemedText>
+              </View>
+              <View style={styles.kitsList}>
+                {rentalIssuedKits.map(item => renderRentalIssuedKit(item))}
               </View>
             </View>
           ) : null}
@@ -1730,6 +1834,16 @@ const styles = StyleSheet.create({
     borderRadius: BorderRadius.sm,
   },
   overdueBadgeText: {
+    fontSize: 11,
+    fontWeight: "600",
+    color: "#fff",
+  },
+  rentalBadge: {
+    paddingHorizontal: Spacing.sm,
+    paddingVertical: 2,
+    borderRadius: BorderRadius.sm,
+  },
+  rentalBadgeText: {
     fontSize: 11,
     fontWeight: "600",
     color: "#fff",
