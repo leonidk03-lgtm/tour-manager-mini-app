@@ -56,11 +56,13 @@ export interface RentalOrder {
 }
 
 export type RentalPaymentType = 'prepayment' | 'refund' | 'service_expense' | 'final';
+export type RentalPaymentMethod = 'cash' | 'card' | 'transfer';
 
 export interface RentalPayment {
   id: string;
   orderId: string;
   type: RentalPaymentType;
+  method: RentalPaymentMethod;
   amount: number;
   managerId: string | null;
   managerName: string | null;
@@ -254,6 +256,7 @@ export function RentalProvider({ children }: { children: ReactNode }) {
         id: p.id,
         orderId: p.order_id,
         type: p.type as RentalPaymentType,
+        method: (p.method || 'cash') as RentalPaymentMethod,
         amount: p.amount,
         managerId: p.manager_id,
         managerName: p.manager_name,
@@ -690,6 +693,7 @@ export function RentalProvider({ children }: { children: ReactNode }) {
       .insert({
         order_id: payment.orderId,
         type: payment.type,
+        method: payment.method || 'cash',
         amount: payment.amount,
         notes: payment.notes,
         manager_id: profile?.id || null,

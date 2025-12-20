@@ -8,7 +8,7 @@ import { ThemedView } from "@/components/ThemedView";
 import { ScreenFlatList } from "@/components/ScreenFlatList";
 import { Spacing, BorderRadius } from "@/constants/theme";
 import { useTheme } from "@/hooks/useTheme";
-import { useRental, RentalPayment, RentalPaymentType, RentalOrder } from "@/contexts/RentalContext";
+import { useRental, RentalPayment, RentalPaymentType, RentalPaymentMethod, RentalOrder } from "@/contexts/RentalContext";
 import { hapticFeedback } from "@/utils/haptics";
 import { SettingsStackParamList } from "@/navigation/SettingsStackNavigator";
 
@@ -20,6 +20,12 @@ const PAYMENT_TYPE_CONFIG: Record<RentalPaymentType, { label: string; color: str
   final: { label: 'Окончательный расчёт', color: '#10B981' },
   refund: { label: 'Возврат', color: '#F59E0B' },
   service_expense: { label: 'Служебный расход', color: '#8B5CF6' },
+};
+
+const PAYMENT_METHOD_CONFIG: Record<RentalPaymentMethod, { label: string; icon: string; color: string }> = {
+  cash: { label: 'Наличные', icon: 'dollar-sign', color: '#22C55E' },
+  card: { label: 'Карта', icon: 'credit-card', color: '#3B82F6' },
+  transfer: { label: 'Перевод', icon: 'send', color: '#A855F7' },
 };
 
 interface PaymentWithOrder extends RentalPayment {
@@ -141,7 +147,12 @@ export default function RentalPaymentsScreen() {
     const unpaidOrders = relevantOrders.filter(o => o.remaining > 0);
     const totalDebt = unpaidOrders.reduce((sum, o) => sum + Math.max(0, o.remaining), 0);
 
-    return { prepayments, finals, refunds, expenses, total, totalDebt, unpaidCount: unpaidOrders.length };
+    const incomePayments = allPayments.filter(p => p.type === 'prepayment' || p.type === 'final');
+    const byCash = incomePayments.filter(p => p.method === 'cash').reduce((sum, p) => sum + Math.abs(p.amount), 0);
+    const byCard = incomePayments.filter(p => p.method === 'card').reduce((sum, p) => sum + Math.abs(p.amount), 0);
+    const byTransfer = incomePayments.filter(p => p.method === 'transfer').reduce((sum, p) => sum + Math.abs(p.amount), 0);
+
+    return { prepayments, finals, refunds, expenses, total, totalDebt, unpaidCount: unpaidOrders.length, byCash, byCard, byTransfer };
   }, [filteredPayments, ordersWithPaymentStatus]);
 
   const formatDate = (dateStr: string): string => {
@@ -297,6 +308,39 @@ export default function RentalPaymentsScreen() {
           </ThemedText>
           <ThemedText style={[styles.miniStatValue, { color: PAYMENT_TYPE_CONFIG.refund.color }]}>
             {statistics.refunds.toLocaleString("ru-RU")}₽
+          </ThemedText>
+        </View>
+      </View>
+
+      <ThemedText style={[styles.sectionSubtitle, { color: theme.textSecondary }]}>
+        По способу оплаты
+      </ThemedText>
+      <View style={styles.statsRow}>
+        <View style={[styles.miniStat, { backgroundColor: PAYMENT_METHOD_CONFIG.cash.color + '15' }]}>
+          <Icon name="dollar-sign" size={14} color={PAYMENT_METHOD_CONFIG.cash.color} />
+          <ThemedText style={[styles.miniStatLabel, { color: PAYMENT_METHOD_CONFIG.cash.color }]}>
+            Наличные
+          </ThemedText>
+          <ThemedText style={[styles.miniStatValue, { color: PAYMENT_METHOD_CONFIG.cash.color }]}>
+            {statistics.byCash.toLocaleString("ru-RU")}₽
+          </ThemedText>
+        </View>
+        <View style={[styles.miniStat, { backgroundColor: PAYMENT_METHOD_CONFIG.card.color + '15' }]}>
+          <Icon name="credit-card" size={14} color={PAYMENT_METHOD_CONFIG.card.color} />
+          <ThemedText style={[styles.miniStatLabel, { color: PAYMENT_METHOD_CONFIG.card.color }]}>
+            Карта
+          </ThemedText>
+          <ThemedText style={[styles.miniStatValue, { color: PAYMENT_METHOD_CONFIG.card.color }]}>
+            {statistics.byCard.toLocaleString("ru-RU")}₽
+          </ThemedText>
+        </View>
+        <View style={[styles.miniStat, { backgroundColor: PAYMENT_METHOD_CONFIG.transfer.color + '15' }]}>
+          <Icon name="send" size={14} color={PAYMENT_METHOD_CONFIG.transfer.color} />
+          <ThemedText style={[styles.miniStatLabel, { color: PAYMENT_METHOD_CONFIG.transfer.color }]}>
+            Перевод
+          </ThemedText>
+          <ThemedText style={[styles.miniStatValue, { color: PAYMENT_METHOD_CONFIG.transfer.color }]}>
+            {statistics.byTransfer.toLocaleString("ru-RU")}₽
           </ThemedText>
         </View>
       </View>
@@ -569,6 +613,10 @@ const styles = StyleSheet.create({
   miniStatValue: {
     fontSize: 14,
     fontWeight: '600',
+  },
+  sectionSubtitle: {
+    fontSize: 13,
+    marginBottom: Spacing.xs,
   },
   debtAlert: {
     flexDirection: 'row',
