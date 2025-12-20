@@ -235,7 +235,7 @@ export default function RentalCalendarScreen() {
           {calendarDays.map((day, index) => {
             const orderCount = day.orders.length;
             const hasOrders = orderCount > 0;
-            const loadLevel = orderCount >= 4 ? "high" : orderCount >= 2 ? "medium" : "low";
+            const loadLevel = orderCount >= 10 ? "high" : orderCount >= 5 ? "medium" : "low";
             
             return (
               <Pressable
@@ -280,15 +280,15 @@ export default function RentalCalendarScreen() {
           <View style={styles.legendItems}>
             <View style={styles.legendItem}>
               <View style={[styles.legendDot, { backgroundColor: "#4CAF50" }]} />
-              <ThemedText style={[styles.legendText, { color: theme.textSecondary }]}>1</ThemedText>
+              <ThemedText style={[styles.legendText, { color: theme.textSecondary }]}>1-4</ThemedText>
             </View>
             <View style={styles.legendItem}>
               <View style={[styles.legendDot, { backgroundColor: "#FF9800" }]} />
-              <ThemedText style={[styles.legendText, { color: theme.textSecondary }]}>2-3</ThemedText>
+              <ThemedText style={[styles.legendText, { color: theme.textSecondary }]}>5-9</ThemedText>
             </View>
             <View style={styles.legendItem}>
               <View style={[styles.legendDot, { backgroundColor: "#F44336" }]} />
-              <ThemedText style={[styles.legendText, { color: theme.textSecondary }]}>4+</ThemedText>
+              <ThemedText style={[styles.legendText, { color: theme.textSecondary }]}>10+</ThemedText>
             </View>
           </View>
         </View>
