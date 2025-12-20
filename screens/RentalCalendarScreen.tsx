@@ -72,7 +72,7 @@ export default function RentalCalendarScreen() {
 
   const getKitCountForDate = useCallback((date: Date): number => {
     const orders = getOrdersForDate(date);
-    return orders.reduce((sum, order) => sum + order.kitCount, 0);
+    return orders.reduce((sum, order) => sum + order.kitCount + (order.spareReceiverCount || 0), 0);
   }, [getOrdersForDate]);
 
   const calendarDays = useMemo((): DayData[] => {
@@ -275,19 +275,19 @@ export default function RentalCalendarScreen() {
         </View>
 
         <View style={styles.legendContainer}>
-          <ThemedText style={[styles.legendTitle, { color: theme.textSecondary }]}>Загрузка:</ThemedText>
+          <ThemedText style={[styles.legendTitle, { color: theme.textSecondary }]}>Комплектов в аренде:</ThemedText>
           <View style={styles.legendItems}>
             <View style={styles.legendItem}>
               <View style={[styles.legendDot, { backgroundColor: "#4CAF50" }]} />
-              <ThemedText style={[styles.legendText, { color: theme.textSecondary }]}>1-4</ThemedText>
+              <ThemedText style={[styles.legendText, { color: theme.textSecondary }]}>1-4 (низкая)</ThemedText>
             </View>
             <View style={styles.legendItem}>
               <View style={[styles.legendDot, { backgroundColor: "#FF9800" }]} />
-              <ThemedText style={[styles.legendText, { color: theme.textSecondary }]}>5-9</ThemedText>
+              <ThemedText style={[styles.legendText, { color: theme.textSecondary }]}>5-9 (средняя)</ThemedText>
             </View>
             <View style={styles.legendItem}>
               <View style={[styles.legendDot, { backgroundColor: "#F44336" }]} />
-              <ThemedText style={[styles.legendText, { color: theme.textSecondary }]}>10+</ThemedText>
+              <ThemedText style={[styles.legendText, { color: theme.textSecondary }]}>10+ (высокая)</ThemedText>
             </View>
           </View>
         </View>
