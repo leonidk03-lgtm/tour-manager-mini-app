@@ -449,6 +449,69 @@ export default function RentalOrderDetailScreen() {
           ) : null}
         </View>
 
+        {order.equipmentBlocks && order.equipmentBlocks.length > 1 ? (
+          <View style={[styles.card, { backgroundColor: theme.backgroundSecondary }]}>
+            <ThemedText style={[styles.sectionTitle, { color: theme.textSecondary }]}>
+              Разбивка по сумкам
+            </ThemedText>
+            {order.equipmentBlocks.map((block, index) => (
+              <View 
+                key={index} 
+                style={[
+                  styles.equipmentBlockCard, 
+                  { 
+                    backgroundColor: theme.backgroundTertiary,
+                    borderLeftColor: theme.primary,
+                  }
+                ]}
+              >
+                <View style={styles.equipmentBlockHeader}>
+                  <Icon name="briefcase" size={16} color={theme.primary} />
+                  <ThemedText style={[styles.equipmentBlockTitle, { color: theme.text }]}>
+                    {block.bagNumber ? `Сумка ${block.bagNumber}` : `Блок ${index + 1}`}
+                  </ThemedText>
+                </View>
+                <View style={styles.equipmentBlockGrid}>
+                  <View style={styles.equipmentBlockItem}>
+                    <ThemedText style={[styles.equipmentBlockValue, { color: theme.primary }]}>
+                      {block.kitCount}
+                    </ThemedText>
+                    <ThemedText style={[styles.equipmentBlockLabel, { color: theme.textSecondary }]}>
+                      компл.
+                    </ThemedText>
+                  </View>
+                  {block.spareReceiverCount > 0 ? (
+                    <View style={styles.equipmentBlockItem}>
+                      <ThemedText style={[styles.equipmentBlockValue, { color: theme.text }]}>
+                        {block.spareReceiverCount}
+                      </ThemedText>
+                      <ThemedText style={[styles.equipmentBlockLabel, { color: theme.textSecondary }]}>
+                        запас.
+                      </ThemedText>
+                    </View>
+                  ) : null}
+                  <View style={styles.equipmentBlockItem}>
+                    <ThemedText style={[styles.equipmentBlockValue, { color: theme.text }]}>
+                      {block.transmitterCount}
+                    </ThemedText>
+                    <ThemedText style={[styles.equipmentBlockLabel, { color: theme.textSecondary }]}>
+                      перед.
+                    </ThemedText>
+                  </View>
+                  <View style={styles.equipmentBlockItem}>
+                    <ThemedText style={[styles.equipmentBlockValue, { color: theme.text }]}>
+                      {block.microphoneCount}
+                    </ThemedText>
+                    <ThemedText style={[styles.equipmentBlockLabel, { color: theme.textSecondary }]}>
+                      микр.
+                    </ThemedText>
+                  </View>
+                </View>
+              </View>
+            ))}
+          </View>
+        ) : null}
+
         <View style={[styles.card, { backgroundColor: theme.backgroundSecondary }]}>
           <ThemedText style={[styles.sectionTitle, { color: theme.textSecondary }]}>
             Стоимость
@@ -1252,5 +1315,38 @@ const styles = StyleSheet.create({
     borderRadius: BorderRadius.md,
     alignItems: "center",
     marginHorizontal: Spacing.md,
+  },
+  equipmentBlockCard: {
+    padding: Spacing.md,
+    borderRadius: BorderRadius.md,
+    marginBottom: Spacing.sm,
+    borderLeftWidth: 3,
+  },
+  equipmentBlockHeader: {
+    flexDirection: "row",
+    alignItems: "center",
+    gap: Spacing.sm,
+    marginBottom: Spacing.sm,
+  },
+  equipmentBlockTitle: {
+    fontSize: 14,
+    fontWeight: "600",
+  },
+  equipmentBlockGrid: {
+    flexDirection: "row",
+    flexWrap: "wrap",
+    gap: Spacing.md,
+  },
+  equipmentBlockItem: {
+    alignItems: "center",
+    minWidth: 50,
+  },
+  equipmentBlockValue: {
+    fontSize: 18,
+    fontWeight: "700",
+  },
+  equipmentBlockLabel: {
+    fontSize: 11,
+    marginTop: 2,
   },
 });
