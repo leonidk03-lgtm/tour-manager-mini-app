@@ -94,18 +94,39 @@ export interface RentalCommission {
   createdAt: string;
 }
 
+export interface RentalService {
+  id: string;
+  name: string;
+  price: number;
+  isActive: boolean;
+  createdAt: string;
+  updatedAt: string;
+}
+
+export interface RentalOrderService {
+  id: string;
+  orderId: string;
+  serviceId: string;
+  serviceName: string;
+  price: number;
+  quantity: number;
+  createdAt: string;
+}
+
 interface RentalContextType {
   rentalClients: RentalClient[];
   rentalOrders: RentalOrder[];
   rentalPayments: RentalPayment[];
   rentalOrderHistory: RentalOrderHistory[];
   rentalCommissions: RentalCommission[];
+  rentalServices: RentalService[];
+  rentalOrderServices: RentalOrderService[];
   isLoading: boolean;
   addRentalClient: (client: Omit<RentalClient, 'id' | 'createdAt' | 'updatedAt'>) => Promise<string>;
   updateRentalClient: (id: string, client: Partial<RentalClient>) => Promise<void>;
   deleteRentalClient: (id: string) => Promise<void>;
-  addRentalOrder: (order: Omit<RentalOrder, 'id' | 'orderNumber' | 'createdAt' | 'updatedAt'>) => Promise<string>;
-  updateRentalOrder: (id: string, order: Partial<RentalOrder>) => Promise<void>;
+  addRentalOrder: (order: Omit<RentalOrder, 'id' | 'orderNumber' | 'createdAt' | 'updatedAt'>, services?: { serviceId: string; quantity: number }[]) => Promise<string>;
+  updateRentalOrder: (id: string, order: Partial<RentalOrder>, services?: { serviceId: string; quantity: number }[]) => Promise<void>;
   deleteRentalOrder: (id: string) => Promise<void>;
   updateOrderStatus: (id: string, status: RentalOrderStatus) => Promise<void>;
   addRentalPayment: (payment: Omit<RentalPayment, 'id' | 'createdAt' | 'managerId' | 'managerName'>) => Promise<void>;
@@ -113,10 +134,14 @@ interface RentalContextType {
   getOrderPayments: (orderId: string) => RentalPayment[];
   getOrderHistory: (orderId: string) => RentalOrderHistory[];
   getClientOrders: (clientId: string) => RentalOrder[];
+  getOrderServices: (orderId: string) => RentalOrderService[];
   getManagerCommissions: (managerId: string) => RentalCommission[];
   markCommissionPaid: (commissionId: string) => Promise<void>;
   markManagerCommissionsPaid: (managerId: string) => Promise<void>;
   payManagerCommissions: (managerId: string, amount: number) => Promise<void>;
+  addRentalService: (service: Omit<RentalService, 'id' | 'createdAt' | 'updatedAt'>) => Promise<string>;
+  updateRentalService: (id: string, service: Partial<RentalService>) => Promise<void>;
+  deleteRentalService: (id: string) => Promise<void>;
   refreshData: () => Promise<void>;
 }
 
@@ -130,6 +155,8 @@ export function RentalProvider({ children }: { children: ReactNode }) {
   const [rentalPayments, setRentalPayments] = useState<RentalPayment[]>([]);
   const [rentalOrderHistory, setRentalOrderHistory] = useState<RentalOrderHistory[]>([]);
   const [rentalCommissions, setRentalCommissions] = useState<RentalCommission[]>([]);
+  const [rentalServices, setRentalServices] = useState<RentalService[]>([]);
+  const [rentalOrderServices, setRentalOrderServices] = useState<RentalOrderService[]>([]);
   const [isLoading, setIsLoading] = useState(true);
 
   const fetchRentalClients = useCallback(async () => {
@@ -291,6 +318,59 @@ export function RentalProvider({ children }: { children: ReactNode }) {
     }
   }, [user]);
 
+  const fetchRentalServices = useCallback(async () => {
+    if (!user) return;
+    try {
+      const { data, error } = await supabase
+        .from('rental_services')
+        .select('*')
+        .order('name', { ascending: true });
+
+      if (error) {
+        console.log('Services table may not exist yet:', error.message);
+        return;
+      }
+
+      setRentalServices((data || []).map(s => ({
+        id: s.id,
+        name: s.name,
+        price: s.price,
+        isActive: s.is_active,
+        createdAt: s.created_at,
+        updatedAt: s.updated_at,
+      })));
+    } catch (error) {
+      console.error('Error fetching rental services:', error);
+    }
+  }, [user]);
+
+  const fetchRentalOrderServices = useCallback(async () => {
+    if (!user) return;
+    try {
+      const { data, error } = await supabase
+        .from('rental_order_services')
+        .select('*')
+        .order('created_at', { ascending: false });
+
+      if (error) {
+        console.log('Order services table may not exist yet:', error.message);
+        return;
+      }
+
+      setRentalOrderServices((data || []).map(os => ({
+        id: os.id,
+        orderId: os.order_id,
+        serviceId: os.service_id,
+        serviceName: os.service_name,
+        price: os.price,
+        quantity: os.quantity,
+        createdAt: os.created_at,
+      })));
+    } catch (error) {
+      console.error('Error fetching rental order services:', error);
+    }
+  }, [user]);
+
   const refreshData = useCallback(async () => {
     setIsLoading(true);
     await Promise.all([
@@ -299,9 +379,11 @@ export function RentalProvider({ children }: { children: ReactNode }) {
       fetchRentalPayments(),
       fetchRentalOrderHistory(),
       fetchRentalCommissions(),
+      fetchRentalServices(),
+      fetchRentalOrderServices(),
     ]);
     setIsLoading(false);
-  }, [fetchRentalClients, fetchRentalOrders, fetchRentalPayments, fetchRentalOrderHistory, fetchRentalCommissions]);
+  }, [fetchRentalClients, fetchRentalOrders, fetchRentalPayments, fetchRentalOrderHistory, fetchRentalCommissions, fetchRentalServices, fetchRentalOrderServices]);
 
   useEffect(() => {
     if (user) {
@@ -737,6 +819,52 @@ export function RentalProvider({ children }: { children: ReactNode }) {
     }
   };
 
+  const addRentalService = async (service: Omit<RentalService, 'id' | 'createdAt' | 'updatedAt'>): Promise<string> => {
+    const { data, error } = await supabase
+      .from('rental_services')
+      .insert({
+        name: service.name,
+        price: service.price,
+        is_active: service.isActive,
+      })
+      .select()
+      .single();
+
+    if (error) throw error;
+    await fetchRentalServices();
+    return data.id;
+  };
+
+  const updateRentalService = async (id: string, service: Partial<RentalService>) => {
+    const updateData: Record<string, unknown> = {};
+    if (service.name !== undefined) updateData.name = service.name;
+    if (service.price !== undefined) updateData.price = service.price;
+    if (service.isActive !== undefined) updateData.is_active = service.isActive;
+    updateData.updated_at = new Date().toISOString();
+
+    const { error } = await supabase
+      .from('rental_services')
+      .update(updateData)
+      .eq('id', id);
+
+    if (error) throw error;
+    await fetchRentalServices();
+  };
+
+  const deleteRentalService = async (id: string) => {
+    const { error } = await supabase
+      .from('rental_services')
+      .delete()
+      .eq('id', id);
+
+    if (error) throw error;
+    await fetchRentalServices();
+  };
+
+  const getOrderServices = (orderId: string): RentalOrderService[] => {
+    return rentalOrderServices.filter(os => os.orderId === orderId);
+  };
+
   return (
     <RentalContext.Provider
       value={{
@@ -745,6 +873,8 @@ export function RentalProvider({ children }: { children: ReactNode }) {
         rentalPayments,
         rentalOrderHistory,
         rentalCommissions,
+        rentalServices,
+        rentalOrderServices,
         isLoading,
         addRentalClient,
         updateRentalClient,
@@ -758,10 +888,14 @@ export function RentalProvider({ children }: { children: ReactNode }) {
         getOrderPayments,
         getOrderHistory,
         getClientOrders,
+        getOrderServices,
         getManagerCommissions,
         markCommissionPaid,
         markManagerCommissionsPaid,
         payManagerCommissions,
+        addRentalService,
+        updateRentalService,
+        deleteRentalService,
         refreshData,
       }}
     >
