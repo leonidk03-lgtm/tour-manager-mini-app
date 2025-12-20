@@ -20,6 +20,7 @@ import { Spacing, BorderRadius } from "@/constants/theme";
 import { useTheme } from "@/hooks/useTheme";
 import { useRental, RentalClient, RentalService } from "@/contexts/RentalContext";
 import { useAuth } from "@/contexts/AuthContext";
+import { useData, RadioGuideKit } from "@/contexts/DataContext";
 import { SettingsStackParamList } from "@/navigation/SettingsStackNavigator";
 import { hapticFeedback } from "@/utils/haptics";
 
@@ -30,8 +31,9 @@ export default function AddRentalOrderScreen() {
   const navigation = useNavigation();
   const route = useRoute<RouteParams>();
   const insets = useSafeAreaInsets();
-  const { rentalClients, rentalOrders, rentalServices, getOrderServices, addRentalOrder, updateRentalOrder } = useRental();
+  const { rentalClients, rentalOrders, rentalServices, getOrderServices, addRentalOrder, updateRentalOrder, isLoading: isRentalLoading } = useRental();
   const { profile, managers } = useAuth();
+  const { radioGuideKits, isLoading: isDataLoading } = useData();
 
   const initialClientId = route.params?.clientId;
   const orderId = route.params?.orderId;
@@ -74,8 +76,31 @@ export default function AddRentalOrderScreen() {
   const [spareReceiverAutoSet, setSpareReceiverAutoSet] = useState(!existingOrder);
   const [transmitterCount, setTransmitterCount] = useState(existingOrder?.transmitterCount?.toString() || "1");
   const [microphoneCount, setMicrophoneCount] = useState(existingOrder?.microphoneCount?.toString() || "1");
-  const [bagNumber, setBagNumber] = useState(existingOrder?.bagNumber || "");
-  const [isCharged, setIsCharged] = useState(existingOrder?.isCharged || false);
+  const [selectedBags, setSelectedBags] = useState<RadioGuideKit[]>([]);
+  const [showBagPicker, setShowBagPicker] = useState(false);
+  const [bagsInitialized, setBagsInitialized] = useState(false);
+  const [unmatchedBagNumbers, setUnmatchedBagNumbers] = useState<number[]>([]);
+
+  useEffect(() => {
+    if (bagsInitialized) return;
+    
+    const dataReady = !isDataLoading && !isRentalLoading;
+    if (!dataReady) return;
+    
+    if (orderId) {
+      if (!existingOrder) return;
+      
+      if (existingOrder.bagNumber) {
+        const bagNumbers = existingOrder.bagNumber.split(',').map(s => parseInt(s.trim())).filter(n => !isNaN(n));
+        const foundBags = radioGuideKits.filter(k => bagNumbers.includes(k.bagNumber));
+        const foundBagNumbers = foundBags.map(b => b.bagNumber);
+        const unmatched = bagNumbers.filter(n => !foundBagNumbers.includes(n));
+        setSelectedBags(foundBags);
+        setUnmatchedBagNumbers(unmatched);
+      }
+    }
+    setBagsInitialized(true);
+  }, [radioGuideKits, existingOrder, bagsInitialized, isDataLoading, isRentalLoading, orderId]);
   const [pricePerUnit, setPricePerUnit] = useState(existingOrder?.pricePerUnit?.toString() || selectedClient?.defaultPrice?.toString() || "100");
   const [prepayment, setPrepayment] = useState(existingOrder?.prepayment?.toString() || "0");
   const [receiverNotes, setReceiverNotes] = useState(existingOrder?.receiverNotes || "");
@@ -236,8 +261,10 @@ export default function AddRentalOrderScreen() {
           spareReceiverCount: parseInt(spareReceiverCount) || 0,
           transmitterCount: parseInt(transmitterCount) || 0,
           microphoneCount: parseInt(microphoneCount) || 0,
-          bagNumber: bagNumber.trim() || null,
-          isCharged,
+          bagNumber: [...selectedBags.map(b => b.bagNumber), ...unmatchedBagNumbers].length > 0 
+            ? [...selectedBags.map(b => b.bagNumber), ...unmatchedBagNumbers].join(', ') 
+            : null,
+          isCharged: selectedBags.length > 0 && selectedBags.every(b => b.batteryLevel === 'full'),
           pricePerUnit: parseFloat(pricePerUnit) || 100,
           totalPrice,
           prepayment: parseFloat(prepayment) || 0,
@@ -254,8 +281,10 @@ export default function AddRentalOrderScreen() {
           spareReceiverCount: parseInt(spareReceiverCount) || 0,
           transmitterCount: parseInt(transmitterCount) || 0,
           microphoneCount: parseInt(microphoneCount) || 0,
-          bagNumber: bagNumber.trim() || null,
-          isCharged,
+          bagNumber: [...selectedBags.map(b => b.bagNumber), ...unmatchedBagNumbers].length > 0 
+            ? [...selectedBags.map(b => b.bagNumber), ...unmatchedBagNumbers].join(', ') 
+            : null,
+          isCharged: selectedBags.length > 0 && selectedBags.every(b => b.batteryLevel === 'full'),
           pricePerUnit: parseFloat(pricePerUnit) || 100,
           totalPrice,
           prepayment: parseFloat(prepayment) || 0,
@@ -424,37 +453,76 @@ export default function AddRentalOrderScreen() {
             </View>
           </View>
 
-          <View style={styles.inputRow}>
-            <View style={[styles.inputColumn, { flex: 2 }]}>
+          <View style={styles.bagSection}>
+            <View style={styles.bagHeader}>
               <ThemedText style={[styles.inputLabel, { color: theme.textSecondary }]}>
-                Номер сумки
-              </ThemedText>
-              <TextInput
-                style={[styles.input, { backgroundColor: theme.backgroundSecondary, color: theme.text }]}
-                value={bagNumber}
-                onChangeText={setBagNumber}
-                placeholder="Например: 5, 12"
-                placeholderTextColor={theme.textSecondary}
-              />
-            </View>
-            <View style={styles.inputColumn}>
-              <ThemedText style={[styles.inputLabel, { color: theme.textSecondary }]}>
-                Заряжен
+                Сумки с оборудованием
               </ThemedText>
               <Pressable
-                onPress={() => setIsCharged(!isCharged)}
-                style={[
-                  styles.checkButton,
-                  { backgroundColor: isCharged ? theme.success + "20" : theme.backgroundSecondary }
-                ]}
+                onPress={() => setShowBagPicker(true)}
+                style={[styles.addBagButton, { backgroundColor: theme.primary + "20" }]}
               >
-                <Icon
-                  name={isCharged ? "check-circle" : "circle"}
-                  size={24}
-                  color={isCharged ? theme.success : theme.textSecondary}
-                />
+                <Icon name="plus" size={16} color={theme.primary} />
+                <ThemedText style={[styles.addBagText, { color: theme.primary }]}>
+                  Добавить
+                </ThemedText>
               </Pressable>
             </View>
+            {selectedBags.length > 0 || unmatchedBagNumbers.length > 0 ? (
+              <View style={styles.selectedBagsContainer}>
+                {selectedBags.map((bag) => {
+                  const batteryColor = bag.batteryLevel === 'full' ? theme.success : 
+                    bag.batteryLevel === 'half' ? theme.warning : theme.error;
+                  const batteryIcon = bag.batteryLevel === 'full' ? 'battery' : 
+                    bag.batteryLevel === 'half' ? 'battery' : 'battery';
+                  return (
+                    <View key={bag.id} style={[styles.selectedBagChip, { backgroundColor: theme.backgroundTertiary }]}>
+                      <ThemedText style={styles.bagChipText}>
+                        Сумка {bag.bagNumber}
+                      </ThemedText>
+                      <View style={styles.batteryIndicator}>
+                        <Icon name={batteryIcon} size={14} color={batteryColor} />
+                        <ThemedText style={[styles.batteryText, { color: batteryColor }]}>
+                          {bag.batteryLevel === 'full' ? '100%' : bag.batteryLevel === 'half' ? '50%' : 'Низкий'}
+                        </ThemedText>
+                      </View>
+                      <Pressable
+                        onPress={() => {
+                          setSelectedBags(prev => prev.filter(b => b.id !== bag.id));
+                          hapticFeedback.selection();
+                        }}
+                        hitSlop={8}
+                      >
+                        <Icon name="x" size={16} color={theme.textSecondary} />
+                      </Pressable>
+                    </View>
+                  );
+                })}
+                {unmatchedBagNumbers.map((bagNum) => (
+                  <View key={`unmatched-${bagNum}`} style={[styles.selectedBagChip, { backgroundColor: theme.warning + "30" }]}>
+                    <ThemedText style={styles.bagChipText}>
+                      Сумка {bagNum}
+                    </ThemedText>
+                    <ThemedText style={[styles.batteryText, { color: theme.warning }]}>
+                      (не найдена)
+                    </ThemedText>
+                    <Pressable
+                      onPress={() => {
+                        setUnmatchedBagNumbers(prev => prev.filter(n => n !== bagNum));
+                        hapticFeedback.selection();
+                      }}
+                      hitSlop={8}
+                    >
+                      <Icon name="x" size={16} color={theme.textSecondary} />
+                    </Pressable>
+                  </View>
+                ))}
+              </View>
+            ) : (
+              <ThemedText style={[styles.noBagsText, { color: theme.textSecondary }]}>
+                Сумки не выбраны
+              </ThemedText>
+            )}
           </View>
         </View>
 
@@ -735,6 +803,64 @@ export default function AddRentalOrderScreen() {
               ListEmptyComponent={
                 <View style={styles.emptyContainer}>
                   <ThemedText style={{ color: theme.textSecondary }}>Клиенты не найдены</ThemedText>
+                </View>
+              }
+            />
+          </View>
+        </View>
+      </Modal>
+
+      <Modal visible={showBagPicker} animationType="slide" transparent>
+        <View style={[styles.modalOverlay, { backgroundColor: "rgba(0,0,0,0.5)" }]}>
+          <View style={[styles.modalContent, { backgroundColor: theme.backgroundDefault }]}>
+            <View style={styles.modalHeader}>
+              <ThemedText style={styles.modalTitle}>Выберите сумку</ThemedText>
+              <Pressable onPress={() => setShowBagPicker(false)}>
+                <Icon name="x" size={24} color={theme.text} />
+              </Pressable>
+            </View>
+
+            <FlatList
+              data={radioGuideKits.filter(k => k.status === 'available' && !selectedBags.find(b => b.id === k.id))}
+              keyExtractor={(item) => item.id}
+              contentContainerStyle={{ padding: Spacing.md }}
+              renderItem={({ item }) => {
+                const batteryColor = item.batteryLevel === 'full' ? theme.success : 
+                  item.batteryLevel === 'half' ? theme.warning : theme.error;
+                return (
+                  <Pressable
+                    onPress={() => {
+                      setSelectedBags(prev => [...prev, item]);
+                      setShowBagPicker(false);
+                      hapticFeedback.selection();
+                    }}
+                    style={[styles.bagItem, { backgroundColor: theme.backgroundSecondary }]}
+                  >
+                    <View style={[styles.bagIcon, { backgroundColor: theme.primary + "20" }]}>
+                      <Icon name="briefcase" size={20} color={theme.primary} />
+                    </View>
+                    <View style={styles.bagInfo}>
+                      <ThemedText style={styles.bagName}>Сумка {item.bagNumber}</ThemedText>
+                      <View style={styles.bagDetails}>
+                        <View style={styles.batteryRow}>
+                          <Icon name="battery" size={14} color={batteryColor} />
+                          <ThemedText style={[styles.batteryLabel, { color: batteryColor }]}>
+                            {item.batteryLevel === 'full' ? 'Полный заряд' : 
+                              item.batteryLevel === 'half' ? 'Средний заряд' : 'Низкий заряд'}
+                          </ThemedText>
+                        </View>
+                      </View>
+                    </View>
+                    <Icon name="plus-circle" size={24} color={theme.primary} />
+                  </Pressable>
+                );
+              }}
+              ListEmptyComponent={
+                <View style={styles.emptyContainer}>
+                  <Icon name="briefcase" size={48} color={theme.textSecondary} style={{ opacity: 0.5, marginBottom: Spacing.md }} />
+                  <ThemedText style={{ color: theme.textSecondary, textAlign: 'center' }}>
+                    Нет доступных сумок
+                  </ThemedText>
                 </View>
               }
             />
@@ -1042,5 +1168,88 @@ const styles = StyleSheet.create({
     borderRadius: BorderRadius.sm,
     justifyContent: "center",
     alignItems: "center",
+  },
+  bagSection: {
+    marginTop: Spacing.sm,
+  },
+  bagHeader: {
+    flexDirection: "row",
+    justifyContent: "space-between",
+    alignItems: "center",
+    marginBottom: Spacing.sm,
+  },
+  addBagButton: {
+    flexDirection: "row",
+    alignItems: "center",
+    paddingHorizontal: Spacing.sm,
+    paddingVertical: Spacing.xs,
+    borderRadius: BorderRadius.sm,
+    gap: 4,
+  },
+  addBagText: {
+    fontSize: 13,
+    fontWeight: "500",
+  },
+  selectedBagsContainer: {
+    flexDirection: "row",
+    flexWrap: "wrap",
+    gap: Spacing.sm,
+  },
+  selectedBagChip: {
+    flexDirection: "row",
+    alignItems: "center",
+    paddingHorizontal: Spacing.sm,
+    paddingVertical: Spacing.xs,
+    borderRadius: BorderRadius.md,
+    gap: Spacing.xs,
+  },
+  bagChipText: {
+    fontSize: 14,
+    fontWeight: "500",
+  },
+  batteryIndicator: {
+    flexDirection: "row",
+    alignItems: "center",
+    gap: 2,
+  },
+  batteryText: {
+    fontSize: 12,
+  },
+  noBagsText: {
+    fontSize: 14,
+    fontStyle: "italic",
+  },
+  bagItem: {
+    flexDirection: "row",
+    alignItems: "center",
+    padding: Spacing.md,
+    borderRadius: BorderRadius.md,
+    marginBottom: Spacing.sm,
+    gap: Spacing.sm,
+  },
+  bagIcon: {
+    width: 40,
+    height: 40,
+    borderRadius: 20,
+    justifyContent: "center",
+    alignItems: "center",
+  },
+  bagInfo: {
+    flex: 1,
+  },
+  bagName: {
+    fontSize: 16,
+    fontWeight: "500",
+  },
+  bagDetails: {
+    marginTop: 2,
+  },
+  batteryRow: {
+    flexDirection: "row",
+    alignItems: "center",
+    gap: 4,
+  },
+  batteryLabel: {
+    fontSize: 13,
   },
 });
