@@ -169,6 +169,7 @@ const styles = StyleSheet.create({
   summaryCard: {
     padding: Spacing.lg,
     borderWidth: 1,
+    marginTop: Spacing.md,
     marginBottom: Spacing.lg,
     alignItems: "center",
   },
