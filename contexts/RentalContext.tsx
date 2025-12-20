@@ -876,13 +876,13 @@ export function RentalProvider({ children }: { children: ReactNode }) {
       return sum + (price * qty);
     }, 0);
 
-    const { data: costSetting } = await supabase
+    const { data: costSetting, error: costError } = await supabase
       .from('app_settings')
       .select('value')
       .eq('key', 'rental_cost_per_receiver')
-      .single();
+      .maybeSingle();
     
-    const costPerReceiver = costSetting ? Number(costSetting.value) || 17 : 17;
+    const costPerReceiver = (!costError && costSetting) ? Number(costSetting.value) || 17 : 17;
     const totalReceivers = order.kitCount + order.spareReceiverCount;
     const totalCost = totalReceivers * costPerReceiver;
     const profit = Math.max(0, totalPrice - totalCost);
