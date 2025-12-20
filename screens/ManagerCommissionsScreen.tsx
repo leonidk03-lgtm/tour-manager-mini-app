@@ -355,6 +355,7 @@ const styles = StyleSheet.create({
   },
   balanceValue: {
     fontSize: 28,
+    lineHeight: 36,
     fontWeight: "700",
     marginBottom: Spacing.md,
   },

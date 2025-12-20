@@ -178,6 +178,7 @@ const styles = StyleSheet.create({
   },
   summaryValue: {
     fontSize: 32,
+    lineHeight: 40,
     fontWeight: "700",
   },
   sectionTitle: {
