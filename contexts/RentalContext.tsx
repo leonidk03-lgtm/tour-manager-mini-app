@@ -502,7 +502,36 @@ export function RentalProvider({ children }: { children: ReactNode }) {
     await fetchRentalOrderHistory();
   };
 
-  const addRentalOrder = async (order: Omit<RentalOrder, 'id' | 'orderNumber' | 'createdAt' | 'updatedAt'>): Promise<string> => {
+  const saveOrderServices = async (orderId: string, services: { serviceId: string; quantity: number }[]) => {
+    await supabase
+      .from('rental_order_services')
+      .delete()
+      .eq('order_id', orderId);
+
+    if (services.length > 0) {
+      const servicesToInsert = services.map(s => {
+        const service = rentalServices.find(rs => rs.id === s.serviceId);
+        return {
+          order_id: orderId,
+          service_id: s.serviceId,
+          service_name: service?.name || 'Услуга',
+          price: service?.price || 0,
+          quantity: s.quantity,
+        };
+      });
+
+      const { error } = await supabase
+        .from('rental_order_services')
+        .insert(servicesToInsert);
+
+      if (error) {
+        console.error('Error saving order services:', error);
+      }
+    }
+    await fetchRentalOrderServices();
+  };
+
+  const addRentalOrder = async (order: Omit<RentalOrder, 'id' | 'orderNumber' | 'createdAt' | 'updatedAt'>, services?: { serviceId: string; quantity: number }[]): Promise<string> => {
     const { data, error } = await supabase
       .from('rental_orders')
       .insert({
@@ -533,12 +562,16 @@ export function RentalProvider({ children }: { children: ReactNode }) {
 
     if (error) throw error;
 
+    if (services && services.length > 0) {
+      await saveOrderServices(data.id, services);
+    }
+
     await addOrderHistory(data.id, 'Заказ создан');
     await fetchRentalOrders();
     return data.id;
   };
 
-  const updateRentalOrder = async (id: string, order: Partial<RentalOrder>) => {
+  const updateRentalOrder = async (id: string, order: Partial<RentalOrder>, services?: { serviceId: string; quantity: number }[]) => {
     const updateData: Record<string, unknown> = {};
     if (order.clientId !== undefined) updateData.client_id = order.clientId;
     if (order.status !== undefined) updateData.status = order.status;
@@ -566,6 +599,11 @@ export function RentalProvider({ children }: { children: ReactNode }) {
       .eq('id', id);
 
     if (error) throw error;
+
+    if (services !== undefined) {
+      await saveOrderServices(id, services);
+    }
+
     await addOrderHistory(id, 'Заказ обновлён');
     await fetchRentalOrders();
   };

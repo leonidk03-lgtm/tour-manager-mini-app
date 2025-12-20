@@ -18,7 +18,7 @@ import { ThemedView } from "@/components/ThemedView";
 import { ScreenKeyboardAwareScrollView } from "@/components/ScreenKeyboardAwareScrollView";
 import { Spacing, BorderRadius } from "@/constants/theme";
 import { useTheme } from "@/hooks/useTheme";
-import { useRental, RentalClient } from "@/contexts/RentalContext";
+import { useRental, RentalClient, RentalService } from "@/contexts/RentalContext";
 import { useAuth } from "@/contexts/AuthContext";
 import { SettingsStackParamList } from "@/navigation/SettingsStackNavigator";
 import { hapticFeedback } from "@/utils/haptics";
@@ -30,7 +30,7 @@ export default function AddRentalOrderScreen() {
   const navigation = useNavigation();
   const route = useRoute<RouteParams>();
   const insets = useSafeAreaInsets();
-  const { rentalClients, rentalOrders, addRentalOrder, updateRentalOrder } = useRental();
+  const { rentalClients, rentalOrders, rentalServices, getOrderServices, addRentalOrder, updateRentalOrder } = useRental();
   const { profile, managers } = useAuth();
 
   const initialClientId = route.params?.clientId;
@@ -79,17 +79,57 @@ export default function AddRentalOrderScreen() {
   const [prepayment, setPrepayment] = useState(existingOrder?.prepayment?.toString() || "0");
   const [receiverNotes, setReceiverNotes] = useState(existingOrder?.receiverNotes || "");
 
+  const existingOrderServices = orderId ? getOrderServices(orderId) : [];
+  const [selectedServices, setSelectedServices] = useState<{ [serviceId: string]: number }>(() => {
+    const initial: { [serviceId: string]: number } = {};
+    existingOrderServices.forEach(os => {
+      initial[os.serviceId] = os.quantity;
+    });
+    return initial;
+  });
+
+  const activeServices = useMemo(() => {
+    return rentalServices.filter(s => s.isActive);
+  }, [rentalServices]);
+
+  const servicesTotal = useMemo(() => {
+    let total = 0;
+    Object.entries(selectedServices).forEach(([serviceId, quantity]) => {
+      const service = rentalServices.find(s => s.id === serviceId);
+      if (service && quantity > 0) {
+        total += service.price * quantity;
+      }
+    });
+    return total;
+  }, [selectedServices, rentalServices]);
+
+  const handleServiceQuantityChange = (serviceId: string, delta: number) => {
+    setSelectedServices(prev => {
+      const currentQty = prev[serviceId] || 0;
+      const newQty = Math.max(0, currentQty + delta);
+      if (newQty === 0) {
+        const { [serviceId]: _, ...rest } = prev;
+        return rest;
+      }
+      return { ...prev, [serviceId]: newQty };
+    });
+  };
+
   const daysCount = useMemo(() => {
     const diffTime = endDate.getTime() - startDate.getTime();
     const diffDays = Math.ceil(diffTime / (1000 * 60 * 60 * 24)) + 1;
     return Math.max(1, diffDays);
   }, [startDate, endDate]);
 
-  const totalPrice = useMemo(() => {
+  const equipmentPrice = useMemo(() => {
     const kits = parseInt(kitCount) || 0;
     const price = parseFloat(pricePerUnit) || 0;
     return kits * price * daysCount;
   }, [kitCount, pricePerUnit, daysCount]);
+
+  const totalPrice = useMemo(() => {
+    return equipmentPrice + servicesTotal;
+  }, [equipmentPrice, servicesTotal]);
 
   const filteredClients = useMemo(() => {
     if (!clientSearch.trim()) return rentalClients.filter(c => c.isActive);
@@ -141,6 +181,10 @@ export default function AddRentalOrderScreen() {
 
     hapticFeedback.selection();
 
+    const servicesToSave = Object.entries(selectedServices)
+      .filter(([_, qty]) => qty > 0)
+      .map(([serviceId, quantity]) => ({ serviceId, quantity }));
+
     try {
       if (isEditMode && orderId) {
         await updateRentalOrder(orderId, {
@@ -158,7 +202,7 @@ export default function AddRentalOrderScreen() {
           totalPrice,
           prepayment: parseFloat(prepayment) || 0,
           receiverNotes: receiverNotes.trim() || null,
-        });
+        }, servicesToSave);
       } else {
         await addRentalOrder({
           clientId: selectedClient.id,
@@ -182,7 +226,7 @@ export default function AddRentalOrderScreen() {
           executorName: profile?.display_name || profile?.email || null,
           ownerManagerId: selectedClient.assignedManagerId || null,
           ownerManagerName: selectedClient.assignedManagerName || null,
-        });
+        }, servicesToSave);
       }
 
       hapticFeedback.success();
@@ -373,6 +417,53 @@ export default function AddRentalOrderScreen() {
             </View>
           </View>
         </View>
+
+        {activeServices.length > 0 ? (
+          <View style={[styles.card, { backgroundColor: theme.backgroundSecondary }]}>
+            <ThemedText style={[styles.sectionTitle, { color: theme.textSecondary }]}>
+              Дополнительные услуги
+            </ThemedText>
+
+            {activeServices.map((service) => {
+              const qty = selectedServices[service.id] || 0;
+              return (
+                <View key={service.id} style={styles.serviceRow}>
+                  <View style={styles.serviceInfo}>
+                    <ThemedText style={styles.serviceName}>{service.name}</ThemedText>
+                    <ThemedText style={[styles.servicePrice, { color: theme.success }]}>
+                      {service.price.toLocaleString("ru-RU")} р.
+                    </ThemedText>
+                  </View>
+                  <View style={styles.quantityControls}>
+                    <Pressable
+                      onPress={() => handleServiceQuantityChange(service.id, -1)}
+                      style={[styles.qtyButton, { backgroundColor: theme.backgroundSecondary, opacity: qty === 0 ? 0.3 : 1 }]}
+                      disabled={qty === 0}
+                    >
+                      <Icon name="minus" size={18} color={theme.text} />
+                    </Pressable>
+                    <ThemedText style={styles.qtyText}>{qty}</ThemedText>
+                    <Pressable
+                      onPress={() => handleServiceQuantityChange(service.id, 1)}
+                      style={[styles.qtyButton, { backgroundColor: theme.primary }]}
+                    >
+                      <Icon name="plus" size={18} color="#FFFFFF" />
+                    </Pressable>
+                  </View>
+                </View>
+              );
+            })}
+
+            {servicesTotal > 0 ? (
+              <View style={[styles.serviceSubtotal, { borderTopColor: theme.border }]}>
+                <ThemedText style={{ color: theme.textSecondary }}>Услуги:</ThemedText>
+                <ThemedText style={{ color: theme.success, fontWeight: "600" }}>
+                  +{servicesTotal.toLocaleString("ru-RU")}₽
+                </ThemedText>
+              </View>
+            ) : null}
+          </View>
+        ) : null}
 
         <View style={[styles.card, { backgroundColor: theme.backgroundSecondary }]}>
           <ThemedText style={[styles.sectionTitle, { color: theme.textSecondary }]}>
@@ -781,5 +872,50 @@ const styles = StyleSheet.create({
   emptyContainer: {
     padding: Spacing.xl,
     alignItems: "center",
+  },
+  serviceRow: {
+    flexDirection: "row",
+    alignItems: "center",
+    justifyContent: "space-between",
+    paddingVertical: Spacing.sm,
+    borderBottomWidth: StyleSheet.hairlineWidth,
+    borderBottomColor: "rgba(255,255,255,0.1)",
+  },
+  serviceInfo: {
+    flex: 1,
+  },
+  serviceName: {
+    fontSize: 15,
+    fontWeight: "500",
+  },
+  servicePrice: {
+    fontSize: 13,
+    marginTop: 2,
+  },
+  quantityControls: {
+    flexDirection: "row",
+    alignItems: "center",
+    gap: Spacing.sm,
+  },
+  qtyButton: {
+    width: 32,
+    height: 32,
+    borderRadius: 16,
+    justifyContent: "center",
+    alignItems: "center",
+  },
+  qtyText: {
+    fontSize: 16,
+    fontWeight: "600",
+    minWidth: 24,
+    textAlign: "center",
+  },
+  serviceSubtotal: {
+    flexDirection: "row",
+    justifyContent: "space-between",
+    alignItems: "center",
+    paddingTop: Spacing.md,
+    marginTop: Spacing.sm,
+    borderTopWidth: StyleSheet.hairlineWidth,
   },
 });
