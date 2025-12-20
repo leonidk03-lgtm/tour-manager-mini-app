@@ -96,6 +96,7 @@ export default function AddRentalOrderScreen() {
   const [showBagPicker, setShowBagPicker] = useState(false);
   const [bagSearchQuery, setBagSearchQuery] = useState("");
   const [blocksInitialized, setBlocksInitialized] = useState(false);
+  const [spareAutoSetEnabled, setSpareAutoSetEnabled] = useState(!isEditMode);
 
   useEffect(() => {
     if (blocksInitialized) return;
@@ -243,6 +244,20 @@ export default function AddRentalOrderScreen() {
     return Math.max(1, diffDays);
   }, [startDate, endDate]);
 
+  useEffect(() => {
+    if (!spareAutoSetEnabled) return;
+    const newSpareCount = daysCount >= 2 ? "2" : "1";
+    setEquipmentBlocks(prev => prev.map(block => ({
+      ...block,
+      spareReceiverCount: newSpareCount,
+    })));
+  }, [daysCount, spareAutoSetEnabled]);
+
+  const handleSpareReceiverChange = (blockId: string, value: string) => {
+    setSpareAutoSetEnabled(false);
+    setEquipmentBlocks(prev => prev.map(b => b.id === blockId ? { ...b, spareReceiverCount: value } : b));
+  };
+
   const totalKitCount = useMemo(() => {
     return equipmentBlocks.reduce((sum, block) => sum + (parseInt(block.kitCount) || 0), 0);
   }, [equipmentBlocks]);
@@ -265,7 +280,11 @@ export default function AddRentalOrderScreen() {
 
   const addEquipmentBlock = () => {
     hapticFeedback.selection();
-    setEquipmentBlocks(prev => [...prev, createEmptyBlock()]);
+    const newBlock = createEmptyBlock();
+    if (spareAutoSetEnabled) {
+      newBlock.spareReceiverCount = daysCount >= 2 ? "2" : "1";
+    }
+    setEquipmentBlocks(prev => [...prev, newBlock]);
   };
 
   const removeEquipmentBlock = (blockId: string) => {
@@ -537,7 +556,7 @@ export default function AddRentalOrderScreen() {
                 <TextInput
                   style={[styles.input, { backgroundColor: theme.backgroundSecondary, color: theme.text }]}
                   value={block.spareReceiverCount}
-                  onChangeText={(value) => updateBlock(block.id, { spareReceiverCount: value })}
+                  onChangeText={(value) => handleSpareReceiverChange(block.id, value)}
                   placeholder="1"
                   placeholderTextColor={theme.textSecondary}
                   keyboardType="numeric"
@@ -643,24 +662,24 @@ export default function AddRentalOrderScreen() {
             </ThemedText>
             <View style={styles.totalsRow}>
               <View style={styles.totalItem}>
-                <ThemedText style={[styles.totalValue, { color: theme.primary }]}>{totalKitCount}</ThemedText>
-                <ThemedText style={[styles.totalLabel, { color: theme.textSecondary }]}>компл.</ThemedText>
+                <ThemedText style={[styles.equipmentTotalValue, { color: theme.primary }]}>{totalKitCount}</ThemedText>
+                <ThemedText style={[styles.equipmentTotalLabel, { color: theme.textSecondary }]}>компл.</ThemedText>
               </View>
               <View style={styles.totalItem}>
-                <ThemedText style={[styles.totalValue, { color: theme.text }]}>{totalSpareReceiverCount}</ThemedText>
-                <ThemedText style={[styles.totalLabel, { color: theme.textSecondary }]}>запас.</ThemedText>
+                <ThemedText style={[styles.equipmentTotalValue, { color: theme.text }]}>{totalSpareReceiverCount}</ThemedText>
+                <ThemedText style={[styles.equipmentTotalLabel, { color: theme.textSecondary }]}>запас.</ThemedText>
               </View>
               <View style={styles.totalItem}>
-                <ThemedText style={[styles.totalValue, { color: theme.text }]}>{totalTransmitterCount}</ThemedText>
-                <ThemedText style={[styles.totalLabel, { color: theme.textSecondary }]}>перед.</ThemedText>
+                <ThemedText style={[styles.equipmentTotalValue, { color: theme.text }]}>{totalTransmitterCount}</ThemedText>
+                <ThemedText style={[styles.equipmentTotalLabel, { color: theme.textSecondary }]}>перед.</ThemedText>
               </View>
               <View style={styles.totalItem}>
-                <ThemedText style={[styles.totalValue, { color: theme.text }]}>{totalMicrophoneCount}</ThemedText>
-                <ThemedText style={[styles.totalLabel, { color: theme.textSecondary }]}>микр.</ThemedText>
+                <ThemedText style={[styles.equipmentTotalValue, { color: theme.text }]}>{totalMicrophoneCount}</ThemedText>
+                <ThemedText style={[styles.equipmentTotalLabel, { color: theme.textSecondary }]}>микр.</ThemedText>
               </View>
               <View style={styles.totalItem}>
-                <ThemedText style={[styles.totalValue, { color: theme.text }]}>{selectedBagsFromBlocks.length}</ThemedText>
-                <ThemedText style={[styles.totalLabel, { color: theme.textSecondary }]}>сумок</ThemedText>
+                <ThemedText style={[styles.equipmentTotalValue, { color: theme.text }]}>{selectedBagsFromBlocks.length}</ThemedText>
+                <ThemedText style={[styles.equipmentTotalLabel, { color: theme.textSecondary }]}>сумок</ThemedText>
               </View>
             </View>
           </View>
@@ -1466,11 +1485,11 @@ const styles = StyleSheet.create({
     paddingHorizontal: Spacing.sm,
     paddingVertical: Spacing.xs,
   },
-  totalValue: {
+  equipmentTotalValue: {
     fontSize: 18,
     fontWeight: "700",
   },
-  totalLabel: {
+  equipmentTotalLabel: {
     fontSize: 11,
     marginTop: 2,
   },
