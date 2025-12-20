@@ -49,7 +49,7 @@ export default function RentalOrderDetailScreen() {
   const insets = useSafeAreaInsets();
   const { rentalOrders, rentalClients, rentalOrderServices, updateRentalOrder, updateRentalClient, updateOrderStatus, addRentalPayment, getOrderPayments, getOrderHistory, deleteRentalOrder } = useRental();
   const { managers, isAdmin } = useAuth();
-  const { equipmentItems, equipmentCategories, addEquipmentMovement, addEquipmentLoss, rentalCostPerReceiver } = useData();
+  const { equipmentItems, equipmentCategories, addEquipmentMovement, addEquipmentLoss } = useData();
 
   const orderId = route.params?.orderId;
   const order = rentalOrders.find(o => o.id === orderId);
@@ -554,24 +554,6 @@ export default function RentalOrderDetailScreen() {
             </ThemedText>
           </View>
 
-          {isAdmin ? (
-            <View style={[styles.profitSection, { borderTopColor: theme.border }]}>
-              <View style={styles.priceRow}>
-                <ThemedText style={{ color: theme.textSecondary, fontSize: 13 }}>
-                  Себестоимость ({order.kitCount + order.spareReceiverCount} прм. x {rentalCostPerReceiver}₽)
-                </ThemedText>
-                <ThemedText style={{ color: theme.error, fontSize: 13 }}>
-                  -{((order.kitCount + order.spareReceiverCount) * rentalCostPerReceiver).toLocaleString("ru-RU")}₽
-                </ThemedText>
-              </View>
-              <View style={styles.priceRow}>
-                <ThemedText style={{ fontWeight: "600" }}>Прибыль:</ThemedText>
-                <ThemedText style={{ fontWeight: "700", color: theme.primary }}>
-                  {Math.max(0, order.totalPrice - ((order.kitCount + order.spareReceiverCount) * rentalCostPerReceiver)).toLocaleString("ru-RU")}₽
-                </ThemedText>
-              </View>
-            </View>
-          ) : null}
         </View>
 
         <View style={[styles.card, { backgroundColor: theme.backgroundSecondary }]}>

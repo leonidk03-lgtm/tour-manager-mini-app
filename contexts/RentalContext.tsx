@@ -844,35 +844,20 @@ export function RentalProvider({ children }: { children: ReactNode }) {
   };
 
   const createCommissionsForOrder = async (orderId: string, totalPrice: number) => {
-    console.log('[Commission] Starting commission creation for order:', orderId, 'totalPrice:', totalPrice);
-    
     const order = rentalOrders.find(o => o.id === orderId);
-    if (!order) {
-      console.log('[Commission] Order not found in local state');
-      return;
-    }
+    if (!order) return;
 
     const ownerId = order.ownerManagerId;
     const executorId = order.executorId;
     
-    console.log('[Commission] ownerId:', ownerId, 'executorId:', executorId);
-    
-    if (!ownerId && !executorId) {
-      console.log('[Commission] No owner or executor - skipping');
-      return;
-    }
+    if (!ownerId && !executorId) return;
 
-    const { data: profiles, error: profilesError } = await supabase
+    const { data: profiles } = await supabase
       .from('profiles')
       .select('id, display_name, role, owner_commission_percent, executor_commission_percent')
       .in('id', [ownerId, executorId].filter(Boolean) as string[]);
 
-    console.log('[Commission] Profiles loaded:', profiles, 'error:', profilesError);
-
-    if (!profiles || profiles.length === 0) {
-      console.log('[Commission] No profiles found - skipping');
-      return;
-    }
+    if (!profiles || profiles.length === 0) return;
 
     const ownerProfile = profiles.find(p => p.id === ownerId);
     const executorProfile = executorId ? profiles.find(p => p.id === executorId) : null;
@@ -897,14 +882,10 @@ export function RentalProvider({ children }: { children: ReactNode }) {
       .eq('key', 'rental_cost_per_receiver')
       .maybeSingle();
     
-    console.log('[Commission] Cost setting:', costSetting, 'error:', costError);
-    
     const costPerReceiver = (!costError && costSetting) ? Number(costSetting.value) || 17 : 17;
     const totalReceivers = order.kitCount + order.spareReceiverCount;
     const totalCost = totalReceivers * costPerReceiver;
     const profit = Math.max(0, totalPrice - totalCost);
-
-    console.log('[Commission] costPerReceiver:', costPerReceiver, 'totalReceivers:', totalReceivers, 'totalCost:', totalCost, 'profit:', profit);
 
     const commissionsToInsert: any[] = [];
 
@@ -962,22 +943,17 @@ export function RentalProvider({ children }: { children: ReactNode }) {
       }
     }
 
-    console.log('[Commission] Commissions to insert:', commissionsToInsert);
-
     if (commissionsToInsert.length > 0) {
       const { error } = await supabase
         .from('rental_commissions')
         .insert(commissionsToInsert);
 
       if (error) {
-        console.error('[Commission] Error creating commissions:', error);
+        console.error('Error creating commissions:', error);
       } else {
-        console.log('[Commission] Commissions created successfully!');
         await addOrderHistory(orderId, `Начислены комиссии (прибыль ${profit}₽): ${commissionsToInsert.map(c => `${c.recipient_name} ${c.amount}₽`).join(', ')}`);
         await fetchRentalCommissions();
       }
-    } else {
-      console.log('[Commission] No commissions to insert');
     }
   };
 
