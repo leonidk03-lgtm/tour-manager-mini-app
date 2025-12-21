@@ -30,14 +30,15 @@ export default function RentalServicesScreen() {
   const [writeoffItemId, setWriteoffItemId] = useState<string | null>(null);
   const [itemPickerVisible, setItemPickerVisible] = useState(false);
 
-  const consumableItems = equipmentItems.filter(item => {
-    const category = equipmentCategories.find(c => c.id === item.categoryId);
-    return category?.type === 'consumables';
-  });
+  const warehouseItems = equipmentItems;
 
   const getItemName = (itemId: string | null) => {
     if (!itemId) return null;
     return equipmentItems.find(i => i.id === itemId)?.name || null;
+  };
+
+  const getCategoryName = (categoryId: string) => {
+    return equipmentCategories.find(c => c.id === categoryId)?.name || '';
   };
 
   const onRefresh = useCallback(async () => {
@@ -406,7 +407,7 @@ export default function RentalServicesScreen() {
                 <ThemedText style={{ color: theme.textSecondary }}>Не списывать</ThemedText>
                 {!writeoffItemId ? <Icon name="check" size={20} color={theme.primary} /> : null}
               </Pressable>
-              {consumableItems.map((item) => (
+              {warehouseItems.map((item) => (
                 <Pressable
                   key={item.id}
                   onPress={() => {
@@ -421,19 +422,19 @@ export default function RentalServicesScreen() {
                     },
                   ]}
                 >
-                  <View>
+                  <View style={{ flex: 1 }}>
                     <ThemedText>{item.name}</ThemedText>
                     <ThemedText style={[styles.itemQuantity, { color: theme.textSecondary }]}>
-                      На складе: {item.quantity} шт.
+                      {getCategoryName(item.categoryId)} | На складе: {item.quantity} шт.
                     </ThemedText>
                   </View>
                   {writeoffItemId === item.id ? <Icon name="check" size={20} color={theme.primary} /> : null}
                 </Pressable>
               ))}
-              {consumableItems.length === 0 ? (
+              {warehouseItems.length === 0 ? (
                 <View style={styles.emptyPicker}>
                   <ThemedText style={{ color: theme.textSecondary, textAlign: "center" }}>
-                    Нет расходных материалов на складе.{"\n"}Добавьте их в разделе "Склад"
+                    Нет товаров на складе.{"\n"}Добавьте их в разделе "Склад"
                   </ThemedText>
                 </View>
               ) : null}
