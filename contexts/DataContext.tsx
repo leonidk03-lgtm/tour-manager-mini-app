@@ -411,6 +411,7 @@ interface DataContextType {
   processAutoWriteoff: (date?: Date) => Promise<{ processed: number; items: Array<{ name: string; quantity: number }> }>;
   autoWriteoffOnIssue: (receiversCount: number, note: string) => Promise<void>;
   autoWriteoffForService: (itemId: string, quantity: number, note: string) => Promise<void>;
+  autoReturnForService: (itemId: string, quantity: number, note: string) => Promise<void>;
   dispatchMarkEvents: DispatchMarkEvent[];
   addDispatchMarkEvents: (events: Omit<DispatchMarkEvent, 'id' | 'createdAt' | 'managerId' | 'managerName'>[]) => Promise<void>;
   getDispatchStats: (startDate: string, endDate: string, managerId?: string) => Promise<DispatchStats[]>;
@@ -2926,6 +2927,58 @@ export function DataProvider({ children }: { children: ReactNode }) {
     await fetchEquipmentMovements();
   };
 
+  const autoReturnForService = async (itemId: string, quantity: number, note: string): Promise<void> => {
+    if (!currentUser) return;
+    if (quantity <= 0) return;
+
+    const { data: itemData } = await supabase
+      .from('equipment_items')
+      .select('*')
+      .eq('id', itemId)
+      .single();
+
+    if (!itemData) {
+      console.error('Item not found for auto-return:', itemId);
+      return;
+    }
+
+    const item = {
+      id: itemData.id,
+      quantity: itemData.quantity || 0,
+      writtenOff: itemData.written_off || 0,
+      name: itemData.name,
+    };
+
+    try {
+      const { error } = await supabase.from('equipment_movements').insert({
+        item_id: item.id,
+        type: 'receipt',
+        quantity: quantity,
+        note: `${note} (${quantity} шт.)`,
+        manager_id: currentUser.id,
+        manager_name: currentUser.name,
+      });
+
+      if (error) throw error;
+
+      const newWrittenOff = Math.max(0, item.writtenOff - quantity);
+
+      await supabase
+        .from('equipment_items')
+        .update({ 
+          quantity: item.quantity + quantity,
+          written_off: newWrittenOff,
+          updated_at: new Date().toISOString() 
+        })
+        .eq('id', item.id);
+    } catch (err) {
+      console.error(`Error auto-return for service:`, err);
+    }
+
+    await fetchEquipmentItems();
+    await fetchEquipmentMovements();
+  };
+
   const processAutoWriteoff = async (date?: Date): Promise<{ processed: number; items: Array<{ name: string; quantity: number }> }> => {
     if (!currentUser) throw new Error('No user');
 
@@ -3236,6 +3289,7 @@ export function DataProvider({ children }: { children: ReactNode }) {
         processAutoWriteoff,
         autoWriteoffOnIssue,
         autoWriteoffForService,
+        autoReturnForService,
         dispatchMarkEvents,
         addDispatchMarkEvents,
         getDispatchStats,

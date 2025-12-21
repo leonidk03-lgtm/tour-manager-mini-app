@@ -164,7 +164,7 @@ const RentalContext = createContext<RentalContextType | undefined>(undefined);
 
 export function RentalProvider({ children }: { children: ReactNode }) {
   const { user, profile } = useAuth();
-  const { autoWriteoffOnIssue, autoWriteoffForService } = useData();
+  const { autoWriteoffOnIssue, autoWriteoffForService, autoReturnForService } = useData();
   
   const [rentalClients, setRentalClients] = useState<RentalClient[]>([]);
   const [rentalOrders, setRentalOrders] = useState<RentalOrder[]>([]);
@@ -539,6 +539,29 @@ export function RentalProvider({ children }: { children: ReactNode }) {
       .delete()
       .eq('order_id', orderId);
 
+    if (!isNewOrder) {
+      for (const existingService of existingServices) {
+        const service = rentalServices.find(rs => rs.id === existingService.serviceId);
+        if (!service?.writeoffItemId) continue;
+
+        const newService = services.find(s => s.serviceId === existingService.serviceId);
+        const newQty = newService?.quantity || 0;
+        const returnQty = existingService.quantity - newQty;
+
+        if (returnQty > 0) {
+          try {
+            await autoReturnForService(
+              service.writeoffItemId,
+              returnQty,
+              `Возврат услуги "${service.name}" (заказ)`
+            );
+          } catch (err) {
+            console.error('Error auto-return for service:', err);
+          }
+        }
+      }
+    }
+
     if (services.length > 0) {
       const servicesToInsert = services.map(s => {
         const service = rentalServices.find(rs => rs.id === s.serviceId);
@@ -565,13 +588,13 @@ export function RentalProvider({ children }: { children: ReactNode }) {
         if (service?.writeoffItemId && s.quantity > 0) {
           const existingService = existingServices.find(es => es.serviceId === s.serviceId);
           const previousQty = existingService?.quantity || 0;
-          const newQty = isNewOrder ? s.quantity : (s.quantity - previousQty);
+          const addedQty = isNewOrder ? s.quantity : (s.quantity - previousQty);
           
-          if (newQty > 0) {
+          if (addedQty > 0) {
             try {
               await autoWriteoffForService(
                 service.writeoffItemId, 
-                newQty, 
+                addedQty, 
                 `Продажа услуги "${service.name}" (заказ)`
               );
             } catch (err) {
