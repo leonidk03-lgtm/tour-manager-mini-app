@@ -64,7 +64,7 @@ const reportItems: ReportItem[] = [
     id: "dispatch",
     title: "Статистика отправлений",
     description: "Отметки туристов по менеджерам",
-    icon: "user-check",
+    icon: "check-circle",
     screen: "DispatchActivityReport",
   },
   {
