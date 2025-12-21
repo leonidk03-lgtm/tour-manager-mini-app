@@ -169,10 +169,47 @@ export default function AddRentalOrderScreen() {
   const [oneTimeServices, setOneTimeServices] = useState<{ name: string; price: number }[]>([]);
   const [newOneTimeName, setNewOneTimeName] = useState("");
   const [newOneTimePrice, setNewOneTimePrice] = useState("");
+  const [showServicePicker, setShowServicePicker] = useState(false);
+  const [serviceSearchQuery, setServiceSearchQuery] = useState("");
 
   const activeServices = useMemo(() => {
     return rentalServices.filter(s => s.isActive);
   }, [rentalServices]);
+
+  const availableServicesForPicker = useMemo(() => {
+    const selectedIds = Object.keys(selectedServices);
+    return activeServices.filter(s => !selectedIds.includes(s.id));
+  }, [activeServices, selectedServices]);
+
+  const filteredServicesForPicker = useMemo(() => {
+    if (!serviceSearchQuery.trim()) return availableServicesForPicker;
+    const query = serviceSearchQuery.toLowerCase();
+    return availableServicesForPicker.filter(s => s.name.toLowerCase().includes(query));
+  }, [availableServicesForPicker, serviceSearchQuery]);
+
+  const selectedServicesWithDetails = useMemo(() => {
+    return Object.entries(selectedServices)
+      .map(([serviceId, quantity]) => {
+        const service = rentalServices.find(s => s.id === serviceId);
+        return service ? { service, quantity } : null;
+      })
+      .filter((item): item is { service: RentalService; quantity: number } => item !== null);
+  }, [selectedServices, rentalServices]);
+
+  const handleSelectService = (service: RentalService) => {
+    setSelectedServices(prev => ({ ...prev, [service.id]: 1 }));
+    setShowServicePicker(false);
+    setServiceSearchQuery("");
+    hapticFeedback.selection();
+  };
+
+  const handleRemoveService = (serviceId: string) => {
+    setSelectedServices(prev => {
+      const { [serviceId]: _, ...rest } = prev;
+      return rest;
+    });
+    hapticFeedback.selection();
+  };
 
   const selectedBagsFromBlocks = useMemo(() => {
     return equipmentBlocks.filter(b => b.selectedBag).map(b => b.selectedBag as RadioGuideKit);
@@ -712,36 +749,48 @@ export default function AddRentalOrderScreen() {
           </View>
         ) : null}
 
-        {activeServices.length > 0 ? (
-          <View style={[styles.card, { backgroundColor: theme.backgroundSecondary }]}>
-            <ThemedText style={[styles.sectionTitle, { color: theme.textSecondary }]}>
-              Дополнительные услуги
-            </ThemedText>
+        <View style={[styles.card, { backgroundColor: theme.backgroundSecondary }]}>
+          <ThemedText style={[styles.sectionTitle, { color: theme.textSecondary }]}>
+            Дополнительные услуги
+          </ThemedText>
 
-            {activeServices.map((service) => {
-              const qty = selectedServices[service.id] || 0;
-              return (
-                <View key={service.id} style={styles.serviceRow}>
-                  <View style={styles.serviceInfo}>
-                    <ThemedText style={styles.serviceName}>{service.name}</ThemedText>
-                    <ThemedText style={[styles.servicePrice, { color: theme.success }]}>
-                      {service.price.toLocaleString("ru-RU")} р.
-                    </ThemedText>
-                  </View>
-                  <TextInput
-                    style={[styles.serviceQtyInput, { backgroundColor: theme.backgroundTertiary, color: theme.text, borderColor: theme.border }]}
-                    value={qty > 0 ? qty.toString() : ""}
-                    onChangeText={(value) => handleServiceQuantityInput(service.id, value)}
-                    placeholder="0"
-                    placeholderTextColor={theme.textSecondary}
-                    keyboardType="numeric"
-                  />
-                </View>
-              );
-            })}
+          {selectedServicesWithDetails.map(({ service, quantity }) => (
+            <View key={service.id} style={styles.serviceRow}>
+              <Pressable
+                onPress={() => handleRemoveService(service.id)}
+                style={[styles.removeBtn, { backgroundColor: theme.error + "20", marginRight: Spacing.sm }]}
+              >
+                <Icon name="x" size={16} color={theme.error} />
+              </Pressable>
+              <View style={styles.serviceInfo}>
+                <ThemedText style={styles.serviceName}>{service.name}</ThemedText>
+                <ThemedText style={[styles.servicePrice, { color: theme.success }]}>
+                  {service.price.toLocaleString("ru-RU")} р.
+                </ThemedText>
+              </View>
+              <TextInput
+                style={[styles.serviceQtyInput, { backgroundColor: theme.backgroundTertiary, color: theme.text, borderColor: theme.border }]}
+                value={quantity > 0 ? quantity.toString() : ""}
+                onChangeText={(value) => handleServiceQuantityInput(service.id, value)}
+                placeholder="1"
+                placeholderTextColor={theme.textSecondary}
+                keyboardType="numeric"
+              />
+            </View>
+          ))}
 
-          </View>
-        ) : null}
+          {availableServicesForPicker.length > 0 ? (
+            <Pressable
+              onPress={() => setShowServicePicker(true)}
+              style={[styles.addServiceButton, { backgroundColor: theme.primary + "15", borderColor: theme.primary }]}
+            >
+              <Icon name="plus" size={18} color={theme.primary} />
+              <ThemedText style={[styles.addServiceText, { color: theme.primary }]}>
+                Добавить услугу
+              </ThemedText>
+            </Pressable>
+          ) : null}
+        </View>
 
         <View style={[styles.card, { backgroundColor: theme.backgroundSecondary }]}>
           <ThemedText style={[styles.sectionTitle, { color: theme.textSecondary }]}>
@@ -1066,6 +1115,71 @@ export default function AddRentalOrderScreen() {
                   </ThemedText>
                 </View>
               }
+              />
+            </View>
+          </View>
+        </KeyboardAvoidingView>
+      </Modal>
+
+      <Modal visible={showServicePicker} animationType="slide" transparent>
+        <KeyboardAvoidingView 
+          behavior={Platform.OS === "ios" ? "padding" : "height"}
+          style={{ flex: 1 }}
+        >
+          <View style={[styles.modalOverlay, { backgroundColor: "rgba(0,0,0,0.5)" }]}>
+            <View style={[styles.modalContent, { backgroundColor: theme.backgroundDefault }]}>
+              <View style={styles.modalHeader}>
+                <ThemedText style={styles.modalTitle}>Выберите услугу</ThemedText>
+                <Pressable onPress={() => { setShowServicePicker(false); setServiceSearchQuery(""); }}>
+                  <Icon name="x" size={24} color={theme.text} />
+                </Pressable>
+              </View>
+
+              <View style={[styles.bagSearchBox, { backgroundColor: theme.backgroundSecondary }]}>
+                <Icon name="search" size={18} color={theme.textSecondary} />
+                <TextInput
+                  style={[styles.bagSearchInput, { color: theme.text }]}
+                  value={serviceSearchQuery}
+                  onChangeText={setServiceSearchQuery}
+                  placeholder="Поиск услуги..."
+                  placeholderTextColor={theme.textSecondary}
+                />
+                {serviceSearchQuery ? (
+                  <Pressable onPress={() => setServiceSearchQuery("")}>
+                    <Icon name="x" size={18} color={theme.textSecondary} />
+                  </Pressable>
+                ) : null}
+              </View>
+
+              <FlatList
+                data={filteredServicesForPicker}
+                keyExtractor={(item) => item.id}
+                contentContainerStyle={{ padding: Spacing.md }}
+                renderItem={({ item }) => (
+                  <Pressable
+                    onPress={() => handleSelectService(item)}
+                    style={[styles.servicePickerItem, { backgroundColor: theme.backgroundSecondary }]}
+                  >
+                    <View style={[styles.servicePickerIcon, { backgroundColor: theme.primary + "20" }]}>
+                      <Icon name="shopping-bag" size={20} color={theme.primary} />
+                    </View>
+                    <View style={styles.servicePickerInfo}>
+                      <ThemedText style={styles.servicePickerName}>{item.name}</ThemedText>
+                      <ThemedText style={[styles.servicePickerPrice, { color: theme.success }]}>
+                        {item.price.toLocaleString("ru-RU")}₽
+                      </ThemedText>
+                    </View>
+                    <Icon name="plus-circle" size={24} color={theme.primary} />
+                  </Pressable>
+                )}
+                ListEmptyComponent={
+                  <View style={styles.emptyContainer}>
+                    <Icon name="shopping-bag" size={48} color={theme.textSecondary} style={{ opacity: 0.5, marginBottom: Spacing.md }} />
+                    <ThemedText style={{ color: theme.textSecondary, textAlign: 'center' }}>
+                      {serviceSearchQuery ? "Услуги не найдены" : "Все услуги уже добавлены"}
+                    </ThemedText>
+                  </View>
+                }
               />
             </View>
           </View>
@@ -1518,6 +1632,47 @@ const styles = StyleSheet.create({
   },
   equipmentTotalLabel: {
     fontSize: 11,
+    marginTop: 2,
+  },
+  addServiceButton: {
+    flexDirection: "row",
+    alignItems: "center",
+    justifyContent: "center",
+    padding: Spacing.md,
+    borderRadius: BorderRadius.md,
+    borderWidth: 1,
+    borderStyle: "dashed",
+    marginTop: Spacing.sm,
+    gap: Spacing.sm,
+  },
+  addServiceText: {
+    fontSize: 14,
+    fontWeight: "500",
+  },
+  servicePickerItem: {
+    flexDirection: "row",
+    alignItems: "center",
+    padding: Spacing.md,
+    borderRadius: BorderRadius.md,
+    marginBottom: Spacing.sm,
+    gap: Spacing.sm,
+  },
+  servicePickerIcon: {
+    width: 40,
+    height: 40,
+    borderRadius: 20,
+    justifyContent: "center",
+    alignItems: "center",
+  },
+  servicePickerInfo: {
+    flex: 1,
+  },
+  servicePickerName: {
+    fontSize: 15,
+    fontWeight: "500",
+  },
+  servicePickerPrice: {
+    fontSize: 14,
     marginTop: 2,
   },
 });
