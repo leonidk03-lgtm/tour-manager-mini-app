@@ -390,6 +390,7 @@ export default function DashboardScreen() {
     const { startDate: tomorrowDateStr } = getDateRangeForPeriod("day", tomorrow);
     
     const tomorrowOrders = rentalOrders.filter(order => {
+      if (order.status !== 'new') return false;
       const orderDateStr = order.startDate.includes('T') ? order.startDate.split('T')[0] : order.startDate;
       return orderDateStr === tomorrowDateStr;
     });
