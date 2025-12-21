@@ -393,6 +393,7 @@ const createStyles = (theme: any) => StyleSheet.create({
     borderRadius: BorderRadius.md,
     alignItems: "center",
     gap: Spacing.xs,
+    backgroundColor: theme.backgroundSecondary,
   },
   statValue: {
     fontSize: 24,
@@ -409,6 +410,7 @@ const createStyles = (theme: any) => StyleSheet.create({
     padding: Spacing.md,
     borderRadius: BorderRadius.md,
     gap: Spacing.sm,
+    backgroundColor: theme.backgroundSecondary,
   },
   financeRow: {
     flexDirection: "row",
@@ -438,6 +440,7 @@ const createStyles = (theme: any) => StyleSheet.create({
     borderRadius: BorderRadius.md,
     alignItems: "center",
     gap: Spacing.xs,
+    backgroundColor: theme.backgroundSecondary,
   },
   equipmentValue: {
     fontSize: 20,
@@ -452,6 +455,7 @@ const createStyles = (theme: any) => StyleSheet.create({
     borderRadius: BorderRadius.md,
     borderLeftWidth: 3,
     alignItems: "center",
+    backgroundColor: theme.backgroundSecondary,
   },
   lossValue: {
     fontSize: 20,
@@ -466,6 +470,7 @@ const createStyles = (theme: any) => StyleSheet.create({
     borderRadius: BorderRadius.md,
     alignItems: "center",
     gap: Spacing.xs,
+    backgroundColor: theme.backgroundSecondary,
   },
   commissionValue: {
     fontSize: 16,
@@ -478,6 +483,7 @@ const createStyles = (theme: any) => StyleSheet.create({
     padding: Spacing.md,
     borderRadius: BorderRadius.md,
     gap: Spacing.sm,
+    backgroundColor: theme.backgroundSecondary,
   },
   managerName: {
     fontSize: 15,
@@ -503,6 +509,7 @@ const createStyles = (theme: any) => StyleSheet.create({
     padding: Spacing.md,
     borderRadius: BorderRadius.md,
     gap: Spacing.md,
+    backgroundColor: theme.backgroundSecondary,
   },
   clientRank: {
     width: 28,

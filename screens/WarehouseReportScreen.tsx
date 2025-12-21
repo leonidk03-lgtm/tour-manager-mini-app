@@ -331,6 +331,7 @@ const createStyles = (theme: any) => StyleSheet.create({
     borderRadius: BorderRadius.md,
     alignItems: "center",
     gap: Spacing.xs,
+    backgroundColor: theme.backgroundSecondary,
   },
   statValue: {
     fontSize: 24,
@@ -348,6 +349,7 @@ const createStyles = (theme: any) => StyleSheet.create({
     padding: Spacing.md,
     borderRadius: BorderRadius.md,
     borderLeftWidth: 3,
+    backgroundColor: theme.backgroundSecondary,
   },
   statCardContent: {
     flexDirection: "row",
@@ -358,6 +360,7 @@ const createStyles = (theme: any) => StyleSheet.create({
     padding: Spacing.md,
     borderRadius: BorderRadius.md,
     gap: Spacing.sm,
+    backgroundColor: theme.backgroundSecondary,
   },
   categoryHeader: {
     flexDirection: "row",
@@ -394,6 +397,7 @@ const createStyles = (theme: any) => StyleSheet.create({
     padding: Spacing.md,
     borderRadius: BorderRadius.md,
     borderLeftWidth: 3,
+    backgroundColor: theme.backgroundSecondary,
   },
   lowStockName: {
     fontSize: 14,
