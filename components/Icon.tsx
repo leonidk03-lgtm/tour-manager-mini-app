@@ -36,6 +36,18 @@ const SVG_ICONS: Record<string, (size: number, color: string) => React.ReactNode
       <Polyline points="12 5 19 12 12 19" />
     </Svg>
   ),
+  "arrow-down-left": (s, c) => (
+    <Svg width={s} height={s} viewBox="0 0 24 24" fill="none" stroke={c} strokeWidth={2} strokeLinecap="round" strokeLinejoin="round">
+      <Line x1="17" y1="7" x2="7" y2="17" />
+      <Polyline points="17 17 7 17 7 7" />
+    </Svg>
+  ),
+  "arrow-up-right": (s, c) => (
+    <Svg width={s} height={s} viewBox="0 0 24 24" fill="none" stroke={c} strokeWidth={2} strokeLinecap="round" strokeLinejoin="round">
+      <Line x1="7" y1="17" x2="17" y2="7" />
+      <Polyline points="7 7 17 7 17 17" />
+    </Svg>
+  ),
   "calendar": (s, c) => (
     <Svg width={s} height={s} viewBox="0 0 24 24" fill="none" stroke={c} strokeWidth={2} strokeLinecap="round" strokeLinejoin="round">
       <Rect x="3" y="4" width="18" height="18" rx="2" ry="2" />
@@ -229,6 +241,13 @@ const SVG_ICONS: Record<string, (size: number, color: string) => React.ReactNode
       <Line x1="3" y1="6" x2="3.01" y2="6" />
       <Line x1="3" y1="12" x2="3.01" y2="12" />
       <Line x1="3" y1="18" x2="3.01" y2="18" />
+    </Svg>
+  ),
+  "layout": (s, c) => (
+    <Svg width={s} height={s} viewBox="0 0 24 24" fill="none" stroke={c} strokeWidth={2} strokeLinecap="round" strokeLinejoin="round">
+      <Rect x="3" y="3" width="18" height="18" rx="2" ry="2" />
+      <Line x1="3" y1="9" x2="21" y2="9" />
+      <Line x1="9" y1="21" x2="9" y2="9" />
     </Svg>
   ),
   "lock": (s, c) => (
@@ -491,6 +510,14 @@ const SVG_ICONS: Record<string, (size: number, color: string) => React.ReactNode
     <Svg width={s} height={s} viewBox="0 0 24 24" fill="none" stroke={c} strokeWidth={2} strokeLinecap="round" strokeLinejoin="round">
       <Path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2" />
       <Circle cx="12" cy="7" r="4" />
+    </Svg>
+  ),
+  "user-plus": (s, c) => (
+    <Svg width={s} height={s} viewBox="0 0 24 24" fill="none" stroke={c} strokeWidth={2} strokeLinecap="round" strokeLinejoin="round">
+      <Path d="M16 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2" />
+      <Circle cx="8.5" cy="7" r="4" />
+      <Line x1="20" y1="8" x2="20" y2="14" />
+      <Line x1="23" y1="11" x2="17" y2="11" />
     </Svg>
   ),
   "users": (s, c) => (
