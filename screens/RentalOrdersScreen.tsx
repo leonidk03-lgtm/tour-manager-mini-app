@@ -68,7 +68,7 @@ export default function RentalOrdersScreen() {
 
     if (activeFilter === "срок") {
       result = result.filter(o => o.status === "new");
-      result.sort((a, b) => new Date(a.endDate).getTime() - new Date(b.endDate).getTime());
+      result.sort((a, b) => new Date(a.startDate).getTime() - new Date(b.startDate).getTime());
     } else if (activeFilter === "issued") {
       result = result.filter(o => o.status === "issued");
       result.sort((a, b) => new Date(a.endDate).getTime() - new Date(b.endDate).getTime());
@@ -99,7 +99,7 @@ export default function RentalOrdersScreen() {
     
     const groups: { [key: string]: RentalOrder[] } = {};
     filteredOrders.forEach(order => {
-      const dateKey = formatDate(order.endDate);
+      const dateKey = formatDate(order.startDate);
       if (!groups[dateKey]) {
         groups[dateKey] = [];
       }
@@ -108,8 +108,8 @@ export default function RentalOrdersScreen() {
 
     return Object.entries(groups)
       .sort((a, b) => {
-        const dateA = new Date(filteredOrders.find(o => formatDate(o.endDate) === a[0])?.endDate || "");
-        const dateB = new Date(filteredOrders.find(o => formatDate(o.endDate) === b[0])?.endDate || "");
+        const dateA = new Date(filteredOrders.find(o => formatDate(o.startDate) === a[0])?.startDate || "");
+        const dateB = new Date(filteredOrders.find(o => formatDate(o.startDate) === b[0])?.startDate || "");
         return dateA.getTime() - dateB.getTime();
       })
       .map(([title, data]) => ({ title, data }));
