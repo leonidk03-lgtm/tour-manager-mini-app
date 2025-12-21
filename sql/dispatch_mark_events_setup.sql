@@ -19,11 +19,6 @@ CREATE INDEX IF NOT EXISTS idx_dispatch_mark_events_created_at ON dispatch_mark_
 CREATE INDEX IF NOT EXISTS idx_dispatch_mark_events_excursion_date ON dispatch_mark_events(excursion_date);
 CREATE INDEX IF NOT EXISTS idx_dispatch_mark_events_manager_date ON dispatch_mark_events(manager_id, created_at);
 
--- Уникальный индекс для предотвращения дублирования одинаковых событий
--- (один менеджер не может отметить один и тот же телефон дважды за секунду)
-CREATE UNIQUE INDEX IF NOT EXISTS idx_dispatch_mark_events_unique 
-ON dispatch_mark_events(manager_id, phone, excursion_date, action, date_trunc('second', created_at));
-
 -- RLS политики
 ALTER TABLE dispatch_mark_events ENABLE ROW LEVEL SECURITY;
 
