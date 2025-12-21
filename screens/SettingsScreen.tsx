@@ -106,8 +106,14 @@ export default function SettingsScreen() {
     ]);
   };
 
-  const canAccessRental = isAdmin || hasPermission('rental');
   const canAccessWarehouse = isAdmin || hasPermission('warehouse');
+  
+  const canAccessRentalClients = isAdmin || hasPermission('rental') || hasPermission('rental_clients');
+  const canAccessRentalOrders = isAdmin || hasPermission('rental') || hasPermission('rental_orders');
+  const canAccessRentalPayments = isAdmin || hasPermission('rental') || hasPermission('rental_payments');
+  const canAccessRentalCommissions = isAdmin || hasPermission('rental') || hasPermission('rental_commissions');
+  const canAccessRentalCalendar = isAdmin || hasPermission('rental') || hasPermission('rental_calendar');
+  const hasAnyRentalAccess = canAccessRentalClients || canAccessRentalOrders || canAccessRentalPayments || canAccessRentalCommissions || canAccessRentalCalendar;
 
   return (
     <ScreenScrollView>
@@ -169,15 +175,25 @@ export default function SettingsScreen() {
           </View>
         </View>
 
-        {canAccessRental ? (
+        {hasAnyRentalAccess ? (
           <View style={styles.section}>
             <SectionTitle title="Аренда" />
             <View style={styles.iconGrid}>
-              <AppIcon icon="users" label="Клиенты" color="#007AFF" onPress={() => navigation.navigate("RentalClients")} />
-              <AppIcon icon="file-text" label="Заказы" color="#5856D6" onPress={() => navigation.navigate("RentalOrders")} />
-              <AppIcon icon="credit-card" label="Платежи" color="#34C759" onPress={() => navigation.navigate("RentalPayments")} />
-              <AppIcon icon="dollar-sign" label="Комиссии" color="#FF9500" onPress={() => navigation.navigate("RentalCommissions")} />
-              <AppIcon icon="calendar" label="Календарь" color="#FF2D55" onPress={() => navigation.navigate("RentalCalendar")} />
+              {canAccessRentalClients ? (
+                <AppIcon icon="users" label="Клиенты" color="#007AFF" onPress={() => navigation.navigate("RentalClients")} />
+              ) : null}
+              {canAccessRentalOrders ? (
+                <AppIcon icon="file-text" label="Заказы" color="#5856D6" onPress={() => navigation.navigate("RentalOrders")} />
+              ) : null}
+              {canAccessRentalPayments ? (
+                <AppIcon icon="credit-card" label="Платежи" color="#34C759" onPress={() => navigation.navigate("RentalPayments")} />
+              ) : null}
+              {canAccessRentalCommissions ? (
+                <AppIcon icon="dollar-sign" label="Комиссии" color="#FF9500" onPress={() => navigation.navigate("RentalCommissions")} />
+              ) : null}
+              {canAccessRentalCalendar ? (
+                <AppIcon icon="calendar" label="Календарь" color="#FF2D55" onPress={() => navigation.navigate("RentalCalendar")} />
+              ) : null}
               {isAdmin ? (
                 <AppIcon icon="gift" label="Услуги" color="#AF52DE" onPress={() => navigation.navigate("RentalServices")} />
               ) : null}

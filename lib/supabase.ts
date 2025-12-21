@@ -99,7 +99,12 @@ export type PermissionKey =
   | 'finances'
   | 'view_other_managers'
   | 'warehouse'
-  | 'rental';
+  | 'rental'
+  | 'rental_clients'
+  | 'rental_orders'
+  | 'rental_payments'
+  | 'rental_commissions'
+  | 'rental_calendar';
 
 export const PERMISSION_DEFINITIONS: Record<PermissionKey, string> = {
   radio_guides: 'Радиогиды',
@@ -115,6 +120,11 @@ export const PERMISSION_DEFINITIONS: Record<PermissionKey, string> = {
   view_other_managers: 'Просмотр данных коллег',
   warehouse: 'Склад',
   rental: 'Аренда',
+  rental_clients: 'Клиенты',
+  rental_orders: 'Заказы',
+  rental_payments: 'Платежи',
+  rental_commissions: 'Комиссии',
+  rental_calendar: 'Календарь',
 };
 
 export interface PermissionGroup {
@@ -149,7 +159,18 @@ export const PERMISSION_GROUPS: PermissionGroup[] = [
   { key: 'finances', label: 'Финансы' },
   { key: 'view_other_managers', label: 'Просмотр данных коллег' },
   { key: 'warehouse', label: 'Склад' },
-  { key: 'rental', label: 'Аренда', description: 'Доступ к модулю аренды радиогидов' },
+  { 
+    key: 'rental', 
+    label: 'Аренда', 
+    description: 'Доступ к модулю аренды радиогидов',
+    children: [
+      { key: 'rental_clients', label: 'Клиенты' },
+      { key: 'rental_orders', label: 'Заказы' },
+      { key: 'rental_payments', label: 'Платежи' },
+      { key: 'rental_commissions', label: 'Комиссии' },
+      { key: 'rental_calendar', label: 'Календарь' },
+    ],
+  },
 ];
 
 export type ManagerPermissions = Partial<Record<PermissionKey, boolean>>;
