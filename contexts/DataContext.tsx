@@ -2740,11 +2740,16 @@ export function DataProvider({ children }: { children: ReactNode }) {
 
     for (const category of autoWriteoffCategories) {
       const itemsInCategory = equipmentItems.filter(i => i.categoryId === category.id);
+      console.log('[autoWriteoff] Items in category', category.name, ':', itemsInCategory.map(i => ({ id: i.id, name: i.name, quantity: i.quantity })));
       
       for (const item of itemsInCategory) {
-        if (item.quantity <= 0) continue;
+        if (item.quantity <= 0) {
+          console.log('[autoWriteoff] Skipping item', item.name, '- quantity is', item.quantity);
+          continue;
+        }
 
         const quantityToWriteoff = Math.min(headphonesCount, item.quantity);
+        console.log('[autoWriteoff] Writing off', quantityToWriteoff, 'of', item.name);
 
         try {
           const { error } = await supabase.from('equipment_movements').insert({
@@ -2756,9 +2761,13 @@ export function DataProvider({ children }: { children: ReactNode }) {
             manager_name: currentUser.name,
           });
 
-          if (error) throw error;
+          if (error) {
+            console.error('[autoWriteoff] Insert movement error:', error);
+            throw error;
+          }
+          console.log('[autoWriteoff] Movement inserted successfully');
 
-          await supabase
+          const { error: updateError } = await supabase
             .from('equipment_items')
             .update({ 
               quantity: item.quantity - quantityToWriteoff,
@@ -2766,6 +2775,12 @@ export function DataProvider({ children }: { children: ReactNode }) {
               updated_at: new Date().toISOString() 
             })
             .eq('id', item.id);
+          
+          if (updateError) {
+            console.error('[autoWriteoff] Update item error:', updateError);
+          } else {
+            console.log('[autoWriteoff] Item updated successfully');
+          }
         } catch (err) {
           console.error(`Error auto-writeoff for ${item.name}:`, err);
         }
