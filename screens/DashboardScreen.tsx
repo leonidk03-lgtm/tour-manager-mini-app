@@ -221,8 +221,8 @@ function SectionHeader({ title, onSeeAll }: { title: string; onSeeAll?: () => vo
 export default function DashboardScreen() {
   const { theme } = useTheme();
   const navigation = useNavigation<NavigationProp<MainTabParamList>>();
-  const { excursions, tourTypes, additionalServices, transactions, radioGuideKits, radioGuideAssignments, equipmentItems, equipmentLosses } = useData();
-  const { rentalOrders, rentalClients, rentalPayments } = useRental();
+  const { excursions, tourTypes, additionalServices, transactions, radioGuideKits, radioGuideAssignments, equipmentItems, equipmentLosses, refreshData } = useData();
+  const { rentalOrders, rentalClients, rentalPayments, refreshData: refreshRentalData } = useRental();
   const { isAdmin, hasPermission, profile } = useAuth();
   const [referenceDate, setReferenceDate] = useState(new Date());
   const [refreshing, setRefreshing] = useState(false);
@@ -282,9 +282,13 @@ export default function DashboardScreen() {
     });
   };
 
-  const onRefresh = () => {
+  const onRefresh = async () => {
     setRefreshing(true);
-    setTimeout(() => setRefreshing(false), 1000);
+    try {
+      await Promise.all([refreshData(), refreshRentalData()]);
+    } finally {
+      setRefreshing(false);
+    }
   };
 
   const todayStats = useMemo(() => {
