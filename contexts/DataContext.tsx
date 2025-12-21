@@ -2733,9 +2733,22 @@ export function DataProvider({ children }: { children: ReactNode }) {
 
     const headphonesCount = receiversCount + 5;
     console.log('[AutoWriteoff] Starting. Receivers:', receiversCount, 'Headphones to writeoff:', headphonesCount);
-    console.log('[AutoWriteoff] Equipment categories:', equipmentCategories.length);
+
+    // Fetch categories directly from DB to avoid race conditions on mobile
+    const { data: categoriesData } = await supabase
+      .from('equipment_categories')
+      .select('*');
     
-    const autoWriteoffCategories = equipmentCategories.filter(c => c.autoWriteoff && c.autoWriteoffSourceId);
+    const freshCategories = (categoriesData || []).map(c => ({
+      id: c.id,
+      name: c.name,
+      autoWriteoff: c.auto_writeoff || false,
+      autoWriteoffSourceId: c.auto_writeoff_source_id || null,
+    }));
+
+    console.log('[AutoWriteoff] Fetched categories:', freshCategories.length);
+    
+    const autoWriteoffCategories = freshCategories.filter(c => c.autoWriteoff && c.autoWriteoffSourceId);
     console.log('[AutoWriteoff] Auto-writeoff categories:', autoWriteoffCategories.length, autoWriteoffCategories.map(c => c.name));
 
     if (autoWriteoffCategories.length === 0) {
@@ -2745,8 +2758,23 @@ export function DataProvider({ children }: { children: ReactNode }) {
       return;
     }
 
+    // Fetch items directly from DB
+    const { data: itemsData } = await supabase
+      .from('equipment_items')
+      .select('*');
+    
+    const freshItems = (itemsData || []).map(i => ({
+      id: i.id,
+      categoryId: i.category_id,
+      name: i.name,
+      quantity: i.quantity || 0,
+      writtenOff: i.written_off || 0,
+    }));
+
+    console.log('[AutoWriteoff] Fetched items:', freshItems.length);
+
     for (const category of autoWriteoffCategories) {
-      const itemsInCategory = equipmentItems.filter(i => i.categoryId === category.id);
+      const itemsInCategory = freshItems.filter(i => i.categoryId === category.id);
       console.log('[AutoWriteoff] Category:', category.name, 'Items:', itemsInCategory.length);
       
       for (const item of itemsInCategory) {
