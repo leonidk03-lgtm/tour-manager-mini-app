@@ -86,10 +86,20 @@ Automatic commission calculation when orders are marked as paid:
 
 ### Auto-Writeoff System
 Automatic consumables writeoff when equipment is issued (excursions or rentals):
-- Formula: `receivers_count + 5` headphones are deducted from consumables
+- **Radio Guide Issue Writeoff**: Formula `receivers_count + 5` headphones are deducted from consumables
 - Works for both excursion radio guide issuance and rental order issuance
 - Requires `auto_writeoff` and `auto_writeoff_source_id` columns in `equipment_categories`
 - Configure by setting `auto_writeoff = true` on a consumables category and linking it to the radio guides category via `auto_writeoff_source_id`
+
+**Rental Service Auto-Writeoff**:
+- Additional services (e.g., headphone sales) can be linked to warehouse consumables
+- When a service with a linked item is sold, the quantity is automatically written off
+- Configure in Settings -> Услуги аренды by selecting a consumable item for each service
+- Only processes writeoffs when service quantity increases (protects against duplicate writeoffs on edits)
+- Handles inventory shortages gracefully (writes off available quantity)
+
+**Database Setup**:
+- Execute `sql/additional_service_writeoff_setup.sql` to add writeoff_item_id column to rental_services
 
 ### Granular Rental Permissions
 The rental module uses granular permissions for fine-grained access control:
