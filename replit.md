@@ -82,6 +82,14 @@ Automatic commission calculation when orders are marked as paid:
 - Execute `sql/equipment_losses_rental_update.sql` to add rental_order_id column to equipment_losses table for tracking losses from rental orders.
 - Execute `sql/rental_permissions_setup.sql` to migrate existing rental permissions to granular sub-permissions.
 - Execute `sql/dashboard_config_setup.sql` to add dashboard_config column for customizable dashboard widgets.
+- Execute `sql/auto_writeoff_setup.sql` to add auto_writeoff columns for automatic consumables writeoff.
+
+### Auto-Writeoff System
+Automatic consumables writeoff when equipment is issued (excursions or rentals):
+- Formula: `receivers_count + 5` headphones are deducted from consumables
+- Works for both excursion radio guide issuance and rental order issuance
+- Requires `auto_writeoff` and `auto_writeoff_source_id` columns in `equipment_categories`
+- Configure by setting `auto_writeoff = true` on a consumables category and linking it to the radio guides category via `auto_writeoff_source_id`
 
 ### Granular Rental Permissions
 The rental module uses granular permissions for fine-grained access control:
