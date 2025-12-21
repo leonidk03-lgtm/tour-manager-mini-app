@@ -55,7 +55,8 @@ export default function RentalOrderDetailScreen() {
   const order = rentalOrders.find(o => o.id === orderId);
   const client = order ? rentalClients.find(c => c.id === order.clientId) : null;
   const payments = order ? getOrderPayments(order.id) : [];
-  const history = order ? getOrderHistory(order.id) : [];
+  const rawHistory = order ? getOrderHistory(order.id) : [];
+  const history = rawHistory.filter(h => !h.action.startsWith("Начислены комиссии"));
 
   const ownerManager = order?.ownerManagerId ? managers.find(m => m.id === order.ownerManagerId) : null;
   const executorManager = order?.executorId ? managers.find(m => m.id === order.executorId) : null;
