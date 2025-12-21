@@ -12,6 +12,58 @@ import { useAuth } from "@/contexts/AuthContext";
 import { useData } from "@/contexts/DataContext";
 import { hapticFeedback } from "@/utils/haptics";
 
+type SettingItemProps = {
+  icon: string;
+  label: string;
+  onPress: () => void;
+  value?: string;
+  showChevron?: boolean;
+};
+
+function SettingItem({ icon, label, onPress, value, showChevron = true }: SettingItemProps) {
+  const { theme } = useTheme();
+  return (
+    <Pressable
+      onPress={() => { hapticFeedback.selection(); onPress(); }}
+      style={({ pressed }) => ({ opacity: pressed ? 0.7 : 1 })}
+    >
+      <View style={styles.settingItem}>
+        <View style={styles.settingLeft}>
+          <Icon name={icon as any} size={20} color={theme.textSecondary} />
+          <ThemedText style={styles.settingText}>{label}</ThemedText>
+        </View>
+        {value ? (
+          <ThemedText style={{ color: theme.primary, fontWeight: "600" }}>{value}</ThemedText>
+        ) : showChevron ? (
+          <Icon name="chevron-right" size={20} color={theme.textSecondary} />
+        ) : null}
+      </View>
+    </Pressable>
+  );
+}
+
+function SettingsCard({ title, children }: { title: string; children: React.ReactNode }) {
+  const { theme } = useTheme();
+  return (
+    <View style={styles.section}>
+      <ThemedText style={[styles.sectionTitle, { color: theme.textSecondary }]}>{title}</ThemedText>
+      <ThemedView
+        style={[
+          styles.settingsGroup,
+          { borderColor: theme.border, borderRadius: BorderRadius.sm },
+        ]}
+      >
+        {children}
+      </ThemedView>
+    </View>
+  );
+}
+
+function Divider() {
+  const { theme } = useTheme();
+  return <View style={[styles.divider, { backgroundColor: theme.border }]} />;
+}
+
 export default function SettingsScreen() {
   const { theme } = useTheme();
   const navigation = useNavigation<NavigationProp<SettingsStackParamList>>();
@@ -73,41 +125,27 @@ export default function SettingsScreen() {
     ]);
   };
 
+  const canAccessRental = isAdmin || hasPermission('rental');
+  const canAccessWarehouse = isAdmin || hasPermission('warehouse');
+
   return (
     <ScreenScrollView>
       <View style={styles.container}>
         <ThemedView
           style={[
             styles.profileCard,
-            {
-              borderColor: theme.border,
-              borderRadius: BorderRadius.sm,
-            },
+            { borderColor: theme.border, borderRadius: BorderRadius.sm },
           ]}
         >
           <View style={styles.avatarContainer}>
-            <View
-              style={[
-                styles.avatar,
-                {
-                  backgroundColor: theme.primary,
-                },
-              ]}
-            >
+            <View style={[styles.avatar, { backgroundColor: theme.primary }]}>
               <ThemedText style={[styles.avatarText, { color: theme.buttonText }]}>
                 {profile?.display_name?.charAt(0).toUpperCase() || "U"}
               </ThemedText>
             </View>
             <View style={styles.profileInfo}>
               <ThemedText style={styles.profileName}>{profile?.display_name || "Пользователь"}</ThemedText>
-              <ThemedView
-                style={[
-                  styles.roleBadge,
-                  {
-                    backgroundColor: theme.primary,
-                  },
-                ]}
-              >
+              <ThemedView style={[styles.roleBadge, { backgroundColor: theme.primary }]}>
                 <ThemedText style={[styles.roleText, { color: theme.buttonText }]}>
                   {isAdmin ? "Администратор" : isRadioDispatcher ? "Диспетчер" : "Менеджер"}
                 </ThemedText>
@@ -131,305 +169,90 @@ export default function SettingsScreen() {
           </Pressable>
         </ThemedView>
 
-        <View style={styles.section}>
-          <ThemedText style={styles.sectionTitle}>Настройки</ThemedText>
-          <ThemedView
-            style={[
-              styles.settingsGroup,
-              {
-                borderColor: theme.border,
-                borderRadius: BorderRadius.sm,
-              },
-            ]}
-          >
+        {isAdmin ? (
+          <SettingsCard title="Администрирование">
+            <SettingItem icon="users" label="Панель администратора" onPress={() => navigation.navigate("AdminPanel")} />
+            <Divider />
+            <SettingItem icon="bar-chart-2" label="Отчёты" onPress={() => navigation.navigate("Reports")} />
+            <Divider />
+            <SettingItem icon="file-text" label="Цены на билеты" onPress={() => navigation.navigate("TicketPrices")} />
+            <Divider />
+            <SettingItem icon="folder" label="База данных" onPress={() => navigation.navigate("DatabaseSettings")} />
+            <Divider />
+            <SettingItem
+              icon="radio"
+              label="Стоимость радиогида"
+              value={`${radioGuidePrice}₽`}
+              showChevron={false}
+              onPress={() => {
+                setPriceInput(String(radioGuidePrice));
+                setShowPriceModal(true);
+              }}
+            />
+            <Divider />
+            <SettingItem
+              icon="package"
+              label="Себестоимость приёмника"
+              value={`${rentalCostPerReceiver}₽`}
+              showChevron={false}
+              onPress={() => {
+                setCostInput(String(rentalCostPerReceiver));
+                setShowCostModal(true);
+              }}
+            />
+          </SettingsCard>
+        ) : null}
+
+        <SettingsCard title="Оборудование">
+          <SettingItem icon="radio" label="Радиогиды" onPress={() => navigation.navigate("RadioGuides")} />
+          <Divider />
+          <SettingItem icon="alert-triangle" label="Утери оборудования" onPress={() => navigation.navigate("EquipmentLosses")} />
+          {canAccessWarehouse ? (
+            <>
+              <Divider />
+              <SettingItem icon="package" label="Склад" onPress={() => navigation.navigate("Warehouse")} />
+            </>
+          ) : null}
+        </SettingsCard>
+
+        {canAccessRental ? (
+          <SettingsCard title="Аренда">
+            <SettingItem icon="users" label="Клиенты" onPress={() => navigation.navigate("RentalClients")} />
+            <Divider />
+            <SettingItem icon="file-text" label="Заказы" onPress={() => navigation.navigate("RentalOrders")} />
+            <Divider />
+            <SettingItem icon="credit-card" label="Платежи" onPress={() => navigation.navigate("RentalPayments")} />
+            <Divider />
+            <SettingItem icon="dollar-sign" label="Комиссии" onPress={() => navigation.navigate("RentalCommissions")} />
+            <Divider />
+            <SettingItem icon="calendar" label="Календарь загрузки" onPress={() => navigation.navigate("RentalCalendar")} />
             {isAdmin ? (
               <>
-                <Pressable
-                  onPress={() => { hapticFeedback.selection(); navigation.navigate("TicketPrices"); }}
-                  style={({ pressed }) => ({ opacity: pressed ? 0.7 : 1 })}
-                >
-                  <View style={styles.settingItem}>
-                    <View style={styles.settingLeft}>
-                      <Icon name="file-text" size={20} color={theme.textSecondary} />
-                      <ThemedText style={styles.settingText}>Цены на билеты</ThemedText>
-                    </View>
-                    <Icon name="chevron-right" size={20} color={theme.textSecondary} />
-                  </View>
-                </Pressable>
-                <View style={[styles.divider, { backgroundColor: theme.border }]} />
+                <Divider />
+                <SettingItem icon="gift" label="Услуги аренды" onPress={() => navigation.navigate("RentalServices")} />
               </>
             ) : null}
-            <Pressable
-              onPress={() => { hapticFeedback.selection(); navigation.navigate("DeletedData"); }}
-              style={({ pressed }) => ({ opacity: pressed ? 0.7 : 1 })}
-            >
-              <View style={styles.settingItem}>
-                <View style={styles.settingLeft}>
-                  <Icon name="trash" size={20} color={theme.textSecondary} />
-                  <ThemedText style={styles.settingText}>Удаленные данные</ThemedText>
-                </View>
-                <Icon name="chevron-right" size={20} color={theme.textSecondary} />
-              </View>
-            </Pressable>
+          </SettingsCard>
+        ) : null}
 
-            {isAdmin ? (
-              <>
-                <View style={[styles.divider, { backgroundColor: theme.border }]} />
-                <Pressable
-                  onPress={() => { hapticFeedback.selection(); navigation.navigate("AdminPanel"); }}
-                  style={({ pressed }) => ({ opacity: pressed ? 0.7 : 1 })}
-                >
-                  <View style={styles.settingItem}>
-                    <View style={styles.settingLeft}>
-                      <Icon name="users" size={20} color={theme.textSecondary} />
-                      <ThemedText style={styles.settingText}>Панель администратора</ThemedText>
-                    </View>
-                    <Icon name="chevron-right" size={20} color={theme.textSecondary} />
-                  </View>
-                </Pressable>
-                <View style={[styles.divider, { backgroundColor: theme.border }]} />
-                <Pressable
-                  onPress={() => { hapticFeedback.selection(); navigation.navigate("Reports"); }}
-                  style={({ pressed }) => ({ opacity: pressed ? 0.7 : 1 })}
-                >
-                  <View style={styles.settingItem}>
-                    <View style={styles.settingLeft}>
-                      <Icon name="bar-chart-2" size={20} color={theme.textSecondary} />
-                      <ThemedText style={styles.settingText}>Отчёты</ThemedText>
-                    </View>
-                    <Icon name="chevron-right" size={20} color={theme.textSecondary} />
-                  </View>
-                </Pressable>
-              </>
-            ) : null}
+        <SettingsCard title="Общее">
+          <SettingItem icon="mail" label="Уведомления" onPress={() => navigation.navigate("Notifications")} />
+          <Divider />
+          <SettingItem icon="trash" label="Удалённые данные" onPress={() => navigation.navigate("DeletedData")} />
+        </SettingsCard>
 
-            <View style={[styles.divider, { backgroundColor: theme.border }]} />
-            <Pressable
-              onPress={() => { hapticFeedback.selection(); navigation.navigate("RadioGuides"); }}
-              style={({ pressed }) => ({ opacity: pressed ? 0.7 : 1 })}
-            >
-              <View style={styles.settingItem}>
-                <View style={styles.settingLeft}>
-                  <Icon name="radio" size={20} color={theme.textSecondary} />
-                  <ThemedText style={styles.settingText}>Радиогиды</ThemedText>
-                </View>
-                <Icon name="chevron-right" size={20} color={theme.textSecondary} />
-              </View>
-            </Pressable>
-            <View style={[styles.divider, { backgroundColor: theme.border }]} />
-            <Pressable
-              onPress={() => { hapticFeedback.selection(); navigation.navigate("EquipmentLosses"); }}
-              style={({ pressed }) => ({ opacity: pressed ? 0.7 : 1 })}
-            >
-              <View style={styles.settingItem}>
-                <View style={styles.settingLeft}>
-                  <Icon name="alert-triangle" size={20} color={theme.textSecondary} />
-                  <ThemedText style={styles.settingText}>Утери оборудования</ThemedText>
-                </View>
-                <Icon name="chevron-right" size={20} color={theme.textSecondary} />
-              </View>
-            </Pressable>
-            {(isAdmin || hasPermission('warehouse')) ? (
-              <>
-                <View style={[styles.divider, { backgroundColor: theme.border }]} />
-                <Pressable
-                  onPress={() => { hapticFeedback.selection(); navigation.navigate("Warehouse"); }}
-                  style={({ pressed }) => ({ opacity: pressed ? 0.7 : 1 })}
-                >
-                  <View style={styles.settingItem}>
-                    <View style={styles.settingLeft}>
-                      <Icon name="package" size={20} color={theme.textSecondary} />
-                      <ThemedText style={styles.settingText}>Склад</ThemedText>
-                    </View>
-                    <Icon name="chevron-right" size={20} color={theme.textSecondary} />
-                  </View>
-                </Pressable>
-              </>
-            ) : null}
-            {(isAdmin || hasPermission('rental')) ? (
-              <>
-                <View style={[styles.divider, { backgroundColor: theme.border }]} />
-                <ThemedText style={[styles.sectionTitle, { color: theme.textSecondary }]}>Аренда</ThemedText>
-                <Pressable
-                  onPress={() => { hapticFeedback.selection(); navigation.navigate("RentalClients"); }}
-                  style={({ pressed }) => ({ opacity: pressed ? 0.7 : 1 })}
-                >
-                  <View style={styles.settingItem}>
-                    <View style={styles.settingLeft}>
-                      <Icon name="users" size={20} color={theme.textSecondary} />
-                      <ThemedText style={styles.settingText}>Клиенты</ThemedText>
-                    </View>
-                    <Icon name="chevron-right" size={20} color={theme.textSecondary} />
-                  </View>
-                </Pressable>
-                <View style={[styles.divider, { backgroundColor: theme.border }]} />
-                <Pressable
-                  onPress={() => { hapticFeedback.selection(); navigation.navigate("RentalOrders"); }}
-                  style={({ pressed }) => ({ opacity: pressed ? 0.7 : 1 })}
-                >
-                  <View style={styles.settingItem}>
-                    <View style={styles.settingLeft}>
-                      <Icon name="file-text" size={20} color={theme.textSecondary} />
-                      <ThemedText style={styles.settingText}>Заказы</ThemedText>
-                    </View>
-                    <Icon name="chevron-right" size={20} color={theme.textSecondary} />
-                  </View>
-                </Pressable>
-                <View style={[styles.divider, { backgroundColor: theme.border }]} />
-                <Pressable
-                  onPress={() => { hapticFeedback.selection(); navigation.navigate("RentalPayments"); }}
-                  style={({ pressed }) => ({ opacity: pressed ? 0.7 : 1 })}
-                >
-                  <View style={styles.settingItem}>
-                    <View style={styles.settingLeft}>
-                      <Icon name="credit-card" size={20} color={theme.textSecondary} />
-                      <ThemedText style={styles.settingText}>Платежи</ThemedText>
-                    </View>
-                    <Icon name="chevron-right" size={20} color={theme.textSecondary} />
-                  </View>
-                </Pressable>
-                <View style={[styles.divider, { backgroundColor: theme.border }]} />
-                <Pressable
-                  onPress={() => { hapticFeedback.selection(); navigation.navigate("RentalCommissions"); }}
-                  style={({ pressed }) => ({ opacity: pressed ? 0.7 : 1 })}
-                >
-                  <View style={styles.settingItem}>
-                    <View style={styles.settingLeft}>
-                      <Icon name="dollar-sign" size={20} color={theme.textSecondary} />
-                      <ThemedText style={styles.settingText}>Комиссии</ThemedText>
-                    </View>
-                    <Icon name="chevron-right" size={20} color={theme.textSecondary} />
-                  </View>
-                </Pressable>
-                <View style={[styles.divider, { backgroundColor: theme.border }]} />
-                <Pressable
-                  onPress={() => { hapticFeedback.selection(); navigation.navigate("RentalCalendar"); }}
-                  style={({ pressed }) => ({ opacity: pressed ? 0.7 : 1 })}
-                >
-                  <View style={styles.settingItem}>
-                    <View style={styles.settingLeft}>
-                      <Icon name="calendar" size={20} color={theme.textSecondary} />
-                      <ThemedText style={styles.settingText}>Календарь загрузки</ThemedText>
-                    </View>
-                    <Icon name="chevron-right" size={20} color={theme.textSecondary} />
-                  </View>
-                </Pressable>
-                {isAdmin ? (
-                  <>
-                    <View style={[styles.divider, { backgroundColor: theme.border }]} />
-                    <Pressable
-                      onPress={() => { hapticFeedback.selection(); navigation.navigate("RentalServices"); }}
-                      style={({ pressed }) => ({ opacity: pressed ? 0.7 : 1 })}
-                    >
-                      <View style={styles.settingItem}>
-                        <View style={styles.settingLeft}>
-                          <Icon name="gift" size={20} color={theme.textSecondary} />
-                          <ThemedText style={styles.settingText}>Услуги аренды</ThemedText>
-                        </View>
-                        <Icon name="chevron-right" size={20} color={theme.textSecondary} />
-                      </View>
-                    </Pressable>
-                  </>
-                ) : null}
-              </>
-            ) : null}
-            <View style={[styles.divider, { backgroundColor: theme.border }]} />
-            <Pressable
-              onPress={() => { hapticFeedback.selection(); navigation.navigate("Notifications"); }}
-              style={({ pressed }) => ({ opacity: pressed ? 0.7 : 1 })}
-            >
-              <View style={styles.settingItem}>
-                <View style={styles.settingLeft}>
-                  <Icon name="mail" size={20} color={theme.textSecondary} />
-                  <ThemedText style={styles.settingText}>Уведомления</ThemedText>
-                </View>
-                <Icon name="chevron-right" size={20} color={theme.textSecondary} />
-              </View>
-            </Pressable>
-            {isAdmin ? (
-              <>
-                <View style={[styles.divider, { backgroundColor: theme.border }]} />
-                <Pressable
-                  onPress={() => { hapticFeedback.selection(); navigation.navigate("DatabaseSettings"); }}
-                  style={({ pressed }) => ({ opacity: pressed ? 0.7 : 1 })}
-                >
-                  <View style={styles.settingItem}>
-                    <View style={styles.settingLeft}>
-                      <Icon name="folder" size={20} color={theme.textSecondary} />
-                      <ThemedText style={styles.settingText}>База данных</ThemedText>
-                    </View>
-                    <Icon name="chevron-right" size={20} color={theme.textSecondary} />
-                  </View>
-                </Pressable>
-                <View style={[styles.divider, { backgroundColor: theme.border }]} />
-                <Pressable
-                  onPress={() => {
-                    setPriceInput(String(radioGuidePrice));
-                    setShowPriceModal(true);
-                  }}
-                  style={({ pressed }) => ({ opacity: pressed ? 0.7 : 1 })}
-                >
-                  <View style={styles.settingItem}>
-                    <View style={styles.settingLeft}>
-                      <Icon name="radio" size={20} color={theme.textSecondary} />
-                      <ThemedText style={styles.settingText}>Стоимость радиогида</ThemedText>
-                    </View>
-                    <ThemedText style={{ color: theme.primary, fontWeight: "600" }}>
-                      {radioGuidePrice}₽
-                    </ThemedText>
-                  </View>
-                </Pressable>
-                <View style={[styles.divider, { backgroundColor: theme.border }]} />
-                <Pressable
-                  onPress={() => {
-                    setCostInput(String(rentalCostPerReceiver));
-                    setShowCostModal(true);
-                  }}
-                  style={({ pressed }) => ({ opacity: pressed ? 0.7 : 1 })}
-                >
-                  <View style={styles.settingItem}>
-                    <View style={styles.settingLeft}>
-                      <Icon name="package" size={20} color={theme.textSecondary} />
-                      <ThemedText style={styles.settingText}>Себестоимость приёмника</ThemedText>
-                    </View>
-                    <ThemedText style={{ color: theme.primary, fontWeight: "600" }}>
-                      {rentalCostPerReceiver}₽
-                    </ThemedText>
-                  </View>
-                </Pressable>
-              </>
-            ) : null}
-          </ThemedView>
-        </View>
-
-        <View style={styles.section}>
-          <ThemedText style={styles.sectionTitle}>О приложении</ThemedText>
-          <ThemedView
-            style={[
-              styles.settingsGroup,
-              {
-                borderColor: theme.border,
-                borderRadius: BorderRadius.sm,
-              },
-            ]}
-          >
-            <View style={styles.settingItem}>
-              <ThemedText style={[styles.settingText, { color: theme.textSecondary }]}>
-                Версия
-              </ThemedText>
-              <ThemedText style={styles.settingText}>1.0.0</ThemedText>
-            </View>
-          </ThemedView>
-        </View>
+        <SettingsCard title="О приложении">
+          <View style={styles.settingItem}>
+            <ThemedText style={[styles.settingText, { color: theme.textSecondary }]}>Версия</ThemedText>
+            <ThemedText style={styles.settingText}>1.0.0</ThemedText>
+          </View>
+        </SettingsCard>
 
         <Pressable
           onPress={handleLogout}
           style={({ pressed }) => [
             styles.logoutButton,
-            {
-              backgroundColor: theme.error,
-              opacity: pressed ? 0.7 : 1,
-            },
+            { backgroundColor: theme.error, opacity: pressed ? 0.7 : 1 },
           ]}
         >
           <Icon name="log-out" size={20} color={theme.buttonText} />
@@ -443,10 +266,7 @@ export default function SettingsScreen() {
         animationType="fade"
         onRequestClose={() => setShowPriceModal(false)}
       >
-        <Pressable
-          style={styles.modalOverlay}
-          onPress={() => setShowPriceModal(false)}
-        >
+        <Pressable style={styles.modalOverlay} onPress={() => setShowPriceModal(false)}>
           <Pressable
             style={[styles.modalContent, { backgroundColor: theme.backgroundSecondary }]}
             onPress={(e) => e.stopPropagation()}
@@ -490,17 +310,14 @@ export default function SettingsScreen() {
         animationType="fade"
         onRequestClose={() => setShowCostModal(false)}
       >
-        <Pressable
-          style={styles.modalOverlay}
-          onPress={() => setShowCostModal(false)}
-        >
+        <Pressable style={styles.modalOverlay} onPress={() => setShowCostModal(false)}>
           <Pressable
             style={[styles.modalContent, { backgroundColor: theme.backgroundSecondary }]}
             onPress={(e) => e.stopPropagation()}
           >
             <ThemedText style={styles.modalTitle}>Себестоимость приёмника</ThemedText>
             <ThemedText style={[styles.modalSubtitle, { color: theme.textSecondary }]}>
-              Стоимость 1 приёмника для расчёта прибыли и комиссий (независимо от дней аренды)
+              Стоимость 1 приёмника для расчёта прибыли и комиссий
             </ThemedText>
             <TextInput
               style={[styles.priceInput, { backgroundColor: theme.backgroundRoot, color: theme.text, borderColor: theme.border }]}
@@ -536,7 +353,7 @@ export default function SettingsScreen() {
 
 const styles = StyleSheet.create({
   container: {
-    gap: Spacing["2xl"],
+    gap: Spacing.xl,
   },
   profileCard: {
     padding: Spacing.xl,
@@ -570,7 +387,7 @@ const styles = StyleSheet.create({
   },
   roleBadge: {
     alignSelf: "flex-start",
-    paddingHorizontal: Spacing.md,
+    paddingHorizontal: Spacing.sm,
     paddingVertical: Spacing.xs,
     borderRadius: BorderRadius.xs,
   },
@@ -578,12 +395,28 @@ const styles = StyleSheet.create({
     fontSize: 12,
     fontWeight: "500",
   },
+  editProfileButton: {
+    flexDirection: "row",
+    alignItems: "center",
+    justifyContent: "center",
+    gap: Spacing.sm,
+    marginTop: Spacing.lg,
+    paddingVertical: Spacing.md,
+    borderRadius: BorderRadius.sm,
+  },
+  editProfileText: {
+    fontWeight: "600",
+    fontSize: 14,
+  },
   section: {
-    gap: Spacing.md,
+    gap: Spacing.sm,
   },
   sectionTitle: {
-    fontSize: 18,
+    fontSize: 13,
     fontWeight: "600",
+    textTransform: "uppercase",
+    letterSpacing: 0.5,
+    marginLeft: Spacing.xs,
   },
   settingsGroup: {
     borderWidth: 1,
@@ -593,58 +426,45 @@ const styles = StyleSheet.create({
     flexDirection: "row",
     alignItems: "center",
     justifyContent: "space-between",
-    padding: Spacing.lg,
+    paddingVertical: Spacing.lg,
+    paddingHorizontal: Spacing.lg,
   },
   settingLeft: {
     flexDirection: "row",
     alignItems: "center",
     gap: Spacing.md,
+    flex: 1,
   },
   settingText: {
     fontSize: 16,
   },
   divider: {
-    height: 1,
-    marginLeft: Spacing.lg + 20 + Spacing.md,
+    height: StyleSheet.hairlineWidth,
+    marginLeft: Spacing.xl + Spacing.lg + Spacing.md,
   },
   logoutButton: {
     flexDirection: "row",
     alignItems: "center",
     justifyContent: "center",
-    padding: Spacing.lg,
-    borderRadius: BorderRadius.xs,
     gap: Spacing.sm,
+    padding: Spacing.lg,
+    borderRadius: BorderRadius.sm,
   },
   logoutText: {
-    fontSize: 16,
     fontWeight: "600",
-  },
-  editProfileButton: {
-    flexDirection: "row",
-    alignItems: "center",
-    justifyContent: "center",
-    gap: Spacing.sm,
-    paddingVertical: Spacing.sm,
-    paddingHorizontal: Spacing.md,
-    borderRadius: BorderRadius.xs,
-    marginTop: Spacing.md,
-  },
-  editProfileText: {
-    fontSize: 14,
-    fontWeight: "500",
+    fontSize: 16,
   },
   modalOverlay: {
     flex: 1,
-    backgroundColor: "rgba(0,0,0,0.5)",
+    backgroundColor: "rgba(0, 0, 0, 0.5)",
     justifyContent: "center",
     alignItems: "center",
     padding: Spacing.xl,
   },
   modalContent: {
     width: "100%",
-    maxWidth: 400,
-    padding: Spacing.xl,
     borderRadius: BorderRadius.md,
+    padding: Spacing.xl,
     gap: Spacing.md,
   },
   modalTitle: {
@@ -657,20 +477,20 @@ const styles = StyleSheet.create({
     textAlign: "center",
   },
   priceInput: {
-    padding: Spacing.md,
-    borderRadius: BorderRadius.sm,
     borderWidth: 1,
+    borderRadius: BorderRadius.sm,
+    padding: Spacing.md,
     fontSize: 18,
     textAlign: "center",
   },
   modalButtons: {
     flexDirection: "row",
     gap: Spacing.md,
-    marginTop: Spacing.md,
+    marginTop: Spacing.sm,
   },
   modalButton: {
     flex: 1,
-    padding: Spacing.md,
+    paddingVertical: Spacing.md,
     borderRadius: BorderRadius.sm,
     alignItems: "center",
   },
