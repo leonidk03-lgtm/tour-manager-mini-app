@@ -326,25 +326,29 @@ const styles = StyleSheet.create({
     alignItems: "center",
   },
   totalCard: {
-    padding: Spacing.lg,
+    paddingHorizontal: Spacing.lg,
+    paddingVertical: Spacing.xl,
     borderRadius: BorderRadius.md,
     gap: Spacing.md,
   },
   totalTitle: {
     fontSize: 16,
     fontWeight: "600",
+    textAlign: "center",
   },
   totalRow: {
     flexDirection: "row",
     justifyContent: "space-around",
+    paddingTop: Spacing.sm,
   },
   totalItem: {
     alignItems: "center",
     gap: Spacing.xs,
   },
   totalValue: {
-    fontSize: 32,
+    fontSize: 28,
     fontWeight: "700",
+    lineHeight: 34,
   },
   totalLabel: {
     fontSize: 14,
