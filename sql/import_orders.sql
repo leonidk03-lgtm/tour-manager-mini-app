@@ -1,6 +1,5 @@
--- Import rental orders from Excel (improved matching)
--- Run this in Supabase SQL Editor
--- Make sure to run import_clients.sql first!
+-- Import rental orders from Excel
+-- Run after import_clients.sql
 
 INSERT INTO rental_orders (
   order_number, client_id, status, start_date, end_date, days_count,
@@ -27,12 +26,9 @@ SELECT
   NOW(),
   NOW()
 FROM rental_clients c
-WHERE c.name ILIKE '%Эдик Заказы для групп%' 
-   OR c.director_name ILIKE '%Эдик Заказы для групп%'
-   OR 'Эдик Заказы для групп' ILIKE '%' || c.name || '%'
-   OR 'Эдик Заказы для групп' ILIKE '%' || c.director_name || '%'
-LIMIT 1
-ON CONFLICT (order_number) DO NOTHING;
+WHERE (c.name = 'Эдик Заказы для групп' OR c.director_name = 'Эдик Заказы для групп')
+  AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 1273)
+LIMIT 1;
 
 INSERT INTO rental_orders (
   order_number, client_id, status, start_date, end_date, days_count,
@@ -59,12 +55,9 @@ SELECT
   NOW(),
   NOW()
 FROM rental_clients c
-WHERE c.name ILIKE '%Эдик Заказы для групп%' 
-   OR c.director_name ILIKE '%Эдик Заказы для групп%'
-   OR 'Эдик Заказы для групп' ILIKE '%' || c.name || '%'
-   OR 'Эдик Заказы для групп' ILIKE '%' || c.director_name || '%'
-LIMIT 1
-ON CONFLICT (order_number) DO NOTHING;
+WHERE (c.name = 'Эдик Заказы для групп' OR c.director_name = 'Эдик Заказы для групп')
+  AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 1272)
+LIMIT 1;
 
 INSERT INTO rental_orders (
   order_number, client_id, status, start_date, end_date, days_count,
@@ -91,12 +84,9 @@ SELECT
   NOW(),
   NOW()
 FROM rental_clients c
-WHERE c.name ILIKE '%София%' 
-   OR c.director_name ILIKE '%София%'
-   OR 'София' ILIKE '%' || c.name || '%'
-   OR 'София' ILIKE '%' || c.director_name || '%'
-LIMIT 1
-ON CONFLICT (order_number) DO NOTHING;
+WHERE (c.name = 'София' OR c.director_name = 'София')
+  AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 1271)
+LIMIT 1;
 
 INSERT INTO rental_orders (
   order_number, client_id, status, start_date, end_date, days_count,
@@ -123,12 +113,9 @@ SELECT
   NOW(),
   NOW()
 FROM rental_clients c
-WHERE c.name ILIKE '%Арсен (Юнион)%' 
-   OR c.director_name ILIKE '%Арсен (Юнион)%'
-   OR 'Арсен (Юнион)' ILIKE '%' || c.name || '%'
-   OR 'Арсен (Юнион)' ILIKE '%' || c.director_name || '%'
-LIMIT 1
-ON CONFLICT (order_number) DO NOTHING;
+WHERE (c.name = 'Арсен (Юнион)' OR c.director_name = 'Арсен (Юнион)')
+  AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 1270)
+LIMIT 1;
 
 INSERT INTO rental_orders (
   order_number, client_id, status, start_date, end_date, days_count,
@@ -155,12 +142,9 @@ SELECT
   NOW(),
   NOW()
 FROM rental_clients c
-WHERE c.name ILIKE '%Арсен (Юнион)%' 
-   OR c.director_name ILIKE '%Арсен (Юнион)%'
-   OR 'Арсен (Юнион)' ILIKE '%' || c.name || '%'
-   OR 'Арсен (Юнион)' ILIKE '%' || c.director_name || '%'
-LIMIT 1
-ON CONFLICT (order_number) DO NOTHING;
+WHERE (c.name = 'Арсен (Юнион)' OR c.director_name = 'Арсен (Юнион)')
+  AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 1269)
+LIMIT 1;
 
 INSERT INTO rental_orders (
   order_number, client_id, status, start_date, end_date, days_count,
@@ -187,12 +171,9 @@ SELECT
   NOW(),
   NOW()
 FROM rental_clients c
-WHERE c.name ILIKE '%Арсен (Юнион)%' 
-   OR c.director_name ILIKE '%Арсен (Юнион)%'
-   OR 'Арсен (Юнион)' ILIKE '%' || c.name || '%'
-   OR 'Арсен (Юнион)' ILIKE '%' || c.director_name || '%'
-LIMIT 1
-ON CONFLICT (order_number) DO NOTHING;
+WHERE (c.name = 'Арсен (Юнион)' OR c.director_name = 'Арсен (Юнион)')
+  AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 1268)
+LIMIT 1;
 
 INSERT INTO rental_orders (
   order_number, client_id, status, start_date, end_date, days_count,
@@ -219,12 +200,9 @@ SELECT
   NOW(),
   NOW()
 FROM rental_clients c
-WHERE c.name ILIKE '%Арсен (Юнион)%' 
-   OR c.director_name ILIKE '%Арсен (Юнион)%'
-   OR 'Арсен (Юнион)' ILIKE '%' || c.name || '%'
-   OR 'Арсен (Юнион)' ILIKE '%' || c.director_name || '%'
-LIMIT 1
-ON CONFLICT (order_number) DO NOTHING;
+WHERE (c.name = 'Арсен (Юнион)' OR c.director_name = 'Арсен (Юнион)')
+  AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 1267)
+LIMIT 1;
 
 INSERT INTO rental_orders (
   order_number, client_id, status, start_date, end_date, days_count,
@@ -251,12 +229,9 @@ SELECT
   NOW(),
   NOW()
 FROM rental_clients c
-WHERE c.name ILIKE '%Арсен (Юнион)%' 
-   OR c.director_name ILIKE '%Арсен (Юнион)%'
-   OR 'Арсен (Юнион)' ILIKE '%' || c.name || '%'
-   OR 'Арсен (Юнион)' ILIKE '%' || c.director_name || '%'
-LIMIT 1
-ON CONFLICT (order_number) DO NOTHING;
+WHERE (c.name = 'Арсен (Юнион)' OR c.director_name = 'Арсен (Юнион)')
+  AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 1266)
+LIMIT 1;
 
 INSERT INTO rental_orders (
   order_number, client_id, status, start_date, end_date, days_count,
@@ -283,12 +258,9 @@ SELECT
   NOW(),
   NOW()
 FROM rental_clients c
-WHERE c.name ILIKE '%Арсен (Юнион)%' 
-   OR c.director_name ILIKE '%Арсен (Юнион)%'
-   OR 'Арсен (Юнион)' ILIKE '%' || c.name || '%'
-   OR 'Арсен (Юнион)' ILIKE '%' || c.director_name || '%'
-LIMIT 1
-ON CONFLICT (order_number) DO NOTHING;
+WHERE (c.name = 'Арсен (Юнион)' OR c.director_name = 'Арсен (Юнион)')
+  AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 1265)
+LIMIT 1;
 
 INSERT INTO rental_orders (
   order_number, client_id, status, start_date, end_date, days_count,
@@ -315,12 +287,9 @@ SELECT
   NOW(),
   NOW()
 FROM rental_clients c
-WHERE c.name ILIKE '%Арсен (Юнион)%' 
-   OR c.director_name ILIKE '%Арсен (Юнион)%'
-   OR 'Арсен (Юнион)' ILIKE '%' || c.name || '%'
-   OR 'Арсен (Юнион)' ILIKE '%' || c.director_name || '%'
-LIMIT 1
-ON CONFLICT (order_number) DO NOTHING;
+WHERE (c.name = 'Арсен (Юнион)' OR c.director_name = 'Арсен (Юнион)')
+  AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 1264)
+LIMIT 1;
 
 INSERT INTO rental_orders (
   order_number, client_id, status, start_date, end_date, days_count,
@@ -347,12 +316,9 @@ SELECT
   NOW(),
   NOW()
 FROM rental_clients c
-WHERE c.name ILIKE '%Арсен (Юнион)%' 
-   OR c.director_name ILIKE '%Арсен (Юнион)%'
-   OR 'Арсен (Юнион)' ILIKE '%' || c.name || '%'
-   OR 'Арсен (Юнион)' ILIKE '%' || c.director_name || '%'
-LIMIT 1
-ON CONFLICT (order_number) DO NOTHING;
+WHERE (c.name = 'Арсен (Юнион)' OR c.director_name = 'Арсен (Юнион)')
+  AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 1263)
+LIMIT 1;
 
 INSERT INTO rental_orders (
   order_number, client_id, status, start_date, end_date, days_count,
@@ -379,12 +345,9 @@ SELECT
   NOW(),
   NOW()
 FROM rental_clients c
-WHERE c.name ILIKE '%Арсен (Юнион)%' 
-   OR c.director_name ILIKE '%Арсен (Юнион)%'
-   OR 'Арсен (Юнион)' ILIKE '%' || c.name || '%'
-   OR 'Арсен (Юнион)' ILIKE '%' || c.director_name || '%'
-LIMIT 1
-ON CONFLICT (order_number) DO NOTHING;
+WHERE (c.name = 'Арсен (Юнион)' OR c.director_name = 'Арсен (Юнион)')
+  AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 1262)
+LIMIT 1;
 
 INSERT INTO rental_orders (
   order_number, client_id, status, start_date, end_date, days_count,
@@ -411,12 +374,9 @@ SELECT
   NOW(),
   NOW()
 FROM rental_clients c
-WHERE c.name ILIKE '%Арсен (Юнион)%' 
-   OR c.director_name ILIKE '%Арсен (Юнион)%'
-   OR 'Арсен (Юнион)' ILIKE '%' || c.name || '%'
-   OR 'Арсен (Юнион)' ILIKE '%' || c.director_name || '%'
-LIMIT 1
-ON CONFLICT (order_number) DO NOTHING;
+WHERE (c.name = 'Арсен (Юнион)' OR c.director_name = 'Арсен (Юнион)')
+  AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 1261)
+LIMIT 1;
 
 INSERT INTO rental_orders (
   order_number, client_id, status, start_date, end_date, days_count,
@@ -443,12 +403,9 @@ SELECT
   NOW(),
   NOW()
 FROM rental_clients c
-WHERE c.name ILIKE '%Арсен (Юнион)%' 
-   OR c.director_name ILIKE '%Арсен (Юнион)%'
-   OR 'Арсен (Юнион)' ILIKE '%' || c.name || '%'
-   OR 'Арсен (Юнион)' ILIKE '%' || c.director_name || '%'
-LIMIT 1
-ON CONFLICT (order_number) DO NOTHING;
+WHERE (c.name = 'Арсен (Юнион)' OR c.director_name = 'Арсен (Юнион)')
+  AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 1260)
+LIMIT 1;
 
 INSERT INTO rental_orders (
   order_number, client_id, status, start_date, end_date, days_count,
@@ -475,12 +432,9 @@ SELECT
   NOW(),
   NOW()
 FROM rental_clients c
-WHERE c.name ILIKE '%Арсен (Юнион)%' 
-   OR c.director_name ILIKE '%Арсен (Юнион)%'
-   OR 'Арсен (Юнион)' ILIKE '%' || c.name || '%'
-   OR 'Арсен (Юнион)' ILIKE '%' || c.director_name || '%'
-LIMIT 1
-ON CONFLICT (order_number) DO NOTHING;
+WHERE (c.name = 'Арсен (Юнион)' OR c.director_name = 'Арсен (Юнион)')
+  AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 1259)
+LIMIT 1;
 
 INSERT INTO rental_orders (
   order_number, client_id, status, start_date, end_date, days_count,
@@ -507,12 +461,9 @@ SELECT
   NOW(),
   NOW()
 FROM rental_clients c
-WHERE c.name ILIKE '%Зельфира%' 
-   OR c.director_name ILIKE '%Зельфира%'
-   OR 'Зельфира' ILIKE '%' || c.name || '%'
-   OR 'Зельфира' ILIKE '%' || c.director_name || '%'
-LIMIT 1
-ON CONFLICT (order_number) DO NOTHING;
+WHERE (c.name = 'Зельфира' OR c.director_name = 'Зельфира')
+  AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 1258)
+LIMIT 1;
 
 INSERT INTO rental_orders (
   order_number, client_id, status, start_date, end_date, days_count,
@@ -539,12 +490,9 @@ SELECT
   NOW(),
   NOW()
 FROM rental_clients c
-WHERE c.name ILIKE '%Зельфира%' 
-   OR c.director_name ILIKE '%Зельфира%'
-   OR 'Зельфира' ILIKE '%' || c.name || '%'
-   OR 'Зельфира' ILIKE '%' || c.director_name || '%'
-LIMIT 1
-ON CONFLICT (order_number) DO NOTHING;
+WHERE (c.name = 'Зельфира' OR c.director_name = 'Зельфира')
+  AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 1257)
+LIMIT 1;
 
 INSERT INTO rental_orders (
   order_number, client_id, status, start_date, end_date, days_count,
@@ -571,12 +519,9 @@ SELECT
   NOW(),
   NOW()
 FROM rental_clients c
-WHERE c.name ILIKE '%Зельфира%' 
-   OR c.director_name ILIKE '%Зельфира%'
-   OR 'Зельфира' ILIKE '%' || c.name || '%'
-   OR 'Зельфира' ILIKE '%' || c.director_name || '%'
-LIMIT 1
-ON CONFLICT (order_number) DO NOTHING;
+WHERE (c.name = 'Зельфира' OR c.director_name = 'Зельфира')
+  AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 1256)
+LIMIT 1;
 
 INSERT INTO rental_orders (
   order_number, client_id, status, start_date, end_date, days_count,
@@ -603,12 +548,9 @@ SELECT
   NOW(),
   NOW()
 FROM rental_clients c
-WHERE c.name ILIKE '%Эвелина (Инициатива)%' 
-   OR c.director_name ILIKE '%Эвелина (Инициатива)%'
-   OR 'Эвелина (Инициатива)' ILIKE '%' || c.name || '%'
-   OR 'Эвелина (Инициатива)' ILIKE '%' || c.director_name || '%'
-LIMIT 1
-ON CONFLICT (order_number) DO NOTHING;
+WHERE (c.name = 'Эвелина (Инициатива)' OR c.director_name = 'Эвелина (Инициатива)')
+  AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 1255)
+LIMIT 1;
 
 INSERT INTO rental_orders (
   order_number, client_id, status, start_date, end_date, days_count,
@@ -635,12 +577,9 @@ SELECT
   NOW(),
   NOW()
 FROM rental_clients c
-WHERE c.name ILIKE '%Эвелина (Инициатива)%' 
-   OR c.director_name ILIKE '%Эвелина (Инициатива)%'
-   OR 'Эвелина (Инициатива)' ILIKE '%' || c.name || '%'
-   OR 'Эвелина (Инициатива)' ILIKE '%' || c.director_name || '%'
-LIMIT 1
-ON CONFLICT (order_number) DO NOTHING;
+WHERE (c.name = 'Эвелина (Инициатива)' OR c.director_name = 'Эвелина (Инициатива)')
+  AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 1254)
+LIMIT 1;
 
 INSERT INTO rental_orders (
   order_number, client_id, status, start_date, end_date, days_count,
@@ -667,12 +606,9 @@ SELECT
   NOW(),
   NOW()
 FROM rental_clients c
-WHERE c.name ILIKE '%Эвелина (Инициатива)%' 
-   OR c.director_name ILIKE '%Эвелина (Инициатива)%'
-   OR 'Эвелина (Инициатива)' ILIKE '%' || c.name || '%'
-   OR 'Эвелина (Инициатива)' ILIKE '%' || c.director_name || '%'
-LIMIT 1
-ON CONFLICT (order_number) DO NOTHING;
+WHERE (c.name = 'Эвелина (Инициатива)' OR c.director_name = 'Эвелина (Инициатива)')
+  AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 1253)
+LIMIT 1;
 
 INSERT INTO rental_orders (
   order_number, client_id, status, start_date, end_date, days_count,
@@ -699,12 +635,9 @@ SELECT
   NOW(),
   NOW()
 FROM rental_clients c
-WHERE c.name ILIKE '%Эвелина (Инициатива)%' 
-   OR c.director_name ILIKE '%Эвелина (Инициатива)%'
-   OR 'Эвелина (Инициатива)' ILIKE '%' || c.name || '%'
-   OR 'Эвелина (Инициатива)' ILIKE '%' || c.director_name || '%'
-LIMIT 1
-ON CONFLICT (order_number) DO NOTHING;
+WHERE (c.name = 'Эвелина (Инициатива)' OR c.director_name = 'Эвелина (Инициатива)')
+  AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 1252)
+LIMIT 1;
 
 INSERT INTO rental_orders (
   order_number, client_id, status, start_date, end_date, days_count,
@@ -731,12 +664,9 @@ SELECT
   NOW(),
   NOW()
 FROM rental_clients c
-WHERE c.name ILIKE '%Эвелина (Инициатива)%' 
-   OR c.director_name ILIKE '%Эвелина (Инициатива)%'
-   OR 'Эвелина (Инициатива)' ILIKE '%' || c.name || '%'
-   OR 'Эвелина (Инициатива)' ILIKE '%' || c.director_name || '%'
-LIMIT 1
-ON CONFLICT (order_number) DO NOTHING;
+WHERE (c.name = 'Эвелина (Инициатива)' OR c.director_name = 'Эвелина (Инициатива)')
+  AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 1251)
+LIMIT 1;
 
 INSERT INTO rental_orders (
   order_number, client_id, status, start_date, end_date, days_count,
@@ -763,12 +693,9 @@ SELECT
   NOW(),
   NOW()
 FROM rental_clients c
-WHERE c.name ILIKE '%Мария Экскурсовод%' 
-   OR c.director_name ILIKE '%Мария Экскурсовод%'
-   OR 'Мария Экскурсовод' ILIKE '%' || c.name || '%'
-   OR 'Мария Экскурсовод' ILIKE '%' || c.director_name || '%'
-LIMIT 1
-ON CONFLICT (order_number) DO NOTHING;
+WHERE (c.name = 'Мария Экскурсовод' OR c.director_name = 'Мария Экскурсовод')
+  AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 1250)
+LIMIT 1;
 
 INSERT INTO rental_orders (
   order_number, client_id, status, start_date, end_date, days_count,
@@ -795,12 +722,9 @@ SELECT
   NOW(),
   NOW()
 FROM rental_clients c
-WHERE c.name ILIKE '%Элина (Сититур)%' 
-   OR c.director_name ILIKE '%Элина (Сититур)%'
-   OR 'Элина (Сититур)' ILIKE '%' || c.name || '%'
-   OR 'Элина (Сититур)' ILIKE '%' || c.director_name || '%'
-LIMIT 1
-ON CONFLICT (order_number) DO NOTHING;
+WHERE (c.name = 'Элина (Сититур)' OR c.director_name = 'Элина (Сититур)')
+  AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 1249)
+LIMIT 1;
 
 INSERT INTO rental_orders (
   order_number, client_id, status, start_date, end_date, days_count,
@@ -827,12 +751,9 @@ SELECT
   NOW(),
   NOW()
 FROM rental_clients c
-WHERE c.name ILIKE '%Ляйсан (Казань 360)%' 
-   OR c.director_name ILIKE '%Ляйсан (Казань 360)%'
-   OR 'Ляйсан (Казань 360)' ILIKE '%' || c.name || '%'
-   OR 'Ляйсан (Казань 360)' ILIKE '%' || c.director_name || '%'
-LIMIT 1
-ON CONFLICT (order_number) DO NOTHING;
+WHERE (c.name = 'Ляйсан (Казань 360)' OR c.director_name = 'Ляйсан (Казань 360)')
+  AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 1248)
+LIMIT 1;
 
 INSERT INTO rental_orders (
   order_number, client_id, status, start_date, end_date, days_count,
@@ -859,12 +780,9 @@ SELECT
   NOW(),
   NOW()
 FROM rental_clients c
-WHERE c.name ILIKE '%Ляйсан (Казань 360)%' 
-   OR c.director_name ILIKE '%Ляйсан (Казань 360)%'
-   OR 'Ляйсан (Казань 360)' ILIKE '%' || c.name || '%'
-   OR 'Ляйсан (Казань 360)' ILIKE '%' || c.director_name || '%'
-LIMIT 1
-ON CONFLICT (order_number) DO NOTHING;
+WHERE (c.name = 'Ляйсан (Казань 360)' OR c.director_name = 'Ляйсан (Казань 360)')
+  AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 1247)
+LIMIT 1;
 
 INSERT INTO rental_orders (
   order_number, client_id, status, start_date, end_date, days_count,
@@ -891,12 +809,9 @@ SELECT
   NOW(),
   NOW()
 FROM rental_clients c
-WHERE c.name ILIKE '%Мира (ИП)%' 
-   OR c.director_name ILIKE '%Мира (ИП)%'
-   OR 'Мира (ИП)' ILIKE '%' || c.name || '%'
-   OR 'Мира (ИП)' ILIKE '%' || c.director_name || '%'
-LIMIT 1
-ON CONFLICT (order_number) DO NOTHING;
+WHERE (c.name = 'Мира (ИП)' OR c.director_name = 'Мира (ИП)')
+  AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 1246)
+LIMIT 1;
 
 INSERT INTO rental_orders (
   order_number, client_id, status, start_date, end_date, days_count,
@@ -923,12 +838,9 @@ SELECT
   NOW(),
   NOW()
 FROM rental_clients c
-WHERE c.name ILIKE '%Любовь (ТИЦ)%' 
-   OR c.director_name ILIKE '%Любовь (ТИЦ)%'
-   OR 'Любовь (ТИЦ)' ILIKE '%' || c.name || '%'
-   OR 'Любовь (ТИЦ)' ILIKE '%' || c.director_name || '%'
-LIMIT 1
-ON CONFLICT (order_number) DO NOTHING;
+WHERE (c.name = 'Любовь (ТИЦ)' OR c.director_name = 'Любовь (ТИЦ)')
+  AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 1245)
+LIMIT 1;
 
 INSERT INTO rental_orders (
   order_number, client_id, status, start_date, end_date, days_count,
@@ -955,12 +867,9 @@ SELECT
   NOW(),
   NOW()
 FROM rental_clients c
-WHERE c.name ILIKE '%Мария Экскурсовод%' 
-   OR c.director_name ILIKE '%Мария Экскурсовод%'
-   OR 'Мария Экскурсовод' ILIKE '%' || c.name || '%'
-   OR 'Мария Экскурсовод' ILIKE '%' || c.director_name || '%'
-LIMIT 1
-ON CONFLICT (order_number) DO NOTHING;
+WHERE (c.name = 'Мария Экскурсовод' OR c.director_name = 'Мария Экскурсовод')
+  AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 1244)
+LIMIT 1;
 
 INSERT INTO rental_orders (
   order_number, client_id, status, start_date, end_date, days_count,
@@ -987,12 +896,9 @@ SELECT
   NOW(),
   NOW()
 FROM rental_clients c
-WHERE c.name ILIKE '%Мария Экскурсовод%' 
-   OR c.director_name ILIKE '%Мария Экскурсовод%'
-   OR 'Мария Экскурсовод' ILIKE '%' || c.name || '%'
-   OR 'Мария Экскурсовод' ILIKE '%' || c.director_name || '%'
-LIMIT 1
-ON CONFLICT (order_number) DO NOTHING;
+WHERE (c.name = 'Мария Экскурсовод' OR c.director_name = 'Мария Экскурсовод')
+  AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 1243)
+LIMIT 1;
 
 INSERT INTO rental_orders (
   order_number, client_id, status, start_date, end_date, days_count,
@@ -1019,12 +925,9 @@ SELECT
   NOW(),
   NOW()
 FROM rental_clients c
-WHERE c.name ILIKE '%Мария Экскурсовод%' 
-   OR c.director_name ILIKE '%Мария Экскурсовод%'
-   OR 'Мария Экскурсовод' ILIKE '%' || c.name || '%'
-   OR 'Мария Экскурсовод' ILIKE '%' || c.director_name || '%'
-LIMIT 1
-ON CONFLICT (order_number) DO NOTHING;
+WHERE (c.name = 'Мария Экскурсовод' OR c.director_name = 'Мария Экскурсовод')
+  AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 1242)
+LIMIT 1;
 
 INSERT INTO rental_orders (
   order_number, client_id, status, start_date, end_date, days_count,
@@ -1051,12 +954,9 @@ SELECT
   NOW(),
   NOW()
 FROM rental_clients c
-WHERE c.name ILIKE '%Арсен (Юнион)%' 
-   OR c.director_name ILIKE '%Арсен (Юнион)%'
-   OR 'Арсен (Юнион)' ILIKE '%' || c.name || '%'
-   OR 'Арсен (Юнион)' ILIKE '%' || c.director_name || '%'
-LIMIT 1
-ON CONFLICT (order_number) DO NOTHING;
+WHERE (c.name = 'Арсен (Юнион)' OR c.director_name = 'Арсен (Юнион)')
+  AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 1241)
+LIMIT 1;
 
 INSERT INTO rental_orders (
   order_number, client_id, status, start_date, end_date, days_count,
@@ -1083,12 +983,9 @@ SELECT
   NOW(),
   NOW()
 FROM rental_clients c
-WHERE c.name ILIKE '%Елена (Конгресс Авиа)%' 
-   OR c.director_name ILIKE '%Елена (Конгресс Авиа)%'
-   OR 'Елена (Конгресс Авиа)' ILIKE '%' || c.name || '%'
-   OR 'Елена (Конгресс Авиа)' ILIKE '%' || c.director_name || '%'
-LIMIT 1
-ON CONFLICT (order_number) DO NOTHING;
+WHERE (c.name = 'Елена (Конгресс Авиа)' OR c.director_name = 'Елена (Конгресс Авиа)')
+  AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 1240)
+LIMIT 1;
 
 INSERT INTO rental_orders (
   order_number, client_id, status, start_date, end_date, days_count,
@@ -1115,12 +1012,9 @@ SELECT
   NOW(),
   NOW()
 FROM rental_clients c
-WHERE c.name ILIKE '%Ляйсан (Казань 360)%' 
-   OR c.director_name ILIKE '%Ляйсан (Казань 360)%'
-   OR 'Ляйсан (Казань 360)' ILIKE '%' || c.name || '%'
-   OR 'Ляйсан (Казань 360)' ILIKE '%' || c.director_name || '%'
-LIMIT 1
-ON CONFLICT (order_number) DO NOTHING;
+WHERE (c.name = 'Ляйсан (Казань 360)' OR c.director_name = 'Ляйсан (Казань 360)')
+  AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 1239)
+LIMIT 1;
 
 INSERT INTO rental_orders (
   order_number, client_id, status, start_date, end_date, days_count,
@@ -1147,12 +1041,9 @@ SELECT
   NOW(),
   NOW()
 FROM rental_clients c
-WHERE c.name ILIKE '%Ляйсан (Казань 360)%' 
-   OR c.director_name ILIKE '%Ляйсан (Казань 360)%'
-   OR 'Ляйсан (Казань 360)' ILIKE '%' || c.name || '%'
-   OR 'Ляйсан (Казань 360)' ILIKE '%' || c.director_name || '%'
-LIMIT 1
-ON CONFLICT (order_number) DO NOTHING;
+WHERE (c.name = 'Ляйсан (Казань 360)' OR c.director_name = 'Ляйсан (Казань 360)')
+  AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 1238)
+LIMIT 1;
 
 INSERT INTO rental_orders (
   order_number, client_id, status, start_date, end_date, days_count,
@@ -1179,12 +1070,9 @@ SELECT
   NOW(),
   NOW()
 FROM rental_clients c
-WHERE c.name ILIKE '%Карина (технологии путешествий)%' 
-   OR c.director_name ILIKE '%Карина (технологии путешествий)%'
-   OR 'Карина (технологии путешествий)' ILIKE '%' || c.name || '%'
-   OR 'Карина (технологии путешествий)' ILIKE '%' || c.director_name || '%'
-LIMIT 1
-ON CONFLICT (order_number) DO NOTHING;
+WHERE (c.name = 'Карина (технологии путешествий)' OR c.director_name = 'Карина (технологии путешествий)')
+  AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 1237)
+LIMIT 1;
 
 INSERT INTO rental_orders (
   order_number, client_id, status, start_date, end_date, days_count,
@@ -1211,12 +1099,9 @@ SELECT
   NOW(),
   NOW()
 FROM rental_clients c
-WHERE c.name ILIKE '%Ляйсан (Казань 360)%' 
-   OR c.director_name ILIKE '%Ляйсан (Казань 360)%'
-   OR 'Ляйсан (Казань 360)' ILIKE '%' || c.name || '%'
-   OR 'Ляйсан (Казань 360)' ILIKE '%' || c.director_name || '%'
-LIMIT 1
-ON CONFLICT (order_number) DO NOTHING;
+WHERE (c.name = 'Ляйсан (Казань 360)' OR c.director_name = 'Ляйсан (Казань 360)')
+  AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 1236)
+LIMIT 1;
 
 INSERT INTO rental_orders (
   order_number, client_id, status, start_date, end_date, days_count,
@@ -1243,12 +1128,9 @@ SELECT
   NOW(),
   NOW()
 FROM rental_clients c
-WHERE c.name ILIKE '%Ляйсан (Казань 360)%' 
-   OR c.director_name ILIKE '%Ляйсан (Казань 360)%'
-   OR 'Ляйсан (Казань 360)' ILIKE '%' || c.name || '%'
-   OR 'Ляйсан (Казань 360)' ILIKE '%' || c.director_name || '%'
-LIMIT 1
-ON CONFLICT (order_number) DO NOTHING;
+WHERE (c.name = 'Ляйсан (Казань 360)' OR c.director_name = 'Ляйсан (Казань 360)')
+  AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 1235)
+LIMIT 1;
 
 INSERT INTO rental_orders (
   order_number, client_id, status, start_date, end_date, days_count,
@@ -1275,12 +1157,9 @@ SELECT
   NOW(),
   NOW()
 FROM rental_clients c
-WHERE c.name ILIKE '%Ляйсан (Казань 360)%' 
-   OR c.director_name ILIKE '%Ляйсан (Казань 360)%'
-   OR 'Ляйсан (Казань 360)' ILIKE '%' || c.name || '%'
-   OR 'Ляйсан (Казань 360)' ILIKE '%' || c.director_name || '%'
-LIMIT 1
-ON CONFLICT (order_number) DO NOTHING;
+WHERE (c.name = 'Ляйсан (Казань 360)' OR c.director_name = 'Ляйсан (Казань 360)')
+  AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 1234)
+LIMIT 1;
 
 INSERT INTO rental_orders (
   order_number, client_id, status, start_date, end_date, days_count,
@@ -1307,12 +1186,9 @@ SELECT
   NOW(),
   NOW()
 FROM rental_clients c
-WHERE c.name ILIKE '%Ляйсан (Казань 360)%' 
-   OR c.director_name ILIKE '%Ляйсан (Казань 360)%'
-   OR 'Ляйсан (Казань 360)' ILIKE '%' || c.name || '%'
-   OR 'Ляйсан (Казань 360)' ILIKE '%' || c.director_name || '%'
-LIMIT 1
-ON CONFLICT (order_number) DO NOTHING;
+WHERE (c.name = 'Ляйсан (Казань 360)' OR c.director_name = 'Ляйсан (Казань 360)')
+  AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 1233)
+LIMIT 1;
 
 INSERT INTO rental_orders (
   order_number, client_id, status, start_date, end_date, days_count,
@@ -1339,12 +1215,9 @@ SELECT
   NOW(),
   NOW()
 FROM rental_clients c
-WHERE c.name ILIKE '%Эдик Заказы для групп%' 
-   OR c.director_name ILIKE '%Эдик Заказы для групп%'
-   OR 'Эдик Заказы для групп' ILIKE '%' || c.name || '%'
-   OR 'Эдик Заказы для групп' ILIKE '%' || c.director_name || '%'
-LIMIT 1
-ON CONFLICT (order_number) DO NOTHING;
+WHERE (c.name = 'Эдик Заказы для групп' OR c.director_name = 'Эдик Заказы для групп')
+  AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 1232)
+LIMIT 1;
 
 INSERT INTO rental_orders (
   order_number, client_id, status, start_date, end_date, days_count,
@@ -1371,12 +1244,9 @@ SELECT
   NOW(),
   NOW()
 FROM rental_clients c
-WHERE c.name ILIKE '%Ляйсан (Казань 360)%' 
-   OR c.director_name ILIKE '%Ляйсан (Казань 360)%'
-   OR 'Ляйсан (Казань 360)' ILIKE '%' || c.name || '%'
-   OR 'Ляйсан (Казань 360)' ILIKE '%' || c.director_name || '%'
-LIMIT 1
-ON CONFLICT (order_number) DO NOTHING;
+WHERE (c.name = 'Ляйсан (Казань 360)' OR c.director_name = 'Ляйсан (Казань 360)')
+  AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 1231)
+LIMIT 1;
 
 INSERT INTO rental_orders (
   order_number, client_id, status, start_date, end_date, days_count,
@@ -1403,12 +1273,9 @@ SELECT
   NOW(),
   NOW()
 FROM rental_clients c
-WHERE c.name ILIKE '%Ляйсан (Казань 360)%' 
-   OR c.director_name ILIKE '%Ляйсан (Казань 360)%'
-   OR 'Ляйсан (Казань 360)' ILIKE '%' || c.name || '%'
-   OR 'Ляйсан (Казань 360)' ILIKE '%' || c.director_name || '%'
-LIMIT 1
-ON CONFLICT (order_number) DO NOTHING;
+WHERE (c.name = 'Ляйсан (Казань 360)' OR c.director_name = 'Ляйсан (Казань 360)')
+  AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 1230)
+LIMIT 1;
 
 INSERT INTO rental_orders (
   order_number, client_id, status, start_date, end_date, days_count,
@@ -1435,12 +1302,9 @@ SELECT
   NOW(),
   NOW()
 FROM rental_clients c
-WHERE c.name ILIKE '%Ляйсан (Казань 360)%' 
-   OR c.director_name ILIKE '%Ляйсан (Казань 360)%'
-   OR 'Ляйсан (Казань 360)' ILIKE '%' || c.name || '%'
-   OR 'Ляйсан (Казань 360)' ILIKE '%' || c.director_name || '%'
-LIMIT 1
-ON CONFLICT (order_number) DO NOTHING;
+WHERE (c.name = 'Ляйсан (Казань 360)' OR c.director_name = 'Ляйсан (Казань 360)')
+  AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 1229)
+LIMIT 1;
 
 INSERT INTO rental_orders (
   order_number, client_id, status, start_date, end_date, days_count,
@@ -1467,12 +1331,9 @@ SELECT
   NOW(),
   NOW()
 FROM rental_clients c
-WHERE c.name ILIKE '%Ляйсан (Казань 360)%' 
-   OR c.director_name ILIKE '%Ляйсан (Казань 360)%'
-   OR 'Ляйсан (Казань 360)' ILIKE '%' || c.name || '%'
-   OR 'Ляйсан (Казань 360)' ILIKE '%' || c.director_name || '%'
-LIMIT 1
-ON CONFLICT (order_number) DO NOTHING;
+WHERE (c.name = 'Ляйсан (Казань 360)' OR c.director_name = 'Ляйсан (Казань 360)')
+  AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 1228)
+LIMIT 1;
 
 INSERT INTO rental_orders (
   order_number, client_id, status, start_date, end_date, days_count,
@@ -1499,12 +1360,9 @@ SELECT
   NOW(),
   NOW()
 FROM rental_clients c
-WHERE c.name ILIKE '%Ляйсан (Казань 360)%' 
-   OR c.director_name ILIKE '%Ляйсан (Казань 360)%'
-   OR 'Ляйсан (Казань 360)' ILIKE '%' || c.name || '%'
-   OR 'Ляйсан (Казань 360)' ILIKE '%' || c.director_name || '%'
-LIMIT 1
-ON CONFLICT (order_number) DO NOTHING;
+WHERE (c.name = 'Ляйсан (Казань 360)' OR c.director_name = 'Ляйсан (Казань 360)')
+  AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 1227)
+LIMIT 1;
 
 INSERT INTO rental_orders (
   order_number, client_id, status, start_date, end_date, days_count,
@@ -1531,12 +1389,9 @@ SELECT
   NOW(),
   NOW()
 FROM rental_clients c
-WHERE c.name ILIKE '%Ляйсан (Казань 360)%' 
-   OR c.director_name ILIKE '%Ляйсан (Казань 360)%'
-   OR 'Ляйсан (Казань 360)' ILIKE '%' || c.name || '%'
-   OR 'Ляйсан (Казань 360)' ILIKE '%' || c.director_name || '%'
-LIMIT 1
-ON CONFLICT (order_number) DO NOTHING;
+WHERE (c.name = 'Ляйсан (Казань 360)' OR c.director_name = 'Ляйсан (Казань 360)')
+  AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 1226)
+LIMIT 1;
 
 INSERT INTO rental_orders (
   order_number, client_id, status, start_date, end_date, days_count,
@@ -1563,12 +1418,9 @@ SELECT
   NOW(),
   NOW()
 FROM rental_clients c
-WHERE c.name ILIKE '%Ляйсан (Казань 360)%' 
-   OR c.director_name ILIKE '%Ляйсан (Казань 360)%'
-   OR 'Ляйсан (Казань 360)' ILIKE '%' || c.name || '%'
-   OR 'Ляйсан (Казань 360)' ILIKE '%' || c.director_name || '%'
-LIMIT 1
-ON CONFLICT (order_number) DO NOTHING;
+WHERE (c.name = 'Ляйсан (Казань 360)' OR c.director_name = 'Ляйсан (Казань 360)')
+  AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 1225)
+LIMIT 1;
 
 INSERT INTO rental_orders (
   order_number, client_id, status, start_date, end_date, days_count,
@@ -1595,12 +1447,9 @@ SELECT
   NOW(),
   NOW()
 FROM rental_clients c
-WHERE c.name ILIKE '%Андрей (Экскурс)%' 
-   OR c.director_name ILIKE '%Андрей (Экскурс)%'
-   OR 'Андрей (Экскурс)' ILIKE '%' || c.name || '%'
-   OR 'Андрей (Экскурс)' ILIKE '%' || c.director_name || '%'
-LIMIT 1
-ON CONFLICT (order_number) DO NOTHING;
+WHERE (c.name = 'Андрей (Экскурс)' OR c.director_name = 'Андрей (Экскурс)')
+  AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 1224)
+LIMIT 1;
 
 INSERT INTO rental_orders (
   order_number, client_id, status, start_date, end_date, days_count,
@@ -1627,12 +1476,9 @@ SELECT
   NOW(),
   NOW()
 FROM rental_clients c
-WHERE c.name ILIKE '%Андрей (Экскурс)%' 
-   OR c.director_name ILIKE '%Андрей (Экскурс)%'
-   OR 'Андрей (Экскурс)' ILIKE '%' || c.name || '%'
-   OR 'Андрей (Экскурс)' ILIKE '%' || c.director_name || '%'
-LIMIT 1
-ON CONFLICT (order_number) DO NOTHING;
+WHERE (c.name = 'Андрей (Экскурс)' OR c.director_name = 'Андрей (Экскурс)')
+  AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 1223)
+LIMIT 1;
 
 INSERT INTO rental_orders (
   order_number, client_id, status, start_date, end_date, days_count,
@@ -1659,12 +1505,9 @@ SELECT
   NOW(),
   NOW()
 FROM rental_clients c
-WHERE c.name ILIKE '%Екатерина Кореева%' 
-   OR c.director_name ILIKE '%Екатерина Кореева%'
-   OR 'Екатерина Кореева' ILIKE '%' || c.name || '%'
-   OR 'Екатерина Кореева' ILIKE '%' || c.director_name || '%'
-LIMIT 1
-ON CONFLICT (order_number) DO NOTHING;
+WHERE (c.name = 'Екатерина Кореева' OR c.director_name = 'Екатерина Кореева')
+  AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 1222)
+LIMIT 1;
 
 INSERT INTO rental_orders (
   order_number, client_id, status, start_date, end_date, days_count,
@@ -1691,12 +1534,9 @@ SELECT
   NOW(),
   NOW()
 FROM rental_clients c
-WHERE c.name ILIKE '%Искандер%' 
-   OR c.director_name ILIKE '%Искандер%'
-   OR 'Искандер' ILIKE '%' || c.name || '%'
-   OR 'Искандер' ILIKE '%' || c.director_name || '%'
-LIMIT 1
-ON CONFLICT (order_number) DO NOTHING;
+WHERE (c.name = 'Искандер' OR c.director_name = 'Искандер')
+  AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 1221)
+LIMIT 1;
 
 INSERT INTO rental_orders (
   order_number, client_id, status, start_date, end_date, days_count,
@@ -1723,12 +1563,9 @@ SELECT
   NOW(),
   NOW()
 FROM rental_clients c
-WHERE c.name ILIKE '%Ольга%' 
-   OR c.director_name ILIKE '%Ольга%'
-   OR 'Ольга' ILIKE '%' || c.name || '%'
-   OR 'Ольга' ILIKE '%' || c.director_name || '%'
-LIMIT 1
-ON CONFLICT (order_number) DO NOTHING;
+WHERE (c.name = 'Ольга' OR c.director_name = 'Ольга')
+  AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 1220)
+LIMIT 1;
 
 INSERT INTO rental_orders (
   order_number, client_id, status, start_date, end_date, days_count,
@@ -1755,12 +1592,9 @@ SELECT
   NOW(),
   NOW()
 FROM rental_clients c
-WHERE c.name ILIKE '%Галия%' 
-   OR c.director_name ILIKE '%Галия%'
-   OR 'Галия' ILIKE '%' || c.name || '%'
-   OR 'Галия' ILIKE '%' || c.director_name || '%'
-LIMIT 1
-ON CONFLICT (order_number) DO NOTHING;
+WHERE (c.name = 'Галия' OR c.director_name = 'Галия')
+  AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 1219)
+LIMIT 1;
 
 INSERT INTO rental_orders (
   order_number, client_id, status, start_date, end_date, days_count,
@@ -1787,12 +1621,9 @@ SELECT
   NOW(),
   NOW()
 FROM rental_clients c
-WHERE c.name ILIKE '%Андрей (Экскурс)%' 
-   OR c.director_name ILIKE '%Андрей (Экскурс)%'
-   OR 'Андрей (Экскурс)' ILIKE '%' || c.name || '%'
-   OR 'Андрей (Экскурс)' ILIKE '%' || c.director_name || '%'
-LIMIT 1
-ON CONFLICT (order_number) DO NOTHING;
+WHERE (c.name = 'Андрей (Экскурс)' OR c.director_name = 'Андрей (Экскурс)')
+  AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 1218)
+LIMIT 1;
 
 INSERT INTO rental_orders (
   order_number, client_id, status, start_date, end_date, days_count,
@@ -1819,12 +1650,9 @@ SELECT
   NOW(),
   NOW()
 FROM rental_clients c
-WHERE c.name ILIKE '%Айгуль Файзуллина%' 
-   OR c.director_name ILIKE '%Айгуль Файзуллина%'
-   OR 'Айгуль Файзуллина' ILIKE '%' || c.name || '%'
-   OR 'Айгуль Файзуллина' ILIKE '%' || c.director_name || '%'
-LIMIT 1
-ON CONFLICT (order_number) DO NOTHING;
+WHERE (c.name = 'Айгуль Файзуллина' OR c.director_name = 'Айгуль Файзуллина')
+  AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 1217)
+LIMIT 1;
 
 INSERT INTO rental_orders (
   order_number, client_id, status, start_date, end_date, days_count,
@@ -1851,12 +1679,9 @@ SELECT
   NOW(),
   NOW()
 FROM rental_clients c
-WHERE c.name ILIKE '%Татьяна (Гольфстрим)%' 
-   OR c.director_name ILIKE '%Татьяна (Гольфстрим)%'
-   OR 'Татьяна (Гольфстрим)' ILIKE '%' || c.name || '%'
-   OR 'Татьяна (Гольфстрим)' ILIKE '%' || c.director_name || '%'
-LIMIT 1
-ON CONFLICT (order_number) DO NOTHING;
+WHERE (c.name = 'Татьяна (Гольфстрим)' OR c.director_name = 'Татьяна (Гольфстрим)')
+  AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 1216)
+LIMIT 1;
 
 INSERT INTO rental_orders (
   order_number, client_id, status, start_date, end_date, days_count,
@@ -1883,12 +1708,9 @@ SELECT
   NOW(),
   NOW()
 FROM rental_clients c
-WHERE c.name ILIKE '%Ленар (ИП Ножкин)%' 
-   OR c.director_name ILIKE '%Ленар (ИП Ножкин)%'
-   OR 'Ленар (ИП Ножкин)' ILIKE '%' || c.name || '%'
-   OR 'Ленар (ИП Ножкин)' ILIKE '%' || c.director_name || '%'
-LIMIT 1
-ON CONFLICT (order_number) DO NOTHING;
+WHERE (c.name = 'Ленар (ИП Ножкин)' OR c.director_name = 'Ленар (ИП Ножкин)')
+  AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 1215)
+LIMIT 1;
 
 INSERT INTO rental_orders (
   order_number, client_id, status, start_date, end_date, days_count,
@@ -1915,12 +1737,9 @@ SELECT
   NOW(),
   NOW()
 FROM rental_clients c
-WHERE c.name ILIKE '%Галия%' 
-   OR c.director_name ILIKE '%Галия%'
-   OR 'Галия' ILIKE '%' || c.name || '%'
-   OR 'Галия' ILIKE '%' || c.director_name || '%'
-LIMIT 1
-ON CONFLICT (order_number) DO NOTHING;
+WHERE (c.name = 'Галия' OR c.director_name = 'Галия')
+  AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 1214)
+LIMIT 1;
 
 INSERT INTO rental_orders (
   order_number, client_id, status, start_date, end_date, days_count,
@@ -1947,12 +1766,9 @@ SELECT
   NOW(),
   NOW()
 FROM rental_clients c
-WHERE c.name ILIKE '%Галина (Тур Урал)%' 
-   OR c.director_name ILIKE '%Галина (Тур Урал)%'
-   OR 'Галина (Тур Урал)' ILIKE '%' || c.name || '%'
-   OR 'Галина (Тур Урал)' ILIKE '%' || c.director_name || '%'
-LIMIT 1
-ON CONFLICT (order_number) DO NOTHING;
+WHERE (c.name = 'Галина (Тур Урал)' OR c.director_name = 'Галина (Тур Урал)')
+  AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 1212)
+LIMIT 1;
 
 INSERT INTO rental_orders (
   order_number, client_id, status, start_date, end_date, days_count,
@@ -1979,12 +1795,9 @@ SELECT
   NOW(),
   NOW()
 FROM rental_clients c
-WHERE c.name ILIKE '%Галина (Тур Урал)%' 
-   OR c.director_name ILIKE '%Галина (Тур Урал)%'
-   OR 'Галина (Тур Урал)' ILIKE '%' || c.name || '%'
-   OR 'Галина (Тур Урал)' ILIKE '%' || c.director_name || '%'
-LIMIT 1
-ON CONFLICT (order_number) DO NOTHING;
+WHERE (c.name = 'Галина (Тур Урал)' OR c.director_name = 'Галина (Тур Урал)')
+  AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 1211)
+LIMIT 1;
 
 INSERT INTO rental_orders (
   order_number, client_id, status, start_date, end_date, days_count,
@@ -2011,12 +1824,9 @@ SELECT
   NOW(),
   NOW()
 FROM rental_clients c
-WHERE c.name ILIKE '%Галина (Тур Урал)%' 
-   OR c.director_name ILIKE '%Галина (Тур Урал)%'
-   OR 'Галина (Тур Урал)' ILIKE '%' || c.name || '%'
-   OR 'Галина (Тур Урал)' ILIKE '%' || c.director_name || '%'
-LIMIT 1
-ON CONFLICT (order_number) DO NOTHING;
+WHERE (c.name = 'Галина (Тур Урал)' OR c.director_name = 'Галина (Тур Урал)')
+  AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 1210)
+LIMIT 1;
 
 INSERT INTO rental_orders (
   order_number, client_id, status, start_date, end_date, days_count,
@@ -2043,12 +1853,9 @@ SELECT
   NOW(),
   NOW()
 FROM rental_clients c
-WHERE c.name ILIKE '%Галина (Тур Урал)%' 
-   OR c.director_name ILIKE '%Галина (Тур Урал)%'
-   OR 'Галина (Тур Урал)' ILIKE '%' || c.name || '%'
-   OR 'Галина (Тур Урал)' ILIKE '%' || c.director_name || '%'
-LIMIT 1
-ON CONFLICT (order_number) DO NOTHING;
+WHERE (c.name = 'Галина (Тур Урал)' OR c.director_name = 'Галина (Тур Урал)')
+  AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 1209)
+LIMIT 1;
 
 INSERT INTO rental_orders (
   order_number, client_id, status, start_date, end_date, days_count,
@@ -2075,12 +1882,9 @@ SELECT
   NOW(),
   NOW()
 FROM rental_clients c
-WHERE c.name ILIKE '%Галина (Тур Урал)%' 
-   OR c.director_name ILIKE '%Галина (Тур Урал)%'
-   OR 'Галина (Тур Урал)' ILIKE '%' || c.name || '%'
-   OR 'Галина (Тур Урал)' ILIKE '%' || c.director_name || '%'
-LIMIT 1
-ON CONFLICT (order_number) DO NOTHING;
+WHERE (c.name = 'Галина (Тур Урал)' OR c.director_name = 'Галина (Тур Урал)')
+  AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 1208)
+LIMIT 1;
 
 INSERT INTO rental_orders (
   order_number, client_id, status, start_date, end_date, days_count,
@@ -2107,12 +1911,9 @@ SELECT
   NOW(),
   NOW()
 FROM rental_clients c
-WHERE c.name ILIKE '%Галина (Тур Урал)%' 
-   OR c.director_name ILIKE '%Галина (Тур Урал)%'
-   OR 'Галина (Тур Урал)' ILIKE '%' || c.name || '%'
-   OR 'Галина (Тур Урал)' ILIKE '%' || c.director_name || '%'
-LIMIT 1
-ON CONFLICT (order_number) DO NOTHING;
+WHERE (c.name = 'Галина (Тур Урал)' OR c.director_name = 'Галина (Тур Урал)')
+  AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 1207)
+LIMIT 1;
 
 INSERT INTO rental_orders (
   order_number, client_id, status, start_date, end_date, days_count,
@@ -2139,12 +1940,9 @@ SELECT
   NOW(),
   NOW()
 FROM rental_clients c
-WHERE c.name ILIKE '%Галина (Тур Урал)%' 
-   OR c.director_name ILIKE '%Галина (Тур Урал)%'
-   OR 'Галина (Тур Урал)' ILIKE '%' || c.name || '%'
-   OR 'Галина (Тур Урал)' ILIKE '%' || c.director_name || '%'
-LIMIT 1
-ON CONFLICT (order_number) DO NOTHING;
+WHERE (c.name = 'Галина (Тур Урал)' OR c.director_name = 'Галина (Тур Урал)')
+  AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 1206)
+LIMIT 1;
 
 INSERT INTO rental_orders (
   order_number, client_id, status, start_date, end_date, days_count,
@@ -2171,12 +1969,9 @@ SELECT
   NOW(),
   NOW()
 FROM rental_clients c
-WHERE c.name ILIKE '%Эдик Заказы для групп%' 
-   OR c.director_name ILIKE '%Эдик Заказы для групп%'
-   OR 'Эдик Заказы для групп' ILIKE '%' || c.name || '%'
-   OR 'Эдик Заказы для групп' ILIKE '%' || c.director_name || '%'
-LIMIT 1
-ON CONFLICT (order_number) DO NOTHING;
+WHERE (c.name = 'Эдик Заказы для групп' OR c.director_name = 'Эдик Заказы для групп')
+  AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 1205)
+LIMIT 1;
 
 INSERT INTO rental_orders (
   order_number, client_id, status, start_date, end_date, days_count,
@@ -2203,12 +1998,9 @@ SELECT
   NOW(),
   NOW()
 FROM rental_clients c
-WHERE c.name ILIKE '%Александр Романов%' 
-   OR c.director_name ILIKE '%Александр Романов%'
-   OR 'Александр Романов' ILIKE '%' || c.name || '%'
-   OR 'Александр Романов' ILIKE '%' || c.director_name || '%'
-LIMIT 1
-ON CONFLICT (order_number) DO NOTHING;
+WHERE (c.name = 'Александр Романов' OR c.director_name = 'Александр Романов')
+  AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 1204)
+LIMIT 1;
 
 INSERT INTO rental_orders (
   order_number, client_id, status, start_date, end_date, days_count,
@@ -2235,12 +2027,9 @@ SELECT
   NOW(),
   NOW()
 FROM rental_clients c
-WHERE c.name ILIKE '%Ляйсан (Казань 360)%' 
-   OR c.director_name ILIKE '%Ляйсан (Казань 360)%'
-   OR 'Ляйсан (Казань 360)' ILIKE '%' || c.name || '%'
-   OR 'Ляйсан (Казань 360)' ILIKE '%' || c.director_name || '%'
-LIMIT 1
-ON CONFLICT (order_number) DO NOTHING;
+WHERE (c.name = 'Ляйсан (Казань 360)' OR c.director_name = 'Ляйсан (Казань 360)')
+  AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 1203)
+LIMIT 1;
 
 INSERT INTO rental_orders (
   order_number, client_id, status, start_date, end_date, days_count,
@@ -2267,12 +2056,9 @@ SELECT
   NOW(),
   NOW()
 FROM rental_clients c
-WHERE c.name ILIKE '%Арсен (Юнион)%' 
-   OR c.director_name ILIKE '%Арсен (Юнион)%'
-   OR 'Арсен (Юнион)' ILIKE '%' || c.name || '%'
-   OR 'Арсен (Юнион)' ILIKE '%' || c.director_name || '%'
-LIMIT 1
-ON CONFLICT (order_number) DO NOTHING;
+WHERE (c.name = 'Арсен (Юнион)' OR c.director_name = 'Арсен (Юнион)')
+  AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 1202)
+LIMIT 1;
 
 INSERT INTO rental_orders (
   order_number, client_id, status, start_date, end_date, days_count,
@@ -2299,12 +2085,9 @@ SELECT
   NOW(),
   NOW()
 FROM rental_clients c
-WHERE c.name ILIKE '%Эдик Заказы для групп%' 
-   OR c.director_name ILIKE '%Эдик Заказы для групп%'
-   OR 'Эдик Заказы для групп' ILIKE '%' || c.name || '%'
-   OR 'Эдик Заказы для групп' ILIKE '%' || c.director_name || '%'
-LIMIT 1
-ON CONFLICT (order_number) DO NOTHING;
+WHERE (c.name = 'Эдик Заказы для групп' OR c.director_name = 'Эдик Заказы для групп')
+  AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 1201)
+LIMIT 1;
 
 INSERT INTO rental_orders (
   order_number, client_id, status, start_date, end_date, days_count,
@@ -2331,12 +2114,9 @@ SELECT
   NOW(),
   NOW()
 FROM rental_clients c
-WHERE c.name ILIKE '%Екатерина%' 
-   OR c.director_name ILIKE '%Екатерина%'
-   OR 'Екатерина' ILIKE '%' || c.name || '%'
-   OR 'Екатерина' ILIKE '%' || c.director_name || '%'
-LIMIT 1
-ON CONFLICT (order_number) DO NOTHING;
+WHERE (c.name = 'Екатерина' OR c.director_name = 'Екатерина')
+  AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 1200)
+LIMIT 1;
 
 INSERT INTO rental_orders (
   order_number, client_id, status, start_date, end_date, days_count,
@@ -2363,12 +2143,9 @@ SELECT
   NOW(),
   NOW()
 FROM rental_clients c
-WHERE c.name ILIKE '%Эдик Заказы для групп%' 
-   OR c.director_name ILIKE '%Эдик Заказы для групп%'
-   OR 'Эдик Заказы для групп' ILIKE '%' || c.name || '%'
-   OR 'Эдик Заказы для групп' ILIKE '%' || c.director_name || '%'
-LIMIT 1
-ON CONFLICT (order_number) DO NOTHING;
+WHERE (c.name = 'Эдик Заказы для групп' OR c.director_name = 'Эдик Заказы для групп')
+  AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 1199)
+LIMIT 1;
 
 INSERT INTO rental_orders (
   order_number, client_id, status, start_date, end_date, days_count,
@@ -2395,12 +2172,9 @@ SELECT
   NOW(),
   NOW()
 FROM rental_clients c
-WHERE c.name ILIKE '%Зульхиза Кутлучурина%' 
-   OR c.director_name ILIKE '%Зульхиза Кутлучурина%'
-   OR 'Зульхиза Кутлучурина' ILIKE '%' || c.name || '%'
-   OR 'Зульхиза Кутлучурина' ILIKE '%' || c.director_name || '%'
-LIMIT 1
-ON CONFLICT (order_number) DO NOTHING;
+WHERE (c.name = 'Зульхиза Кутлучурина' OR c.director_name = 'Зульхиза Кутлучурина')
+  AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 1198)
+LIMIT 1;
 
 INSERT INTO rental_orders (
   order_number, client_id, status, start_date, end_date, days_count,
@@ -2427,12 +2201,9 @@ SELECT
   NOW(),
   NOW()
 FROM rental_clients c
-WHERE c.name ILIKE '%Галина (Тур Урал)%' 
-   OR c.director_name ILIKE '%Галина (Тур Урал)%'
-   OR 'Галина (Тур Урал)' ILIKE '%' || c.name || '%'
-   OR 'Галина (Тур Урал)' ILIKE '%' || c.director_name || '%'
-LIMIT 1
-ON CONFLICT (order_number) DO NOTHING;
+WHERE (c.name = 'Галина (Тур Урал)' OR c.director_name = 'Галина (Тур Урал)')
+  AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 1197)
+LIMIT 1;
 
 INSERT INTO rental_orders (
   order_number, client_id, status, start_date, end_date, days_count,
@@ -2459,12 +2230,9 @@ SELECT
   NOW(),
   NOW()
 FROM rental_clients c
-WHERE c.name ILIKE '%Зульхиза Кутлучурина%' 
-   OR c.director_name ILIKE '%Зульхиза Кутлучурина%'
-   OR 'Зульхиза Кутлучурина' ILIKE '%' || c.name || '%'
-   OR 'Зульхиза Кутлучурина' ILIKE '%' || c.director_name || '%'
-LIMIT 1
-ON CONFLICT (order_number) DO NOTHING;
+WHERE (c.name = 'Зульхиза Кутлучурина' OR c.director_name = 'Зульхиза Кутлучурина')
+  AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 1196)
+LIMIT 1;
 
 INSERT INTO rental_orders (
   order_number, client_id, status, start_date, end_date, days_count,
@@ -2491,12 +2259,9 @@ SELECT
   NOW(),
   NOW()
 FROM rental_clients c
-WHERE c.name ILIKE '%Артем Агафонов%' 
-   OR c.director_name ILIKE '%Артем Агафонов%'
-   OR 'Артем Агафонов' ILIKE '%' || c.name || '%'
-   OR 'Артем Агафонов' ILIKE '%' || c.director_name || '%'
-LIMIT 1
-ON CONFLICT (order_number) DO NOTHING;
+WHERE (c.name = 'Артем Агафонов' OR c.director_name = 'Артем Агафонов')
+  AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 1195)
+LIMIT 1;
 
 INSERT INTO rental_orders (
   order_number, client_id, status, start_date, end_date, days_count,
@@ -2523,12 +2288,9 @@ SELECT
   NOW(),
   NOW()
 FROM rental_clients c
-WHERE c.name ILIKE '%Татьяна (Гольфстрим)%' 
-   OR c.director_name ILIKE '%Татьяна (Гольфстрим)%'
-   OR 'Татьяна (Гольфстрим)' ILIKE '%' || c.name || '%'
-   OR 'Татьяна (Гольфстрим)' ILIKE '%' || c.director_name || '%'
-LIMIT 1
-ON CONFLICT (order_number) DO NOTHING;
+WHERE (c.name = 'Татьяна (Гольфстрим)' OR c.director_name = 'Татьяна (Гольфстрим)')
+  AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 1194)
+LIMIT 1;
 
 INSERT INTO rental_orders (
   order_number, client_id, status, start_date, end_date, days_count,
@@ -2555,12 +2317,9 @@ SELECT
   NOW(),
   NOW()
 FROM rental_clients c
-WHERE c.name ILIKE '%Ляйсан (Казань 360)%' 
-   OR c.director_name ILIKE '%Ляйсан (Казань 360)%'
-   OR 'Ляйсан (Казань 360)' ILIKE '%' || c.name || '%'
-   OR 'Ляйсан (Казань 360)' ILIKE '%' || c.director_name || '%'
-LIMIT 1
-ON CONFLICT (order_number) DO NOTHING;
+WHERE (c.name = 'Ляйсан (Казань 360)' OR c.director_name = 'Ляйсан (Казань 360)')
+  AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 1193)
+LIMIT 1;
 
 INSERT INTO rental_orders (
   order_number, client_id, status, start_date, end_date, days_count,
@@ -2587,12 +2346,9 @@ SELECT
   NOW(),
   NOW()
 FROM rental_clients c
-WHERE c.name ILIKE '%Любовь (ТИЦ)%' 
-   OR c.director_name ILIKE '%Любовь (ТИЦ)%'
-   OR 'Любовь (ТИЦ)' ILIKE '%' || c.name || '%'
-   OR 'Любовь (ТИЦ)' ILIKE '%' || c.director_name || '%'
-LIMIT 1
-ON CONFLICT (order_number) DO NOTHING;
+WHERE (c.name = 'Любовь (ТИЦ)' OR c.director_name = 'Любовь (ТИЦ)')
+  AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 1192)
+LIMIT 1;
 
 INSERT INTO rental_orders (
   order_number, client_id, status, start_date, end_date, days_count,
@@ -2619,12 +2375,9 @@ SELECT
   NOW(),
   NOW()
 FROM rental_clients c
-WHERE c.name ILIKE '%Любовь (ТИЦ)%' 
-   OR c.director_name ILIKE '%Любовь (ТИЦ)%'
-   OR 'Любовь (ТИЦ)' ILIKE '%' || c.name || '%'
-   OR 'Любовь (ТИЦ)' ILIKE '%' || c.director_name || '%'
-LIMIT 1
-ON CONFLICT (order_number) DO NOTHING;
+WHERE (c.name = 'Любовь (ТИЦ)' OR c.director_name = 'Любовь (ТИЦ)')
+  AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 1191)
+LIMIT 1;
 
 INSERT INTO rental_orders (
   order_number, client_id, status, start_date, end_date, days_count,
@@ -2651,12 +2404,9 @@ SELECT
   NOW(),
   NOW()
 FROM rental_clients c
-WHERE c.name ILIKE '%Альберт (КТ)%' 
-   OR c.director_name ILIKE '%Альберт (КТ)%'
-   OR 'Альберт (КТ)' ILIKE '%' || c.name || '%'
-   OR 'Альберт (КТ)' ILIKE '%' || c.director_name || '%'
-LIMIT 1
-ON CONFLICT (order_number) DO NOTHING;
+WHERE (c.name = 'Альберт (КТ)' OR c.director_name = 'Альберт (КТ)')
+  AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 1190)
+LIMIT 1;
 
 INSERT INTO rental_orders (
   order_number, client_id, status, start_date, end_date, days_count,
@@ -2683,12 +2433,9 @@ SELECT
   NOW(),
   NOW()
 FROM rental_clients c
-WHERE c.name ILIKE '%Эдик Заказы для групп%' 
-   OR c.director_name ILIKE '%Эдик Заказы для групп%'
-   OR 'Эдик Заказы для групп' ILIKE '%' || c.name || '%'
-   OR 'Эдик Заказы для групп' ILIKE '%' || c.director_name || '%'
-LIMIT 1
-ON CONFLICT (order_number) DO NOTHING;
+WHERE (c.name = 'Эдик Заказы для групп' OR c.director_name = 'Эдик Заказы для групп')
+  AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 1189)
+LIMIT 1;
 
 INSERT INTO rental_orders (
   order_number, client_id, status, start_date, end_date, days_count,
@@ -2715,12 +2462,9 @@ SELECT
   NOW(),
   NOW()
 FROM rental_clients c
-WHERE c.name ILIKE '%Любовь (ТИЦ)%' 
-   OR c.director_name ILIKE '%Любовь (ТИЦ)%'
-   OR 'Любовь (ТИЦ)' ILIKE '%' || c.name || '%'
-   OR 'Любовь (ТИЦ)' ILIKE '%' || c.director_name || '%'
-LIMIT 1
-ON CONFLICT (order_number) DO NOTHING;
+WHERE (c.name = 'Любовь (ТИЦ)' OR c.director_name = 'Любовь (ТИЦ)')
+  AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 1188)
+LIMIT 1;
 
 INSERT INTO rental_orders (
   order_number, client_id, status, start_date, end_date, days_count,
@@ -2747,12 +2491,9 @@ SELECT
   NOW(),
   NOW()
 FROM rental_clients c
-WHERE c.name ILIKE '%Арсен (Юнион)%' 
-   OR c.director_name ILIKE '%Арсен (Юнион)%'
-   OR 'Арсен (Юнион)' ILIKE '%' || c.name || '%'
-   OR 'Арсен (Юнион)' ILIKE '%' || c.director_name || '%'
-LIMIT 1
-ON CONFLICT (order_number) DO NOTHING;
+WHERE (c.name = 'Арсен (Юнион)' OR c.director_name = 'Арсен (Юнион)')
+  AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 1187)
+LIMIT 1;
 
 INSERT INTO rental_orders (
   order_number, client_id, status, start_date, end_date, days_count,
@@ -2779,12 +2520,9 @@ SELECT
   NOW(),
   NOW()
 FROM rental_clients c
-WHERE c.name ILIKE '%Арсен (Юнион)%' 
-   OR c.director_name ILIKE '%Арсен (Юнион)%'
-   OR 'Арсен (Юнион)' ILIKE '%' || c.name || '%'
-   OR 'Арсен (Юнион)' ILIKE '%' || c.director_name || '%'
-LIMIT 1
-ON CONFLICT (order_number) DO NOTHING;
+WHERE (c.name = 'Арсен (Юнион)' OR c.director_name = 'Арсен (Юнион)')
+  AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 1186)
+LIMIT 1;
 
 INSERT INTO rental_orders (
   order_number, client_id, status, start_date, end_date, days_count,
@@ -2811,12 +2549,9 @@ SELECT
   NOW(),
   NOW()
 FROM rental_clients c
-WHERE c.name ILIKE '%Ирина (Иль Мио Тур)%' 
-   OR c.director_name ILIKE '%Ирина (Иль Мио Тур)%'
-   OR 'Ирина (Иль Мио Тур)' ILIKE '%' || c.name || '%'
-   OR 'Ирина (Иль Мио Тур)' ILIKE '%' || c.director_name || '%'
-LIMIT 1
-ON CONFLICT (order_number) DO NOTHING;
+WHERE (c.name = 'Ирина (Иль Мио Тур)' OR c.director_name = 'Ирина (Иль Мио Тур)')
+  AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 1185)
+LIMIT 1;
 
 INSERT INTO rental_orders (
   order_number, client_id, status, start_date, end_date, days_count,
@@ -2843,12 +2578,9 @@ SELECT
   NOW(),
   NOW()
 FROM rental_clients c
-WHERE c.name ILIKE '%Зельфира%' 
-   OR c.director_name ILIKE '%Зельфира%'
-   OR 'Зельфира' ILIKE '%' || c.name || '%'
-   OR 'Зельфира' ILIKE '%' || c.director_name || '%'
-LIMIT 1
-ON CONFLICT (order_number) DO NOTHING;
+WHERE (c.name = 'Зельфира' OR c.director_name = 'Зельфира')
+  AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 1184)
+LIMIT 1;
 
 INSERT INTO rental_orders (
   order_number, client_id, status, start_date, end_date, days_count,
@@ -2875,12 +2607,9 @@ SELECT
   NOW(),
   NOW()
 FROM rental_clients c
-WHERE c.name ILIKE '%Зельфира%' 
-   OR c.director_name ILIKE '%Зельфира%'
-   OR 'Зельфира' ILIKE '%' || c.name || '%'
-   OR 'Зельфира' ILIKE '%' || c.director_name || '%'
-LIMIT 1
-ON CONFLICT (order_number) DO NOTHING;
+WHERE (c.name = 'Зельфира' OR c.director_name = 'Зельфира')
+  AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 1183)
+LIMIT 1;
 
 INSERT INTO rental_orders (
   order_number, client_id, status, start_date, end_date, days_count,
@@ -2907,12 +2636,9 @@ SELECT
   NOW(),
   NOW()
 FROM rental_clients c
-WHERE c.name ILIKE '%Любовь Ким%' 
-   OR c.director_name ILIKE '%Любовь Ким%'
-   OR 'Любовь Ким' ILIKE '%' || c.name || '%'
-   OR 'Любовь Ким' ILIKE '%' || c.director_name || '%'
-LIMIT 1
-ON CONFLICT (order_number) DO NOTHING;
+WHERE (c.name = 'Любовь Ким' OR c.director_name = 'Любовь Ким')
+  AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 1182)
+LIMIT 1;
 
 INSERT INTO rental_orders (
   order_number, client_id, status, start_date, end_date, days_count,
@@ -2939,12 +2665,9 @@ SELECT
   NOW(),
   NOW()
 FROM rental_clients c
-WHERE c.name ILIKE '%Искандер%' 
-   OR c.director_name ILIKE '%Искандер%'
-   OR 'Искандер' ILIKE '%' || c.name || '%'
-   OR 'Искандер' ILIKE '%' || c.director_name || '%'
-LIMIT 1
-ON CONFLICT (order_number) DO NOTHING;
+WHERE (c.name = 'Искандер' OR c.director_name = 'Искандер')
+  AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 1181)
+LIMIT 1;
 
 INSERT INTO rental_orders (
   order_number, client_id, status, start_date, end_date, days_count,
@@ -2971,12 +2694,9 @@ SELECT
   NOW(),
   NOW()
 FROM rental_clients c
-WHERE c.name ILIKE '%Любовь (ТИЦ)%' 
-   OR c.director_name ILIKE '%Любовь (ТИЦ)%'
-   OR 'Любовь (ТИЦ)' ILIKE '%' || c.name || '%'
-   OR 'Любовь (ТИЦ)' ILIKE '%' || c.director_name || '%'
-LIMIT 1
-ON CONFLICT (order_number) DO NOTHING;
+WHERE (c.name = 'Любовь (ТИЦ)' OR c.director_name = 'Любовь (ТИЦ)')
+  AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 1180)
+LIMIT 1;
 
 INSERT INTO rental_orders (
   order_number, client_id, status, start_date, end_date, days_count,
@@ -3003,12 +2723,9 @@ SELECT
   NOW(),
   NOW()
 FROM rental_clients c
-WHERE c.name ILIKE '%Мария Экскурсовод%' 
-   OR c.director_name ILIKE '%Мария Экскурсовод%'
-   OR 'Мария Экскурсовод' ILIKE '%' || c.name || '%'
-   OR 'Мария Экскурсовод' ILIKE '%' || c.director_name || '%'
-LIMIT 1
-ON CONFLICT (order_number) DO NOTHING;
+WHERE (c.name = 'Мария Экскурсовод' OR c.director_name = 'Мария Экскурсовод')
+  AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 1179)
+LIMIT 1;
 
 INSERT INTO rental_orders (
   order_number, client_id, status, start_date, end_date, days_count,
@@ -3035,12 +2752,9 @@ SELECT
   NOW(),
   NOW()
 FROM rental_clients c
-WHERE c.name ILIKE '%Альберт (КТ)%' 
-   OR c.director_name ILIKE '%Альберт (КТ)%'
-   OR 'Альберт (КТ)' ILIKE '%' || c.name || '%'
-   OR 'Альберт (КТ)' ILIKE '%' || c.director_name || '%'
-LIMIT 1
-ON CONFLICT (order_number) DO NOTHING;
+WHERE (c.name = 'Альберт (КТ)' OR c.director_name = 'Альберт (КТ)')
+  AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 1178)
+LIMIT 1;
 
 INSERT INTO rental_orders (
   order_number, client_id, status, start_date, end_date, days_count,
@@ -3067,12 +2781,9 @@ SELECT
   NOW(),
   NOW()
 FROM rental_clients c
-WHERE c.name ILIKE '%Ольга Лотова%' 
-   OR c.director_name ILIKE '%Ольга Лотова%'
-   OR 'Ольга Лотова' ILIKE '%' || c.name || '%'
-   OR 'Ольга Лотова' ILIKE '%' || c.director_name || '%'
-LIMIT 1
-ON CONFLICT (order_number) DO NOTHING;
+WHERE (c.name = 'Ольга Лотова' OR c.director_name = 'Ольга Лотова')
+  AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 1177)
+LIMIT 1;
 
 INSERT INTO rental_orders (
   order_number, client_id, status, start_date, end_date, days_count,
@@ -3099,12 +2810,9 @@ SELECT
   NOW(),
   NOW()
 FROM rental_clients c
-WHERE c.name ILIKE '%Альберт (КТ)%' 
-   OR c.director_name ILIKE '%Альберт (КТ)%'
-   OR 'Альберт (КТ)' ILIKE '%' || c.name || '%'
-   OR 'Альберт (КТ)' ILIKE '%' || c.director_name || '%'
-LIMIT 1
-ON CONFLICT (order_number) DO NOTHING;
+WHERE (c.name = 'Альберт (КТ)' OR c.director_name = 'Альберт (КТ)')
+  AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 1176)
+LIMIT 1;
 
 INSERT INTO rental_orders (
   order_number, client_id, status, start_date, end_date, days_count,
@@ -3131,12 +2839,9 @@ SELECT
   NOW(),
   NOW()
 FROM rental_clients c
-WHERE c.name ILIKE '%Татьяна (Гольфстрим)%' 
-   OR c.director_name ILIKE '%Татьяна (Гольфстрим)%'
-   OR 'Татьяна (Гольфстрим)' ILIKE '%' || c.name || '%'
-   OR 'Татьяна (Гольфстрим)' ILIKE '%' || c.director_name || '%'
-LIMIT 1
-ON CONFLICT (order_number) DO NOTHING;
+WHERE (c.name = 'Татьяна (Гольфстрим)' OR c.director_name = 'Татьяна (Гольфстрим)')
+  AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 1175)
+LIMIT 1;
 
 INSERT INTO rental_orders (
   order_number, client_id, status, start_date, end_date, days_count,
@@ -3163,12 +2868,9 @@ SELECT
   NOW(),
   NOW()
 FROM rental_clients c
-WHERE c.name ILIKE '%Татьяна (Гольфстрим)%' 
-   OR c.director_name ILIKE '%Татьяна (Гольфстрим)%'
-   OR 'Татьяна (Гольфстрим)' ILIKE '%' || c.name || '%'
-   OR 'Татьяна (Гольфстрим)' ILIKE '%' || c.director_name || '%'
-LIMIT 1
-ON CONFLICT (order_number) DO NOTHING;
+WHERE (c.name = 'Татьяна (Гольфстрим)' OR c.director_name = 'Татьяна (Гольфстрим)')
+  AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 1174)
+LIMIT 1;
 
 INSERT INTO rental_orders (
   order_number, client_id, status, start_date, end_date, days_count,
@@ -3195,12 +2897,9 @@ SELECT
   NOW(),
   NOW()
 FROM rental_clients c
-WHERE c.name ILIKE '%Татьяна (Гольфстрим)%' 
-   OR c.director_name ILIKE '%Татьяна (Гольфстрим)%'
-   OR 'Татьяна (Гольфстрим)' ILIKE '%' || c.name || '%'
-   OR 'Татьяна (Гольфстрим)' ILIKE '%' || c.director_name || '%'
-LIMIT 1
-ON CONFLICT (order_number) DO NOTHING;
+WHERE (c.name = 'Татьяна (Гольфстрим)' OR c.director_name = 'Татьяна (Гольфстрим)')
+  AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 1173)
+LIMIT 1;
 
 INSERT INTO rental_orders (
   order_number, client_id, status, start_date, end_date, days_count,
@@ -3227,12 +2926,9 @@ SELECT
   NOW(),
   NOW()
 FROM rental_clients c
-WHERE c.name ILIKE '%Татьяна (Гольфстрим)%' 
-   OR c.director_name ILIKE '%Татьяна (Гольфстрим)%'
-   OR 'Татьяна (Гольфстрим)' ILIKE '%' || c.name || '%'
-   OR 'Татьяна (Гольфстрим)' ILIKE '%' || c.director_name || '%'
-LIMIT 1
-ON CONFLICT (order_number) DO NOTHING;
+WHERE (c.name = 'Татьяна (Гольфстрим)' OR c.director_name = 'Татьяна (Гольфстрим)')
+  AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 1172)
+LIMIT 1;
 
 INSERT INTO rental_orders (
   order_number, client_id, status, start_date, end_date, days_count,
@@ -3259,12 +2955,9 @@ SELECT
   NOW(),
   NOW()
 FROM rental_clients c
-WHERE c.name ILIKE '%Татьяна (Гольфстрим)%' 
-   OR c.director_name ILIKE '%Татьяна (Гольфстрим)%'
-   OR 'Татьяна (Гольфстрим)' ILIKE '%' || c.name || '%'
-   OR 'Татьяна (Гольфстрим)' ILIKE '%' || c.director_name || '%'
-LIMIT 1
-ON CONFLICT (order_number) DO NOTHING;
+WHERE (c.name = 'Татьяна (Гольфстрим)' OR c.director_name = 'Татьяна (Гольфстрим)')
+  AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 1171)
+LIMIT 1;
 
 INSERT INTO rental_orders (
   order_number, client_id, status, start_date, end_date, days_count,
@@ -3291,12 +2984,9 @@ SELECT
   NOW(),
   NOW()
 FROM rental_clients c
-WHERE c.name ILIKE '%Любовь (ТИЦ)%' 
-   OR c.director_name ILIKE '%Любовь (ТИЦ)%'
-   OR 'Любовь (ТИЦ)' ILIKE '%' || c.name || '%'
-   OR 'Любовь (ТИЦ)' ILIKE '%' || c.director_name || '%'
-LIMIT 1
-ON CONFLICT (order_number) DO NOTHING;
+WHERE (c.name = 'Любовь (ТИЦ)' OR c.director_name = 'Любовь (ТИЦ)')
+  AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 1170)
+LIMIT 1;
 
 INSERT INTO rental_orders (
   order_number, client_id, status, start_date, end_date, days_count,
@@ -3323,12 +3013,9 @@ SELECT
   NOW(),
   NOW()
 FROM rental_clients c
-WHERE c.name ILIKE '%Татьяна (Гольфстрим)%' 
-   OR c.director_name ILIKE '%Татьяна (Гольфстрим)%'
-   OR 'Татьяна (Гольфстрим)' ILIKE '%' || c.name || '%'
-   OR 'Татьяна (Гольфстрим)' ILIKE '%' || c.director_name || '%'
-LIMIT 1
-ON CONFLICT (order_number) DO NOTHING;
+WHERE (c.name = 'Татьяна (Гольфстрим)' OR c.director_name = 'Татьяна (Гольфстрим)')
+  AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 1169)
+LIMIT 1;
 
 INSERT INTO rental_orders (
   order_number, client_id, status, start_date, end_date, days_count,
@@ -3355,12 +3042,9 @@ SELECT
   NOW(),
   NOW()
 FROM rental_clients c
-WHERE c.name ILIKE '%Галина (Тур Урал)%' 
-   OR c.director_name ILIKE '%Галина (Тур Урал)%'
-   OR 'Галина (Тур Урал)' ILIKE '%' || c.name || '%'
-   OR 'Галина (Тур Урал)' ILIKE '%' || c.director_name || '%'
-LIMIT 1
-ON CONFLICT (order_number) DO NOTHING;
+WHERE (c.name = 'Галина (Тур Урал)' OR c.director_name = 'Галина (Тур Урал)')
+  AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 1168)
+LIMIT 1;
 
 INSERT INTO rental_orders (
   order_number, client_id, status, start_date, end_date, days_count,
@@ -3387,12 +3071,9 @@ SELECT
   NOW(),
   NOW()
 FROM rental_clients c
-WHERE c.name ILIKE '%Зульхиза Кутлучурина%' 
-   OR c.director_name ILIKE '%Зульхиза Кутлучурина%'
-   OR 'Зульхиза Кутлучурина' ILIKE '%' || c.name || '%'
-   OR 'Зульхиза Кутлучурина' ILIKE '%' || c.director_name || '%'
-LIMIT 1
-ON CONFLICT (order_number) DO NOTHING;
+WHERE (c.name = 'Зульхиза Кутлучурина' OR c.director_name = 'Зульхиза Кутлучурина')
+  AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 1167)
+LIMIT 1;
 
 INSERT INTO rental_orders (
   order_number, client_id, status, start_date, end_date, days_count,
@@ -3419,12 +3100,9 @@ SELECT
   NOW(),
   NOW()
 FROM rental_clients c
-WHERE c.name ILIKE '%Татьяна (Гольфстрим)%' 
-   OR c.director_name ILIKE '%Татьяна (Гольфстрим)%'
-   OR 'Татьяна (Гольфстрим)' ILIKE '%' || c.name || '%'
-   OR 'Татьяна (Гольфстрим)' ILIKE '%' || c.director_name || '%'
-LIMIT 1
-ON CONFLICT (order_number) DO NOTHING;
+WHERE (c.name = 'Татьяна (Гольфстрим)' OR c.director_name = 'Татьяна (Гольфстрим)')
+  AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 1166)
+LIMIT 1;
 
 INSERT INTO rental_orders (
   order_number, client_id, status, start_date, end_date, days_count,
@@ -3451,12 +3129,9 @@ SELECT
   NOW(),
   NOW()
 FROM rental_clients c
-WHERE c.name ILIKE '%Татьяна (Гольфстрим)%' 
-   OR c.director_name ILIKE '%Татьяна (Гольфстрим)%'
-   OR 'Татьяна (Гольфстрим)' ILIKE '%' || c.name || '%'
-   OR 'Татьяна (Гольфстрим)' ILIKE '%' || c.director_name || '%'
-LIMIT 1
-ON CONFLICT (order_number) DO NOTHING;
+WHERE (c.name = 'Татьяна (Гольфстрим)' OR c.director_name = 'Татьяна (Гольфстрим)')
+  AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 1165)
+LIMIT 1;
 
 INSERT INTO rental_orders (
   order_number, client_id, status, start_date, end_date, days_count,
@@ -3483,12 +3158,9 @@ SELECT
   NOW(),
   NOW()
 FROM rental_clients c
-WHERE c.name ILIKE '%Любовь (ТИЦ)%' 
-   OR c.director_name ILIKE '%Любовь (ТИЦ)%'
-   OR 'Любовь (ТИЦ)' ILIKE '%' || c.name || '%'
-   OR 'Любовь (ТИЦ)' ILIKE '%' || c.director_name || '%'
-LIMIT 1
-ON CONFLICT (order_number) DO NOTHING;
+WHERE (c.name = 'Любовь (ТИЦ)' OR c.director_name = 'Любовь (ТИЦ)')
+  AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 1164)
+LIMIT 1;
 
 INSERT INTO rental_orders (
   order_number, client_id, status, start_date, end_date, days_count,
@@ -3515,12 +3187,9 @@ SELECT
   NOW(),
   NOW()
 FROM rental_clients c
-WHERE c.name ILIKE '%Элина (Сититур)%' 
-   OR c.director_name ILIKE '%Элина (Сититур)%'
-   OR 'Элина (Сититур)' ILIKE '%' || c.name || '%'
-   OR 'Элина (Сититур)' ILIKE '%' || c.director_name || '%'
-LIMIT 1
-ON CONFLICT (order_number) DO NOTHING;
+WHERE (c.name = 'Элина (Сититур)' OR c.director_name = 'Элина (Сититур)')
+  AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 1163)
+LIMIT 1;
 
 INSERT INTO rental_orders (
   order_number, client_id, status, start_date, end_date, days_count,
@@ -3547,12 +3216,9 @@ SELECT
   NOW(),
   NOW()
 FROM rental_clients c
-WHERE c.name ILIKE '%Андрей (Экскурс)%' 
-   OR c.director_name ILIKE '%Андрей (Экскурс)%'
-   OR 'Андрей (Экскурс)' ILIKE '%' || c.name || '%'
-   OR 'Андрей (Экскурс)' ILIKE '%' || c.director_name || '%'
-LIMIT 1
-ON CONFLICT (order_number) DO NOTHING;
+WHERE (c.name = 'Андрей (Экскурс)' OR c.director_name = 'Андрей (Экскурс)')
+  AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 1162)
+LIMIT 1;
 
 INSERT INTO rental_orders (
   order_number, client_id, status, start_date, end_date, days_count,
@@ -3579,12 +3245,9 @@ SELECT
   NOW(),
   NOW()
 FROM rental_clients c
-WHERE c.name ILIKE '%Альберт (КТ)%' 
-   OR c.director_name ILIKE '%Альберт (КТ)%'
-   OR 'Альберт (КТ)' ILIKE '%' || c.name || '%'
-   OR 'Альберт (КТ)' ILIKE '%' || c.director_name || '%'
-LIMIT 1
-ON CONFLICT (order_number) DO NOTHING;
+WHERE (c.name = 'Альберт (КТ)' OR c.director_name = 'Альберт (КТ)')
+  AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 1161)
+LIMIT 1;
 
 INSERT INTO rental_orders (
   order_number, client_id, status, start_date, end_date, days_count,
@@ -3611,12 +3274,9 @@ SELECT
   NOW(),
   NOW()
 FROM rental_clients c
-WHERE c.name ILIKE '%Мария Экскурсовод%' 
-   OR c.director_name ILIKE '%Мария Экскурсовод%'
-   OR 'Мария Экскурсовод' ILIKE '%' || c.name || '%'
-   OR 'Мария Экскурсовод' ILIKE '%' || c.director_name || '%'
-LIMIT 1
-ON CONFLICT (order_number) DO NOTHING;
+WHERE (c.name = 'Мария Экскурсовод' OR c.director_name = 'Мария Экскурсовод')
+  AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 1160)
+LIMIT 1;
 
 INSERT INTO rental_orders (
   order_number, client_id, status, start_date, end_date, days_count,
@@ -3643,12 +3303,9 @@ SELECT
   NOW(),
   NOW()
 FROM rental_clients c
-WHERE c.name ILIKE '%Наталья Флот%' 
-   OR c.director_name ILIKE '%Наталья Флот%'
-   OR 'Наталья Флот' ILIKE '%' || c.name || '%'
-   OR 'Наталья Флот' ILIKE '%' || c.director_name || '%'
-LIMIT 1
-ON CONFLICT (order_number) DO NOTHING;
+WHERE (c.name = 'Наталья Флот' OR c.director_name = 'Наталья Флот')
+  AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 1159)
+LIMIT 1;
 
 INSERT INTO rental_orders (
   order_number, client_id, status, start_date, end_date, days_count,
@@ -3675,12 +3332,9 @@ SELECT
   NOW(),
   NOW()
 FROM rental_clients c
-WHERE c.name ILIKE '%Карина (технологии путешествий)%' 
-   OR c.director_name ILIKE '%Карина (технологии путешествий)%'
-   OR 'Карина (технологии путешествий)' ILIKE '%' || c.name || '%'
-   OR 'Карина (технологии путешествий)' ILIKE '%' || c.director_name || '%'
-LIMIT 1
-ON CONFLICT (order_number) DO NOTHING;
+WHERE (c.name = 'Карина (технологии путешествий)' OR c.director_name = 'Карина (технологии путешествий)')
+  AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 1158)
+LIMIT 1;
 
 INSERT INTO rental_orders (
   order_number, client_id, status, start_date, end_date, days_count,
@@ -3707,12 +3361,9 @@ SELECT
   NOW(),
   NOW()
 FROM rental_clients c
-WHERE c.name ILIKE '%Алексей%' 
-   OR c.director_name ILIKE '%Алексей%'
-   OR 'Алексей' ILIKE '%' || c.name || '%'
-   OR 'Алексей' ILIKE '%' || c.director_name || '%'
-LIMIT 1
-ON CONFLICT (order_number) DO NOTHING;
+WHERE (c.name = 'Алексей' OR c.director_name = 'Алексей')
+  AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 1157)
+LIMIT 1;
 
 INSERT INTO rental_orders (
   order_number, client_id, status, start_date, end_date, days_count,
@@ -3739,12 +3390,9 @@ SELECT
   NOW(),
   NOW()
 FROM rental_clients c
-WHERE c.name ILIKE '%Эдик Заказы для групп%' 
-   OR c.director_name ILIKE '%Эдик Заказы для групп%'
-   OR 'Эдик Заказы для групп' ILIKE '%' || c.name || '%'
-   OR 'Эдик Заказы для групп' ILIKE '%' || c.director_name || '%'
-LIMIT 1
-ON CONFLICT (order_number) DO NOTHING;
+WHERE (c.name = 'Эдик Заказы для групп' OR c.director_name = 'Эдик Заказы для групп')
+  AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 1156)
+LIMIT 1;
 
 INSERT INTO rental_orders (
   order_number, client_id, status, start_date, end_date, days_count,
@@ -3771,12 +3419,9 @@ SELECT
   NOW(),
   NOW()
 FROM rental_clients c
-WHERE c.name ILIKE '%Любовь (ТИЦ)%' 
-   OR c.director_name ILIKE '%Любовь (ТИЦ)%'
-   OR 'Любовь (ТИЦ)' ILIKE '%' || c.name || '%'
-   OR 'Любовь (ТИЦ)' ILIKE '%' || c.director_name || '%'
-LIMIT 1
-ON CONFLICT (order_number) DO NOTHING;
+WHERE (c.name = 'Любовь (ТИЦ)' OR c.director_name = 'Любовь (ТИЦ)')
+  AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 1155)
+LIMIT 1;
 
 INSERT INTO rental_orders (
   order_number, client_id, status, start_date, end_date, days_count,
@@ -3803,12 +3448,9 @@ SELECT
   NOW(),
   NOW()
 FROM rental_clients c
-WHERE c.name ILIKE '%Любовь (ТИЦ)%' 
-   OR c.director_name ILIKE '%Любовь (ТИЦ)%'
-   OR 'Любовь (ТИЦ)' ILIKE '%' || c.name || '%'
-   OR 'Любовь (ТИЦ)' ILIKE '%' || c.director_name || '%'
-LIMIT 1
-ON CONFLICT (order_number) DO NOTHING;
+WHERE (c.name = 'Любовь (ТИЦ)' OR c.director_name = 'Любовь (ТИЦ)')
+  AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 1154)
+LIMIT 1;
 
 INSERT INTO rental_orders (
   order_number, client_id, status, start_date, end_date, days_count,
@@ -3835,12 +3477,9 @@ SELECT
   NOW(),
   NOW()
 FROM rental_clients c
-WHERE c.name ILIKE '%Эдик Заказы для групп%' 
-   OR c.director_name ILIKE '%Эдик Заказы для групп%'
-   OR 'Эдик Заказы для групп' ILIKE '%' || c.name || '%'
-   OR 'Эдик Заказы для групп' ILIKE '%' || c.director_name || '%'
-LIMIT 1
-ON CONFLICT (order_number) DO NOTHING;
+WHERE (c.name = 'Эдик Заказы для групп' OR c.director_name = 'Эдик Заказы для групп')
+  AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 1153)
+LIMIT 1;
 
 INSERT INTO rental_orders (
   order_number, client_id, status, start_date, end_date, days_count,
@@ -3867,12 +3506,9 @@ SELECT
   NOW(),
   NOW()
 FROM rental_clients c
-WHERE c.name ILIKE '%Эдик Заказы для групп%' 
-   OR c.director_name ILIKE '%Эдик Заказы для групп%'
-   OR 'Эдик Заказы для групп' ILIKE '%' || c.name || '%'
-   OR 'Эдик Заказы для групп' ILIKE '%' || c.director_name || '%'
-LIMIT 1
-ON CONFLICT (order_number) DO NOTHING;
+WHERE (c.name = 'Эдик Заказы для групп' OR c.director_name = 'Эдик Заказы для групп')
+  AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 1152)
+LIMIT 1;
 
 INSERT INTO rental_orders (
   order_number, client_id, status, start_date, end_date, days_count,
@@ -3899,12 +3535,9 @@ SELECT
   NOW(),
   NOW()
 FROM rental_clients c
-WHERE c.name ILIKE '%Елена%' 
-   OR c.director_name ILIKE '%Елена%'
-   OR 'Елена' ILIKE '%' || c.name || '%'
-   OR 'Елена' ILIKE '%' || c.director_name || '%'
-LIMIT 1
-ON CONFLICT (order_number) DO NOTHING;
+WHERE (c.name = 'Елена' OR c.director_name = 'Елена')
+  AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 1151)
+LIMIT 1;
 
 INSERT INTO rental_orders (
   order_number, client_id, status, start_date, end_date, days_count,
@@ -3931,12 +3564,9 @@ SELECT
   NOW(),
   NOW()
 FROM rental_clients c
-WHERE c.name ILIKE '%Любовь (ТИЦ)%' 
-   OR c.director_name ILIKE '%Любовь (ТИЦ)%'
-   OR 'Любовь (ТИЦ)' ILIKE '%' || c.name || '%'
-   OR 'Любовь (ТИЦ)' ILIKE '%' || c.director_name || '%'
-LIMIT 1
-ON CONFLICT (order_number) DO NOTHING;
+WHERE (c.name = 'Любовь (ТИЦ)' OR c.director_name = 'Любовь (ТИЦ)')
+  AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 1150)
+LIMIT 1;
 
 INSERT INTO rental_orders (
   order_number, client_id, status, start_date, end_date, days_count,
@@ -3963,12 +3593,9 @@ SELECT
   NOW(),
   NOW()
 FROM rental_clients c
-WHERE c.name ILIKE '%Любовь (ТИЦ)%' 
-   OR c.director_name ILIKE '%Любовь (ТИЦ)%'
-   OR 'Любовь (ТИЦ)' ILIKE '%' || c.name || '%'
-   OR 'Любовь (ТИЦ)' ILIKE '%' || c.director_name || '%'
-LIMIT 1
-ON CONFLICT (order_number) DO NOTHING;
+WHERE (c.name = 'Любовь (ТИЦ)' OR c.director_name = 'Любовь (ТИЦ)')
+  AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 1149)
+LIMIT 1;
 
 INSERT INTO rental_orders (
   order_number, client_id, status, start_date, end_date, days_count,
@@ -3995,12 +3622,9 @@ SELECT
   NOW(),
   NOW()
 FROM rental_clients c
-WHERE c.name ILIKE '%Татьяна (Гольфстрим)%' 
-   OR c.director_name ILIKE '%Татьяна (Гольфстрим)%'
-   OR 'Татьяна (Гольфстрим)' ILIKE '%' || c.name || '%'
-   OR 'Татьяна (Гольфстрим)' ILIKE '%' || c.director_name || '%'
-LIMIT 1
-ON CONFLICT (order_number) DO NOTHING;
+WHERE (c.name = 'Татьяна (Гольфстрим)' OR c.director_name = 'Татьяна (Гольфстрим)')
+  AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 1148)
+LIMIT 1;
 
 INSERT INTO rental_orders (
   order_number, client_id, status, start_date, end_date, days_count,
@@ -4027,12 +3651,9 @@ SELECT
   NOW(),
   NOW()
 FROM rental_clients c
-WHERE c.name ILIKE '%Мария Экскурсовод%' 
-   OR c.director_name ILIKE '%Мария Экскурсовод%'
-   OR 'Мария Экскурсовод' ILIKE '%' || c.name || '%'
-   OR 'Мария Экскурсовод' ILIKE '%' || c.director_name || '%'
-LIMIT 1
-ON CONFLICT (order_number) DO NOTHING;
+WHERE (c.name = 'Мария Экскурсовод' OR c.director_name = 'Мария Экскурсовод')
+  AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 1147)
+LIMIT 1;
 
 INSERT INTO rental_orders (
   order_number, client_id, status, start_date, end_date, days_count,
@@ -4059,12 +3680,9 @@ SELECT
   NOW(),
   NOW()
 FROM rental_clients c
-WHERE c.name ILIKE '%Гузелия%' 
-   OR c.director_name ILIKE '%Гузелия%'
-   OR 'Гузелия' ILIKE '%' || c.name || '%'
-   OR 'Гузелия' ILIKE '%' || c.director_name || '%'
-LIMIT 1
-ON CONFLICT (order_number) DO NOTHING;
+WHERE (c.name = 'Гузелия' OR c.director_name = 'Гузелия')
+  AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 1146)
+LIMIT 1;
 
 INSERT INTO rental_orders (
   order_number, client_id, status, start_date, end_date, days_count,
@@ -4091,12 +3709,9 @@ SELECT
   NOW(),
   NOW()
 FROM rental_clients c
-WHERE c.name ILIKE '%Юлия Супрунова (от Миры)%' 
-   OR c.director_name ILIKE '%Юлия Супрунова (от Миры)%'
-   OR 'Юлия Супрунова (от Миры)' ILIKE '%' || c.name || '%'
-   OR 'Юлия Супрунова (от Миры)' ILIKE '%' || c.director_name || '%'
-LIMIT 1
-ON CONFLICT (order_number) DO NOTHING;
+WHERE (c.name = 'Юлия Супрунова (от Миры)' OR c.director_name = 'Юлия Супрунова (от Миры)')
+  AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 1145)
+LIMIT 1;
 
 INSERT INTO rental_orders (
   order_number, client_id, status, start_date, end_date, days_count,
@@ -4123,12 +3738,9 @@ SELECT
   NOW(),
   NOW()
 FROM rental_clients c
-WHERE c.name ILIKE '%Любовь (ТИЦ)%' 
-   OR c.director_name ILIKE '%Любовь (ТИЦ)%'
-   OR 'Любовь (ТИЦ)' ILIKE '%' || c.name || '%'
-   OR 'Любовь (ТИЦ)' ILIKE '%' || c.director_name || '%'
-LIMIT 1
-ON CONFLICT (order_number) DO NOTHING;
+WHERE (c.name = 'Любовь (ТИЦ)' OR c.director_name = 'Любовь (ТИЦ)')
+  AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 1144)
+LIMIT 1;
 
 INSERT INTO rental_orders (
   order_number, client_id, status, start_date, end_date, days_count,
@@ -4155,12 +3767,9 @@ SELECT
   NOW(),
   NOW()
 FROM rental_clients c
-WHERE c.name ILIKE '%Ольга (Сиалия)%' 
-   OR c.director_name ILIKE '%Ольга (Сиалия)%'
-   OR 'Ольга (Сиалия)' ILIKE '%' || c.name || '%'
-   OR 'Ольга (Сиалия)' ILIKE '%' || c.director_name || '%'
-LIMIT 1
-ON CONFLICT (order_number) DO NOTHING;
+WHERE (c.name = 'Ольга (Сиалия)' OR c.director_name = 'Ольга (Сиалия)')
+  AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 1143)
+LIMIT 1;
 
 INSERT INTO rental_orders (
   order_number, client_id, status, start_date, end_date, days_count,
@@ -4187,12 +3796,9 @@ SELECT
   NOW(),
   NOW()
 FROM rental_clients c
-WHERE c.name ILIKE '%Эвелина (Инициатива)%' 
-   OR c.director_name ILIKE '%Эвелина (Инициатива)%'
-   OR 'Эвелина (Инициатива)' ILIKE '%' || c.name || '%'
-   OR 'Эвелина (Инициатива)' ILIKE '%' || c.director_name || '%'
-LIMIT 1
-ON CONFLICT (order_number) DO NOTHING;
+WHERE (c.name = 'Эвелина (Инициатива)' OR c.director_name = 'Эвелина (Инициатива)')
+  AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 1142)
+LIMIT 1;
 
 INSERT INTO rental_orders (
   order_number, client_id, status, start_date, end_date, days_count,
@@ -4219,12 +3825,9 @@ SELECT
   NOW(),
   NOW()
 FROM rental_clients c
-WHERE c.name ILIKE '%Галина (Тур Урал)%' 
-   OR c.director_name ILIKE '%Галина (Тур Урал)%'
-   OR 'Галина (Тур Урал)' ILIKE '%' || c.name || '%'
-   OR 'Галина (Тур Урал)' ILIKE '%' || c.director_name || '%'
-LIMIT 1
-ON CONFLICT (order_number) DO NOTHING;
+WHERE (c.name = 'Галина (Тур Урал)' OR c.director_name = 'Галина (Тур Урал)')
+  AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 1141)
+LIMIT 1;
 
 INSERT INTO rental_orders (
   order_number, client_id, status, start_date, end_date, days_count,
@@ -4251,12 +3854,9 @@ SELECT
   NOW(),
   NOW()
 FROM rental_clients c
-WHERE c.name ILIKE '%Галина (Тур Урал)%' 
-   OR c.director_name ILIKE '%Галина (Тур Урал)%'
-   OR 'Галина (Тур Урал)' ILIKE '%' || c.name || '%'
-   OR 'Галина (Тур Урал)' ILIKE '%' || c.director_name || '%'
-LIMIT 1
-ON CONFLICT (order_number) DO NOTHING;
+WHERE (c.name = 'Галина (Тур Урал)' OR c.director_name = 'Галина (Тур Урал)')
+  AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 1140)
+LIMIT 1;
 
 INSERT INTO rental_orders (
   order_number, client_id, status, start_date, end_date, days_count,
@@ -4283,12 +3883,9 @@ SELECT
   NOW(),
   NOW()
 FROM rental_clients c
-WHERE c.name ILIKE '%Галина (Тур Урал)%' 
-   OR c.director_name ILIKE '%Галина (Тур Урал)%'
-   OR 'Галина (Тур Урал)' ILIKE '%' || c.name || '%'
-   OR 'Галина (Тур Урал)' ILIKE '%' || c.director_name || '%'
-LIMIT 1
-ON CONFLICT (order_number) DO NOTHING;
+WHERE (c.name = 'Галина (Тур Урал)' OR c.director_name = 'Галина (Тур Урал)')
+  AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 1139)
+LIMIT 1;
 
 INSERT INTO rental_orders (
   order_number, client_id, status, start_date, end_date, days_count,
@@ -4315,12 +3912,9 @@ SELECT
   NOW(),
   NOW()
 FROM rental_clients c
-WHERE c.name ILIKE '%Юлия (Рыжий Слон)%' 
-   OR c.director_name ILIKE '%Юлия (Рыжий Слон)%'
-   OR 'Юлия (Рыжий Слон)' ILIKE '%' || c.name || '%'
-   OR 'Юлия (Рыжий Слон)' ILIKE '%' || c.director_name || '%'
-LIMIT 1
-ON CONFLICT (order_number) DO NOTHING;
+WHERE (c.name = 'Юлия (Рыжий Слон)' OR c.director_name = 'Юлия (Рыжий Слон)')
+  AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 1138)
+LIMIT 1;
 
 INSERT INTO rental_orders (
   order_number, client_id, status, start_date, end_date, days_count,
@@ -4347,12 +3941,9 @@ SELECT
   NOW(),
   NOW()
 FROM rental_clients c
-WHERE c.name ILIKE '%Гузель (Юралс)%' 
-   OR c.director_name ILIKE '%Гузель (Юралс)%'
-   OR 'Гузель (Юралс)' ILIKE '%' || c.name || '%'
-   OR 'Гузель (Юралс)' ILIKE '%' || c.director_name || '%'
-LIMIT 1
-ON CONFLICT (order_number) DO NOTHING;
+WHERE (c.name = 'Гузель (Юралс)' OR c.director_name = 'Гузель (Юралс)')
+  AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 1137)
+LIMIT 1;
 
 INSERT INTO rental_orders (
   order_number, client_id, status, start_date, end_date, days_count,
@@ -4379,12 +3970,9 @@ SELECT
   NOW(),
   NOW()
 FROM rental_clients c
-WHERE c.name ILIKE '%Любовь (ТИЦ)%' 
-   OR c.director_name ILIKE '%Любовь (ТИЦ)%'
-   OR 'Любовь (ТИЦ)' ILIKE '%' || c.name || '%'
-   OR 'Любовь (ТИЦ)' ILIKE '%' || c.director_name || '%'
-LIMIT 1
-ON CONFLICT (order_number) DO NOTHING;
+WHERE (c.name = 'Любовь (ТИЦ)' OR c.director_name = 'Любовь (ТИЦ)')
+  AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 1136)
+LIMIT 1;
 
 INSERT INTO rental_orders (
   order_number, client_id, status, start_date, end_date, days_count,
@@ -4411,12 +3999,9 @@ SELECT
   NOW(),
   NOW()
 FROM rental_clients c
-WHERE c.name ILIKE '%Любовь (ТИЦ)%' 
-   OR c.director_name ILIKE '%Любовь (ТИЦ)%'
-   OR 'Любовь (ТИЦ)' ILIKE '%' || c.name || '%'
-   OR 'Любовь (ТИЦ)' ILIKE '%' || c.director_name || '%'
-LIMIT 1
-ON CONFLICT (order_number) DO NOTHING;
+WHERE (c.name = 'Любовь (ТИЦ)' OR c.director_name = 'Любовь (ТИЦ)')
+  AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 1135)
+LIMIT 1;
 
 INSERT INTO rental_orders (
   order_number, client_id, status, start_date, end_date, days_count,
@@ -4443,12 +4028,9 @@ SELECT
   NOW(),
   NOW()
 FROM rental_clients c
-WHERE c.name ILIKE '%Екатерина «Романова Трэвел»%' 
-   OR c.director_name ILIKE '%Екатерина «Романова Трэвел»%'
-   OR 'Екатерина «Романова Трэвел»' ILIKE '%' || c.name || '%'
-   OR 'Екатерина «Романова Трэвел»' ILIKE '%' || c.director_name || '%'
-LIMIT 1
-ON CONFLICT (order_number) DO NOTHING;
+WHERE (c.name = 'Екатерина «Романова Трэвел»' OR c.director_name = 'Екатерина «Романова Трэвел»')
+  AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 1134)
+LIMIT 1;
 
 INSERT INTO rental_orders (
   order_number, client_id, status, start_date, end_date, days_count,
@@ -4475,12 +4057,9 @@ SELECT
   NOW(),
   NOW()
 FROM rental_clients c
-WHERE c.name ILIKE '%Дмитрий (Алабуга-Волокно)%' 
-   OR c.director_name ILIKE '%Дмитрий (Алабуга-Волокно)%'
-   OR 'Дмитрий (Алабуга-Волокно)' ILIKE '%' || c.name || '%'
-   OR 'Дмитрий (Алабуга-Волокно)' ILIKE '%' || c.director_name || '%'
-LIMIT 1
-ON CONFLICT (order_number) DO NOTHING;
+WHERE (c.name = 'Дмитрий (Алабуга-Волокно)' OR c.director_name = 'Дмитрий (Алабуга-Волокно)')
+  AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 1133)
+LIMIT 1;
 
 INSERT INTO rental_orders (
   order_number, client_id, status, start_date, end_date, days_count,
@@ -4507,12 +4086,9 @@ SELECT
   NOW(),
   NOW()
 FROM rental_clients c
-WHERE c.name ILIKE '%Арсен (Юнион)%' 
-   OR c.director_name ILIKE '%Арсен (Юнион)%'
-   OR 'Арсен (Юнион)' ILIKE '%' || c.name || '%'
-   OR 'Арсен (Юнион)' ILIKE '%' || c.director_name || '%'
-LIMIT 1
-ON CONFLICT (order_number) DO NOTHING;
+WHERE (c.name = 'Арсен (Юнион)' OR c.director_name = 'Арсен (Юнион)')
+  AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 1132)
+LIMIT 1;
 
 INSERT INTO rental_orders (
   order_number, client_id, status, start_date, end_date, days_count,
@@ -4539,12 +4115,9 @@ SELECT
   NOW(),
   NOW()
 FROM rental_clients c
-WHERE c.name ILIKE '%Елена%' 
-   OR c.director_name ILIKE '%Елена%'
-   OR 'Елена' ILIKE '%' || c.name || '%'
-   OR 'Елена' ILIKE '%' || c.director_name || '%'
-LIMIT 1
-ON CONFLICT (order_number) DO NOTHING;
+WHERE (c.name = 'Елена' OR c.director_name = 'Елена')
+  AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 1131)
+LIMIT 1;
 
 INSERT INTO rental_orders (
   order_number, client_id, status, start_date, end_date, days_count,
@@ -4571,12 +4144,9 @@ SELECT
   NOW(),
   NOW()
 FROM rental_clients c
-WHERE c.name ILIKE '%Марина Экс%' 
-   OR c.director_name ILIKE '%Марина Экс%'
-   OR 'Марина Экс' ILIKE '%' || c.name || '%'
-   OR 'Марина Экс' ILIKE '%' || c.director_name || '%'
-LIMIT 1
-ON CONFLICT (order_number) DO NOTHING;
+WHERE (c.name = 'Марина Экс' OR c.director_name = 'Марина Экс')
+  AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 1130)
+LIMIT 1;
 
 INSERT INTO rental_orders (
   order_number, client_id, status, start_date, end_date, days_count,
@@ -4603,12 +4173,9 @@ SELECT
   NOW(),
   NOW()
 FROM rental_clients c
-WHERE c.name ILIKE '%Мария Экскурсовод%' 
-   OR c.director_name ILIKE '%Мария Экскурсовод%'
-   OR 'Мария Экскурсовод' ILIKE '%' || c.name || '%'
-   OR 'Мария Экскурсовод' ILIKE '%' || c.director_name || '%'
-LIMIT 1
-ON CONFLICT (order_number) DO NOTHING;
+WHERE (c.name = 'Мария Экскурсовод' OR c.director_name = 'Мария Экскурсовод')
+  AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 1129)
+LIMIT 1;
 
 INSERT INTO rental_orders (
   order_number, client_id, status, start_date, end_date, days_count,
@@ -4635,12 +4202,9 @@ SELECT
   NOW(),
   NOW()
 FROM rental_clients c
-WHERE c.name ILIKE '%Любовь (ТИЦ)%' 
-   OR c.director_name ILIKE '%Любовь (ТИЦ)%'
-   OR 'Любовь (ТИЦ)' ILIKE '%' || c.name || '%'
-   OR 'Любовь (ТИЦ)' ILIKE '%' || c.director_name || '%'
-LIMIT 1
-ON CONFLICT (order_number) DO NOTHING;
+WHERE (c.name = 'Любовь (ТИЦ)' OR c.director_name = 'Любовь (ТИЦ)')
+  AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 1128)
+LIMIT 1;
 
 INSERT INTO rental_orders (
   order_number, client_id, status, start_date, end_date, days_count,
@@ -4667,12 +4231,9 @@ SELECT
   NOW(),
   NOW()
 FROM rental_clients c
-WHERE c.name ILIKE '%Карина (технологии путешествий)%' 
-   OR c.director_name ILIKE '%Карина (технологии путешествий)%'
-   OR 'Карина (технологии путешествий)' ILIKE '%' || c.name || '%'
-   OR 'Карина (технологии путешествий)' ILIKE '%' || c.director_name || '%'
-LIMIT 1
-ON CONFLICT (order_number) DO NOTHING;
+WHERE (c.name = 'Карина (технологии путешествий)' OR c.director_name = 'Карина (технологии путешествий)')
+  AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 1127)
+LIMIT 1;
 
 INSERT INTO rental_orders (
   order_number, client_id, status, start_date, end_date, days_count,
@@ -4699,12 +4260,9 @@ SELECT
   NOW(),
   NOW()
 FROM rental_clients c
-WHERE c.name ILIKE '%Карина (технологии путешествий)%' 
-   OR c.director_name ILIKE '%Карина (технологии путешествий)%'
-   OR 'Карина (технологии путешествий)' ILIKE '%' || c.name || '%'
-   OR 'Карина (технологии путешествий)' ILIKE '%' || c.director_name || '%'
-LIMIT 1
-ON CONFLICT (order_number) DO NOTHING;
+WHERE (c.name = 'Карина (технологии путешествий)' OR c.director_name = 'Карина (технологии путешествий)')
+  AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 1126)
+LIMIT 1;
 
 INSERT INTO rental_orders (
   order_number, client_id, status, start_date, end_date, days_count,
@@ -4731,12 +4289,9 @@ SELECT
   NOW(),
   NOW()
 FROM rental_clients c
-WHERE c.name ILIKE '%Ляйсан (Казань 360)%' 
-   OR c.director_name ILIKE '%Ляйсан (Казань 360)%'
-   OR 'Ляйсан (Казань 360)' ILIKE '%' || c.name || '%'
-   OR 'Ляйсан (Казань 360)' ILIKE '%' || c.director_name || '%'
-LIMIT 1
-ON CONFLICT (order_number) DO NOTHING;
+WHERE (c.name = 'Ляйсан (Казань 360)' OR c.director_name = 'Ляйсан (Казань 360)')
+  AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 1125)
+LIMIT 1;
 
 INSERT INTO rental_orders (
   order_number, client_id, status, start_date, end_date, days_count,
@@ -4763,12 +4318,9 @@ SELECT
   NOW(),
   NOW()
 FROM rental_clients c
-WHERE c.name ILIKE '%Любовь (ТИЦ)%' 
-   OR c.director_name ILIKE '%Любовь (ТИЦ)%'
-   OR 'Любовь (ТИЦ)' ILIKE '%' || c.name || '%'
-   OR 'Любовь (ТИЦ)' ILIKE '%' || c.director_name || '%'
-LIMIT 1
-ON CONFLICT (order_number) DO NOTHING;
+WHERE (c.name = 'Любовь (ТИЦ)' OR c.director_name = 'Любовь (ТИЦ)')
+  AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 1124)
+LIMIT 1;
 
 INSERT INTO rental_orders (
   order_number, client_id, status, start_date, end_date, days_count,
@@ -4795,12 +4347,9 @@ SELECT
   NOW(),
   NOW()
 FROM rental_clients c
-WHERE c.name ILIKE '%Любовь (ТИЦ)%' 
-   OR c.director_name ILIKE '%Любовь (ТИЦ)%'
-   OR 'Любовь (ТИЦ)' ILIKE '%' || c.name || '%'
-   OR 'Любовь (ТИЦ)' ILIKE '%' || c.director_name || '%'
-LIMIT 1
-ON CONFLICT (order_number) DO NOTHING;
+WHERE (c.name = 'Любовь (ТИЦ)' OR c.director_name = 'Любовь (ТИЦ)')
+  AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 1123)
+LIMIT 1;
 
 INSERT INTO rental_orders (
   order_number, client_id, status, start_date, end_date, days_count,
@@ -4827,12 +4376,9 @@ SELECT
   NOW(),
   NOW()
 FROM rental_clients c
-WHERE c.name ILIKE '%Любовь (ТИЦ)%' 
-   OR c.director_name ILIKE '%Любовь (ТИЦ)%'
-   OR 'Любовь (ТИЦ)' ILIKE '%' || c.name || '%'
-   OR 'Любовь (ТИЦ)' ILIKE '%' || c.director_name || '%'
-LIMIT 1
-ON CONFLICT (order_number) DO NOTHING;
+WHERE (c.name = 'Любовь (ТИЦ)' OR c.director_name = 'Любовь (ТИЦ)')
+  AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 1122)
+LIMIT 1;
 
 INSERT INTO rental_orders (
   order_number, client_id, status, start_date, end_date, days_count,
@@ -4859,12 +4405,9 @@ SELECT
   NOW(),
   NOW()
 FROM rental_clients c
-WHERE c.name ILIKE '%Эдик Заказы для групп%' 
-   OR c.director_name ILIKE '%Эдик Заказы для групп%'
-   OR 'Эдик Заказы для групп' ILIKE '%' || c.name || '%'
-   OR 'Эдик Заказы для групп' ILIKE '%' || c.director_name || '%'
-LIMIT 1
-ON CONFLICT (order_number) DO NOTHING;
+WHERE (c.name = 'Эдик Заказы для групп' OR c.director_name = 'Эдик Заказы для групп')
+  AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 1121)
+LIMIT 1;
 
 INSERT INTO rental_orders (
   order_number, client_id, status, start_date, end_date, days_count,
@@ -4891,12 +4434,9 @@ SELECT
   NOW(),
   NOW()
 FROM rental_clients c
-WHERE c.name ILIKE '%Эдик Заказы для групп%' 
-   OR c.director_name ILIKE '%Эдик Заказы для групп%'
-   OR 'Эдик Заказы для групп' ILIKE '%' || c.name || '%'
-   OR 'Эдик Заказы для групп' ILIKE '%' || c.director_name || '%'
-LIMIT 1
-ON CONFLICT (order_number) DO NOTHING;
+WHERE (c.name = 'Эдик Заказы для групп' OR c.director_name = 'Эдик Заказы для групп')
+  AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 1120)
+LIMIT 1;
 
 INSERT INTO rental_orders (
   order_number, client_id, status, start_date, end_date, days_count,
@@ -4923,12 +4463,9 @@ SELECT
   NOW(),
   NOW()
 FROM rental_clients c
-WHERE c.name ILIKE '%Эдик Заказы для групп%' 
-   OR c.director_name ILIKE '%Эдик Заказы для групп%'
-   OR 'Эдик Заказы для групп' ILIKE '%' || c.name || '%'
-   OR 'Эдик Заказы для групп' ILIKE '%' || c.director_name || '%'
-LIMIT 1
-ON CONFLICT (order_number) DO NOTHING;
+WHERE (c.name = 'Эдик Заказы для групп' OR c.director_name = 'Эдик Заказы для групп')
+  AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 1119)
+LIMIT 1;
 
 INSERT INTO rental_orders (
   order_number, client_id, status, start_date, end_date, days_count,
@@ -4955,12 +4492,9 @@ SELECT
   NOW(),
   NOW()
 FROM rental_clients c
-WHERE c.name ILIKE '%Эдик Заказы для групп%' 
-   OR c.director_name ILIKE '%Эдик Заказы для групп%'
-   OR 'Эдик Заказы для групп' ILIKE '%' || c.name || '%'
-   OR 'Эдик Заказы для групп' ILIKE '%' || c.director_name || '%'
-LIMIT 1
-ON CONFLICT (order_number) DO NOTHING;
+WHERE (c.name = 'Эдик Заказы для групп' OR c.director_name = 'Эдик Заказы для групп')
+  AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 1118)
+LIMIT 1;
 
 INSERT INTO rental_orders (
   order_number, client_id, status, start_date, end_date, days_count,
@@ -4987,12 +4521,9 @@ SELECT
   NOW(),
   NOW()
 FROM rental_clients c
-WHERE c.name ILIKE '%Инна Экскурсовод%' 
-   OR c.director_name ILIKE '%Инна Экскурсовод%'
-   OR 'Инна Экскурсовод' ILIKE '%' || c.name || '%'
-   OR 'Инна Экскурсовод' ILIKE '%' || c.director_name || '%'
-LIMIT 1
-ON CONFLICT (order_number) DO NOTHING;
+WHERE (c.name = 'Инна Экскурсовод' OR c.director_name = 'Инна Экскурсовод')
+  AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 1117)
+LIMIT 1;
 
 INSERT INTO rental_orders (
   order_number, client_id, status, start_date, end_date, days_count,
@@ -5019,12 +4550,9 @@ SELECT
   NOW(),
   NOW()
 FROM rental_clients c
-WHERE c.name ILIKE '%Любовь (ТИЦ)%' 
-   OR c.director_name ILIKE '%Любовь (ТИЦ)%'
-   OR 'Любовь (ТИЦ)' ILIKE '%' || c.name || '%'
-   OR 'Любовь (ТИЦ)' ILIKE '%' || c.director_name || '%'
-LIMIT 1
-ON CONFLICT (order_number) DO NOTHING;
+WHERE (c.name = 'Любовь (ТИЦ)' OR c.director_name = 'Любовь (ТИЦ)')
+  AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 1116)
+LIMIT 1;
 
 INSERT INTO rental_orders (
   order_number, client_id, status, start_date, end_date, days_count,
@@ -5051,12 +4579,9 @@ SELECT
   NOW(),
   NOW()
 FROM rental_clients c
-WHERE c.name ILIKE '%Мария (ОСР)%' 
-   OR c.director_name ILIKE '%Мария (ОСР)%'
-   OR 'Мария (ОСР)' ILIKE '%' || c.name || '%'
-   OR 'Мария (ОСР)' ILIKE '%' || c.director_name || '%'
-LIMIT 1
-ON CONFLICT (order_number) DO NOTHING;
+WHERE (c.name = 'Мария (ОСР)' OR c.director_name = 'Мария (ОСР)')
+  AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 1115)
+LIMIT 1;
 
 INSERT INTO rental_orders (
   order_number, client_id, status, start_date, end_date, days_count,
@@ -5083,12 +4608,9 @@ SELECT
   NOW(),
   NOW()
 FROM rental_clients c
-WHERE c.name ILIKE '%Любовь (ТИЦ)%' 
-   OR c.director_name ILIKE '%Любовь (ТИЦ)%'
-   OR 'Любовь (ТИЦ)' ILIKE '%' || c.name || '%'
-   OR 'Любовь (ТИЦ)' ILIKE '%' || c.director_name || '%'
-LIMIT 1
-ON CONFLICT (order_number) DO NOTHING;
+WHERE (c.name = 'Любовь (ТИЦ)' OR c.director_name = 'Любовь (ТИЦ)')
+  AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 1114)
+LIMIT 1;
 
 INSERT INTO rental_orders (
   order_number, client_id, status, start_date, end_date, days_count,
@@ -5115,12 +4637,9 @@ SELECT
   NOW(),
   NOW()
 FROM rental_clients c
-WHERE c.name ILIKE '%Титова Галина (Эллинлайн)%' 
-   OR c.director_name ILIKE '%Титова Галина (Эллинлайн)%'
-   OR 'Титова Галина (Эллинлайн)' ILIKE '%' || c.name || '%'
-   OR 'Титова Галина (Эллинлайн)' ILIKE '%' || c.director_name || '%'
-LIMIT 1
-ON CONFLICT (order_number) DO NOTHING;
+WHERE (c.name = 'Титова Галина (Эллинлайн)' OR c.director_name = 'Титова Галина (Эллинлайн)')
+  AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 1113)
+LIMIT 1;
 
 INSERT INTO rental_orders (
   order_number, client_id, status, start_date, end_date, days_count,
@@ -5147,12 +4666,9 @@ SELECT
   NOW(),
   NOW()
 FROM rental_clients c
-WHERE c.name ILIKE '%Татьяна (Гольфстрим)%' 
-   OR c.director_name ILIKE '%Татьяна (Гольфстрим)%'
-   OR 'Татьяна (Гольфстрим)' ILIKE '%' || c.name || '%'
-   OR 'Татьяна (Гольфстрим)' ILIKE '%' || c.director_name || '%'
-LIMIT 1
-ON CONFLICT (order_number) DO NOTHING;
+WHERE (c.name = 'Татьяна (Гольфстрим)' OR c.director_name = 'Татьяна (Гольфстрим)')
+  AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 1112)
+LIMIT 1;
 
 INSERT INTO rental_orders (
   order_number, client_id, status, start_date, end_date, days_count,
@@ -5179,12 +4695,9 @@ SELECT
   NOW(),
   NOW()
 FROM rental_clients c
-WHERE c.name ILIKE '%Ляйсан (Казань 360)%' 
-   OR c.director_name ILIKE '%Ляйсан (Казань 360)%'
-   OR 'Ляйсан (Казань 360)' ILIKE '%' || c.name || '%'
-   OR 'Ляйсан (Казань 360)' ILIKE '%' || c.director_name || '%'
-LIMIT 1
-ON CONFLICT (order_number) DO NOTHING;
+WHERE (c.name = 'Ляйсан (Казань 360)' OR c.director_name = 'Ляйсан (Казань 360)')
+  AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 1111)
+LIMIT 1;
 
 INSERT INTO rental_orders (
   order_number, client_id, status, start_date, end_date, days_count,
@@ -5211,12 +4724,9 @@ SELECT
   NOW(),
   NOW()
 FROM rental_clients c
-WHERE c.name ILIKE '%Ляйсан (Казань 360)%' 
-   OR c.director_name ILIKE '%Ляйсан (Казань 360)%'
-   OR 'Ляйсан (Казань 360)' ILIKE '%' || c.name || '%'
-   OR 'Ляйсан (Казань 360)' ILIKE '%' || c.director_name || '%'
-LIMIT 1
-ON CONFLICT (order_number) DO NOTHING;
+WHERE (c.name = 'Ляйсан (Казань 360)' OR c.director_name = 'Ляйсан (Казань 360)')
+  AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 1110)
+LIMIT 1;
 
 INSERT INTO rental_orders (
   order_number, client_id, status, start_date, end_date, days_count,
@@ -5243,12 +4753,9 @@ SELECT
   NOW(),
   NOW()
 FROM rental_clients c
-WHERE c.name ILIKE '%Татьяна (Гольфстрим)%' 
-   OR c.director_name ILIKE '%Татьяна (Гольфстрим)%'
-   OR 'Татьяна (Гольфстрим)' ILIKE '%' || c.name || '%'
-   OR 'Татьяна (Гольфстрим)' ILIKE '%' || c.director_name || '%'
-LIMIT 1
-ON CONFLICT (order_number) DO NOTHING;
+WHERE (c.name = 'Татьяна (Гольфстрим)' OR c.director_name = 'Татьяна (Гольфстрим)')
+  AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 1109)
+LIMIT 1;
 
 INSERT INTO rental_orders (
   order_number, client_id, status, start_date, end_date, days_count,
@@ -5275,12 +4782,9 @@ SELECT
   NOW(),
   NOW()
 FROM rental_clients c
-WHERE c.name ILIKE '%Татьяна Чуб%' 
-   OR c.director_name ILIKE '%Татьяна Чуб%'
-   OR 'Татьяна Чуб' ILIKE '%' || c.name || '%'
-   OR 'Татьяна Чуб' ILIKE '%' || c.director_name || '%'
-LIMIT 1
-ON CONFLICT (order_number) DO NOTHING;
+WHERE (c.name = 'Татьяна Чуб' OR c.director_name = 'Татьяна Чуб')
+  AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 1108)
+LIMIT 1;
 
 INSERT INTO rental_orders (
   order_number, client_id, status, start_date, end_date, days_count,
@@ -5307,12 +4811,9 @@ SELECT
   NOW(),
   NOW()
 FROM rental_clients c
-WHERE c.name ILIKE '%Эдик Заказы для групп%' 
-   OR c.director_name ILIKE '%Эдик Заказы для групп%'
-   OR 'Эдик Заказы для групп' ILIKE '%' || c.name || '%'
-   OR 'Эдик Заказы для групп' ILIKE '%' || c.director_name || '%'
-LIMIT 1
-ON CONFLICT (order_number) DO NOTHING;
+WHERE (c.name = 'Эдик Заказы для групп' OR c.director_name = 'Эдик Заказы для групп')
+  AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 1107)
+LIMIT 1;
 
 INSERT INTO rental_orders (
   order_number, client_id, status, start_date, end_date, days_count,
@@ -5339,12 +4840,9 @@ SELECT
   NOW(),
   NOW()
 FROM rental_clients c
-WHERE c.name ILIKE '%Эвелина (Инициатива)%' 
-   OR c.director_name ILIKE '%Эвелина (Инициатива)%'
-   OR 'Эвелина (Инициатива)' ILIKE '%' || c.name || '%'
-   OR 'Эвелина (Инициатива)' ILIKE '%' || c.director_name || '%'
-LIMIT 1
-ON CONFLICT (order_number) DO NOTHING;
+WHERE (c.name = 'Эвелина (Инициатива)' OR c.director_name = 'Эвелина (Инициатива)')
+  AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 1106)
+LIMIT 1;
 
 INSERT INTO rental_orders (
   order_number, client_id, status, start_date, end_date, days_count,
@@ -5371,12 +4869,9 @@ SELECT
   NOW(),
   NOW()
 FROM rental_clients c
-WHERE c.name ILIKE '%Мария (ОСР)%' 
-   OR c.director_name ILIKE '%Мария (ОСР)%'
-   OR 'Мария (ОСР)' ILIKE '%' || c.name || '%'
-   OR 'Мария (ОСР)' ILIKE '%' || c.director_name || '%'
-LIMIT 1
-ON CONFLICT (order_number) DO NOTHING;
+WHERE (c.name = 'Мария (ОСР)' OR c.director_name = 'Мария (ОСР)')
+  AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 1105)
+LIMIT 1;
 
 INSERT INTO rental_orders (
   order_number, client_id, status, start_date, end_date, days_count,
@@ -5403,12 +4898,9 @@ SELECT
   NOW(),
   NOW()
 FROM rental_clients c
-WHERE c.name ILIKE '%Эдик Заказы для групп%' 
-   OR c.director_name ILIKE '%Эдик Заказы для групп%'
-   OR 'Эдик Заказы для групп' ILIKE '%' || c.name || '%'
-   OR 'Эдик Заказы для групп' ILIKE '%' || c.director_name || '%'
-LIMIT 1
-ON CONFLICT (order_number) DO NOTHING;
+WHERE (c.name = 'Эдик Заказы для групп' OR c.director_name = 'Эдик Заказы для групп')
+  AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 1104)
+LIMIT 1;
 
 INSERT INTO rental_orders (
   order_number, client_id, status, start_date, end_date, days_count,
@@ -5435,12 +4927,9 @@ SELECT
   NOW(),
   NOW()
 FROM rental_clients c
-WHERE c.name ILIKE '%Любовь Ким%' 
-   OR c.director_name ILIKE '%Любовь Ким%'
-   OR 'Любовь Ким' ILIKE '%' || c.name || '%'
-   OR 'Любовь Ким' ILIKE '%' || c.director_name || '%'
-LIMIT 1
-ON CONFLICT (order_number) DO NOTHING;
+WHERE (c.name = 'Любовь Ким' OR c.director_name = 'Любовь Ким')
+  AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 1103)
+LIMIT 1;
 
 INSERT INTO rental_orders (
   order_number, client_id, status, start_date, end_date, days_count,
@@ -5467,12 +4956,9 @@ SELECT
   NOW(),
   NOW()
 FROM rental_clients c
-WHERE c.name ILIKE '%Любовь Ким%' 
-   OR c.director_name ILIKE '%Любовь Ким%'
-   OR 'Любовь Ким' ILIKE '%' || c.name || '%'
-   OR 'Любовь Ким' ILIKE '%' || c.director_name || '%'
-LIMIT 1
-ON CONFLICT (order_number) DO NOTHING;
+WHERE (c.name = 'Любовь Ким' OR c.director_name = 'Любовь Ким')
+  AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 1102)
+LIMIT 1;
 
 INSERT INTO rental_orders (
   order_number, client_id, status, start_date, end_date, days_count,
@@ -5499,12 +4985,9 @@ SELECT
   NOW(),
   NOW()
 FROM rental_clients c
-WHERE c.name ILIKE '%Зельфира%' 
-   OR c.director_name ILIKE '%Зельфира%'
-   OR 'Зельфира' ILIKE '%' || c.name || '%'
-   OR 'Зельфира' ILIKE '%' || c.director_name || '%'
-LIMIT 1
-ON CONFLICT (order_number) DO NOTHING;
+WHERE (c.name = 'Зельфира' OR c.director_name = 'Зельфира')
+  AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 1101)
+LIMIT 1;
 
 INSERT INTO rental_orders (
   order_number, client_id, status, start_date, end_date, days_count,
@@ -5531,12 +5014,9 @@ SELECT
   NOW(),
   NOW()
 FROM rental_clients c
-WHERE c.name ILIKE '%Екатерина%' 
-   OR c.director_name ILIKE '%Екатерина%'
-   OR 'Екатерина' ILIKE '%' || c.name || '%'
-   OR 'Екатерина' ILIKE '%' || c.director_name || '%'
-LIMIT 1
-ON CONFLICT (order_number) DO NOTHING;
+WHERE (c.name = 'Екатерина' OR c.director_name = 'Екатерина')
+  AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 1100)
+LIMIT 1;
 
 INSERT INTO rental_orders (
   order_number, client_id, status, start_date, end_date, days_count,
@@ -5563,12 +5043,9 @@ SELECT
   NOW(),
   NOW()
 FROM rental_clients c
-WHERE c.name ILIKE '%Владимир Нежданов%' 
-   OR c.director_name ILIKE '%Владимир Нежданов%'
-   OR 'Владимир Нежданов' ILIKE '%' || c.name || '%'
-   OR 'Владимир Нежданов' ILIKE '%' || c.director_name || '%'
-LIMIT 1
-ON CONFLICT (order_number) DO NOTHING;
+WHERE (c.name = 'Владимир Нежданов' OR c.director_name = 'Владимир Нежданов')
+  AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 1099)
+LIMIT 1;
 
 INSERT INTO rental_orders (
   order_number, client_id, status, start_date, end_date, days_count,
@@ -5595,12 +5072,9 @@ SELECT
   NOW(),
   NOW()
 FROM rental_clients c
-WHERE c.name ILIKE '%Галия%' 
-   OR c.director_name ILIKE '%Галия%'
-   OR 'Галия' ILIKE '%' || c.name || '%'
-   OR 'Галия' ILIKE '%' || c.director_name || '%'
-LIMIT 1
-ON CONFLICT (order_number) DO NOTHING;
+WHERE (c.name = 'Галия' OR c.director_name = 'Галия')
+  AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 1098)
+LIMIT 1;
 
 INSERT INTO rental_orders (
   order_number, client_id, status, start_date, end_date, days_count,
@@ -5627,12 +5101,9 @@ SELECT
   NOW(),
   NOW()
 FROM rental_clients c
-WHERE c.name ILIKE '%Елена (Конгресс Авиа)%' 
-   OR c.director_name ILIKE '%Елена (Конгресс Авиа)%'
-   OR 'Елена (Конгресс Авиа)' ILIKE '%' || c.name || '%'
-   OR 'Елена (Конгресс Авиа)' ILIKE '%' || c.director_name || '%'
-LIMIT 1
-ON CONFLICT (order_number) DO NOTHING;
+WHERE (c.name = 'Елена (Конгресс Авиа)' OR c.director_name = 'Елена (Конгресс Авиа)')
+  AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 1097)
+LIMIT 1;
 
 INSERT INTO rental_orders (
   order_number, client_id, status, start_date, end_date, days_count,
@@ -5659,12 +5130,9 @@ SELECT
   NOW(),
   NOW()
 FROM rental_clients c
-WHERE c.name ILIKE '%Татьяна (Агентство Удачи)%' 
-   OR c.director_name ILIKE '%Татьяна (Агентство Удачи)%'
-   OR 'Татьяна (Агентство Удачи)' ILIKE '%' || c.name || '%'
-   OR 'Татьяна (Агентство Удачи)' ILIKE '%' || c.director_name || '%'
-LIMIT 1
-ON CONFLICT (order_number) DO NOTHING;
+WHERE (c.name = 'Татьяна (Агентство Удачи)' OR c.director_name = 'Татьяна (Агентство Удачи)')
+  AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 1096)
+LIMIT 1;
 
 INSERT INTO rental_orders (
   order_number, client_id, status, start_date, end_date, days_count,
@@ -5691,12 +5159,9 @@ SELECT
   NOW(),
   NOW()
 FROM rental_clients c
-WHERE c.name ILIKE '%Ляйсан (Казань 360)%' 
-   OR c.director_name ILIKE '%Ляйсан (Казань 360)%'
-   OR 'Ляйсан (Казань 360)' ILIKE '%' || c.name || '%'
-   OR 'Ляйсан (Казань 360)' ILIKE '%' || c.director_name || '%'
-LIMIT 1
-ON CONFLICT (order_number) DO NOTHING;
+WHERE (c.name = 'Ляйсан (Казань 360)' OR c.director_name = 'Ляйсан (Казань 360)')
+  AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 1095)
+LIMIT 1;
 
 INSERT INTO rental_orders (
   order_number, client_id, status, start_date, end_date, days_count,
@@ -5723,12 +5188,9 @@ SELECT
   NOW(),
   NOW()
 FROM rental_clients c
-WHERE c.name ILIKE '%Дамир (Экскурс)%' 
-   OR c.director_name ILIKE '%Дамир (Экскурс)%'
-   OR 'Дамир (Экскурс)' ILIKE '%' || c.name || '%'
-   OR 'Дамир (Экскурс)' ILIKE '%' || c.director_name || '%'
-LIMIT 1
-ON CONFLICT (order_number) DO NOTHING;
+WHERE (c.name = 'Дамир (Экскурс)' OR c.director_name = 'Дамир (Экскурс)')
+  AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 1094)
+LIMIT 1;
 
 INSERT INTO rental_orders (
   order_number, client_id, status, start_date, end_date, days_count,
@@ -5755,12 +5217,9 @@ SELECT
   NOW(),
   NOW()
 FROM rental_clients c
-WHERE c.name ILIKE '%Ленар (ИП Ножкин)%' 
-   OR c.director_name ILIKE '%Ленар (ИП Ножкин)%'
-   OR 'Ленар (ИП Ножкин)' ILIKE '%' || c.name || '%'
-   OR 'Ленар (ИП Ножкин)' ILIKE '%' || c.director_name || '%'
-LIMIT 1
-ON CONFLICT (order_number) DO NOTHING;
+WHERE (c.name = 'Ленар (ИП Ножкин)' OR c.director_name = 'Ленар (ИП Ножкин)')
+  AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 1093)
+LIMIT 1;
 
 INSERT INTO rental_orders (
   order_number, client_id, status, start_date, end_date, days_count,
@@ -5787,12 +5246,9 @@ SELECT
   NOW(),
   NOW()
 FROM rental_clients c
-WHERE c.name ILIKE '%Искандер%' 
-   OR c.director_name ILIKE '%Искандер%'
-   OR 'Искандер' ILIKE '%' || c.name || '%'
-   OR 'Искандер' ILIKE '%' || c.director_name || '%'
-LIMIT 1
-ON CONFLICT (order_number) DO NOTHING;
+WHERE (c.name = 'Искандер' OR c.director_name = 'Искандер')
+  AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 1092)
+LIMIT 1;
 
 INSERT INTO rental_orders (
   order_number, client_id, status, start_date, end_date, days_count,
@@ -5819,12 +5275,9 @@ SELECT
   NOW(),
   NOW()
 FROM rental_clients c
-WHERE c.name ILIKE '%Любовь (ТИЦ)%' 
-   OR c.director_name ILIKE '%Любовь (ТИЦ)%'
-   OR 'Любовь (ТИЦ)' ILIKE '%' || c.name || '%'
-   OR 'Любовь (ТИЦ)' ILIKE '%' || c.director_name || '%'
-LIMIT 1
-ON CONFLICT (order_number) DO NOTHING;
+WHERE (c.name = 'Любовь (ТИЦ)' OR c.director_name = 'Любовь (ТИЦ)')
+  AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 1091)
+LIMIT 1;
 
 INSERT INTO rental_orders (
   order_number, client_id, status, start_date, end_date, days_count,
@@ -5851,12 +5304,9 @@ SELECT
   NOW(),
   NOW()
 FROM rental_clients c
-WHERE c.name ILIKE '%Екатерина Кореева%' 
-   OR c.director_name ILIKE '%Екатерина Кореева%'
-   OR 'Екатерина Кореева' ILIKE '%' || c.name || '%'
-   OR 'Екатерина Кореева' ILIKE '%' || c.director_name || '%'
-LIMIT 1
-ON CONFLICT (order_number) DO NOTHING;
+WHERE (c.name = 'Екатерина Кореева' OR c.director_name = 'Екатерина Кореева')
+  AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 1090)
+LIMIT 1;
 
 INSERT INTO rental_orders (
   order_number, client_id, status, start_date, end_date, days_count,
@@ -5883,12 +5333,9 @@ SELECT
   NOW(),
   NOW()
 FROM rental_clients c
-WHERE c.name ILIKE '%Арсен (Юнион)%' 
-   OR c.director_name ILIKE '%Арсен (Юнион)%'
-   OR 'Арсен (Юнион)' ILIKE '%' || c.name || '%'
-   OR 'Арсен (Юнион)' ILIKE '%' || c.director_name || '%'
-LIMIT 1
-ON CONFLICT (order_number) DO NOTHING;
+WHERE (c.name = 'Арсен (Юнион)' OR c.director_name = 'Арсен (Юнион)')
+  AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 1089)
+LIMIT 1;
 
 INSERT INTO rental_orders (
   order_number, client_id, status, start_date, end_date, days_count,
@@ -5915,12 +5362,9 @@ SELECT
   NOW(),
   NOW()
 FROM rental_clients c
-WHERE c.name ILIKE '%Арсен (Юнион)%' 
-   OR c.director_name ILIKE '%Арсен (Юнион)%'
-   OR 'Арсен (Юнион)' ILIKE '%' || c.name || '%'
-   OR 'Арсен (Юнион)' ILIKE '%' || c.director_name || '%'
-LIMIT 1
-ON CONFLICT (order_number) DO NOTHING;
+WHERE (c.name = 'Арсен (Юнион)' OR c.director_name = 'Арсен (Юнион)')
+  AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 1088)
+LIMIT 1;
 
 INSERT INTO rental_orders (
   order_number, client_id, status, start_date, end_date, days_count,
@@ -5947,12 +5391,9 @@ SELECT
   NOW(),
   NOW()
 FROM rental_clients c
-WHERE c.name ILIKE '%Галия%' 
-   OR c.director_name ILIKE '%Галия%'
-   OR 'Галия' ILIKE '%' || c.name || '%'
-   OR 'Галия' ILIKE '%' || c.director_name || '%'
-LIMIT 1
-ON CONFLICT (order_number) DO NOTHING;
+WHERE (c.name = 'Галия' OR c.director_name = 'Галия')
+  AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 1087)
+LIMIT 1;
 
 INSERT INTO rental_orders (
   order_number, client_id, status, start_date, end_date, days_count,
@@ -5979,12 +5420,9 @@ SELECT
   NOW(),
   NOW()
 FROM rental_clients c
-WHERE c.name ILIKE '%Юлия Супрунова (от Миры)%' 
-   OR c.director_name ILIKE '%Юлия Супрунова (от Миры)%'
-   OR 'Юлия Супрунова (от Миры)' ILIKE '%' || c.name || '%'
-   OR 'Юлия Супрунова (от Миры)' ILIKE '%' || c.director_name || '%'
-LIMIT 1
-ON CONFLICT (order_number) DO NOTHING;
+WHERE (c.name = 'Юлия Супрунова (от Миры)' OR c.director_name = 'Юлия Супрунова (от Миры)')
+  AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 1086)
+LIMIT 1;
 
 INSERT INTO rental_orders (
   order_number, client_id, status, start_date, end_date, days_count,
@@ -6011,12 +5449,9 @@ SELECT
   NOW(),
   NOW()
 FROM rental_clients c
-WHERE c.name ILIKE '%Сафина Алина (ФРГРТ)%' 
-   OR c.director_name ILIKE '%Сафина Алина (ФРГРТ)%'
-   OR 'Сафина Алина (ФРГРТ)' ILIKE '%' || c.name || '%'
-   OR 'Сафина Алина (ФРГРТ)' ILIKE '%' || c.director_name || '%'
-LIMIT 1
-ON CONFLICT (order_number) DO NOTHING;
+WHERE (c.name = 'Сафина Алина (ФРГРТ)' OR c.director_name = 'Сафина Алина (ФРГРТ)')
+  AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 1085)
+LIMIT 1;
 
 INSERT INTO rental_orders (
   order_number, client_id, status, start_date, end_date, days_count,
@@ -6043,12 +5478,9 @@ SELECT
   NOW(),
   NOW()
 FROM rental_clients c
-WHERE c.name ILIKE '%Татьяна (Гольфстрим)%' 
-   OR c.director_name ILIKE '%Татьяна (Гольфстрим)%'
-   OR 'Татьяна (Гольфстрим)' ILIKE '%' || c.name || '%'
-   OR 'Татьяна (Гольфстрим)' ILIKE '%' || c.director_name || '%'
-LIMIT 1
-ON CONFLICT (order_number) DO NOTHING;
+WHERE (c.name = 'Татьяна (Гольфстрим)' OR c.director_name = 'Татьяна (Гольфстрим)')
+  AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 1084)
+LIMIT 1;
 
 INSERT INTO rental_orders (
   order_number, client_id, status, start_date, end_date, days_count,
@@ -6075,12 +5507,9 @@ SELECT
   NOW(),
   NOW()
 FROM rental_clients c
-WHERE c.name ILIKE '%Татьяна (Гольфстрим)%' 
-   OR c.director_name ILIKE '%Татьяна (Гольфстрим)%'
-   OR 'Татьяна (Гольфстрим)' ILIKE '%' || c.name || '%'
-   OR 'Татьяна (Гольфстрим)' ILIKE '%' || c.director_name || '%'
-LIMIT 1
-ON CONFLICT (order_number) DO NOTHING;
+WHERE (c.name = 'Татьяна (Гольфстрим)' OR c.director_name = 'Татьяна (Гольфстрим)')
+  AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 1083)
+LIMIT 1;
 
 INSERT INTO rental_orders (
   order_number, client_id, status, start_date, end_date, days_count,
@@ -6107,12 +5536,9 @@ SELECT
   NOW(),
   NOW()
 FROM rental_clients c
-WHERE c.name ILIKE '%Мария Экскурсовод%' 
-   OR c.director_name ILIKE '%Мария Экскурсовод%'
-   OR 'Мария Экскурсовод' ILIKE '%' || c.name || '%'
-   OR 'Мария Экскурсовод' ILIKE '%' || c.director_name || '%'
-LIMIT 1
-ON CONFLICT (order_number) DO NOTHING;
+WHERE (c.name = 'Мария Экскурсовод' OR c.director_name = 'Мария Экскурсовод')
+  AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 1082)
+LIMIT 1;
 
 INSERT INTO rental_orders (
   order_number, client_id, status, start_date, end_date, days_count,
@@ -6139,12 +5565,9 @@ SELECT
   NOW(),
   NOW()
 FROM rental_clients c
-WHERE c.name ILIKE '%Мира (ИП)%' 
-   OR c.director_name ILIKE '%Мира (ИП)%'
-   OR 'Мира (ИП)' ILIKE '%' || c.name || '%'
-   OR 'Мира (ИП)' ILIKE '%' || c.director_name || '%'
-LIMIT 1
-ON CONFLICT (order_number) DO NOTHING;
+WHERE (c.name = 'Мира (ИП)' OR c.director_name = 'Мира (ИП)')
+  AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 1081)
+LIMIT 1;
 
 INSERT INTO rental_orders (
   order_number, client_id, status, start_date, end_date, days_count,
@@ -6171,12 +5594,9 @@ SELECT
   NOW(),
   NOW()
 FROM rental_clients c
-WHERE c.name ILIKE '%Вадим%' 
-   OR c.director_name ILIKE '%Вадим%'
-   OR 'Вадим' ILIKE '%' || c.name || '%'
-   OR 'Вадим' ILIKE '%' || c.director_name || '%'
-LIMIT 1
-ON CONFLICT (order_number) DO NOTHING;
+WHERE (c.name = 'Вадим' OR c.director_name = 'Вадим')
+  AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 1080)
+LIMIT 1;
 
 INSERT INTO rental_orders (
   order_number, client_id, status, start_date, end_date, days_count,
@@ -6203,12 +5623,9 @@ SELECT
   NOW(),
   NOW()
 FROM rental_clients c
-WHERE c.name ILIKE '%Мария Экскурсовод%' 
-   OR c.director_name ILIKE '%Мария Экскурсовод%'
-   OR 'Мария Экскурсовод' ILIKE '%' || c.name || '%'
-   OR 'Мария Экскурсовод' ILIKE '%' || c.director_name || '%'
-LIMIT 1
-ON CONFLICT (order_number) DO NOTHING;
+WHERE (c.name = 'Мария Экскурсовод' OR c.director_name = 'Мария Экскурсовод')
+  AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 1079)
+LIMIT 1;
 
 INSERT INTO rental_orders (
   order_number, client_id, status, start_date, end_date, days_count,
@@ -6235,12 +5652,9 @@ SELECT
   NOW(),
   NOW()
 FROM rental_clients c
-WHERE c.name ILIKE '%Эдик Заказы для групп%' 
-   OR c.director_name ILIKE '%Эдик Заказы для групп%'
-   OR 'Эдик Заказы для групп' ILIKE '%' || c.name || '%'
-   OR 'Эдик Заказы для групп' ILIKE '%' || c.director_name || '%'
-LIMIT 1
-ON CONFLICT (order_number) DO NOTHING;
+WHERE (c.name = 'Эдик Заказы для групп' OR c.director_name = 'Эдик Заказы для групп')
+  AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 1078)
+LIMIT 1;
 
 INSERT INTO rental_orders (
   order_number, client_id, status, start_date, end_date, days_count,
@@ -6267,12 +5681,9 @@ SELECT
   NOW(),
   NOW()
 FROM rental_clients c
-WHERE c.name ILIKE '%Татьяна (Гольфстрим)%' 
-   OR c.director_name ILIKE '%Татьяна (Гольфстрим)%'
-   OR 'Татьяна (Гольфстрим)' ILIKE '%' || c.name || '%'
-   OR 'Татьяна (Гольфстрим)' ILIKE '%' || c.director_name || '%'
-LIMIT 1
-ON CONFLICT (order_number) DO NOTHING;
+WHERE (c.name = 'Татьяна (Гольфстрим)' OR c.director_name = 'Татьяна (Гольфстрим)')
+  AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 1077)
+LIMIT 1;
 
 INSERT INTO rental_orders (
   order_number, client_id, status, start_date, end_date, days_count,
@@ -6299,12 +5710,9 @@ SELECT
   NOW(),
   NOW()
 FROM rental_clients c
-WHERE c.name ILIKE '%Татьяна (Гольфстрим)%' 
-   OR c.director_name ILIKE '%Татьяна (Гольфстрим)%'
-   OR 'Татьяна (Гольфстрим)' ILIKE '%' || c.name || '%'
-   OR 'Татьяна (Гольфстрим)' ILIKE '%' || c.director_name || '%'
-LIMIT 1
-ON CONFLICT (order_number) DO NOTHING;
+WHERE (c.name = 'Татьяна (Гольфстрим)' OR c.director_name = 'Татьяна (Гольфстрим)')
+  AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 1076)
+LIMIT 1;
 
 INSERT INTO rental_orders (
   order_number, client_id, status, start_date, end_date, days_count,
@@ -6331,12 +5739,9 @@ SELECT
   NOW(),
   NOW()
 FROM rental_clients c
-WHERE c.name ILIKE '%Татьяна (Гольфстрим)%' 
-   OR c.director_name ILIKE '%Татьяна (Гольфстрим)%'
-   OR 'Татьяна (Гольфстрим)' ILIKE '%' || c.name || '%'
-   OR 'Татьяна (Гольфстрим)' ILIKE '%' || c.director_name || '%'
-LIMIT 1
-ON CONFLICT (order_number) DO NOTHING;
+WHERE (c.name = 'Татьяна (Гольфстрим)' OR c.director_name = 'Татьяна (Гольфстрим)')
+  AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 1075)
+LIMIT 1;
 
 INSERT INTO rental_orders (
   order_number, client_id, status, start_date, end_date, days_count,
@@ -6363,12 +5768,9 @@ SELECT
   NOW(),
   NOW()
 FROM rental_clients c
-WHERE c.name ILIKE '%Татьяна (Гольфстрим)%' 
-   OR c.director_name ILIKE '%Татьяна (Гольфстрим)%'
-   OR 'Татьяна (Гольфстрим)' ILIKE '%' || c.name || '%'
-   OR 'Татьяна (Гольфстрим)' ILIKE '%' || c.director_name || '%'
-LIMIT 1
-ON CONFLICT (order_number) DO NOTHING;
+WHERE (c.name = 'Татьяна (Гольфстрим)' OR c.director_name = 'Татьяна (Гольфстрим)')
+  AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 1074)
+LIMIT 1;
 
 INSERT INTO rental_orders (
   order_number, client_id, status, start_date, end_date, days_count,
@@ -6395,12 +5797,9 @@ SELECT
   NOW(),
   NOW()
 FROM rental_clients c
-WHERE c.name ILIKE '%Татьяна (Гольфстрим)%' 
-   OR c.director_name ILIKE '%Татьяна (Гольфстрим)%'
-   OR 'Татьяна (Гольфстрим)' ILIKE '%' || c.name || '%'
-   OR 'Татьяна (Гольфстрим)' ILIKE '%' || c.director_name || '%'
-LIMIT 1
-ON CONFLICT (order_number) DO NOTHING;
+WHERE (c.name = 'Татьяна (Гольфстрим)' OR c.director_name = 'Татьяна (Гольфстрим)')
+  AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 1073)
+LIMIT 1;
 
 INSERT INTO rental_orders (
   order_number, client_id, status, start_date, end_date, days_count,
@@ -6427,12 +5826,9 @@ SELECT
   NOW(),
   NOW()
 FROM rental_clients c
-WHERE c.name ILIKE '%Екатерина Кореева%' 
-   OR c.director_name ILIKE '%Екатерина Кореева%'
-   OR 'Екатерина Кореева' ILIKE '%' || c.name || '%'
-   OR 'Екатерина Кореева' ILIKE '%' || c.director_name || '%'
-LIMIT 1
-ON CONFLICT (order_number) DO NOTHING;
+WHERE (c.name = 'Екатерина Кореева' OR c.director_name = 'Екатерина Кореева')
+  AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 1072)
+LIMIT 1;
 
 INSERT INTO rental_orders (
   order_number, client_id, status, start_date, end_date, days_count,
@@ -6459,12 +5855,9 @@ SELECT
   NOW(),
   NOW()
 FROM rental_clients c
-WHERE c.name ILIKE '%Ольга (Сиалия)%' 
-   OR c.director_name ILIKE '%Ольга (Сиалия)%'
-   OR 'Ольга (Сиалия)' ILIKE '%' || c.name || '%'
-   OR 'Ольга (Сиалия)' ILIKE '%' || c.director_name || '%'
-LIMIT 1
-ON CONFLICT (order_number) DO NOTHING;
+WHERE (c.name = 'Ольга (Сиалия)' OR c.director_name = 'Ольга (Сиалия)')
+  AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 1071)
+LIMIT 1;
 
 INSERT INTO rental_orders (
   order_number, client_id, status, start_date, end_date, days_count,
@@ -6491,12 +5884,9 @@ SELECT
   NOW(),
   NOW()
 FROM rental_clients c
-WHERE c.name ILIKE '%Карина (технологии путешествий)%' 
-   OR c.director_name ILIKE '%Карина (технологии путешествий)%'
-   OR 'Карина (технологии путешествий)' ILIKE '%' || c.name || '%'
-   OR 'Карина (технологии путешествий)' ILIKE '%' || c.director_name || '%'
-LIMIT 1
-ON CONFLICT (order_number) DO NOTHING;
+WHERE (c.name = 'Карина (технологии путешествий)' OR c.director_name = 'Карина (технологии путешествий)')
+  AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 1070)
+LIMIT 1;
 
 INSERT INTO rental_orders (
   order_number, client_id, status, start_date, end_date, days_count,
@@ -6523,12 +5913,9 @@ SELECT
   NOW(),
   NOW()
 FROM rental_clients c
-WHERE c.name ILIKE '%Зельфира%' 
-   OR c.director_name ILIKE '%Зельфира%'
-   OR 'Зельфира' ILIKE '%' || c.name || '%'
-   OR 'Зельфира' ILIKE '%' || c.director_name || '%'
-LIMIT 1
-ON CONFLICT (order_number) DO NOTHING;
+WHERE (c.name = 'Зельфира' OR c.director_name = 'Зельфира')
+  AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 1069)
+LIMIT 1;
 
 INSERT INTO rental_orders (
   order_number, client_id, status, start_date, end_date, days_count,
@@ -6555,12 +5942,9 @@ SELECT
   NOW(),
   NOW()
 FROM rental_clients c
-WHERE c.name ILIKE '%Эдик Заказы для групп%' 
-   OR c.director_name ILIKE '%Эдик Заказы для групп%'
-   OR 'Эдик Заказы для групп' ILIKE '%' || c.name || '%'
-   OR 'Эдик Заказы для групп' ILIKE '%' || c.director_name || '%'
-LIMIT 1
-ON CONFLICT (order_number) DO NOTHING;
+WHERE (c.name = 'Эдик Заказы для групп' OR c.director_name = 'Эдик Заказы для групп')
+  AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 1068)
+LIMIT 1;
 
 INSERT INTO rental_orders (
   order_number, client_id, status, start_date, end_date, days_count,
@@ -6587,12 +5971,9 @@ SELECT
   NOW(),
   NOW()
 FROM rental_clients c
-WHERE c.name ILIKE '%Любовь (ТИЦ)%' 
-   OR c.director_name ILIKE '%Любовь (ТИЦ)%'
-   OR 'Любовь (ТИЦ)' ILIKE '%' || c.name || '%'
-   OR 'Любовь (ТИЦ)' ILIKE '%' || c.director_name || '%'
-LIMIT 1
-ON CONFLICT (order_number) DO NOTHING;
+WHERE (c.name = 'Любовь (ТИЦ)' OR c.director_name = 'Любовь (ТИЦ)')
+  AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 1067)
+LIMIT 1;
 
 INSERT INTO rental_orders (
   order_number, client_id, status, start_date, end_date, days_count,
@@ -6619,12 +6000,9 @@ SELECT
   NOW(),
   NOW()
 FROM rental_clients c
-WHERE c.name ILIKE '%Любовь (ТИЦ)%' 
-   OR c.director_name ILIKE '%Любовь (ТИЦ)%'
-   OR 'Любовь (ТИЦ)' ILIKE '%' || c.name || '%'
-   OR 'Любовь (ТИЦ)' ILIKE '%' || c.director_name || '%'
-LIMIT 1
-ON CONFLICT (order_number) DO NOTHING;
+WHERE (c.name = 'Любовь (ТИЦ)' OR c.director_name = 'Любовь (ТИЦ)')
+  AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 1066)
+LIMIT 1;
 
 INSERT INTO rental_orders (
   order_number, client_id, status, start_date, end_date, days_count,
@@ -6651,12 +6029,9 @@ SELECT
   NOW(),
   NOW()
 FROM rental_clients c
-WHERE c.name ILIKE '%Арсен (Юнион)%' 
-   OR c.director_name ILIKE '%Арсен (Юнион)%'
-   OR 'Арсен (Юнион)' ILIKE '%' || c.name || '%'
-   OR 'Арсен (Юнион)' ILIKE '%' || c.director_name || '%'
-LIMIT 1
-ON CONFLICT (order_number) DO NOTHING;
+WHERE (c.name = 'Арсен (Юнион)' OR c.director_name = 'Арсен (Юнион)')
+  AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 1065)
+LIMIT 1;
 
 INSERT INTO rental_orders (
   order_number, client_id, status, start_date, end_date, days_count,
@@ -6683,12 +6058,9 @@ SELECT
   NOW(),
   NOW()
 FROM rental_clients c
-WHERE c.name ILIKE '%Татьяна (Гольфстрим)%' 
-   OR c.director_name ILIKE '%Татьяна (Гольфстрим)%'
-   OR 'Татьяна (Гольфстрим)' ILIKE '%' || c.name || '%'
-   OR 'Татьяна (Гольфстрим)' ILIKE '%' || c.director_name || '%'
-LIMIT 1
-ON CONFLICT (order_number) DO NOTHING;
+WHERE (c.name = 'Татьяна (Гольфстрим)' OR c.director_name = 'Татьяна (Гольфстрим)')
+  AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 1064)
+LIMIT 1;
 
 INSERT INTO rental_orders (
   order_number, client_id, status, start_date, end_date, days_count,
@@ -6715,12 +6087,9 @@ SELECT
   NOW(),
   NOW()
 FROM rental_clients c
-WHERE c.name ILIKE '%Зульхиза Кутлучурина%' 
-   OR c.director_name ILIKE '%Зульхиза Кутлучурина%'
-   OR 'Зульхиза Кутлучурина' ILIKE '%' || c.name || '%'
-   OR 'Зульхиза Кутлучурина' ILIKE '%' || c.director_name || '%'
-LIMIT 1
-ON CONFLICT (order_number) DO NOTHING;
+WHERE (c.name = 'Зульхиза Кутлучурина' OR c.director_name = 'Зульхиза Кутлучурина')
+  AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 1063)
+LIMIT 1;
 
 INSERT INTO rental_orders (
   order_number, client_id, status, start_date, end_date, days_count,
@@ -6747,12 +6116,9 @@ SELECT
   NOW(),
   NOW()
 FROM rental_clients c
-WHERE c.name ILIKE '%Андрей (Экскурс)%' 
-   OR c.director_name ILIKE '%Андрей (Экскурс)%'
-   OR 'Андрей (Экскурс)' ILIKE '%' || c.name || '%'
-   OR 'Андрей (Экскурс)' ILIKE '%' || c.director_name || '%'
-LIMIT 1
-ON CONFLICT (order_number) DO NOTHING;
+WHERE (c.name = 'Андрей (Экскурс)' OR c.director_name = 'Андрей (Экскурс)')
+  AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 1062)
+LIMIT 1;
 
 INSERT INTO rental_orders (
   order_number, client_id, status, start_date, end_date, days_count,
@@ -6779,12 +6145,9 @@ SELECT
   NOW(),
   NOW()
 FROM rental_clients c
-WHERE c.name ILIKE '%Татьяна%' 
-   OR c.director_name ILIKE '%Татьяна%'
-   OR 'Татьяна' ILIKE '%' || c.name || '%'
-   OR 'Татьяна' ILIKE '%' || c.director_name || '%'
-LIMIT 1
-ON CONFLICT (order_number) DO NOTHING;
+WHERE (c.name = 'Татьяна' OR c.director_name = 'Татьяна')
+  AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 1061)
+LIMIT 1;
 
 INSERT INTO rental_orders (
   order_number, client_id, status, start_date, end_date, days_count,
@@ -6811,12 +6174,9 @@ SELECT
   NOW(),
   NOW()
 FROM rental_clients c
-WHERE c.name ILIKE '%Ольга%' 
-   OR c.director_name ILIKE '%Ольга%'
-   OR 'Ольга' ILIKE '%' || c.name || '%'
-   OR 'Ольга' ILIKE '%' || c.director_name || '%'
-LIMIT 1
-ON CONFLICT (order_number) DO NOTHING;
+WHERE (c.name = 'Ольга' OR c.director_name = 'Ольга')
+  AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 1060)
+LIMIT 1;
 
 INSERT INTO rental_orders (
   order_number, client_id, status, start_date, end_date, days_count,
@@ -6843,12 +6203,9 @@ SELECT
   NOW(),
   NOW()
 FROM rental_clients c
-WHERE c.name ILIKE '%Айрат Нурмухаммадов%' 
-   OR c.director_name ILIKE '%Айрат Нурмухаммадов%'
-   OR 'Айрат Нурмухаммадов' ILIKE '%' || c.name || '%'
-   OR 'Айрат Нурмухаммадов' ILIKE '%' || c.director_name || '%'
-LIMIT 1
-ON CONFLICT (order_number) DO NOTHING;
+WHERE (c.name = 'Айрат Нурмухаммадов' OR c.director_name = 'Айрат Нурмухаммадов')
+  AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 1059)
+LIMIT 1;
 
 INSERT INTO rental_orders (
   order_number, client_id, status, start_date, end_date, days_count,
@@ -6875,12 +6232,9 @@ SELECT
   NOW(),
   NOW()
 FROM rental_clients c
-WHERE c.name ILIKE '%Айрат Нурмухаммадов%' 
-   OR c.director_name ILIKE '%Айрат Нурмухаммадов%'
-   OR 'Айрат Нурмухаммадов' ILIKE '%' || c.name || '%'
-   OR 'Айрат Нурмухаммадов' ILIKE '%' || c.director_name || '%'
-LIMIT 1
-ON CONFLICT (order_number) DO NOTHING;
+WHERE (c.name = 'Айрат Нурмухаммадов' OR c.director_name = 'Айрат Нурмухаммадов')
+  AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 1058)
+LIMIT 1;
 
 INSERT INTO rental_orders (
   order_number, client_id, status, start_date, end_date, days_count,
@@ -6907,12 +6261,9 @@ SELECT
   NOW(),
   NOW()
 FROM rental_clients c
-WHERE c.name ILIKE '%Эдик Заказы для групп%' 
-   OR c.director_name ILIKE '%Эдик Заказы для групп%'
-   OR 'Эдик Заказы для групп' ILIKE '%' || c.name || '%'
-   OR 'Эдик Заказы для групп' ILIKE '%' || c.director_name || '%'
-LIMIT 1
-ON CONFLICT (order_number) DO NOTHING;
+WHERE (c.name = 'Эдик Заказы для групп' OR c.director_name = 'Эдик Заказы для групп')
+  AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 1057)
+LIMIT 1;
 
 INSERT INTO rental_orders (
   order_number, client_id, status, start_date, end_date, days_count,
@@ -6939,12 +6290,9 @@ SELECT
   NOW(),
   NOW()
 FROM rental_clients c
-WHERE c.name ILIKE '%Любовь (ТИЦ)%' 
-   OR c.director_name ILIKE '%Любовь (ТИЦ)%'
-   OR 'Любовь (ТИЦ)' ILIKE '%' || c.name || '%'
-   OR 'Любовь (ТИЦ)' ILIKE '%' || c.director_name || '%'
-LIMIT 1
-ON CONFLICT (order_number) DO NOTHING;
+WHERE (c.name = 'Любовь (ТИЦ)' OR c.director_name = 'Любовь (ТИЦ)')
+  AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 1056)
+LIMIT 1;
 
 INSERT INTO rental_orders (
   order_number, client_id, status, start_date, end_date, days_count,
@@ -6971,12 +6319,9 @@ SELECT
   NOW(),
   NOW()
 FROM rental_clients c
-WHERE c.name ILIKE '%Екатерина «Романова Трэвел»%' 
-   OR c.director_name ILIKE '%Екатерина «Романова Трэвел»%'
-   OR 'Екатерина «Романова Трэвел»' ILIKE '%' || c.name || '%'
-   OR 'Екатерина «Романова Трэвел»' ILIKE '%' || c.director_name || '%'
-LIMIT 1
-ON CONFLICT (order_number) DO NOTHING;
+WHERE (c.name = 'Екатерина «Романова Трэвел»' OR c.director_name = 'Екатерина «Романова Трэвел»')
+  AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 1055)
+LIMIT 1;
 
 INSERT INTO rental_orders (
   order_number, client_id, status, start_date, end_date, days_count,
@@ -7003,12 +6348,9 @@ SELECT
   NOW(),
   NOW()
 FROM rental_clients c
-WHERE c.name ILIKE '%Екатерина%' 
-   OR c.director_name ILIKE '%Екатерина%'
-   OR 'Екатерина' ILIKE '%' || c.name || '%'
-   OR 'Екатерина' ILIKE '%' || c.director_name || '%'
-LIMIT 1
-ON CONFLICT (order_number) DO NOTHING;
+WHERE (c.name = 'Екатерина' OR c.director_name = 'Екатерина')
+  AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 1054)
+LIMIT 1;
 
 INSERT INTO rental_orders (
   order_number, client_id, status, start_date, end_date, days_count,
@@ -7035,12 +6377,9 @@ SELECT
   NOW(),
   NOW()
 FROM rental_clients c
-WHERE c.name ILIKE '%Екатерина%' 
-   OR c.director_name ILIKE '%Екатерина%'
-   OR 'Екатерина' ILIKE '%' || c.name || '%'
-   OR 'Екатерина' ILIKE '%' || c.director_name || '%'
-LIMIT 1
-ON CONFLICT (order_number) DO NOTHING;
+WHERE (c.name = 'Екатерина' OR c.director_name = 'Екатерина')
+  AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 1053)
+LIMIT 1;
 
 INSERT INTO rental_orders (
   order_number, client_id, status, start_date, end_date, days_count,
@@ -7067,12 +6406,9 @@ SELECT
   NOW(),
   NOW()
 FROM rental_clients c
-WHERE c.name ILIKE '%Татьяна (Мои Каникулы) (Круиз)%' 
-   OR c.director_name ILIKE '%Татьяна (Мои Каникулы) (Круиз)%'
-   OR 'Татьяна (Мои Каникулы) (Круиз)' ILIKE '%' || c.name || '%'
-   OR 'Татьяна (Мои Каникулы) (Круиз)' ILIKE '%' || c.director_name || '%'
-LIMIT 1
-ON CONFLICT (order_number) DO NOTHING;
+WHERE (c.name = 'Татьяна (Мои Каникулы) (Круиз)' OR c.director_name = 'Татьяна (Мои Каникулы) (Круиз)')
+  AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 1052)
+LIMIT 1;
 
 INSERT INTO rental_orders (
   order_number, client_id, status, start_date, end_date, days_count,
@@ -7099,12 +6435,9 @@ SELECT
   NOW(),
   NOW()
 FROM rental_clients c
-WHERE c.name ILIKE '%Управление Природными Территориями (УПТ)%' 
-   OR c.director_name ILIKE '%Управление Природными Территориями (УПТ)%'
-   OR 'Управление Природными Территориями (УПТ)' ILIKE '%' || c.name || '%'
-   OR 'Управление Природными Территориями (УПТ)' ILIKE '%' || c.director_name || '%'
-LIMIT 1
-ON CONFLICT (order_number) DO NOTHING;
+WHERE (c.name = 'Управление Природными Территориями (УПТ)' OR c.director_name = 'Управление Природными Территориями (УПТ)')
+  AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 1051)
+LIMIT 1;
 
 INSERT INTO rental_orders (
   order_number, client_id, status, start_date, end_date, days_count,
@@ -7131,12 +6464,9 @@ SELECT
   NOW(),
   NOW()
 FROM rental_clients c
-WHERE c.name ILIKE '%Зельфира%' 
-   OR c.director_name ILIKE '%Зельфира%'
-   OR 'Зельфира' ILIKE '%' || c.name || '%'
-   OR 'Зельфира' ILIKE '%' || c.director_name || '%'
-LIMIT 1
-ON CONFLICT (order_number) DO NOTHING;
+WHERE (c.name = 'Зельфира' OR c.director_name = 'Зельфира')
+  AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 1050)
+LIMIT 1;
 
 INSERT INTO rental_orders (
   order_number, client_id, status, start_date, end_date, days_count,
@@ -7163,12 +6493,9 @@ SELECT
   NOW(),
   NOW()
 FROM rental_clients c
-WHERE c.name ILIKE '%Любовь Ким%' 
-   OR c.director_name ILIKE '%Любовь Ким%'
-   OR 'Любовь Ким' ILIKE '%' || c.name || '%'
-   OR 'Любовь Ким' ILIKE '%' || c.director_name || '%'
-LIMIT 1
-ON CONFLICT (order_number) DO NOTHING;
+WHERE (c.name = 'Любовь Ким' OR c.director_name = 'Любовь Ким')
+  AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 1049)
+LIMIT 1;
 
 INSERT INTO rental_orders (
   order_number, client_id, status, start_date, end_date, days_count,
@@ -7195,12 +6522,9 @@ SELECT
   NOW(),
   NOW()
 FROM rental_clients c
-WHERE c.name ILIKE '%Елена (Конгресс Авиа)%' 
-   OR c.director_name ILIKE '%Елена (Конгресс Авиа)%'
-   OR 'Елена (Конгресс Авиа)' ILIKE '%' || c.name || '%'
-   OR 'Елена (Конгресс Авиа)' ILIKE '%' || c.director_name || '%'
-LIMIT 1
-ON CONFLICT (order_number) DO NOTHING;
+WHERE (c.name = 'Елена (Конгресс Авиа)' OR c.director_name = 'Елена (Конгресс Авиа)')
+  AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 1048)
+LIMIT 1;
 
 INSERT INTO rental_orders (
   order_number, client_id, status, start_date, end_date, days_count,
@@ -7227,12 +6551,9 @@ SELECT
   NOW(),
   NOW()
 FROM rental_clients c
-WHERE c.name ILIKE '%Эдик Заказы для групп%' 
-   OR c.director_name ILIKE '%Эдик Заказы для групп%'
-   OR 'Эдик Заказы для групп' ILIKE '%' || c.name || '%'
-   OR 'Эдик Заказы для групп' ILIKE '%' || c.director_name || '%'
-LIMIT 1
-ON CONFLICT (order_number) DO NOTHING;
+WHERE (c.name = 'Эдик Заказы для групп' OR c.director_name = 'Эдик Заказы для групп')
+  AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 1046)
+LIMIT 1;
 
 INSERT INTO rental_orders (
   order_number, client_id, status, start_date, end_date, days_count,
@@ -7259,12 +6580,9 @@ SELECT
   NOW(),
   NOW()
 FROM rental_clients c
-WHERE c.name ILIKE '%Галина Тур Москва%' 
-   OR c.director_name ILIKE '%Галина Тур Москва%'
-   OR 'Галина Тур Москва' ILIKE '%' || c.name || '%'
-   OR 'Галина Тур Москва' ILIKE '%' || c.director_name || '%'
-LIMIT 1
-ON CONFLICT (order_number) DO NOTHING;
+WHERE (c.name = 'Галина Тур Москва' OR c.director_name = 'Галина Тур Москва')
+  AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 1044)
+LIMIT 1;
 
 INSERT INTO rental_orders (
   order_number, client_id, status, start_date, end_date, days_count,
@@ -7291,12 +6609,9 @@ SELECT
   NOW(),
   NOW()
 FROM rental_clients c
-WHERE c.name ILIKE '%Галия%' 
-   OR c.director_name ILIKE '%Галия%'
-   OR 'Галия' ILIKE '%' || c.name || '%'
-   OR 'Галия' ILIKE '%' || c.director_name || '%'
-LIMIT 1
-ON CONFLICT (order_number) DO NOTHING;
+WHERE (c.name = 'Галия' OR c.director_name = 'Галия')
+  AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 1043)
+LIMIT 1;
 
 INSERT INTO rental_orders (
   order_number, client_id, status, start_date, end_date, days_count,
@@ -7323,12 +6638,9 @@ SELECT
   NOW(),
   NOW()
 FROM rental_clients c
-WHERE c.name ILIKE '%Инна Экскурсовод%' 
-   OR c.director_name ILIKE '%Инна Экскурсовод%'
-   OR 'Инна Экскурсовод' ILIKE '%' || c.name || '%'
-   OR 'Инна Экскурсовод' ILIKE '%' || c.director_name || '%'
-LIMIT 1
-ON CONFLICT (order_number) DO NOTHING;
+WHERE (c.name = 'Инна Экскурсовод' OR c.director_name = 'Инна Экскурсовод')
+  AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 1042)
+LIMIT 1;
 
 INSERT INTO rental_orders (
   order_number, client_id, status, start_date, end_date, days_count,
@@ -7355,12 +6667,9 @@ SELECT
   NOW(),
   NOW()
 FROM rental_clients c
-WHERE c.name ILIKE '%Мария Экскурсовод%' 
-   OR c.director_name ILIKE '%Мария Экскурсовод%'
-   OR 'Мария Экскурсовод' ILIKE '%' || c.name || '%'
-   OR 'Мария Экскурсовод' ILIKE '%' || c.director_name || '%'
-LIMIT 1
-ON CONFLICT (order_number) DO NOTHING;
+WHERE (c.name = 'Мария Экскурсовод' OR c.director_name = 'Мария Экскурсовод')
+  AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 1041)
+LIMIT 1;
 
 INSERT INTO rental_orders (
   order_number, client_id, status, start_date, end_date, days_count,
@@ -7387,12 +6696,9 @@ SELECT
   NOW(),
   NOW()
 FROM rental_clients c
-WHERE c.name ILIKE '%Карина (технологии путешествий)%' 
-   OR c.director_name ILIKE '%Карина (технологии путешествий)%'
-   OR 'Карина (технологии путешествий)' ILIKE '%' || c.name || '%'
-   OR 'Карина (технологии путешествий)' ILIKE '%' || c.director_name || '%'
-LIMIT 1
-ON CONFLICT (order_number) DO NOTHING;
+WHERE (c.name = 'Карина (технологии путешествий)' OR c.director_name = 'Карина (технологии путешествий)')
+  AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 1040)
+LIMIT 1;
 
 INSERT INTO rental_orders (
   order_number, client_id, status, start_date, end_date, days_count,
@@ -7419,12 +6725,9 @@ SELECT
   NOW(),
   NOW()
 FROM rental_clients c
-WHERE c.name ILIKE '%Любовь (ТИЦ)%' 
-   OR c.director_name ILIKE '%Любовь (ТИЦ)%'
-   OR 'Любовь (ТИЦ)' ILIKE '%' || c.name || '%'
-   OR 'Любовь (ТИЦ)' ILIKE '%' || c.director_name || '%'
-LIMIT 1
-ON CONFLICT (order_number) DO NOTHING;
+WHERE (c.name = 'Любовь (ТИЦ)' OR c.director_name = 'Любовь (ТИЦ)')
+  AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 1039)
+LIMIT 1;
 
 INSERT INTO rental_orders (
   order_number, client_id, status, start_date, end_date, days_count,
@@ -7451,12 +6754,9 @@ SELECT
   NOW(),
   NOW()
 FROM rental_clients c
-WHERE c.name ILIKE '%Галина (Тур Урал)%' 
-   OR c.director_name ILIKE '%Галина (Тур Урал)%'
-   OR 'Галина (Тур Урал)' ILIKE '%' || c.name || '%'
-   OR 'Галина (Тур Урал)' ILIKE '%' || c.director_name || '%'
-LIMIT 1
-ON CONFLICT (order_number) DO NOTHING;
+WHERE (c.name = 'Галина (Тур Урал)' OR c.director_name = 'Галина (Тур Урал)')
+  AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 1038)
+LIMIT 1;
 
 INSERT INTO rental_orders (
   order_number, client_id, status, start_date, end_date, days_count,
@@ -7483,12 +6783,9 @@ SELECT
   NOW(),
   NOW()
 FROM rental_clients c
-WHERE c.name ILIKE '%Давид (КФУ)%' 
-   OR c.director_name ILIKE '%Давид (КФУ)%'
-   OR 'Давид (КФУ)' ILIKE '%' || c.name || '%'
-   OR 'Давид (КФУ)' ILIKE '%' || c.director_name || '%'
-LIMIT 1
-ON CONFLICT (order_number) DO NOTHING;
+WHERE (c.name = 'Давид (КФУ)' OR c.director_name = 'Давид (КФУ)')
+  AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 1037)
+LIMIT 1;
 
 INSERT INTO rental_orders (
   order_number, client_id, status, start_date, end_date, days_count,
@@ -7515,12 +6812,9 @@ SELECT
   NOW(),
   NOW()
 FROM rental_clients c
-WHERE c.name ILIKE '%Мария%' 
-   OR c.director_name ILIKE '%Мария%'
-   OR 'Мария' ILIKE '%' || c.name || '%'
-   OR 'Мария' ILIKE '%' || c.director_name || '%'
-LIMIT 1
-ON CONFLICT (order_number) DO NOTHING;
+WHERE (c.name = 'Мария' OR c.director_name = 'Мария')
+  AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 1036)
+LIMIT 1;
 
 INSERT INTO rental_orders (
   order_number, client_id, status, start_date, end_date, days_count,
@@ -7547,12 +6841,9 @@ SELECT
   NOW(),
   NOW()
 FROM rental_clients c
-WHERE c.name ILIKE '%Мария%' 
-   OR c.director_name ILIKE '%Мария%'
-   OR 'Мария' ILIKE '%' || c.name || '%'
-   OR 'Мария' ILIKE '%' || c.director_name || '%'
-LIMIT 1
-ON CONFLICT (order_number) DO NOTHING;
+WHERE (c.name = 'Мария' OR c.director_name = 'Мария')
+  AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 1035)
+LIMIT 1;
 
 INSERT INTO rental_orders (
   order_number, client_id, status, start_date, end_date, days_count,
@@ -7579,12 +6870,9 @@ SELECT
   NOW(),
   NOW()
 FROM rental_clients c
-WHERE c.name ILIKE '%Ирина Пронина%' 
-   OR c.director_name ILIKE '%Ирина Пронина%'
-   OR 'Ирина Пронина' ILIKE '%' || c.name || '%'
-   OR 'Ирина Пронина' ILIKE '%' || c.director_name || '%'
-LIMIT 1
-ON CONFLICT (order_number) DO NOTHING;
+WHERE (c.name = 'Ирина Пронина' OR c.director_name = 'Ирина Пронина')
+  AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 1034)
+LIMIT 1;
 
 INSERT INTO rental_orders (
   order_number, client_id, status, start_date, end_date, days_count,
@@ -7611,12 +6899,9 @@ SELECT
   NOW(),
   NOW()
 FROM rental_clients c
-WHERE c.name ILIKE '%Арсен (Юнион)%' 
-   OR c.director_name ILIKE '%Арсен (Юнион)%'
-   OR 'Арсен (Юнион)' ILIKE '%' || c.name || '%'
-   OR 'Арсен (Юнион)' ILIKE '%' || c.director_name || '%'
-LIMIT 1
-ON CONFLICT (order_number) DO NOTHING;
+WHERE (c.name = 'Арсен (Юнион)' OR c.director_name = 'Арсен (Юнион)')
+  AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 1033)
+LIMIT 1;
 
 INSERT INTO rental_orders (
   order_number, client_id, status, start_date, end_date, days_count,
@@ -7643,12 +6928,9 @@ SELECT
   NOW(),
   NOW()
 FROM rental_clients c
-WHERE c.name ILIKE '%Арсен (Юнион)%' 
-   OR c.director_name ILIKE '%Арсен (Юнион)%'
-   OR 'Арсен (Юнион)' ILIKE '%' || c.name || '%'
-   OR 'Арсен (Юнион)' ILIKE '%' || c.director_name || '%'
-LIMIT 1
-ON CONFLICT (order_number) DO NOTHING;
+WHERE (c.name = 'Арсен (Юнион)' OR c.director_name = 'Арсен (Юнион)')
+  AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 1032)
+LIMIT 1;
 
 INSERT INTO rental_orders (
   order_number, client_id, status, start_date, end_date, days_count,
@@ -7675,12 +6957,9 @@ SELECT
   NOW(),
   NOW()
 FROM rental_clients c
-WHERE c.name ILIKE '%Любовь (ТИЦ)%' 
-   OR c.director_name ILIKE '%Любовь (ТИЦ)%'
-   OR 'Любовь (ТИЦ)' ILIKE '%' || c.name || '%'
-   OR 'Любовь (ТИЦ)' ILIKE '%' || c.director_name || '%'
-LIMIT 1
-ON CONFLICT (order_number) DO NOTHING;
+WHERE (c.name = 'Любовь (ТИЦ)' OR c.director_name = 'Любовь (ТИЦ)')
+  AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 1031)
+LIMIT 1;
 
 INSERT INTO rental_orders (
   order_number, client_id, status, start_date, end_date, days_count,
@@ -7707,12 +6986,9 @@ SELECT
   NOW(),
   NOW()
 FROM rental_clients c
-WHERE c.name ILIKE '%Екатерина%' 
-   OR c.director_name ILIKE '%Екатерина%'
-   OR 'Екатерина' ILIKE '%' || c.name || '%'
-   OR 'Екатерина' ILIKE '%' || c.director_name || '%'
-LIMIT 1
-ON CONFLICT (order_number) DO NOTHING;
+WHERE (c.name = 'Екатерина' OR c.director_name = 'Екатерина')
+  AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 1030)
+LIMIT 1;
 
 INSERT INTO rental_orders (
   order_number, client_id, status, start_date, end_date, days_count,
@@ -7739,12 +7015,9 @@ SELECT
   NOW(),
   NOW()
 FROM rental_clients c
-WHERE c.name ILIKE '%Зельфира%' 
-   OR c.director_name ILIKE '%Зельфира%'
-   OR 'Зельфира' ILIKE '%' || c.name || '%'
-   OR 'Зельфира' ILIKE '%' || c.director_name || '%'
-LIMIT 1
-ON CONFLICT (order_number) DO NOTHING;
+WHERE (c.name = 'Зельфира' OR c.director_name = 'Зельфира')
+  AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 1029)
+LIMIT 1;
 
 INSERT INTO rental_orders (
   order_number, client_id, status, start_date, end_date, days_count,
@@ -7771,12 +7044,9 @@ SELECT
   NOW(),
   NOW()
 FROM rental_clients c
-WHERE c.name ILIKE '%Любовь (ТИЦ)%' 
-   OR c.director_name ILIKE '%Любовь (ТИЦ)%'
-   OR 'Любовь (ТИЦ)' ILIKE '%' || c.name || '%'
-   OR 'Любовь (ТИЦ)' ILIKE '%' || c.director_name || '%'
-LIMIT 1
-ON CONFLICT (order_number) DO NOTHING;
+WHERE (c.name = 'Любовь (ТИЦ)' OR c.director_name = 'Любовь (ТИЦ)')
+  AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 1027)
+LIMIT 1;
 
 INSERT INTO rental_orders (
   order_number, client_id, status, start_date, end_date, days_count,
@@ -7803,12 +7073,9 @@ SELECT
   NOW(),
   NOW()
 FROM rental_clients c
-WHERE c.name ILIKE '%Алина Сафина%' 
-   OR c.director_name ILIKE '%Алина Сафина%'
-   OR 'Алина Сафина' ILIKE '%' || c.name || '%'
-   OR 'Алина Сафина' ILIKE '%' || c.director_name || '%'
-LIMIT 1
-ON CONFLICT (order_number) DO NOTHING;
+WHERE (c.name = 'Алина Сафина' OR c.director_name = 'Алина Сафина')
+  AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 1026)
+LIMIT 1;
 
 INSERT INTO rental_orders (
   order_number, client_id, status, start_date, end_date, days_count,
@@ -7835,12 +7102,9 @@ SELECT
   NOW(),
   NOW()
 FROM rental_clients c
-WHERE c.name ILIKE '%Татьяна (Гольфстрим)%' 
-   OR c.director_name ILIKE '%Татьяна (Гольфстрим)%'
-   OR 'Татьяна (Гольфстрим)' ILIKE '%' || c.name || '%'
-   OR 'Татьяна (Гольфстрим)' ILIKE '%' || c.director_name || '%'
-LIMIT 1
-ON CONFLICT (order_number) DO NOTHING;
+WHERE (c.name = 'Татьяна (Гольфстрим)' OR c.director_name = 'Татьяна (Гольфстрим)')
+  AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 1025)
+LIMIT 1;
 
 INSERT INTO rental_orders (
   order_number, client_id, status, start_date, end_date, days_count,
@@ -7867,12 +7131,9 @@ SELECT
   NOW(),
   NOW()
 FROM rental_clients c
-WHERE c.name ILIKE '%Татьяна (Гольфстрим)%' 
-   OR c.director_name ILIKE '%Татьяна (Гольфстрим)%'
-   OR 'Татьяна (Гольфстрим)' ILIKE '%' || c.name || '%'
-   OR 'Татьяна (Гольфстрим)' ILIKE '%' || c.director_name || '%'
-LIMIT 1
-ON CONFLICT (order_number) DO NOTHING;
+WHERE (c.name = 'Татьяна (Гольфстрим)' OR c.director_name = 'Татьяна (Гольфстрим)')
+  AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 1024)
+LIMIT 1;
 
 INSERT INTO rental_orders (
   order_number, client_id, status, start_date, end_date, days_count,
@@ -7899,12 +7160,9 @@ SELECT
   NOW(),
   NOW()
 FROM rental_clients c
-WHERE c.name ILIKE '%Александр%' 
-   OR c.director_name ILIKE '%Александр%'
-   OR 'Александр' ILIKE '%' || c.name || '%'
-   OR 'Александр' ILIKE '%' || c.director_name || '%'
-LIMIT 1
-ON CONFLICT (order_number) DO NOTHING;
+WHERE (c.name = 'Александр' OR c.director_name = 'Александр')
+  AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 1023)
+LIMIT 1;
 
 INSERT INTO rental_orders (
   order_number, client_id, status, start_date, end_date, days_count,
@@ -7931,12 +7189,9 @@ SELECT
   NOW(),
   NOW()
 FROM rental_clients c
-WHERE c.name ILIKE '%Андрей СПБ%' 
-   OR c.director_name ILIKE '%Андрей СПБ%'
-   OR 'Андрей СПБ' ILIKE '%' || c.name || '%'
-   OR 'Андрей СПБ' ILIKE '%' || c.director_name || '%'
-LIMIT 1
-ON CONFLICT (order_number) DO NOTHING;
+WHERE (c.name = 'Андрей СПБ' OR c.director_name = 'Андрей СПБ')
+  AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 1022)
+LIMIT 1;
 
 INSERT INTO rental_orders (
   order_number, client_id, status, start_date, end_date, days_count,
@@ -7963,12 +7218,9 @@ SELECT
   NOW(),
   NOW()
 FROM rental_clients c
-WHERE c.name ILIKE '%Ирина (Иль Мио Тур)%' 
-   OR c.director_name ILIKE '%Ирина (Иль Мио Тур)%'
-   OR 'Ирина (Иль Мио Тур)' ILIKE '%' || c.name || '%'
-   OR 'Ирина (Иль Мио Тур)' ILIKE '%' || c.director_name || '%'
-LIMIT 1
-ON CONFLICT (order_number) DO NOTHING;
+WHERE (c.name = 'Ирина (Иль Мио Тур)' OR c.director_name = 'Ирина (Иль Мио Тур)')
+  AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 1021)
+LIMIT 1;
 
 INSERT INTO rental_orders (
   order_number, client_id, status, start_date, end_date, days_count,
@@ -7995,12 +7247,9 @@ SELECT
   NOW(),
   NOW()
 FROM rental_clients c
-WHERE c.name ILIKE '%Ляйсан (Казань 360)%' 
-   OR c.director_name ILIKE '%Ляйсан (Казань 360)%'
-   OR 'Ляйсан (Казань 360)' ILIKE '%' || c.name || '%'
-   OR 'Ляйсан (Казань 360)' ILIKE '%' || c.director_name || '%'
-LIMIT 1
-ON CONFLICT (order_number) DO NOTHING;
+WHERE (c.name = 'Ляйсан (Казань 360)' OR c.director_name = 'Ляйсан (Казань 360)')
+  AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 1020)
+LIMIT 1;
 
 INSERT INTO rental_orders (
   order_number, client_id, status, start_date, end_date, days_count,
@@ -8027,12 +7276,9 @@ SELECT
   NOW(),
   NOW()
 FROM rental_clients c
-WHERE c.name ILIKE '%Татьяна Чуб%' 
-   OR c.director_name ILIKE '%Татьяна Чуб%'
-   OR 'Татьяна Чуб' ILIKE '%' || c.name || '%'
-   OR 'Татьяна Чуб' ILIKE '%' || c.director_name || '%'
-LIMIT 1
-ON CONFLICT (order_number) DO NOTHING;
+WHERE (c.name = 'Татьяна Чуб' OR c.director_name = 'Татьяна Чуб')
+  AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 1019)
+LIMIT 1;
 
 INSERT INTO rental_orders (
   order_number, client_id, status, start_date, end_date, days_count,
@@ -8059,12 +7305,9 @@ SELECT
   NOW(),
   NOW()
 FROM rental_clients c
-WHERE c.name ILIKE '%Зульхиза Кутлучурина%' 
-   OR c.director_name ILIKE '%Зульхиза Кутлучурина%'
-   OR 'Зульхиза Кутлучурина' ILIKE '%' || c.name || '%'
-   OR 'Зульхиза Кутлучурина' ILIKE '%' || c.director_name || '%'
-LIMIT 1
-ON CONFLICT (order_number) DO NOTHING;
+WHERE (c.name = 'Зульхиза Кутлучурина' OR c.director_name = 'Зульхиза Кутлучурина')
+  AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 1018)
+LIMIT 1;
 
 INSERT INTO rental_orders (
   order_number, client_id, status, start_date, end_date, days_count,
@@ -8091,12 +7334,9 @@ SELECT
   NOW(),
   NOW()
 FROM rental_clients c
-WHERE c.name ILIKE '%Анастасия%' 
-   OR c.director_name ILIKE '%Анастасия%'
-   OR 'Анастасия' ILIKE '%' || c.name || '%'
-   OR 'Анастасия' ILIKE '%' || c.director_name || '%'
-LIMIT 1
-ON CONFLICT (order_number) DO NOTHING;
+WHERE (c.name = 'Анастасия' OR c.director_name = 'Анастасия')
+  AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 1017)
+LIMIT 1;
 
 INSERT INTO rental_orders (
   order_number, client_id, status, start_date, end_date, days_count,
@@ -8123,12 +7363,9 @@ SELECT
   NOW(),
   NOW()
 FROM rental_clients c
-WHERE c.name ILIKE '%Управление Природными Территориями (УПТ)%' 
-   OR c.director_name ILIKE '%Управление Природными Территориями (УПТ)%'
-   OR 'Управление Природными Территориями (УПТ)' ILIKE '%' || c.name || '%'
-   OR 'Управление Природными Территориями (УПТ)' ILIKE '%' || c.director_name || '%'
-LIMIT 1
-ON CONFLICT (order_number) DO NOTHING;
+WHERE (c.name = 'Управление Природными Территориями (УПТ)' OR c.director_name = 'Управление Природными Территориями (УПТ)')
+  AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 1016)
+LIMIT 1;
 
 INSERT INTO rental_orders (
   order_number, client_id, status, start_date, end_date, days_count,
@@ -8155,12 +7392,9 @@ SELECT
   NOW(),
   NOW()
 FROM rental_clients c
-WHERE c.name ILIKE '%Татьяна (Гольфстрим)%' 
-   OR c.director_name ILIKE '%Татьяна (Гольфстрим)%'
-   OR 'Татьяна (Гольфстрим)' ILIKE '%' || c.name || '%'
-   OR 'Татьяна (Гольфстрим)' ILIKE '%' || c.director_name || '%'
-LIMIT 1
-ON CONFLICT (order_number) DO NOTHING;
+WHERE (c.name = 'Татьяна (Гольфстрим)' OR c.director_name = 'Татьяна (Гольфстрим)')
+  AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 1015)
+LIMIT 1;
 
 INSERT INTO rental_orders (
   order_number, client_id, status, start_date, end_date, days_count,
@@ -8187,12 +7421,9 @@ SELECT
   NOW(),
   NOW()
 FROM rental_clients c
-WHERE c.name ILIKE '%Анюта Родионова (Родина-тур)%' 
-   OR c.director_name ILIKE '%Анюта Родионова (Родина-тур)%'
-   OR 'Анюта Родионова (Родина-тур)' ILIKE '%' || c.name || '%'
-   OR 'Анюта Родионова (Родина-тур)' ILIKE '%' || c.director_name || '%'
-LIMIT 1
-ON CONFLICT (order_number) DO NOTHING;
+WHERE (c.name = 'Анюта Родионова (Родина-тур)' OR c.director_name = 'Анюта Родионова (Родина-тур)')
+  AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 1014)
+LIMIT 1;
 
 INSERT INTO rental_orders (
   order_number, client_id, status, start_date, end_date, days_count,
@@ -8219,12 +7450,9 @@ SELECT
   NOW(),
   NOW()
 FROM rental_clients c
-WHERE c.name ILIKE '%Эдик Заказы для групп%' 
-   OR c.director_name ILIKE '%Эдик Заказы для групп%'
-   OR 'Эдик Заказы для групп' ILIKE '%' || c.name || '%'
-   OR 'Эдик Заказы для групп' ILIKE '%' || c.director_name || '%'
-LIMIT 1
-ON CONFLICT (order_number) DO NOTHING;
+WHERE (c.name = 'Эдик Заказы для групп' OR c.director_name = 'Эдик Заказы для групп')
+  AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 1012)
+LIMIT 1;
 
 INSERT INTO rental_orders (
   order_number, client_id, status, start_date, end_date, days_count,
@@ -8251,12 +7479,9 @@ SELECT
   NOW(),
   NOW()
 FROM rental_clients c
-WHERE c.name ILIKE '%Александр%' 
-   OR c.director_name ILIKE '%Александр%'
-   OR 'Александр' ILIKE '%' || c.name || '%'
-   OR 'Александр' ILIKE '%' || c.director_name || '%'
-LIMIT 1
-ON CONFLICT (order_number) DO NOTHING;
+WHERE (c.name = 'Александр' OR c.director_name = 'Александр')
+  AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 1011)
+LIMIT 1;
 
 INSERT INTO rental_orders (
   order_number, client_id, status, start_date, end_date, days_count,
@@ -8283,12 +7508,9 @@ SELECT
   NOW(),
   NOW()
 FROM rental_clients c
-WHERE c.name ILIKE '%Марина Экс%' 
-   OR c.director_name ILIKE '%Марина Экс%'
-   OR 'Марина Экс' ILIKE '%' || c.name || '%'
-   OR 'Марина Экс' ILIKE '%' || c.director_name || '%'
-LIMIT 1
-ON CONFLICT (order_number) DO NOTHING;
+WHERE (c.name = 'Марина Экс' OR c.director_name = 'Марина Экс')
+  AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 1010)
+LIMIT 1;
 
 INSERT INTO rental_orders (
   order_number, client_id, status, start_date, end_date, days_count,
@@ -8315,12 +7537,9 @@ SELECT
   NOW(),
   NOW()
 FROM rental_clients c
-WHERE c.name ILIKE '%Екатерина Кореева%' 
-   OR c.director_name ILIKE '%Екатерина Кореева%'
-   OR 'Екатерина Кореева' ILIKE '%' || c.name || '%'
-   OR 'Екатерина Кореева' ILIKE '%' || c.director_name || '%'
-LIMIT 1
-ON CONFLICT (order_number) DO NOTHING;
+WHERE (c.name = 'Екатерина Кореева' OR c.director_name = 'Екатерина Кореева')
+  AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 1009)
+LIMIT 1;
 
 INSERT INTO rental_orders (
   order_number, client_id, status, start_date, end_date, days_count,
@@ -8347,12 +7566,9 @@ SELECT
   NOW(),
   NOW()
 FROM rental_clients c
-WHERE c.name ILIKE '%Ольга (Тольятти)%' 
-   OR c.director_name ILIKE '%Ольга (Тольятти)%'
-   OR 'Ольга (Тольятти)' ILIKE '%' || c.name || '%'
-   OR 'Ольга (Тольятти)' ILIKE '%' || c.director_name || '%'
-LIMIT 1
-ON CONFLICT (order_number) DO NOTHING;
+WHERE (c.name = 'Ольга (Тольятти)' OR c.director_name = 'Ольга (Тольятти)')
+  AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 1008)
+LIMIT 1;
 
 INSERT INTO rental_orders (
   order_number, client_id, status, start_date, end_date, days_count,
@@ -8379,12 +7595,9 @@ SELECT
   NOW(),
   NOW()
 FROM rental_clients c
-WHERE c.name ILIKE '%Любовь (ТИЦ)%' 
-   OR c.director_name ILIKE '%Любовь (ТИЦ)%'
-   OR 'Любовь (ТИЦ)' ILIKE '%' || c.name || '%'
-   OR 'Любовь (ТИЦ)' ILIKE '%' || c.director_name || '%'
-LIMIT 1
-ON CONFLICT (order_number) DO NOTHING;
+WHERE (c.name = 'Любовь (ТИЦ)' OR c.director_name = 'Любовь (ТИЦ)')
+  AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 1007)
+LIMIT 1;
 
 INSERT INTO rental_orders (
   order_number, client_id, status, start_date, end_date, days_count,
@@ -8411,12 +7624,9 @@ SELECT
   NOW(),
   NOW()
 FROM rental_clients c
-WHERE c.name ILIKE '%Арсен (Юнион)%' 
-   OR c.director_name ILIKE '%Арсен (Юнион)%'
-   OR 'Арсен (Юнион)' ILIKE '%' || c.name || '%'
-   OR 'Арсен (Юнион)' ILIKE '%' || c.director_name || '%'
-LIMIT 1
-ON CONFLICT (order_number) DO NOTHING;
+WHERE (c.name = 'Арсен (Юнион)' OR c.director_name = 'Арсен (Юнион)')
+  AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 1006)
+LIMIT 1;
 
 INSERT INTO rental_orders (
   order_number, client_id, status, start_date, end_date, days_count,
@@ -8443,12 +7653,9 @@ SELECT
   NOW(),
   NOW()
 FROM rental_clients c
-WHERE c.name ILIKE '%Любовь (ТИЦ)%' 
-   OR c.director_name ILIKE '%Любовь (ТИЦ)%'
-   OR 'Любовь (ТИЦ)' ILIKE '%' || c.name || '%'
-   OR 'Любовь (ТИЦ)' ILIKE '%' || c.director_name || '%'
-LIMIT 1
-ON CONFLICT (order_number) DO NOTHING;
+WHERE (c.name = 'Любовь (ТИЦ)' OR c.director_name = 'Любовь (ТИЦ)')
+  AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 1005)
+LIMIT 1;
 
 INSERT INTO rental_orders (
   order_number, client_id, status, start_date, end_date, days_count,
@@ -8475,12 +7682,9 @@ SELECT
   NOW(),
   NOW()
 FROM rental_clients c
-WHERE c.name ILIKE '%Любовь (ТИЦ)%' 
-   OR c.director_name ILIKE '%Любовь (ТИЦ)%'
-   OR 'Любовь (ТИЦ)' ILIKE '%' || c.name || '%'
-   OR 'Любовь (ТИЦ)' ILIKE '%' || c.director_name || '%'
-LIMIT 1
-ON CONFLICT (order_number) DO NOTHING;
+WHERE (c.name = 'Любовь (ТИЦ)' OR c.director_name = 'Любовь (ТИЦ)')
+  AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 1004)
+LIMIT 1;
 
 INSERT INTO rental_orders (
   order_number, client_id, status, start_date, end_date, days_count,
@@ -8507,12 +7711,9 @@ SELECT
   NOW(),
   NOW()
 FROM rental_clients c
-WHERE c.name ILIKE '%Гузелия%' 
-   OR c.director_name ILIKE '%Гузелия%'
-   OR 'Гузелия' ILIKE '%' || c.name || '%'
-   OR 'Гузелия' ILIKE '%' || c.director_name || '%'
-LIMIT 1
-ON CONFLICT (order_number) DO NOTHING;
+WHERE (c.name = 'Гузелия' OR c.director_name = 'Гузелия')
+  AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 1003)
+LIMIT 1;
 
 INSERT INTO rental_orders (
   order_number, client_id, status, start_date, end_date, days_count,
@@ -8539,12 +7740,9 @@ SELECT
   NOW(),
   NOW()
 FROM rental_clients c
-WHERE c.name ILIKE '%Эдик Заказы для групп%' 
-   OR c.director_name ILIKE '%Эдик Заказы для групп%'
-   OR 'Эдик Заказы для групп' ILIKE '%' || c.name || '%'
-   OR 'Эдик Заказы для групп' ILIKE '%' || c.director_name || '%'
-LIMIT 1
-ON CONFLICT (order_number) DO NOTHING;
+WHERE (c.name = 'Эдик Заказы для групп' OR c.director_name = 'Эдик Заказы для групп')
+  AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 1002)
+LIMIT 1;
 
 INSERT INTO rental_orders (
   order_number, client_id, status, start_date, end_date, days_count,
@@ -8571,12 +7769,9 @@ SELECT
   NOW(),
   NOW()
 FROM rental_clients c
-WHERE c.name ILIKE '%Юлия (Рыжий Слон)%' 
-   OR c.director_name ILIKE '%Юлия (Рыжий Слон)%'
-   OR 'Юлия (Рыжий Слон)' ILIKE '%' || c.name || '%'
-   OR 'Юлия (Рыжий Слон)' ILIKE '%' || c.director_name || '%'
-LIMIT 1
-ON CONFLICT (order_number) DO NOTHING;
+WHERE (c.name = 'Юлия (Рыжий Слон)' OR c.director_name = 'Юлия (Рыжий Слон)')
+  AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 1001)
+LIMIT 1;
 
 INSERT INTO rental_orders (
   order_number, client_id, status, start_date, end_date, days_count,
@@ -8603,12 +7798,9 @@ SELECT
   NOW(),
   NOW()
 FROM rental_clients c
-WHERE c.name ILIKE '%Мира (ИП)%' 
-   OR c.director_name ILIKE '%Мира (ИП)%'
-   OR 'Мира (ИП)' ILIKE '%' || c.name || '%'
-   OR 'Мира (ИП)' ILIKE '%' || c.director_name || '%'
-LIMIT 1
-ON CONFLICT (order_number) DO NOTHING;
+WHERE (c.name = 'Мира (ИП)' OR c.director_name = 'Мира (ИП)')
+  AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 1000)
+LIMIT 1;
 
 INSERT INTO rental_orders (
   order_number, client_id, status, start_date, end_date, days_count,
@@ -8635,12 +7827,9 @@ SELECT
   NOW(),
   NOW()
 FROM rental_clients c
-WHERE c.name ILIKE '%Лариса Перминова%' 
-   OR c.director_name ILIKE '%Лариса Перминова%'
-   OR 'Лариса Перминова' ILIKE '%' || c.name || '%'
-   OR 'Лариса Перминова' ILIKE '%' || c.director_name || '%'
-LIMIT 1
-ON CONFLICT (order_number) DO NOTHING;
+WHERE (c.name = 'Лариса Перминова' OR c.director_name = 'Лариса Перминова')
+  AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 999)
+LIMIT 1;
 
 INSERT INTO rental_orders (
   order_number, client_id, status, start_date, end_date, days_count,
@@ -8667,12 +7856,9 @@ SELECT
   NOW(),
   NOW()
 FROM rental_clients c
-WHERE c.name ILIKE '%Гузелия%' 
-   OR c.director_name ILIKE '%Гузелия%'
-   OR 'Гузелия' ILIKE '%' || c.name || '%'
-   OR 'Гузелия' ILIKE '%' || c.director_name || '%'
-LIMIT 1
-ON CONFLICT (order_number) DO NOTHING;
+WHERE (c.name = 'Гузелия' OR c.director_name = 'Гузелия')
+  AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 998)
+LIMIT 1;
 
 INSERT INTO rental_orders (
   order_number, client_id, status, start_date, end_date, days_count,
@@ -8699,12 +7885,9 @@ SELECT
   NOW(),
   NOW()
 FROM rental_clients c
-WHERE c.name ILIKE '%Ольга (Сиалия)%' 
-   OR c.director_name ILIKE '%Ольга (Сиалия)%'
-   OR 'Ольга (Сиалия)' ILIKE '%' || c.name || '%'
-   OR 'Ольга (Сиалия)' ILIKE '%' || c.director_name || '%'
-LIMIT 1
-ON CONFLICT (order_number) DO NOTHING;
+WHERE (c.name = 'Ольга (Сиалия)' OR c.director_name = 'Ольга (Сиалия)')
+  AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 997)
+LIMIT 1;
 
 INSERT INTO rental_orders (
   order_number, client_id, status, start_date, end_date, days_count,
@@ -8731,12 +7914,9 @@ SELECT
   NOW(),
   NOW()
 FROM rental_clients c
-WHERE c.name ILIKE '%Рената (Твоя Казань)%' 
-   OR c.director_name ILIKE '%Рената (Твоя Казань)%'
-   OR 'Рената (Твоя Казань)' ILIKE '%' || c.name || '%'
-   OR 'Рената (Твоя Казань)' ILIKE '%' || c.director_name || '%'
-LIMIT 1
-ON CONFLICT (order_number) DO NOTHING;
+WHERE (c.name = 'Рената (Твоя Казань)' OR c.director_name = 'Рената (Твоя Казань)')
+  AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 996)
+LIMIT 1;
 
 INSERT INTO rental_orders (
   order_number, client_id, status, start_date, end_date, days_count,
@@ -8763,12 +7943,9 @@ SELECT
   NOW(),
   NOW()
 FROM rental_clients c
-WHERE c.name ILIKE '%Эвелина (Инициатива)%' 
-   OR c.director_name ILIKE '%Эвелина (Инициатива)%'
-   OR 'Эвелина (Инициатива)' ILIKE '%' || c.name || '%'
-   OR 'Эвелина (Инициатива)' ILIKE '%' || c.director_name || '%'
-LIMIT 1
-ON CONFLICT (order_number) DO NOTHING;
+WHERE (c.name = 'Эвелина (Инициатива)' OR c.director_name = 'Эвелина (Инициатива)')
+  AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 995)
+LIMIT 1;
 
 INSERT INTO rental_orders (
   order_number, client_id, status, start_date, end_date, days_count,
@@ -8795,12 +7972,9 @@ SELECT
   NOW(),
   NOW()
 FROM rental_clients c
-WHERE c.name ILIKE '%Зульхиза Кутлучурина%' 
-   OR c.director_name ILIKE '%Зульхиза Кутлучурина%'
-   OR 'Зульхиза Кутлучурина' ILIKE '%' || c.name || '%'
-   OR 'Зульхиза Кутлучурина' ILIKE '%' || c.director_name || '%'
-LIMIT 1
-ON CONFLICT (order_number) DO NOTHING;
+WHERE (c.name = 'Зульхиза Кутлучурина' OR c.director_name = 'Зульхиза Кутлучурина')
+  AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 994)
+LIMIT 1;
 
 INSERT INTO rental_orders (
   order_number, client_id, status, start_date, end_date, days_count,
@@ -8827,12 +8001,9 @@ SELECT
   NOW(),
   NOW()
 FROM rental_clients c
-WHERE c.name ILIKE '%Анастасия%' 
-   OR c.director_name ILIKE '%Анастасия%'
-   OR 'Анастасия' ILIKE '%' || c.name || '%'
-   OR 'Анастасия' ILIKE '%' || c.director_name || '%'
-LIMIT 1
-ON CONFLICT (order_number) DO NOTHING;
+WHERE (c.name = 'Анастасия' OR c.director_name = 'Анастасия')
+  AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 993)
+LIMIT 1;
 
 INSERT INTO rental_orders (
   order_number, client_id, status, start_date, end_date, days_count,
@@ -8859,12 +8030,9 @@ SELECT
   NOW(),
   NOW()
 FROM rental_clients c
-WHERE c.name ILIKE '%Жанна%' 
-   OR c.director_name ILIKE '%Жанна%'
-   OR 'Жанна' ILIKE '%' || c.name || '%'
-   OR 'Жанна' ILIKE '%' || c.director_name || '%'
-LIMIT 1
-ON CONFLICT (order_number) DO NOTHING;
+WHERE (c.name = 'Жанна' OR c.director_name = 'Жанна')
+  AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 992)
+LIMIT 1;
 
 INSERT INTO rental_orders (
   order_number, client_id, status, start_date, end_date, days_count,
@@ -8891,12 +8059,9 @@ SELECT
   NOW(),
   NOW()
 FROM rental_clients c
-WHERE c.name ILIKE '%Татьяна (Гольфстрим)%' 
-   OR c.director_name ILIKE '%Татьяна (Гольфстрим)%'
-   OR 'Татьяна (Гольфстрим)' ILIKE '%' || c.name || '%'
-   OR 'Татьяна (Гольфстрим)' ILIKE '%' || c.director_name || '%'
-LIMIT 1
-ON CONFLICT (order_number) DO NOTHING;
+WHERE (c.name = 'Татьяна (Гольфстрим)' OR c.director_name = 'Татьяна (Гольфстрим)')
+  AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 990)
+LIMIT 1;
 
 INSERT INTO rental_orders (
   order_number, client_id, status, start_date, end_date, days_count,
@@ -8923,12 +8088,9 @@ SELECT
   NOW(),
   NOW()
 FROM rental_clients c
-WHERE c.name ILIKE '%Анюта Родионова (Родина-тур)%' 
-   OR c.director_name ILIKE '%Анюта Родионова (Родина-тур)%'
-   OR 'Анюта Родионова (Родина-тур)' ILIKE '%' || c.name || '%'
-   OR 'Анюта Родионова (Родина-тур)' ILIKE '%' || c.director_name || '%'
-LIMIT 1
-ON CONFLICT (order_number) DO NOTHING;
+WHERE (c.name = 'Анюта Родионова (Родина-тур)' OR c.director_name = 'Анюта Родионова (Родина-тур)')
+  AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 989)
+LIMIT 1;
 
 INSERT INTO rental_orders (
   order_number, client_id, status, start_date, end_date, days_count,
@@ -8955,12 +8117,9 @@ SELECT
   NOW(),
   NOW()
 FROM rental_clients c
-WHERE c.name ILIKE '%Айрат Нурмухаммадов%' 
-   OR c.director_name ILIKE '%Айрат Нурмухаммадов%'
-   OR 'Айрат Нурмухаммадов' ILIKE '%' || c.name || '%'
-   OR 'Айрат Нурмухаммадов' ILIKE '%' || c.director_name || '%'
-LIMIT 1
-ON CONFLICT (order_number) DO NOTHING;
+WHERE (c.name = 'Айрат Нурмухаммадов' OR c.director_name = 'Айрат Нурмухаммадов')
+  AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 988)
+LIMIT 1;
 
 INSERT INTO rental_orders (
   order_number, client_id, status, start_date, end_date, days_count,
@@ -8987,12 +8146,9 @@ SELECT
   NOW(),
   NOW()
 FROM rental_clients c
-WHERE c.name ILIKE '%Юлианна%' 
-   OR c.director_name ILIKE '%Юлианна%'
-   OR 'Юлианна' ILIKE '%' || c.name || '%'
-   OR 'Юлианна' ILIKE '%' || c.director_name || '%'
-LIMIT 1
-ON CONFLICT (order_number) DO NOTHING;
+WHERE (c.name = 'Юлианна' OR c.director_name = 'Юлианна')
+  AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 987)
+LIMIT 1;
 
 INSERT INTO rental_orders (
   order_number, client_id, status, start_date, end_date, days_count,
@@ -9019,12 +8175,9 @@ SELECT
   NOW(),
   NOW()
 FROM rental_clients c
-WHERE c.name ILIKE '%Фируза%' 
-   OR c.director_name ILIKE '%Фируза%'
-   OR 'Фируза' ILIKE '%' || c.name || '%'
-   OR 'Фируза' ILIKE '%' || c.director_name || '%'
-LIMIT 1
-ON CONFLICT (order_number) DO NOTHING;
+WHERE (c.name = 'Фируза' OR c.director_name = 'Фируза')
+  AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 986)
+LIMIT 1;
 
 INSERT INTO rental_orders (
   order_number, client_id, status, start_date, end_date, days_count,
@@ -9051,12 +8204,9 @@ SELECT
   NOW(),
   NOW()
 FROM rental_clients c
-WHERE c.name ILIKE '%Эвелина (Инициатива)%' 
-   OR c.director_name ILIKE '%Эвелина (Инициатива)%'
-   OR 'Эвелина (Инициатива)' ILIKE '%' || c.name || '%'
-   OR 'Эвелина (Инициатива)' ILIKE '%' || c.director_name || '%'
-LIMIT 1
-ON CONFLICT (order_number) DO NOTHING;
+WHERE (c.name = 'Эвелина (Инициатива)' OR c.director_name = 'Эвелина (Инициатива)')
+  AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 985)
+LIMIT 1;
 
 INSERT INTO rental_orders (
   order_number, client_id, status, start_date, end_date, days_count,
@@ -9083,12 +8233,9 @@ SELECT
   NOW(),
   NOW()
 FROM rental_clients c
-WHERE c.name ILIKE '%Эвелина (Инициатива)%' 
-   OR c.director_name ILIKE '%Эвелина (Инициатива)%'
-   OR 'Эвелина (Инициатива)' ILIKE '%' || c.name || '%'
-   OR 'Эвелина (Инициатива)' ILIKE '%' || c.director_name || '%'
-LIMIT 1
-ON CONFLICT (order_number) DO NOTHING;
+WHERE (c.name = 'Эвелина (Инициатива)' OR c.director_name = 'Эвелина (Инициатива)')
+  AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 984)
+LIMIT 1;
 
 INSERT INTO rental_orders (
   order_number, client_id, status, start_date, end_date, days_count,
@@ -9115,12 +8262,9 @@ SELECT
   NOW(),
   NOW()
 FROM rental_clients c
-WHERE c.name ILIKE '%Эвелина (Инициатива)%' 
-   OR c.director_name ILIKE '%Эвелина (Инициатива)%'
-   OR 'Эвелина (Инициатива)' ILIKE '%' || c.name || '%'
-   OR 'Эвелина (Инициатива)' ILIKE '%' || c.director_name || '%'
-LIMIT 1
-ON CONFLICT (order_number) DO NOTHING;
+WHERE (c.name = 'Эвелина (Инициатива)' OR c.director_name = 'Эвелина (Инициатива)')
+  AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 983)
+LIMIT 1;
 
 INSERT INTO rental_orders (
   order_number, client_id, status, start_date, end_date, days_count,
@@ -9147,12 +8291,9 @@ SELECT
   NOW(),
   NOW()
 FROM rental_clients c
-WHERE c.name ILIKE '%Эвелина (Инициатива)%' 
-   OR c.director_name ILIKE '%Эвелина (Инициатива)%'
-   OR 'Эвелина (Инициатива)' ILIKE '%' || c.name || '%'
-   OR 'Эвелина (Инициатива)' ILIKE '%' || c.director_name || '%'
-LIMIT 1
-ON CONFLICT (order_number) DO NOTHING;
+WHERE (c.name = 'Эвелина (Инициатива)' OR c.director_name = 'Эвелина (Инициатива)')
+  AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 982)
+LIMIT 1;
 
 INSERT INTO rental_orders (
   order_number, client_id, status, start_date, end_date, days_count,
@@ -9179,12 +8320,9 @@ SELECT
   NOW(),
   NOW()
 FROM rental_clients c
-WHERE c.name ILIKE '%Эвелина (Инициатива)%' 
-   OR c.director_name ILIKE '%Эвелина (Инициатива)%'
-   OR 'Эвелина (Инициатива)' ILIKE '%' || c.name || '%'
-   OR 'Эвелина (Инициатива)' ILIKE '%' || c.director_name || '%'
-LIMIT 1
-ON CONFLICT (order_number) DO NOTHING;
+WHERE (c.name = 'Эвелина (Инициатива)' OR c.director_name = 'Эвелина (Инициатива)')
+  AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 981)
+LIMIT 1;
 
 INSERT INTO rental_orders (
   order_number, client_id, status, start_date, end_date, days_count,
@@ -9211,12 +8349,9 @@ SELECT
   NOW(),
   NOW()
 FROM rental_clients c
-WHERE c.name ILIKE '%Эвелина (Инициатива)%' 
-   OR c.director_name ILIKE '%Эвелина (Инициатива)%'
-   OR 'Эвелина (Инициатива)' ILIKE '%' || c.name || '%'
-   OR 'Эвелина (Инициатива)' ILIKE '%' || c.director_name || '%'
-LIMIT 1
-ON CONFLICT (order_number) DO NOTHING;
+WHERE (c.name = 'Эвелина (Инициатива)' OR c.director_name = 'Эвелина (Инициатива)')
+  AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 980)
+LIMIT 1;
 
 INSERT INTO rental_orders (
   order_number, client_id, status, start_date, end_date, days_count,
@@ -9243,12 +8378,9 @@ SELECT
   NOW(),
   NOW()
 FROM rental_clients c
-WHERE c.name ILIKE '%Эвелина (Инициатива)%' 
-   OR c.director_name ILIKE '%Эвелина (Инициатива)%'
-   OR 'Эвелина (Инициатива)' ILIKE '%' || c.name || '%'
-   OR 'Эвелина (Инициатива)' ILIKE '%' || c.director_name || '%'
-LIMIT 1
-ON CONFLICT (order_number) DO NOTHING;
+WHERE (c.name = 'Эвелина (Инициатива)' OR c.director_name = 'Эвелина (Инициатива)')
+  AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 979)
+LIMIT 1;
 
 INSERT INTO rental_orders (
   order_number, client_id, status, start_date, end_date, days_count,
@@ -9275,12 +8407,9 @@ SELECT
   NOW(),
   NOW()
 FROM rental_clients c
-WHERE c.name ILIKE '%Эвелина (Инициатива)%' 
-   OR c.director_name ILIKE '%Эвелина (Инициатива)%'
-   OR 'Эвелина (Инициатива)' ILIKE '%' || c.name || '%'
-   OR 'Эвелина (Инициатива)' ILIKE '%' || c.director_name || '%'
-LIMIT 1
-ON CONFLICT (order_number) DO NOTHING;
+WHERE (c.name = 'Эвелина (Инициатива)' OR c.director_name = 'Эвелина (Инициатива)')
+  AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 978)
+LIMIT 1;
 
 INSERT INTO rental_orders (
   order_number, client_id, status, start_date, end_date, days_count,
@@ -9307,12 +8436,9 @@ SELECT
   NOW(),
   NOW()
 FROM rental_clients c
-WHERE c.name ILIKE '%Эвелина (Инициатива)%' 
-   OR c.director_name ILIKE '%Эвелина (Инициатива)%'
-   OR 'Эвелина (Инициатива)' ILIKE '%' || c.name || '%'
-   OR 'Эвелина (Инициатива)' ILIKE '%' || c.director_name || '%'
-LIMIT 1
-ON CONFLICT (order_number) DO NOTHING;
+WHERE (c.name = 'Эвелина (Инициатива)' OR c.director_name = 'Эвелина (Инициатива)')
+  AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 977)
+LIMIT 1;
 
 INSERT INTO rental_orders (
   order_number, client_id, status, start_date, end_date, days_count,
@@ -9339,12 +8465,9 @@ SELECT
   NOW(),
   NOW()
 FROM rental_clients c
-WHERE c.name ILIKE '%Эвелина (Инициатива)%' 
-   OR c.director_name ILIKE '%Эвелина (Инициатива)%'
-   OR 'Эвелина (Инициатива)' ILIKE '%' || c.name || '%'
-   OR 'Эвелина (Инициатива)' ILIKE '%' || c.director_name || '%'
-LIMIT 1
-ON CONFLICT (order_number) DO NOTHING;
+WHERE (c.name = 'Эвелина (Инициатива)' OR c.director_name = 'Эвелина (Инициатива)')
+  AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 976)
+LIMIT 1;
 
 INSERT INTO rental_orders (
   order_number, client_id, status, start_date, end_date, days_count,
@@ -9371,12 +8494,9 @@ SELECT
   NOW(),
   NOW()
 FROM rental_clients c
-WHERE c.name ILIKE '%Эвелина (Инициатива)%' 
-   OR c.director_name ILIKE '%Эвелина (Инициатива)%'
-   OR 'Эвелина (Инициатива)' ILIKE '%' || c.name || '%'
-   OR 'Эвелина (Инициатива)' ILIKE '%' || c.director_name || '%'
-LIMIT 1
-ON CONFLICT (order_number) DO NOTHING;
+WHERE (c.name = 'Эвелина (Инициатива)' OR c.director_name = 'Эвелина (Инициатива)')
+  AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 975)
+LIMIT 1;
 
 INSERT INTO rental_orders (
   order_number, client_id, status, start_date, end_date, days_count,
@@ -9403,12 +8523,9 @@ SELECT
   NOW(),
   NOW()
 FROM rental_clients c
-WHERE c.name ILIKE '%Арсен (Юнион)%' 
-   OR c.director_name ILIKE '%Арсен (Юнион)%'
-   OR 'Арсен (Юнион)' ILIKE '%' || c.name || '%'
-   OR 'Арсен (Юнион)' ILIKE '%' || c.director_name || '%'
-LIMIT 1
-ON CONFLICT (order_number) DO NOTHING;
+WHERE (c.name = 'Арсен (Юнион)' OR c.director_name = 'Арсен (Юнион)')
+  AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 974)
+LIMIT 1;
 
 INSERT INTO rental_orders (
   order_number, client_id, status, start_date, end_date, days_count,
@@ -9435,12 +8552,9 @@ SELECT
   NOW(),
   NOW()
 FROM rental_clients c
-WHERE c.name ILIKE '%Арсен (Юнион)%' 
-   OR c.director_name ILIKE '%Арсен (Юнион)%'
-   OR 'Арсен (Юнион)' ILIKE '%' || c.name || '%'
-   OR 'Арсен (Юнион)' ILIKE '%' || c.director_name || '%'
-LIMIT 1
-ON CONFLICT (order_number) DO NOTHING;
+WHERE (c.name = 'Арсен (Юнион)' OR c.director_name = 'Арсен (Юнион)')
+  AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 973)
+LIMIT 1;
 
 INSERT INTO rental_orders (
   order_number, client_id, status, start_date, end_date, days_count,
@@ -9467,12 +8581,9 @@ SELECT
   NOW(),
   NOW()
 FROM rental_clients c
-WHERE c.name ILIKE '%Эвелина (Инициатива)%' 
-   OR c.director_name ILIKE '%Эвелина (Инициатива)%'
-   OR 'Эвелина (Инициатива)' ILIKE '%' || c.name || '%'
-   OR 'Эвелина (Инициатива)' ILIKE '%' || c.director_name || '%'
-LIMIT 1
-ON CONFLICT (order_number) DO NOTHING;
+WHERE (c.name = 'Эвелина (Инициатива)' OR c.director_name = 'Эвелина (Инициатива)')
+  AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 972)
+LIMIT 1;
 
 INSERT INTO rental_orders (
   order_number, client_id, status, start_date, end_date, days_count,
@@ -9499,12 +8610,9 @@ SELECT
   NOW(),
   NOW()
 FROM rental_clients c
-WHERE c.name ILIKE '%Эвелина (Инициатива)%' 
-   OR c.director_name ILIKE '%Эвелина (Инициатива)%'
-   OR 'Эвелина (Инициатива)' ILIKE '%' || c.name || '%'
-   OR 'Эвелина (Инициатива)' ILIKE '%' || c.director_name || '%'
-LIMIT 1
-ON CONFLICT (order_number) DO NOTHING;
+WHERE (c.name = 'Эвелина (Инициатива)' OR c.director_name = 'Эвелина (Инициатива)')
+  AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 971)
+LIMIT 1;
 
 INSERT INTO rental_orders (
   order_number, client_id, status, start_date, end_date, days_count,
@@ -9531,12 +8639,9 @@ SELECT
   NOW(),
   NOW()
 FROM rental_clients c
-WHERE c.name ILIKE '%Ленар (ИП Ножкин)%' 
-   OR c.director_name ILIKE '%Ленар (ИП Ножкин)%'
-   OR 'Ленар (ИП Ножкин)' ILIKE '%' || c.name || '%'
-   OR 'Ленар (ИП Ножкин)' ILIKE '%' || c.director_name || '%'
-LIMIT 1
-ON CONFLICT (order_number) DO NOTHING;
+WHERE (c.name = 'Ленар (ИП Ножкин)' OR c.director_name = 'Ленар (ИП Ножкин)')
+  AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 970)
+LIMIT 1;
 
 INSERT INTO rental_orders (
   order_number, client_id, status, start_date, end_date, days_count,
@@ -9563,12 +8668,9 @@ SELECT
   NOW(),
   NOW()
 FROM rental_clients c
-WHERE c.name ILIKE '%Андрей (Экскурс)%' 
-   OR c.director_name ILIKE '%Андрей (Экскурс)%'
-   OR 'Андрей (Экскурс)' ILIKE '%' || c.name || '%'
-   OR 'Андрей (Экскурс)' ILIKE '%' || c.director_name || '%'
-LIMIT 1
-ON CONFLICT (order_number) DO NOTHING;
+WHERE (c.name = 'Андрей (Экскурс)' OR c.director_name = 'Андрей (Экскурс)')
+  AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 969)
+LIMIT 1;
 
 INSERT INTO rental_orders (
   order_number, client_id, status, start_date, end_date, days_count,
@@ -9595,12 +8697,9 @@ SELECT
   NOW(),
   NOW()
 FROM rental_clients c
-WHERE c.name ILIKE '%Зельфира%' 
-   OR c.director_name ILIKE '%Зельфира%'
-   OR 'Зельфира' ILIKE '%' || c.name || '%'
-   OR 'Зельфира' ILIKE '%' || c.director_name || '%'
-LIMIT 1
-ON CONFLICT (order_number) DO NOTHING;
+WHERE (c.name = 'Зельфира' OR c.director_name = 'Зельфира')
+  AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 968)
+LIMIT 1;
 
 INSERT INTO rental_orders (
   order_number, client_id, status, start_date, end_date, days_count,
@@ -9627,12 +8726,9 @@ SELECT
   NOW(),
   NOW()
 FROM rental_clients c
-WHERE c.name ILIKE '%Камила Ягудина%' 
-   OR c.director_name ILIKE '%Камила Ягудина%'
-   OR 'Камила Ягудина' ILIKE '%' || c.name || '%'
-   OR 'Камила Ягудина' ILIKE '%' || c.director_name || '%'
-LIMIT 1
-ON CONFLICT (order_number) DO NOTHING;
+WHERE (c.name = 'Камила Ягудина' OR c.director_name = 'Камила Ягудина')
+  AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 967)
+LIMIT 1;
 
 INSERT INTO rental_orders (
   order_number, client_id, status, start_date, end_date, days_count,
@@ -9659,12 +8755,9 @@ SELECT
   NOW(),
   NOW()
 FROM rental_clients c
-WHERE c.name ILIKE '%Любовь (ТИЦ)%' 
-   OR c.director_name ILIKE '%Любовь (ТИЦ)%'
-   OR 'Любовь (ТИЦ)' ILIKE '%' || c.name || '%'
-   OR 'Любовь (ТИЦ)' ILIKE '%' || c.director_name || '%'
-LIMIT 1
-ON CONFLICT (order_number) DO NOTHING;
+WHERE (c.name = 'Любовь (ТИЦ)' OR c.director_name = 'Любовь (ТИЦ)')
+  AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 966)
+LIMIT 1;
 
 INSERT INTO rental_orders (
   order_number, client_id, status, start_date, end_date, days_count,
@@ -9691,12 +8784,9 @@ SELECT
   NOW(),
   NOW()
 FROM rental_clients c
-WHERE c.name ILIKE '%Любовь (ТИЦ)%' 
-   OR c.director_name ILIKE '%Любовь (ТИЦ)%'
-   OR 'Любовь (ТИЦ)' ILIKE '%' || c.name || '%'
-   OR 'Любовь (ТИЦ)' ILIKE '%' || c.director_name || '%'
-LIMIT 1
-ON CONFLICT (order_number) DO NOTHING;
+WHERE (c.name = 'Любовь (ТИЦ)' OR c.director_name = 'Любовь (ТИЦ)')
+  AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 965)
+LIMIT 1;
 
 INSERT INTO rental_orders (
   order_number, client_id, status, start_date, end_date, days_count,
@@ -9723,12 +8813,9 @@ SELECT
   NOW(),
   NOW()
 FROM rental_clients c
-WHERE c.name ILIKE '%Мария Экскурсовод%' 
-   OR c.director_name ILIKE '%Мария Экскурсовод%'
-   OR 'Мария Экскурсовод' ILIKE '%' || c.name || '%'
-   OR 'Мария Экскурсовод' ILIKE '%' || c.director_name || '%'
-LIMIT 1
-ON CONFLICT (order_number) DO NOTHING;
+WHERE (c.name = 'Мария Экскурсовод' OR c.director_name = 'Мария Экскурсовод')
+  AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 964)
+LIMIT 1;
 
 INSERT INTO rental_orders (
   order_number, client_id, status, start_date, end_date, days_count,
@@ -9755,12 +8842,9 @@ SELECT
   NOW(),
   NOW()
 FROM rental_clients c
-WHERE c.name ILIKE '%Галина Тур Москва%' 
-   OR c.director_name ILIKE '%Галина Тур Москва%'
-   OR 'Галина Тур Москва' ILIKE '%' || c.name || '%'
-   OR 'Галина Тур Москва' ILIKE '%' || c.director_name || '%'
-LIMIT 1
-ON CONFLICT (order_number) DO NOTHING;
+WHERE (c.name = 'Галина Тур Москва' OR c.director_name = 'Галина Тур Москва')
+  AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 963)
+LIMIT 1;
 
 INSERT INTO rental_orders (
   order_number, client_id, status, start_date, end_date, days_count,
@@ -9787,12 +8871,9 @@ SELECT
   NOW(),
   NOW()
 FROM rental_clients c
-WHERE c.name ILIKE '%Ольга (Дольче Вита)%' 
-   OR c.director_name ILIKE '%Ольга (Дольче Вита)%'
-   OR 'Ольга (Дольче Вита)' ILIKE '%' || c.name || '%'
-   OR 'Ольга (Дольче Вита)' ILIKE '%' || c.director_name || '%'
-LIMIT 1
-ON CONFLICT (order_number) DO NOTHING;
+WHERE (c.name = 'Ольга (Дольче Вита)' OR c.director_name = 'Ольга (Дольче Вита)')
+  AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 962)
+LIMIT 1;
 
 INSERT INTO rental_orders (
   order_number, client_id, status, start_date, end_date, days_count,
@@ -9819,12 +8900,9 @@ SELECT
   NOW(),
   NOW()
 FROM rental_clients c
-WHERE c.name ILIKE '%Сафина Алина (ФРГРТ)%' 
-   OR c.director_name ILIKE '%Сафина Алина (ФРГРТ)%'
-   OR 'Сафина Алина (ФРГРТ)' ILIKE '%' || c.name || '%'
-   OR 'Сафина Алина (ФРГРТ)' ILIKE '%' || c.director_name || '%'
-LIMIT 1
-ON CONFLICT (order_number) DO NOTHING;
+WHERE (c.name = 'Сафина Алина (ФРГРТ)' OR c.director_name = 'Сафина Алина (ФРГРТ)')
+  AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 961)
+LIMIT 1;
 
 INSERT INTO rental_orders (
   order_number, client_id, status, start_date, end_date, days_count,
@@ -9851,12 +8929,9 @@ SELECT
   NOW(),
   NOW()
 FROM rental_clients c
-WHERE c.name ILIKE '%Артем Агафонов%' 
-   OR c.director_name ILIKE '%Артем Агафонов%'
-   OR 'Артем Агафонов' ILIKE '%' || c.name || '%'
-   OR 'Артем Агафонов' ILIKE '%' || c.director_name || '%'
-LIMIT 1
-ON CONFLICT (order_number) DO NOTHING;
+WHERE (c.name = 'Артем Агафонов' OR c.director_name = 'Артем Агафонов')
+  AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 960)
+LIMIT 1;
 
 INSERT INTO rental_orders (
   order_number, client_id, status, start_date, end_date, days_count,
@@ -9883,12 +8958,9 @@ SELECT
   NOW(),
   NOW()
 FROM rental_clients c
-WHERE c.name ILIKE '%Татьяна (Гольфстрим)%' 
-   OR c.director_name ILIKE '%Татьяна (Гольфстрим)%'
-   OR 'Татьяна (Гольфстрим)' ILIKE '%' || c.name || '%'
-   OR 'Татьяна (Гольфстрим)' ILIKE '%' || c.director_name || '%'
-LIMIT 1
-ON CONFLICT (order_number) DO NOTHING;
+WHERE (c.name = 'Татьяна (Гольфстрим)' OR c.director_name = 'Татьяна (Гольфстрим)')
+  AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 959)
+LIMIT 1;
 
 INSERT INTO rental_orders (
   order_number, client_id, status, start_date, end_date, days_count,
@@ -9915,12 +8987,9 @@ SELECT
   NOW(),
   NOW()
 FROM rental_clients c
-WHERE c.name ILIKE '%Гузелия%' 
-   OR c.director_name ILIKE '%Гузелия%'
-   OR 'Гузелия' ILIKE '%' || c.name || '%'
-   OR 'Гузелия' ILIKE '%' || c.director_name || '%'
-LIMIT 1
-ON CONFLICT (order_number) DO NOTHING;
+WHERE (c.name = 'Гузелия' OR c.director_name = 'Гузелия')
+  AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 958)
+LIMIT 1;
 
 INSERT INTO rental_orders (
   order_number, client_id, status, start_date, end_date, days_count,
@@ -9947,12 +9016,9 @@ SELECT
   NOW(),
   NOW()
 FROM rental_clients c
-WHERE c.name ILIKE '%Андрей (Экскурс)%' 
-   OR c.director_name ILIKE '%Андрей (Экскурс)%'
-   OR 'Андрей (Экскурс)' ILIKE '%' || c.name || '%'
-   OR 'Андрей (Экскурс)' ILIKE '%' || c.director_name || '%'
-LIMIT 1
-ON CONFLICT (order_number) DO NOTHING;
+WHERE (c.name = 'Андрей (Экскурс)' OR c.director_name = 'Андрей (Экскурс)')
+  AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 957)
+LIMIT 1;
 
 INSERT INTO rental_orders (
   order_number, client_id, status, start_date, end_date, days_count,
@@ -9979,12 +9045,9 @@ SELECT
   NOW(),
   NOW()
 FROM rental_clients c
-WHERE c.name ILIKE '%Анвар Каримов%' 
-   OR c.director_name ILIKE '%Анвар Каримов%'
-   OR 'Анвар Каримов' ILIKE '%' || c.name || '%'
-   OR 'Анвар Каримов' ILIKE '%' || c.director_name || '%'
-LIMIT 1
-ON CONFLICT (order_number) DO NOTHING;
+WHERE (c.name = 'Анвар Каримов' OR c.director_name = 'Анвар Каримов')
+  AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 956)
+LIMIT 1;
 
 INSERT INTO rental_orders (
   order_number, client_id, status, start_date, end_date, days_count,
@@ -10011,12 +9074,9 @@ SELECT
   NOW(),
   NOW()
 FROM rental_clients c
-WHERE c.name ILIKE '%Галина (Тур Урал)%' 
-   OR c.director_name ILIKE '%Галина (Тур Урал)%'
-   OR 'Галина (Тур Урал)' ILIKE '%' || c.name || '%'
-   OR 'Галина (Тур Урал)' ILIKE '%' || c.director_name || '%'
-LIMIT 1
-ON CONFLICT (order_number) DO NOTHING;
+WHERE (c.name = 'Галина (Тур Урал)' OR c.director_name = 'Галина (Тур Урал)')
+  AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 955)
+LIMIT 1;
 
 INSERT INTO rental_orders (
   order_number, client_id, status, start_date, end_date, days_count,
@@ -10043,12 +9103,9 @@ SELECT
   NOW(),
   NOW()
 FROM rental_clients c
-WHERE c.name ILIKE '%Татьяна (Гольфстрим)%' 
-   OR c.director_name ILIKE '%Татьяна (Гольфстрим)%'
-   OR 'Татьяна (Гольфстрим)' ILIKE '%' || c.name || '%'
-   OR 'Татьяна (Гольфстрим)' ILIKE '%' || c.director_name || '%'
-LIMIT 1
-ON CONFLICT (order_number) DO NOTHING;
+WHERE (c.name = 'Татьяна (Гольфстрим)' OR c.director_name = 'Татьяна (Гольфстрим)')
+  AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 954)
+LIMIT 1;
 
 INSERT INTO rental_orders (
   order_number, client_id, status, start_date, end_date, days_count,
@@ -10075,12 +9132,9 @@ SELECT
   NOW(),
   NOW()
 FROM rental_clients c
-WHERE c.name ILIKE '%Арсен (Юнион)%' 
-   OR c.director_name ILIKE '%Арсен (Юнион)%'
-   OR 'Арсен (Юнион)' ILIKE '%' || c.name || '%'
-   OR 'Арсен (Юнион)' ILIKE '%' || c.director_name || '%'
-LIMIT 1
-ON CONFLICT (order_number) DO NOTHING;
+WHERE (c.name = 'Арсен (Юнион)' OR c.director_name = 'Арсен (Юнион)')
+  AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 953)
+LIMIT 1;
 
 INSERT INTO rental_orders (
   order_number, client_id, status, start_date, end_date, days_count,
@@ -10107,12 +9161,9 @@ SELECT
   NOW(),
   NOW()
 FROM rental_clients c
-WHERE c.name ILIKE '%Ольга (Дольче Вита)%' 
-   OR c.director_name ILIKE '%Ольга (Дольче Вита)%'
-   OR 'Ольга (Дольче Вита)' ILIKE '%' || c.name || '%'
-   OR 'Ольга (Дольче Вита)' ILIKE '%' || c.director_name || '%'
-LIMIT 1
-ON CONFLICT (order_number) DO NOTHING;
+WHERE (c.name = 'Ольга (Дольче Вита)' OR c.director_name = 'Ольга (Дольче Вита)')
+  AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 952)
+LIMIT 1;
 
 INSERT INTO rental_orders (
   order_number, client_id, status, start_date, end_date, days_count,
@@ -10139,12 +9190,9 @@ SELECT
   NOW(),
   NOW()
 FROM rental_clients c
-WHERE c.name ILIKE '%Камила Ягудина%' 
-   OR c.director_name ILIKE '%Камила Ягудина%'
-   OR 'Камила Ягудина' ILIKE '%' || c.name || '%'
-   OR 'Камила Ягудина' ILIKE '%' || c.director_name || '%'
-LIMIT 1
-ON CONFLICT (order_number) DO NOTHING;
+WHERE (c.name = 'Камила Ягудина' OR c.director_name = 'Камила Ягудина')
+  AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 951)
+LIMIT 1;
 
 INSERT INTO rental_orders (
   order_number, client_id, status, start_date, end_date, days_count,
@@ -10171,12 +9219,9 @@ SELECT
   NOW(),
   NOW()
 FROM rental_clients c
-WHERE c.name ILIKE '%Инна Экскурсовод%' 
-   OR c.director_name ILIKE '%Инна Экскурсовод%'
-   OR 'Инна Экскурсовод' ILIKE '%' || c.name || '%'
-   OR 'Инна Экскурсовод' ILIKE '%' || c.director_name || '%'
-LIMIT 1
-ON CONFLICT (order_number) DO NOTHING;
+WHERE (c.name = 'Инна Экскурсовод' OR c.director_name = 'Инна Экскурсовод')
+  AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 950)
+LIMIT 1;
 
 INSERT INTO rental_orders (
   order_number, client_id, status, start_date, end_date, days_count,
@@ -10203,12 +9248,9 @@ SELECT
   NOW(),
   NOW()
 FROM rental_clients c
-WHERE c.name ILIKE '%Мира (ИП)%' 
-   OR c.director_name ILIKE '%Мира (ИП)%'
-   OR 'Мира (ИП)' ILIKE '%' || c.name || '%'
-   OR 'Мира (ИП)' ILIKE '%' || c.director_name || '%'
-LIMIT 1
-ON CONFLICT (order_number) DO NOTHING;
+WHERE (c.name = 'Мира (ИП)' OR c.director_name = 'Мира (ИП)')
+  AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 949)
+LIMIT 1;
 
 INSERT INTO rental_orders (
   order_number, client_id, status, start_date, end_date, days_count,
@@ -10235,12 +9277,9 @@ SELECT
   NOW(),
   NOW()
 FROM rental_clients c
-WHERE c.name ILIKE '%Эдик Заказы для групп%' 
-   OR c.director_name ILIKE '%Эдик Заказы для групп%'
-   OR 'Эдик Заказы для групп' ILIKE '%' || c.name || '%'
-   OR 'Эдик Заказы для групп' ILIKE '%' || c.director_name || '%'
-LIMIT 1
-ON CONFLICT (order_number) DO NOTHING;
+WHERE (c.name = 'Эдик Заказы для групп' OR c.director_name = 'Эдик Заказы для групп')
+  AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 948)
+LIMIT 1;
 
 INSERT INTO rental_orders (
   order_number, client_id, status, start_date, end_date, days_count,
@@ -10267,12 +9306,9 @@ SELECT
   NOW(),
   NOW()
 FROM rental_clients c
-WHERE c.name ILIKE '%Сафина Алина (ФРГРТ)%' 
-   OR c.director_name ILIKE '%Сафина Алина (ФРГРТ)%'
-   OR 'Сафина Алина (ФРГРТ)' ILIKE '%' || c.name || '%'
-   OR 'Сафина Алина (ФРГРТ)' ILIKE '%' || c.director_name || '%'
-LIMIT 1
-ON CONFLICT (order_number) DO NOTHING;
+WHERE (c.name = 'Сафина Алина (ФРГРТ)' OR c.director_name = 'Сафина Алина (ФРГРТ)')
+  AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 947)
+LIMIT 1;
 
 INSERT INTO rental_orders (
   order_number, client_id, status, start_date, end_date, days_count,
@@ -10299,12 +9335,9 @@ SELECT
   NOW(),
   NOW()
 FROM rental_clients c
-WHERE c.name ILIKE '%Руслан (Тимсофт)%' 
-   OR c.director_name ILIKE '%Руслан (Тимсофт)%'
-   OR 'Руслан (Тимсофт)' ILIKE '%' || c.name || '%'
-   OR 'Руслан (Тимсофт)' ILIKE '%' || c.director_name || '%'
-LIMIT 1
-ON CONFLICT (order_number) DO NOTHING;
+WHERE (c.name = 'Руслан (Тимсофт)' OR c.director_name = 'Руслан (Тимсофт)')
+  AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 946)
+LIMIT 1;
 
 INSERT INTO rental_orders (
   order_number, client_id, status, start_date, end_date, days_count,
@@ -10331,12 +9364,9 @@ SELECT
   NOW(),
   NOW()
 FROM rental_clients c
-WHERE c.name ILIKE '%Любовь (ТИЦ)%' 
-   OR c.director_name ILIKE '%Любовь (ТИЦ)%'
-   OR 'Любовь (ТИЦ)' ILIKE '%' || c.name || '%'
-   OR 'Любовь (ТИЦ)' ILIKE '%' || c.director_name || '%'
-LIMIT 1
-ON CONFLICT (order_number) DO NOTHING;
+WHERE (c.name = 'Любовь (ТИЦ)' OR c.director_name = 'Любовь (ТИЦ)')
+  AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 945)
+LIMIT 1;
 
 INSERT INTO rental_orders (
   order_number, client_id, status, start_date, end_date, days_count,
@@ -10363,12 +9393,9 @@ SELECT
   NOW(),
   NOW()
 FROM rental_clients c
-WHERE c.name ILIKE '%Любовь (ТИЦ)%' 
-   OR c.director_name ILIKE '%Любовь (ТИЦ)%'
-   OR 'Любовь (ТИЦ)' ILIKE '%' || c.name || '%'
-   OR 'Любовь (ТИЦ)' ILIKE '%' || c.director_name || '%'
-LIMIT 1
-ON CONFLICT (order_number) DO NOTHING;
+WHERE (c.name = 'Любовь (ТИЦ)' OR c.director_name = 'Любовь (ТИЦ)')
+  AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 944)
+LIMIT 1;
 
 INSERT INTO rental_orders (
   order_number, client_id, status, start_date, end_date, days_count,
@@ -10395,12 +9422,9 @@ SELECT
   NOW(),
   NOW()
 FROM rental_clients c
-WHERE c.name ILIKE '%Эдик Заказы для групп%' 
-   OR c.director_name ILIKE '%Эдик Заказы для групп%'
-   OR 'Эдик Заказы для групп' ILIKE '%' || c.name || '%'
-   OR 'Эдик Заказы для групп' ILIKE '%' || c.director_name || '%'
-LIMIT 1
-ON CONFLICT (order_number) DO NOTHING;
+WHERE (c.name = 'Эдик Заказы для групп' OR c.director_name = 'Эдик Заказы для групп')
+  AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 943)
+LIMIT 1;
 
 INSERT INTO rental_orders (
   order_number, client_id, status, start_date, end_date, days_count,
@@ -10427,12 +9451,9 @@ SELECT
   NOW(),
   NOW()
 FROM rental_clients c
-WHERE c.name ILIKE '%Наталья%' 
-   OR c.director_name ILIKE '%Наталья%'
-   OR 'Наталья' ILIKE '%' || c.name || '%'
-   OR 'Наталья' ILIKE '%' || c.director_name || '%'
-LIMIT 1
-ON CONFLICT (order_number) DO NOTHING;
+WHERE (c.name = 'Наталья' OR c.director_name = 'Наталья')
+  AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 942)
+LIMIT 1;
 
 INSERT INTO rental_orders (
   order_number, client_id, status, start_date, end_date, days_count,
@@ -10459,12 +9480,9 @@ SELECT
   NOW(),
   NOW()
 FROM rental_clients c
-WHERE c.name ILIKE '%Гузелия%' 
-   OR c.director_name ILIKE '%Гузелия%'
-   OR 'Гузелия' ILIKE '%' || c.name || '%'
-   OR 'Гузелия' ILIKE '%' || c.director_name || '%'
-LIMIT 1
-ON CONFLICT (order_number) DO NOTHING;
+WHERE (c.name = 'Гузелия' OR c.director_name = 'Гузелия')
+  AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 941)
+LIMIT 1;
 
 INSERT INTO rental_orders (
   order_number, client_id, status, start_date, end_date, days_count,
@@ -10491,12 +9509,9 @@ SELECT
   NOW(),
   NOW()
 FROM rental_clients c
-WHERE c.name ILIKE '%Мария Экскурсовод%' 
-   OR c.director_name ILIKE '%Мария Экскурсовод%'
-   OR 'Мария Экскурсовод' ILIKE '%' || c.name || '%'
-   OR 'Мария Экскурсовод' ILIKE '%' || c.director_name || '%'
-LIMIT 1
-ON CONFLICT (order_number) DO NOTHING;
+WHERE (c.name = 'Мария Экскурсовод' OR c.director_name = 'Мария Экскурсовод')
+  AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 940)
+LIMIT 1;
 
 INSERT INTO rental_orders (
   order_number, client_id, status, start_date, end_date, days_count,
@@ -10523,12 +9538,9 @@ SELECT
   NOW(),
   NOW()
 FROM rental_clients c
-WHERE c.name ILIKE '%Алексей%' 
-   OR c.director_name ILIKE '%Алексей%'
-   OR 'Алексей' ILIKE '%' || c.name || '%'
-   OR 'Алексей' ILIKE '%' || c.director_name || '%'
-LIMIT 1
-ON CONFLICT (order_number) DO NOTHING;
+WHERE (c.name = 'Алексей' OR c.director_name = 'Алексей')
+  AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 939)
+LIMIT 1;
 
 INSERT INTO rental_orders (
   order_number, client_id, status, start_date, end_date, days_count,
@@ -10555,12 +9567,9 @@ SELECT
   NOW(),
   NOW()
 FROM rental_clients c
-WHERE c.name ILIKE '%Ольга (Дольче Вита)%' 
-   OR c.director_name ILIKE '%Ольга (Дольче Вита)%'
-   OR 'Ольга (Дольче Вита)' ILIKE '%' || c.name || '%'
-   OR 'Ольга (Дольче Вита)' ILIKE '%' || c.director_name || '%'
-LIMIT 1
-ON CONFLICT (order_number) DO NOTHING;
+WHERE (c.name = 'Ольга (Дольче Вита)' OR c.director_name = 'Ольга (Дольче Вита)')
+  AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 938)
+LIMIT 1;
 
 INSERT INTO rental_orders (
   order_number, client_id, status, start_date, end_date, days_count,
@@ -10587,12 +9596,9 @@ SELECT
   NOW(),
   NOW()
 FROM rental_clients c
-WHERE c.name ILIKE '%Арсен (Юнион)%' 
-   OR c.director_name ILIKE '%Арсен (Юнион)%'
-   OR 'Арсен (Юнион)' ILIKE '%' || c.name || '%'
-   OR 'Арсен (Юнион)' ILIKE '%' || c.director_name || '%'
-LIMIT 1
-ON CONFLICT (order_number) DO NOTHING;
+WHERE (c.name = 'Арсен (Юнион)' OR c.director_name = 'Арсен (Юнион)')
+  AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 937)
+LIMIT 1;
 
 INSERT INTO rental_orders (
   order_number, client_id, status, start_date, end_date, days_count,
@@ -10619,12 +9625,9 @@ SELECT
   NOW(),
   NOW()
 FROM rental_clients c
-WHERE c.name ILIKE '%Арсен (Юнион)%' 
-   OR c.director_name ILIKE '%Арсен (Юнион)%'
-   OR 'Арсен (Юнион)' ILIKE '%' || c.name || '%'
-   OR 'Арсен (Юнион)' ILIKE '%' || c.director_name || '%'
-LIMIT 1
-ON CONFLICT (order_number) DO NOTHING;
+WHERE (c.name = 'Арсен (Юнион)' OR c.director_name = 'Арсен (Юнион)')
+  AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 936)
+LIMIT 1;
 
 INSERT INTO rental_orders (
   order_number, client_id, status, start_date, end_date, days_count,
@@ -10651,12 +9654,9 @@ SELECT
   NOW(),
   NOW()
 FROM rental_clients c
-WHERE c.name ILIKE '%Элина (Сититур)%' 
-   OR c.director_name ILIKE '%Элина (Сититур)%'
-   OR 'Элина (Сититур)' ILIKE '%' || c.name || '%'
-   OR 'Элина (Сититур)' ILIKE '%' || c.director_name || '%'
-LIMIT 1
-ON CONFLICT (order_number) DO NOTHING;
+WHERE (c.name = 'Элина (Сититур)' OR c.director_name = 'Элина (Сититур)')
+  AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 935)
+LIMIT 1;
 
 INSERT INTO rental_orders (
   order_number, client_id, status, start_date, end_date, days_count,
@@ -10683,12 +9683,9 @@ SELECT
   NOW(),
   NOW()
 FROM rental_clients c
-WHERE c.name ILIKE '%Ольга%' 
-   OR c.director_name ILIKE '%Ольга%'
-   OR 'Ольга' ILIKE '%' || c.name || '%'
-   OR 'Ольга' ILIKE '%' || c.director_name || '%'
-LIMIT 1
-ON CONFLICT (order_number) DO NOTHING;
+WHERE (c.name = 'Ольга' OR c.director_name = 'Ольга')
+  AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 934)
+LIMIT 1;
 
 INSERT INTO rental_orders (
   order_number, client_id, status, start_date, end_date, days_count,
@@ -10715,12 +9712,9 @@ SELECT
   NOW(),
   NOW()
 FROM rental_clients c
-WHERE c.name ILIKE '%Гульназ%' 
-   OR c.director_name ILIKE '%Гульназ%'
-   OR 'Гульназ' ILIKE '%' || c.name || '%'
-   OR 'Гульназ' ILIKE '%' || c.director_name || '%'
-LIMIT 1
-ON CONFLICT (order_number) DO NOTHING;
+WHERE (c.name = 'Гульназ' OR c.director_name = 'Гульназ')
+  AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 933)
+LIMIT 1;
 
 INSERT INTO rental_orders (
   order_number, client_id, status, start_date, end_date, days_count,
@@ -10747,12 +9741,9 @@ SELECT
   NOW(),
   NOW()
 FROM rental_clients c
-WHERE c.name ILIKE '%Вера%' 
-   OR c.director_name ILIKE '%Вера%'
-   OR 'Вера' ILIKE '%' || c.name || '%'
-   OR 'Вера' ILIKE '%' || c.director_name || '%'
-LIMIT 1
-ON CONFLICT (order_number) DO NOTHING;
+WHERE (c.name = 'Вера' OR c.director_name = 'Вера')
+  AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 932)
+LIMIT 1;
 
 INSERT INTO rental_orders (
   order_number, client_id, status, start_date, end_date, days_count,
@@ -10779,12 +9770,9 @@ SELECT
   NOW(),
   NOW()
 FROM rental_clients c
-WHERE c.name ILIKE '%Алла (Вятские Поляны)%' 
-   OR c.director_name ILIKE '%Алла (Вятские Поляны)%'
-   OR 'Алла (Вятские Поляны)' ILIKE '%' || c.name || '%'
-   OR 'Алла (Вятские Поляны)' ILIKE '%' || c.director_name || '%'
-LIMIT 1
-ON CONFLICT (order_number) DO NOTHING;
+WHERE (c.name = 'Алла (Вятские Поляны)' OR c.director_name = 'Алла (Вятские Поляны)')
+  AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 931)
+LIMIT 1;
 
 INSERT INTO rental_orders (
   order_number, client_id, status, start_date, end_date, days_count,
@@ -10811,12 +9799,9 @@ SELECT
   NOW(),
   NOW()
 FROM rental_clients c
-WHERE c.name ILIKE '%Любовь (ТИЦ)%' 
-   OR c.director_name ILIKE '%Любовь (ТИЦ)%'
-   OR 'Любовь (ТИЦ)' ILIKE '%' || c.name || '%'
-   OR 'Любовь (ТИЦ)' ILIKE '%' || c.director_name || '%'
-LIMIT 1
-ON CONFLICT (order_number) DO NOTHING;
+WHERE (c.name = 'Любовь (ТИЦ)' OR c.director_name = 'Любовь (ТИЦ)')
+  AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 930)
+LIMIT 1;
 
 INSERT INTO rental_orders (
   order_number, client_id, status, start_date, end_date, days_count,
@@ -10843,12 +9828,9 @@ SELECT
   NOW(),
   NOW()
 FROM rental_clients c
-WHERE c.name ILIKE '%Любовь (ТИЦ)%' 
-   OR c.director_name ILIKE '%Любовь (ТИЦ)%'
-   OR 'Любовь (ТИЦ)' ILIKE '%' || c.name || '%'
-   OR 'Любовь (ТИЦ)' ILIKE '%' || c.director_name || '%'
-LIMIT 1
-ON CONFLICT (order_number) DO NOTHING;
+WHERE (c.name = 'Любовь (ТИЦ)' OR c.director_name = 'Любовь (ТИЦ)')
+  AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 929)
+LIMIT 1;
 
 INSERT INTO rental_orders (
   order_number, client_id, status, start_date, end_date, days_count,
@@ -10875,12 +9857,9 @@ SELECT
   NOW(),
   NOW()
 FROM rental_clients c
-WHERE c.name ILIKE '%Зельфира%' 
-   OR c.director_name ILIKE '%Зельфира%'
-   OR 'Зельфира' ILIKE '%' || c.name || '%'
-   OR 'Зельфира' ILIKE '%' || c.director_name || '%'
-LIMIT 1
-ON CONFLICT (order_number) DO NOTHING;
+WHERE (c.name = 'Зельфира' OR c.director_name = 'Зельфира')
+  AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 928)
+LIMIT 1;
 
 INSERT INTO rental_orders (
   order_number, client_id, status, start_date, end_date, days_count,
@@ -10907,12 +9886,9 @@ SELECT
   NOW(),
   NOW()
 FROM rental_clients c
-WHERE c.name ILIKE '%Зельфира%' 
-   OR c.director_name ILIKE '%Зельфира%'
-   OR 'Зельфира' ILIKE '%' || c.name || '%'
-   OR 'Зельфира' ILIKE '%' || c.director_name || '%'
-LIMIT 1
-ON CONFLICT (order_number) DO NOTHING;
+WHERE (c.name = 'Зельфира' OR c.director_name = 'Зельфира')
+  AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 927)
+LIMIT 1;
 
 INSERT INTO rental_orders (
   order_number, client_id, status, start_date, end_date, days_count,
@@ -10939,12 +9915,9 @@ SELECT
   NOW(),
   NOW()
 FROM rental_clients c
-WHERE c.name ILIKE '%Любовь (ТИЦ)%' 
-   OR c.director_name ILIKE '%Любовь (ТИЦ)%'
-   OR 'Любовь (ТИЦ)' ILIKE '%' || c.name || '%'
-   OR 'Любовь (ТИЦ)' ILIKE '%' || c.director_name || '%'
-LIMIT 1
-ON CONFLICT (order_number) DO NOTHING;
+WHERE (c.name = 'Любовь (ТИЦ)' OR c.director_name = 'Любовь (ТИЦ)')
+  AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 926)
+LIMIT 1;
 
 INSERT INTO rental_orders (
   order_number, client_id, status, start_date, end_date, days_count,
@@ -10971,12 +9944,9 @@ SELECT
   NOW(),
   NOW()
 FROM rental_clients c
-WHERE c.name ILIKE '%Артем Агафонов%' 
-   OR c.director_name ILIKE '%Артем Агафонов%'
-   OR 'Артем Агафонов' ILIKE '%' || c.name || '%'
-   OR 'Артем Агафонов' ILIKE '%' || c.director_name || '%'
-LIMIT 1
-ON CONFLICT (order_number) DO NOTHING;
+WHERE (c.name = 'Артем Агафонов' OR c.director_name = 'Артем Агафонов')
+  AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 925)
+LIMIT 1;
 
 INSERT INTO rental_orders (
   order_number, client_id, status, start_date, end_date, days_count,
@@ -11003,12 +9973,9 @@ SELECT
   NOW(),
   NOW()
 FROM rental_clients c
-WHERE c.name ILIKE '%Любовь (ТИЦ)%' 
-   OR c.director_name ILIKE '%Любовь (ТИЦ)%'
-   OR 'Любовь (ТИЦ)' ILIKE '%' || c.name || '%'
-   OR 'Любовь (ТИЦ)' ILIKE '%' || c.director_name || '%'
-LIMIT 1
-ON CONFLICT (order_number) DO NOTHING;
+WHERE (c.name = 'Любовь (ТИЦ)' OR c.director_name = 'Любовь (ТИЦ)')
+  AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 924)
+LIMIT 1;
 
 INSERT INTO rental_orders (
   order_number, client_id, status, start_date, end_date, days_count,
@@ -11035,12 +10002,9 @@ SELECT
   NOW(),
   NOW()
 FROM rental_clients c
-WHERE c.name ILIKE '%Екатерина%' 
-   OR c.director_name ILIKE '%Екатерина%'
-   OR 'Екатерина' ILIKE '%' || c.name || '%'
-   OR 'Екатерина' ILIKE '%' || c.director_name || '%'
-LIMIT 1
-ON CONFLICT (order_number) DO NOTHING;
+WHERE (c.name = 'Екатерина' OR c.director_name = 'Екатерина')
+  AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 923)
+LIMIT 1;
 
 INSERT INTO rental_orders (
   order_number, client_id, status, start_date, end_date, days_count,
@@ -11067,12 +10031,9 @@ SELECT
   NOW(),
   NOW()
 FROM rental_clients c
-WHERE c.name ILIKE '%Ольга (Дольче Вита)%' 
-   OR c.director_name ILIKE '%Ольга (Дольче Вита)%'
-   OR 'Ольга (Дольче Вита)' ILIKE '%' || c.name || '%'
-   OR 'Ольга (Дольче Вита)' ILIKE '%' || c.director_name || '%'
-LIMIT 1
-ON CONFLICT (order_number) DO NOTHING;
+WHERE (c.name = 'Ольга (Дольче Вита)' OR c.director_name = 'Ольга (Дольче Вита)')
+  AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 922)
+LIMIT 1;
 
 INSERT INTO rental_orders (
   order_number, client_id, status, start_date, end_date, days_count,
@@ -11099,12 +10060,9 @@ SELECT
   NOW(),
   NOW()
 FROM rental_clients c
-WHERE c.name ILIKE '%Ольга (Дольче Вита)%' 
-   OR c.director_name ILIKE '%Ольга (Дольче Вита)%'
-   OR 'Ольга (Дольче Вита)' ILIKE '%' || c.name || '%'
-   OR 'Ольга (Дольче Вита)' ILIKE '%' || c.director_name || '%'
-LIMIT 1
-ON CONFLICT (order_number) DO NOTHING;
+WHERE (c.name = 'Ольга (Дольче Вита)' OR c.director_name = 'Ольга (Дольче Вита)')
+  AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 921)
+LIMIT 1;
 
 INSERT INTO rental_orders (
   order_number, client_id, status, start_date, end_date, days_count,
@@ -11131,12 +10089,9 @@ SELECT
   NOW(),
   NOW()
 FROM rental_clients c
-WHERE c.name ILIKE '%Ольга (Дольче Вита)%' 
-   OR c.director_name ILIKE '%Ольга (Дольче Вита)%'
-   OR 'Ольга (Дольче Вита)' ILIKE '%' || c.name || '%'
-   OR 'Ольга (Дольче Вита)' ILIKE '%' || c.director_name || '%'
-LIMIT 1
-ON CONFLICT (order_number) DO NOTHING;
+WHERE (c.name = 'Ольга (Дольче Вита)' OR c.director_name = 'Ольга (Дольче Вита)')
+  AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 920)
+LIMIT 1;
 
 INSERT INTO rental_orders (
   order_number, client_id, status, start_date, end_date, days_count,
@@ -11163,12 +10118,9 @@ SELECT
   NOW(),
   NOW()
 FROM rental_clients c
-WHERE c.name ILIKE '%Ольга (Сиалия)%' 
-   OR c.director_name ILIKE '%Ольга (Сиалия)%'
-   OR 'Ольга (Сиалия)' ILIKE '%' || c.name || '%'
-   OR 'Ольга (Сиалия)' ILIKE '%' || c.director_name || '%'
-LIMIT 1
-ON CONFLICT (order_number) DO NOTHING;
+WHERE (c.name = 'Ольга (Сиалия)' OR c.director_name = 'Ольга (Сиалия)')
+  AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 919)
+LIMIT 1;
 
 INSERT INTO rental_orders (
   order_number, client_id, status, start_date, end_date, days_count,
@@ -11195,12 +10147,9 @@ SELECT
   NOW(),
   NOW()
 FROM rental_clients c
-WHERE c.name ILIKE '%Гульнара%' 
-   OR c.director_name ILIKE '%Гульнара%'
-   OR 'Гульнара' ILIKE '%' || c.name || '%'
-   OR 'Гульнара' ILIKE '%' || c.director_name || '%'
-LIMIT 1
-ON CONFLICT (order_number) DO NOTHING;
+WHERE (c.name = 'Гульнара' OR c.director_name = 'Гульнара')
+  AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 918)
+LIMIT 1;
 
 INSERT INTO rental_orders (
   order_number, client_id, status, start_date, end_date, days_count,
@@ -11227,12 +10176,9 @@ SELECT
   NOW(),
   NOW()
 FROM rental_clients c
-WHERE c.name ILIKE '%Мира (ИП)%' 
-   OR c.director_name ILIKE '%Мира (ИП)%'
-   OR 'Мира (ИП)' ILIKE '%' || c.name || '%'
-   OR 'Мира (ИП)' ILIKE '%' || c.director_name || '%'
-LIMIT 1
-ON CONFLICT (order_number) DO NOTHING;
+WHERE (c.name = 'Мира (ИП)' OR c.director_name = 'Мира (ИП)')
+  AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 917)
+LIMIT 1;
 
 INSERT INTO rental_orders (
   order_number, client_id, status, start_date, end_date, days_count,
@@ -11259,12 +10205,9 @@ SELECT
   NOW(),
   NOW()
 FROM rental_clients c
-WHERE c.name ILIKE '%Юлианна%' 
-   OR c.director_name ILIKE '%Юлианна%'
-   OR 'Юлианна' ILIKE '%' || c.name || '%'
-   OR 'Юлианна' ILIKE '%' || c.director_name || '%'
-LIMIT 1
-ON CONFLICT (order_number) DO NOTHING;
+WHERE (c.name = 'Юлианна' OR c.director_name = 'Юлианна')
+  AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 916)
+LIMIT 1;
 
 INSERT INTO rental_orders (
   order_number, client_id, status, start_date, end_date, days_count,
@@ -11291,12 +10234,9 @@ SELECT
   NOW(),
   NOW()
 FROM rental_clients c
-WHERE c.name ILIKE '%Арсен (Юнион)%' 
-   OR c.director_name ILIKE '%Арсен (Юнион)%'
-   OR 'Арсен (Юнион)' ILIKE '%' || c.name || '%'
-   OR 'Арсен (Юнион)' ILIKE '%' || c.director_name || '%'
-LIMIT 1
-ON CONFLICT (order_number) DO NOTHING;
+WHERE (c.name = 'Арсен (Юнион)' OR c.director_name = 'Арсен (Юнион)')
+  AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 915)
+LIMIT 1;
 
 INSERT INTO rental_orders (
   order_number, client_id, status, start_date, end_date, days_count,
@@ -11323,12 +10263,9 @@ SELECT
   NOW(),
   NOW()
 FROM rental_clients c
-WHERE c.name ILIKE '%Арсен (Юнион)%' 
-   OR c.director_name ILIKE '%Арсен (Юнион)%'
-   OR 'Арсен (Юнион)' ILIKE '%' || c.name || '%'
-   OR 'Арсен (Юнион)' ILIKE '%' || c.director_name || '%'
-LIMIT 1
-ON CONFLICT (order_number) DO NOTHING;
+WHERE (c.name = 'Арсен (Юнион)' OR c.director_name = 'Арсен (Юнион)')
+  AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 914)
+LIMIT 1;
 
 INSERT INTO rental_orders (
   order_number, client_id, status, start_date, end_date, days_count,
@@ -11355,12 +10292,9 @@ SELECT
   NOW(),
   NOW()
 FROM rental_clients c
-WHERE c.name ILIKE '%Елена%' 
-   OR c.director_name ILIKE '%Елена%'
-   OR 'Елена' ILIKE '%' || c.name || '%'
-   OR 'Елена' ILIKE '%' || c.director_name || '%'
-LIMIT 1
-ON CONFLICT (order_number) DO NOTHING;
+WHERE (c.name = 'Елена' OR c.director_name = 'Елена')
+  AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 913)
+LIMIT 1;
 
 INSERT INTO rental_orders (
   order_number, client_id, status, start_date, end_date, days_count,
@@ -11387,12 +10321,9 @@ SELECT
   NOW(),
   NOW()
 FROM rental_clients c
-WHERE c.name ILIKE '%Алина Минеева%' 
-   OR c.director_name ILIKE '%Алина Минеева%'
-   OR 'Алина Минеева' ILIKE '%' || c.name || '%'
-   OR 'Алина Минеева' ILIKE '%' || c.director_name || '%'
-LIMIT 1
-ON CONFLICT (order_number) DO NOTHING;
+WHERE (c.name = 'Алина Минеева' OR c.director_name = 'Алина Минеева')
+  AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 912)
+LIMIT 1;
 
 INSERT INTO rental_orders (
   order_number, client_id, status, start_date, end_date, days_count,
@@ -11419,12 +10350,9 @@ SELECT
   NOW(),
   NOW()
 FROM rental_clients c
-WHERE c.name ILIKE '%Мария Экскурсовод%' 
-   OR c.director_name ILIKE '%Мария Экскурсовод%'
-   OR 'Мария Экскурсовод' ILIKE '%' || c.name || '%'
-   OR 'Мария Экскурсовод' ILIKE '%' || c.director_name || '%'
-LIMIT 1
-ON CONFLICT (order_number) DO NOTHING;
+WHERE (c.name = 'Мария Экскурсовод' OR c.director_name = 'Мария Экскурсовод')
+  AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 911)
+LIMIT 1;
 
 INSERT INTO rental_orders (
   order_number, client_id, status, start_date, end_date, days_count,
@@ -11451,12 +10379,9 @@ SELECT
   NOW(),
   NOW()
 FROM rental_clients c
-WHERE c.name ILIKE '%Любовь (ТИЦ)%' 
-   OR c.director_name ILIKE '%Любовь (ТИЦ)%'
-   OR 'Любовь (ТИЦ)' ILIKE '%' || c.name || '%'
-   OR 'Любовь (ТИЦ)' ILIKE '%' || c.director_name || '%'
-LIMIT 1
-ON CONFLICT (order_number) DO NOTHING;
+WHERE (c.name = 'Любовь (ТИЦ)' OR c.director_name = 'Любовь (ТИЦ)')
+  AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 909)
+LIMIT 1;
 
 INSERT INTO rental_orders (
   order_number, client_id, status, start_date, end_date, days_count,
@@ -11483,12 +10408,9 @@ SELECT
   NOW(),
   NOW()
 FROM rental_clients c
-WHERE c.name ILIKE '%Ляйсан (Казань 360)%' 
-   OR c.director_name ILIKE '%Ляйсан (Казань 360)%'
-   OR 'Ляйсан (Казань 360)' ILIKE '%' || c.name || '%'
-   OR 'Ляйсан (Казань 360)' ILIKE '%' || c.director_name || '%'
-LIMIT 1
-ON CONFLICT (order_number) DO NOTHING;
+WHERE (c.name = 'Ляйсан (Казань 360)' OR c.director_name = 'Ляйсан (Казань 360)')
+  AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 908)
+LIMIT 1;
 
 INSERT INTO rental_orders (
   order_number, client_id, status, start_date, end_date, days_count,
@@ -11515,12 +10437,9 @@ SELECT
   NOW(),
   NOW()
 FROM rental_clients c
-WHERE c.name ILIKE '%Ляйсан (Казань 360)%' 
-   OR c.director_name ILIKE '%Ляйсан (Казань 360)%'
-   OR 'Ляйсан (Казань 360)' ILIKE '%' || c.name || '%'
-   OR 'Ляйсан (Казань 360)' ILIKE '%' || c.director_name || '%'
-LIMIT 1
-ON CONFLICT (order_number) DO NOTHING;
+WHERE (c.name = 'Ляйсан (Казань 360)' OR c.director_name = 'Ляйсан (Казань 360)')
+  AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 907)
+LIMIT 1;
 
 INSERT INTO rental_orders (
   order_number, client_id, status, start_date, end_date, days_count,
@@ -11547,12 +10466,9 @@ SELECT
   NOW(),
   NOW()
 FROM rental_clients c
-WHERE c.name ILIKE '%Татьяна Чуб%' 
-   OR c.director_name ILIKE '%Татьяна Чуб%'
-   OR 'Татьяна Чуб' ILIKE '%' || c.name || '%'
-   OR 'Татьяна Чуб' ILIKE '%' || c.director_name || '%'
-LIMIT 1
-ON CONFLICT (order_number) DO NOTHING;
+WHERE (c.name = 'Татьяна Чуб' OR c.director_name = 'Татьяна Чуб')
+  AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 906)
+LIMIT 1;
 
 INSERT INTO rental_orders (
   order_number, client_id, status, start_date, end_date, days_count,
@@ -11579,12 +10495,9 @@ SELECT
   NOW(),
   NOW()
 FROM rental_clients c
-WHERE c.name ILIKE '%Алла (Вятские Поляны)%' 
-   OR c.director_name ILIKE '%Алла (Вятские Поляны)%'
-   OR 'Алла (Вятские Поляны)' ILIKE '%' || c.name || '%'
-   OR 'Алла (Вятские Поляны)' ILIKE '%' || c.director_name || '%'
-LIMIT 1
-ON CONFLICT (order_number) DO NOTHING;
+WHERE (c.name = 'Алла (Вятские Поляны)' OR c.director_name = 'Алла (Вятские Поляны)')
+  AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 905)
+LIMIT 1;
 
 INSERT INTO rental_orders (
   order_number, client_id, status, start_date, end_date, days_count,
@@ -11611,12 +10524,9 @@ SELECT
   NOW(),
   NOW()
 FROM rental_clients c
-WHERE c.name ILIKE '%Ольга (Дольче Вита)%' 
-   OR c.director_name ILIKE '%Ольга (Дольче Вита)%'
-   OR 'Ольга (Дольче Вита)' ILIKE '%' || c.name || '%'
-   OR 'Ольга (Дольче Вита)' ILIKE '%' || c.director_name || '%'
-LIMIT 1
-ON CONFLICT (order_number) DO NOTHING;
+WHERE (c.name = 'Ольга (Дольче Вита)' OR c.director_name = 'Ольга (Дольче Вита)')
+  AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 904)
+LIMIT 1;
 
 INSERT INTO rental_orders (
   order_number, client_id, status, start_date, end_date, days_count,
@@ -11643,12 +10553,9 @@ SELECT
   NOW(),
   NOW()
 FROM rental_clients c
-WHERE c.name ILIKE '%Гузель (Юралс)%' 
-   OR c.director_name ILIKE '%Гузель (Юралс)%'
-   OR 'Гузель (Юралс)' ILIKE '%' || c.name || '%'
-   OR 'Гузель (Юралс)' ILIKE '%' || c.director_name || '%'
-LIMIT 1
-ON CONFLICT (order_number) DO NOTHING;
+WHERE (c.name = 'Гузель (Юралс)' OR c.director_name = 'Гузель (Юралс)')
+  AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 903)
+LIMIT 1;
 
 INSERT INTO rental_orders (
   order_number, client_id, status, start_date, end_date, days_count,
@@ -11675,12 +10582,9 @@ SELECT
   NOW(),
   NOW()
 FROM rental_clients c
-WHERE c.name ILIKE '%Инна Экскурсовод%' 
-   OR c.director_name ILIKE '%Инна Экскурсовод%'
-   OR 'Инна Экскурсовод' ILIKE '%' || c.name || '%'
-   OR 'Инна Экскурсовод' ILIKE '%' || c.director_name || '%'
-LIMIT 1
-ON CONFLICT (order_number) DO NOTHING;
+WHERE (c.name = 'Инна Экскурсовод' OR c.director_name = 'Инна Экскурсовод')
+  AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 902)
+LIMIT 1;
 
 INSERT INTO rental_orders (
   order_number, client_id, status, start_date, end_date, days_count,
@@ -11707,12 +10611,9 @@ SELECT
   NOW(),
   NOW()
 FROM rental_clients c
-WHERE c.name ILIKE '%Алина Минеева%' 
-   OR c.director_name ILIKE '%Алина Минеева%'
-   OR 'Алина Минеева' ILIKE '%' || c.name || '%'
-   OR 'Алина Минеева' ILIKE '%' || c.director_name || '%'
-LIMIT 1
-ON CONFLICT (order_number) DO NOTHING;
+WHERE (c.name = 'Алина Минеева' OR c.director_name = 'Алина Минеева')
+  AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 901)
+LIMIT 1;
 
 INSERT INTO rental_orders (
   order_number, client_id, status, start_date, end_date, days_count,
@@ -11739,12 +10640,9 @@ SELECT
   NOW(),
   NOW()
 FROM rental_clients c
-WHERE c.name ILIKE '%Анюта Родионова (Родина-тур)%' 
-   OR c.director_name ILIKE '%Анюта Родионова (Родина-тур)%'
-   OR 'Анюта Родионова (Родина-тур)' ILIKE '%' || c.name || '%'
-   OR 'Анюта Родионова (Родина-тур)' ILIKE '%' || c.director_name || '%'
-LIMIT 1
-ON CONFLICT (order_number) DO NOTHING;
+WHERE (c.name = 'Анюта Родионова (Родина-тур)' OR c.director_name = 'Анюта Родионова (Родина-тур)')
+  AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 900)
+LIMIT 1;
 
 INSERT INTO rental_orders (
   order_number, client_id, status, start_date, end_date, days_count,
@@ -11771,12 +10669,9 @@ SELECT
   NOW(),
   NOW()
 FROM rental_clients c
-WHERE c.name ILIKE '%Зельфира%' 
-   OR c.director_name ILIKE '%Зельфира%'
-   OR 'Зельфира' ILIKE '%' || c.name || '%'
-   OR 'Зельфира' ILIKE '%' || c.director_name || '%'
-LIMIT 1
-ON CONFLICT (order_number) DO NOTHING;
+WHERE (c.name = 'Зельфира' OR c.director_name = 'Зельфира')
+  AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 899)
+LIMIT 1;
 
 INSERT INTO rental_orders (
   order_number, client_id, status, start_date, end_date, days_count,
@@ -11803,12 +10698,9 @@ SELECT
   NOW(),
   NOW()
 FROM rental_clients c
-WHERE c.name ILIKE '%Зельфира%' 
-   OR c.director_name ILIKE '%Зельфира%'
-   OR 'Зельфира' ILIKE '%' || c.name || '%'
-   OR 'Зельфира' ILIKE '%' || c.director_name || '%'
-LIMIT 1
-ON CONFLICT (order_number) DO NOTHING;
+WHERE (c.name = 'Зельфира' OR c.director_name = 'Зельфира')
+  AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 898)
+LIMIT 1;
 
 INSERT INTO rental_orders (
   order_number, client_id, status, start_date, end_date, days_count,
@@ -11835,12 +10727,9 @@ SELECT
   NOW(),
   NOW()
 FROM rental_clients c
-WHERE c.name ILIKE '%Эвелина (Инициатива)%' 
-   OR c.director_name ILIKE '%Эвелина (Инициатива)%'
-   OR 'Эвелина (Инициатива)' ILIKE '%' || c.name || '%'
-   OR 'Эвелина (Инициатива)' ILIKE '%' || c.director_name || '%'
-LIMIT 1
-ON CONFLICT (order_number) DO NOTHING;
+WHERE (c.name = 'Эвелина (Инициатива)' OR c.director_name = 'Эвелина (Инициатива)')
+  AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 897)
+LIMIT 1;
 
 INSERT INTO rental_orders (
   order_number, client_id, status, start_date, end_date, days_count,
@@ -11867,12 +10756,9 @@ SELECT
   NOW(),
   NOW()
 FROM rental_clients c
-WHERE c.name ILIKE '%Арсен (Юнион)%' 
-   OR c.director_name ILIKE '%Арсен (Юнион)%'
-   OR 'Арсен (Юнион)' ILIKE '%' || c.name || '%'
-   OR 'Арсен (Юнион)' ILIKE '%' || c.director_name || '%'
-LIMIT 1
-ON CONFLICT (order_number) DO NOTHING;
+WHERE (c.name = 'Арсен (Юнион)' OR c.director_name = 'Арсен (Юнион)')
+  AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 896)
+LIMIT 1;
 
 INSERT INTO rental_orders (
   order_number, client_id, status, start_date, end_date, days_count,
@@ -11899,12 +10785,9 @@ SELECT
   NOW(),
   NOW()
 FROM rental_clients c
-WHERE c.name ILIKE '%Любовь (ТИЦ)%' 
-   OR c.director_name ILIKE '%Любовь (ТИЦ)%'
-   OR 'Любовь (ТИЦ)' ILIKE '%' || c.name || '%'
-   OR 'Любовь (ТИЦ)' ILIKE '%' || c.director_name || '%'
-LIMIT 1
-ON CONFLICT (order_number) DO NOTHING;
+WHERE (c.name = 'Любовь (ТИЦ)' OR c.director_name = 'Любовь (ТИЦ)')
+  AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 895)
+LIMIT 1;
 
 INSERT INTO rental_orders (
   order_number, client_id, status, start_date, end_date, days_count,
@@ -11931,12 +10814,9 @@ SELECT
   NOW(),
   NOW()
 FROM rental_clients c
-WHERE c.name ILIKE '%Рената (Твоя Казань)%' 
-   OR c.director_name ILIKE '%Рената (Твоя Казань)%'
-   OR 'Рената (Твоя Казань)' ILIKE '%' || c.name || '%'
-   OR 'Рената (Твоя Казань)' ILIKE '%' || c.director_name || '%'
-LIMIT 1
-ON CONFLICT (order_number) DO NOTHING;
+WHERE (c.name = 'Рената (Твоя Казань)' OR c.director_name = 'Рената (Твоя Казань)')
+  AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 894)
+LIMIT 1;
 
 INSERT INTO rental_orders (
   order_number, client_id, status, start_date, end_date, days_count,
@@ -11963,12 +10843,9 @@ SELECT
   NOW(),
   NOW()
 FROM rental_clients c
-WHERE c.name ILIKE '%Любовь (ТИЦ)%' 
-   OR c.director_name ILIKE '%Любовь (ТИЦ)%'
-   OR 'Любовь (ТИЦ)' ILIKE '%' || c.name || '%'
-   OR 'Любовь (ТИЦ)' ILIKE '%' || c.director_name || '%'
-LIMIT 1
-ON CONFLICT (order_number) DO NOTHING;
+WHERE (c.name = 'Любовь (ТИЦ)' OR c.director_name = 'Любовь (ТИЦ)')
+  AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 893)
+LIMIT 1;
 
 INSERT INTO rental_orders (
   order_number, client_id, status, start_date, end_date, days_count,
@@ -11995,12 +10872,9 @@ SELECT
   NOW(),
   NOW()
 FROM rental_clients c
-WHERE c.name ILIKE '%Любовь (ТИЦ)%' 
-   OR c.director_name ILIKE '%Любовь (ТИЦ)%'
-   OR 'Любовь (ТИЦ)' ILIKE '%' || c.name || '%'
-   OR 'Любовь (ТИЦ)' ILIKE '%' || c.director_name || '%'
-LIMIT 1
-ON CONFLICT (order_number) DO NOTHING;
+WHERE (c.name = 'Любовь (ТИЦ)' OR c.director_name = 'Любовь (ТИЦ)')
+  AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 892)
+LIMIT 1;
 
 INSERT INTO rental_orders (
   order_number, client_id, status, start_date, end_date, days_count,
@@ -12027,12 +10901,9 @@ SELECT
   NOW(),
   NOW()
 FROM rental_clients c
-WHERE c.name ILIKE '%Любовь (ТИЦ)%' 
-   OR c.director_name ILIKE '%Любовь (ТИЦ)%'
-   OR 'Любовь (ТИЦ)' ILIKE '%' || c.name || '%'
-   OR 'Любовь (ТИЦ)' ILIKE '%' || c.director_name || '%'
-LIMIT 1
-ON CONFLICT (order_number) DO NOTHING;
+WHERE (c.name = 'Любовь (ТИЦ)' OR c.director_name = 'Любовь (ТИЦ)')
+  AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 891)
+LIMIT 1;
 
 INSERT INTO rental_orders (
   order_number, client_id, status, start_date, end_date, days_count,
@@ -12059,12 +10930,9 @@ SELECT
   NOW(),
   NOW()
 FROM rental_clients c
-WHERE c.name ILIKE '%Ирина (Иль Мио Тур)%' 
-   OR c.director_name ILIKE '%Ирина (Иль Мио Тур)%'
-   OR 'Ирина (Иль Мио Тур)' ILIKE '%' || c.name || '%'
-   OR 'Ирина (Иль Мио Тур)' ILIKE '%' || c.director_name || '%'
-LIMIT 1
-ON CONFLICT (order_number) DO NOTHING;
+WHERE (c.name = 'Ирина (Иль Мио Тур)' OR c.director_name = 'Ирина (Иль Мио Тур)')
+  AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 890)
+LIMIT 1;
 
 INSERT INTO rental_orders (
   order_number, client_id, status, start_date, end_date, days_count,
@@ -12091,12 +10959,9 @@ SELECT
   NOW(),
   NOW()
 FROM rental_clients c
-WHERE c.name ILIKE '%Мария Экскурсовод%' 
-   OR c.director_name ILIKE '%Мария Экскурсовод%'
-   OR 'Мария Экскурсовод' ILIKE '%' || c.name || '%'
-   OR 'Мария Экскурсовод' ILIKE '%' || c.director_name || '%'
-LIMIT 1
-ON CONFLICT (order_number) DO NOTHING;
+WHERE (c.name = 'Мария Экскурсовод' OR c.director_name = 'Мария Экскурсовод')
+  AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 889)
+LIMIT 1;
 
 INSERT INTO rental_orders (
   order_number, client_id, status, start_date, end_date, days_count,
@@ -12123,12 +10988,9 @@ SELECT
   NOW(),
   NOW()
 FROM rental_clients c
-WHERE c.name ILIKE '%Мария Экскурсовод%' 
-   OR c.director_name ILIKE '%Мария Экскурсовод%'
-   OR 'Мария Экскурсовод' ILIKE '%' || c.name || '%'
-   OR 'Мария Экскурсовод' ILIKE '%' || c.director_name || '%'
-LIMIT 1
-ON CONFLICT (order_number) DO NOTHING;
+WHERE (c.name = 'Мария Экскурсовод' OR c.director_name = 'Мария Экскурсовод')
+  AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 888)
+LIMIT 1;
 
 INSERT INTO rental_orders (
   order_number, client_id, status, start_date, end_date, days_count,
@@ -12155,12 +11017,9 @@ SELECT
   NOW(),
   NOW()
 FROM rental_clients c
-WHERE c.name ILIKE '%Эдик Заказы для групп%' 
-   OR c.director_name ILIKE '%Эдик Заказы для групп%'
-   OR 'Эдик Заказы для групп' ILIKE '%' || c.name || '%'
-   OR 'Эдик Заказы для групп' ILIKE '%' || c.director_name || '%'
-LIMIT 1
-ON CONFLICT (order_number) DO NOTHING;
+WHERE (c.name = 'Эдик Заказы для групп' OR c.director_name = 'Эдик Заказы для групп')
+  AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 887)
+LIMIT 1;
 
 INSERT INTO rental_orders (
   order_number, client_id, status, start_date, end_date, days_count,
@@ -12187,12 +11046,9 @@ SELECT
   NOW(),
   NOW()
 FROM rental_clients c
-WHERE c.name ILIKE '%Эдик Заказы для групп%' 
-   OR c.director_name ILIKE '%Эдик Заказы для групп%'
-   OR 'Эдик Заказы для групп' ILIKE '%' || c.name || '%'
-   OR 'Эдик Заказы для групп' ILIKE '%' || c.director_name || '%'
-LIMIT 1
-ON CONFLICT (order_number) DO NOTHING;
+WHERE (c.name = 'Эдик Заказы для групп' OR c.director_name = 'Эдик Заказы для групп')
+  AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 886)
+LIMIT 1;
 
 INSERT INTO rental_orders (
   order_number, client_id, status, start_date, end_date, days_count,
@@ -12219,12 +11075,9 @@ SELECT
   NOW(),
   NOW()
 FROM rental_clients c
-WHERE c.name ILIKE '%Владимир Нежданов%' 
-   OR c.director_name ILIKE '%Владимир Нежданов%'
-   OR 'Владимир Нежданов' ILIKE '%' || c.name || '%'
-   OR 'Владимир Нежданов' ILIKE '%' || c.director_name || '%'
-LIMIT 1
-ON CONFLICT (order_number) DO NOTHING;
+WHERE (c.name = 'Владимир Нежданов' OR c.director_name = 'Владимир Нежданов')
+  AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 885)
+LIMIT 1;
 
 INSERT INTO rental_orders (
   order_number, client_id, status, start_date, end_date, days_count,
@@ -12251,12 +11104,9 @@ SELECT
   NOW(),
   NOW()
 FROM rental_clients c
-WHERE c.name ILIKE '%Артем Агафонов%' 
-   OR c.director_name ILIKE '%Артем Агафонов%'
-   OR 'Артем Агафонов' ILIKE '%' || c.name || '%'
-   OR 'Артем Агафонов' ILIKE '%' || c.director_name || '%'
-LIMIT 1
-ON CONFLICT (order_number) DO NOTHING;
+WHERE (c.name = 'Артем Агафонов' OR c.director_name = 'Артем Агафонов')
+  AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 884)
+LIMIT 1;
 
 INSERT INTO rental_orders (
   order_number, client_id, status, start_date, end_date, days_count,
@@ -12283,12 +11133,9 @@ SELECT
   NOW(),
   NOW()
 FROM rental_clients c
-WHERE c.name ILIKE '%Андрей (Экскурс)%' 
-   OR c.director_name ILIKE '%Андрей (Экскурс)%'
-   OR 'Андрей (Экскурс)' ILIKE '%' || c.name || '%'
-   OR 'Андрей (Экскурс)' ILIKE '%' || c.director_name || '%'
-LIMIT 1
-ON CONFLICT (order_number) DO NOTHING;
+WHERE (c.name = 'Андрей (Экскурс)' OR c.director_name = 'Андрей (Экскурс)')
+  AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 883)
+LIMIT 1;
 
 INSERT INTO rental_orders (
   order_number, client_id, status, start_date, end_date, days_count,
@@ -12315,12 +11162,9 @@ SELECT
   NOW(),
   NOW()
 FROM rental_clients c
-WHERE c.name ILIKE '%Мира (ИП)%' 
-   OR c.director_name ILIKE '%Мира (ИП)%'
-   OR 'Мира (ИП)' ILIKE '%' || c.name || '%'
-   OR 'Мира (ИП)' ILIKE '%' || c.director_name || '%'
-LIMIT 1
-ON CONFLICT (order_number) DO NOTHING;
+WHERE (c.name = 'Мира (ИП)' OR c.director_name = 'Мира (ИП)')
+  AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 882)
+LIMIT 1;
 
 INSERT INTO rental_orders (
   order_number, client_id, status, start_date, end_date, days_count,
@@ -12347,12 +11191,9 @@ SELECT
   NOW(),
   NOW()
 FROM rental_clients c
-WHERE c.name ILIKE '%Сергей%' 
-   OR c.director_name ILIKE '%Сергей%'
-   OR 'Сергей' ILIKE '%' || c.name || '%'
-   OR 'Сергей' ILIKE '%' || c.director_name || '%'
-LIMIT 1
-ON CONFLICT (order_number) DO NOTHING;
+WHERE (c.name = 'Сергей' OR c.director_name = 'Сергей')
+  AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 881)
+LIMIT 1;
 
 INSERT INTO rental_orders (
   order_number, client_id, status, start_date, end_date, days_count,
@@ -12379,12 +11220,9 @@ SELECT
   NOW(),
   NOW()
 FROM rental_clients c
-WHERE c.name ILIKE '%Татьяна (Гольфстрим)%' 
-   OR c.director_name ILIKE '%Татьяна (Гольфстрим)%'
-   OR 'Татьяна (Гольфстрим)' ILIKE '%' || c.name || '%'
-   OR 'Татьяна (Гольфстрим)' ILIKE '%' || c.director_name || '%'
-LIMIT 1
-ON CONFLICT (order_number) DO NOTHING;
+WHERE (c.name = 'Татьяна (Гольфстрим)' OR c.director_name = 'Татьяна (Гольфстрим)')
+  AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 880)
+LIMIT 1;
 
 INSERT INTO rental_orders (
   order_number, client_id, status, start_date, end_date, days_count,
@@ -12411,12 +11249,9 @@ SELECT
   NOW(),
   NOW()
 FROM rental_clients c
-WHERE c.name ILIKE '%Любовь (ТИЦ)%' 
-   OR c.director_name ILIKE '%Любовь (ТИЦ)%'
-   OR 'Любовь (ТИЦ)' ILIKE '%' || c.name || '%'
-   OR 'Любовь (ТИЦ)' ILIKE '%' || c.director_name || '%'
-LIMIT 1
-ON CONFLICT (order_number) DO NOTHING;
+WHERE (c.name = 'Любовь (ТИЦ)' OR c.director_name = 'Любовь (ТИЦ)')
+  AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 879)
+LIMIT 1;
 
 INSERT INTO rental_orders (
   order_number, client_id, status, start_date, end_date, days_count,
@@ -12443,12 +11278,9 @@ SELECT
   NOW(),
   NOW()
 FROM rental_clients c
-WHERE c.name ILIKE '%Ольга (Сиалия)%' 
-   OR c.director_name ILIKE '%Ольга (Сиалия)%'
-   OR 'Ольга (Сиалия)' ILIKE '%' || c.name || '%'
-   OR 'Ольга (Сиалия)' ILIKE '%' || c.director_name || '%'
-LIMIT 1
-ON CONFLICT (order_number) DO NOTHING;
+WHERE (c.name = 'Ольга (Сиалия)' OR c.director_name = 'Ольга (Сиалия)')
+  AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 878)
+LIMIT 1;
 
 INSERT INTO rental_orders (
   order_number, client_id, status, start_date, end_date, days_count,
@@ -12475,12 +11307,9 @@ SELECT
   NOW(),
   NOW()
 FROM rental_clients c
-WHERE c.name ILIKE '%Арсен (Юнион)%' 
-   OR c.director_name ILIKE '%Арсен (Юнион)%'
-   OR 'Арсен (Юнион)' ILIKE '%' || c.name || '%'
-   OR 'Арсен (Юнион)' ILIKE '%' || c.director_name || '%'
-LIMIT 1
-ON CONFLICT (order_number) DO NOTHING;
+WHERE (c.name = 'Арсен (Юнион)' OR c.director_name = 'Арсен (Юнион)')
+  AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 877)
+LIMIT 1;
 
 INSERT INTO rental_orders (
   order_number, client_id, status, start_date, end_date, days_count,
@@ -12507,12 +11336,9 @@ SELECT
   NOW(),
   NOW()
 FROM rental_clients c
-WHERE c.name ILIKE '%Арсен (Юнион)%' 
-   OR c.director_name ILIKE '%Арсен (Юнион)%'
-   OR 'Арсен (Юнион)' ILIKE '%' || c.name || '%'
-   OR 'Арсен (Юнион)' ILIKE '%' || c.director_name || '%'
-LIMIT 1
-ON CONFLICT (order_number) DO NOTHING;
+WHERE (c.name = 'Арсен (Юнион)' OR c.director_name = 'Арсен (Юнион)')
+  AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 876)
+LIMIT 1;
 
 INSERT INTO rental_orders (
   order_number, client_id, status, start_date, end_date, days_count,
@@ -12539,12 +11365,9 @@ SELECT
   NOW(),
   NOW()
 FROM rental_clients c
-WHERE c.name ILIKE '%Ленар (ИП Ножкин)%' 
-   OR c.director_name ILIKE '%Ленар (ИП Ножкин)%'
-   OR 'Ленар (ИП Ножкин)' ILIKE '%' || c.name || '%'
-   OR 'Ленар (ИП Ножкин)' ILIKE '%' || c.director_name || '%'
-LIMIT 1
-ON CONFLICT (order_number) DO NOTHING;
+WHERE (c.name = 'Ленар (ИП Ножкин)' OR c.director_name = 'Ленар (ИП Ножкин)')
+  AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 875)
+LIMIT 1;
 
 INSERT INTO rental_orders (
   order_number, client_id, status, start_date, end_date, days_count,
@@ -12571,12 +11394,9 @@ SELECT
   NOW(),
   NOW()
 FROM rental_clients c
-WHERE c.name ILIKE '%Эдик Заказы для групп%' 
-   OR c.director_name ILIKE '%Эдик Заказы для групп%'
-   OR 'Эдик Заказы для групп' ILIKE '%' || c.name || '%'
-   OR 'Эдик Заказы для групп' ILIKE '%' || c.director_name || '%'
-LIMIT 1
-ON CONFLICT (order_number) DO NOTHING;
+WHERE (c.name = 'Эдик Заказы для групп' OR c.director_name = 'Эдик Заказы для групп')
+  AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 874)
+LIMIT 1;
 
 INSERT INTO rental_orders (
   order_number, client_id, status, start_date, end_date, days_count,
@@ -12603,12 +11423,9 @@ SELECT
   NOW(),
   NOW()
 FROM rental_clients c
-WHERE c.name ILIKE '%Ольга (Дольче Вита)%' 
-   OR c.director_name ILIKE '%Ольга (Дольче Вита)%'
-   OR 'Ольга (Дольче Вита)' ILIKE '%' || c.name || '%'
-   OR 'Ольга (Дольче Вита)' ILIKE '%' || c.director_name || '%'
-LIMIT 1
-ON CONFLICT (order_number) DO NOTHING;
+WHERE (c.name = 'Ольга (Дольче Вита)' OR c.director_name = 'Ольга (Дольче Вита)')
+  AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 873)
+LIMIT 1;
 
 INSERT INTO rental_orders (
   order_number, client_id, status, start_date, end_date, days_count,
@@ -12635,12 +11452,9 @@ SELECT
   NOW(),
   NOW()
 FROM rental_clients c
-WHERE c.name ILIKE '%Екатерина%' 
-   OR c.director_name ILIKE '%Екатерина%'
-   OR 'Екатерина' ILIKE '%' || c.name || '%'
-   OR 'Екатерина' ILIKE '%' || c.director_name || '%'
-LIMIT 1
-ON CONFLICT (order_number) DO NOTHING;
+WHERE (c.name = 'Екатерина' OR c.director_name = 'Екатерина')
+  AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 872)
+LIMIT 1;
 
 INSERT INTO rental_orders (
   order_number, client_id, status, start_date, end_date, days_count,
@@ -12667,12 +11481,9 @@ SELECT
   NOW(),
   NOW()
 FROM rental_clients c
-WHERE c.name ILIKE '%Виктор (Мастерминд)%' 
-   OR c.director_name ILIKE '%Виктор (Мастерминд)%'
-   OR 'Виктор (Мастерминд)' ILIKE '%' || c.name || '%'
-   OR 'Виктор (Мастерминд)' ILIKE '%' || c.director_name || '%'
-LIMIT 1
-ON CONFLICT (order_number) DO NOTHING;
+WHERE (c.name = 'Виктор (Мастерминд)' OR c.director_name = 'Виктор (Мастерминд)')
+  AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 871)
+LIMIT 1;
 
 INSERT INTO rental_orders (
   order_number, client_id, status, start_date, end_date, days_count,
@@ -12699,12 +11510,9 @@ SELECT
   NOW(),
   NOW()
 FROM rental_clients c
-WHERE c.name ILIKE '%Ирина (Иль Мио Тур)%' 
-   OR c.director_name ILIKE '%Ирина (Иль Мио Тур)%'
-   OR 'Ирина (Иль Мио Тур)' ILIKE '%' || c.name || '%'
-   OR 'Ирина (Иль Мио Тур)' ILIKE '%' || c.director_name || '%'
-LIMIT 1
-ON CONFLICT (order_number) DO NOTHING;
+WHERE (c.name = 'Ирина (Иль Мио Тур)' OR c.director_name = 'Ирина (Иль Мио Тур)')
+  AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 870)
+LIMIT 1;
 
 INSERT INTO rental_orders (
   order_number, client_id, status, start_date, end_date, days_count,
@@ -12731,12 +11539,9 @@ SELECT
   NOW(),
   NOW()
 FROM rental_clients c
-WHERE c.name ILIKE '%Мария Экскурсовод%' 
-   OR c.director_name ILIKE '%Мария Экскурсовод%'
-   OR 'Мария Экскурсовод' ILIKE '%' || c.name || '%'
-   OR 'Мария Экскурсовод' ILIKE '%' || c.director_name || '%'
-LIMIT 1
-ON CONFLICT (order_number) DO NOTHING;
+WHERE (c.name = 'Мария Экскурсовод' OR c.director_name = 'Мария Экскурсовод')
+  AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 869)
+LIMIT 1;
 
 INSERT INTO rental_orders (
   order_number, client_id, status, start_date, end_date, days_count,
@@ -12763,12 +11568,9 @@ SELECT
   NOW(),
   NOW()
 FROM rental_clients c
-WHERE c.name ILIKE '%Татьяна (Агентство Удачи)%' 
-   OR c.director_name ILIKE '%Татьяна (Агентство Удачи)%'
-   OR 'Татьяна (Агентство Удачи)' ILIKE '%' || c.name || '%'
-   OR 'Татьяна (Агентство Удачи)' ILIKE '%' || c.director_name || '%'
-LIMIT 1
-ON CONFLICT (order_number) DO NOTHING;
+WHERE (c.name = 'Татьяна (Агентство Удачи)' OR c.director_name = 'Татьяна (Агентство Удачи)')
+  AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 868)
+LIMIT 1;
 
 INSERT INTO rental_orders (
   order_number, client_id, status, start_date, end_date, days_count,
@@ -12795,12 +11597,9 @@ SELECT
   NOW(),
   NOW()
 FROM rental_clients c
-WHERE c.name ILIKE '%Валентина Воронкова (Ввел Ком)%' 
-   OR c.director_name ILIKE '%Валентина Воронкова (Ввел Ком)%'
-   OR 'Валентина Воронкова (Ввел Ком)' ILIKE '%' || c.name || '%'
-   OR 'Валентина Воронкова (Ввел Ком)' ILIKE '%' || c.director_name || '%'
-LIMIT 1
-ON CONFLICT (order_number) DO NOTHING;
+WHERE (c.name = 'Валентина Воронкова (Ввел Ком)' OR c.director_name = 'Валентина Воронкова (Ввел Ком)')
+  AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 867)
+LIMIT 1;
 
 INSERT INTO rental_orders (
   order_number, client_id, status, start_date, end_date, days_count,
@@ -12827,12 +11626,9 @@ SELECT
   NOW(),
   NOW()
 FROM rental_clients c
-WHERE c.name ILIKE '%Фируза%' 
-   OR c.director_name ILIKE '%Фируза%'
-   OR 'Фируза' ILIKE '%' || c.name || '%'
-   OR 'Фируза' ILIKE '%' || c.director_name || '%'
-LIMIT 1
-ON CONFLICT (order_number) DO NOTHING;
+WHERE (c.name = 'Фируза' OR c.director_name = 'Фируза')
+  AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 866)
+LIMIT 1;
 
 INSERT INTO rental_orders (
   order_number, client_id, status, start_date, end_date, days_count,
@@ -12859,12 +11655,9 @@ SELECT
   NOW(),
   NOW()
 FROM rental_clients c
-WHERE c.name ILIKE '%Ольга (Дольче Вита)%' 
-   OR c.director_name ILIKE '%Ольга (Дольче Вита)%'
-   OR 'Ольга (Дольче Вита)' ILIKE '%' || c.name || '%'
-   OR 'Ольга (Дольче Вита)' ILIKE '%' || c.director_name || '%'
-LIMIT 1
-ON CONFLICT (order_number) DO NOTHING;
+WHERE (c.name = 'Ольга (Дольче Вита)' OR c.director_name = 'Ольга (Дольче Вита)')
+  AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 865)
+LIMIT 1;
 
 INSERT INTO rental_orders (
   order_number, client_id, status, start_date, end_date, days_count,
@@ -12891,12 +11684,9 @@ SELECT
   NOW(),
   NOW()
 FROM rental_clients c
-WHERE c.name ILIKE '%Ольга (Дольче Вита)%' 
-   OR c.director_name ILIKE '%Ольга (Дольче Вита)%'
-   OR 'Ольга (Дольче Вита)' ILIKE '%' || c.name || '%'
-   OR 'Ольга (Дольче Вита)' ILIKE '%' || c.director_name || '%'
-LIMIT 1
-ON CONFLICT (order_number) DO NOTHING;
+WHERE (c.name = 'Ольга (Дольче Вита)' OR c.director_name = 'Ольга (Дольче Вита)')
+  AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 864)
+LIMIT 1;
 
 INSERT INTO rental_orders (
   order_number, client_id, status, start_date, end_date, days_count,
@@ -12923,12 +11713,9 @@ SELECT
   NOW(),
   NOW()
 FROM rental_clients c
-WHERE c.name ILIKE '%Ольга (Дольче Вита)%' 
-   OR c.director_name ILIKE '%Ольга (Дольче Вита)%'
-   OR 'Ольга (Дольче Вита)' ILIKE '%' || c.name || '%'
-   OR 'Ольга (Дольче Вита)' ILIKE '%' || c.director_name || '%'
-LIMIT 1
-ON CONFLICT (order_number) DO NOTHING;
+WHERE (c.name = 'Ольга (Дольче Вита)' OR c.director_name = 'Ольга (Дольче Вита)')
+  AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 863)
+LIMIT 1;
 
 INSERT INTO rental_orders (
   order_number, client_id, status, start_date, end_date, days_count,
@@ -12955,12 +11742,9 @@ SELECT
   NOW(),
   NOW()
 FROM rental_clients c
-WHERE c.name ILIKE '%Татьяна%' 
-   OR c.director_name ILIKE '%Татьяна%'
-   OR 'Татьяна' ILIKE '%' || c.name || '%'
-   OR 'Татьяна' ILIKE '%' || c.director_name || '%'
-LIMIT 1
-ON CONFLICT (order_number) DO NOTHING;
+WHERE (c.name = 'Татьяна' OR c.director_name = 'Татьяна')
+  AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 862)
+LIMIT 1;
 
 INSERT INTO rental_orders (
   order_number, client_id, status, start_date, end_date, days_count,
@@ -12987,12 +11771,9 @@ SELECT
   NOW(),
   NOW()
 FROM rental_clients c
-WHERE c.name ILIKE '%Любовь (ТИЦ)%' 
-   OR c.director_name ILIKE '%Любовь (ТИЦ)%'
-   OR 'Любовь (ТИЦ)' ILIKE '%' || c.name || '%'
-   OR 'Любовь (ТИЦ)' ILIKE '%' || c.director_name || '%'
-LIMIT 1
-ON CONFLICT (order_number) DO NOTHING;
+WHERE (c.name = 'Любовь (ТИЦ)' OR c.director_name = 'Любовь (ТИЦ)')
+  AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 861)
+LIMIT 1;
 
 INSERT INTO rental_orders (
   order_number, client_id, status, start_date, end_date, days_count,
@@ -13019,12 +11800,9 @@ SELECT
   NOW(),
   NOW()
 FROM rental_clients c
-WHERE c.name ILIKE '%Арсен (Юнион)%' 
-   OR c.director_name ILIKE '%Арсен (Юнион)%'
-   OR 'Арсен (Юнион)' ILIKE '%' || c.name || '%'
-   OR 'Арсен (Юнион)' ILIKE '%' || c.director_name || '%'
-LIMIT 1
-ON CONFLICT (order_number) DO NOTHING;
+WHERE (c.name = 'Арсен (Юнион)' OR c.director_name = 'Арсен (Юнион)')
+  AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 860)
+LIMIT 1;
 
 INSERT INTO rental_orders (
   order_number, client_id, status, start_date, end_date, days_count,
@@ -13051,12 +11829,9 @@ SELECT
   NOW(),
   NOW()
 FROM rental_clients c
-WHERE c.name ILIKE '%Мира (ИП)%' 
-   OR c.director_name ILIKE '%Мира (ИП)%'
-   OR 'Мира (ИП)' ILIKE '%' || c.name || '%'
-   OR 'Мира (ИП)' ILIKE '%' || c.director_name || '%'
-LIMIT 1
-ON CONFLICT (order_number) DO NOTHING;
+WHERE (c.name = 'Мира (ИП)' OR c.director_name = 'Мира (ИП)')
+  AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 859)
+LIMIT 1;
 
 INSERT INTO rental_orders (
   order_number, client_id, status, start_date, end_date, days_count,
@@ -13083,12 +11858,9 @@ SELECT
   NOW(),
   NOW()
 FROM rental_clients c
-WHERE c.name ILIKE '%Арсен (Юнион)%' 
-   OR c.director_name ILIKE '%Арсен (Юнион)%'
-   OR 'Арсен (Юнион)' ILIKE '%' || c.name || '%'
-   OR 'Арсен (Юнион)' ILIKE '%' || c.director_name || '%'
-LIMIT 1
-ON CONFLICT (order_number) DO NOTHING;
+WHERE (c.name = 'Арсен (Юнион)' OR c.director_name = 'Арсен (Юнион)')
+  AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 858)
+LIMIT 1;
 
 INSERT INTO rental_orders (
   order_number, client_id, status, start_date, end_date, days_count,
@@ -13115,12 +11887,9 @@ SELECT
   NOW(),
   NOW()
 FROM rental_clients c
-WHERE c.name ILIKE '%Елена (Конгресс Авиа)%' 
-   OR c.director_name ILIKE '%Елена (Конгресс Авиа)%'
-   OR 'Елена (Конгресс Авиа)' ILIKE '%' || c.name || '%'
-   OR 'Елена (Конгресс Авиа)' ILIKE '%' || c.director_name || '%'
-LIMIT 1
-ON CONFLICT (order_number) DO NOTHING;
+WHERE (c.name = 'Елена (Конгресс Авиа)' OR c.director_name = 'Елена (Конгресс Авиа)')
+  AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 857)
+LIMIT 1;
 
 INSERT INTO rental_orders (
   order_number, client_id, status, start_date, end_date, days_count,
@@ -13147,12 +11916,9 @@ SELECT
   NOW(),
   NOW()
 FROM rental_clients c
-WHERE c.name ILIKE '%Галина (Тур Урал)%' 
-   OR c.director_name ILIKE '%Галина (Тур Урал)%'
-   OR 'Галина (Тур Урал)' ILIKE '%' || c.name || '%'
-   OR 'Галина (Тур Урал)' ILIKE '%' || c.director_name || '%'
-LIMIT 1
-ON CONFLICT (order_number) DO NOTHING;
+WHERE (c.name = 'Галина (Тур Урал)' OR c.director_name = 'Галина (Тур Урал)')
+  AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 856)
+LIMIT 1;
 
 INSERT INTO rental_orders (
   order_number, client_id, status, start_date, end_date, days_count,
@@ -13179,12 +11945,9 @@ SELECT
   NOW(),
   NOW()
 FROM rental_clients c
-WHERE c.name ILIKE '%Мира (ИП)%' 
-   OR c.director_name ILIKE '%Мира (ИП)%'
-   OR 'Мира (ИП)' ILIKE '%' || c.name || '%'
-   OR 'Мира (ИП)' ILIKE '%' || c.director_name || '%'
-LIMIT 1
-ON CONFLICT (order_number) DO NOTHING;
+WHERE (c.name = 'Мира (ИП)' OR c.director_name = 'Мира (ИП)')
+  AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 855)
+LIMIT 1;
 
 INSERT INTO rental_orders (
   order_number, client_id, status, start_date, end_date, days_count,
@@ -13211,12 +11974,9 @@ SELECT
   NOW(),
   NOW()
 FROM rental_clients c
-WHERE c.name ILIKE '%Зельфира%' 
-   OR c.director_name ILIKE '%Зельфира%'
-   OR 'Зельфира' ILIKE '%' || c.name || '%'
-   OR 'Зельфира' ILIKE '%' || c.director_name || '%'
-LIMIT 1
-ON CONFLICT (order_number) DO NOTHING;
+WHERE (c.name = 'Зельфира' OR c.director_name = 'Зельфира')
+  AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 854)
+LIMIT 1;
 
 INSERT INTO rental_orders (
   order_number, client_id, status, start_date, end_date, days_count,
@@ -13243,12 +12003,9 @@ SELECT
   NOW(),
   NOW()
 FROM rental_clients c
-WHERE c.name ILIKE '%Инна Экскурсовод%' 
-   OR c.director_name ILIKE '%Инна Экскурсовод%'
-   OR 'Инна Экскурсовод' ILIKE '%' || c.name || '%'
-   OR 'Инна Экскурсовод' ILIKE '%' || c.director_name || '%'
-LIMIT 1
-ON CONFLICT (order_number) DO NOTHING;
+WHERE (c.name = 'Инна Экскурсовод' OR c.director_name = 'Инна Экскурсовод')
+  AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 853)
+LIMIT 1;
 
 INSERT INTO rental_orders (
   order_number, client_id, status, start_date, end_date, days_count,
@@ -13275,12 +12032,9 @@ SELECT
   NOW(),
   NOW()
 FROM rental_clients c
-WHERE c.name ILIKE '%Камила Ягудина%' 
-   OR c.director_name ILIKE '%Камила Ягудина%'
-   OR 'Камила Ягудина' ILIKE '%' || c.name || '%'
-   OR 'Камила Ягудина' ILIKE '%' || c.director_name || '%'
-LIMIT 1
-ON CONFLICT (order_number) DO NOTHING;
+WHERE (c.name = 'Камила Ягудина' OR c.director_name = 'Камила Ягудина')
+  AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 852)
+LIMIT 1;
 
 INSERT INTO rental_orders (
   order_number, client_id, status, start_date, end_date, days_count,
@@ -13307,12 +12061,9 @@ SELECT
   NOW(),
   NOW()
 FROM rental_clients c
-WHERE c.name ILIKE '%Екатерина%' 
-   OR c.director_name ILIKE '%Екатерина%'
-   OR 'Екатерина' ILIKE '%' || c.name || '%'
-   OR 'Екатерина' ILIKE '%' || c.director_name || '%'
-LIMIT 1
-ON CONFLICT (order_number) DO NOTHING;
+WHERE (c.name = 'Екатерина' OR c.director_name = 'Екатерина')
+  AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 851)
+LIMIT 1;
 
 INSERT INTO rental_orders (
   order_number, client_id, status, start_date, end_date, days_count,
@@ -13339,12 +12090,9 @@ SELECT
   NOW(),
   NOW()
 FROM rental_clients c
-WHERE c.name ILIKE '%Татьяна (Гольфстрим)%' 
-   OR c.director_name ILIKE '%Татьяна (Гольфстрим)%'
-   OR 'Татьяна (Гольфстрим)' ILIKE '%' || c.name || '%'
-   OR 'Татьяна (Гольфстрим)' ILIKE '%' || c.director_name || '%'
-LIMIT 1
-ON CONFLICT (order_number) DO NOTHING;
+WHERE (c.name = 'Татьяна (Гольфстрим)' OR c.director_name = 'Татьяна (Гольфстрим)')
+  AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 850)
+LIMIT 1;
 
 INSERT INTO rental_orders (
   order_number, client_id, status, start_date, end_date, days_count,
@@ -13371,12 +12119,9 @@ SELECT
   NOW(),
   NOW()
 FROM rental_clients c
-WHERE c.name ILIKE '%Гульнара%' 
-   OR c.director_name ILIKE '%Гульнара%'
-   OR 'Гульнара' ILIKE '%' || c.name || '%'
-   OR 'Гульнара' ILIKE '%' || c.director_name || '%'
-LIMIT 1
-ON CONFLICT (order_number) DO NOTHING;
+WHERE (c.name = 'Гульнара' OR c.director_name = 'Гульнара')
+  AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 849)
+LIMIT 1;
 
 INSERT INTO rental_orders (
   order_number, client_id, status, start_date, end_date, days_count,
@@ -13403,12 +12148,9 @@ SELECT
   NOW(),
   NOW()
 FROM rental_clients c
-WHERE c.name ILIKE '%Яна Янова%' 
-   OR c.director_name ILIKE '%Яна Янова%'
-   OR 'Яна Янова' ILIKE '%' || c.name || '%'
-   OR 'Яна Янова' ILIKE '%' || c.director_name || '%'
-LIMIT 1
-ON CONFLICT (order_number) DO NOTHING;
+WHERE (c.name = 'Яна Янова' OR c.director_name = 'Яна Янова')
+  AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 848)
+LIMIT 1;
 
 INSERT INTO rental_orders (
   order_number, client_id, status, start_date, end_date, days_count,
@@ -13435,12 +12177,9 @@ SELECT
   NOW(),
   NOW()
 FROM rental_clients c
-WHERE c.name ILIKE '%Арсен (Юнион)%' 
-   OR c.director_name ILIKE '%Арсен (Юнион)%'
-   OR 'Арсен (Юнион)' ILIKE '%' || c.name || '%'
-   OR 'Арсен (Юнион)' ILIKE '%' || c.director_name || '%'
-LIMIT 1
-ON CONFLICT (order_number) DO NOTHING;
+WHERE (c.name = 'Арсен (Юнион)' OR c.director_name = 'Арсен (Юнион)')
+  AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 847)
+LIMIT 1;
 
 INSERT INTO rental_orders (
   order_number, client_id, status, start_date, end_date, days_count,
@@ -13467,12 +12206,9 @@ SELECT
   NOW(),
   NOW()
 FROM rental_clients c
-WHERE c.name ILIKE '%Ольга (Сиалия)%' 
-   OR c.director_name ILIKE '%Ольга (Сиалия)%'
-   OR 'Ольга (Сиалия)' ILIKE '%' || c.name || '%'
-   OR 'Ольга (Сиалия)' ILIKE '%' || c.director_name || '%'
-LIMIT 1
-ON CONFLICT (order_number) DO NOTHING;
+WHERE (c.name = 'Ольга (Сиалия)' OR c.director_name = 'Ольга (Сиалия)')
+  AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 846)
+LIMIT 1;
 
 INSERT INTO rental_orders (
   order_number, client_id, status, start_date, end_date, days_count,
@@ -13499,12 +12235,9 @@ SELECT
   NOW(),
   NOW()
 FROM rental_clients c
-WHERE c.name ILIKE '%Гузель (Юралс)%' 
-   OR c.director_name ILIKE '%Гузель (Юралс)%'
-   OR 'Гузель (Юралс)' ILIKE '%' || c.name || '%'
-   OR 'Гузель (Юралс)' ILIKE '%' || c.director_name || '%'
-LIMIT 1
-ON CONFLICT (order_number) DO NOTHING;
+WHERE (c.name = 'Гузель (Юралс)' OR c.director_name = 'Гузель (Юралс)')
+  AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 845)
+LIMIT 1;
 
 INSERT INTO rental_orders (
   order_number, client_id, status, start_date, end_date, days_count,
@@ -13531,12 +12264,9 @@ SELECT
   NOW(),
   NOW()
 FROM rental_clients c
-WHERE c.name ILIKE '%Элина (Сититур)%' 
-   OR c.director_name ILIKE '%Элина (Сититур)%'
-   OR 'Элина (Сититур)' ILIKE '%' || c.name || '%'
-   OR 'Элина (Сититур)' ILIKE '%' || c.director_name || '%'
-LIMIT 1
-ON CONFLICT (order_number) DO NOTHING;
+WHERE (c.name = 'Элина (Сититур)' OR c.director_name = 'Элина (Сититур)')
+  AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 844)
+LIMIT 1;
 
 INSERT INTO rental_orders (
   order_number, client_id, status, start_date, end_date, days_count,
@@ -13563,12 +12293,9 @@ SELECT
   NOW(),
   NOW()
 FROM rental_clients c
-WHERE c.name ILIKE '%Ольга%' 
-   OR c.director_name ILIKE '%Ольга%'
-   OR 'Ольга' ILIKE '%' || c.name || '%'
-   OR 'Ольга' ILIKE '%' || c.director_name || '%'
-LIMIT 1
-ON CONFLICT (order_number) DO NOTHING;
+WHERE (c.name = 'Ольга' OR c.director_name = 'Ольга')
+  AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 843)
+LIMIT 1;
 
 INSERT INTO rental_orders (
   order_number, client_id, status, start_date, end_date, days_count,
@@ -13595,12 +12322,9 @@ SELECT
   NOW(),
   NOW()
 FROM rental_clients c
-WHERE c.name ILIKE '%Анюта Родионова (Родина-тур)%' 
-   OR c.director_name ILIKE '%Анюта Родионова (Родина-тур)%'
-   OR 'Анюта Родионова (Родина-тур)' ILIKE '%' || c.name || '%'
-   OR 'Анюта Родионова (Родина-тур)' ILIKE '%' || c.director_name || '%'
-LIMIT 1
-ON CONFLICT (order_number) DO NOTHING;
+WHERE (c.name = 'Анюта Родионова (Родина-тур)' OR c.director_name = 'Анюта Родионова (Родина-тур)')
+  AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 842)
+LIMIT 1;
 
 INSERT INTO rental_orders (
   order_number, client_id, status, start_date, end_date, days_count,
@@ -13627,12 +12351,9 @@ SELECT
   NOW(),
   NOW()
 FROM rental_clients c
-WHERE c.name ILIKE '%Ольга (Дольче Вита)%' 
-   OR c.director_name ILIKE '%Ольга (Дольче Вита)%'
-   OR 'Ольга (Дольче Вита)' ILIKE '%' || c.name || '%'
-   OR 'Ольга (Дольче Вита)' ILIKE '%' || c.director_name || '%'
-LIMIT 1
-ON CONFLICT (order_number) DO NOTHING;
+WHERE (c.name = 'Ольга (Дольче Вита)' OR c.director_name = 'Ольга (Дольче Вита)')
+  AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 841)
+LIMIT 1;
 
 INSERT INTO rental_orders (
   order_number, client_id, status, start_date, end_date, days_count,
@@ -13659,12 +12380,9 @@ SELECT
   NOW(),
   NOW()
 FROM rental_clients c
-WHERE c.name ILIKE '%Арсен (Юнион)%' 
-   OR c.director_name ILIKE '%Арсен (Юнион)%'
-   OR 'Арсен (Юнион)' ILIKE '%' || c.name || '%'
-   OR 'Арсен (Юнион)' ILIKE '%' || c.director_name || '%'
-LIMIT 1
-ON CONFLICT (order_number) DO NOTHING;
+WHERE (c.name = 'Арсен (Юнион)' OR c.director_name = 'Арсен (Юнион)')
+  AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 840)
+LIMIT 1;
 
 INSERT INTO rental_orders (
   order_number, client_id, status, start_date, end_date, days_count,
@@ -13691,12 +12409,9 @@ SELECT
   NOW(),
   NOW()
 FROM rental_clients c
-WHERE c.name ILIKE '%Любовь (ТИЦ)%' 
-   OR c.director_name ILIKE '%Любовь (ТИЦ)%'
-   OR 'Любовь (ТИЦ)' ILIKE '%' || c.name || '%'
-   OR 'Любовь (ТИЦ)' ILIKE '%' || c.director_name || '%'
-LIMIT 1
-ON CONFLICT (order_number) DO NOTHING;
+WHERE (c.name = 'Любовь (ТИЦ)' OR c.director_name = 'Любовь (ТИЦ)')
+  AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 839)
+LIMIT 1;
 
 INSERT INTO rental_orders (
   order_number, client_id, status, start_date, end_date, days_count,
@@ -13723,12 +12438,9 @@ SELECT
   NOW(),
   NOW()
 FROM rental_clients c
-WHERE c.name ILIKE '%Наталья Компания%' 
-   OR c.director_name ILIKE '%Наталья Компания%'
-   OR 'Наталья Компания' ILIKE '%' || c.name || '%'
-   OR 'Наталья Компания' ILIKE '%' || c.director_name || '%'
-LIMIT 1
-ON CONFLICT (order_number) DO NOTHING;
+WHERE (c.name = 'Наталья Компания' OR c.director_name = 'Наталья Компания')
+  AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 838)
+LIMIT 1;
 
 INSERT INTO rental_orders (
   order_number, client_id, status, start_date, end_date, days_count,
@@ -13755,12 +12467,9 @@ SELECT
   NOW(),
   NOW()
 FROM rental_clients c
-WHERE c.name ILIKE '%Любовь (ТИЦ)%' 
-   OR c.director_name ILIKE '%Любовь (ТИЦ)%'
-   OR 'Любовь (ТИЦ)' ILIKE '%' || c.name || '%'
-   OR 'Любовь (ТИЦ)' ILIKE '%' || c.director_name || '%'
-LIMIT 1
-ON CONFLICT (order_number) DO NOTHING;
+WHERE (c.name = 'Любовь (ТИЦ)' OR c.director_name = 'Любовь (ТИЦ)')
+  AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 837)
+LIMIT 1;
 
 INSERT INTO rental_orders (
   order_number, client_id, status, start_date, end_date, days_count,
@@ -13787,12 +12496,9 @@ SELECT
   NOW(),
   NOW()
 FROM rental_clients c
-WHERE c.name ILIKE '%Артем Агафонов%' 
-   OR c.director_name ILIKE '%Артем Агафонов%'
-   OR 'Артем Агафонов' ILIKE '%' || c.name || '%'
-   OR 'Артем Агафонов' ILIKE '%' || c.director_name || '%'
-LIMIT 1
-ON CONFLICT (order_number) DO NOTHING;
+WHERE (c.name = 'Артем Агафонов' OR c.director_name = 'Артем Агафонов')
+  AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 835)
+LIMIT 1;
 
 INSERT INTO rental_orders (
   order_number, client_id, status, start_date, end_date, days_count,
@@ -13819,12 +12525,9 @@ SELECT
   NOW(),
   NOW()
 FROM rental_clients c
-WHERE c.name ILIKE '%Зульхиза Кутлучурина%' 
-   OR c.director_name ILIKE '%Зульхиза Кутлучурина%'
-   OR 'Зульхиза Кутлучурина' ILIKE '%' || c.name || '%'
-   OR 'Зульхиза Кутлучурина' ILIKE '%' || c.director_name || '%'
-LIMIT 1
-ON CONFLICT (order_number) DO NOTHING;
+WHERE (c.name = 'Зульхиза Кутлучурина' OR c.director_name = 'Зульхиза Кутлучурина')
+  AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 834)
+LIMIT 1;
 
 INSERT INTO rental_orders (
   order_number, client_id, status, start_date, end_date, days_count,
@@ -13851,12 +12554,9 @@ SELECT
   NOW(),
   NOW()
 FROM rental_clients c
-WHERE c.name ILIKE '%Татьяна (Гольфстрим)%' 
-   OR c.director_name ILIKE '%Татьяна (Гольфстрим)%'
-   OR 'Татьяна (Гольфстрим)' ILIKE '%' || c.name || '%'
-   OR 'Татьяна (Гольфстрим)' ILIKE '%' || c.director_name || '%'
-LIMIT 1
-ON CONFLICT (order_number) DO NOTHING;
+WHERE (c.name = 'Татьяна (Гольфстрим)' OR c.director_name = 'Татьяна (Гольфстрим)')
+  AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 833)
+LIMIT 1;
 
 INSERT INTO rental_orders (
   order_number, client_id, status, start_date, end_date, days_count,
@@ -13883,12 +12583,9 @@ SELECT
   NOW(),
   NOW()
 FROM rental_clients c
-WHERE c.name ILIKE '%Ольга (Дольче Вита)%' 
-   OR c.director_name ILIKE '%Ольга (Дольче Вита)%'
-   OR 'Ольга (Дольче Вита)' ILIKE '%' || c.name || '%'
-   OR 'Ольга (Дольче Вита)' ILIKE '%' || c.director_name || '%'
-LIMIT 1
-ON CONFLICT (order_number) DO NOTHING;
+WHERE (c.name = 'Ольга (Дольче Вита)' OR c.director_name = 'Ольга (Дольче Вита)')
+  AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 832)
+LIMIT 1;
 
 INSERT INTO rental_orders (
   order_number, client_id, status, start_date, end_date, days_count,
@@ -13915,12 +12612,9 @@ SELECT
   NOW(),
   NOW()
 FROM rental_clients c
-WHERE c.name ILIKE '%Мария (ОСР)%' 
-   OR c.director_name ILIKE '%Мария (ОСР)%'
-   OR 'Мария (ОСР)' ILIKE '%' || c.name || '%'
-   OR 'Мария (ОСР)' ILIKE '%' || c.director_name || '%'
-LIMIT 1
-ON CONFLICT (order_number) DO NOTHING;
+WHERE (c.name = 'Мария (ОСР)' OR c.director_name = 'Мария (ОСР)')
+  AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 831)
+LIMIT 1;
 
 INSERT INTO rental_orders (
   order_number, client_id, status, start_date, end_date, days_count,
@@ -13947,12 +12641,9 @@ SELECT
   NOW(),
   NOW()
 FROM rental_clients c
-WHERE c.name ILIKE '%Галина (Тур Урал)%' 
-   OR c.director_name ILIKE '%Галина (Тур Урал)%'
-   OR 'Галина (Тур Урал)' ILIKE '%' || c.name || '%'
-   OR 'Галина (Тур Урал)' ILIKE '%' || c.director_name || '%'
-LIMIT 1
-ON CONFLICT (order_number) DO NOTHING;
+WHERE (c.name = 'Галина (Тур Урал)' OR c.director_name = 'Галина (Тур Урал)')
+  AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 830)
+LIMIT 1;
 
 INSERT INTO rental_orders (
   order_number, client_id, status, start_date, end_date, days_count,
@@ -13979,12 +12670,9 @@ SELECT
   NOW(),
   NOW()
 FROM rental_clients c
-WHERE c.name ILIKE '%Айгуль Файзуллина%' 
-   OR c.director_name ILIKE '%Айгуль Файзуллина%'
-   OR 'Айгуль Файзуллина' ILIKE '%' || c.name || '%'
-   OR 'Айгуль Файзуллина' ILIKE '%' || c.director_name || '%'
-LIMIT 1
-ON CONFLICT (order_number) DO NOTHING;
+WHERE (c.name = 'Айгуль Файзуллина' OR c.director_name = 'Айгуль Файзуллина')
+  AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 829)
+LIMIT 1;
 
 INSERT INTO rental_orders (
   order_number, client_id, status, start_date, end_date, days_count,
@@ -14011,12 +12699,9 @@ SELECT
   NOW(),
   NOW()
 FROM rental_clients c
-WHERE c.name ILIKE '%Эвелина (Инициатива)%' 
-   OR c.director_name ILIKE '%Эвелина (Инициатива)%'
-   OR 'Эвелина (Инициатива)' ILIKE '%' || c.name || '%'
-   OR 'Эвелина (Инициатива)' ILIKE '%' || c.director_name || '%'
-LIMIT 1
-ON CONFLICT (order_number) DO NOTHING;
+WHERE (c.name = 'Эвелина (Инициатива)' OR c.director_name = 'Эвелина (Инициатива)')
+  AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 828)
+LIMIT 1;
 
 INSERT INTO rental_orders (
   order_number, client_id, status, start_date, end_date, days_count,
@@ -14043,12 +12728,9 @@ SELECT
   NOW(),
   NOW()
 FROM rental_clients c
-WHERE c.name ILIKE '%Екатерина Кореева%' 
-   OR c.director_name ILIKE '%Екатерина Кореева%'
-   OR 'Екатерина Кореева' ILIKE '%' || c.name || '%'
-   OR 'Екатерина Кореева' ILIKE '%' || c.director_name || '%'
-LIMIT 1
-ON CONFLICT (order_number) DO NOTHING;
+WHERE (c.name = 'Екатерина Кореева' OR c.director_name = 'Екатерина Кореева')
+  AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 827)
+LIMIT 1;
 
 INSERT INTO rental_orders (
   order_number, client_id, status, start_date, end_date, days_count,
@@ -14075,12 +12757,9 @@ SELECT
   NOW(),
   NOW()
 FROM rental_clients c
-WHERE c.name ILIKE '%Эдик Заказы для групп%' 
-   OR c.director_name ILIKE '%Эдик Заказы для групп%'
-   OR 'Эдик Заказы для групп' ILIKE '%' || c.name || '%'
-   OR 'Эдик Заказы для групп' ILIKE '%' || c.director_name || '%'
-LIMIT 1
-ON CONFLICT (order_number) DO NOTHING;
+WHERE (c.name = 'Эдик Заказы для групп' OR c.director_name = 'Эдик Заказы для групп')
+  AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 826)
+LIMIT 1;
 
 INSERT INTO rental_orders (
   order_number, client_id, status, start_date, end_date, days_count,
@@ -14107,12 +12786,9 @@ SELECT
   NOW(),
   NOW()
 FROM rental_clients c
-WHERE c.name ILIKE '%Зельфира%' 
-   OR c.director_name ILIKE '%Зельфира%'
-   OR 'Зельфира' ILIKE '%' || c.name || '%'
-   OR 'Зельфира' ILIKE '%' || c.director_name || '%'
-LIMIT 1
-ON CONFLICT (order_number) DO NOTHING;
+WHERE (c.name = 'Зельфира' OR c.director_name = 'Зельфира')
+  AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 825)
+LIMIT 1;
 
 INSERT INTO rental_orders (
   order_number, client_id, status, start_date, end_date, days_count,
@@ -14139,12 +12815,9 @@ SELECT
   NOW(),
   NOW()
 FROM rental_clients c
-WHERE c.name ILIKE '%Татьяна (Гольфстрим)%' 
-   OR c.director_name ILIKE '%Татьяна (Гольфстрим)%'
-   OR 'Татьяна (Гольфстрим)' ILIKE '%' || c.name || '%'
-   OR 'Татьяна (Гольфстрим)' ILIKE '%' || c.director_name || '%'
-LIMIT 1
-ON CONFLICT (order_number) DO NOTHING;
+WHERE (c.name = 'Татьяна (Гольфстрим)' OR c.director_name = 'Татьяна (Гольфстрим)')
+  AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 824)
+LIMIT 1;
 
 INSERT INTO rental_orders (
   order_number, client_id, status, start_date, end_date, days_count,
@@ -14171,12 +12844,9 @@ SELECT
   NOW(),
   NOW()
 FROM rental_clients c
-WHERE c.name ILIKE '%Татьяна (Гольфстрим)%' 
-   OR c.director_name ILIKE '%Татьяна (Гольфстрим)%'
-   OR 'Татьяна (Гольфстрим)' ILIKE '%' || c.name || '%'
-   OR 'Татьяна (Гольфстрим)' ILIKE '%' || c.director_name || '%'
-LIMIT 1
-ON CONFLICT (order_number) DO NOTHING;
+WHERE (c.name = 'Татьяна (Гольфстрим)' OR c.director_name = 'Татьяна (Гольфстрим)')
+  AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 823)
+LIMIT 1;
 
 INSERT INTO rental_orders (
   order_number, client_id, status, start_date, end_date, days_count,
@@ -14203,12 +12873,9 @@ SELECT
   NOW(),
   NOW()
 FROM rental_clients c
-WHERE c.name ILIKE '%Эдик Заказы для групп%' 
-   OR c.director_name ILIKE '%Эдик Заказы для групп%'
-   OR 'Эдик Заказы для групп' ILIKE '%' || c.name || '%'
-   OR 'Эдик Заказы для групп' ILIKE '%' || c.director_name || '%'
-LIMIT 1
-ON CONFLICT (order_number) DO NOTHING;
+WHERE (c.name = 'Эдик Заказы для групп' OR c.director_name = 'Эдик Заказы для групп')
+  AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 822)
+LIMIT 1;
 
 INSERT INTO rental_orders (
   order_number, client_id, status, start_date, end_date, days_count,
@@ -14235,12 +12902,9 @@ SELECT
   NOW(),
   NOW()
 FROM rental_clients c
-WHERE c.name ILIKE '%Фируза%' 
-   OR c.director_name ILIKE '%Фируза%'
-   OR 'Фируза' ILIKE '%' || c.name || '%'
-   OR 'Фируза' ILIKE '%' || c.director_name || '%'
-LIMIT 1
-ON CONFLICT (order_number) DO NOTHING;
+WHERE (c.name = 'Фируза' OR c.director_name = 'Фируза')
+  AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 821)
+LIMIT 1;
 
 INSERT INTO rental_orders (
   order_number, client_id, status, start_date, end_date, days_count,
@@ -14267,12 +12931,9 @@ SELECT
   NOW(),
   NOW()
 FROM rental_clients c
-WHERE c.name ILIKE '%Альберт (КТ)%' 
-   OR c.director_name ILIKE '%Альберт (КТ)%'
-   OR 'Альберт (КТ)' ILIKE '%' || c.name || '%'
-   OR 'Альберт (КТ)' ILIKE '%' || c.director_name || '%'
-LIMIT 1
-ON CONFLICT (order_number) DO NOTHING;
+WHERE (c.name = 'Альберт (КТ)' OR c.director_name = 'Альберт (КТ)')
+  AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 820)
+LIMIT 1;
 
 INSERT INTO rental_orders (
   order_number, client_id, status, start_date, end_date, days_count,
@@ -14299,12 +12960,9 @@ SELECT
   NOW(),
   NOW()
 FROM rental_clients c
-WHERE c.name ILIKE '%Инна Экскурсовод%' 
-   OR c.director_name ILIKE '%Инна Экскурсовод%'
-   OR 'Инна Экскурсовод' ILIKE '%' || c.name || '%'
-   OR 'Инна Экскурсовод' ILIKE '%' || c.director_name || '%'
-LIMIT 1
-ON CONFLICT (order_number) DO NOTHING;
+WHERE (c.name = 'Инна Экскурсовод' OR c.director_name = 'Инна Экскурсовод')
+  AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 819)
+LIMIT 1;
 
 INSERT INTO rental_orders (
   order_number, client_id, status, start_date, end_date, days_count,
@@ -14331,12 +12989,9 @@ SELECT
   NOW(),
   NOW()
 FROM rental_clients c
-WHERE c.name ILIKE '%Артем Агафонов%' 
-   OR c.director_name ILIKE '%Артем Агафонов%'
-   OR 'Артем Агафонов' ILIKE '%' || c.name || '%'
-   OR 'Артем Агафонов' ILIKE '%' || c.director_name || '%'
-LIMIT 1
-ON CONFLICT (order_number) DO NOTHING;
+WHERE (c.name = 'Артем Агафонов' OR c.director_name = 'Артем Агафонов')
+  AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 818)
+LIMIT 1;
 
 INSERT INTO rental_orders (
   order_number, client_id, status, start_date, end_date, days_count,
@@ -14363,12 +13018,9 @@ SELECT
   NOW(),
   NOW()
 FROM rental_clients c
-WHERE c.name ILIKE '%Мира (ИП)%' 
-   OR c.director_name ILIKE '%Мира (ИП)%'
-   OR 'Мира (ИП)' ILIKE '%' || c.name || '%'
-   OR 'Мира (ИП)' ILIKE '%' || c.director_name || '%'
-LIMIT 1
-ON CONFLICT (order_number) DO NOTHING;
+WHERE (c.name = 'Мира (ИП)' OR c.director_name = 'Мира (ИП)')
+  AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 817)
+LIMIT 1;
 
 INSERT INTO rental_orders (
   order_number, client_id, status, start_date, end_date, days_count,
@@ -14395,12 +13047,9 @@ SELECT
   NOW(),
   NOW()
 FROM rental_clients c
-WHERE c.name ILIKE '%Альберт (КТ)%' 
-   OR c.director_name ILIKE '%Альберт (КТ)%'
-   OR 'Альберт (КТ)' ILIKE '%' || c.name || '%'
-   OR 'Альберт (КТ)' ILIKE '%' || c.director_name || '%'
-LIMIT 1
-ON CONFLICT (order_number) DO NOTHING;
+WHERE (c.name = 'Альберт (КТ)' OR c.director_name = 'Альберт (КТ)')
+  AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 816)
+LIMIT 1;
 
 INSERT INTO rental_orders (
   order_number, client_id, status, start_date, end_date, days_count,
@@ -14427,12 +13076,9 @@ SELECT
   NOW(),
   NOW()
 FROM rental_clients c
-WHERE c.name ILIKE '%Альберт (КТ)%' 
-   OR c.director_name ILIKE '%Альберт (КТ)%'
-   OR 'Альберт (КТ)' ILIKE '%' || c.name || '%'
-   OR 'Альберт (КТ)' ILIKE '%' || c.director_name || '%'
-LIMIT 1
-ON CONFLICT (order_number) DO NOTHING;
+WHERE (c.name = 'Альберт (КТ)' OR c.director_name = 'Альберт (КТ)')
+  AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 815)
+LIMIT 1;
 
 INSERT INTO rental_orders (
   order_number, client_id, status, start_date, end_date, days_count,
@@ -14459,12 +13105,9 @@ SELECT
   NOW(),
   NOW()
 FROM rental_clients c
-WHERE c.name ILIKE '%Альберт (КТ)%' 
-   OR c.director_name ILIKE '%Альберт (КТ)%'
-   OR 'Альберт (КТ)' ILIKE '%' || c.name || '%'
-   OR 'Альберт (КТ)' ILIKE '%' || c.director_name || '%'
-LIMIT 1
-ON CONFLICT (order_number) DO NOTHING;
+WHERE (c.name = 'Альберт (КТ)' OR c.director_name = 'Альберт (КТ)')
+  AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 814)
+LIMIT 1;
 
 INSERT INTO rental_orders (
   order_number, client_id, status, start_date, end_date, days_count,
@@ -14491,12 +13134,9 @@ SELECT
   NOW(),
   NOW()
 FROM rental_clients c
-WHERE c.name ILIKE '%Ленар (ИП Ножкин)%' 
-   OR c.director_name ILIKE '%Ленар (ИП Ножкин)%'
-   OR 'Ленар (ИП Ножкин)' ILIKE '%' || c.name || '%'
-   OR 'Ленар (ИП Ножкин)' ILIKE '%' || c.director_name || '%'
-LIMIT 1
-ON CONFLICT (order_number) DO NOTHING;
+WHERE (c.name = 'Ленар (ИП Ножкин)' OR c.director_name = 'Ленар (ИП Ножкин)')
+  AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 813)
+LIMIT 1;
 
 INSERT INTO rental_orders (
   order_number, client_id, status, start_date, end_date, days_count,
@@ -14523,12 +13163,9 @@ SELECT
   NOW(),
   NOW()
 FROM rental_clients c
-WHERE c.name ILIKE '%Любовь (ТИЦ)%' 
-   OR c.director_name ILIKE '%Любовь (ТИЦ)%'
-   OR 'Любовь (ТИЦ)' ILIKE '%' || c.name || '%'
-   OR 'Любовь (ТИЦ)' ILIKE '%' || c.director_name || '%'
-LIMIT 1
-ON CONFLICT (order_number) DO NOTHING;
+WHERE (c.name = 'Любовь (ТИЦ)' OR c.director_name = 'Любовь (ТИЦ)')
+  AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 812)
+LIMIT 1;
 
 INSERT INTO rental_orders (
   order_number, client_id, status, start_date, end_date, days_count,
@@ -14555,12 +13192,9 @@ SELECT
   NOW(),
   NOW()
 FROM rental_clients c
-WHERE c.name ILIKE '%Арсен (Юнион)%' 
-   OR c.director_name ILIKE '%Арсен (Юнион)%'
-   OR 'Арсен (Юнион)' ILIKE '%' || c.name || '%'
-   OR 'Арсен (Юнион)' ILIKE '%' || c.director_name || '%'
-LIMIT 1
-ON CONFLICT (order_number) DO NOTHING;
+WHERE (c.name = 'Арсен (Юнион)' OR c.director_name = 'Арсен (Юнион)')
+  AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 811)
+LIMIT 1;
 
 INSERT INTO rental_orders (
   order_number, client_id, status, start_date, end_date, days_count,
@@ -14587,12 +13221,9 @@ SELECT
   NOW(),
   NOW()
 FROM rental_clients c
-WHERE c.name ILIKE '%Арсен (Юнион)%' 
-   OR c.director_name ILIKE '%Арсен (Юнион)%'
-   OR 'Арсен (Юнион)' ILIKE '%' || c.name || '%'
-   OR 'Арсен (Юнион)' ILIKE '%' || c.director_name || '%'
-LIMIT 1
-ON CONFLICT (order_number) DO NOTHING;
+WHERE (c.name = 'Арсен (Юнион)' OR c.director_name = 'Арсен (Юнион)')
+  AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 810)
+LIMIT 1;
 
 INSERT INTO rental_orders (
   order_number, client_id, status, start_date, end_date, days_count,
@@ -14619,12 +13250,9 @@ SELECT
   NOW(),
   NOW()
 FROM rental_clients c
-WHERE c.name ILIKE '%Ольга (Сиалия)%' 
-   OR c.director_name ILIKE '%Ольга (Сиалия)%'
-   OR 'Ольга (Сиалия)' ILIKE '%' || c.name || '%'
-   OR 'Ольга (Сиалия)' ILIKE '%' || c.director_name || '%'
-LIMIT 1
-ON CONFLICT (order_number) DO NOTHING;
+WHERE (c.name = 'Ольга (Сиалия)' OR c.director_name = 'Ольга (Сиалия)')
+  AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 809)
+LIMIT 1;
 
 INSERT INTO rental_orders (
   order_number, client_id, status, start_date, end_date, days_count,
@@ -14651,12 +13279,9 @@ SELECT
   NOW(),
   NOW()
 FROM rental_clients c
-WHERE c.name ILIKE '%Камила Ягудина%' 
-   OR c.director_name ILIKE '%Камила Ягудина%'
-   OR 'Камила Ягудина' ILIKE '%' || c.name || '%'
-   OR 'Камила Ягудина' ILIKE '%' || c.director_name || '%'
-LIMIT 1
-ON CONFLICT (order_number) DO NOTHING;
+WHERE (c.name = 'Камила Ягудина' OR c.director_name = 'Камила Ягудина')
+  AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 808)
+LIMIT 1;
 
 INSERT INTO rental_orders (
   order_number, client_id, status, start_date, end_date, days_count,
@@ -14683,12 +13308,9 @@ SELECT
   NOW(),
   NOW()
 FROM rental_clients c
-WHERE c.name ILIKE '%Екатерина%' 
-   OR c.director_name ILIKE '%Екатерина%'
-   OR 'Екатерина' ILIKE '%' || c.name || '%'
-   OR 'Екатерина' ILIKE '%' || c.director_name || '%'
-LIMIT 1
-ON CONFLICT (order_number) DO NOTHING;
+WHERE (c.name = 'Екатерина' OR c.director_name = 'Екатерина')
+  AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 807)
+LIMIT 1;
 
 INSERT INTO rental_orders (
   order_number, client_id, status, start_date, end_date, days_count,
@@ -14715,12 +13337,9 @@ SELECT
   NOW(),
   NOW()
 FROM rental_clients c
-WHERE c.name ILIKE '%Любовь (ТИЦ)%' 
-   OR c.director_name ILIKE '%Любовь (ТИЦ)%'
-   OR 'Любовь (ТИЦ)' ILIKE '%' || c.name || '%'
-   OR 'Любовь (ТИЦ)' ILIKE '%' || c.director_name || '%'
-LIMIT 1
-ON CONFLICT (order_number) DO NOTHING;
+WHERE (c.name = 'Любовь (ТИЦ)' OR c.director_name = 'Любовь (ТИЦ)')
+  AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 806)
+LIMIT 1;
 
 INSERT INTO rental_orders (
   order_number, client_id, status, start_date, end_date, days_count,
@@ -14747,12 +13366,9 @@ SELECT
   NOW(),
   NOW()
 FROM rental_clients c
-WHERE c.name ILIKE '%Любовь (ТИЦ)%' 
-   OR c.director_name ILIKE '%Любовь (ТИЦ)%'
-   OR 'Любовь (ТИЦ)' ILIKE '%' || c.name || '%'
-   OR 'Любовь (ТИЦ)' ILIKE '%' || c.director_name || '%'
-LIMIT 1
-ON CONFLICT (order_number) DO NOTHING;
+WHERE (c.name = 'Любовь (ТИЦ)' OR c.director_name = 'Любовь (ТИЦ)')
+  AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 805)
+LIMIT 1;
 
 INSERT INTO rental_orders (
   order_number, client_id, status, start_date, end_date, days_count,
@@ -14779,12 +13395,9 @@ SELECT
   NOW(),
   NOW()
 FROM rental_clients c
-WHERE c.name ILIKE '%Елена (Конгресс Авиа)%' 
-   OR c.director_name ILIKE '%Елена (Конгресс Авиа)%'
-   OR 'Елена (Конгресс Авиа)' ILIKE '%' || c.name || '%'
-   OR 'Елена (Конгресс Авиа)' ILIKE '%' || c.director_name || '%'
-LIMIT 1
-ON CONFLICT (order_number) DO NOTHING;
+WHERE (c.name = 'Елена (Конгресс Авиа)' OR c.director_name = 'Елена (Конгресс Авиа)')
+  AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 804)
+LIMIT 1;
 
 INSERT INTO rental_orders (
   order_number, client_id, status, start_date, end_date, days_count,
@@ -14811,12 +13424,9 @@ SELECT
   NOW(),
   NOW()
 FROM rental_clients c
-WHERE c.name ILIKE '%Альберт (КТ)%' 
-   OR c.director_name ILIKE '%Альберт (КТ)%'
-   OR 'Альберт (КТ)' ILIKE '%' || c.name || '%'
-   OR 'Альберт (КТ)' ILIKE '%' || c.director_name || '%'
-LIMIT 1
-ON CONFLICT (order_number) DO NOTHING;
+WHERE (c.name = 'Альберт (КТ)' OR c.director_name = 'Альберт (КТ)')
+  AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 803)
+LIMIT 1;
 
 INSERT INTO rental_orders (
   order_number, client_id, status, start_date, end_date, days_count,
@@ -14843,12 +13453,9 @@ SELECT
   NOW(),
   NOW()
 FROM rental_clients c
-WHERE c.name ILIKE '%Эдик Заказы для групп%' 
-   OR c.director_name ILIKE '%Эдик Заказы для групп%'
-   OR 'Эдик Заказы для групп' ILIKE '%' || c.name || '%'
-   OR 'Эдик Заказы для групп' ILIKE '%' || c.director_name || '%'
-LIMIT 1
-ON CONFLICT (order_number) DO NOTHING;
+WHERE (c.name = 'Эдик Заказы для групп' OR c.director_name = 'Эдик Заказы для групп')
+  AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 802)
+LIMIT 1;
 
 INSERT INTO rental_orders (
   order_number, client_id, status, start_date, end_date, days_count,
@@ -14875,12 +13482,9 @@ SELECT
   NOW(),
   NOW()
 FROM rental_clients c
-WHERE c.name ILIKE '%Ольга%' 
-   OR c.director_name ILIKE '%Ольга%'
-   OR 'Ольга' ILIKE '%' || c.name || '%'
-   OR 'Ольга' ILIKE '%' || c.director_name || '%'
-LIMIT 1
-ON CONFLICT (order_number) DO NOTHING;
+WHERE (c.name = 'Ольга' OR c.director_name = 'Ольга')
+  AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 801)
+LIMIT 1;
 
 INSERT INTO rental_orders (
   order_number, client_id, status, start_date, end_date, days_count,
@@ -14907,12 +13511,9 @@ SELECT
   NOW(),
   NOW()
 FROM rental_clients c
-WHERE c.name ILIKE '%Любовь (ТИЦ)%' 
-   OR c.director_name ILIKE '%Любовь (ТИЦ)%'
-   OR 'Любовь (ТИЦ)' ILIKE '%' || c.name || '%'
-   OR 'Любовь (ТИЦ)' ILIKE '%' || c.director_name || '%'
-LIMIT 1
-ON CONFLICT (order_number) DO NOTHING;
+WHERE (c.name = 'Любовь (ТИЦ)' OR c.director_name = 'Любовь (ТИЦ)')
+  AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 800)
+LIMIT 1;
 
 INSERT INTO rental_orders (
   order_number, client_id, status, start_date, end_date, days_count,
@@ -14939,12 +13540,9 @@ SELECT
   NOW(),
   NOW()
 FROM rental_clients c
-WHERE c.name ILIKE '%Любовь (ТИЦ)%' 
-   OR c.director_name ILIKE '%Любовь (ТИЦ)%'
-   OR 'Любовь (ТИЦ)' ILIKE '%' || c.name || '%'
-   OR 'Любовь (ТИЦ)' ILIKE '%' || c.director_name || '%'
-LIMIT 1
-ON CONFLICT (order_number) DO NOTHING;
+WHERE (c.name = 'Любовь (ТИЦ)' OR c.director_name = 'Любовь (ТИЦ)')
+  AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 799)
+LIMIT 1;
 
 INSERT INTO rental_orders (
   order_number, client_id, status, start_date, end_date, days_count,
@@ -14971,12 +13569,9 @@ SELECT
   NOW(),
   NOW()
 FROM rental_clients c
-WHERE c.name ILIKE '%Альберт (КТ)%' 
-   OR c.director_name ILIKE '%Альберт (КТ)%'
-   OR 'Альберт (КТ)' ILIKE '%' || c.name || '%'
-   OR 'Альберт (КТ)' ILIKE '%' || c.director_name || '%'
-LIMIT 1
-ON CONFLICT (order_number) DO NOTHING;
+WHERE (c.name = 'Альберт (КТ)' OR c.director_name = 'Альберт (КТ)')
+  AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 798)
+LIMIT 1;
 
 INSERT INTO rental_orders (
   order_number, client_id, status, start_date, end_date, days_count,
@@ -15003,12 +13598,9 @@ SELECT
   NOW(),
   NOW()
 FROM rental_clients c
-WHERE c.name ILIKE '%Александр%' 
-   OR c.director_name ILIKE '%Александр%'
-   OR 'Александр' ILIKE '%' || c.name || '%'
-   OR 'Александр' ILIKE '%' || c.director_name || '%'
-LIMIT 1
-ON CONFLICT (order_number) DO NOTHING;
+WHERE (c.name = 'Александр' OR c.director_name = 'Александр')
+  AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 797)
+LIMIT 1;
 
 INSERT INTO rental_orders (
   order_number, client_id, status, start_date, end_date, days_count,
@@ -15035,12 +13627,9 @@ SELECT
   NOW(),
   NOW()
 FROM rental_clients c
-WHERE c.name ILIKE '%Екатерина%' 
-   OR c.director_name ILIKE '%Екатерина%'
-   OR 'Екатерина' ILIKE '%' || c.name || '%'
-   OR 'Екатерина' ILIKE '%' || c.director_name || '%'
-LIMIT 1
-ON CONFLICT (order_number) DO NOTHING;
+WHERE (c.name = 'Екатерина' OR c.director_name = 'Екатерина')
+  AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 796)
+LIMIT 1;
 
 INSERT INTO rental_orders (
   order_number, client_id, status, start_date, end_date, days_count,
@@ -15067,12 +13656,9 @@ SELECT
   NOW(),
   NOW()
 FROM rental_clients c
-WHERE c.name ILIKE '%Арсен (Юнион)%' 
-   OR c.director_name ILIKE '%Арсен (Юнион)%'
-   OR 'Арсен (Юнион)' ILIKE '%' || c.name || '%'
-   OR 'Арсен (Юнион)' ILIKE '%' || c.director_name || '%'
-LIMIT 1
-ON CONFLICT (order_number) DO NOTHING;
+WHERE (c.name = 'Арсен (Юнион)' OR c.director_name = 'Арсен (Юнион)')
+  AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 795)
+LIMIT 1;
 
 INSERT INTO rental_orders (
   order_number, client_id, status, start_date, end_date, days_count,
@@ -15099,12 +13685,9 @@ SELECT
   NOW(),
   NOW()
 FROM rental_clients c
-WHERE c.name ILIKE '%Арсен (Юнион)%' 
-   OR c.director_name ILIKE '%Арсен (Юнион)%'
-   OR 'Арсен (Юнион)' ILIKE '%' || c.name || '%'
-   OR 'Арсен (Юнион)' ILIKE '%' || c.director_name || '%'
-LIMIT 1
-ON CONFLICT (order_number) DO NOTHING;
+WHERE (c.name = 'Арсен (Юнион)' OR c.director_name = 'Арсен (Юнион)')
+  AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 794)
+LIMIT 1;
 
 INSERT INTO rental_orders (
   order_number, client_id, status, start_date, end_date, days_count,
@@ -15131,12 +13714,9 @@ SELECT
   NOW(),
   NOW()
 FROM rental_clients c
-WHERE c.name ILIKE '%Ольга (Сиалия)%' 
-   OR c.director_name ILIKE '%Ольга (Сиалия)%'
-   OR 'Ольга (Сиалия)' ILIKE '%' || c.name || '%'
-   OR 'Ольга (Сиалия)' ILIKE '%' || c.director_name || '%'
-LIMIT 1
-ON CONFLICT (order_number) DO NOTHING;
+WHERE (c.name = 'Ольга (Сиалия)' OR c.director_name = 'Ольга (Сиалия)')
+  AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 792)
+LIMIT 1;
 
 INSERT INTO rental_orders (
   order_number, client_id, status, start_date, end_date, days_count,
@@ -15163,12 +13743,9 @@ SELECT
   NOW(),
   NOW()
 FROM rental_clients c
-WHERE c.name ILIKE '%Галина Тур Москва%' 
-   OR c.director_name ILIKE '%Галина Тур Москва%'
-   OR 'Галина Тур Москва' ILIKE '%' || c.name || '%'
-   OR 'Галина Тур Москва' ILIKE '%' || c.director_name || '%'
-LIMIT 1
-ON CONFLICT (order_number) DO NOTHING;
+WHERE (c.name = 'Галина Тур Москва' OR c.director_name = 'Галина Тур Москва')
+  AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 791)
+LIMIT 1;
 
 INSERT INTO rental_orders (
   order_number, client_id, status, start_date, end_date, days_count,
@@ -15195,12 +13772,9 @@ SELECT
   NOW(),
   NOW()
 FROM rental_clients c
-WHERE c.name ILIKE '%Ольга%' 
-   OR c.director_name ILIKE '%Ольга%'
-   OR 'Ольга' ILIKE '%' || c.name || '%'
-   OR 'Ольга' ILIKE '%' || c.director_name || '%'
-LIMIT 1
-ON CONFLICT (order_number) DO NOTHING;
+WHERE (c.name = 'Ольга' OR c.director_name = 'Ольга')
+  AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 790)
+LIMIT 1;
 
 INSERT INTO rental_orders (
   order_number, client_id, status, start_date, end_date, days_count,
@@ -15227,12 +13801,9 @@ SELECT
   NOW(),
   NOW()
 FROM rental_clients c
-WHERE c.name ILIKE '%Екатерина%' 
-   OR c.director_name ILIKE '%Екатерина%'
-   OR 'Екатерина' ILIKE '%' || c.name || '%'
-   OR 'Екатерина' ILIKE '%' || c.director_name || '%'
-LIMIT 1
-ON CONFLICT (order_number) DO NOTHING;
+WHERE (c.name = 'Екатерина' OR c.director_name = 'Екатерина')
+  AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 789)
+LIMIT 1;
 
 INSERT INTO rental_orders (
   order_number, client_id, status, start_date, end_date, days_count,
@@ -15259,12 +13830,9 @@ SELECT
   NOW(),
   NOW()
 FROM rental_clients c
-WHERE c.name ILIKE '%Эдик Заказы для групп%' 
-   OR c.director_name ILIKE '%Эдик Заказы для групп%'
-   OR 'Эдик Заказы для групп' ILIKE '%' || c.name || '%'
-   OR 'Эдик Заказы для групп' ILIKE '%' || c.director_name || '%'
-LIMIT 1
-ON CONFLICT (order_number) DO NOTHING;
+WHERE (c.name = 'Эдик Заказы для групп' OR c.director_name = 'Эдик Заказы для групп')
+  AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 788)
+LIMIT 1;
 
 INSERT INTO rental_orders (
   order_number, client_id, status, start_date, end_date, days_count,
@@ -15291,12 +13859,9 @@ SELECT
   NOW(),
   NOW()
 FROM rental_clients c
-WHERE c.name ILIKE '%Зельфира%' 
-   OR c.director_name ILIKE '%Зельфира%'
-   OR 'Зельфира' ILIKE '%' || c.name || '%'
-   OR 'Зельфира' ILIKE '%' || c.director_name || '%'
-LIMIT 1
-ON CONFLICT (order_number) DO NOTHING;
+WHERE (c.name = 'Зельфира' OR c.director_name = 'Зельфира')
+  AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 786)
+LIMIT 1;
 
 INSERT INTO rental_orders (
   order_number, client_id, status, start_date, end_date, days_count,
@@ -15323,12 +13888,9 @@ SELECT
   NOW(),
   NOW()
 FROM rental_clients c
-WHERE c.name ILIKE '%Родина-тур%' 
-   OR c.director_name ILIKE '%Родина-тур%'
-   OR 'Родина-тур' ILIKE '%' || c.name || '%'
-   OR 'Родина-тур' ILIKE '%' || c.director_name || '%'
-LIMIT 1
-ON CONFLICT (order_number) DO NOTHING;
+WHERE (c.name = 'Родина-тур' OR c.director_name = 'Родина-тур')
+  AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 785)
+LIMIT 1;
 
 INSERT INTO rental_orders (
   order_number, client_id, status, start_date, end_date, days_count,
@@ -15355,12 +13917,9 @@ SELECT
   NOW(),
   NOW()
 FROM rental_clients c
-WHERE c.name ILIKE '%Татьяна Чуб%' 
-   OR c.director_name ILIKE '%Татьяна Чуб%'
-   OR 'Татьяна Чуб' ILIKE '%' || c.name || '%'
-   OR 'Татьяна Чуб' ILIKE '%' || c.director_name || '%'
-LIMIT 1
-ON CONFLICT (order_number) DO NOTHING;
+WHERE (c.name = 'Татьяна Чуб' OR c.director_name = 'Татьяна Чуб')
+  AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 784)
+LIMIT 1;
 
 INSERT INTO rental_orders (
   order_number, client_id, status, start_date, end_date, days_count,
@@ -15387,12 +13946,9 @@ SELECT
   NOW(),
   NOW()
 FROM rental_clients c
-WHERE c.name ILIKE '%Галина (Тур Урал)%' 
-   OR c.director_name ILIKE '%Галина (Тур Урал)%'
-   OR 'Галина (Тур Урал)' ILIKE '%' || c.name || '%'
-   OR 'Галина (Тур Урал)' ILIKE '%' || c.director_name || '%'
-LIMIT 1
-ON CONFLICT (order_number) DO NOTHING;
+WHERE (c.name = 'Галина (Тур Урал)' OR c.director_name = 'Галина (Тур Урал)')
+  AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 783)
+LIMIT 1;
 
 INSERT INTO rental_orders (
   order_number, client_id, status, start_date, end_date, days_count,
@@ -15419,12 +13975,9 @@ SELECT
   NOW(),
   NOW()
 FROM rental_clients c
-WHERE c.name ILIKE '%Любовь (ТИЦ)%' 
-   OR c.director_name ILIKE '%Любовь (ТИЦ)%'
-   OR 'Любовь (ТИЦ)' ILIKE '%' || c.name || '%'
-   OR 'Любовь (ТИЦ)' ILIKE '%' || c.director_name || '%'
-LIMIT 1
-ON CONFLICT (order_number) DO NOTHING;
+WHERE (c.name = 'Любовь (ТИЦ)' OR c.director_name = 'Любовь (ТИЦ)')
+  AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 782)
+LIMIT 1;
 
 INSERT INTO rental_orders (
   order_number, client_id, status, start_date, end_date, days_count,
@@ -15451,12 +14004,9 @@ SELECT
   NOW(),
   NOW()
 FROM rental_clients c
-WHERE c.name ILIKE '%Любовь (ТИЦ)%' 
-   OR c.director_name ILIKE '%Любовь (ТИЦ)%'
-   OR 'Любовь (ТИЦ)' ILIKE '%' || c.name || '%'
-   OR 'Любовь (ТИЦ)' ILIKE '%' || c.director_name || '%'
-LIMIT 1
-ON CONFLICT (order_number) DO NOTHING;
+WHERE (c.name = 'Любовь (ТИЦ)' OR c.director_name = 'Любовь (ТИЦ)')
+  AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 781)
+LIMIT 1;
 
 INSERT INTO rental_orders (
   order_number, client_id, status, start_date, end_date, days_count,
@@ -15483,12 +14033,9 @@ SELECT
   NOW(),
   NOW()
 FROM rental_clients c
-WHERE c.name ILIKE '%Дарья%' 
-   OR c.director_name ILIKE '%Дарья%'
-   OR 'Дарья' ILIKE '%' || c.name || '%'
-   OR 'Дарья' ILIKE '%' || c.director_name || '%'
-LIMIT 1
-ON CONFLICT (order_number) DO NOTHING;
+WHERE (c.name = 'Дарья' OR c.director_name = 'Дарья')
+  AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 780)
+LIMIT 1;
 
 INSERT INTO rental_orders (
   order_number, client_id, status, start_date, end_date, days_count,
@@ -15515,12 +14062,9 @@ SELECT
   NOW(),
   NOW()
 FROM rental_clients c
-WHERE c.name ILIKE '%Гузель (Юралс)%' 
-   OR c.director_name ILIKE '%Гузель (Юралс)%'
-   OR 'Гузель (Юралс)' ILIKE '%' || c.name || '%'
-   OR 'Гузель (Юралс)' ILIKE '%' || c.director_name || '%'
-LIMIT 1
-ON CONFLICT (order_number) DO NOTHING;
+WHERE (c.name = 'Гузель (Юралс)' OR c.director_name = 'Гузель (Юралс)')
+  AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 779)
+LIMIT 1;
 
 INSERT INTO rental_orders (
   order_number, client_id, status, start_date, end_date, days_count,
@@ -15547,12 +14091,9 @@ SELECT
   NOW(),
   NOW()
 FROM rental_clients c
-WHERE c.name ILIKE '%Эвелина (Инициатива)%' 
-   OR c.director_name ILIKE '%Эвелина (Инициатива)%'
-   OR 'Эвелина (Инициатива)' ILIKE '%' || c.name || '%'
-   OR 'Эвелина (Инициатива)' ILIKE '%' || c.director_name || '%'
-LIMIT 1
-ON CONFLICT (order_number) DO NOTHING;
+WHERE (c.name = 'Эвелина (Инициатива)' OR c.director_name = 'Эвелина (Инициатива)')
+  AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 777)
+LIMIT 1;
 
 INSERT INTO rental_orders (
   order_number, client_id, status, start_date, end_date, days_count,
@@ -15579,12 +14120,9 @@ SELECT
   NOW(),
   NOW()
 FROM rental_clients c
-WHERE c.name ILIKE '%Екатерина (ОЛТА Трэвел)%' 
-   OR c.director_name ILIKE '%Екатерина (ОЛТА Трэвел)%'
-   OR 'Екатерина (ОЛТА Трэвел)' ILIKE '%' || c.name || '%'
-   OR 'Екатерина (ОЛТА Трэвел)' ILIKE '%' || c.director_name || '%'
-LIMIT 1
-ON CONFLICT (order_number) DO NOTHING;
+WHERE (c.name = 'Екатерина (ОЛТА Трэвел)' OR c.director_name = 'Екатерина (ОЛТА Трэвел)')
+  AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 776)
+LIMIT 1;
 
 INSERT INTO rental_orders (
   order_number, client_id, status, start_date, end_date, days_count,
@@ -15611,12 +14149,9 @@ SELECT
   NOW(),
   NOW()
 FROM rental_clients c
-WHERE c.name ILIKE '%Ольга (Дольче Вита)%' 
-   OR c.director_name ILIKE '%Ольга (Дольче Вита)%'
-   OR 'Ольга (Дольче Вита)' ILIKE '%' || c.name || '%'
-   OR 'Ольга (Дольче Вита)' ILIKE '%' || c.director_name || '%'
-LIMIT 1
-ON CONFLICT (order_number) DO NOTHING;
+WHERE (c.name = 'Ольга (Дольче Вита)' OR c.director_name = 'Ольга (Дольче Вита)')
+  AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 775)
+LIMIT 1;
 
 INSERT INTO rental_orders (
   order_number, client_id, status, start_date, end_date, days_count,
@@ -15643,12 +14178,9 @@ SELECT
   NOW(),
   NOW()
 FROM rental_clients c
-WHERE c.name ILIKE '%Ольга (Дольче Вита)%' 
-   OR c.director_name ILIKE '%Ольга (Дольче Вита)%'
-   OR 'Ольга (Дольче Вита)' ILIKE '%' || c.name || '%'
-   OR 'Ольга (Дольче Вита)' ILIKE '%' || c.director_name || '%'
-LIMIT 1
-ON CONFLICT (order_number) DO NOTHING;
+WHERE (c.name = 'Ольга (Дольче Вита)' OR c.director_name = 'Ольга (Дольче Вита)')
+  AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 774)
+LIMIT 1;
 
 INSERT INTO rental_orders (
   order_number, client_id, status, start_date, end_date, days_count,
@@ -15675,12 +14207,9 @@ SELECT
   NOW(),
   NOW()
 FROM rental_clients c
-WHERE c.name ILIKE '%Ирина (Иль Мио Тур)%' 
-   OR c.director_name ILIKE '%Ирина (Иль Мио Тур)%'
-   OR 'Ирина (Иль Мио Тур)' ILIKE '%' || c.name || '%'
-   OR 'Ирина (Иль Мио Тур)' ILIKE '%' || c.director_name || '%'
-LIMIT 1
-ON CONFLICT (order_number) DO NOTHING;
+WHERE (c.name = 'Ирина (Иль Мио Тур)' OR c.director_name = 'Ирина (Иль Мио Тур)')
+  AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 773)
+LIMIT 1;
 
 INSERT INTO rental_orders (
   order_number, client_id, status, start_date, end_date, days_count,
@@ -15707,12 +14236,9 @@ SELECT
   NOW(),
   NOW()
 FROM rental_clients c
-WHERE c.name ILIKE '%Мария Экскурсовод%' 
-   OR c.director_name ILIKE '%Мария Экскурсовод%'
-   OR 'Мария Экскурсовод' ILIKE '%' || c.name || '%'
-   OR 'Мария Экскурсовод' ILIKE '%' || c.director_name || '%'
-LIMIT 1
-ON CONFLICT (order_number) DO NOTHING;
+WHERE (c.name = 'Мария Экскурсовод' OR c.director_name = 'Мария Экскурсовод')
+  AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 772)
+LIMIT 1;
 
 INSERT INTO rental_orders (
   order_number, client_id, status, start_date, end_date, days_count,
@@ -15739,12 +14265,9 @@ SELECT
   NOW(),
   NOW()
 FROM rental_clients c
-WHERE c.name ILIKE '%Татьяна (Гольфстрим)%' 
-   OR c.director_name ILIKE '%Татьяна (Гольфстрим)%'
-   OR 'Татьяна (Гольфстрим)' ILIKE '%' || c.name || '%'
-   OR 'Татьяна (Гольфстрим)' ILIKE '%' || c.director_name || '%'
-LIMIT 1
-ON CONFLICT (order_number) DO NOTHING;
+WHERE (c.name = 'Татьяна (Гольфстрим)' OR c.director_name = 'Татьяна (Гольфстрим)')
+  AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 771)
+LIMIT 1;
 
 INSERT INTO rental_orders (
   order_number, client_id, status, start_date, end_date, days_count,
@@ -15771,12 +14294,9 @@ SELECT
   NOW(),
   NOW()
 FROM rental_clients c
-WHERE c.name ILIKE '%Арсен (Юнион)%' 
-   OR c.director_name ILIKE '%Арсен (Юнион)%'
-   OR 'Арсен (Юнион)' ILIKE '%' || c.name || '%'
-   OR 'Арсен (Юнион)' ILIKE '%' || c.director_name || '%'
-LIMIT 1
-ON CONFLICT (order_number) DO NOTHING;
+WHERE (c.name = 'Арсен (Юнион)' OR c.director_name = 'Арсен (Юнион)')
+  AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 769)
+LIMIT 1;
 
 INSERT INTO rental_orders (
   order_number, client_id, status, start_date, end_date, days_count,
@@ -15803,12 +14323,9 @@ SELECT
   NOW(),
   NOW()
 FROM rental_clients c
-WHERE c.name ILIKE '%Арсен (Юнион)%' 
-   OR c.director_name ILIKE '%Арсен (Юнион)%'
-   OR 'Арсен (Юнион)' ILIKE '%' || c.name || '%'
-   OR 'Арсен (Юнион)' ILIKE '%' || c.director_name || '%'
-LIMIT 1
-ON CONFLICT (order_number) DO NOTHING;
+WHERE (c.name = 'Арсен (Юнион)' OR c.director_name = 'Арсен (Юнион)')
+  AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 768)
+LIMIT 1;
 
 INSERT INTO rental_orders (
   order_number, client_id, status, start_date, end_date, days_count,
@@ -15835,12 +14352,9 @@ SELECT
   NOW(),
   NOW()
 FROM rental_clients c
-WHERE c.name ILIKE '%Зельфира%' 
-   OR c.director_name ILIKE '%Зельфира%'
-   OR 'Зельфира' ILIKE '%' || c.name || '%'
-   OR 'Зельфира' ILIKE '%' || c.director_name || '%'
-LIMIT 1
-ON CONFLICT (order_number) DO NOTHING;
+WHERE (c.name = 'Зельфира' OR c.director_name = 'Зельфира')
+  AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 767)
+LIMIT 1;
 
 INSERT INTO rental_orders (
   order_number, client_id, status, start_date, end_date, days_count,
@@ -15867,12 +14381,9 @@ SELECT
   NOW(),
   NOW()
 FROM rental_clients c
-WHERE c.name ILIKE '%Альберт (КТ)%' 
-   OR c.director_name ILIKE '%Альберт (КТ)%'
-   OR 'Альберт (КТ)' ILIKE '%' || c.name || '%'
-   OR 'Альберт (КТ)' ILIKE '%' || c.director_name || '%'
-LIMIT 1
-ON CONFLICT (order_number) DO NOTHING;
+WHERE (c.name = 'Альберт (КТ)' OR c.director_name = 'Альберт (КТ)')
+  AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 765)
+LIMIT 1;
 
 INSERT INTO rental_orders (
   order_number, client_id, status, start_date, end_date, days_count,
@@ -15899,12 +14410,9 @@ SELECT
   NOW(),
   NOW()
 FROM rental_clients c
-WHERE c.name ILIKE '%Мира (ИП)%' 
-   OR c.director_name ILIKE '%Мира (ИП)%'
-   OR 'Мира (ИП)' ILIKE '%' || c.name || '%'
-   OR 'Мира (ИП)' ILIKE '%' || c.director_name || '%'
-LIMIT 1
-ON CONFLICT (order_number) DO NOTHING;
+WHERE (c.name = 'Мира (ИП)' OR c.director_name = 'Мира (ИП)')
+  AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 764)
+LIMIT 1;
 
 INSERT INTO rental_orders (
   order_number, client_id, status, start_date, end_date, days_count,
@@ -15931,12 +14439,9 @@ SELECT
   NOW(),
   NOW()
 FROM rental_clients c
-WHERE c.name ILIKE '%Ирина (Иль Мио Тур)%' 
-   OR c.director_name ILIKE '%Ирина (Иль Мио Тур)%'
-   OR 'Ирина (Иль Мио Тур)' ILIKE '%' || c.name || '%'
-   OR 'Ирина (Иль Мио Тур)' ILIKE '%' || c.director_name || '%'
-LIMIT 1
-ON CONFLICT (order_number) DO NOTHING;
+WHERE (c.name = 'Ирина (Иль Мио Тур)' OR c.director_name = 'Ирина (Иль Мио Тур)')
+  AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 763)
+LIMIT 1;
 
 INSERT INTO rental_orders (
   order_number, client_id, status, start_date, end_date, days_count,
@@ -15963,12 +14468,9 @@ SELECT
   NOW(),
   NOW()
 FROM rental_clients c
-WHERE c.name ILIKE '%Родина-тур%' 
-   OR c.director_name ILIKE '%Родина-тур%'
-   OR 'Родина-тур' ILIKE '%' || c.name || '%'
-   OR 'Родина-тур' ILIKE '%' || c.director_name || '%'
-LIMIT 1
-ON CONFLICT (order_number) DO NOTHING;
+WHERE (c.name = 'Родина-тур' OR c.director_name = 'Родина-тур')
+  AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 762)
+LIMIT 1;
 
 INSERT INTO rental_orders (
   order_number, client_id, status, start_date, end_date, days_count,
@@ -15995,12 +14497,9 @@ SELECT
   NOW(),
   NOW()
 FROM rental_clients c
-WHERE c.name ILIKE '%Ирина Пронина%' 
-   OR c.director_name ILIKE '%Ирина Пронина%'
-   OR 'Ирина Пронина' ILIKE '%' || c.name || '%'
-   OR 'Ирина Пронина' ILIKE '%' || c.director_name || '%'
-LIMIT 1
-ON CONFLICT (order_number) DO NOTHING;
+WHERE (c.name = 'Ирина Пронина' OR c.director_name = 'Ирина Пронина')
+  AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 761)
+LIMIT 1;
 
 INSERT INTO rental_orders (
   order_number, client_id, status, start_date, end_date, days_count,
@@ -16027,12 +14526,9 @@ SELECT
   NOW(),
   NOW()
 FROM rental_clients c
-WHERE c.name ILIKE '%Татьяна (Гольфстрим)%' 
-   OR c.director_name ILIKE '%Татьяна (Гольфстрим)%'
-   OR 'Татьяна (Гольфстрим)' ILIKE '%' || c.name || '%'
-   OR 'Татьяна (Гольфстрим)' ILIKE '%' || c.director_name || '%'
-LIMIT 1
-ON CONFLICT (order_number) DO NOTHING;
+WHERE (c.name = 'Татьяна (Гольфстрим)' OR c.director_name = 'Татьяна (Гольфстрим)')
+  AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 760)
+LIMIT 1;
 
 INSERT INTO rental_orders (
   order_number, client_id, status, start_date, end_date, days_count,
@@ -16059,12 +14555,9 @@ SELECT
   NOW(),
   NOW()
 FROM rental_clients c
-WHERE c.name ILIKE '%Алексей%' 
-   OR c.director_name ILIKE '%Алексей%'
-   OR 'Алексей' ILIKE '%' || c.name || '%'
-   OR 'Алексей' ILIKE '%' || c.director_name || '%'
-LIMIT 1
-ON CONFLICT (order_number) DO NOTHING;
+WHERE (c.name = 'Алексей' OR c.director_name = 'Алексей')
+  AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 759)
+LIMIT 1;
 
 INSERT INTO rental_orders (
   order_number, client_id, status, start_date, end_date, days_count,
@@ -16091,12 +14584,9 @@ SELECT
   NOW(),
   NOW()
 FROM rental_clients c
-WHERE c.name ILIKE '%Юлианна%' 
-   OR c.director_name ILIKE '%Юлианна%'
-   OR 'Юлианна' ILIKE '%' || c.name || '%'
-   OR 'Юлианна' ILIKE '%' || c.director_name || '%'
-LIMIT 1
-ON CONFLICT (order_number) DO NOTHING;
+WHERE (c.name = 'Юлианна' OR c.director_name = 'Юлианна')
+  AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 758)
+LIMIT 1;
 
 INSERT INTO rental_orders (
   order_number, client_id, status, start_date, end_date, days_count,
@@ -16123,12 +14613,9 @@ SELECT
   NOW(),
   NOW()
 FROM rental_clients c
-WHERE c.name ILIKE '%Зульхиза Кутлучурина%' 
-   OR c.director_name ILIKE '%Зульхиза Кутлучурина%'
-   OR 'Зульхиза Кутлучурина' ILIKE '%' || c.name || '%'
-   OR 'Зульхиза Кутлучурина' ILIKE '%' || c.director_name || '%'
-LIMIT 1
-ON CONFLICT (order_number) DO NOTHING;
+WHERE (c.name = 'Зульхиза Кутлучурина' OR c.director_name = 'Зульхиза Кутлучурина')
+  AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 757)
+LIMIT 1;
 
 INSERT INTO rental_orders (
   order_number, client_id, status, start_date, end_date, days_count,
@@ -16155,12 +14642,9 @@ SELECT
   NOW(),
   NOW()
 FROM rental_clients c
-WHERE c.name ILIKE '%Ляйсан (Казань 360)%' 
-   OR c.director_name ILIKE '%Ляйсан (Казань 360)%'
-   OR 'Ляйсан (Казань 360)' ILIKE '%' || c.name || '%'
-   OR 'Ляйсан (Казань 360)' ILIKE '%' || c.director_name || '%'
-LIMIT 1
-ON CONFLICT (order_number) DO NOTHING;
+WHERE (c.name = 'Ляйсан (Казань 360)' OR c.director_name = 'Ляйсан (Казань 360)')
+  AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 756)
+LIMIT 1;
 
 INSERT INTO rental_orders (
   order_number, client_id, status, start_date, end_date, days_count,
@@ -16187,12 +14671,9 @@ SELECT
   NOW(),
   NOW()
 FROM rental_clients c
-WHERE c.name ILIKE '%Екатерина%' 
-   OR c.director_name ILIKE '%Екатерина%'
-   OR 'Екатерина' ILIKE '%' || c.name || '%'
-   OR 'Екатерина' ILIKE '%' || c.director_name || '%'
-LIMIT 1
-ON CONFLICT (order_number) DO NOTHING;
+WHERE (c.name = 'Екатерина' OR c.director_name = 'Екатерина')
+  AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 755)
+LIMIT 1;
 
 INSERT INTO rental_orders (
   order_number, client_id, status, start_date, end_date, days_count,
@@ -16219,12 +14700,9 @@ SELECT
   NOW(),
   NOW()
 FROM rental_clients c
-WHERE c.name ILIKE '%Юлианна%' 
-   OR c.director_name ILIKE '%Юлианна%'
-   OR 'Юлианна' ILIKE '%' || c.name || '%'
-   OR 'Юлианна' ILIKE '%' || c.director_name || '%'
-LIMIT 1
-ON CONFLICT (order_number) DO NOTHING;
+WHERE (c.name = 'Юлианна' OR c.director_name = 'Юлианна')
+  AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 754)
+LIMIT 1;
 
 INSERT INTO rental_orders (
   order_number, client_id, status, start_date, end_date, days_count,
@@ -16251,12 +14729,9 @@ SELECT
   NOW(),
   NOW()
 FROM rental_clients c
-WHERE c.name ILIKE '%Юлианна%' 
-   OR c.director_name ILIKE '%Юлианна%'
-   OR 'Юлианна' ILIKE '%' || c.name || '%'
-   OR 'Юлианна' ILIKE '%' || c.director_name || '%'
-LIMIT 1
-ON CONFLICT (order_number) DO NOTHING;
+WHERE (c.name = 'Юлианна' OR c.director_name = 'Юлианна')
+  AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 753)
+LIMIT 1;
 
 INSERT INTO rental_orders (
   order_number, client_id, status, start_date, end_date, days_count,
@@ -16283,12 +14758,9 @@ SELECT
   NOW(),
   NOW()
 FROM rental_clients c
-WHERE c.name ILIKE '%Эдик Заказы для групп%' 
-   OR c.director_name ILIKE '%Эдик Заказы для групп%'
-   OR 'Эдик Заказы для групп' ILIKE '%' || c.name || '%'
-   OR 'Эдик Заказы для групп' ILIKE '%' || c.director_name || '%'
-LIMIT 1
-ON CONFLICT (order_number) DO NOTHING;
+WHERE (c.name = 'Эдик Заказы для групп' OR c.director_name = 'Эдик Заказы для групп')
+  AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 752)
+LIMIT 1;
 
 INSERT INTO rental_orders (
   order_number, client_id, status, start_date, end_date, days_count,
@@ -16315,12 +14787,9 @@ SELECT
   NOW(),
   NOW()
 FROM rental_clients c
-WHERE c.name ILIKE '%Елена Павловна%' 
-   OR c.director_name ILIKE '%Елена Павловна%'
-   OR 'Елена Павловна' ILIKE '%' || c.name || '%'
-   OR 'Елена Павловна' ILIKE '%' || c.director_name || '%'
-LIMIT 1
-ON CONFLICT (order_number) DO NOTHING;
+WHERE (c.name = 'Елена Павловна' OR c.director_name = 'Елена Павловна')
+  AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 751)
+LIMIT 1;
 
 INSERT INTO rental_orders (
   order_number, client_id, status, start_date, end_date, days_count,
@@ -16347,12 +14816,9 @@ SELECT
   NOW(),
   NOW()
 FROM rental_clients c
-WHERE c.name ILIKE '%Алина Минеева%' 
-   OR c.director_name ILIKE '%Алина Минеева%'
-   OR 'Алина Минеева' ILIKE '%' || c.name || '%'
-   OR 'Алина Минеева' ILIKE '%' || c.director_name || '%'
-LIMIT 1
-ON CONFLICT (order_number) DO NOTHING;
+WHERE (c.name = 'Алина Минеева' OR c.director_name = 'Алина Минеева')
+  AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 750)
+LIMIT 1;
 
 INSERT INTO rental_orders (
   order_number, client_id, status, start_date, end_date, days_count,
@@ -16379,12 +14845,9 @@ SELECT
   NOW(),
   NOW()
 FROM rental_clients c
-WHERE c.name ILIKE '%Имя%' 
-   OR c.director_name ILIKE '%Имя%'
-   OR 'Имя' ILIKE '%' || c.name || '%'
-   OR 'Имя' ILIKE '%' || c.director_name || '%'
-LIMIT 1
-ON CONFLICT (order_number) DO NOTHING;
+WHERE (c.name = 'Имя' OR c.director_name = 'Имя')
+  AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 749)
+LIMIT 1;
 
 INSERT INTO rental_orders (
   order_number, client_id, status, start_date, end_date, days_count,
@@ -16411,12 +14874,9 @@ SELECT
   NOW(),
   NOW()
 FROM rental_clients c
-WHERE c.name ILIKE '%Наталья%' 
-   OR c.director_name ILIKE '%Наталья%'
-   OR 'Наталья' ILIKE '%' || c.name || '%'
-   OR 'Наталья' ILIKE '%' || c.director_name || '%'
-LIMIT 1
-ON CONFLICT (order_number) DO NOTHING;
+WHERE (c.name = 'Наталья' OR c.director_name = 'Наталья')
+  AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 748)
+LIMIT 1;
 
 INSERT INTO rental_orders (
   order_number, client_id, status, start_date, end_date, days_count,
@@ -16443,12 +14903,9 @@ SELECT
   NOW(),
   NOW()
 FROM rental_clients c
-WHERE c.name ILIKE '%Екатерина Кореева%' 
-   OR c.director_name ILIKE '%Екатерина Кореева%'
-   OR 'Екатерина Кореева' ILIKE '%' || c.name || '%'
-   OR 'Екатерина Кореева' ILIKE '%' || c.director_name || '%'
-LIMIT 1
-ON CONFLICT (order_number) DO NOTHING;
+WHERE (c.name = 'Екатерина Кореева' OR c.director_name = 'Екатерина Кореева')
+  AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 747)
+LIMIT 1;
 
 INSERT INTO rental_orders (
   order_number, client_id, status, start_date, end_date, days_count,
@@ -16475,12 +14932,9 @@ SELECT
   NOW(),
   NOW()
 FROM rental_clients c
-WHERE c.name ILIKE '%Татьяна (Гольфстрим)%' 
-   OR c.director_name ILIKE '%Татьяна (Гольфстрим)%'
-   OR 'Татьяна (Гольфстрим)' ILIKE '%' || c.name || '%'
-   OR 'Татьяна (Гольфстрим)' ILIKE '%' || c.director_name || '%'
-LIMIT 1
-ON CONFLICT (order_number) DO NOTHING;
+WHERE (c.name = 'Татьяна (Гольфстрим)' OR c.director_name = 'Татьяна (Гольфстрим)')
+  AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 746)
+LIMIT 1;
 
 INSERT INTO rental_orders (
   order_number, client_id, status, start_date, end_date, days_count,
@@ -16507,12 +14961,9 @@ SELECT
   NOW(),
   NOW()
 FROM rental_clients c
-WHERE c.name ILIKE '%Арсен (Юнион)%' 
-   OR c.director_name ILIKE '%Арсен (Юнион)%'
-   OR 'Арсен (Юнион)' ILIKE '%' || c.name || '%'
-   OR 'Арсен (Юнион)' ILIKE '%' || c.director_name || '%'
-LIMIT 1
-ON CONFLICT (order_number) DO NOTHING;
+WHERE (c.name = 'Арсен (Юнион)' OR c.director_name = 'Арсен (Юнион)')
+  AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 745)
+LIMIT 1;
 
 INSERT INTO rental_orders (
   order_number, client_id, status, start_date, end_date, days_count,
@@ -16539,12 +14990,9 @@ SELECT
   NOW(),
   NOW()
 FROM rental_clients c
-WHERE c.name ILIKE '%Любовь (ТИЦ)%' 
-   OR c.director_name ILIKE '%Любовь (ТИЦ)%'
-   OR 'Любовь (ТИЦ)' ILIKE '%' || c.name || '%'
-   OR 'Любовь (ТИЦ)' ILIKE '%' || c.director_name || '%'
-LIMIT 1
-ON CONFLICT (order_number) DO NOTHING;
+WHERE (c.name = 'Любовь (ТИЦ)' OR c.director_name = 'Любовь (ТИЦ)')
+  AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 744)
+LIMIT 1;
 
 INSERT INTO rental_orders (
   order_number, client_id, status, start_date, end_date, days_count,
@@ -16571,12 +15019,9 @@ SELECT
   NOW(),
   NOW()
 FROM rental_clients c
-WHERE c.name ILIKE '%Анюта Родионова (Родина-тур)%' 
-   OR c.director_name ILIKE '%Анюта Родионова (Родина-тур)%'
-   OR 'Анюта Родионова (Родина-тур)' ILIKE '%' || c.name || '%'
-   OR 'Анюта Родионова (Родина-тур)' ILIKE '%' || c.director_name || '%'
-LIMIT 1
-ON CONFLICT (order_number) DO NOTHING;
+WHERE (c.name = 'Анюта Родионова (Родина-тур)' OR c.director_name = 'Анюта Родионова (Родина-тур)')
+  AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 743)
+LIMIT 1;
 
 INSERT INTO rental_orders (
   order_number, client_id, status, start_date, end_date, days_count,
@@ -16603,12 +15048,9 @@ SELECT
   NOW(),
   NOW()
 FROM rental_clients c
-WHERE c.name ILIKE '%Екатерина%' 
-   OR c.director_name ILIKE '%Екатерина%'
-   OR 'Екатерина' ILIKE '%' || c.name || '%'
-   OR 'Екатерина' ILIKE '%' || c.director_name || '%'
-LIMIT 1
-ON CONFLICT (order_number) DO NOTHING;
+WHERE (c.name = 'Екатерина' OR c.director_name = 'Екатерина')
+  AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 742)
+LIMIT 1;
 
 INSERT INTO rental_orders (
   order_number, client_id, status, start_date, end_date, days_count,
@@ -16635,12 +15077,9 @@ SELECT
   NOW(),
   NOW()
 FROM rental_clients c
-WHERE c.name ILIKE '%Любовь (ТИЦ)%' 
-   OR c.director_name ILIKE '%Любовь (ТИЦ)%'
-   OR 'Любовь (ТИЦ)' ILIKE '%' || c.name || '%'
-   OR 'Любовь (ТИЦ)' ILIKE '%' || c.director_name || '%'
-LIMIT 1
-ON CONFLICT (order_number) DO NOTHING;
+WHERE (c.name = 'Любовь (ТИЦ)' OR c.director_name = 'Любовь (ТИЦ)')
+  AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 741)
+LIMIT 1;
 
 INSERT INTO rental_orders (
   order_number, client_id, status, start_date, end_date, days_count,
@@ -16667,12 +15106,9 @@ SELECT
   NOW(),
   NOW()
 FROM rental_clients c
-WHERE c.name ILIKE '%Анастасия Пашинин (НК Транс Тур)%' 
-   OR c.director_name ILIKE '%Анастасия Пашинин (НК Транс Тур)%'
-   OR 'Анастасия Пашинин (НК Транс Тур)' ILIKE '%' || c.name || '%'
-   OR 'Анастасия Пашинин (НК Транс Тур)' ILIKE '%' || c.director_name || '%'
-LIMIT 1
-ON CONFLICT (order_number) DO NOTHING;
+WHERE (c.name = 'Анастасия Пашинин (НК Транс Тур)' OR c.director_name = 'Анастасия Пашинин (НК Транс Тур)')
+  AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 740)
+LIMIT 1;
 
 INSERT INTO rental_orders (
   order_number, client_id, status, start_date, end_date, days_count,
@@ -16699,12 +15135,9 @@ SELECT
   NOW(),
   NOW()
 FROM rental_clients c
-WHERE c.name ILIKE '%Анастасия Пашинин (НК Транс Тур)%' 
-   OR c.director_name ILIKE '%Анастасия Пашинин (НК Транс Тур)%'
-   OR 'Анастасия Пашинин (НК Транс Тур)' ILIKE '%' || c.name || '%'
-   OR 'Анастасия Пашинин (НК Транс Тур)' ILIKE '%' || c.director_name || '%'
-LIMIT 1
-ON CONFLICT (order_number) DO NOTHING;
+WHERE (c.name = 'Анастасия Пашинин (НК Транс Тур)' OR c.director_name = 'Анастасия Пашинин (НК Транс Тур)')
+  AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 739)
+LIMIT 1;
 
 INSERT INTO rental_orders (
   order_number, client_id, status, start_date, end_date, days_count,
@@ -16731,12 +15164,9 @@ SELECT
   NOW(),
   NOW()
 FROM rental_clients c
-WHERE c.name ILIKE '%Анастасия Пашинин (НК Транс Тур)%' 
-   OR c.director_name ILIKE '%Анастасия Пашинин (НК Транс Тур)%'
-   OR 'Анастасия Пашинин (НК Транс Тур)' ILIKE '%' || c.name || '%'
-   OR 'Анастасия Пашинин (НК Транс Тур)' ILIKE '%' || c.director_name || '%'
-LIMIT 1
-ON CONFLICT (order_number) DO NOTHING;
+WHERE (c.name = 'Анастасия Пашинин (НК Транс Тур)' OR c.director_name = 'Анастасия Пашинин (НК Транс Тур)')
+  AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 738)
+LIMIT 1;
 
 INSERT INTO rental_orders (
   order_number, client_id, status, start_date, end_date, days_count,
@@ -16763,12 +15193,9 @@ SELECT
   NOW(),
   NOW()
 FROM rental_clients c
-WHERE c.name ILIKE '%Анастасия Пашинин (НК Транс Тур)%' 
-   OR c.director_name ILIKE '%Анастасия Пашинин (НК Транс Тур)%'
-   OR 'Анастасия Пашинин (НК Транс Тур)' ILIKE '%' || c.name || '%'
-   OR 'Анастасия Пашинин (НК Транс Тур)' ILIKE '%' || c.director_name || '%'
-LIMIT 1
-ON CONFLICT (order_number) DO NOTHING;
+WHERE (c.name = 'Анастасия Пашинин (НК Транс Тур)' OR c.director_name = 'Анастасия Пашинин (НК Транс Тур)')
+  AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 737)
+LIMIT 1;
 
 INSERT INTO rental_orders (
   order_number, client_id, status, start_date, end_date, days_count,
@@ -16795,12 +15222,9 @@ SELECT
   NOW(),
   NOW()
 FROM rental_clients c
-WHERE c.name ILIKE '%Айгуль Файзуллина%' 
-   OR c.director_name ILIKE '%Айгуль Файзуллина%'
-   OR 'Айгуль Файзуллина' ILIKE '%' || c.name || '%'
-   OR 'Айгуль Файзуллина' ILIKE '%' || c.director_name || '%'
-LIMIT 1
-ON CONFLICT (order_number) DO NOTHING;
+WHERE (c.name = 'Айгуль Файзуллина' OR c.director_name = 'Айгуль Файзуллина')
+  AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 736)
+LIMIT 1;
 
 INSERT INTO rental_orders (
   order_number, client_id, status, start_date, end_date, days_count,
@@ -16827,12 +15251,9 @@ SELECT
   NOW(),
   NOW()
 FROM rental_clients c
-WHERE c.name ILIKE '%Анастасия Пашинин (НК Транс Тур)%' 
-   OR c.director_name ILIKE '%Анастасия Пашинин (НК Транс Тур)%'
-   OR 'Анастасия Пашинин (НК Транс Тур)' ILIKE '%' || c.name || '%'
-   OR 'Анастасия Пашинин (НК Транс Тур)' ILIKE '%' || c.director_name || '%'
-LIMIT 1
-ON CONFLICT (order_number) DO NOTHING;
+WHERE (c.name = 'Анастасия Пашинин (НК Транс Тур)' OR c.director_name = 'Анастасия Пашинин (НК Транс Тур)')
+  AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 735)
+LIMIT 1;
 
 INSERT INTO rental_orders (
   order_number, client_id, status, start_date, end_date, days_count,
@@ -16859,12 +15280,9 @@ SELECT
   NOW(),
   NOW()
 FROM rental_clients c
-WHERE c.name ILIKE '%Эдик Заказы для групп%' 
-   OR c.director_name ILIKE '%Эдик Заказы для групп%'
-   OR 'Эдик Заказы для групп' ILIKE '%' || c.name || '%'
-   OR 'Эдик Заказы для групп' ILIKE '%' || c.director_name || '%'
-LIMIT 1
-ON CONFLICT (order_number) DO NOTHING;
+WHERE (c.name = 'Эдик Заказы для групп' OR c.director_name = 'Эдик Заказы для групп')
+  AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 734)
+LIMIT 1;
 
 INSERT INTO rental_orders (
   order_number, client_id, status, start_date, end_date, days_count,
@@ -16891,12 +15309,9 @@ SELECT
   NOW(),
   NOW()
 FROM rental_clients c
-WHERE c.name ILIKE '%Эдик Заказы для групп%' 
-   OR c.director_name ILIKE '%Эдик Заказы для групп%'
-   OR 'Эдик Заказы для групп' ILIKE '%' || c.name || '%'
-   OR 'Эдик Заказы для групп' ILIKE '%' || c.director_name || '%'
-LIMIT 1
-ON CONFLICT (order_number) DO NOTHING;
+WHERE (c.name = 'Эдик Заказы для групп' OR c.director_name = 'Эдик Заказы для групп')
+  AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 733)
+LIMIT 1;
 
 INSERT INTO rental_orders (
   order_number, client_id, status, start_date, end_date, days_count,
@@ -16923,12 +15338,9 @@ SELECT
   NOW(),
   NOW()
 FROM rental_clients c
-WHERE c.name ILIKE '%Эдик Заказы для групп%' 
-   OR c.director_name ILIKE '%Эдик Заказы для групп%'
-   OR 'Эдик Заказы для групп' ILIKE '%' || c.name || '%'
-   OR 'Эдик Заказы для групп' ILIKE '%' || c.director_name || '%'
-LIMIT 1
-ON CONFLICT (order_number) DO NOTHING;
+WHERE (c.name = 'Эдик Заказы для групп' OR c.director_name = 'Эдик Заказы для групп')
+  AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 732)
+LIMIT 1;
 
 INSERT INTO rental_orders (
   order_number, client_id, status, start_date, end_date, days_count,
@@ -16955,12 +15367,9 @@ SELECT
   NOW(),
   NOW()
 FROM rental_clients c
-WHERE c.name ILIKE '%Эдик Заказы для групп%' 
-   OR c.director_name ILIKE '%Эдик Заказы для групп%'
-   OR 'Эдик Заказы для групп' ILIKE '%' || c.name || '%'
-   OR 'Эдик Заказы для групп' ILIKE '%' || c.director_name || '%'
-LIMIT 1
-ON CONFLICT (order_number) DO NOTHING;
+WHERE (c.name = 'Эдик Заказы для групп' OR c.director_name = 'Эдик Заказы для групп')
+  AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 731)
+LIMIT 1;
 
 INSERT INTO rental_orders (
   order_number, client_id, status, start_date, end_date, days_count,
@@ -16987,12 +15396,9 @@ SELECT
   NOW(),
   NOW()
 FROM rental_clients c
-WHERE c.name ILIKE '%Эдик Заказы для групп%' 
-   OR c.director_name ILIKE '%Эдик Заказы для групп%'
-   OR 'Эдик Заказы для групп' ILIKE '%' || c.name || '%'
-   OR 'Эдик Заказы для групп' ILIKE '%' || c.director_name || '%'
-LIMIT 1
-ON CONFLICT (order_number) DO NOTHING;
+WHERE (c.name = 'Эдик Заказы для групп' OR c.director_name = 'Эдик Заказы для групп')
+  AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 730)
+LIMIT 1;
 
 INSERT INTO rental_orders (
   order_number, client_id, status, start_date, end_date, days_count,
@@ -17019,12 +15425,9 @@ SELECT
   NOW(),
   NOW()
 FROM rental_clients c
-WHERE c.name ILIKE '%Эдик Заказы для групп%' 
-   OR c.director_name ILIKE '%Эдик Заказы для групп%'
-   OR 'Эдик Заказы для групп' ILIKE '%' || c.name || '%'
-   OR 'Эдик Заказы для групп' ILIKE '%' || c.director_name || '%'
-LIMIT 1
-ON CONFLICT (order_number) DO NOTHING;
+WHERE (c.name = 'Эдик Заказы для групп' OR c.director_name = 'Эдик Заказы для групп')
+  AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 729)
+LIMIT 1;
 
 INSERT INTO rental_orders (
   order_number, client_id, status, start_date, end_date, days_count,
@@ -17051,12 +15454,9 @@ SELECT
   NOW(),
   NOW()
 FROM rental_clients c
-WHERE c.name ILIKE '%Эдик Заказы для групп%' 
-   OR c.director_name ILIKE '%Эдик Заказы для групп%'
-   OR 'Эдик Заказы для групп' ILIKE '%' || c.name || '%'
-   OR 'Эдик Заказы для групп' ILIKE '%' || c.director_name || '%'
-LIMIT 1
-ON CONFLICT (order_number) DO NOTHING;
+WHERE (c.name = 'Эдик Заказы для групп' OR c.director_name = 'Эдик Заказы для групп')
+  AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 728)
+LIMIT 1;
 
 INSERT INTO rental_orders (
   order_number, client_id, status, start_date, end_date, days_count,
@@ -17083,12 +15483,9 @@ SELECT
   NOW(),
   NOW()
 FROM rental_clients c
-WHERE c.name ILIKE '%Эдик Заказы для групп%' 
-   OR c.director_name ILIKE '%Эдик Заказы для групп%'
-   OR 'Эдик Заказы для групп' ILIKE '%' || c.name || '%'
-   OR 'Эдик Заказы для групп' ILIKE '%' || c.director_name || '%'
-LIMIT 1
-ON CONFLICT (order_number) DO NOTHING;
+WHERE (c.name = 'Эдик Заказы для групп' OR c.director_name = 'Эдик Заказы для групп')
+  AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 727)
+LIMIT 1;
 
 INSERT INTO rental_orders (
   order_number, client_id, status, start_date, end_date, days_count,
@@ -17115,12 +15512,9 @@ SELECT
   NOW(),
   NOW()
 FROM rental_clients c
-WHERE c.name ILIKE '%Эдик Заказы для групп%' 
-   OR c.director_name ILIKE '%Эдик Заказы для групп%'
-   OR 'Эдик Заказы для групп' ILIKE '%' || c.name || '%'
-   OR 'Эдик Заказы для групп' ILIKE '%' || c.director_name || '%'
-LIMIT 1
-ON CONFLICT (order_number) DO NOTHING;
+WHERE (c.name = 'Эдик Заказы для групп' OR c.director_name = 'Эдик Заказы для групп')
+  AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 726)
+LIMIT 1;
 
 INSERT INTO rental_orders (
   order_number, client_id, status, start_date, end_date, days_count,
@@ -17147,12 +15541,9 @@ SELECT
   NOW(),
   NOW()
 FROM rental_clients c
-WHERE c.name ILIKE '%Эдик Заказы для групп%' 
-   OR c.director_name ILIKE '%Эдик Заказы для групп%'
-   OR 'Эдик Заказы для групп' ILIKE '%' || c.name || '%'
-   OR 'Эдик Заказы для групп' ILIKE '%' || c.director_name || '%'
-LIMIT 1
-ON CONFLICT (order_number) DO NOTHING;
+WHERE (c.name = 'Эдик Заказы для групп' OR c.director_name = 'Эдик Заказы для групп')
+  AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 725)
+LIMIT 1;
 
 INSERT INTO rental_orders (
   order_number, client_id, status, start_date, end_date, days_count,
@@ -17179,12 +15570,9 @@ SELECT
   NOW(),
   NOW()
 FROM rental_clients c
-WHERE c.name ILIKE '%Екатерина%' 
-   OR c.director_name ILIKE '%Екатерина%'
-   OR 'Екатерина' ILIKE '%' || c.name || '%'
-   OR 'Екатерина' ILIKE '%' || c.director_name || '%'
-LIMIT 1
-ON CONFLICT (order_number) DO NOTHING;
+WHERE (c.name = 'Екатерина' OR c.director_name = 'Екатерина')
+  AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 724)
+LIMIT 1;
 
 INSERT INTO rental_orders (
   order_number, client_id, status, start_date, end_date, days_count,
@@ -17211,12 +15599,9 @@ SELECT
   NOW(),
   NOW()
 FROM rental_clients c
-WHERE c.name ILIKE '%Александра (Александрия)%' 
-   OR c.director_name ILIKE '%Александра (Александрия)%'
-   OR 'Александра (Александрия)' ILIKE '%' || c.name || '%'
-   OR 'Александра (Александрия)' ILIKE '%' || c.director_name || '%'
-LIMIT 1
-ON CONFLICT (order_number) DO NOTHING;
+WHERE (c.name = 'Александра (Александрия)' OR c.director_name = 'Александра (Александрия)')
+  AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 723)
+LIMIT 1;
 
 INSERT INTO rental_orders (
   order_number, client_id, status, start_date, end_date, days_count,
@@ -17243,12 +15628,9 @@ SELECT
   NOW(),
   NOW()
 FROM rental_clients c
-WHERE c.name ILIKE '%Эвелина (Инициатива)%' 
-   OR c.director_name ILIKE '%Эвелина (Инициатива)%'
-   OR 'Эвелина (Инициатива)' ILIKE '%' || c.name || '%'
-   OR 'Эвелина (Инициатива)' ILIKE '%' || c.director_name || '%'
-LIMIT 1
-ON CONFLICT (order_number) DO NOTHING;
+WHERE (c.name = 'Эвелина (Инициатива)' OR c.director_name = 'Эвелина (Инициатива)')
+  AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 722)
+LIMIT 1;
 
 INSERT INTO rental_orders (
   order_number, client_id, status, start_date, end_date, days_count,
@@ -17275,12 +15657,9 @@ SELECT
   NOW(),
   NOW()
 FROM rental_clients c
-WHERE c.name ILIKE '%Любовь (ТИЦ)%' 
-   OR c.director_name ILIKE '%Любовь (ТИЦ)%'
-   OR 'Любовь (ТИЦ)' ILIKE '%' || c.name || '%'
-   OR 'Любовь (ТИЦ)' ILIKE '%' || c.director_name || '%'
-LIMIT 1
-ON CONFLICT (order_number) DO NOTHING;
+WHERE (c.name = 'Любовь (ТИЦ)' OR c.director_name = 'Любовь (ТИЦ)')
+  AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 721)
+LIMIT 1;
 
 INSERT INTO rental_orders (
   order_number, client_id, status, start_date, end_date, days_count,
@@ -17307,12 +15686,9 @@ SELECT
   NOW(),
   NOW()
 FROM rental_clients c
-WHERE c.name ILIKE '%Мария Экскурсовод%' 
-   OR c.director_name ILIKE '%Мария Экскурсовод%'
-   OR 'Мария Экскурсовод' ILIKE '%' || c.name || '%'
-   OR 'Мария Экскурсовод' ILIKE '%' || c.director_name || '%'
-LIMIT 1
-ON CONFLICT (order_number) DO NOTHING;
+WHERE (c.name = 'Мария Экскурсовод' OR c.director_name = 'Мария Экскурсовод')
+  AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 720)
+LIMIT 1;
 
 INSERT INTO rental_orders (
   order_number, client_id, status, start_date, end_date, days_count,
@@ -17339,12 +15715,9 @@ SELECT
   NOW(),
   NOW()
 FROM rental_clients c
-WHERE c.name ILIKE '%Карина (технологии путешествий)%' 
-   OR c.director_name ILIKE '%Карина (технологии путешествий)%'
-   OR 'Карина (технологии путешествий)' ILIKE '%' || c.name || '%'
-   OR 'Карина (технологии путешествий)' ILIKE '%' || c.director_name || '%'
-LIMIT 1
-ON CONFLICT (order_number) DO NOTHING;
+WHERE (c.name = 'Карина (технологии путешествий)' OR c.director_name = 'Карина (технологии путешествий)')
+  AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 719)
+LIMIT 1;
 
 INSERT INTO rental_orders (
   order_number, client_id, status, start_date, end_date, days_count,
@@ -17371,12 +15744,9 @@ SELECT
   NOW(),
   NOW()
 FROM rental_clients c
-WHERE c.name ILIKE '%Ирина (Иль Мио Тур)%' 
-   OR c.director_name ILIKE '%Ирина (Иль Мио Тур)%'
-   OR 'Ирина (Иль Мио Тур)' ILIKE '%' || c.name || '%'
-   OR 'Ирина (Иль Мио Тур)' ILIKE '%' || c.director_name || '%'
-LIMIT 1
-ON CONFLICT (order_number) DO NOTHING;
+WHERE (c.name = 'Ирина (Иль Мио Тур)' OR c.director_name = 'Ирина (Иль Мио Тур)')
+  AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 718)
+LIMIT 1;
 
 INSERT INTO rental_orders (
   order_number, client_id, status, start_date, end_date, days_count,
@@ -17403,12 +15773,9 @@ SELECT
   NOW(),
   NOW()
 FROM rental_clients c
-WHERE c.name ILIKE '%Иванов Семён%' 
-   OR c.director_name ILIKE '%Иванов Семён%'
-   OR 'Иванов Семён' ILIKE '%' || c.name || '%'
-   OR 'Иванов Семён' ILIKE '%' || c.director_name || '%'
-LIMIT 1
-ON CONFLICT (order_number) DO NOTHING;
+WHERE (c.name = 'Иванов Семён' OR c.director_name = 'Иванов Семён')
+  AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 716)
+LIMIT 1;
 
 INSERT INTO rental_orders (
   order_number, client_id, status, start_date, end_date, days_count,
@@ -17435,12 +15802,9 @@ SELECT
   NOW(),
   NOW()
 FROM rental_clients c
-WHERE c.name ILIKE '%Анюта Родионова (Родина-тур)%' 
-   OR c.director_name ILIKE '%Анюта Родионова (Родина-тур)%'
-   OR 'Анюта Родионова (Родина-тур)' ILIKE '%' || c.name || '%'
-   OR 'Анюта Родионова (Родина-тур)' ILIKE '%' || c.director_name || '%'
-LIMIT 1
-ON CONFLICT (order_number) DO NOTHING;
+WHERE (c.name = 'Анюта Родионова (Родина-тур)' OR c.director_name = 'Анюта Родионова (Родина-тур)')
+  AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 715)
+LIMIT 1;
 
 INSERT INTO rental_orders (
   order_number, client_id, status, start_date, end_date, days_count,
@@ -17467,12 +15831,9 @@ SELECT
   NOW(),
   NOW()
 FROM rental_clients c
-WHERE c.name ILIKE '%Ирина Пронина%' 
-   OR c.director_name ILIKE '%Ирина Пронина%'
-   OR 'Ирина Пронина' ILIKE '%' || c.name || '%'
-   OR 'Ирина Пронина' ILIKE '%' || c.director_name || '%'
-LIMIT 1
-ON CONFLICT (order_number) DO NOTHING;
+WHERE (c.name = 'Ирина Пронина' OR c.director_name = 'Ирина Пронина')
+  AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 714)
+LIMIT 1;
 
 INSERT INTO rental_orders (
   order_number, client_id, status, start_date, end_date, days_count,
@@ -17499,12 +15860,9 @@ SELECT
   NOW(),
   NOW()
 FROM rental_clients c
-WHERE c.name ILIKE '%Лариса%' 
-   OR c.director_name ILIKE '%Лариса%'
-   OR 'Лариса' ILIKE '%' || c.name || '%'
-   OR 'Лариса' ILIKE '%' || c.director_name || '%'
-LIMIT 1
-ON CONFLICT (order_number) DO NOTHING;
+WHERE (c.name = 'Лариса' OR c.director_name = 'Лариса')
+  AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 713)
+LIMIT 1;
 
 INSERT INTO rental_orders (
   order_number, client_id, status, start_date, end_date, days_count,
@@ -17531,12 +15889,9 @@ SELECT
   NOW(),
   NOW()
 FROM rental_clients c
-WHERE c.name ILIKE '%Рената (Твоя Казань)%' 
-   OR c.director_name ILIKE '%Рената (Твоя Казань)%'
-   OR 'Рената (Твоя Казань)' ILIKE '%' || c.name || '%'
-   OR 'Рената (Твоя Казань)' ILIKE '%' || c.director_name || '%'
-LIMIT 1
-ON CONFLICT (order_number) DO NOTHING;
+WHERE (c.name = 'Рената (Твоя Казань)' OR c.director_name = 'Рената (Твоя Казань)')
+  AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 712)
+LIMIT 1;
 
 INSERT INTO rental_orders (
   order_number, client_id, status, start_date, end_date, days_count,
@@ -17563,12 +15918,9 @@ SELECT
   NOW(),
   NOW()
 FROM rental_clients c
-WHERE c.name ILIKE '%Арсен (Юнион)%' 
-   OR c.director_name ILIKE '%Арсен (Юнион)%'
-   OR 'Арсен (Юнион)' ILIKE '%' || c.name || '%'
-   OR 'Арсен (Юнион)' ILIKE '%' || c.director_name || '%'
-LIMIT 1
-ON CONFLICT (order_number) DO NOTHING;
+WHERE (c.name = 'Арсен (Юнион)' OR c.director_name = 'Арсен (Юнион)')
+  AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 711)
+LIMIT 1;
 
 INSERT INTO rental_orders (
   order_number, client_id, status, start_date, end_date, days_count,
@@ -17595,12 +15947,9 @@ SELECT
   NOW(),
   NOW()
 FROM rental_clients c
-WHERE c.name ILIKE '%Инна Экскурсовод%' 
-   OR c.director_name ILIKE '%Инна Экскурсовод%'
-   OR 'Инна Экскурсовод' ILIKE '%' || c.name || '%'
-   OR 'Инна Экскурсовод' ILIKE '%' || c.director_name || '%'
-LIMIT 1
-ON CONFLICT (order_number) DO NOTHING;
+WHERE (c.name = 'Инна Экскурсовод' OR c.director_name = 'Инна Экскурсовод')
+  AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 710)
+LIMIT 1;
 
 INSERT INTO rental_orders (
   order_number, client_id, status, start_date, end_date, days_count,
@@ -17627,12 +15976,9 @@ SELECT
   NOW(),
   NOW()
 FROM rental_clients c
-WHERE c.name ILIKE '%Татьяна Чуб%' 
-   OR c.director_name ILIKE '%Татьяна Чуб%'
-   OR 'Татьяна Чуб' ILIKE '%' || c.name || '%'
-   OR 'Татьяна Чуб' ILIKE '%' || c.director_name || '%'
-LIMIT 1
-ON CONFLICT (order_number) DO NOTHING;
+WHERE (c.name = 'Татьяна Чуб' OR c.director_name = 'Татьяна Чуб')
+  AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 709)
+LIMIT 1;
 
 INSERT INTO rental_orders (
   order_number, client_id, status, start_date, end_date, days_count,
@@ -17659,12 +16005,9 @@ SELECT
   NOW(),
   NOW()
 FROM rental_clients c
-WHERE c.name ILIKE '%Ляйсан (Казань 360)%' 
-   OR c.director_name ILIKE '%Ляйсан (Казань 360)%'
-   OR 'Ляйсан (Казань 360)' ILIKE '%' || c.name || '%'
-   OR 'Ляйсан (Казань 360)' ILIKE '%' || c.director_name || '%'
-LIMIT 1
-ON CONFLICT (order_number) DO NOTHING;
+WHERE (c.name = 'Ляйсан (Казань 360)' OR c.director_name = 'Ляйсан (Казань 360)')
+  AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 708)
+LIMIT 1;
 
 INSERT INTO rental_orders (
   order_number, client_id, status, start_date, end_date, days_count,
@@ -17691,12 +16034,9 @@ SELECT
   NOW(),
   NOW()
 FROM rental_clients c
-WHERE c.name ILIKE '%Ирина (Иль Мио Тур)%' 
-   OR c.director_name ILIKE '%Ирина (Иль Мио Тур)%'
-   OR 'Ирина (Иль Мио Тур)' ILIKE '%' || c.name || '%'
-   OR 'Ирина (Иль Мио Тур)' ILIKE '%' || c.director_name || '%'
-LIMIT 1
-ON CONFLICT (order_number) DO NOTHING;
+WHERE (c.name = 'Ирина (Иль Мио Тур)' OR c.director_name = 'Ирина (Иль Мио Тур)')
+  AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 707)
+LIMIT 1;
 
 INSERT INTO rental_orders (
   order_number, client_id, status, start_date, end_date, days_count,
@@ -17723,12 +16063,9 @@ SELECT
   NOW(),
   NOW()
 FROM rental_clients c
-WHERE c.name ILIKE '%Ирина (Иль Мио Тур)%' 
-   OR c.director_name ILIKE '%Ирина (Иль Мио Тур)%'
-   OR 'Ирина (Иль Мио Тур)' ILIKE '%' || c.name || '%'
-   OR 'Ирина (Иль Мио Тур)' ILIKE '%' || c.director_name || '%'
-LIMIT 1
-ON CONFLICT (order_number) DO NOTHING;
+WHERE (c.name = 'Ирина (Иль Мио Тур)' OR c.director_name = 'Ирина (Иль Мио Тур)')
+  AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 706)
+LIMIT 1;
 
 INSERT INTO rental_orders (
   order_number, client_id, status, start_date, end_date, days_count,
@@ -17755,12 +16092,9 @@ SELECT
   NOW(),
   NOW()
 FROM rental_clients c
-WHERE c.name ILIKE '%Иванов Семён%' 
-   OR c.director_name ILIKE '%Иванов Семён%'
-   OR 'Иванов Семён' ILIKE '%' || c.name || '%'
-   OR 'Иванов Семён' ILIKE '%' || c.director_name || '%'
-LIMIT 1
-ON CONFLICT (order_number) DO NOTHING;
+WHERE (c.name = 'Иванов Семён' OR c.director_name = 'Иванов Семён')
+  AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 705)
+LIMIT 1;
 
 INSERT INTO rental_orders (
   order_number, client_id, status, start_date, end_date, days_count,
@@ -17787,12 +16121,9 @@ SELECT
   NOW(),
   NOW()
 FROM rental_clients c
-WHERE c.name ILIKE '%Любовь (ТИЦ)%' 
-   OR c.director_name ILIKE '%Любовь (ТИЦ)%'
-   OR 'Любовь (ТИЦ)' ILIKE '%' || c.name || '%'
-   OR 'Любовь (ТИЦ)' ILIKE '%' || c.director_name || '%'
-LIMIT 1
-ON CONFLICT (order_number) DO NOTHING;
+WHERE (c.name = 'Любовь (ТИЦ)' OR c.director_name = 'Любовь (ТИЦ)')
+  AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 704)
+LIMIT 1;
 
 INSERT INTO rental_orders (
   order_number, client_id, status, start_date, end_date, days_count,
@@ -17819,12 +16150,9 @@ SELECT
   NOW(),
   NOW()
 FROM rental_clients c
-WHERE c.name ILIKE '%Любовь (ТИЦ)%' 
-   OR c.director_name ILIKE '%Любовь (ТИЦ)%'
-   OR 'Любовь (ТИЦ)' ILIKE '%' || c.name || '%'
-   OR 'Любовь (ТИЦ)' ILIKE '%' || c.director_name || '%'
-LIMIT 1
-ON CONFLICT (order_number) DO NOTHING;
+WHERE (c.name = 'Любовь (ТИЦ)' OR c.director_name = 'Любовь (ТИЦ)')
+  AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 703)
+LIMIT 1;
 
 INSERT INTO rental_orders (
   order_number, client_id, status, start_date, end_date, days_count,
@@ -17851,12 +16179,9 @@ SELECT
   NOW(),
   NOW()
 FROM rental_clients c
-WHERE c.name ILIKE '%Альберт (КТ)%' 
-   OR c.director_name ILIKE '%Альберт (КТ)%'
-   OR 'Альберт (КТ)' ILIKE '%' || c.name || '%'
-   OR 'Альберт (КТ)' ILIKE '%' || c.director_name || '%'
-LIMIT 1
-ON CONFLICT (order_number) DO NOTHING;
+WHERE (c.name = 'Альберт (КТ)' OR c.director_name = 'Альберт (КТ)')
+  AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 702)
+LIMIT 1;
 
 INSERT INTO rental_orders (
   order_number, client_id, status, start_date, end_date, days_count,
@@ -17883,12 +16208,9 @@ SELECT
   NOW(),
   NOW()
 FROM rental_clients c
-WHERE c.name ILIKE '%Татьяна (Гольфстрим)%' 
-   OR c.director_name ILIKE '%Татьяна (Гольфстрим)%'
-   OR 'Татьяна (Гольфстрим)' ILIKE '%' || c.name || '%'
-   OR 'Татьяна (Гольфстрим)' ILIKE '%' || c.director_name || '%'
-LIMIT 1
-ON CONFLICT (order_number) DO NOTHING;
+WHERE (c.name = 'Татьяна (Гольфстрим)' OR c.director_name = 'Татьяна (Гольфстрим)')
+  AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 701)
+LIMIT 1;
 
 INSERT INTO rental_orders (
   order_number, client_id, status, start_date, end_date, days_count,
@@ -17915,12 +16237,9 @@ SELECT
   NOW(),
   NOW()
 FROM rental_clients c
-WHERE c.name ILIKE '%Эдик Заказы для групп%' 
-   OR c.director_name ILIKE '%Эдик Заказы для групп%'
-   OR 'Эдик Заказы для групп' ILIKE '%' || c.name || '%'
-   OR 'Эдик Заказы для групп' ILIKE '%' || c.director_name || '%'
-LIMIT 1
-ON CONFLICT (order_number) DO NOTHING;
+WHERE (c.name = 'Эдик Заказы для групп' OR c.director_name = 'Эдик Заказы для групп')
+  AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 700)
+LIMIT 1;
 
 INSERT INTO rental_orders (
   order_number, client_id, status, start_date, end_date, days_count,
@@ -17947,12 +16266,9 @@ SELECT
   NOW(),
   NOW()
 FROM rental_clients c
-WHERE c.name ILIKE '%Эдик Заказы для групп%' 
-   OR c.director_name ILIKE '%Эдик Заказы для групп%'
-   OR 'Эдик Заказы для групп' ILIKE '%' || c.name || '%'
-   OR 'Эдик Заказы для групп' ILIKE '%' || c.director_name || '%'
-LIMIT 1
-ON CONFLICT (order_number) DO NOTHING;
+WHERE (c.name = 'Эдик Заказы для групп' OR c.director_name = 'Эдик Заказы для групп')
+  AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 699)
+LIMIT 1;
 
 INSERT INTO rental_orders (
   order_number, client_id, status, start_date, end_date, days_count,
@@ -17979,12 +16295,9 @@ SELECT
   NOW(),
   NOW()
 FROM rental_clients c
-WHERE c.name ILIKE '%Валентина Экскурсовод%' 
-   OR c.director_name ILIKE '%Валентина Экскурсовод%'
-   OR 'Валентина Экскурсовод' ILIKE '%' || c.name || '%'
-   OR 'Валентина Экскурсовод' ILIKE '%' || c.director_name || '%'
-LIMIT 1
-ON CONFLICT (order_number) DO NOTHING;
+WHERE (c.name = 'Валентина Экскурсовод' OR c.director_name = 'Валентина Экскурсовод')
+  AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 698)
+LIMIT 1;
 
 INSERT INTO rental_orders (
   order_number, client_id, status, start_date, end_date, days_count,
@@ -18011,12 +16324,9 @@ SELECT
   NOW(),
   NOW()
 FROM rental_clients c
-WHERE c.name ILIKE '%Гульнара%' 
-   OR c.director_name ILIKE '%Гульнара%'
-   OR 'Гульнара' ILIKE '%' || c.name || '%'
-   OR 'Гульнара' ILIKE '%' || c.director_name || '%'
-LIMIT 1
-ON CONFLICT (order_number) DO NOTHING;
+WHERE (c.name = 'Гульнара' OR c.director_name = 'Гульнара')
+  AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 697)
+LIMIT 1;
 
 INSERT INTO rental_orders (
   order_number, client_id, status, start_date, end_date, days_count,
@@ -18043,12 +16353,9 @@ SELECT
   NOW(),
   NOW()
 FROM rental_clients c
-WHERE c.name ILIKE '%Твой Гид%' 
-   OR c.director_name ILIKE '%Твой Гид%'
-   OR 'Твой Гид' ILIKE '%' || c.name || '%'
-   OR 'Твой Гид' ILIKE '%' || c.director_name || '%'
-LIMIT 1
-ON CONFLICT (order_number) DO NOTHING;
+WHERE (c.name = 'Твой Гид' OR c.director_name = 'Твой Гид')
+  AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 696)
+LIMIT 1;
 
 INSERT INTO rental_orders (
   order_number, client_id, status, start_date, end_date, days_count,
@@ -18075,12 +16382,9 @@ SELECT
   NOW(),
   NOW()
 FROM rental_clients c
-WHERE c.name ILIKE '%Татьяна (Гольфстрим)%' 
-   OR c.director_name ILIKE '%Татьяна (Гольфстрим)%'
-   OR 'Татьяна (Гольфстрим)' ILIKE '%' || c.name || '%'
-   OR 'Татьяна (Гольфстрим)' ILIKE '%' || c.director_name || '%'
-LIMIT 1
-ON CONFLICT (order_number) DO NOTHING;
+WHERE (c.name = 'Татьяна (Гольфстрим)' OR c.director_name = 'Татьяна (Гольфстрим)')
+  AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 694)
+LIMIT 1;
 
 INSERT INTO rental_orders (
   order_number, client_id, status, start_date, end_date, days_count,
@@ -18107,12 +16411,9 @@ SELECT
   NOW(),
   NOW()
 FROM rental_clients c
-WHERE c.name ILIKE '%Татьяна (Гольфстрим)%' 
-   OR c.director_name ILIKE '%Татьяна (Гольфстрим)%'
-   OR 'Татьяна (Гольфстрим)' ILIKE '%' || c.name || '%'
-   OR 'Татьяна (Гольфстрим)' ILIKE '%' || c.director_name || '%'
-LIMIT 1
-ON CONFLICT (order_number) DO NOTHING;
+WHERE (c.name = 'Татьяна (Гольфстрим)' OR c.director_name = 'Татьяна (Гольфстрим)')
+  AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 693)
+LIMIT 1;
 
 INSERT INTO rental_orders (
   order_number, client_id, status, start_date, end_date, days_count,
@@ -18139,12 +16440,9 @@ SELECT
   NOW(),
   NOW()
 FROM rental_clients c
-WHERE c.name ILIKE '%Татьяна (Гольфстрим)%' 
-   OR c.director_name ILIKE '%Татьяна (Гольфстрим)%'
-   OR 'Татьяна (Гольфстрим)' ILIKE '%' || c.name || '%'
-   OR 'Татьяна (Гольфстрим)' ILIKE '%' || c.director_name || '%'
-LIMIT 1
-ON CONFLICT (order_number) DO NOTHING;
+WHERE (c.name = 'Татьяна (Гольфстрим)' OR c.director_name = 'Татьяна (Гольфстрим)')
+  AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 692)
+LIMIT 1;
 
 INSERT INTO rental_orders (
   order_number, client_id, status, start_date, end_date, days_count,
@@ -18171,12 +16469,9 @@ SELECT
   NOW(),
   NOW()
 FROM rental_clients c
-WHERE c.name ILIKE '%Татьяна (Гольфстрим)%' 
-   OR c.director_name ILIKE '%Татьяна (Гольфстрим)%'
-   OR 'Татьяна (Гольфстрим)' ILIKE '%' || c.name || '%'
-   OR 'Татьяна (Гольфстрим)' ILIKE '%' || c.director_name || '%'
-LIMIT 1
-ON CONFLICT (order_number) DO NOTHING;
+WHERE (c.name = 'Татьяна (Гольфстрим)' OR c.director_name = 'Татьяна (Гольфстрим)')
+  AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 691)
+LIMIT 1;
 
 INSERT INTO rental_orders (
   order_number, client_id, status, start_date, end_date, days_count,
@@ -18203,12 +16498,9 @@ SELECT
   NOW(),
   NOW()
 FROM rental_clients c
-WHERE c.name ILIKE '%Любовь (ТИЦ)%' 
-   OR c.director_name ILIKE '%Любовь (ТИЦ)%'
-   OR 'Любовь (ТИЦ)' ILIKE '%' || c.name || '%'
-   OR 'Любовь (ТИЦ)' ILIKE '%' || c.director_name || '%'
-LIMIT 1
-ON CONFLICT (order_number) DO NOTHING;
+WHERE (c.name = 'Любовь (ТИЦ)' OR c.director_name = 'Любовь (ТИЦ)')
+  AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 690)
+LIMIT 1;
 
 INSERT INTO rental_orders (
   order_number, client_id, status, start_date, end_date, days_count,
@@ -18235,12 +16527,9 @@ SELECT
   NOW(),
   NOW()
 FROM rental_clients c
-WHERE c.name ILIKE '%Рената (Твоя Казань)%' 
-   OR c.director_name ILIKE '%Рената (Твоя Казань)%'
-   OR 'Рената (Твоя Казань)' ILIKE '%' || c.name || '%'
-   OR 'Рената (Твоя Казань)' ILIKE '%' || c.director_name || '%'
-LIMIT 1
-ON CONFLICT (order_number) DO NOTHING;
+WHERE (c.name = 'Рената (Твоя Казань)' OR c.director_name = 'Рената (Твоя Казань)')
+  AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 688)
+LIMIT 1;
 
 INSERT INTO rental_orders (
   order_number, client_id, status, start_date, end_date, days_count,
@@ -18267,12 +16556,9 @@ SELECT
   NOW(),
   NOW()
 FROM rental_clients c
-WHERE c.name ILIKE '%Татьяна (Агентство Удачи)%' 
-   OR c.director_name ILIKE '%Татьяна (Агентство Удачи)%'
-   OR 'Татьяна (Агентство Удачи)' ILIKE '%' || c.name || '%'
-   OR 'Татьяна (Агентство Удачи)' ILIKE '%' || c.director_name || '%'
-LIMIT 1
-ON CONFLICT (order_number) DO NOTHING;
+WHERE (c.name = 'Татьяна (Агентство Удачи)' OR c.director_name = 'Татьяна (Агентство Удачи)')
+  AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 687)
+LIMIT 1;
 
 INSERT INTO rental_orders (
   order_number, client_id, status, start_date, end_date, days_count,
@@ -18299,12 +16585,9 @@ SELECT
   NOW(),
   NOW()
 FROM rental_clients c
-WHERE c.name ILIKE '%Любовь (ТИЦ)%' 
-   OR c.director_name ILIKE '%Любовь (ТИЦ)%'
-   OR 'Любовь (ТИЦ)' ILIKE '%' || c.name || '%'
-   OR 'Любовь (ТИЦ)' ILIKE '%' || c.director_name || '%'
-LIMIT 1
-ON CONFLICT (order_number) DO NOTHING;
+WHERE (c.name = 'Любовь (ТИЦ)' OR c.director_name = 'Любовь (ТИЦ)')
+  AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 686)
+LIMIT 1;
 
 INSERT INTO rental_orders (
   order_number, client_id, status, start_date, end_date, days_count,
@@ -18331,12 +16614,9 @@ SELECT
   NOW(),
   NOW()
 FROM rental_clients c
-WHERE c.name ILIKE '%Любовь (ТИЦ)%' 
-   OR c.director_name ILIKE '%Любовь (ТИЦ)%'
-   OR 'Любовь (ТИЦ)' ILIKE '%' || c.name || '%'
-   OR 'Любовь (ТИЦ)' ILIKE '%' || c.director_name || '%'
-LIMIT 1
-ON CONFLICT (order_number) DO NOTHING;
+WHERE (c.name = 'Любовь (ТИЦ)' OR c.director_name = 'Любовь (ТИЦ)')
+  AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 685)
+LIMIT 1;
 
 INSERT INTO rental_orders (
   order_number, client_id, status, start_date, end_date, days_count,
@@ -18363,12 +16643,9 @@ SELECT
   NOW(),
   NOW()
 FROM rental_clients c
-WHERE c.name ILIKE '%Андрей (Экскурс)%' 
-   OR c.director_name ILIKE '%Андрей (Экскурс)%'
-   OR 'Андрей (Экскурс)' ILIKE '%' || c.name || '%'
-   OR 'Андрей (Экскурс)' ILIKE '%' || c.director_name || '%'
-LIMIT 1
-ON CONFLICT (order_number) DO NOTHING;
+WHERE (c.name = 'Андрей (Экскурс)' OR c.director_name = 'Андрей (Экскурс)')
+  AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 684)
+LIMIT 1;
 
 INSERT INTO rental_orders (
   order_number, client_id, status, start_date, end_date, days_count,
@@ -18395,12 +16672,9 @@ SELECT
   NOW(),
   NOW()
 FROM rental_clients c
-WHERE c.name ILIKE '%Любовь (ТИЦ)%' 
-   OR c.director_name ILIKE '%Любовь (ТИЦ)%'
-   OR 'Любовь (ТИЦ)' ILIKE '%' || c.name || '%'
-   OR 'Любовь (ТИЦ)' ILIKE '%' || c.director_name || '%'
-LIMIT 1
-ON CONFLICT (order_number) DO NOTHING;
+WHERE (c.name = 'Любовь (ТИЦ)' OR c.director_name = 'Любовь (ТИЦ)')
+  AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 683)
+LIMIT 1;
 
 INSERT INTO rental_orders (
   order_number, client_id, status, start_date, end_date, days_count,
@@ -18427,12 +16701,9 @@ SELECT
   NOW(),
   NOW()
 FROM rental_clients c
-WHERE c.name ILIKE '%Яна (Вариот)%' 
-   OR c.director_name ILIKE '%Яна (Вариот)%'
-   OR 'Яна (Вариот)' ILIKE '%' || c.name || '%'
-   OR 'Яна (Вариот)' ILIKE '%' || c.director_name || '%'
-LIMIT 1
-ON CONFLICT (order_number) DO NOTHING;
+WHERE (c.name = 'Яна (Вариот)' OR c.director_name = 'Яна (Вариот)')
+  AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 682)
+LIMIT 1;
 
 INSERT INTO rental_orders (
   order_number, client_id, status, start_date, end_date, days_count,
@@ -18459,12 +16730,9 @@ SELECT
   NOW(),
   NOW()
 FROM rental_clients c
-WHERE c.name ILIKE '%Карина (технологии путешествий)%' 
-   OR c.director_name ILIKE '%Карина (технологии путешествий)%'
-   OR 'Карина (технологии путешествий)' ILIKE '%' || c.name || '%'
-   OR 'Карина (технологии путешествий)' ILIKE '%' || c.director_name || '%'
-LIMIT 1
-ON CONFLICT (order_number) DO NOTHING;
+WHERE (c.name = 'Карина (технологии путешествий)' OR c.director_name = 'Карина (технологии путешествий)')
+  AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 681)
+LIMIT 1;
 
 INSERT INTO rental_orders (
   order_number, client_id, status, start_date, end_date, days_count,
@@ -18491,12 +16759,9 @@ SELECT
   NOW(),
   NOW()
 FROM rental_clients c
-WHERE c.name ILIKE '%Ольга%' 
-   OR c.director_name ILIKE '%Ольга%'
-   OR 'Ольга' ILIKE '%' || c.name || '%'
-   OR 'Ольга' ILIKE '%' || c.director_name || '%'
-LIMIT 1
-ON CONFLICT (order_number) DO NOTHING;
+WHERE (c.name = 'Ольга' OR c.director_name = 'Ольга')
+  AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 680)
+LIMIT 1;
 
 INSERT INTO rental_orders (
   order_number, client_id, status, start_date, end_date, days_count,
@@ -18523,12 +16788,9 @@ SELECT
   NOW(),
   NOW()
 FROM rental_clients c
-WHERE c.name ILIKE '%Карина (технологии путешествий)%' 
-   OR c.director_name ILIKE '%Карина (технологии путешествий)%'
-   OR 'Карина (технологии путешествий)' ILIKE '%' || c.name || '%'
-   OR 'Карина (технологии путешествий)' ILIKE '%' || c.director_name || '%'
-LIMIT 1
-ON CONFLICT (order_number) DO NOTHING;
+WHERE (c.name = 'Карина (технологии путешествий)' OR c.director_name = 'Карина (технологии путешествий)')
+  AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 678)
+LIMIT 1;
 
 INSERT INTO rental_orders (
   order_number, client_id, status, start_date, end_date, days_count,
@@ -18555,12 +16817,9 @@ SELECT
   NOW(),
   NOW()
 FROM rental_clients c
-WHERE c.name ILIKE '%Екатерина%' 
-   OR c.director_name ILIKE '%Екатерина%'
-   OR 'Екатерина' ILIKE '%' || c.name || '%'
-   OR 'Екатерина' ILIKE '%' || c.director_name || '%'
-LIMIT 1
-ON CONFLICT (order_number) DO NOTHING;
+WHERE (c.name = 'Екатерина' OR c.director_name = 'Екатерина')
+  AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 677)
+LIMIT 1;
 
 INSERT INTO rental_orders (
   order_number, client_id, status, start_date, end_date, days_count,
@@ -18587,12 +16846,9 @@ SELECT
   NOW(),
   NOW()
 FROM rental_clients c
-WHERE c.name ILIKE '%Лариса Позднякова%' 
-   OR c.director_name ILIKE '%Лариса Позднякова%'
-   OR 'Лариса Позднякова' ILIKE '%' || c.name || '%'
-   OR 'Лариса Позднякова' ILIKE '%' || c.director_name || '%'
-LIMIT 1
-ON CONFLICT (order_number) DO NOTHING;
+WHERE (c.name = 'Лариса Позднякова' OR c.director_name = 'Лариса Позднякова')
+  AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 676)
+LIMIT 1;
 
 INSERT INTO rental_orders (
   order_number, client_id, status, start_date, end_date, days_count,
@@ -18619,12 +16875,9 @@ SELECT
   NOW(),
   NOW()
 FROM rental_clients c
-WHERE c.name ILIKE '%Сергей (Авангард)%' 
-   OR c.director_name ILIKE '%Сергей (Авангард)%'
-   OR 'Сергей (Авангард)' ILIKE '%' || c.name || '%'
-   OR 'Сергей (Авангард)' ILIKE '%' || c.director_name || '%'
-LIMIT 1
-ON CONFLICT (order_number) DO NOTHING;
+WHERE (c.name = 'Сергей (Авангард)' OR c.director_name = 'Сергей (Авангард)')
+  AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 675)
+LIMIT 1;
 
 INSERT INTO rental_orders (
   order_number, client_id, status, start_date, end_date, days_count,
@@ -18651,12 +16904,9 @@ SELECT
   NOW(),
   NOW()
 FROM rental_clients c
-WHERE c.name ILIKE '%Наталья%' 
-   OR c.director_name ILIKE '%Наталья%'
-   OR 'Наталья' ILIKE '%' || c.name || '%'
-   OR 'Наталья' ILIKE '%' || c.director_name || '%'
-LIMIT 1
-ON CONFLICT (order_number) DO NOTHING;
+WHERE (c.name = 'Наталья' OR c.director_name = 'Наталья')
+  AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 674)
+LIMIT 1;
 
 INSERT INTO rental_orders (
   order_number, client_id, status, start_date, end_date, days_count,
@@ -18683,12 +16933,9 @@ SELECT
   NOW(),
   NOW()
 FROM rental_clients c
-WHERE c.name ILIKE '%Любовь (ТИЦ)%' 
-   OR c.director_name ILIKE '%Любовь (ТИЦ)%'
-   OR 'Любовь (ТИЦ)' ILIKE '%' || c.name || '%'
-   OR 'Любовь (ТИЦ)' ILIKE '%' || c.director_name || '%'
-LIMIT 1
-ON CONFLICT (order_number) DO NOTHING;
+WHERE (c.name = 'Любовь (ТИЦ)' OR c.director_name = 'Любовь (ТИЦ)')
+  AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 672)
+LIMIT 1;
 
 INSERT INTO rental_orders (
   order_number, client_id, status, start_date, end_date, days_count,
@@ -18715,12 +16962,9 @@ SELECT
   NOW(),
   NOW()
 FROM rental_clients c
-WHERE c.name ILIKE '%Альберт (КТ)%' 
-   OR c.director_name ILIKE '%Альберт (КТ)%'
-   OR 'Альберт (КТ)' ILIKE '%' || c.name || '%'
-   OR 'Альберт (КТ)' ILIKE '%' || c.director_name || '%'
-LIMIT 1
-ON CONFLICT (order_number) DO NOTHING;
+WHERE (c.name = 'Альберт (КТ)' OR c.director_name = 'Альберт (КТ)')
+  AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 671)
+LIMIT 1;
 
 INSERT INTO rental_orders (
   order_number, client_id, status, start_date, end_date, days_count,
@@ -18747,12 +16991,9 @@ SELECT
   NOW(),
   NOW()
 FROM rental_clients c
-WHERE c.name ILIKE '%Любовь (ТИЦ)%' 
-   OR c.director_name ILIKE '%Любовь (ТИЦ)%'
-   OR 'Любовь (ТИЦ)' ILIKE '%' || c.name || '%'
-   OR 'Любовь (ТИЦ)' ILIKE '%' || c.director_name || '%'
-LIMIT 1
-ON CONFLICT (order_number) DO NOTHING;
+WHERE (c.name = 'Любовь (ТИЦ)' OR c.director_name = 'Любовь (ТИЦ)')
+  AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 670)
+LIMIT 1;
 
 INSERT INTO rental_orders (
   order_number, client_id, status, start_date, end_date, days_count,
@@ -18779,12 +17020,9 @@ SELECT
   NOW(),
   NOW()
 FROM rental_clients c
-WHERE c.name ILIKE '%Любовь (ТИЦ)%' 
-   OR c.director_name ILIKE '%Любовь (ТИЦ)%'
-   OR 'Любовь (ТИЦ)' ILIKE '%' || c.name || '%'
-   OR 'Любовь (ТИЦ)' ILIKE '%' || c.director_name || '%'
-LIMIT 1
-ON CONFLICT (order_number) DO NOTHING;
+WHERE (c.name = 'Любовь (ТИЦ)' OR c.director_name = 'Любовь (ТИЦ)')
+  AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 669)
+LIMIT 1;
 
 INSERT INTO rental_orders (
   order_number, client_id, status, start_date, end_date, days_count,
@@ -18811,12 +17049,9 @@ SELECT
   NOW(),
   NOW()
 FROM rental_clients c
-WHERE c.name ILIKE '%Андрей (Экскурс)%' 
-   OR c.director_name ILIKE '%Андрей (Экскурс)%'
-   OR 'Андрей (Экскурс)' ILIKE '%' || c.name || '%'
-   OR 'Андрей (Экскурс)' ILIKE '%' || c.director_name || '%'
-LIMIT 1
-ON CONFLICT (order_number) DO NOTHING;
+WHERE (c.name = 'Андрей (Экскурс)' OR c.director_name = 'Андрей (Экскурс)')
+  AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 668)
+LIMIT 1;
 
 INSERT INTO rental_orders (
   order_number, client_id, status, start_date, end_date, days_count,
@@ -18843,12 +17078,9 @@ SELECT
   NOW(),
   NOW()
 FROM rental_clients c
-WHERE c.name ILIKE '%Сергей%' 
-   OR c.director_name ILIKE '%Сергей%'
-   OR 'Сергей' ILIKE '%' || c.name || '%'
-   OR 'Сергей' ILIKE '%' || c.director_name || '%'
-LIMIT 1
-ON CONFLICT (order_number) DO NOTHING;
+WHERE (c.name = 'Сергей' OR c.director_name = 'Сергей')
+  AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 667)
+LIMIT 1;
 
 INSERT INTO rental_orders (
   order_number, client_id, status, start_date, end_date, days_count,
@@ -18875,12 +17107,9 @@ SELECT
   NOW(),
   NOW()
 FROM rental_clients c
-WHERE c.name ILIKE '%Любовь (ТИЦ)%' 
-   OR c.director_name ILIKE '%Любовь (ТИЦ)%'
-   OR 'Любовь (ТИЦ)' ILIKE '%' || c.name || '%'
-   OR 'Любовь (ТИЦ)' ILIKE '%' || c.director_name || '%'
-LIMIT 1
-ON CONFLICT (order_number) DO NOTHING;
+WHERE (c.name = 'Любовь (ТИЦ)' OR c.director_name = 'Любовь (ТИЦ)')
+  AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 666)
+LIMIT 1;
 
 INSERT INTO rental_orders (
   order_number, client_id, status, start_date, end_date, days_count,
@@ -18907,12 +17136,9 @@ SELECT
   NOW(),
   NOW()
 FROM rental_clients c
-WHERE c.name ILIKE '%Галина (Тур Урал)%' 
-   OR c.director_name ILIKE '%Галина (Тур Урал)%'
-   OR 'Галина (Тур Урал)' ILIKE '%' || c.name || '%'
-   OR 'Галина (Тур Урал)' ILIKE '%' || c.director_name || '%'
-LIMIT 1
-ON CONFLICT (order_number) DO NOTHING;
+WHERE (c.name = 'Галина (Тур Урал)' OR c.director_name = 'Галина (Тур Урал)')
+  AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 664)
+LIMIT 1;
 
 INSERT INTO rental_orders (
   order_number, client_id, status, start_date, end_date, days_count,
@@ -18939,12 +17165,9 @@ SELECT
   NOW(),
   NOW()
 FROM rental_clients c
-WHERE c.name ILIKE '%Гузель (Юралс)%' 
-   OR c.director_name ILIKE '%Гузель (Юралс)%'
-   OR 'Гузель (Юралс)' ILIKE '%' || c.name || '%'
-   OR 'Гузель (Юралс)' ILIKE '%' || c.director_name || '%'
-LIMIT 1
-ON CONFLICT (order_number) DO NOTHING;
+WHERE (c.name = 'Гузель (Юралс)' OR c.director_name = 'Гузель (Юралс)')
+  AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 663)
+LIMIT 1;
 
 INSERT INTO rental_orders (
   order_number, client_id, status, start_date, end_date, days_count,
@@ -18971,12 +17194,9 @@ SELECT
   NOW(),
   NOW()
 FROM rental_clients c
-WHERE c.name ILIKE '%Галина (Тур Урал)%' 
-   OR c.director_name ILIKE '%Галина (Тур Урал)%'
-   OR 'Галина (Тур Урал)' ILIKE '%' || c.name || '%'
-   OR 'Галина (Тур Урал)' ILIKE '%' || c.director_name || '%'
-LIMIT 1
-ON CONFLICT (order_number) DO NOTHING;
+WHERE (c.name = 'Галина (Тур Урал)' OR c.director_name = 'Галина (Тур Урал)')
+  AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 662)
+LIMIT 1;
 
 INSERT INTO rental_orders (
   order_number, client_id, status, start_date, end_date, days_count,
@@ -19003,12 +17223,9 @@ SELECT
   NOW(),
   NOW()
 FROM rental_clients c
-WHERE c.name ILIKE '%Юлия (Рыжий Слон)%' 
-   OR c.director_name ILIKE '%Юлия (Рыжий Слон)%'
-   OR 'Юлия (Рыжий Слон)' ILIKE '%' || c.name || '%'
-   OR 'Юлия (Рыжий Слон)' ILIKE '%' || c.director_name || '%'
-LIMIT 1
-ON CONFLICT (order_number) DO NOTHING;
+WHERE (c.name = 'Юлия (Рыжий Слон)' OR c.director_name = 'Юлия (Рыжий Слон)')
+  AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 661)
+LIMIT 1;
 
 INSERT INTO rental_orders (
   order_number, client_id, status, start_date, end_date, days_count,
@@ -19035,12 +17252,9 @@ SELECT
   NOW(),
   NOW()
 FROM rental_clients c
-WHERE c.name ILIKE '%Альберт (КТ)%' 
-   OR c.director_name ILIKE '%Альберт (КТ)%'
-   OR 'Альберт (КТ)' ILIKE '%' || c.name || '%'
-   OR 'Альберт (КТ)' ILIKE '%' || c.director_name || '%'
-LIMIT 1
-ON CONFLICT (order_number) DO NOTHING;
+WHERE (c.name = 'Альберт (КТ)' OR c.director_name = 'Альберт (КТ)')
+  AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 660)
+LIMIT 1;
 
 INSERT INTO rental_orders (
   order_number, client_id, status, start_date, end_date, days_count,
@@ -19067,12 +17281,9 @@ SELECT
   NOW(),
   NOW()
 FROM rental_clients c
-WHERE c.name ILIKE '%Галина (Тур Урал)%' 
-   OR c.director_name ILIKE '%Галина (Тур Урал)%'
-   OR 'Галина (Тур Урал)' ILIKE '%' || c.name || '%'
-   OR 'Галина (Тур Урал)' ILIKE '%' || c.director_name || '%'
-LIMIT 1
-ON CONFLICT (order_number) DO NOTHING;
+WHERE (c.name = 'Галина (Тур Урал)' OR c.director_name = 'Галина (Тур Урал)')
+  AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 659)
+LIMIT 1;
 
 INSERT INTO rental_orders (
   order_number, client_id, status, start_date, end_date, days_count,
@@ -19099,12 +17310,9 @@ SELECT
   NOW(),
   NOW()
 FROM rental_clients c
-WHERE c.name ILIKE '%Наталья%' 
-   OR c.director_name ILIKE '%Наталья%'
-   OR 'Наталья' ILIKE '%' || c.name || '%'
-   OR 'Наталья' ILIKE '%' || c.director_name || '%'
-LIMIT 1
-ON CONFLICT (order_number) DO NOTHING;
+WHERE (c.name = 'Наталья' OR c.director_name = 'Наталья')
+  AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 658)
+LIMIT 1;
 
 INSERT INTO rental_orders (
   order_number, client_id, status, start_date, end_date, days_count,
@@ -19131,12 +17339,9 @@ SELECT
   NOW(),
   NOW()
 FROM rental_clients c
-WHERE c.name ILIKE '%Арсен (Юнион)%' 
-   OR c.director_name ILIKE '%Арсен (Юнион)%'
-   OR 'Арсен (Юнион)' ILIKE '%' || c.name || '%'
-   OR 'Арсен (Юнион)' ILIKE '%' || c.director_name || '%'
-LIMIT 1
-ON CONFLICT (order_number) DO NOTHING;
+WHERE (c.name = 'Арсен (Юнион)' OR c.director_name = 'Арсен (Юнион)')
+  AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 657)
+LIMIT 1;
 
 INSERT INTO rental_orders (
   order_number, client_id, status, start_date, end_date, days_count,
@@ -19163,12 +17368,9 @@ SELECT
   NOW(),
   NOW()
 FROM rental_clients c
-WHERE c.name ILIKE '%Эвелина (Инициатива)%' 
-   OR c.director_name ILIKE '%Эвелина (Инициатива)%'
-   OR 'Эвелина (Инициатива)' ILIKE '%' || c.name || '%'
-   OR 'Эвелина (Инициатива)' ILIKE '%' || c.director_name || '%'
-LIMIT 1
-ON CONFLICT (order_number) DO NOTHING;
+WHERE (c.name = 'Эвелина (Инициатива)' OR c.director_name = 'Эвелина (Инициатива)')
+  AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 656)
+LIMIT 1;
 
 INSERT INTO rental_orders (
   order_number, client_id, status, start_date, end_date, days_count,
@@ -19195,12 +17397,9 @@ SELECT
   NOW(),
   NOW()
 FROM rental_clients c
-WHERE c.name ILIKE '%Наталья Москва%' 
-   OR c.director_name ILIKE '%Наталья Москва%'
-   OR 'Наталья Москва' ILIKE '%' || c.name || '%'
-   OR 'Наталья Москва' ILIKE '%' || c.director_name || '%'
-LIMIT 1
-ON CONFLICT (order_number) DO NOTHING;
+WHERE (c.name = 'Наталья Москва' OR c.director_name = 'Наталья Москва')
+  AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 655)
+LIMIT 1;
 
 INSERT INTO rental_orders (
   order_number, client_id, status, start_date, end_date, days_count,
@@ -19227,12 +17426,9 @@ SELECT
   NOW(),
   NOW()
 FROM rental_clients c
-WHERE c.name ILIKE '%Инна Экскурсовод%' 
-   OR c.director_name ILIKE '%Инна Экскурсовод%'
-   OR 'Инна Экскурсовод' ILIKE '%' || c.name || '%'
-   OR 'Инна Экскурсовод' ILIKE '%' || c.director_name || '%'
-LIMIT 1
-ON CONFLICT (order_number) DO NOTHING;
+WHERE (c.name = 'Инна Экскурсовод' OR c.director_name = 'Инна Экскурсовод')
+  AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 654)
+LIMIT 1;
 
 INSERT INTO rental_orders (
   order_number, client_id, status, start_date, end_date, days_count,
@@ -19259,12 +17455,9 @@ SELECT
   NOW(),
   NOW()
 FROM rental_clients c
-WHERE c.name ILIKE '%Алина Сафина%' 
-   OR c.director_name ILIKE '%Алина Сафина%'
-   OR 'Алина Сафина' ILIKE '%' || c.name || '%'
-   OR 'Алина Сафина' ILIKE '%' || c.director_name || '%'
-LIMIT 1
-ON CONFLICT (order_number) DO NOTHING;
+WHERE (c.name = 'Алина Сафина' OR c.director_name = 'Алина Сафина')
+  AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 653)
+LIMIT 1;
 
 INSERT INTO rental_orders (
   order_number, client_id, status, start_date, end_date, days_count,
@@ -19291,12 +17484,9 @@ SELECT
   NOW(),
   NOW()
 FROM rental_clients c
-WHERE c.name ILIKE '%Эдик Заказы для групп%' 
-   OR c.director_name ILIKE '%Эдик Заказы для групп%'
-   OR 'Эдик Заказы для групп' ILIKE '%' || c.name || '%'
-   OR 'Эдик Заказы для групп' ILIKE '%' || c.director_name || '%'
-LIMIT 1
-ON CONFLICT (order_number) DO NOTHING;
+WHERE (c.name = 'Эдик Заказы для групп' OR c.director_name = 'Эдик Заказы для групп')
+  AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 652)
+LIMIT 1;
 
 INSERT INTO rental_orders (
   order_number, client_id, status, start_date, end_date, days_count,
@@ -19323,12 +17513,9 @@ SELECT
   NOW(),
   NOW()
 FROM rental_clients c
-WHERE c.name ILIKE '%Альберт (КТ)%' 
-   OR c.director_name ILIKE '%Альберт (КТ)%'
-   OR 'Альберт (КТ)' ILIKE '%' || c.name || '%'
-   OR 'Альберт (КТ)' ILIKE '%' || c.director_name || '%'
-LIMIT 1
-ON CONFLICT (order_number) DO NOTHING;
+WHERE (c.name = 'Альберт (КТ)' OR c.director_name = 'Альберт (КТ)')
+  AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 651)
+LIMIT 1;
 
 INSERT INTO rental_orders (
   order_number, client_id, status, start_date, end_date, days_count,
@@ -19355,12 +17542,9 @@ SELECT
   NOW(),
   NOW()
 FROM rental_clients c
-WHERE c.name ILIKE '%Галия%' 
-   OR c.director_name ILIKE '%Галия%'
-   OR 'Галия' ILIKE '%' || c.name || '%'
-   OR 'Галия' ILIKE '%' || c.director_name || '%'
-LIMIT 1
-ON CONFLICT (order_number) DO NOTHING;
+WHERE (c.name = 'Галия' OR c.director_name = 'Галия')
+  AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 650)
+LIMIT 1;
 
 INSERT INTO rental_orders (
   order_number, client_id, status, start_date, end_date, days_count,
@@ -19387,12 +17571,9 @@ SELECT
   NOW(),
   NOW()
 FROM rental_clients c
-WHERE c.name ILIKE '%Светлана (Лана-тур Казань)%' 
-   OR c.director_name ILIKE '%Светлана (Лана-тур Казань)%'
-   OR 'Светлана (Лана-тур Казань)' ILIKE '%' || c.name || '%'
-   OR 'Светлана (Лана-тур Казань)' ILIKE '%' || c.director_name || '%'
-LIMIT 1
-ON CONFLICT (order_number) DO NOTHING;
+WHERE (c.name = 'Светлана (Лана-тур Казань)' OR c.director_name = 'Светлана (Лана-тур Казань)')
+  AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 649)
+LIMIT 1;
 
 INSERT INTO rental_orders (
   order_number, client_id, status, start_date, end_date, days_count,
@@ -19419,12 +17600,9 @@ SELECT
   NOW(),
   NOW()
 FROM rental_clients c
-WHERE c.name ILIKE '%Галина Рыжикова%' 
-   OR c.director_name ILIKE '%Галина Рыжикова%'
-   OR 'Галина Рыжикова' ILIKE '%' || c.name || '%'
-   OR 'Галина Рыжикова' ILIKE '%' || c.director_name || '%'
-LIMIT 1
-ON CONFLICT (order_number) DO NOTHING;
+WHERE (c.name = 'Галина Рыжикова' OR c.director_name = 'Галина Рыжикова')
+  AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 648)
+LIMIT 1;
 
 INSERT INTO rental_orders (
   order_number, client_id, status, start_date, end_date, days_count,
@@ -19451,12 +17629,9 @@ SELECT
   NOW(),
   NOW()
 FROM rental_clients c
-WHERE c.name ILIKE '%Вера (СК-Интур)%' 
-   OR c.director_name ILIKE '%Вера (СК-Интур)%'
-   OR 'Вера (СК-Интур)' ILIKE '%' || c.name || '%'
-   OR 'Вера (СК-Интур)' ILIKE '%' || c.director_name || '%'
-LIMIT 1
-ON CONFLICT (order_number) DO NOTHING;
+WHERE (c.name = 'Вера (СК-Интур)' OR c.director_name = 'Вера (СК-Интур)')
+  AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 647)
+LIMIT 1;
 
 INSERT INTO rental_orders (
   order_number, client_id, status, start_date, end_date, days_count,
@@ -19483,12 +17658,9 @@ SELECT
   NOW(),
   NOW()
 FROM rental_clients c
-WHERE c.name ILIKE '%Любовь (ТИЦ)%' 
-   OR c.director_name ILIKE '%Любовь (ТИЦ)%'
-   OR 'Любовь (ТИЦ)' ILIKE '%' || c.name || '%'
-   OR 'Любовь (ТИЦ)' ILIKE '%' || c.director_name || '%'
-LIMIT 1
-ON CONFLICT (order_number) DO NOTHING;
+WHERE (c.name = 'Любовь (ТИЦ)' OR c.director_name = 'Любовь (ТИЦ)')
+  AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 646)
+LIMIT 1;
 
 INSERT INTO rental_orders (
   order_number, client_id, status, start_date, end_date, days_count,
@@ -19515,12 +17687,9 @@ SELECT
   NOW(),
   NOW()
 FROM rental_clients c
-WHERE c.name ILIKE '%Эвелина (Инициатива)%' 
-   OR c.director_name ILIKE '%Эвелина (Инициатива)%'
-   OR 'Эвелина (Инициатива)' ILIKE '%' || c.name || '%'
-   OR 'Эвелина (Инициатива)' ILIKE '%' || c.director_name || '%'
-LIMIT 1
-ON CONFLICT (order_number) DO NOTHING;
+WHERE (c.name = 'Эвелина (Инициатива)' OR c.director_name = 'Эвелина (Инициатива)')
+  AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 645)
+LIMIT 1;
 
 INSERT INTO rental_orders (
   order_number, client_id, status, start_date, end_date, days_count,
@@ -19547,12 +17716,9 @@ SELECT
   NOW(),
   NOW()
 FROM rental_clients c
-WHERE c.name ILIKE '%Эвелина (Инициатива)%' 
-   OR c.director_name ILIKE '%Эвелина (Инициатива)%'
-   OR 'Эвелина (Инициатива)' ILIKE '%' || c.name || '%'
-   OR 'Эвелина (Инициатива)' ILIKE '%' || c.director_name || '%'
-LIMIT 1
-ON CONFLICT (order_number) DO NOTHING;
+WHERE (c.name = 'Эвелина (Инициатива)' OR c.director_name = 'Эвелина (Инициатива)')
+  AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 644)
+LIMIT 1;
 
 INSERT INTO rental_orders (
   order_number, client_id, status, start_date, end_date, days_count,
@@ -19579,12 +17745,9 @@ SELECT
   NOW(),
   NOW()
 FROM rental_clients c
-WHERE c.name ILIKE '%Эвелина (Инициатива)%' 
-   OR c.director_name ILIKE '%Эвелина (Инициатива)%'
-   OR 'Эвелина (Инициатива)' ILIKE '%' || c.name || '%'
-   OR 'Эвелина (Инициатива)' ILIKE '%' || c.director_name || '%'
-LIMIT 1
-ON CONFLICT (order_number) DO NOTHING;
+WHERE (c.name = 'Эвелина (Инициатива)' OR c.director_name = 'Эвелина (Инициатива)')
+  AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 643)
+LIMIT 1;
 
 INSERT INTO rental_orders (
   order_number, client_id, status, start_date, end_date, days_count,
@@ -19611,12 +17774,9 @@ SELECT
   NOW(),
   NOW()
 FROM rental_clients c
-WHERE c.name ILIKE '%Зельфира%' 
-   OR c.director_name ILIKE '%Зельфира%'
-   OR 'Зельфира' ILIKE '%' || c.name || '%'
-   OR 'Зельфира' ILIKE '%' || c.director_name || '%'
-LIMIT 1
-ON CONFLICT (order_number) DO NOTHING;
+WHERE (c.name = 'Зельфира' OR c.director_name = 'Зельфира')
+  AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 642)
+LIMIT 1;
 
 INSERT INTO rental_orders (
   order_number, client_id, status, start_date, end_date, days_count,
@@ -19643,12 +17803,9 @@ SELECT
   NOW(),
   NOW()
 FROM rental_clients c
-WHERE c.name ILIKE '%Эдик Заказы для групп%' 
-   OR c.director_name ILIKE '%Эдик Заказы для групп%'
-   OR 'Эдик Заказы для групп' ILIKE '%' || c.name || '%'
-   OR 'Эдик Заказы для групп' ILIKE '%' || c.director_name || '%'
-LIMIT 1
-ON CONFLICT (order_number) DO NOTHING;
+WHERE (c.name = 'Эдик Заказы для групп' OR c.director_name = 'Эдик Заказы для групп')
+  AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 641)
+LIMIT 1;
 
 INSERT INTO rental_orders (
   order_number, client_id, status, start_date, end_date, days_count,
@@ -19675,12 +17832,9 @@ SELECT
   NOW(),
   NOW()
 FROM rental_clients c
-WHERE c.name ILIKE '%Эдик Заказы для групп%' 
-   OR c.director_name ILIKE '%Эдик Заказы для групп%'
-   OR 'Эдик Заказы для групп' ILIKE '%' || c.name || '%'
-   OR 'Эдик Заказы для групп' ILIKE '%' || c.director_name || '%'
-LIMIT 1
-ON CONFLICT (order_number) DO NOTHING;
+WHERE (c.name = 'Эдик Заказы для групп' OR c.director_name = 'Эдик Заказы для групп')
+  AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 640)
+LIMIT 1;
 
 INSERT INTO rental_orders (
   order_number, client_id, status, start_date, end_date, days_count,
@@ -19707,12 +17861,9 @@ SELECT
   NOW(),
   NOW()
 FROM rental_clients c
-WHERE c.name ILIKE '%Эдик Заказы для групп%' 
-   OR c.director_name ILIKE '%Эдик Заказы для групп%'
-   OR 'Эдик Заказы для групп' ILIKE '%' || c.name || '%'
-   OR 'Эдик Заказы для групп' ILIKE '%' || c.director_name || '%'
-LIMIT 1
-ON CONFLICT (order_number) DO NOTHING;
+WHERE (c.name = 'Эдик Заказы для групп' OR c.director_name = 'Эдик Заказы для групп')
+  AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 639)
+LIMIT 1;
 
 INSERT INTO rental_orders (
   order_number, client_id, status, start_date, end_date, days_count,
@@ -19739,12 +17890,9 @@ SELECT
   NOW(),
   NOW()
 FROM rental_clients c
-WHERE c.name ILIKE '%Эдик Заказы для групп%' 
-   OR c.director_name ILIKE '%Эдик Заказы для групп%'
-   OR 'Эдик Заказы для групп' ILIKE '%' || c.name || '%'
-   OR 'Эдик Заказы для групп' ILIKE '%' || c.director_name || '%'
-LIMIT 1
-ON CONFLICT (order_number) DO NOTHING;
+WHERE (c.name = 'Эдик Заказы для групп' OR c.director_name = 'Эдик Заказы для групп')
+  AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 638)
+LIMIT 1;
 
 INSERT INTO rental_orders (
   order_number, client_id, status, start_date, end_date, days_count,
@@ -19771,12 +17919,9 @@ SELECT
   NOW(),
   NOW()
 FROM rental_clients c
-WHERE c.name ILIKE '%Эдик Заказы для групп%' 
-   OR c.director_name ILIKE '%Эдик Заказы для групп%'
-   OR 'Эдик Заказы для групп' ILIKE '%' || c.name || '%'
-   OR 'Эдик Заказы для групп' ILIKE '%' || c.director_name || '%'
-LIMIT 1
-ON CONFLICT (order_number) DO NOTHING;
+WHERE (c.name = 'Эдик Заказы для групп' OR c.director_name = 'Эдик Заказы для групп')
+  AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 637)
+LIMIT 1;
 
 INSERT INTO rental_orders (
   order_number, client_id, status, start_date, end_date, days_count,
@@ -19803,12 +17948,9 @@ SELECT
   NOW(),
   NOW()
 FROM rental_clients c
-WHERE c.name ILIKE '%Эдик Заказы для групп%' 
-   OR c.director_name ILIKE '%Эдик Заказы для групп%'
-   OR 'Эдик Заказы для групп' ILIKE '%' || c.name || '%'
-   OR 'Эдик Заказы для групп' ILIKE '%' || c.director_name || '%'
-LIMIT 1
-ON CONFLICT (order_number) DO NOTHING;
+WHERE (c.name = 'Эдик Заказы для групп' OR c.director_name = 'Эдик Заказы для групп')
+  AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 634)
+LIMIT 1;
 
 INSERT INTO rental_orders (
   order_number, client_id, status, start_date, end_date, days_count,
@@ -19835,12 +17977,9 @@ SELECT
   NOW(),
   NOW()
 FROM rental_clients c
-WHERE c.name ILIKE '%Эдик Заказы для групп%' 
-   OR c.director_name ILIKE '%Эдик Заказы для групп%'
-   OR 'Эдик Заказы для групп' ILIKE '%' || c.name || '%'
-   OR 'Эдик Заказы для групп' ILIKE '%' || c.director_name || '%'
-LIMIT 1
-ON CONFLICT (order_number) DO NOTHING;
+WHERE (c.name = 'Эдик Заказы для групп' OR c.director_name = 'Эдик Заказы для групп')
+  AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 633)
+LIMIT 1;
 
 INSERT INTO rental_orders (
   order_number, client_id, status, start_date, end_date, days_count,
@@ -19867,12 +18006,9 @@ SELECT
   NOW(),
   NOW()
 FROM rental_clients c
-WHERE c.name ILIKE '%Эдик Заказы для групп%' 
-   OR c.director_name ILIKE '%Эдик Заказы для групп%'
-   OR 'Эдик Заказы для групп' ILIKE '%' || c.name || '%'
-   OR 'Эдик Заказы для групп' ILIKE '%' || c.director_name || '%'
-LIMIT 1
-ON CONFLICT (order_number) DO NOTHING;
+WHERE (c.name = 'Эдик Заказы для групп' OR c.director_name = 'Эдик Заказы для групп')
+  AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 632)
+LIMIT 1;
 
 INSERT INTO rental_orders (
   order_number, client_id, status, start_date, end_date, days_count,
@@ -19899,12 +18035,9 @@ SELECT
   NOW(),
   NOW()
 FROM rental_clients c
-WHERE c.name ILIKE '%Эдик Заказы для групп%' 
-   OR c.director_name ILIKE '%Эдик Заказы для групп%'
-   OR 'Эдик Заказы для групп' ILIKE '%' || c.name || '%'
-   OR 'Эдик Заказы для групп' ILIKE '%' || c.director_name || '%'
-LIMIT 1
-ON CONFLICT (order_number) DO NOTHING;
+WHERE (c.name = 'Эдик Заказы для групп' OR c.director_name = 'Эдик Заказы для групп')
+  AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 630)
+LIMIT 1;
 
 INSERT INTO rental_orders (
   order_number, client_id, status, start_date, end_date, days_count,
@@ -19931,12 +18064,9 @@ SELECT
   NOW(),
   NOW()
 FROM rental_clients c
-WHERE c.name ILIKE '%Эдик Заказы для групп%' 
-   OR c.director_name ILIKE '%Эдик Заказы для групп%'
-   OR 'Эдик Заказы для групп' ILIKE '%' || c.name || '%'
-   OR 'Эдик Заказы для групп' ILIKE '%' || c.director_name || '%'
-LIMIT 1
-ON CONFLICT (order_number) DO NOTHING;
+WHERE (c.name = 'Эдик Заказы для групп' OR c.director_name = 'Эдик Заказы для групп')
+  AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 629)
+LIMIT 1;
 
 INSERT INTO rental_orders (
   order_number, client_id, status, start_date, end_date, days_count,
@@ -19963,12 +18093,9 @@ SELECT
   NOW(),
   NOW()
 FROM rental_clients c
-WHERE c.name ILIKE '%Эдик Заказы для групп%' 
-   OR c.director_name ILIKE '%Эдик Заказы для групп%'
-   OR 'Эдик Заказы для групп' ILIKE '%' || c.name || '%'
-   OR 'Эдик Заказы для групп' ILIKE '%' || c.director_name || '%'
-LIMIT 1
-ON CONFLICT (order_number) DO NOTHING;
+WHERE (c.name = 'Эдик Заказы для групп' OR c.director_name = 'Эдик Заказы для групп')
+  AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 628)
+LIMIT 1;
 
 INSERT INTO rental_orders (
   order_number, client_id, status, start_date, end_date, days_count,
@@ -19995,12 +18122,9 @@ SELECT
   NOW(),
   NOW()
 FROM rental_clients c
-WHERE c.name ILIKE '%Эдик Заказы для групп%' 
-   OR c.director_name ILIKE '%Эдик Заказы для групп%'
-   OR 'Эдик Заказы для групп' ILIKE '%' || c.name || '%'
-   OR 'Эдик Заказы для групп' ILIKE '%' || c.director_name || '%'
-LIMIT 1
-ON CONFLICT (order_number) DO NOTHING;
+WHERE (c.name = 'Эдик Заказы для групп' OR c.director_name = 'Эдик Заказы для групп')
+  AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 627)
+LIMIT 1;
 
 INSERT INTO rental_orders (
   order_number, client_id, status, start_date, end_date, days_count,
@@ -20027,12 +18151,9 @@ SELECT
   NOW(),
   NOW()
 FROM rental_clients c
-WHERE c.name ILIKE '%Ирина (Иль Мио Тур)%' 
-   OR c.director_name ILIKE '%Ирина (Иль Мио Тур)%'
-   OR 'Ирина (Иль Мио Тур)' ILIKE '%' || c.name || '%'
-   OR 'Ирина (Иль Мио Тур)' ILIKE '%' || c.director_name || '%'
-LIMIT 1
-ON CONFLICT (order_number) DO NOTHING;
+WHERE (c.name = 'Ирина (Иль Мио Тур)' OR c.director_name = 'Ирина (Иль Мио Тур)')
+  AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 626)
+LIMIT 1;
 
 INSERT INTO rental_orders (
   order_number, client_id, status, start_date, end_date, days_count,
@@ -20059,12 +18180,9 @@ SELECT
   NOW(),
   NOW()
 FROM rental_clients c
-WHERE c.name ILIKE '%Оксана%' 
-   OR c.director_name ILIKE '%Оксана%'
-   OR 'Оксана' ILIKE '%' || c.name || '%'
-   OR 'Оксана' ILIKE '%' || c.director_name || '%'
-LIMIT 1
-ON CONFLICT (order_number) DO NOTHING;
+WHERE (c.name = 'Оксана' OR c.director_name = 'Оксана')
+  AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 625)
+LIMIT 1;
 
 INSERT INTO rental_orders (
   order_number, client_id, status, start_date, end_date, days_count,
@@ -20091,12 +18209,9 @@ SELECT
   NOW(),
   NOW()
 FROM rental_clients c
-WHERE c.name ILIKE '%Любовь (ТИЦ)%' 
-   OR c.director_name ILIKE '%Любовь (ТИЦ)%'
-   OR 'Любовь (ТИЦ)' ILIKE '%' || c.name || '%'
-   OR 'Любовь (ТИЦ)' ILIKE '%' || c.director_name || '%'
-LIMIT 1
-ON CONFLICT (order_number) DO NOTHING;
+WHERE (c.name = 'Любовь (ТИЦ)' OR c.director_name = 'Любовь (ТИЦ)')
+  AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 624)
+LIMIT 1;
 
 INSERT INTO rental_orders (
   order_number, client_id, status, start_date, end_date, days_count,
@@ -20123,12 +18238,9 @@ SELECT
   NOW(),
   NOW()
 FROM rental_clients c
-WHERE c.name ILIKE '%Татьяна (Гольфстрим)%' 
-   OR c.director_name ILIKE '%Татьяна (Гольфстрим)%'
-   OR 'Татьяна (Гольфстрим)' ILIKE '%' || c.name || '%'
-   OR 'Татьяна (Гольфстрим)' ILIKE '%' || c.director_name || '%'
-LIMIT 1
-ON CONFLICT (order_number) DO NOTHING;
+WHERE (c.name = 'Татьяна (Гольфстрим)' OR c.director_name = 'Татьяна (Гольфстрим)')
+  AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 623)
+LIMIT 1;
 
 INSERT INTO rental_orders (
   order_number, client_id, status, start_date, end_date, days_count,
@@ -20155,12 +18267,9 @@ SELECT
   NOW(),
   NOW()
 FROM rental_clients c
-WHERE c.name ILIKE '%Татьяна (Гольфстрим)%' 
-   OR c.director_name ILIKE '%Татьяна (Гольфстрим)%'
-   OR 'Татьяна (Гольфстрим)' ILIKE '%' || c.name || '%'
-   OR 'Татьяна (Гольфстрим)' ILIKE '%' || c.director_name || '%'
-LIMIT 1
-ON CONFLICT (order_number) DO NOTHING;
+WHERE (c.name = 'Татьяна (Гольфстрим)' OR c.director_name = 'Татьяна (Гольфстрим)')
+  AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 622)
+LIMIT 1;
 
 INSERT INTO rental_orders (
   order_number, client_id, status, start_date, end_date, days_count,
@@ -20187,12 +18296,9 @@ SELECT
   NOW(),
   NOW()
 FROM rental_clients c
-WHERE c.name ILIKE '%Татьяна (Гольфстрим)%' 
-   OR c.director_name ILIKE '%Татьяна (Гольфстрим)%'
-   OR 'Татьяна (Гольфстрим)' ILIKE '%' || c.name || '%'
-   OR 'Татьяна (Гольфстрим)' ILIKE '%' || c.director_name || '%'
-LIMIT 1
-ON CONFLICT (order_number) DO NOTHING;
+WHERE (c.name = 'Татьяна (Гольфстрим)' OR c.director_name = 'Татьяна (Гольфстрим)')
+  AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 621)
+LIMIT 1;
 
 INSERT INTO rental_orders (
   order_number, client_id, status, start_date, end_date, days_count,
@@ -20219,12 +18325,9 @@ SELECT
   NOW(),
   NOW()
 FROM rental_clients c
-WHERE c.name ILIKE '%Татьяна (Гольфстрим)%' 
-   OR c.director_name ILIKE '%Татьяна (Гольфстрим)%'
-   OR 'Татьяна (Гольфстрим)' ILIKE '%' || c.name || '%'
-   OR 'Татьяна (Гольфстрим)' ILIKE '%' || c.director_name || '%'
-LIMIT 1
-ON CONFLICT (order_number) DO NOTHING;
+WHERE (c.name = 'Татьяна (Гольфстрим)' OR c.director_name = 'Татьяна (Гольфстрим)')
+  AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 620)
+LIMIT 1;
 
 INSERT INTO rental_orders (
   order_number, client_id, status, start_date, end_date, days_count,
@@ -20251,12 +18354,9 @@ SELECT
   NOW(),
   NOW()
 FROM rental_clients c
-WHERE c.name ILIKE '%Мария Экскурсовод%' 
-   OR c.director_name ILIKE '%Мария Экскурсовод%'
-   OR 'Мария Экскурсовод' ILIKE '%' || c.name || '%'
-   OR 'Мария Экскурсовод' ILIKE '%' || c.director_name || '%'
-LIMIT 1
-ON CONFLICT (order_number) DO NOTHING;
+WHERE (c.name = 'Мария Экскурсовод' OR c.director_name = 'Мария Экскурсовод')
+  AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 619)
+LIMIT 1;
 
 INSERT INTO rental_orders (
   order_number, client_id, status, start_date, end_date, days_count,
@@ -20283,12 +18383,9 @@ SELECT
   NOW(),
   NOW()
 FROM rental_clients c
-WHERE c.name ILIKE '%Арсен (Юнион)%' 
-   OR c.director_name ILIKE '%Арсен (Юнион)%'
-   OR 'Арсен (Юнион)' ILIKE '%' || c.name || '%'
-   OR 'Арсен (Юнион)' ILIKE '%' || c.director_name || '%'
-LIMIT 1
-ON CONFLICT (order_number) DO NOTHING;
+WHERE (c.name = 'Арсен (Юнион)' OR c.director_name = 'Арсен (Юнион)')
+  AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 618)
+LIMIT 1;
 
 INSERT INTO rental_orders (
   order_number, client_id, status, start_date, end_date, days_count,
@@ -20315,12 +18412,9 @@ SELECT
   NOW(),
   NOW()
 FROM rental_clients c
-WHERE c.name ILIKE '%Арсен (Юнион)%' 
-   OR c.director_name ILIKE '%Арсен (Юнион)%'
-   OR 'Арсен (Юнион)' ILIKE '%' || c.name || '%'
-   OR 'Арсен (Юнион)' ILIKE '%' || c.director_name || '%'
-LIMIT 1
-ON CONFLICT (order_number) DO NOTHING;
+WHERE (c.name = 'Арсен (Юнион)' OR c.director_name = 'Арсен (Юнион)')
+  AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 617)
+LIMIT 1;
 
 INSERT INTO rental_orders (
   order_number, client_id, status, start_date, end_date, days_count,
@@ -20347,12 +18441,9 @@ SELECT
   NOW(),
   NOW()
 FROM rental_clients c
-WHERE c.name ILIKE '%Диляра%' 
-   OR c.director_name ILIKE '%Диляра%'
-   OR 'Диляра' ILIKE '%' || c.name || '%'
-   OR 'Диляра' ILIKE '%' || c.director_name || '%'
-LIMIT 1
-ON CONFLICT (order_number) DO NOTHING;
+WHERE (c.name = 'Диляра' OR c.director_name = 'Диляра')
+  AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 615)
+LIMIT 1;
 
 INSERT INTO rental_orders (
   order_number, client_id, status, start_date, end_date, days_count,
@@ -20379,12 +18470,9 @@ SELECT
   NOW(),
   NOW()
 FROM rental_clients c
-WHERE c.name ILIKE '%Татьяна (Гольфстрим)%' 
-   OR c.director_name ILIKE '%Татьяна (Гольфстрим)%'
-   OR 'Татьяна (Гольфстрим)' ILIKE '%' || c.name || '%'
-   OR 'Татьяна (Гольфстрим)' ILIKE '%' || c.director_name || '%'
-LIMIT 1
-ON CONFLICT (order_number) DO NOTHING;
+WHERE (c.name = 'Татьяна (Гольфстрим)' OR c.director_name = 'Татьяна (Гольфстрим)')
+  AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 614)
+LIMIT 1;
 
 INSERT INTO rental_orders (
   order_number, client_id, status, start_date, end_date, days_count,
@@ -20411,12 +18499,9 @@ SELECT
   NOW(),
   NOW()
 FROM rental_clients c
-WHERE c.name ILIKE '%Татьяна (Гольфстрим)%' 
-   OR c.director_name ILIKE '%Татьяна (Гольфстрим)%'
-   OR 'Татьяна (Гольфстрим)' ILIKE '%' || c.name || '%'
-   OR 'Татьяна (Гольфстрим)' ILIKE '%' || c.director_name || '%'
-LIMIT 1
-ON CONFLICT (order_number) DO NOTHING;
+WHERE (c.name = 'Татьяна (Гольфстрим)' OR c.director_name = 'Татьяна (Гольфстрим)')
+  AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 613)
+LIMIT 1;
 
 INSERT INTO rental_orders (
   order_number, client_id, status, start_date, end_date, days_count,
@@ -20443,12 +18528,9 @@ SELECT
   NOW(),
   NOW()
 FROM rental_clients c
-WHERE c.name ILIKE '%Альберт (КТ)%' 
-   OR c.director_name ILIKE '%Альберт (КТ)%'
-   OR 'Альберт (КТ)' ILIKE '%' || c.name || '%'
-   OR 'Альберт (КТ)' ILIKE '%' || c.director_name || '%'
-LIMIT 1
-ON CONFLICT (order_number) DO NOTHING;
+WHERE (c.name = 'Альберт (КТ)' OR c.director_name = 'Альберт (КТ)')
+  AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 612)
+LIMIT 1;
 
 INSERT INTO rental_orders (
   order_number, client_id, status, start_date, end_date, days_count,
@@ -20475,12 +18557,9 @@ SELECT
   NOW(),
   NOW()
 FROM rental_clients c
-WHERE c.name ILIKE '%Любовь (ТИЦ)%' 
-   OR c.director_name ILIKE '%Любовь (ТИЦ)%'
-   OR 'Любовь (ТИЦ)' ILIKE '%' || c.name || '%'
-   OR 'Любовь (ТИЦ)' ILIKE '%' || c.director_name || '%'
-LIMIT 1
-ON CONFLICT (order_number) DO NOTHING;
+WHERE (c.name = 'Любовь (ТИЦ)' OR c.director_name = 'Любовь (ТИЦ)')
+  AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 611)
+LIMIT 1;
 
 INSERT INTO rental_orders (
   order_number, client_id, status, start_date, end_date, days_count,
@@ -20507,12 +18586,9 @@ SELECT
   NOW(),
   NOW()
 FROM rental_clients c
-WHERE c.name ILIKE '%Галина (Тур Урал)%' 
-   OR c.director_name ILIKE '%Галина (Тур Урал)%'
-   OR 'Галина (Тур Урал)' ILIKE '%' || c.name || '%'
-   OR 'Галина (Тур Урал)' ILIKE '%' || c.director_name || '%'
-LIMIT 1
-ON CONFLICT (order_number) DO NOTHING;
+WHERE (c.name = 'Галина (Тур Урал)' OR c.director_name = 'Галина (Тур Урал)')
+  AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 610)
+LIMIT 1;
 
 INSERT INTO rental_orders (
   order_number, client_id, status, start_date, end_date, days_count,
@@ -20539,12 +18615,9 @@ SELECT
   NOW(),
   NOW()
 FROM rental_clients c
-WHERE c.name ILIKE '%Галина (Тур Урал)%' 
-   OR c.director_name ILIKE '%Галина (Тур Урал)%'
-   OR 'Галина (Тур Урал)' ILIKE '%' || c.name || '%'
-   OR 'Галина (Тур Урал)' ILIKE '%' || c.director_name || '%'
-LIMIT 1
-ON CONFLICT (order_number) DO NOTHING;
+WHERE (c.name = 'Галина (Тур Урал)' OR c.director_name = 'Галина (Тур Урал)')
+  AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 609)
+LIMIT 1;
 
 INSERT INTO rental_orders (
   order_number, client_id, status, start_date, end_date, days_count,
@@ -20571,12 +18644,9 @@ SELECT
   NOW(),
   NOW()
 FROM rental_clients c
-WHERE c.name ILIKE '%Любовь (ТИЦ)%' 
-   OR c.director_name ILIKE '%Любовь (ТИЦ)%'
-   OR 'Любовь (ТИЦ)' ILIKE '%' || c.name || '%'
-   OR 'Любовь (ТИЦ)' ILIKE '%' || c.director_name || '%'
-LIMIT 1
-ON CONFLICT (order_number) DO NOTHING;
+WHERE (c.name = 'Любовь (ТИЦ)' OR c.director_name = 'Любовь (ТИЦ)')
+  AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 608)
+LIMIT 1;
 
 INSERT INTO rental_orders (
   order_number, client_id, status, start_date, end_date, days_count,
@@ -20603,12 +18673,9 @@ SELECT
   NOW(),
   NOW()
 FROM rental_clients c
-WHERE c.name ILIKE '%Арсен (Юнион)%' 
-   OR c.director_name ILIKE '%Арсен (Юнион)%'
-   OR 'Арсен (Юнион)' ILIKE '%' || c.name || '%'
-   OR 'Арсен (Юнион)' ILIKE '%' || c.director_name || '%'
-LIMIT 1
-ON CONFLICT (order_number) DO NOTHING;
+WHERE (c.name = 'Арсен (Юнион)' OR c.director_name = 'Арсен (Юнион)')
+  AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 607)
+LIMIT 1;
 
 INSERT INTO rental_orders (
   order_number, client_id, status, start_date, end_date, days_count,
@@ -20635,12 +18702,9 @@ SELECT
   NOW(),
   NOW()
 FROM rental_clients c
-WHERE c.name ILIKE '%Арсен (Юнион)%' 
-   OR c.director_name ILIKE '%Арсен (Юнион)%'
-   OR 'Арсен (Юнион)' ILIKE '%' || c.name || '%'
-   OR 'Арсен (Юнион)' ILIKE '%' || c.director_name || '%'
-LIMIT 1
-ON CONFLICT (order_number) DO NOTHING;
+WHERE (c.name = 'Арсен (Юнион)' OR c.director_name = 'Арсен (Юнион)')
+  AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 606)
+LIMIT 1;
 
 INSERT INTO rental_orders (
   order_number, client_id, status, start_date, end_date, days_count,
@@ -20667,12 +18731,9 @@ SELECT
   NOW(),
   NOW()
 FROM rental_clients c
-WHERE c.name ILIKE '%Арсен (Юнион)%' 
-   OR c.director_name ILIKE '%Арсен (Юнион)%'
-   OR 'Арсен (Юнион)' ILIKE '%' || c.name || '%'
-   OR 'Арсен (Юнион)' ILIKE '%' || c.director_name || '%'
-LIMIT 1
-ON CONFLICT (order_number) DO NOTHING;
+WHERE (c.name = 'Арсен (Юнион)' OR c.director_name = 'Арсен (Юнион)')
+  AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 605)
+LIMIT 1;
 
 INSERT INTO rental_orders (
   order_number, client_id, status, start_date, end_date, days_count,
@@ -20699,12 +18760,9 @@ SELECT
   NOW(),
   NOW()
 FROM rental_clients c
-WHERE c.name ILIKE '%Ляйсан (Казань 360)%' 
-   OR c.director_name ILIKE '%Ляйсан (Казань 360)%'
-   OR 'Ляйсан (Казань 360)' ILIKE '%' || c.name || '%'
-   OR 'Ляйсан (Казань 360)' ILIKE '%' || c.director_name || '%'
-LIMIT 1
-ON CONFLICT (order_number) DO NOTHING;
+WHERE (c.name = 'Ляйсан (Казань 360)' OR c.director_name = 'Ляйсан (Казань 360)')
+  AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 604)
+LIMIT 1;
 
 INSERT INTO rental_orders (
   order_number, client_id, status, start_date, end_date, days_count,
@@ -20731,12 +18789,9 @@ SELECT
   NOW(),
   NOW()
 FROM rental_clients c
-WHERE c.name ILIKE '%Ирина (Иль Мио Тур)%' 
-   OR c.director_name ILIKE '%Ирина (Иль Мио Тур)%'
-   OR 'Ирина (Иль Мио Тур)' ILIKE '%' || c.name || '%'
-   OR 'Ирина (Иль Мио Тур)' ILIKE '%' || c.director_name || '%'
-LIMIT 1
-ON CONFLICT (order_number) DO NOTHING;
+WHERE (c.name = 'Ирина (Иль Мио Тур)' OR c.director_name = 'Ирина (Иль Мио Тур)')
+  AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 602)
+LIMIT 1;
 
 INSERT INTO rental_orders (
   order_number, client_id, status, start_date, end_date, days_count,
@@ -20763,12 +18818,9 @@ SELECT
   NOW(),
   NOW()
 FROM rental_clients c
-WHERE c.name ILIKE '%Галина (Тур Урал)%' 
-   OR c.director_name ILIKE '%Галина (Тур Урал)%'
-   OR 'Галина (Тур Урал)' ILIKE '%' || c.name || '%'
-   OR 'Галина (Тур Урал)' ILIKE '%' || c.director_name || '%'
-LIMIT 1
-ON CONFLICT (order_number) DO NOTHING;
+WHERE (c.name = 'Галина (Тур Урал)' OR c.director_name = 'Галина (Тур Урал)')
+  AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 601)
+LIMIT 1;
 
 INSERT INTO rental_orders (
   order_number, client_id, status, start_date, end_date, days_count,
@@ -20795,12 +18847,9 @@ SELECT
   NOW(),
   NOW()
 FROM rental_clients c
-WHERE c.name ILIKE '%Галина (Тур Урал)%' 
-   OR c.director_name ILIKE '%Галина (Тур Урал)%'
-   OR 'Галина (Тур Урал)' ILIKE '%' || c.name || '%'
-   OR 'Галина (Тур Урал)' ILIKE '%' || c.director_name || '%'
-LIMIT 1
-ON CONFLICT (order_number) DO NOTHING;
+WHERE (c.name = 'Галина (Тур Урал)' OR c.director_name = 'Галина (Тур Урал)')
+  AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 600)
+LIMIT 1;
 
 INSERT INTO rental_orders (
   order_number, client_id, status, start_date, end_date, days_count,
@@ -20827,12 +18876,9 @@ SELECT
   NOW(),
   NOW()
 FROM rental_clients c
-WHERE c.name ILIKE '%Эвелина (Инициатива)%' 
-   OR c.director_name ILIKE '%Эвелина (Инициатива)%'
-   OR 'Эвелина (Инициатива)' ILIKE '%' || c.name || '%'
-   OR 'Эвелина (Инициатива)' ILIKE '%' || c.director_name || '%'
-LIMIT 1
-ON CONFLICT (order_number) DO NOTHING;
+WHERE (c.name = 'Эвелина (Инициатива)' OR c.director_name = 'Эвелина (Инициатива)')
+  AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 599)
+LIMIT 1;
 
 INSERT INTO rental_orders (
   order_number, client_id, status, start_date, end_date, days_count,
@@ -20859,12 +18905,9 @@ SELECT
   NOW(),
   NOW()
 FROM rental_clients c
-WHERE c.name ILIKE '%Эвелина (Инициатива)%' 
-   OR c.director_name ILIKE '%Эвелина (Инициатива)%'
-   OR 'Эвелина (Инициатива)' ILIKE '%' || c.name || '%'
-   OR 'Эвелина (Инициатива)' ILIKE '%' || c.director_name || '%'
-LIMIT 1
-ON CONFLICT (order_number) DO NOTHING;
+WHERE (c.name = 'Эвелина (Инициатива)' OR c.director_name = 'Эвелина (Инициатива)')
+  AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 598)
+LIMIT 1;
 
 INSERT INTO rental_orders (
   order_number, client_id, status, start_date, end_date, days_count,
@@ -20891,12 +18934,9 @@ SELECT
   NOW(),
   NOW()
 FROM rental_clients c
-WHERE c.name ILIKE '%Галина (Тур Урал)%' 
-   OR c.director_name ILIKE '%Галина (Тур Урал)%'
-   OR 'Галина (Тур Урал)' ILIKE '%' || c.name || '%'
-   OR 'Галина (Тур Урал)' ILIKE '%' || c.director_name || '%'
-LIMIT 1
-ON CONFLICT (order_number) DO NOTHING;
+WHERE (c.name = 'Галина (Тур Урал)' OR c.director_name = 'Галина (Тур Урал)')
+  AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 597)
+LIMIT 1;
 
 INSERT INTO rental_orders (
   order_number, client_id, status, start_date, end_date, days_count,
@@ -20923,12 +18963,9 @@ SELECT
   NOW(),
   NOW()
 FROM rental_clients c
-WHERE c.name ILIKE '%Галина (Тур Урал)%' 
-   OR c.director_name ILIKE '%Галина (Тур Урал)%'
-   OR 'Галина (Тур Урал)' ILIKE '%' || c.name || '%'
-   OR 'Галина (Тур Урал)' ILIKE '%' || c.director_name || '%'
-LIMIT 1
-ON CONFLICT (order_number) DO NOTHING;
+WHERE (c.name = 'Галина (Тур Урал)' OR c.director_name = 'Галина (Тур Урал)')
+  AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 596)
+LIMIT 1;
 
 INSERT INTO rental_orders (
   order_number, client_id, status, start_date, end_date, days_count,
@@ -20955,12 +18992,9 @@ SELECT
   NOW(),
   NOW()
 FROM rental_clients c
-WHERE c.name ILIKE '%Галина (Тур Урал)%' 
-   OR c.director_name ILIKE '%Галина (Тур Урал)%'
-   OR 'Галина (Тур Урал)' ILIKE '%' || c.name || '%'
-   OR 'Галина (Тур Урал)' ILIKE '%' || c.director_name || '%'
-LIMIT 1
-ON CONFLICT (order_number) DO NOTHING;
+WHERE (c.name = 'Галина (Тур Урал)' OR c.director_name = 'Галина (Тур Урал)')
+  AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 595)
+LIMIT 1;
 
 INSERT INTO rental_orders (
   order_number, client_id, status, start_date, end_date, days_count,
@@ -20987,12 +19021,9 @@ SELECT
   NOW(),
   NOW()
 FROM rental_clients c
-WHERE c.name ILIKE '%Алексей%' 
-   OR c.director_name ILIKE '%Алексей%'
-   OR 'Алексей' ILIKE '%' || c.name || '%'
-   OR 'Алексей' ILIKE '%' || c.director_name || '%'
-LIMIT 1
-ON CONFLICT (order_number) DO NOTHING;
+WHERE (c.name = 'Алексей' OR c.director_name = 'Алексей')
+  AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 594)
+LIMIT 1;
 
 INSERT INTO rental_orders (
   order_number, client_id, status, start_date, end_date, days_count,
@@ -21019,12 +19050,9 @@ SELECT
   NOW(),
   NOW()
 FROM rental_clients c
-WHERE c.name ILIKE '%Альберт (КТ)%' 
-   OR c.director_name ILIKE '%Альберт (КТ)%'
-   OR 'Альберт (КТ)' ILIKE '%' || c.name || '%'
-   OR 'Альберт (КТ)' ILIKE '%' || c.director_name || '%'
-LIMIT 1
-ON CONFLICT (order_number) DO NOTHING;
+WHERE (c.name = 'Альберт (КТ)' OR c.director_name = 'Альберт (КТ)')
+  AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 593)
+LIMIT 1;
 
 INSERT INTO rental_orders (
   order_number, client_id, status, start_date, end_date, days_count,
@@ -21051,12 +19079,9 @@ SELECT
   NOW(),
   NOW()
 FROM rental_clients c
-WHERE c.name ILIKE '%Ольга (Дольче Вита)%' 
-   OR c.director_name ILIKE '%Ольга (Дольче Вита)%'
-   OR 'Ольга (Дольче Вита)' ILIKE '%' || c.name || '%'
-   OR 'Ольга (Дольче Вита)' ILIKE '%' || c.director_name || '%'
-LIMIT 1
-ON CONFLICT (order_number) DO NOTHING;
+WHERE (c.name = 'Ольга (Дольче Вита)' OR c.director_name = 'Ольга (Дольче Вита)')
+  AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 592)
+LIMIT 1;
 
 INSERT INTO rental_orders (
   order_number, client_id, status, start_date, end_date, days_count,
@@ -21083,12 +19108,9 @@ SELECT
   NOW(),
   NOW()
 FROM rental_clients c
-WHERE c.name ILIKE '%Ольга (Дольче Вита)%' 
-   OR c.director_name ILIKE '%Ольга (Дольче Вита)%'
-   OR 'Ольга (Дольче Вита)' ILIKE '%' || c.name || '%'
-   OR 'Ольга (Дольче Вита)' ILIKE '%' || c.director_name || '%'
-LIMIT 1
-ON CONFLICT (order_number) DO NOTHING;
+WHERE (c.name = 'Ольга (Дольче Вита)' OR c.director_name = 'Ольга (Дольче Вита)')
+  AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 591)
+LIMIT 1;
 
 INSERT INTO rental_orders (
   order_number, client_id, status, start_date, end_date, days_count,
@@ -21115,12 +19137,9 @@ SELECT
   NOW(),
   NOW()
 FROM rental_clients c
-WHERE c.name ILIKE '%Елизавета Ткач%' 
-   OR c.director_name ILIKE '%Елизавета Ткач%'
-   OR 'Елизавета Ткач' ILIKE '%' || c.name || '%'
-   OR 'Елизавета Ткач' ILIKE '%' || c.director_name || '%'
-LIMIT 1
-ON CONFLICT (order_number) DO NOTHING;
+WHERE (c.name = 'Елизавета Ткач' OR c.director_name = 'Елизавета Ткач')
+  AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 589)
+LIMIT 1;
 
 INSERT INTO rental_orders (
   order_number, client_id, status, start_date, end_date, days_count,
@@ -21147,12 +19166,9 @@ SELECT
   NOW(),
   NOW()
 FROM rental_clients c
-WHERE c.name ILIKE '%Анюта Родионова (Родина-тур)%' 
-   OR c.director_name ILIKE '%Анюта Родионова (Родина-тур)%'
-   OR 'Анюта Родионова (Родина-тур)' ILIKE '%' || c.name || '%'
-   OR 'Анюта Родионова (Родина-тур)' ILIKE '%' || c.director_name || '%'
-LIMIT 1
-ON CONFLICT (order_number) DO NOTHING;
+WHERE (c.name = 'Анюта Родионова (Родина-тур)' OR c.director_name = 'Анюта Родионова (Родина-тур)')
+  AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 588)
+LIMIT 1;
 
 INSERT INTO rental_orders (
   order_number, client_id, status, start_date, end_date, days_count,
@@ -21179,12 +19195,9 @@ SELECT
   NOW(),
   NOW()
 FROM rental_clients c
-WHERE c.name ILIKE '%Татьяна (Гольфстрим)%' 
-   OR c.director_name ILIKE '%Татьяна (Гольфстрим)%'
-   OR 'Татьяна (Гольфстрим)' ILIKE '%' || c.name || '%'
-   OR 'Татьяна (Гольфстрим)' ILIKE '%' || c.director_name || '%'
-LIMIT 1
-ON CONFLICT (order_number) DO NOTHING;
+WHERE (c.name = 'Татьяна (Гольфстрим)' OR c.director_name = 'Татьяна (Гольфстрим)')
+  AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 587)
+LIMIT 1;
 
 INSERT INTO rental_orders (
   order_number, client_id, status, start_date, end_date, days_count,
@@ -21211,12 +19224,9 @@ SELECT
   NOW(),
   NOW()
 FROM rental_clients c
-WHERE c.name ILIKE '%Татьяна (Гольфстрим)%' 
-   OR c.director_name ILIKE '%Татьяна (Гольфстрим)%'
-   OR 'Татьяна (Гольфстрим)' ILIKE '%' || c.name || '%'
-   OR 'Татьяна (Гольфстрим)' ILIKE '%' || c.director_name || '%'
-LIMIT 1
-ON CONFLICT (order_number) DO NOTHING;
+WHERE (c.name = 'Татьяна (Гольфстрим)' OR c.director_name = 'Татьяна (Гольфстрим)')
+  AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 586)
+LIMIT 1;
 
 INSERT INTO rental_orders (
   order_number, client_id, status, start_date, end_date, days_count,
@@ -21243,12 +19253,9 @@ SELECT
   NOW(),
   NOW()
 FROM rental_clients c
-WHERE c.name ILIKE '%Татьяна (Гольфстрим)%' 
-   OR c.director_name ILIKE '%Татьяна (Гольфстрим)%'
-   OR 'Татьяна (Гольфстрим)' ILIKE '%' || c.name || '%'
-   OR 'Татьяна (Гольфстрим)' ILIKE '%' || c.director_name || '%'
-LIMIT 1
-ON CONFLICT (order_number) DO NOTHING;
+WHERE (c.name = 'Татьяна (Гольфстрим)' OR c.director_name = 'Татьяна (Гольфстрим)')
+  AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 585)
+LIMIT 1;
 
 INSERT INTO rental_orders (
   order_number, client_id, status, start_date, end_date, days_count,
@@ -21275,12 +19282,9 @@ SELECT
   NOW(),
   NOW()
 FROM rental_clients c
-WHERE c.name ILIKE '%Татьяна (Гольфстрим)%' 
-   OR c.director_name ILIKE '%Татьяна (Гольфстрим)%'
-   OR 'Татьяна (Гольфстрим)' ILIKE '%' || c.name || '%'
-   OR 'Татьяна (Гольфстрим)' ILIKE '%' || c.director_name || '%'
-LIMIT 1
-ON CONFLICT (order_number) DO NOTHING;
+WHERE (c.name = 'Татьяна (Гольфстрим)' OR c.director_name = 'Татьяна (Гольфстрим)')
+  AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 584)
+LIMIT 1;
 
 INSERT INTO rental_orders (
   order_number, client_id, status, start_date, end_date, days_count,
@@ -21307,12 +19311,9 @@ SELECT
   NOW(),
   NOW()
 FROM rental_clients c
-WHERE c.name ILIKE '%Татьяна (Гольфстрим)%' 
-   OR c.director_name ILIKE '%Татьяна (Гольфстрим)%'
-   OR 'Татьяна (Гольфстрим)' ILIKE '%' || c.name || '%'
-   OR 'Татьяна (Гольфстрим)' ILIKE '%' || c.director_name || '%'
-LIMIT 1
-ON CONFLICT (order_number) DO NOTHING;
+WHERE (c.name = 'Татьяна (Гольфстрим)' OR c.director_name = 'Татьяна (Гольфстрим)')
+  AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 583)
+LIMIT 1;
 
 INSERT INTO rental_orders (
   order_number, client_id, status, start_date, end_date, days_count,
@@ -21339,12 +19340,9 @@ SELECT
   NOW(),
   NOW()
 FROM rental_clients c
-WHERE c.name ILIKE '%Эдик Заказы для групп%' 
-   OR c.director_name ILIKE '%Эдик Заказы для групп%'
-   OR 'Эдик Заказы для групп' ILIKE '%' || c.name || '%'
-   OR 'Эдик Заказы для групп' ILIKE '%' || c.director_name || '%'
-LIMIT 1
-ON CONFLICT (order_number) DO NOTHING;
+WHERE (c.name = 'Эдик Заказы для групп' OR c.director_name = 'Эдик Заказы для групп')
+  AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 582)
+LIMIT 1;
 
 INSERT INTO rental_orders (
   order_number, client_id, status, start_date, end_date, days_count,
@@ -21371,12 +19369,9 @@ SELECT
   NOW(),
   NOW()
 FROM rental_clients c
-WHERE c.name ILIKE '%Светлана Зеленина%' 
-   OR c.director_name ILIKE '%Светлана Зеленина%'
-   OR 'Светлана Зеленина' ILIKE '%' || c.name || '%'
-   OR 'Светлана Зеленина' ILIKE '%' || c.director_name || '%'
-LIMIT 1
-ON CONFLICT (order_number) DO NOTHING;
+WHERE (c.name = 'Светлана Зеленина' OR c.director_name = 'Светлана Зеленина')
+  AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 581)
+LIMIT 1;
 
 INSERT INTO rental_orders (
   order_number, client_id, status, start_date, end_date, days_count,
@@ -21403,12 +19398,9 @@ SELECT
   NOW(),
   NOW()
 FROM rental_clients c
-WHERE c.name ILIKE '%Айрат Нурмухаммадов%' 
-   OR c.director_name ILIKE '%Айрат Нурмухаммадов%'
-   OR 'Айрат Нурмухаммадов' ILIKE '%' || c.name || '%'
-   OR 'Айрат Нурмухаммадов' ILIKE '%' || c.director_name || '%'
-LIMIT 1
-ON CONFLICT (order_number) DO NOTHING;
+WHERE (c.name = 'Айрат Нурмухаммадов' OR c.director_name = 'Айрат Нурмухаммадов')
+  AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 580)
+LIMIT 1;
 
 INSERT INTO rental_orders (
   order_number, client_id, status, start_date, end_date, days_count,
@@ -21435,12 +19427,9 @@ SELECT
   NOW(),
   NOW()
 FROM rental_clients c
-WHERE c.name ILIKE '%Гульнара%' 
-   OR c.director_name ILIKE '%Гульнара%'
-   OR 'Гульнара' ILIKE '%' || c.name || '%'
-   OR 'Гульнара' ILIKE '%' || c.director_name || '%'
-LIMIT 1
-ON CONFLICT (order_number) DO NOTHING;
+WHERE (c.name = 'Гульнара' OR c.director_name = 'Гульнара')
+  AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 579)
+LIMIT 1;
 
 INSERT INTO rental_orders (
   order_number, client_id, status, start_date, end_date, days_count,
@@ -21467,12 +19456,9 @@ SELECT
   NOW(),
   NOW()
 FROM rental_clients c
-WHERE c.name ILIKE '%Альберт (КТ)%' 
-   OR c.director_name ILIKE '%Альберт (КТ)%'
-   OR 'Альберт (КТ)' ILIKE '%' || c.name || '%'
-   OR 'Альберт (КТ)' ILIKE '%' || c.director_name || '%'
-LIMIT 1
-ON CONFLICT (order_number) DO NOTHING;
+WHERE (c.name = 'Альберт (КТ)' OR c.director_name = 'Альберт (КТ)')
+  AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 578)
+LIMIT 1;
 
 INSERT INTO rental_orders (
   order_number, client_id, status, start_date, end_date, days_count,
@@ -21499,12 +19485,9 @@ SELECT
   NOW(),
   NOW()
 FROM rental_clients c
-WHERE c.name ILIKE '%Валентина Экскурсовод%' 
-   OR c.director_name ILIKE '%Валентина Экскурсовод%'
-   OR 'Валентина Экскурсовод' ILIKE '%' || c.name || '%'
-   OR 'Валентина Экскурсовод' ILIKE '%' || c.director_name || '%'
-LIMIT 1
-ON CONFLICT (order_number) DO NOTHING;
+WHERE (c.name = 'Валентина Экскурсовод' OR c.director_name = 'Валентина Экскурсовод')
+  AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 577)
+LIMIT 1;
 
 INSERT INTO rental_orders (
   order_number, client_id, status, start_date, end_date, days_count,
@@ -21531,12 +19514,9 @@ SELECT
   NOW(),
   NOW()
 FROM rental_clients c
-WHERE c.name ILIKE '%Татьяна Чуб%' 
-   OR c.director_name ILIKE '%Татьяна Чуб%'
-   OR 'Татьяна Чуб' ILIKE '%' || c.name || '%'
-   OR 'Татьяна Чуб' ILIKE '%' || c.director_name || '%'
-LIMIT 1
-ON CONFLICT (order_number) DO NOTHING;
+WHERE (c.name = 'Татьяна Чуб' OR c.director_name = 'Татьяна Чуб')
+  AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 576)
+LIMIT 1;
 
 INSERT INTO rental_orders (
   order_number, client_id, status, start_date, end_date, days_count,
@@ -21563,12 +19543,9 @@ SELECT
   NOW(),
   NOW()
 FROM rental_clients c
-WHERE c.name ILIKE '%Татьяна Чуб%' 
-   OR c.director_name ILIKE '%Татьяна Чуб%'
-   OR 'Татьяна Чуб' ILIKE '%' || c.name || '%'
-   OR 'Татьяна Чуб' ILIKE '%' || c.director_name || '%'
-LIMIT 1
-ON CONFLICT (order_number) DO NOTHING;
+WHERE (c.name = 'Татьяна Чуб' OR c.director_name = 'Татьяна Чуб')
+  AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 575)
+LIMIT 1;
 
 INSERT INTO rental_orders (
   order_number, client_id, status, start_date, end_date, days_count,
@@ -21595,12 +19572,9 @@ SELECT
   NOW(),
   NOW()
 FROM rental_clients c
-WHERE c.name ILIKE '%Татьяна Чуб%' 
-   OR c.director_name ILIKE '%Татьяна Чуб%'
-   OR 'Татьяна Чуб' ILIKE '%' || c.name || '%'
-   OR 'Татьяна Чуб' ILIKE '%' || c.director_name || '%'
-LIMIT 1
-ON CONFLICT (order_number) DO NOTHING;
+WHERE (c.name = 'Татьяна Чуб' OR c.director_name = 'Татьяна Чуб')
+  AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 574)
+LIMIT 1;
 
 INSERT INTO rental_orders (
   order_number, client_id, status, start_date, end_date, days_count,
@@ -21627,12 +19601,9 @@ SELECT
   NOW(),
   NOW()
 FROM rental_clients c
-WHERE c.name ILIKE '%Татьяна Чуб%' 
-   OR c.director_name ILIKE '%Татьяна Чуб%'
-   OR 'Татьяна Чуб' ILIKE '%' || c.name || '%'
-   OR 'Татьяна Чуб' ILIKE '%' || c.director_name || '%'
-LIMIT 1
-ON CONFLICT (order_number) DO NOTHING;
+WHERE (c.name = 'Татьяна Чуб' OR c.director_name = 'Татьяна Чуб')
+  AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 573)
+LIMIT 1;
 
 INSERT INTO rental_orders (
   order_number, client_id, status, start_date, end_date, days_count,
@@ -21659,12 +19630,9 @@ SELECT
   NOW(),
   NOW()
 FROM rental_clients c
-WHERE c.name ILIKE '%Татьяна (Гольфстрим)%' 
-   OR c.director_name ILIKE '%Татьяна (Гольфстрим)%'
-   OR 'Татьяна (Гольфстрим)' ILIKE '%' || c.name || '%'
-   OR 'Татьяна (Гольфстрим)' ILIKE '%' || c.director_name || '%'
-LIMIT 1
-ON CONFLICT (order_number) DO NOTHING;
+WHERE (c.name = 'Татьяна (Гольфстрим)' OR c.director_name = 'Татьяна (Гольфстрим)')
+  AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 572)
+LIMIT 1;
 
 INSERT INTO rental_orders (
   order_number, client_id, status, start_date, end_date, days_count,
@@ -21691,12 +19659,9 @@ SELECT
   NOW(),
   NOW()
 FROM rental_clients c
-WHERE c.name ILIKE '%Анна%' 
-   OR c.director_name ILIKE '%Анна%'
-   OR 'Анна' ILIKE '%' || c.name || '%'
-   OR 'Анна' ILIKE '%' || c.director_name || '%'
-LIMIT 1
-ON CONFLICT (order_number) DO NOTHING;
+WHERE (c.name = 'Анна' OR c.director_name = 'Анна')
+  AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 571)
+LIMIT 1;
 
 INSERT INTO rental_orders (
   order_number, client_id, status, start_date, end_date, days_count,
@@ -21723,12 +19688,9 @@ SELECT
   NOW(),
   NOW()
 FROM rental_clients c
-WHERE c.name ILIKE '%Эдик Заказы для групп%' 
-   OR c.director_name ILIKE '%Эдик Заказы для групп%'
-   OR 'Эдик Заказы для групп' ILIKE '%' || c.name || '%'
-   OR 'Эдик Заказы для групп' ILIKE '%' || c.director_name || '%'
-LIMIT 1
-ON CONFLICT (order_number) DO NOTHING;
+WHERE (c.name = 'Эдик Заказы для групп' OR c.director_name = 'Эдик Заказы для групп')
+  AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 570)
+LIMIT 1;
 
 INSERT INTO rental_orders (
   order_number, client_id, status, start_date, end_date, days_count,
@@ -21755,12 +19717,9 @@ SELECT
   NOW(),
   NOW()
 FROM rental_clients c
-WHERE c.name ILIKE '%Эдик Заказы для групп%' 
-   OR c.director_name ILIKE '%Эдик Заказы для групп%'
-   OR 'Эдик Заказы для групп' ILIKE '%' || c.name || '%'
-   OR 'Эдик Заказы для групп' ILIKE '%' || c.director_name || '%'
-LIMIT 1
-ON CONFLICT (order_number) DO NOTHING;
+WHERE (c.name = 'Эдик Заказы для групп' OR c.director_name = 'Эдик Заказы для групп')
+  AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 569)
+LIMIT 1;
 
 INSERT INTO rental_orders (
   order_number, client_id, status, start_date, end_date, days_count,
@@ -21787,12 +19746,9 @@ SELECT
   NOW(),
   NOW()
 FROM rental_clients c
-WHERE c.name ILIKE '%Константин%' 
-   OR c.director_name ILIKE '%Константин%'
-   OR 'Константин' ILIKE '%' || c.name || '%'
-   OR 'Константин' ILIKE '%' || c.director_name || '%'
-LIMIT 1
-ON CONFLICT (order_number) DO NOTHING;
+WHERE (c.name = 'Константин' OR c.director_name = 'Константин')
+  AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 568)
+LIMIT 1;
 
 INSERT INTO rental_orders (
   order_number, client_id, status, start_date, end_date, days_count,
@@ -21819,12 +19775,9 @@ SELECT
   NOW(),
   NOW()
 FROM rental_clients c
-WHERE c.name ILIKE '%Эдик Заказы для групп%' 
-   OR c.director_name ILIKE '%Эдик Заказы для групп%'
-   OR 'Эдик Заказы для групп' ILIKE '%' || c.name || '%'
-   OR 'Эдик Заказы для групп' ILIKE '%' || c.director_name || '%'
-LIMIT 1
-ON CONFLICT (order_number) DO NOTHING;
+WHERE (c.name = 'Эдик Заказы для групп' OR c.director_name = 'Эдик Заказы для групп')
+  AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 567)
+LIMIT 1;
 
 INSERT INTO rental_orders (
   order_number, client_id, status, start_date, end_date, days_count,
@@ -21851,12 +19804,9 @@ SELECT
   NOW(),
   NOW()
 FROM rental_clients c
-WHERE c.name ILIKE '%Юлия (Рыжий Слон)%' 
-   OR c.director_name ILIKE '%Юлия (Рыжий Слон)%'
-   OR 'Юлия (Рыжий Слон)' ILIKE '%' || c.name || '%'
-   OR 'Юлия (Рыжий Слон)' ILIKE '%' || c.director_name || '%'
-LIMIT 1
-ON CONFLICT (order_number) DO NOTHING;
+WHERE (c.name = 'Юлия (Рыжий Слон)' OR c.director_name = 'Юлия (Рыжий Слон)')
+  AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 566)
+LIMIT 1;
 
 INSERT INTO rental_orders (
   order_number, client_id, status, start_date, end_date, days_count,
@@ -21883,12 +19833,9 @@ SELECT
   NOW(),
   NOW()
 FROM rental_clients c
-WHERE c.name ILIKE '%Татьяна Чуб%' 
-   OR c.director_name ILIKE '%Татьяна Чуб%'
-   OR 'Татьяна Чуб' ILIKE '%' || c.name || '%'
-   OR 'Татьяна Чуб' ILIKE '%' || c.director_name || '%'
-LIMIT 1
-ON CONFLICT (order_number) DO NOTHING;
+WHERE (c.name = 'Татьяна Чуб' OR c.director_name = 'Татьяна Чуб')
+  AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 565)
+LIMIT 1;
 
 INSERT INTO rental_orders (
   order_number, client_id, status, start_date, end_date, days_count,
@@ -21915,12 +19862,9 @@ SELECT
   NOW(),
   NOW()
 FROM rental_clients c
-WHERE c.name ILIKE '%Татьяна Чуб%' 
-   OR c.director_name ILIKE '%Татьяна Чуб%'
-   OR 'Татьяна Чуб' ILIKE '%' || c.name || '%'
-   OR 'Татьяна Чуб' ILIKE '%' || c.director_name || '%'
-LIMIT 1
-ON CONFLICT (order_number) DO NOTHING;
+WHERE (c.name = 'Татьяна Чуб' OR c.director_name = 'Татьяна Чуб')
+  AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 563)
+LIMIT 1;
 
 INSERT INTO rental_orders (
   order_number, client_id, status, start_date, end_date, days_count,
@@ -21947,12 +19891,9 @@ SELECT
   NOW(),
   NOW()
 FROM rental_clients c
-WHERE c.name ILIKE '%Елена Тамбова (Апрель)%' 
-   OR c.director_name ILIKE '%Елена Тамбова (Апрель)%'
-   OR 'Елена Тамбова (Апрель)' ILIKE '%' || c.name || '%'
-   OR 'Елена Тамбова (Апрель)' ILIKE '%' || c.director_name || '%'
-LIMIT 1
-ON CONFLICT (order_number) DO NOTHING;
+WHERE (c.name = 'Елена Тамбова (Апрель)' OR c.director_name = 'Елена Тамбова (Апрель)')
+  AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 562)
+LIMIT 1;
 
 INSERT INTO rental_orders (
   order_number, client_id, status, start_date, end_date, days_count,
@@ -21979,12 +19920,9 @@ SELECT
   NOW(),
   NOW()
 FROM rental_clients c
-WHERE c.name ILIKE '%Анастасия Шадрина%' 
-   OR c.director_name ILIKE '%Анастасия Шадрина%'
-   OR 'Анастасия Шадрина' ILIKE '%' || c.name || '%'
-   OR 'Анастасия Шадрина' ILIKE '%' || c.director_name || '%'
-LIMIT 1
-ON CONFLICT (order_number) DO NOTHING;
+WHERE (c.name = 'Анастасия Шадрина' OR c.director_name = 'Анастасия Шадрина')
+  AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 561)
+LIMIT 1;
 
 INSERT INTO rental_orders (
   order_number, client_id, status, start_date, end_date, days_count,
@@ -22011,12 +19949,9 @@ SELECT
   NOW(),
   NOW()
 FROM rental_clients c
-WHERE c.name ILIKE '%Мира (ИП)%' 
-   OR c.director_name ILIKE '%Мира (ИП)%'
-   OR 'Мира (ИП)' ILIKE '%' || c.name || '%'
-   OR 'Мира (ИП)' ILIKE '%' || c.director_name || '%'
-LIMIT 1
-ON CONFLICT (order_number) DO NOTHING;
+WHERE (c.name = 'Мира (ИП)' OR c.director_name = 'Мира (ИП)')
+  AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 560)
+LIMIT 1;
 
 INSERT INTO rental_orders (
   order_number, client_id, status, start_date, end_date, days_count,
@@ -22043,12 +19978,9 @@ SELECT
   NOW(),
   NOW()
 FROM rental_clients c
-WHERE c.name ILIKE '%Мира (ИП)%' 
-   OR c.director_name ILIKE '%Мира (ИП)%'
-   OR 'Мира (ИП)' ILIKE '%' || c.name || '%'
-   OR 'Мира (ИП)' ILIKE '%' || c.director_name || '%'
-LIMIT 1
-ON CONFLICT (order_number) DO NOTHING;
+WHERE (c.name = 'Мира (ИП)' OR c.director_name = 'Мира (ИП)')
+  AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 559)
+LIMIT 1;
 
 INSERT INTO rental_orders (
   order_number, client_id, status, start_date, end_date, days_count,
@@ -22075,12 +20007,9 @@ SELECT
   NOW(),
   NOW()
 FROM rental_clients c
-WHERE c.name ILIKE '%Гульнара%' 
-   OR c.director_name ILIKE '%Гульнара%'
-   OR 'Гульнара' ILIKE '%' || c.name || '%'
-   OR 'Гульнара' ILIKE '%' || c.director_name || '%'
-LIMIT 1
-ON CONFLICT (order_number) DO NOTHING;
+WHERE (c.name = 'Гульнара' OR c.director_name = 'Гульнара')
+  AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 557)
+LIMIT 1;
 
 INSERT INTO rental_orders (
   order_number, client_id, status, start_date, end_date, days_count,
@@ -22107,12 +20036,9 @@ SELECT
   NOW(),
   NOW()
 FROM rental_clients c
-WHERE c.name ILIKE '%Екатерина%' 
-   OR c.director_name ILIKE '%Екатерина%'
-   OR 'Екатерина' ILIKE '%' || c.name || '%'
-   OR 'Екатерина' ILIKE '%' || c.director_name || '%'
-LIMIT 1
-ON CONFLICT (order_number) DO NOTHING;
+WHERE (c.name = 'Екатерина' OR c.director_name = 'Екатерина')
+  AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 556)
+LIMIT 1;
 
 INSERT INTO rental_orders (
   order_number, client_id, status, start_date, end_date, days_count,
@@ -22139,12 +20065,9 @@ SELECT
   NOW(),
   NOW()
 FROM rental_clients c
-WHERE c.name ILIKE '%Эльвира%' 
-   OR c.director_name ILIKE '%Эльвира%'
-   OR 'Эльвира' ILIKE '%' || c.name || '%'
-   OR 'Эльвира' ILIKE '%' || c.director_name || '%'
-LIMIT 1
-ON CONFLICT (order_number) DO NOTHING;
+WHERE (c.name = 'Эльвира' OR c.director_name = 'Эльвира')
+  AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 555)
+LIMIT 1;
 
 INSERT INTO rental_orders (
   order_number, client_id, status, start_date, end_date, days_count,
@@ -22171,12 +20094,9 @@ SELECT
   NOW(),
   NOW()
 FROM rental_clients c
-WHERE c.name ILIKE '%Эдик Заказы для групп%' 
-   OR c.director_name ILIKE '%Эдик Заказы для групп%'
-   OR 'Эдик Заказы для групп' ILIKE '%' || c.name || '%'
-   OR 'Эдик Заказы для групп' ILIKE '%' || c.director_name || '%'
-LIMIT 1
-ON CONFLICT (order_number) DO NOTHING;
+WHERE (c.name = 'Эдик Заказы для групп' OR c.director_name = 'Эдик Заказы для групп')
+  AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 554)
+LIMIT 1;
 
 INSERT INTO rental_orders (
   order_number, client_id, status, start_date, end_date, days_count,
@@ -22203,12 +20123,9 @@ SELECT
   NOW(),
   NOW()
 FROM rental_clients c
-WHERE c.name ILIKE '%Эдик Заказы для групп%' 
-   OR c.director_name ILIKE '%Эдик Заказы для групп%'
-   OR 'Эдик Заказы для групп' ILIKE '%' || c.name || '%'
-   OR 'Эдик Заказы для групп' ILIKE '%' || c.director_name || '%'
-LIMIT 1
-ON CONFLICT (order_number) DO NOTHING;
+WHERE (c.name = 'Эдик Заказы для групп' OR c.director_name = 'Эдик Заказы для групп')
+  AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 553)
+LIMIT 1;
 
 INSERT INTO rental_orders (
   order_number, client_id, status, start_date, end_date, days_count,
@@ -22235,12 +20152,9 @@ SELECT
   NOW(),
   NOW()
 FROM rental_clients c
-WHERE c.name ILIKE '%Татьяна (Гольфстрим)%' 
-   OR c.director_name ILIKE '%Татьяна (Гольфстрим)%'
-   OR 'Татьяна (Гольфстрим)' ILIKE '%' || c.name || '%'
-   OR 'Татьяна (Гольфстрим)' ILIKE '%' || c.director_name || '%'
-LIMIT 1
-ON CONFLICT (order_number) DO NOTHING;
+WHERE (c.name = 'Татьяна (Гольфстрим)' OR c.director_name = 'Татьяна (Гольфстрим)')
+  AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 551)
+LIMIT 1;
 
 INSERT INTO rental_orders (
   order_number, client_id, status, start_date, end_date, days_count,
@@ -22267,12 +20181,9 @@ SELECT
   NOW(),
   NOW()
 FROM rental_clients c
-WHERE c.name ILIKE '%Татьяна (Гольфстрим)%' 
-   OR c.director_name ILIKE '%Татьяна (Гольфстрим)%'
-   OR 'Татьяна (Гольфстрим)' ILIKE '%' || c.name || '%'
-   OR 'Татьяна (Гольфстрим)' ILIKE '%' || c.director_name || '%'
-LIMIT 1
-ON CONFLICT (order_number) DO NOTHING;
+WHERE (c.name = 'Татьяна (Гольфстрим)' OR c.director_name = 'Татьяна (Гольфстрим)')
+  AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 550)
+LIMIT 1;
 
 INSERT INTO rental_orders (
   order_number, client_id, status, start_date, end_date, days_count,
@@ -22299,12 +20210,9 @@ SELECT
   NOW(),
   NOW()
 FROM rental_clients c
-WHERE c.name ILIKE '%Эдик Заказы для групп%' 
-   OR c.director_name ILIKE '%Эдик Заказы для групп%'
-   OR 'Эдик Заказы для групп' ILIKE '%' || c.name || '%'
-   OR 'Эдик Заказы для групп' ILIKE '%' || c.director_name || '%'
-LIMIT 1
-ON CONFLICT (order_number) DO NOTHING;
+WHERE (c.name = 'Эдик Заказы для групп' OR c.director_name = 'Эдик Заказы для групп')
+  AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 548)
+LIMIT 1;
 
 INSERT INTO rental_orders (
   order_number, client_id, status, start_date, end_date, days_count,
@@ -22331,12 +20239,9 @@ SELECT
   NOW(),
   NOW()
 FROM rental_clients c
-WHERE c.name ILIKE '%Мира (ИП)%' 
-   OR c.director_name ILIKE '%Мира (ИП)%'
-   OR 'Мира (ИП)' ILIKE '%' || c.name || '%'
-   OR 'Мира (ИП)' ILIKE '%' || c.director_name || '%'
-LIMIT 1
-ON CONFLICT (order_number) DO NOTHING;
+WHERE (c.name = 'Мира (ИП)' OR c.director_name = 'Мира (ИП)')
+  AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 547)
+LIMIT 1;
 
 INSERT INTO rental_orders (
   order_number, client_id, status, start_date, end_date, days_count,
@@ -22363,12 +20268,9 @@ SELECT
   NOW(),
   NOW()
 FROM rental_clients c
-WHERE c.name ILIKE '%Татьяна (Гольфстрим)%' 
-   OR c.director_name ILIKE '%Татьяна (Гольфстрим)%'
-   OR 'Татьяна (Гольфстрим)' ILIKE '%' || c.name || '%'
-   OR 'Татьяна (Гольфстрим)' ILIKE '%' || c.director_name || '%'
-LIMIT 1
-ON CONFLICT (order_number) DO NOTHING;
+WHERE (c.name = 'Татьяна (Гольфстрим)' OR c.director_name = 'Татьяна (Гольфстрим)')
+  AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 546)
+LIMIT 1;
 
 INSERT INTO rental_orders (
   order_number, client_id, status, start_date, end_date, days_count,
@@ -22395,12 +20297,9 @@ SELECT
   NOW(),
   NOW()
 FROM rental_clients c
-WHERE c.name ILIKE '%Антон%' 
-   OR c.director_name ILIKE '%Антон%'
-   OR 'Антон' ILIKE '%' || c.name || '%'
-   OR 'Антон' ILIKE '%' || c.director_name || '%'
-LIMIT 1
-ON CONFLICT (order_number) DO NOTHING;
+WHERE (c.name = 'Антон' OR c.director_name = 'Антон')
+  AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 544)
+LIMIT 1;
 
 INSERT INTO rental_orders (
   order_number, client_id, status, start_date, end_date, days_count,
@@ -22427,12 +20326,9 @@ SELECT
   NOW(),
   NOW()
 FROM rental_clients c
-WHERE c.name ILIKE '%Эдик Заказы для групп%' 
-   OR c.director_name ILIKE '%Эдик Заказы для групп%'
-   OR 'Эдик Заказы для групп' ILIKE '%' || c.name || '%'
-   OR 'Эдик Заказы для групп' ILIKE '%' || c.director_name || '%'
-LIMIT 1
-ON CONFLICT (order_number) DO NOTHING;
+WHERE (c.name = 'Эдик Заказы для групп' OR c.director_name = 'Эдик Заказы для групп')
+  AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 543)
+LIMIT 1;
 
 INSERT INTO rental_orders (
   order_number, client_id, status, start_date, end_date, days_count,
@@ -22459,12 +20355,9 @@ SELECT
   NOW(),
   NOW()
 FROM rental_clients c
-WHERE c.name ILIKE '%Мира (ИП)%' 
-   OR c.director_name ILIKE '%Мира (ИП)%'
-   OR 'Мира (ИП)' ILIKE '%' || c.name || '%'
-   OR 'Мира (ИП)' ILIKE '%' || c.director_name || '%'
-LIMIT 1
-ON CONFLICT (order_number) DO NOTHING;
+WHERE (c.name = 'Мира (ИП)' OR c.director_name = 'Мира (ИП)')
+  AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 542)
+LIMIT 1;
 
 INSERT INTO rental_orders (
   order_number, client_id, status, start_date, end_date, days_count,
@@ -22491,12 +20384,9 @@ SELECT
   NOW(),
   NOW()
 FROM rental_clients c
-WHERE c.name ILIKE '%Эдик Заказы для групп%' 
-   OR c.director_name ILIKE '%Эдик Заказы для групп%'
-   OR 'Эдик Заказы для групп' ILIKE '%' || c.name || '%'
-   OR 'Эдик Заказы для групп' ILIKE '%' || c.director_name || '%'
-LIMIT 1
-ON CONFLICT (order_number) DO NOTHING;
+WHERE (c.name = 'Эдик Заказы для групп' OR c.director_name = 'Эдик Заказы для групп')
+  AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 541)
+LIMIT 1;
 
 INSERT INTO rental_orders (
   order_number, client_id, status, start_date, end_date, days_count,
@@ -22523,12 +20413,9 @@ SELECT
   NOW(),
   NOW()
 FROM rental_clients c
-WHERE c.name ILIKE '%Юлианна%' 
-   OR c.director_name ILIKE '%Юлианна%'
-   OR 'Юлианна' ILIKE '%' || c.name || '%'
-   OR 'Юлианна' ILIKE '%' || c.director_name || '%'
-LIMIT 1
-ON CONFLICT (order_number) DO NOTHING;
+WHERE (c.name = 'Юлианна' OR c.director_name = 'Юлианна')
+  AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 540)
+LIMIT 1;
 
 INSERT INTO rental_orders (
   order_number, client_id, status, start_date, end_date, days_count,
@@ -22555,12 +20442,9 @@ SELECT
   NOW(),
   NOW()
 FROM rental_clients c
-WHERE c.name ILIKE '%Эдик Заказы для групп%' 
-   OR c.director_name ILIKE '%Эдик Заказы для групп%'
-   OR 'Эдик Заказы для групп' ILIKE '%' || c.name || '%'
-   OR 'Эдик Заказы для групп' ILIKE '%' || c.director_name || '%'
-LIMIT 1
-ON CONFLICT (order_number) DO NOTHING;
+WHERE (c.name = 'Эдик Заказы для групп' OR c.director_name = 'Эдик Заказы для групп')
+  AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 539)
+LIMIT 1;
 
 INSERT INTO rental_orders (
   order_number, client_id, status, start_date, end_date, days_count,
@@ -22587,12 +20471,9 @@ SELECT
   NOW(),
   NOW()
 FROM rental_clients c
-WHERE c.name ILIKE '%Элина (Сититур)%' 
-   OR c.director_name ILIKE '%Элина (Сититур)%'
-   OR 'Элина (Сититур)' ILIKE '%' || c.name || '%'
-   OR 'Элина (Сититур)' ILIKE '%' || c.director_name || '%'
-LIMIT 1
-ON CONFLICT (order_number) DO NOTHING;
+WHERE (c.name = 'Элина (Сититур)' OR c.director_name = 'Элина (Сититур)')
+  AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 537)
+LIMIT 1;
 
 INSERT INTO rental_orders (
   order_number, client_id, status, start_date, end_date, days_count,
@@ -22619,12 +20500,9 @@ SELECT
   NOW(),
   NOW()
 FROM rental_clients c
-WHERE c.name ILIKE '%Ольга Лукоянова%' 
-   OR c.director_name ILIKE '%Ольга Лукоянова%'
-   OR 'Ольга Лукоянова' ILIKE '%' || c.name || '%'
-   OR 'Ольга Лукоянова' ILIKE '%' || c.director_name || '%'
-LIMIT 1
-ON CONFLICT (order_number) DO NOTHING;
+WHERE (c.name = 'Ольга Лукоянова' OR c.director_name = 'Ольга Лукоянова')
+  AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 536)
+LIMIT 1;
 
 INSERT INTO rental_orders (
   order_number, client_id, status, start_date, end_date, days_count,
@@ -22651,12 +20529,9 @@ SELECT
   NOW(),
   NOW()
 FROM rental_clients c
-WHERE c.name ILIKE '%Юлия Воронова%' 
-   OR c.director_name ILIKE '%Юлия Воронова%'
-   OR 'Юлия Воронова' ILIKE '%' || c.name || '%'
-   OR 'Юлия Воронова' ILIKE '%' || c.director_name || '%'
-LIMIT 1
-ON CONFLICT (order_number) DO NOTHING;
+WHERE (c.name = 'Юлия Воронова' OR c.director_name = 'Юлия Воронова')
+  AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 533)
+LIMIT 1;
 
 INSERT INTO rental_orders (
   order_number, client_id, status, start_date, end_date, days_count,
@@ -22683,12 +20558,9 @@ SELECT
   NOW(),
   NOW()
 FROM rental_clients c
-WHERE c.name ILIKE '%Татьяна (Гольфстрим)%' 
-   OR c.director_name ILIKE '%Татьяна (Гольфстрим)%'
-   OR 'Татьяна (Гольфстрим)' ILIKE '%' || c.name || '%'
-   OR 'Татьяна (Гольфстрим)' ILIKE '%' || c.director_name || '%'
-LIMIT 1
-ON CONFLICT (order_number) DO NOTHING;
+WHERE (c.name = 'Татьяна (Гольфстрим)' OR c.director_name = 'Татьяна (Гольфстрим)')
+  AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 532)
+LIMIT 1;
 
 INSERT INTO rental_orders (
   order_number, client_id, status, start_date, end_date, days_count,
@@ -22715,12 +20587,9 @@ SELECT
   NOW(),
   NOW()
 FROM rental_clients c
-WHERE c.name ILIKE '%Татьяна (Гольфстрим)%' 
-   OR c.director_name ILIKE '%Татьяна (Гольфстрим)%'
-   OR 'Татьяна (Гольфстрим)' ILIKE '%' || c.name || '%'
-   OR 'Татьяна (Гольфстрим)' ILIKE '%' || c.director_name || '%'
-LIMIT 1
-ON CONFLICT (order_number) DO NOTHING;
+WHERE (c.name = 'Татьяна (Гольфстрим)' OR c.director_name = 'Татьяна (Гольфстрим)')
+  AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 531)
+LIMIT 1;
 
 INSERT INTO rental_orders (
   order_number, client_id, status, start_date, end_date, days_count,
@@ -22747,12 +20616,9 @@ SELECT
   NOW(),
   NOW()
 FROM rental_clients c
-WHERE c.name ILIKE '%Виолетта%' 
-   OR c.director_name ILIKE '%Виолетта%'
-   OR 'Виолетта' ILIKE '%' || c.name || '%'
-   OR 'Виолетта' ILIKE '%' || c.director_name || '%'
-LIMIT 1
-ON CONFLICT (order_number) DO NOTHING;
+WHERE (c.name = 'Виолетта' OR c.director_name = 'Виолетта')
+  AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 530)
+LIMIT 1;
 
 INSERT INTO rental_orders (
   order_number, client_id, status, start_date, end_date, days_count,
@@ -22779,12 +20645,9 @@ SELECT
   NOW(),
   NOW()
 FROM rental_clients c
-WHERE c.name ILIKE '%Альберт (КТ)%' 
-   OR c.director_name ILIKE '%Альберт (КТ)%'
-   OR 'Альберт (КТ)' ILIKE '%' || c.name || '%'
-   OR 'Альберт (КТ)' ILIKE '%' || c.director_name || '%'
-LIMIT 1
-ON CONFLICT (order_number) DO NOTHING;
+WHERE (c.name = 'Альберт (КТ)' OR c.director_name = 'Альберт (КТ)')
+  AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 529)
+LIMIT 1;
 
 INSERT INTO rental_orders (
   order_number, client_id, status, start_date, end_date, days_count,
@@ -22811,12 +20674,9 @@ SELECT
   NOW(),
   NOW()
 FROM rental_clients c
-WHERE c.name ILIKE '%Альберт (КТ)%' 
-   OR c.director_name ILIKE '%Альберт (КТ)%'
-   OR 'Альберт (КТ)' ILIKE '%' || c.name || '%'
-   OR 'Альберт (КТ)' ILIKE '%' || c.director_name || '%'
-LIMIT 1
-ON CONFLICT (order_number) DO NOTHING;
+WHERE (c.name = 'Альберт (КТ)' OR c.director_name = 'Альберт (КТ)')
+  AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 528)
+LIMIT 1;
 
 INSERT INTO rental_orders (
   order_number, client_id, status, start_date, end_date, days_count,
@@ -22843,12 +20703,9 @@ SELECT
   NOW(),
   NOW()
 FROM rental_clients c
-WHERE c.name ILIKE '%Альберт (КТ)%' 
-   OR c.director_name ILIKE '%Альберт (КТ)%'
-   OR 'Альберт (КТ)' ILIKE '%' || c.name || '%'
-   OR 'Альберт (КТ)' ILIKE '%' || c.director_name || '%'
-LIMIT 1
-ON CONFLICT (order_number) DO NOTHING;
+WHERE (c.name = 'Альберт (КТ)' OR c.director_name = 'Альберт (КТ)')
+  AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 527)
+LIMIT 1;
 
 INSERT INTO rental_orders (
   order_number, client_id, status, start_date, end_date, days_count,
@@ -22875,12 +20732,9 @@ SELECT
   NOW(),
   NOW()
 FROM rental_clients c
-WHERE c.name ILIKE '%Татьяна (Гольфстрим)%' 
-   OR c.director_name ILIKE '%Татьяна (Гольфстрим)%'
-   OR 'Татьяна (Гольфстрим)' ILIKE '%' || c.name || '%'
-   OR 'Татьяна (Гольфстрим)' ILIKE '%' || c.director_name || '%'
-LIMIT 1
-ON CONFLICT (order_number) DO NOTHING;
+WHERE (c.name = 'Татьяна (Гольфстрим)' OR c.director_name = 'Татьяна (Гольфстрим)')
+  AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 526)
+LIMIT 1;
 
 INSERT INTO rental_orders (
   order_number, client_id, status, start_date, end_date, days_count,
@@ -22907,12 +20761,9 @@ SELECT
   NOW(),
   NOW()
 FROM rental_clients c
-WHERE c.name ILIKE '%Татьяна (Гольфстрим)%' 
-   OR c.director_name ILIKE '%Татьяна (Гольфстрим)%'
-   OR 'Татьяна (Гольфстрим)' ILIKE '%' || c.name || '%'
-   OR 'Татьяна (Гольфстрим)' ILIKE '%' || c.director_name || '%'
-LIMIT 1
-ON CONFLICT (order_number) DO NOTHING;
+WHERE (c.name = 'Татьяна (Гольфстрим)' OR c.director_name = 'Татьяна (Гольфстрим)')
+  AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 525)
+LIMIT 1;
 
 INSERT INTO rental_orders (
   order_number, client_id, status, start_date, end_date, days_count,
@@ -22939,12 +20790,9 @@ SELECT
   NOW(),
   NOW()
 FROM rental_clients c
-WHERE c.name ILIKE '%Мира (ИП)%' 
-   OR c.director_name ILIKE '%Мира (ИП)%'
-   OR 'Мира (ИП)' ILIKE '%' || c.name || '%'
-   OR 'Мира (ИП)' ILIKE '%' || c.director_name || '%'
-LIMIT 1
-ON CONFLICT (order_number) DO NOTHING;
+WHERE (c.name = 'Мира (ИП)' OR c.director_name = 'Мира (ИП)')
+  AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 524)
+LIMIT 1;
 
 INSERT INTO rental_orders (
   order_number, client_id, status, start_date, end_date, days_count,
@@ -22971,12 +20819,9 @@ SELECT
   NOW(),
   NOW()
 FROM rental_clients c
-WHERE c.name ILIKE '%Гульнара%' 
-   OR c.director_name ILIKE '%Гульнара%'
-   OR 'Гульнара' ILIKE '%' || c.name || '%'
-   OR 'Гульнара' ILIKE '%' || c.director_name || '%'
-LIMIT 1
-ON CONFLICT (order_number) DO NOTHING;
+WHERE (c.name = 'Гульнара' OR c.director_name = 'Гульнара')
+  AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 523)
+LIMIT 1;
 
 INSERT INTO rental_orders (
   order_number, client_id, status, start_date, end_date, days_count,
@@ -23003,12 +20848,9 @@ SELECT
   NOW(),
   NOW()
 FROM rental_clients c
-WHERE c.name ILIKE '%Эдик Заказы для групп%' 
-   OR c.director_name ILIKE '%Эдик Заказы для групп%'
-   OR 'Эдик Заказы для групп' ILIKE '%' || c.name || '%'
-   OR 'Эдик Заказы для групп' ILIKE '%' || c.director_name || '%'
-LIMIT 1
-ON CONFLICT (order_number) DO NOTHING;
+WHERE (c.name = 'Эдик Заказы для групп' OR c.director_name = 'Эдик Заказы для групп')
+  AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 522)
+LIMIT 1;
 
 INSERT INTO rental_orders (
   order_number, client_id, status, start_date, end_date, days_count,
@@ -23035,12 +20877,9 @@ SELECT
   NOW(),
   NOW()
 FROM rental_clients c
-WHERE c.name ILIKE '%Татьяна (Гольфстрим)%' 
-   OR c.director_name ILIKE '%Татьяна (Гольфстрим)%'
-   OR 'Татьяна (Гольфстрим)' ILIKE '%' || c.name || '%'
-   OR 'Татьяна (Гольфстрим)' ILIKE '%' || c.director_name || '%'
-LIMIT 1
-ON CONFLICT (order_number) DO NOTHING;
+WHERE (c.name = 'Татьяна (Гольфстрим)' OR c.director_name = 'Татьяна (Гольфстрим)')
+  AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 521)
+LIMIT 1;
 
 INSERT INTO rental_orders (
   order_number, client_id, status, start_date, end_date, days_count,
@@ -23067,12 +20906,9 @@ SELECT
   NOW(),
   NOW()
 FROM rental_clients c
-WHERE c.name ILIKE '%Зельфира%' 
-   OR c.director_name ILIKE '%Зельфира%'
-   OR 'Зельфира' ILIKE '%' || c.name || '%'
-   OR 'Зельфира' ILIKE '%' || c.director_name || '%'
-LIMIT 1
-ON CONFLICT (order_number) DO NOTHING;
+WHERE (c.name = 'Зельфира' OR c.director_name = 'Зельфира')
+  AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 520)
+LIMIT 1;
 
 INSERT INTO rental_orders (
   order_number, client_id, status, start_date, end_date, days_count,
@@ -23099,12 +20935,9 @@ SELECT
   NOW(),
   NOW()
 FROM rental_clients c
-WHERE c.name ILIKE '%Гульнара%' 
-   OR c.director_name ILIKE '%Гульнара%'
-   OR 'Гульнара' ILIKE '%' || c.name || '%'
-   OR 'Гульнара' ILIKE '%' || c.director_name || '%'
-LIMIT 1
-ON CONFLICT (order_number) DO NOTHING;
+WHERE (c.name = 'Гульнара' OR c.director_name = 'Гульнара')
+  AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 519)
+LIMIT 1;
 
 INSERT INTO rental_orders (
   order_number, client_id, status, start_date, end_date, days_count,
@@ -23131,12 +20964,9 @@ SELECT
   NOW(),
   NOW()
 FROM rental_clients c
-WHERE c.name ILIKE '%Татьяна (Гольфстрим)%' 
-   OR c.director_name ILIKE '%Татьяна (Гольфстрим)%'
-   OR 'Татьяна (Гольфстрим)' ILIKE '%' || c.name || '%'
-   OR 'Татьяна (Гольфстрим)' ILIKE '%' || c.director_name || '%'
-LIMIT 1
-ON CONFLICT (order_number) DO NOTHING;
+WHERE (c.name = 'Татьяна (Гольфстрим)' OR c.director_name = 'Татьяна (Гольфстрим)')
+  AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 518)
+LIMIT 1;
 
 INSERT INTO rental_orders (
   order_number, client_id, status, start_date, end_date, days_count,
@@ -23163,12 +20993,9 @@ SELECT
   NOW(),
   NOW()
 FROM rental_clients c
-WHERE c.name ILIKE '%Татьяна (Гольфстрим)%' 
-   OR c.director_name ILIKE '%Татьяна (Гольфстрим)%'
-   OR 'Татьяна (Гольфстрим)' ILIKE '%' || c.name || '%'
-   OR 'Татьяна (Гольфстрим)' ILIKE '%' || c.director_name || '%'
-LIMIT 1
-ON CONFLICT (order_number) DO NOTHING;
+WHERE (c.name = 'Татьяна (Гольфстрим)' OR c.director_name = 'Татьяна (Гольфстрим)')
+  AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 517)
+LIMIT 1;
 
 INSERT INTO rental_orders (
   order_number, client_id, status, start_date, end_date, days_count,
@@ -23195,12 +21022,9 @@ SELECT
   NOW(),
   NOW()
 FROM rental_clients c
-WHERE c.name ILIKE '%Татьяна (Гольфстрим)%' 
-   OR c.director_name ILIKE '%Татьяна (Гольфстрим)%'
-   OR 'Татьяна (Гольфстрим)' ILIKE '%' || c.name || '%'
-   OR 'Татьяна (Гольфстрим)' ILIKE '%' || c.director_name || '%'
-LIMIT 1
-ON CONFLICT (order_number) DO NOTHING;
+WHERE (c.name = 'Татьяна (Гольфстрим)' OR c.director_name = 'Татьяна (Гольфстрим)')
+  AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 516)
+LIMIT 1;
 
 INSERT INTO rental_orders (
   order_number, client_id, status, start_date, end_date, days_count,
@@ -23227,12 +21051,9 @@ SELECT
   NOW(),
   NOW()
 FROM rental_clients c
-WHERE c.name ILIKE '%Татьяна (Гольфстрим)%' 
-   OR c.director_name ILIKE '%Татьяна (Гольфстрим)%'
-   OR 'Татьяна (Гольфстрим)' ILIKE '%' || c.name || '%'
-   OR 'Татьяна (Гольфстрим)' ILIKE '%' || c.director_name || '%'
-LIMIT 1
-ON CONFLICT (order_number) DO NOTHING;
+WHERE (c.name = 'Татьяна (Гольфстрим)' OR c.director_name = 'Татьяна (Гольфстрим)')
+  AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 515)
+LIMIT 1;
 
 INSERT INTO rental_orders (
   order_number, client_id, status, start_date, end_date, days_count,
@@ -23259,12 +21080,9 @@ SELECT
   NOW(),
   NOW()
 FROM rental_clients c
-WHERE c.name ILIKE '%Сергей (Авангард)%' 
-   OR c.director_name ILIKE '%Сергей (Авангард)%'
-   OR 'Сергей (Авангард)' ILIKE '%' || c.name || '%'
-   OR 'Сергей (Авангард)' ILIKE '%' || c.director_name || '%'
-LIMIT 1
-ON CONFLICT (order_number) DO NOTHING;
+WHERE (c.name = 'Сергей (Авангард)' OR c.director_name = 'Сергей (Авангард)')
+  AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 514)
+LIMIT 1;
 
 INSERT INTO rental_orders (
   order_number, client_id, status, start_date, end_date, days_count,
@@ -23291,12 +21109,9 @@ SELECT
   NOW(),
   NOW()
 FROM rental_clients c
-WHERE c.name ILIKE '%Юлия Воронова%' 
-   OR c.director_name ILIKE '%Юлия Воронова%'
-   OR 'Юлия Воронова' ILIKE '%' || c.name || '%'
-   OR 'Юлия Воронова' ILIKE '%' || c.director_name || '%'
-LIMIT 1
-ON CONFLICT (order_number) DO NOTHING;
+WHERE (c.name = 'Юлия Воронова' OR c.director_name = 'Юлия Воронова')
+  AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 513)
+LIMIT 1;
 
 INSERT INTO rental_orders (
   order_number, client_id, status, start_date, end_date, days_count,
@@ -23323,12 +21138,9 @@ SELECT
   NOW(),
   NOW()
 FROM rental_clients c
-WHERE c.name ILIKE '%Мария Экскурсовод%' 
-   OR c.director_name ILIKE '%Мария Экскурсовод%'
-   OR 'Мария Экскурсовод' ILIKE '%' || c.name || '%'
-   OR 'Мария Экскурсовод' ILIKE '%' || c.director_name || '%'
-LIMIT 1
-ON CONFLICT (order_number) DO NOTHING;
+WHERE (c.name = 'Мария Экскурсовод' OR c.director_name = 'Мария Экскурсовод')
+  AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 512)
+LIMIT 1;
 
 INSERT INTO rental_orders (
   order_number, client_id, status, start_date, end_date, days_count,
@@ -23355,12 +21167,9 @@ SELECT
   NOW(),
   NOW()
 FROM rental_clients c
-WHERE c.name ILIKE '%Элина (Сититур)%' 
-   OR c.director_name ILIKE '%Элина (Сититур)%'
-   OR 'Элина (Сититур)' ILIKE '%' || c.name || '%'
-   OR 'Элина (Сититур)' ILIKE '%' || c.director_name || '%'
-LIMIT 1
-ON CONFLICT (order_number) DO NOTHING;
+WHERE (c.name = 'Элина (Сититур)' OR c.director_name = 'Элина (Сититур)')
+  AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 509)
+LIMIT 1;
 
 INSERT INTO rental_orders (
   order_number, client_id, status, start_date, end_date, days_count,
@@ -23387,12 +21196,9 @@ SELECT
   NOW(),
   NOW()
 FROM rental_clients c
-WHERE c.name ILIKE '%Ирина Обыденникова%' 
-   OR c.director_name ILIKE '%Ирина Обыденникова%'
-   OR 'Ирина Обыденникова' ILIKE '%' || c.name || '%'
-   OR 'Ирина Обыденникова' ILIKE '%' || c.director_name || '%'
-LIMIT 1
-ON CONFLICT (order_number) DO NOTHING;
+WHERE (c.name = 'Ирина Обыденникова' OR c.director_name = 'Ирина Обыденникова')
+  AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 508)
+LIMIT 1;
 
 INSERT INTO rental_orders (
   order_number, client_id, status, start_date, end_date, days_count,
@@ -23419,12 +21225,9 @@ SELECT
   NOW(),
   NOW()
 FROM rental_clients c
-WHERE c.name ILIKE '%Мира (ИП)%' 
-   OR c.director_name ILIKE '%Мира (ИП)%'
-   OR 'Мира (ИП)' ILIKE '%' || c.name || '%'
-   OR 'Мира (ИП)' ILIKE '%' || c.director_name || '%'
-LIMIT 1
-ON CONFLICT (order_number) DO NOTHING;
+WHERE (c.name = 'Мира (ИП)' OR c.director_name = 'Мира (ИП)')
+  AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 507)
+LIMIT 1;
 
 INSERT INTO rental_orders (
   order_number, client_id, status, start_date, end_date, days_count,
@@ -23451,12 +21254,9 @@ SELECT
   NOW(),
   NOW()
 FROM rental_clients c
-WHERE c.name ILIKE '%Мира (ИП)%' 
-   OR c.director_name ILIKE '%Мира (ИП)%'
-   OR 'Мира (ИП)' ILIKE '%' || c.name || '%'
-   OR 'Мира (ИП)' ILIKE '%' || c.director_name || '%'
-LIMIT 1
-ON CONFLICT (order_number) DO NOTHING;
+WHERE (c.name = 'Мира (ИП)' OR c.director_name = 'Мира (ИП)')
+  AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 506)
+LIMIT 1;
 
 INSERT INTO rental_orders (
   order_number, client_id, status, start_date, end_date, days_count,
@@ -23483,12 +21283,9 @@ SELECT
   NOW(),
   NOW()
 FROM rental_clients c
-WHERE c.name ILIKE '%Андрей (Экскурс)%' 
-   OR c.director_name ILIKE '%Андрей (Экскурс)%'
-   OR 'Андрей (Экскурс)' ILIKE '%' || c.name || '%'
-   OR 'Андрей (Экскурс)' ILIKE '%' || c.director_name || '%'
-LIMIT 1
-ON CONFLICT (order_number) DO NOTHING;
+WHERE (c.name = 'Андрей (Экскурс)' OR c.director_name = 'Андрей (Экскурс)')
+  AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 505)
+LIMIT 1;
 
 INSERT INTO rental_orders (
   order_number, client_id, status, start_date, end_date, days_count,
@@ -23515,12 +21312,9 @@ SELECT
   NOW(),
   NOW()
 FROM rental_clients c
-WHERE c.name ILIKE '%Мария Экскурсовод%' 
-   OR c.director_name ILIKE '%Мария Экскурсовод%'
-   OR 'Мария Экскурсовод' ILIKE '%' || c.name || '%'
-   OR 'Мария Экскурсовод' ILIKE '%' || c.director_name || '%'
-LIMIT 1
-ON CONFLICT (order_number) DO NOTHING;
+WHERE (c.name = 'Мария Экскурсовод' OR c.director_name = 'Мария Экскурсовод')
+  AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 504)
+LIMIT 1;
 
 INSERT INTO rental_orders (
   order_number, client_id, status, start_date, end_date, days_count,
@@ -23547,12 +21341,9 @@ SELECT
   NOW(),
   NOW()
 FROM rental_clients c
-WHERE c.name ILIKE '%Анастасия%' 
-   OR c.director_name ILIKE '%Анастасия%'
-   OR 'Анастасия' ILIKE '%' || c.name || '%'
-   OR 'Анастасия' ILIKE '%' || c.director_name || '%'
-LIMIT 1
-ON CONFLICT (order_number) DO NOTHING;
+WHERE (c.name = 'Анастасия' OR c.director_name = 'Анастасия')
+  AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 503)
+LIMIT 1;
 
 INSERT INTO rental_orders (
   order_number, client_id, status, start_date, end_date, days_count,
@@ -23579,12 +21370,9 @@ SELECT
   NOW(),
   NOW()
 FROM rental_clients c
-WHERE c.name ILIKE '%Галия%' 
-   OR c.director_name ILIKE '%Галия%'
-   OR 'Галия' ILIKE '%' || c.name || '%'
-   OR 'Галия' ILIKE '%' || c.director_name || '%'
-LIMIT 1
-ON CONFLICT (order_number) DO NOTHING;
+WHERE (c.name = 'Галия' OR c.director_name = 'Галия')
+  AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 502)
+LIMIT 1;
 
 INSERT INTO rental_orders (
   order_number, client_id, status, start_date, end_date, days_count,
@@ -23611,12 +21399,9 @@ SELECT
   NOW(),
   NOW()
 FROM rental_clients c
-WHERE c.name ILIKE '%Мария Экскурсовод%' 
-   OR c.director_name ILIKE '%Мария Экскурсовод%'
-   OR 'Мария Экскурсовод' ILIKE '%' || c.name || '%'
-   OR 'Мария Экскурсовод' ILIKE '%' || c.director_name || '%'
-LIMIT 1
-ON CONFLICT (order_number) DO NOTHING;
+WHERE (c.name = 'Мария Экскурсовод' OR c.director_name = 'Мария Экскурсовод')
+  AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 501)
+LIMIT 1;
 
 INSERT INTO rental_orders (
   order_number, client_id, status, start_date, end_date, days_count,
@@ -23643,12 +21428,9 @@ SELECT
   NOW(),
   NOW()
 FROM rental_clients c
-WHERE c.name ILIKE '%Альберт (КТ)%' 
-   OR c.director_name ILIKE '%Альберт (КТ)%'
-   OR 'Альберт (КТ)' ILIKE '%' || c.name || '%'
-   OR 'Альберт (КТ)' ILIKE '%' || c.director_name || '%'
-LIMIT 1
-ON CONFLICT (order_number) DO NOTHING;
+WHERE (c.name = 'Альберт (КТ)' OR c.director_name = 'Альберт (КТ)')
+  AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 500)
+LIMIT 1;
 
 INSERT INTO rental_orders (
   order_number, client_id, status, start_date, end_date, days_count,
@@ -23675,12 +21457,9 @@ SELECT
   NOW(),
   NOW()
 FROM rental_clients c
-WHERE c.name ILIKE '%Эдик Заказы для групп%' 
-   OR c.director_name ILIKE '%Эдик Заказы для групп%'
-   OR 'Эдик Заказы для групп' ILIKE '%' || c.name || '%'
-   OR 'Эдик Заказы для групп' ILIKE '%' || c.director_name || '%'
-LIMIT 1
-ON CONFLICT (order_number) DO NOTHING;
+WHERE (c.name = 'Эдик Заказы для групп' OR c.director_name = 'Эдик Заказы для групп')
+  AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 499)
+LIMIT 1;
 
 INSERT INTO rental_orders (
   order_number, client_id, status, start_date, end_date, days_count,
@@ -23707,12 +21486,9 @@ SELECT
   NOW(),
   NOW()
 FROM rental_clients c
-WHERE c.name ILIKE '%Эдик Заказы для групп%' 
-   OR c.director_name ILIKE '%Эдик Заказы для групп%'
-   OR 'Эдик Заказы для групп' ILIKE '%' || c.name || '%'
-   OR 'Эдик Заказы для групп' ILIKE '%' || c.director_name || '%'
-LIMIT 1
-ON CONFLICT (order_number) DO NOTHING;
+WHERE (c.name = 'Эдик Заказы для групп' OR c.director_name = 'Эдик Заказы для групп')
+  AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 498)
+LIMIT 1;
 
 INSERT INTO rental_orders (
   order_number, client_id, status, start_date, end_date, days_count,
@@ -23739,12 +21515,9 @@ SELECT
   NOW(),
   NOW()
 FROM rental_clients c
-WHERE c.name ILIKE '%Эдик Заказы для групп%' 
-   OR c.director_name ILIKE '%Эдик Заказы для групп%'
-   OR 'Эдик Заказы для групп' ILIKE '%' || c.name || '%'
-   OR 'Эдик Заказы для групп' ILIKE '%' || c.director_name || '%'
-LIMIT 1
-ON CONFLICT (order_number) DO NOTHING;
+WHERE (c.name = 'Эдик Заказы для групп' OR c.director_name = 'Эдик Заказы для групп')
+  AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 497)
+LIMIT 1;
 
 INSERT INTO rental_orders (
   order_number, client_id, status, start_date, end_date, days_count,
@@ -23771,12 +21544,9 @@ SELECT
   NOW(),
   NOW()
 FROM rental_clients c
-WHERE c.name ILIKE '%Эдик Заказы для групп%' 
-   OR c.director_name ILIKE '%Эдик Заказы для групп%'
-   OR 'Эдик Заказы для групп' ILIKE '%' || c.name || '%'
-   OR 'Эдик Заказы для групп' ILIKE '%' || c.director_name || '%'
-LIMIT 1
-ON CONFLICT (order_number) DO NOTHING;
+WHERE (c.name = 'Эдик Заказы для групп' OR c.director_name = 'Эдик Заказы для групп')
+  AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 496)
+LIMIT 1;
 
 INSERT INTO rental_orders (
   order_number, client_id, status, start_date, end_date, days_count,
@@ -23803,12 +21573,9 @@ SELECT
   NOW(),
   NOW()
 FROM rental_clients c
-WHERE c.name ILIKE '%Наталья%' 
-   OR c.director_name ILIKE '%Наталья%'
-   OR 'Наталья' ILIKE '%' || c.name || '%'
-   OR 'Наталья' ILIKE '%' || c.director_name || '%'
-LIMIT 1
-ON CONFLICT (order_number) DO NOTHING;
+WHERE (c.name = 'Наталья' OR c.director_name = 'Наталья')
+  AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 495)
+LIMIT 1;
 
 INSERT INTO rental_orders (
   order_number, client_id, status, start_date, end_date, days_count,
@@ -23835,12 +21602,9 @@ SELECT
   NOW(),
   NOW()
 FROM rental_clients c
-WHERE c.name ILIKE '%Наталья%' 
-   OR c.director_name ILIKE '%Наталья%'
-   OR 'Наталья' ILIKE '%' || c.name || '%'
-   OR 'Наталья' ILIKE '%' || c.director_name || '%'
-LIMIT 1
-ON CONFLICT (order_number) DO NOTHING;
+WHERE (c.name = 'Наталья' OR c.director_name = 'Наталья')
+  AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 494)
+LIMIT 1;
 
 INSERT INTO rental_orders (
   order_number, client_id, status, start_date, end_date, days_count,
@@ -23867,12 +21631,9 @@ SELECT
   NOW(),
   NOW()
 FROM rental_clients c
-WHERE c.name ILIKE '%Альберт (КТ)%' 
-   OR c.director_name ILIKE '%Альберт (КТ)%'
-   OR 'Альберт (КТ)' ILIKE '%' || c.name || '%'
-   OR 'Альберт (КТ)' ILIKE '%' || c.director_name || '%'
-LIMIT 1
-ON CONFLICT (order_number) DO NOTHING;
+WHERE (c.name = 'Альберт (КТ)' OR c.director_name = 'Альберт (КТ)')
+  AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 493)
+LIMIT 1;
 
 INSERT INTO rental_orders (
   order_number, client_id, status, start_date, end_date, days_count,
@@ -23899,12 +21660,9 @@ SELECT
   NOW(),
   NOW()
 FROM rental_clients c
-WHERE c.name ILIKE '%Эдик Заказы для групп%' 
-   OR c.director_name ILIKE '%Эдик Заказы для групп%'
-   OR 'Эдик Заказы для групп' ILIKE '%' || c.name || '%'
-   OR 'Эдик Заказы для групп' ILIKE '%' || c.director_name || '%'
-LIMIT 1
-ON CONFLICT (order_number) DO NOTHING;
+WHERE (c.name = 'Эдик Заказы для групп' OR c.director_name = 'Эдик Заказы для групп')
+  AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 492)
+LIMIT 1;
 
 INSERT INTO rental_orders (
   order_number, client_id, status, start_date, end_date, days_count,
@@ -23931,12 +21689,9 @@ SELECT
   NOW(),
   NOW()
 FROM rental_clients c
-WHERE c.name ILIKE '%Татьяна (Гольфстрим)%' 
-   OR c.director_name ILIKE '%Татьяна (Гольфстрим)%'
-   OR 'Татьяна (Гольфстрим)' ILIKE '%' || c.name || '%'
-   OR 'Татьяна (Гольфстрим)' ILIKE '%' || c.director_name || '%'
-LIMIT 1
-ON CONFLICT (order_number) DO NOTHING;
+WHERE (c.name = 'Татьяна (Гольфстрим)' OR c.director_name = 'Татьяна (Гольфстрим)')
+  AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 491)
+LIMIT 1;
 
 INSERT INTO rental_orders (
   order_number, client_id, status, start_date, end_date, days_count,
@@ -23963,12 +21718,9 @@ SELECT
   NOW(),
   NOW()
 FROM rental_clients c
-WHERE c.name ILIKE '%Юлия (Рыжий Слон)%' 
-   OR c.director_name ILIKE '%Юлия (Рыжий Слон)%'
-   OR 'Юлия (Рыжий Слон)' ILIKE '%' || c.name || '%'
-   OR 'Юлия (Рыжий Слон)' ILIKE '%' || c.director_name || '%'
-LIMIT 1
-ON CONFLICT (order_number) DO NOTHING;
+WHERE (c.name = 'Юлия (Рыжий Слон)' OR c.director_name = 'Юлия (Рыжий Слон)')
+  AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 490)
+LIMIT 1;
 
 INSERT INTO rental_orders (
   order_number, client_id, status, start_date, end_date, days_count,
@@ -23995,12 +21747,9 @@ SELECT
   NOW(),
   NOW()
 FROM rental_clients c
-WHERE c.name ILIKE '%Татьяна (Гольфстрим)%' 
-   OR c.director_name ILIKE '%Татьяна (Гольфстрим)%'
-   OR 'Татьяна (Гольфстрим)' ILIKE '%' || c.name || '%'
-   OR 'Татьяна (Гольфстрим)' ILIKE '%' || c.director_name || '%'
-LIMIT 1
-ON CONFLICT (order_number) DO NOTHING;
+WHERE (c.name = 'Татьяна (Гольфстрим)' OR c.director_name = 'Татьяна (Гольфстрим)')
+  AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 489)
+LIMIT 1;
 
 INSERT INTO rental_orders (
   order_number, client_id, status, start_date, end_date, days_count,
@@ -24027,12 +21776,9 @@ SELECT
   NOW(),
   NOW()
 FROM rental_clients c
-WHERE c.name ILIKE '%Татьяна (Гольфстрим)%' 
-   OR c.director_name ILIKE '%Татьяна (Гольфстрим)%'
-   OR 'Татьяна (Гольфстрим)' ILIKE '%' || c.name || '%'
-   OR 'Татьяна (Гольфстрим)' ILIKE '%' || c.director_name || '%'
-LIMIT 1
-ON CONFLICT (order_number) DO NOTHING;
+WHERE (c.name = 'Татьяна (Гольфстрим)' OR c.director_name = 'Татьяна (Гольфстрим)')
+  AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 488)
+LIMIT 1;
 
 INSERT INTO rental_orders (
   order_number, client_id, status, start_date, end_date, days_count,
@@ -24059,12 +21805,9 @@ SELECT
   NOW(),
   NOW()
 FROM rental_clients c
-WHERE c.name ILIKE '%Татьяна (Гольфстрим)%' 
-   OR c.director_name ILIKE '%Татьяна (Гольфстрим)%'
-   OR 'Татьяна (Гольфстрим)' ILIKE '%' || c.name || '%'
-   OR 'Татьяна (Гольфстрим)' ILIKE '%' || c.director_name || '%'
-LIMIT 1
-ON CONFLICT (order_number) DO NOTHING;
+WHERE (c.name = 'Татьяна (Гольфстрим)' OR c.director_name = 'Татьяна (Гольфстрим)')
+  AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 487)
+LIMIT 1;
 
 INSERT INTO rental_orders (
   order_number, client_id, status, start_date, end_date, days_count,
@@ -24091,12 +21834,9 @@ SELECT
   NOW(),
   NOW()
 FROM rental_clients c
-WHERE c.name ILIKE '%Татьяна (Гольфстрим)%' 
-   OR c.director_name ILIKE '%Татьяна (Гольфстрим)%'
-   OR 'Татьяна (Гольфстрим)' ILIKE '%' || c.name || '%'
-   OR 'Татьяна (Гольфстрим)' ILIKE '%' || c.director_name || '%'
-LIMIT 1
-ON CONFLICT (order_number) DO NOTHING;
+WHERE (c.name = 'Татьяна (Гольфстрим)' OR c.director_name = 'Татьяна (Гольфстрим)')
+  AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 486)
+LIMIT 1;
 
 INSERT INTO rental_orders (
   order_number, client_id, status, start_date, end_date, days_count,
@@ -24123,12 +21863,9 @@ SELECT
   NOW(),
   NOW()
 FROM rental_clients c
-WHERE c.name ILIKE '%Татьяна (Гольфстрим)%' 
-   OR c.director_name ILIKE '%Татьяна (Гольфстрим)%'
-   OR 'Татьяна (Гольфстрим)' ILIKE '%' || c.name || '%'
-   OR 'Татьяна (Гольфстрим)' ILIKE '%' || c.director_name || '%'
-LIMIT 1
-ON CONFLICT (order_number) DO NOTHING;
+WHERE (c.name = 'Татьяна (Гольфстрим)' OR c.director_name = 'Татьяна (Гольфстрим)')
+  AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 485)
+LIMIT 1;
 
 INSERT INTO rental_orders (
   order_number, client_id, status, start_date, end_date, days_count,
@@ -24155,12 +21892,9 @@ SELECT
   NOW(),
   NOW()
 FROM rental_clients c
-WHERE c.name ILIKE '%Татьяна (Гольфстрим)%' 
-   OR c.director_name ILIKE '%Татьяна (Гольфстрим)%'
-   OR 'Татьяна (Гольфстрим)' ILIKE '%' || c.name || '%'
-   OR 'Татьяна (Гольфстрим)' ILIKE '%' || c.director_name || '%'
-LIMIT 1
-ON CONFLICT (order_number) DO NOTHING;
+WHERE (c.name = 'Татьяна (Гольфстрим)' OR c.director_name = 'Татьяна (Гольфстрим)')
+  AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 484)
+LIMIT 1;
 
 INSERT INTO rental_orders (
   order_number, client_id, status, start_date, end_date, days_count,
@@ -24187,12 +21921,9 @@ SELECT
   NOW(),
   NOW()
 FROM rental_clients c
-WHERE c.name ILIKE '%Татьяна (Гольфстрим)%' 
-   OR c.director_name ILIKE '%Татьяна (Гольфстрим)%'
-   OR 'Татьяна (Гольфстрим)' ILIKE '%' || c.name || '%'
-   OR 'Татьяна (Гольфстрим)' ILIKE '%' || c.director_name || '%'
-LIMIT 1
-ON CONFLICT (order_number) DO NOTHING;
+WHERE (c.name = 'Татьяна (Гольфстрим)' OR c.director_name = 'Татьяна (Гольфстрим)')
+  AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 483)
+LIMIT 1;
 
 INSERT INTO rental_orders (
   order_number, client_id, status, start_date, end_date, days_count,
@@ -24219,12 +21950,9 @@ SELECT
   NOW(),
   NOW()
 FROM rental_clients c
-WHERE c.name ILIKE '%Татьяна (Гольфстрим)%' 
-   OR c.director_name ILIKE '%Татьяна (Гольфстрим)%'
-   OR 'Татьяна (Гольфстрим)' ILIKE '%' || c.name || '%'
-   OR 'Татьяна (Гольфстрим)' ILIKE '%' || c.director_name || '%'
-LIMIT 1
-ON CONFLICT (order_number) DO NOTHING;
+WHERE (c.name = 'Татьяна (Гольфстрим)' OR c.director_name = 'Татьяна (Гольфстрим)')
+  AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 482)
+LIMIT 1;
 
 INSERT INTO rental_orders (
   order_number, client_id, status, start_date, end_date, days_count,
@@ -24251,12 +21979,9 @@ SELECT
   NOW(),
   NOW()
 FROM rental_clients c
-WHERE c.name ILIKE '%Татьяна (Гольфстрим)%' 
-   OR c.director_name ILIKE '%Татьяна (Гольфстрим)%'
-   OR 'Татьяна (Гольфстрим)' ILIKE '%' || c.name || '%'
-   OR 'Татьяна (Гольфстрим)' ILIKE '%' || c.director_name || '%'
-LIMIT 1
-ON CONFLICT (order_number) DO NOTHING;
+WHERE (c.name = 'Татьяна (Гольфстрим)' OR c.director_name = 'Татьяна (Гольфстрим)')
+  AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 481)
+LIMIT 1;
 
 INSERT INTO rental_orders (
   order_number, client_id, status, start_date, end_date, days_count,
@@ -24283,12 +22008,9 @@ SELECT
   NOW(),
   NOW()
 FROM rental_clients c
-WHERE c.name ILIKE '%Татьяна (Гольфстрим)%' 
-   OR c.director_name ILIKE '%Татьяна (Гольфстрим)%'
-   OR 'Татьяна (Гольфстрим)' ILIKE '%' || c.name || '%'
-   OR 'Татьяна (Гольфстрим)' ILIKE '%' || c.director_name || '%'
-LIMIT 1
-ON CONFLICT (order_number) DO NOTHING;
+WHERE (c.name = 'Татьяна (Гольфстрим)' OR c.director_name = 'Татьяна (Гольфстрим)')
+  AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 480)
+LIMIT 1;
 
 INSERT INTO rental_orders (
   order_number, client_id, status, start_date, end_date, days_count,
@@ -24315,12 +22037,9 @@ SELECT
   NOW(),
   NOW()
 FROM rental_clients c
-WHERE c.name ILIKE '%Татьяна (Гольфстрим)%' 
-   OR c.director_name ILIKE '%Татьяна (Гольфстрим)%'
-   OR 'Татьяна (Гольфстрим)' ILIKE '%' || c.name || '%'
-   OR 'Татьяна (Гольфстрим)' ILIKE '%' || c.director_name || '%'
-LIMIT 1
-ON CONFLICT (order_number) DO NOTHING;
+WHERE (c.name = 'Татьяна (Гольфстрим)' OR c.director_name = 'Татьяна (Гольфстрим)')
+  AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 479)
+LIMIT 1;
 
 INSERT INTO rental_orders (
   order_number, client_id, status, start_date, end_date, days_count,
@@ -24347,12 +22066,9 @@ SELECT
   NOW(),
   NOW()
 FROM rental_clients c
-WHERE c.name ILIKE '%Татьяна (Гольфстрим)%' 
-   OR c.director_name ILIKE '%Татьяна (Гольфстрим)%'
-   OR 'Татьяна (Гольфстрим)' ILIKE '%' || c.name || '%'
-   OR 'Татьяна (Гольфстрим)' ILIKE '%' || c.director_name || '%'
-LIMIT 1
-ON CONFLICT (order_number) DO NOTHING;
+WHERE (c.name = 'Татьяна (Гольфстрим)' OR c.director_name = 'Татьяна (Гольфстрим)')
+  AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 478)
+LIMIT 1;
 
 INSERT INTO rental_orders (
   order_number, client_id, status, start_date, end_date, days_count,
@@ -24379,12 +22095,9 @@ SELECT
   NOW(),
   NOW()
 FROM rental_clients c
-WHERE c.name ILIKE '%Дмитрий Попков%' 
-   OR c.director_name ILIKE '%Дмитрий Попков%'
-   OR 'Дмитрий Попков' ILIKE '%' || c.name || '%'
-   OR 'Дмитрий Попков' ILIKE '%' || c.director_name || '%'
-LIMIT 1
-ON CONFLICT (order_number) DO NOTHING;
+WHERE (c.name = 'Дмитрий Попков' OR c.director_name = 'Дмитрий Попков')
+  AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 477)
+LIMIT 1;
 
 INSERT INTO rental_orders (
   order_number, client_id, status, start_date, end_date, days_count,
@@ -24411,12 +22124,9 @@ SELECT
   NOW(),
   NOW()
 FROM rental_clients c
-WHERE c.name ILIKE '%Ольга%' 
-   OR c.director_name ILIKE '%Ольга%'
-   OR 'Ольга' ILIKE '%' || c.name || '%'
-   OR 'Ольга' ILIKE '%' || c.director_name || '%'
-LIMIT 1
-ON CONFLICT (order_number) DO NOTHING;
+WHERE (c.name = 'Ольга' OR c.director_name = 'Ольга')
+  AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 476)
+LIMIT 1;
 
 INSERT INTO rental_orders (
   order_number, client_id, status, start_date, end_date, days_count,
@@ -24443,12 +22153,9 @@ SELECT
   NOW(),
   NOW()
 FROM rental_clients c
-WHERE c.name ILIKE '%Камила Ягудина%' 
-   OR c.director_name ILIKE '%Камила Ягудина%'
-   OR 'Камила Ягудина' ILIKE '%' || c.name || '%'
-   OR 'Камила Ягудина' ILIKE '%' || c.director_name || '%'
-LIMIT 1
-ON CONFLICT (order_number) DO NOTHING;
+WHERE (c.name = 'Камила Ягудина' OR c.director_name = 'Камила Ягудина')
+  AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 475)
+LIMIT 1;
 
 INSERT INTO rental_orders (
   order_number, client_id, status, start_date, end_date, days_count,
@@ -24475,12 +22182,9 @@ SELECT
   NOW(),
   NOW()
 FROM rental_clients c
-WHERE c.name ILIKE '%Луиза%' 
-   OR c.director_name ILIKE '%Луиза%'
-   OR 'Луиза' ILIKE '%' || c.name || '%'
-   OR 'Луиза' ILIKE '%' || c.director_name || '%'
-LIMIT 1
-ON CONFLICT (order_number) DO NOTHING;
+WHERE (c.name = 'Луиза' OR c.director_name = 'Луиза')
+  AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 474)
+LIMIT 1;
 
 INSERT INTO rental_orders (
   order_number, client_id, status, start_date, end_date, days_count,
@@ -24507,12 +22211,9 @@ SELECT
   NOW(),
   NOW()
 FROM rental_clients c
-WHERE c.name ILIKE '%Нина Тиханова%' 
-   OR c.director_name ILIKE '%Нина Тиханова%'
-   OR 'Нина Тиханова' ILIKE '%' || c.name || '%'
-   OR 'Нина Тиханова' ILIKE '%' || c.director_name || '%'
-LIMIT 1
-ON CONFLICT (order_number) DO NOTHING;
+WHERE (c.name = 'Нина Тиханова' OR c.director_name = 'Нина Тиханова')
+  AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 473)
+LIMIT 1;
 
 INSERT INTO rental_orders (
   order_number, client_id, status, start_date, end_date, days_count,
@@ -24539,12 +22240,9 @@ SELECT
   NOW(),
   NOW()
 FROM rental_clients c
-WHERE c.name ILIKE '%Ольга Тандалова%' 
-   OR c.director_name ILIKE '%Ольга Тандалова%'
-   OR 'Ольга Тандалова' ILIKE '%' || c.name || '%'
-   OR 'Ольга Тандалова' ILIKE '%' || c.director_name || '%'
-LIMIT 1
-ON CONFLICT (order_number) DO NOTHING;
+WHERE (c.name = 'Ольга Тандалова' OR c.director_name = 'Ольга Тандалова')
+  AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 472)
+LIMIT 1;
 
 INSERT INTO rental_orders (
   order_number, client_id, status, start_date, end_date, days_count,
@@ -24571,12 +22269,9 @@ SELECT
   NOW(),
   NOW()
 FROM rental_clients c
-WHERE c.name ILIKE '%Татьяна Чуб%' 
-   OR c.director_name ILIKE '%Татьяна Чуб%'
-   OR 'Татьяна Чуб' ILIKE '%' || c.name || '%'
-   OR 'Татьяна Чуб' ILIKE '%' || c.director_name || '%'
-LIMIT 1
-ON CONFLICT (order_number) DO NOTHING;
+WHERE (c.name = 'Татьяна Чуб' OR c.director_name = 'Татьяна Чуб')
+  AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 470)
+LIMIT 1;
 
 INSERT INTO rental_orders (
   order_number, client_id, status, start_date, end_date, days_count,
@@ -24603,12 +22298,9 @@ SELECT
   NOW(),
   NOW()
 FROM rental_clients c
-WHERE c.name ILIKE '%Наталья%' 
-   OR c.director_name ILIKE '%Наталья%'
-   OR 'Наталья' ILIKE '%' || c.name || '%'
-   OR 'Наталья' ILIKE '%' || c.director_name || '%'
-LIMIT 1
-ON CONFLICT (order_number) DO NOTHING;
+WHERE (c.name = 'Наталья' OR c.director_name = 'Наталья')
+  AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 469)
+LIMIT 1;
 
 INSERT INTO rental_orders (
   order_number, client_id, status, start_date, end_date, days_count,
@@ -24635,12 +22327,9 @@ SELECT
   NOW(),
   NOW()
 FROM rental_clients c
-WHERE c.name ILIKE '%Галия%' 
-   OR c.director_name ILIKE '%Галия%'
-   OR 'Галия' ILIKE '%' || c.name || '%'
-   OR 'Галия' ILIKE '%' || c.director_name || '%'
-LIMIT 1
-ON CONFLICT (order_number) DO NOTHING;
+WHERE (c.name = 'Галия' OR c.director_name = 'Галия')
+  AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 468)
+LIMIT 1;
 
 INSERT INTO rental_orders (
   order_number, client_id, status, start_date, end_date, days_count,
@@ -24667,12 +22356,9 @@ SELECT
   NOW(),
   NOW()
 FROM rental_clients c
-WHERE c.name ILIKE '%Элина (Сититур)%' 
-   OR c.director_name ILIKE '%Элина (Сититур)%'
-   OR 'Элина (Сититур)' ILIKE '%' || c.name || '%'
-   OR 'Элина (Сититур)' ILIKE '%' || c.director_name || '%'
-LIMIT 1
-ON CONFLICT (order_number) DO NOTHING;
+WHERE (c.name = 'Элина (Сититур)' OR c.director_name = 'Элина (Сититур)')
+  AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 467)
+LIMIT 1;
 
 INSERT INTO rental_orders (
   order_number, client_id, status, start_date, end_date, days_count,
@@ -24699,12 +22385,9 @@ SELECT
   NOW(),
   NOW()
 FROM rental_clients c
-WHERE c.name ILIKE '%Элина (Сититур)%' 
-   OR c.director_name ILIKE '%Элина (Сититур)%'
-   OR 'Элина (Сититур)' ILIKE '%' || c.name || '%'
-   OR 'Элина (Сититур)' ILIKE '%' || c.director_name || '%'
-LIMIT 1
-ON CONFLICT (order_number) DO NOTHING;
+WHERE (c.name = 'Элина (Сититур)' OR c.director_name = 'Элина (Сититур)')
+  AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 466)
+LIMIT 1;
 
 INSERT INTO rental_orders (
   order_number, client_id, status, start_date, end_date, days_count,
@@ -24731,12 +22414,9 @@ SELECT
   NOW(),
   NOW()
 FROM rental_clients c
-WHERE c.name ILIKE '%Аниса%' 
-   OR c.director_name ILIKE '%Аниса%'
-   OR 'Аниса' ILIKE '%' || c.name || '%'
-   OR 'Аниса' ILIKE '%' || c.director_name || '%'
-LIMIT 1
-ON CONFLICT (order_number) DO NOTHING;
+WHERE (c.name = 'Аниса' OR c.director_name = 'Аниса')
+  AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 465)
+LIMIT 1;
 
 INSERT INTO rental_orders (
   order_number, client_id, status, start_date, end_date, days_count,
@@ -24763,12 +22443,9 @@ SELECT
   NOW(),
   NOW()
 FROM rental_clients c
-WHERE c.name ILIKE '%Варвара%' 
-   OR c.director_name ILIKE '%Варвара%'
-   OR 'Варвара' ILIKE '%' || c.name || '%'
-   OR 'Варвара' ILIKE '%' || c.director_name || '%'
-LIMIT 1
-ON CONFLICT (order_number) DO NOTHING;
+WHERE (c.name = 'Варвара' OR c.director_name = 'Варвара')
+  AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 463)
+LIMIT 1;
 
 INSERT INTO rental_orders (
   order_number, client_id, status, start_date, end_date, days_count,
@@ -24795,12 +22472,9 @@ SELECT
   NOW(),
   NOW()
 FROM rental_clients c
-WHERE c.name ILIKE '%Екатерина%' 
-   OR c.director_name ILIKE '%Екатерина%'
-   OR 'Екатерина' ILIKE '%' || c.name || '%'
-   OR 'Екатерина' ILIKE '%' || c.director_name || '%'
-LIMIT 1
-ON CONFLICT (order_number) DO NOTHING;
+WHERE (c.name = 'Екатерина' OR c.director_name = 'Екатерина')
+  AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 462)
+LIMIT 1;
 
 INSERT INTO rental_orders (
   order_number, client_id, status, start_date, end_date, days_count,
@@ -24827,12 +22501,9 @@ SELECT
   NOW(),
   NOW()
 FROM rental_clients c
-WHERE c.name ILIKE '%Мира (ИП)%' 
-   OR c.director_name ILIKE '%Мира (ИП)%'
-   OR 'Мира (ИП)' ILIKE '%' || c.name || '%'
-   OR 'Мира (ИП)' ILIKE '%' || c.director_name || '%'
-LIMIT 1
-ON CONFLICT (order_number) DO NOTHING;
+WHERE (c.name = 'Мира (ИП)' OR c.director_name = 'Мира (ИП)')
+  AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 461)
+LIMIT 1;
 
 INSERT INTO rental_orders (
   order_number, client_id, status, start_date, end_date, days_count,
@@ -24859,12 +22530,9 @@ SELECT
   NOW(),
   NOW()
 FROM rental_clients c
-WHERE c.name ILIKE '%Ирина Сафронова%' 
-   OR c.director_name ILIKE '%Ирина Сафронова%'
-   OR 'Ирина Сафронова' ILIKE '%' || c.name || '%'
-   OR 'Ирина Сафронова' ILIKE '%' || c.director_name || '%'
-LIMIT 1
-ON CONFLICT (order_number) DO NOTHING;
+WHERE (c.name = 'Ирина Сафронова' OR c.director_name = 'Ирина Сафронова')
+  AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 460)
+LIMIT 1;
 
 INSERT INTO rental_orders (
   order_number, client_id, status, start_date, end_date, days_count,
@@ -24891,12 +22559,9 @@ SELECT
   NOW(),
   NOW()
 FROM rental_clients c
-WHERE c.name ILIKE '%Юлия Воронова%' 
-   OR c.director_name ILIKE '%Юлия Воронова%'
-   OR 'Юлия Воронова' ILIKE '%' || c.name || '%'
-   OR 'Юлия Воронова' ILIKE '%' || c.director_name || '%'
-LIMIT 1
-ON CONFLICT (order_number) DO NOTHING;
+WHERE (c.name = 'Юлия Воронова' OR c.director_name = 'Юлия Воронова')
+  AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 459)
+LIMIT 1;
 
 INSERT INTO rental_orders (
   order_number, client_id, status, start_date, end_date, days_count,
@@ -24923,12 +22588,9 @@ SELECT
   NOW(),
   NOW()
 FROM rental_clients c
-WHERE c.name ILIKE '%Палитра Тур%' 
-   OR c.director_name ILIKE '%Палитра Тур%'
-   OR 'Палитра Тур' ILIKE '%' || c.name || '%'
-   OR 'Палитра Тур' ILIKE '%' || c.director_name || '%'
-LIMIT 1
-ON CONFLICT (order_number) DO NOTHING;
+WHERE (c.name = 'Палитра Тур' OR c.director_name = 'Палитра Тур')
+  AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 458)
+LIMIT 1;
 
 INSERT INTO rental_orders (
   order_number, client_id, status, start_date, end_date, days_count,
@@ -24955,12 +22617,9 @@ SELECT
   NOW(),
   NOW()
 FROM rental_clients c
-WHERE c.name ILIKE '%Галия%' 
-   OR c.director_name ILIKE '%Галия%'
-   OR 'Галия' ILIKE '%' || c.name || '%'
-   OR 'Галия' ILIKE '%' || c.director_name || '%'
-LIMIT 1
-ON CONFLICT (order_number) DO NOTHING;
+WHERE (c.name = 'Галия' OR c.director_name = 'Галия')
+  AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 457)
+LIMIT 1;
 
 INSERT INTO rental_orders (
   order_number, client_id, status, start_date, end_date, days_count,
@@ -24987,12 +22646,9 @@ SELECT
   NOW(),
   NOW()
 FROM rental_clients c
-WHERE c.name ILIKE '%Юлия Воронова%' 
-   OR c.director_name ILIKE '%Юлия Воронова%'
-   OR 'Юлия Воронова' ILIKE '%' || c.name || '%'
-   OR 'Юлия Воронова' ILIKE '%' || c.director_name || '%'
-LIMIT 1
-ON CONFLICT (order_number) DO NOTHING;
+WHERE (c.name = 'Юлия Воронова' OR c.director_name = 'Юлия Воронова')
+  AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 455)
+LIMIT 1;
 
 INSERT INTO rental_orders (
   order_number, client_id, status, start_date, end_date, days_count,
@@ -25019,12 +22675,9 @@ SELECT
   NOW(),
   NOW()
 FROM rental_clients c
-WHERE c.name ILIKE '%Юлия Воронова%' 
-   OR c.director_name ILIKE '%Юлия Воронова%'
-   OR 'Юлия Воронова' ILIKE '%' || c.name || '%'
-   OR 'Юлия Воронова' ILIKE '%' || c.director_name || '%'
-LIMIT 1
-ON CONFLICT (order_number) DO NOTHING;
+WHERE (c.name = 'Юлия Воронова' OR c.director_name = 'Юлия Воронова')
+  AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 454)
+LIMIT 1;
 
 INSERT INTO rental_orders (
   order_number, client_id, status, start_date, end_date, days_count,
@@ -25051,12 +22704,9 @@ SELECT
   NOW(),
   NOW()
 FROM rental_clients c
-WHERE c.name ILIKE '%Мария%' 
-   OR c.director_name ILIKE '%Мария%'
-   OR 'Мария' ILIKE '%' || c.name || '%'
-   OR 'Мария' ILIKE '%' || c.director_name || '%'
-LIMIT 1
-ON CONFLICT (order_number) DO NOTHING;
+WHERE (c.name = 'Мария' OR c.director_name = 'Мария')
+  AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 453)
+LIMIT 1;
 
 INSERT INTO rental_orders (
   order_number, client_id, status, start_date, end_date, days_count,
@@ -25083,12 +22733,9 @@ SELECT
   NOW(),
   NOW()
 FROM rental_clients c
-WHERE c.name ILIKE '%Мария%' 
-   OR c.director_name ILIKE '%Мария%'
-   OR 'Мария' ILIKE '%' || c.name || '%'
-   OR 'Мария' ILIKE '%' || c.director_name || '%'
-LIMIT 1
-ON CONFLICT (order_number) DO NOTHING;
+WHERE (c.name = 'Мария' OR c.director_name = 'Мария')
+  AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 452)
+LIMIT 1;
 
 INSERT INTO rental_orders (
   order_number, client_id, status, start_date, end_date, days_count,
@@ -25115,12 +22762,9 @@ SELECT
   NOW(),
   NOW()
 FROM rental_clients c
-WHERE c.name ILIKE '%Мария%' 
-   OR c.director_name ILIKE '%Мария%'
-   OR 'Мария' ILIKE '%' || c.name || '%'
-   OR 'Мария' ILIKE '%' || c.director_name || '%'
-LIMIT 1
-ON CONFLICT (order_number) DO NOTHING;
+WHERE (c.name = 'Мария' OR c.director_name = 'Мария')
+  AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 451)
+LIMIT 1;
 
 INSERT INTO rental_orders (
   order_number, client_id, status, start_date, end_date, days_count,
@@ -25147,12 +22791,9 @@ SELECT
   NOW(),
   NOW()
 FROM rental_clients c
-WHERE c.name ILIKE '%Ирина Обыденникова%' 
-   OR c.director_name ILIKE '%Ирина Обыденникова%'
-   OR 'Ирина Обыденникова' ILIKE '%' || c.name || '%'
-   OR 'Ирина Обыденникова' ILIKE '%' || c.director_name || '%'
-LIMIT 1
-ON CONFLICT (order_number) DO NOTHING;
+WHERE (c.name = 'Ирина Обыденникова' OR c.director_name = 'Ирина Обыденникова')
+  AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 450)
+LIMIT 1;
 
 INSERT INTO rental_orders (
   order_number, client_id, status, start_date, end_date, days_count,
@@ -25179,12 +22820,9 @@ SELECT
   NOW(),
   NOW()
 FROM rental_clients c
-WHERE c.name ILIKE '%Ирина Обыденникова%' 
-   OR c.director_name ILIKE '%Ирина Обыденникова%'
-   OR 'Ирина Обыденникова' ILIKE '%' || c.name || '%'
-   OR 'Ирина Обыденникова' ILIKE '%' || c.director_name || '%'
-LIMIT 1
-ON CONFLICT (order_number) DO NOTHING;
+WHERE (c.name = 'Ирина Обыденникова' OR c.director_name = 'Ирина Обыденникова')
+  AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 449)
+LIMIT 1;
 
 INSERT INTO rental_orders (
   order_number, client_id, status, start_date, end_date, days_count,
@@ -25211,12 +22849,9 @@ SELECT
   NOW(),
   NOW()
 FROM rental_clients c
-WHERE c.name ILIKE '%Мария Экскурсовод%' 
-   OR c.director_name ILIKE '%Мария Экскурсовод%'
-   OR 'Мария Экскурсовод' ILIKE '%' || c.name || '%'
-   OR 'Мария Экскурсовод' ILIKE '%' || c.director_name || '%'
-LIMIT 1
-ON CONFLICT (order_number) DO NOTHING;
+WHERE (c.name = 'Мария Экскурсовод' OR c.director_name = 'Мария Экскурсовод')
+  AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 445)
+LIMIT 1;
 
 INSERT INTO rental_orders (
   order_number, client_id, status, start_date, end_date, days_count,
@@ -25243,12 +22878,9 @@ SELECT
   NOW(),
   NOW()
 FROM rental_clients c
-WHERE c.name ILIKE '%Гульфия%' 
-   OR c.director_name ILIKE '%Гульфия%'
-   OR 'Гульфия' ILIKE '%' || c.name || '%'
-   OR 'Гульфия' ILIKE '%' || c.director_name || '%'
-LIMIT 1
-ON CONFLICT (order_number) DO NOTHING;
+WHERE (c.name = 'Гульфия' OR c.director_name = 'Гульфия')
+  AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 444)
+LIMIT 1;
 
 INSERT INTO rental_orders (
   order_number, client_id, status, start_date, end_date, days_count,
@@ -25275,12 +22907,9 @@ SELECT
   NOW(),
   NOW()
 FROM rental_clients c
-WHERE c.name ILIKE '%Лариса%' 
-   OR c.director_name ILIKE '%Лариса%'
-   OR 'Лариса' ILIKE '%' || c.name || '%'
-   OR 'Лариса' ILIKE '%' || c.director_name || '%'
-LIMIT 1
-ON CONFLICT (order_number) DO NOTHING;
+WHERE (c.name = 'Лариса' OR c.director_name = 'Лариса')
+  AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 443)
+LIMIT 1;
 
 INSERT INTO rental_orders (
   order_number, client_id, status, start_date, end_date, days_count,
@@ -25307,12 +22936,9 @@ SELECT
   NOW(),
   NOW()
 FROM rental_clients c
-WHERE c.name ILIKE '%Татьяна (Гольфстрим)%' 
-   OR c.director_name ILIKE '%Татьяна (Гольфстрим)%'
-   OR 'Татьяна (Гольфстрим)' ILIKE '%' || c.name || '%'
-   OR 'Татьяна (Гольфстрим)' ILIKE '%' || c.director_name || '%'
-LIMIT 1
-ON CONFLICT (order_number) DO NOTHING;
+WHERE (c.name = 'Татьяна (Гольфстрим)' OR c.director_name = 'Татьяна (Гольфстрим)')
+  AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 442)
+LIMIT 1;
 
 INSERT INTO rental_orders (
   order_number, client_id, status, start_date, end_date, days_count,
@@ -25339,12 +22965,9 @@ SELECT
   NOW(),
   NOW()
 FROM rental_clients c
-WHERE c.name ILIKE '%Ирина Пронина%' 
-   OR c.director_name ILIKE '%Ирина Пронина%'
-   OR 'Ирина Пронина' ILIKE '%' || c.name || '%'
-   OR 'Ирина Пронина' ILIKE '%' || c.director_name || '%'
-LIMIT 1
-ON CONFLICT (order_number) DO NOTHING;
+WHERE (c.name = 'Ирина Пронина' OR c.director_name = 'Ирина Пронина')
+  AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 441)
+LIMIT 1;
 
 INSERT INTO rental_orders (
   order_number, client_id, status, start_date, end_date, days_count,
@@ -25371,12 +22994,9 @@ SELECT
   NOW(),
   NOW()
 FROM rental_clients c
-WHERE c.name ILIKE '%Инна Экскурсовод%' 
-   OR c.director_name ILIKE '%Инна Экскурсовод%'
-   OR 'Инна Экскурсовод' ILIKE '%' || c.name || '%'
-   OR 'Инна Экскурсовод' ILIKE '%' || c.director_name || '%'
-LIMIT 1
-ON CONFLICT (order_number) DO NOTHING;
+WHERE (c.name = 'Инна Экскурсовод' OR c.director_name = 'Инна Экскурсовод')
+  AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 440)
+LIMIT 1;
 
 INSERT INTO rental_orders (
   order_number, client_id, status, start_date, end_date, days_count,
@@ -25403,12 +23023,9 @@ SELECT
   NOW(),
   NOW()
 FROM rental_clients c
-WHERE c.name ILIKE '%Юлианна%' 
-   OR c.director_name ILIKE '%Юлианна%'
-   OR 'Юлианна' ILIKE '%' || c.name || '%'
-   OR 'Юлианна' ILIKE '%' || c.director_name || '%'
-LIMIT 1
-ON CONFLICT (order_number) DO NOTHING;
+WHERE (c.name = 'Юлианна' OR c.director_name = 'Юлианна')
+  AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 439)
+LIMIT 1;
 
 INSERT INTO rental_orders (
   order_number, client_id, status, start_date, end_date, days_count,
@@ -25435,12 +23052,9 @@ SELECT
   NOW(),
   NOW()
 FROM rental_clients c
-WHERE c.name ILIKE '%Питер%' 
-   OR c.director_name ILIKE '%Питер%'
-   OR 'Питер' ILIKE '%' || c.name || '%'
-   OR 'Питер' ILIKE '%' || c.director_name || '%'
-LIMIT 1
-ON CONFLICT (order_number) DO NOTHING;
+WHERE (c.name = 'Питер' OR c.director_name = 'Питер')
+  AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 438)
+LIMIT 1;
 
 INSERT INTO rental_orders (
   order_number, client_id, status, start_date, end_date, days_count,
@@ -25467,12 +23081,9 @@ SELECT
   NOW(),
   NOW()
 FROM rental_clients c
-WHERE c.name ILIKE '%Питер%' 
-   OR c.director_name ILIKE '%Питер%'
-   OR 'Питер' ILIKE '%' || c.name || '%'
-   OR 'Питер' ILIKE '%' || c.director_name || '%'
-LIMIT 1
-ON CONFLICT (order_number) DO NOTHING;
+WHERE (c.name = 'Питер' OR c.director_name = 'Питер')
+  AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 437)
+LIMIT 1;
 
 INSERT INTO rental_orders (
   order_number, client_id, status, start_date, end_date, days_count,
@@ -25499,12 +23110,9 @@ SELECT
   NOW(),
   NOW()
 FROM rental_clients c
-WHERE c.name ILIKE '%Питер%' 
-   OR c.director_name ILIKE '%Питер%'
-   OR 'Питер' ILIKE '%' || c.name || '%'
-   OR 'Питер' ILIKE '%' || c.director_name || '%'
-LIMIT 1
-ON CONFLICT (order_number) DO NOTHING;
+WHERE (c.name = 'Питер' OR c.director_name = 'Питер')
+  AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 436)
+LIMIT 1;
 
 INSERT INTO rental_orders (
   order_number, client_id, status, start_date, end_date, days_count,
@@ -25531,12 +23139,9 @@ SELECT
   NOW(),
   NOW()
 FROM rental_clients c
-WHERE c.name ILIKE '%Питер%' 
-   OR c.director_name ILIKE '%Питер%'
-   OR 'Питер' ILIKE '%' || c.name || '%'
-   OR 'Питер' ILIKE '%' || c.director_name || '%'
-LIMIT 1
-ON CONFLICT (order_number) DO NOTHING;
+WHERE (c.name = 'Питер' OR c.director_name = 'Питер')
+  AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 435)
+LIMIT 1;
 
 INSERT INTO rental_orders (
   order_number, client_id, status, start_date, end_date, days_count,
@@ -25563,12 +23168,9 @@ SELECT
   NOW(),
   NOW()
 FROM rental_clients c
-WHERE c.name ILIKE '%Татьяна (Гольфстрим)%' 
-   OR c.director_name ILIKE '%Татьяна (Гольфстрим)%'
-   OR 'Татьяна (Гольфстрим)' ILIKE '%' || c.name || '%'
-   OR 'Татьяна (Гольфстрим)' ILIKE '%' || c.director_name || '%'
-LIMIT 1
-ON CONFLICT (order_number) DO NOTHING;
+WHERE (c.name = 'Татьяна (Гольфстрим)' OR c.director_name = 'Татьяна (Гольфстрим)')
+  AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 434)
+LIMIT 1;
 
 INSERT INTO rental_orders (
   order_number, client_id, status, start_date, end_date, days_count,
@@ -25595,12 +23197,9 @@ SELECT
   NOW(),
   NOW()
 FROM rental_clients c
-WHERE c.name ILIKE '%Татьяна (Гольфстрим)%' 
-   OR c.director_name ILIKE '%Татьяна (Гольфстрим)%'
-   OR 'Татьяна (Гольфстрим)' ILIKE '%' || c.name || '%'
-   OR 'Татьяна (Гольфстрим)' ILIKE '%' || c.director_name || '%'
-LIMIT 1
-ON CONFLICT (order_number) DO NOTHING;
+WHERE (c.name = 'Татьяна (Гольфстрим)' OR c.director_name = 'Татьяна (Гольфстрим)')
+  AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 433)
+LIMIT 1;
 
 INSERT INTO rental_orders (
   order_number, client_id, status, start_date, end_date, days_count,
@@ -25627,12 +23226,9 @@ SELECT
   NOW(),
   NOW()
 FROM rental_clients c
-WHERE c.name ILIKE '%Татьяна (Гольфстрим)%' 
-   OR c.director_name ILIKE '%Татьяна (Гольфстрим)%'
-   OR 'Татьяна (Гольфстрим)' ILIKE '%' || c.name || '%'
-   OR 'Татьяна (Гольфстрим)' ILIKE '%' || c.director_name || '%'
-LIMIT 1
-ON CONFLICT (order_number) DO NOTHING;
+WHERE (c.name = 'Татьяна (Гольфстрим)' OR c.director_name = 'Татьяна (Гольфстрим)')
+  AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 432)
+LIMIT 1;
 
 INSERT INTO rental_orders (
   order_number, client_id, status, start_date, end_date, days_count,
@@ -25659,12 +23255,9 @@ SELECT
   NOW(),
   NOW()
 FROM rental_clients c
-WHERE c.name ILIKE '%Татьяна (Гольфстрим)%' 
-   OR c.director_name ILIKE '%Татьяна (Гольфстрим)%'
-   OR 'Татьяна (Гольфстрим)' ILIKE '%' || c.name || '%'
-   OR 'Татьяна (Гольфстрим)' ILIKE '%' || c.director_name || '%'
-LIMIT 1
-ON CONFLICT (order_number) DO NOTHING;
+WHERE (c.name = 'Татьяна (Гольфстрим)' OR c.director_name = 'Татьяна (Гольфстрим)')
+  AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 431)
+LIMIT 1;
 
 INSERT INTO rental_orders (
   order_number, client_id, status, start_date, end_date, days_count,
@@ -25691,12 +23284,9 @@ SELECT
   NOW(),
   NOW()
 FROM rental_clients c
-WHERE c.name ILIKE '%Татьяна (Гольфстрим)%' 
-   OR c.director_name ILIKE '%Татьяна (Гольфстрим)%'
-   OR 'Татьяна (Гольфстрим)' ILIKE '%' || c.name || '%'
-   OR 'Татьяна (Гольфстрим)' ILIKE '%' || c.director_name || '%'
-LIMIT 1
-ON CONFLICT (order_number) DO NOTHING;
+WHERE (c.name = 'Татьяна (Гольфстрим)' OR c.director_name = 'Татьяна (Гольфстрим)')
+  AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 430)
+LIMIT 1;
 
 INSERT INTO rental_orders (
   order_number, client_id, status, start_date, end_date, days_count,
@@ -25723,12 +23313,9 @@ SELECT
   NOW(),
   NOW()
 FROM rental_clients c
-WHERE c.name ILIKE '%Алена Волина%' 
-   OR c.director_name ILIKE '%Алена Волина%'
-   OR 'Алена Волина' ILIKE '%' || c.name || '%'
-   OR 'Алена Волина' ILIKE '%' || c.director_name || '%'
-LIMIT 1
-ON CONFLICT (order_number) DO NOTHING;
+WHERE (c.name = 'Алена Волина' OR c.director_name = 'Алена Волина')
+  AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 429)
+LIMIT 1;
 
 INSERT INTO rental_orders (
   order_number, client_id, status, start_date, end_date, days_count,
@@ -25755,12 +23342,9 @@ SELECT
   NOW(),
   NOW()
 FROM rental_clients c
-WHERE c.name ILIKE '%Альберт (КТ)%' 
-   OR c.director_name ILIKE '%Альберт (КТ)%'
-   OR 'Альберт (КТ)' ILIKE '%' || c.name || '%'
-   OR 'Альберт (КТ)' ILIKE '%' || c.director_name || '%'
-LIMIT 1
-ON CONFLICT (order_number) DO NOTHING;
+WHERE (c.name = 'Альберт (КТ)' OR c.director_name = 'Альберт (КТ)')
+  AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 428)
+LIMIT 1;
 
 INSERT INTO rental_orders (
   order_number, client_id, status, start_date, end_date, days_count,
@@ -25787,12 +23371,9 @@ SELECT
   NOW(),
   NOW()
 FROM rental_clients c
-WHERE c.name ILIKE '%Юрий%' 
-   OR c.director_name ILIKE '%Юрий%'
-   OR 'Юрий' ILIKE '%' || c.name || '%'
-   OR 'Юрий' ILIKE '%' || c.director_name || '%'
-LIMIT 1
-ON CONFLICT (order_number) DO NOTHING;
+WHERE (c.name = 'Юрий' OR c.director_name = 'Юрий')
+  AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 427)
+LIMIT 1;
 
 INSERT INTO rental_orders (
   order_number, client_id, status, start_date, end_date, days_count,
@@ -25819,12 +23400,9 @@ SELECT
   NOW(),
   NOW()
 FROM rental_clients c
-WHERE c.name ILIKE '%Гульнара%' 
-   OR c.director_name ILIKE '%Гульнара%'
-   OR 'Гульнара' ILIKE '%' || c.name || '%'
-   OR 'Гульнара' ILIKE '%' || c.director_name || '%'
-LIMIT 1
-ON CONFLICT (order_number) DO NOTHING;
+WHERE (c.name = 'Гульнара' OR c.director_name = 'Гульнара')
+  AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 426)
+LIMIT 1;
 
 INSERT INTO rental_orders (
   order_number, client_id, status, start_date, end_date, days_count,
@@ -25851,12 +23429,9 @@ SELECT
   NOW(),
   NOW()
 FROM rental_clients c
-WHERE c.name ILIKE '%Гульнара%' 
-   OR c.director_name ILIKE '%Гульнара%'
-   OR 'Гульнара' ILIKE '%' || c.name || '%'
-   OR 'Гульнара' ILIKE '%' || c.director_name || '%'
-LIMIT 1
-ON CONFLICT (order_number) DO NOTHING;
+WHERE (c.name = 'Гульнара' OR c.director_name = 'Гульнара')
+  AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 425)
+LIMIT 1;
 
 INSERT INTO rental_orders (
   order_number, client_id, status, start_date, end_date, days_count,
@@ -25883,12 +23458,9 @@ SELECT
   NOW(),
   NOW()
 FROM rental_clients c
-WHERE c.name ILIKE '%Анюта Родионова (Родина-тур)%' 
-   OR c.director_name ILIKE '%Анюта Родионова (Родина-тур)%'
-   OR 'Анюта Родионова (Родина-тур)' ILIKE '%' || c.name || '%'
-   OR 'Анюта Родионова (Родина-тур)' ILIKE '%' || c.director_name || '%'
-LIMIT 1
-ON CONFLICT (order_number) DO NOTHING;
+WHERE (c.name = 'Анюта Родионова (Родина-тур)' OR c.director_name = 'Анюта Родионова (Родина-тур)')
+  AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 424)
+LIMIT 1;
 
 INSERT INTO rental_orders (
   order_number, client_id, status, start_date, end_date, days_count,
@@ -25915,12 +23487,9 @@ SELECT
   NOW(),
   NOW()
 FROM rental_clients c
-WHERE c.name ILIKE '%Элина (Сититур)%' 
-   OR c.director_name ILIKE '%Элина (Сититур)%'
-   OR 'Элина (Сититур)' ILIKE '%' || c.name || '%'
-   OR 'Элина (Сититур)' ILIKE '%' || c.director_name || '%'
-LIMIT 1
-ON CONFLICT (order_number) DO NOTHING;
+WHERE (c.name = 'Элина (Сититур)' OR c.director_name = 'Элина (Сититур)')
+  AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 423)
+LIMIT 1;
 
 INSERT INTO rental_orders (
   order_number, client_id, status, start_date, end_date, days_count,
@@ -25947,12 +23516,9 @@ SELECT
   NOW(),
   NOW()
 FROM rental_clients c
-WHERE c.name ILIKE '%Татьяна (Гольфстрим)%' 
-   OR c.director_name ILIKE '%Татьяна (Гольфстрим)%'
-   OR 'Татьяна (Гольфстрим)' ILIKE '%' || c.name || '%'
-   OR 'Татьяна (Гольфстрим)' ILIKE '%' || c.director_name || '%'
-LIMIT 1
-ON CONFLICT (order_number) DO NOTHING;
+WHERE (c.name = 'Татьяна (Гольфстрим)' OR c.director_name = 'Татьяна (Гольфстрим)')
+  AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 422)
+LIMIT 1;
 
 INSERT INTO rental_orders (
   order_number, client_id, status, start_date, end_date, days_count,
@@ -25979,12 +23545,9 @@ SELECT
   NOW(),
   NOW()
 FROM rental_clients c
-WHERE c.name ILIKE '%Альберт (КТ)%' 
-   OR c.director_name ILIKE '%Альберт (КТ)%'
-   OR 'Альберт (КТ)' ILIKE '%' || c.name || '%'
-   OR 'Альберт (КТ)' ILIKE '%' || c.director_name || '%'
-LIMIT 1
-ON CONFLICT (order_number) DO NOTHING;
+WHERE (c.name = 'Альберт (КТ)' OR c.director_name = 'Альберт (КТ)')
+  AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 421)
+LIMIT 1;
 
 INSERT INTO rental_orders (
   order_number, client_id, status, start_date, end_date, days_count,
@@ -26011,12 +23574,9 @@ SELECT
   NOW(),
   NOW()
 FROM rental_clients c
-WHERE c.name ILIKE '%Мария%' 
-   OR c.director_name ILIKE '%Мария%'
-   OR 'Мария' ILIKE '%' || c.name || '%'
-   OR 'Мария' ILIKE '%' || c.director_name || '%'
-LIMIT 1
-ON CONFLICT (order_number) DO NOTHING;
+WHERE (c.name = 'Мария' OR c.director_name = 'Мария')
+  AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 419)
+LIMIT 1;
 
 INSERT INTO rental_orders (
   order_number, client_id, status, start_date, end_date, days_count,
@@ -26043,12 +23603,9 @@ SELECT
   NOW(),
   NOW()
 FROM rental_clients c
-WHERE c.name ILIKE '%Мария%' 
-   OR c.director_name ILIKE '%Мария%'
-   OR 'Мария' ILIKE '%' || c.name || '%'
-   OR 'Мария' ILIKE '%' || c.director_name || '%'
-LIMIT 1
-ON CONFLICT (order_number) DO NOTHING;
+WHERE (c.name = 'Мария' OR c.director_name = 'Мария')
+  AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 418)
+LIMIT 1;
 
 INSERT INTO rental_orders (
   order_number, client_id, status, start_date, end_date, days_count,
@@ -26075,12 +23632,9 @@ SELECT
   NOW(),
   NOW()
 FROM rental_clients c
-WHERE c.name ILIKE '%Мария Экскурсовод%' 
-   OR c.director_name ILIKE '%Мария Экскурсовод%'
-   OR 'Мария Экскурсовод' ILIKE '%' || c.name || '%'
-   OR 'Мария Экскурсовод' ILIKE '%' || c.director_name || '%'
-LIMIT 1
-ON CONFLICT (order_number) DO NOTHING;
+WHERE (c.name = 'Мария Экскурсовод' OR c.director_name = 'Мария Экскурсовод')
+  AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 417)
+LIMIT 1;
 
 INSERT INTO rental_orders (
   order_number, client_id, status, start_date, end_date, days_count,
@@ -26107,12 +23661,9 @@ SELECT
   NOW(),
   NOW()
 FROM rental_clients c
-WHERE c.name ILIKE '%Мария Экскурсовод%' 
-   OR c.director_name ILIKE '%Мария Экскурсовод%'
-   OR 'Мария Экскурсовод' ILIKE '%' || c.name || '%'
-   OR 'Мария Экскурсовод' ILIKE '%' || c.director_name || '%'
-LIMIT 1
-ON CONFLICT (order_number) DO NOTHING;
+WHERE (c.name = 'Мария Экскурсовод' OR c.director_name = 'Мария Экскурсовод')
+  AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 416)
+LIMIT 1;
 
 INSERT INTO rental_orders (
   order_number, client_id, status, start_date, end_date, days_count,
@@ -26139,12 +23690,9 @@ SELECT
   NOW(),
   NOW()
 FROM rental_clients c
-WHERE c.name ILIKE '%Твой Гид%' 
-   OR c.director_name ILIKE '%Твой Гид%'
-   OR 'Твой Гид' ILIKE '%' || c.name || '%'
-   OR 'Твой Гид' ILIKE '%' || c.director_name || '%'
-LIMIT 1
-ON CONFLICT (order_number) DO NOTHING;
+WHERE (c.name = 'Твой Гид' OR c.director_name = 'Твой Гид')
+  AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 414)
+LIMIT 1;
 
 INSERT INTO rental_orders (
   order_number, client_id, status, start_date, end_date, days_count,
@@ -26171,12 +23719,9 @@ SELECT
   NOW(),
   NOW()
 FROM rental_clients c
-WHERE c.name ILIKE '%Александр Романов%' 
-   OR c.director_name ILIKE '%Александр Романов%'
-   OR 'Александр Романов' ILIKE '%' || c.name || '%'
-   OR 'Александр Романов' ILIKE '%' || c.director_name || '%'
-LIMIT 1
-ON CONFLICT (order_number) DO NOTHING;
+WHERE (c.name = 'Александр Романов' OR c.director_name = 'Александр Романов')
+  AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 413)
+LIMIT 1;
 
 INSERT INTO rental_orders (
   order_number, client_id, status, start_date, end_date, days_count,
@@ -26203,12 +23748,9 @@ SELECT
   NOW(),
   NOW()
 FROM rental_clients c
-WHERE c.name ILIKE '%Эдик Заказы для групп%' 
-   OR c.director_name ILIKE '%Эдик Заказы для групп%'
-   OR 'Эдик Заказы для групп' ILIKE '%' || c.name || '%'
-   OR 'Эдик Заказы для групп' ILIKE '%' || c.director_name || '%'
-LIMIT 1
-ON CONFLICT (order_number) DO NOTHING;
+WHERE (c.name = 'Эдик Заказы для групп' OR c.director_name = 'Эдик Заказы для групп')
+  AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 412)
+LIMIT 1;
 
 INSERT INTO rental_orders (
   order_number, client_id, status, start_date, end_date, days_count,
@@ -26235,12 +23777,9 @@ SELECT
   NOW(),
   NOW()
 FROM rental_clients c
-WHERE c.name ILIKE '%Ольга Лукоянова%' 
-   OR c.director_name ILIKE '%Ольга Лукоянова%'
-   OR 'Ольга Лукоянова' ILIKE '%' || c.name || '%'
-   OR 'Ольга Лукоянова' ILIKE '%' || c.director_name || '%'
-LIMIT 1
-ON CONFLICT (order_number) DO NOTHING;
+WHERE (c.name = 'Ольга Лукоянова' OR c.director_name = 'Ольга Лукоянова')
+  AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 411)
+LIMIT 1;
 
 INSERT INTO rental_orders (
   order_number, client_id, status, start_date, end_date, days_count,
@@ -26267,12 +23806,9 @@ SELECT
   NOW(),
   NOW()
 FROM rental_clients c
-WHERE c.name ILIKE '%Татьяна Чуб%' 
-   OR c.director_name ILIKE '%Татьяна Чуб%'
-   OR 'Татьяна Чуб' ILIKE '%' || c.name || '%'
-   OR 'Татьяна Чуб' ILIKE '%' || c.director_name || '%'
-LIMIT 1
-ON CONFLICT (order_number) DO NOTHING;
+WHERE (c.name = 'Татьяна Чуб' OR c.director_name = 'Татьяна Чуб')
+  AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 410)
+LIMIT 1;
 
 INSERT INTO rental_orders (
   order_number, client_id, status, start_date, end_date, days_count,
@@ -26299,12 +23835,9 @@ SELECT
   NOW(),
   NOW()
 FROM rental_clients c
-WHERE c.name ILIKE '%Эдик Заказы для групп%' 
-   OR c.director_name ILIKE '%Эдик Заказы для групп%'
-   OR 'Эдик Заказы для групп' ILIKE '%' || c.name || '%'
-   OR 'Эдик Заказы для групп' ILIKE '%' || c.director_name || '%'
-LIMIT 1
-ON CONFLICT (order_number) DO NOTHING;
+WHERE (c.name = 'Эдик Заказы для групп' OR c.director_name = 'Эдик Заказы для групп')
+  AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 409)
+LIMIT 1;
 
 INSERT INTO rental_orders (
   order_number, client_id, status, start_date, end_date, days_count,
@@ -26331,12 +23864,9 @@ SELECT
   NOW(),
   NOW()
 FROM rental_clients c
-WHERE c.name ILIKE '%Эдик Заказы для групп%' 
-   OR c.director_name ILIKE '%Эдик Заказы для групп%'
-   OR 'Эдик Заказы для групп' ILIKE '%' || c.name || '%'
-   OR 'Эдик Заказы для групп' ILIKE '%' || c.director_name || '%'
-LIMIT 1
-ON CONFLICT (order_number) DO NOTHING;
+WHERE (c.name = 'Эдик Заказы для групп' OR c.director_name = 'Эдик Заказы для групп')
+  AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 408)
+LIMIT 1;
 
 INSERT INTO rental_orders (
   order_number, client_id, status, start_date, end_date, days_count,
@@ -26363,12 +23893,9 @@ SELECT
   NOW(),
   NOW()
 FROM rental_clients c
-WHERE c.name ILIKE '%Мира (ИП)%' 
-   OR c.director_name ILIKE '%Мира (ИП)%'
-   OR 'Мира (ИП)' ILIKE '%' || c.name || '%'
-   OR 'Мира (ИП)' ILIKE '%' || c.director_name || '%'
-LIMIT 1
-ON CONFLICT (order_number) DO NOTHING;
+WHERE (c.name = 'Мира (ИП)' OR c.director_name = 'Мира (ИП)')
+  AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 407)
+LIMIT 1;
 
 INSERT INTO rental_orders (
   order_number, client_id, status, start_date, end_date, days_count,
@@ -26395,12 +23922,9 @@ SELECT
   NOW(),
   NOW()
 FROM rental_clients c
-WHERE c.name ILIKE '%Мира (ИП)%' 
-   OR c.director_name ILIKE '%Мира (ИП)%'
-   OR 'Мира (ИП)' ILIKE '%' || c.name || '%'
-   OR 'Мира (ИП)' ILIKE '%' || c.director_name || '%'
-LIMIT 1
-ON CONFLICT (order_number) DO NOTHING;
+WHERE (c.name = 'Мира (ИП)' OR c.director_name = 'Мира (ИП)')
+  AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 406)
+LIMIT 1;
 
 INSERT INTO rental_orders (
   order_number, client_id, status, start_date, end_date, days_count,
@@ -26427,12 +23951,9 @@ SELECT
   NOW(),
   NOW()
 FROM rental_clients c
-WHERE c.name ILIKE '%Екатерина%' 
-   OR c.director_name ILIKE '%Екатерина%'
-   OR 'Екатерина' ILIKE '%' || c.name || '%'
-   OR 'Екатерина' ILIKE '%' || c.director_name || '%'
-LIMIT 1
-ON CONFLICT (order_number) DO NOTHING;
+WHERE (c.name = 'Екатерина' OR c.director_name = 'Екатерина')
+  AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 405)
+LIMIT 1;
 
 INSERT INTO rental_orders (
   order_number, client_id, status, start_date, end_date, days_count,
@@ -26459,12 +23980,9 @@ SELECT
   NOW(),
   NOW()
 FROM rental_clients c
-WHERE c.name ILIKE '%Екатерина%' 
-   OR c.director_name ILIKE '%Екатерина%'
-   OR 'Екатерина' ILIKE '%' || c.name || '%'
-   OR 'Екатерина' ILIKE '%' || c.director_name || '%'
-LIMIT 1
-ON CONFLICT (order_number) DO NOTHING;
+WHERE (c.name = 'Екатерина' OR c.director_name = 'Екатерина')
+  AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 404)
+LIMIT 1;
 
 INSERT INTO rental_orders (
   order_number, client_id, status, start_date, end_date, days_count,
@@ -26491,12 +24009,9 @@ SELECT
   NOW(),
   NOW()
 FROM rental_clients c
-WHERE c.name ILIKE '%Юлия Воронова%' 
-   OR c.director_name ILIKE '%Юлия Воронова%'
-   OR 'Юлия Воронова' ILIKE '%' || c.name || '%'
-   OR 'Юлия Воронова' ILIKE '%' || c.director_name || '%'
-LIMIT 1
-ON CONFLICT (order_number) DO NOTHING;
+WHERE (c.name = 'Юлия Воронова' OR c.director_name = 'Юлия Воронова')
+  AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 403)
+LIMIT 1;
 
 INSERT INTO rental_orders (
   order_number, client_id, status, start_date, end_date, days_count,
@@ -26523,12 +24038,9 @@ SELECT
   NOW(),
   NOW()
 FROM rental_clients c
-WHERE c.name ILIKE '%Галия%' 
-   OR c.director_name ILIKE '%Галия%'
-   OR 'Галия' ILIKE '%' || c.name || '%'
-   OR 'Галия' ILIKE '%' || c.director_name || '%'
-LIMIT 1
-ON CONFLICT (order_number) DO NOTHING;
+WHERE (c.name = 'Галия' OR c.director_name = 'Галия')
+  AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 402)
+LIMIT 1;
 
 INSERT INTO rental_orders (
   order_number, client_id, status, start_date, end_date, days_count,
@@ -26555,12 +24067,9 @@ SELECT
   NOW(),
   NOW()
 FROM rental_clients c
-WHERE c.name ILIKE '%Эдик Заказы для групп%' 
-   OR c.director_name ILIKE '%Эдик Заказы для групп%'
-   OR 'Эдик Заказы для групп' ILIKE '%' || c.name || '%'
-   OR 'Эдик Заказы для групп' ILIKE '%' || c.director_name || '%'
-LIMIT 1
-ON CONFLICT (order_number) DO NOTHING;
+WHERE (c.name = 'Эдик Заказы для групп' OR c.director_name = 'Эдик Заказы для групп')
+  AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 401)
+LIMIT 1;
 
 INSERT INTO rental_orders (
   order_number, client_id, status, start_date, end_date, days_count,
@@ -26587,12 +24096,9 @@ SELECT
   NOW(),
   NOW()
 FROM rental_clients c
-WHERE c.name ILIKE '%Татьяна (Гольфстрим)%' 
-   OR c.director_name ILIKE '%Татьяна (Гольфстрим)%'
-   OR 'Татьяна (Гольфстрим)' ILIKE '%' || c.name || '%'
-   OR 'Татьяна (Гольфстрим)' ILIKE '%' || c.director_name || '%'
-LIMIT 1
-ON CONFLICT (order_number) DO NOTHING;
+WHERE (c.name = 'Татьяна (Гольфстрим)' OR c.director_name = 'Татьяна (Гольфстрим)')
+  AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 400)
+LIMIT 1;
 
 INSERT INTO rental_orders (
   order_number, client_id, status, start_date, end_date, days_count,
@@ -26619,12 +24125,9 @@ SELECT
   NOW(),
   NOW()
 FROM rental_clients c
-WHERE c.name ILIKE '%Зельфира%' 
-   OR c.director_name ILIKE '%Зельфира%'
-   OR 'Зельфира' ILIKE '%' || c.name || '%'
-   OR 'Зельфира' ILIKE '%' || c.director_name || '%'
-LIMIT 1
-ON CONFLICT (order_number) DO NOTHING;
+WHERE (c.name = 'Зельфира' OR c.director_name = 'Зельфира')
+  AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 399)
+LIMIT 1;
 
 INSERT INTO rental_orders (
   order_number, client_id, status, start_date, end_date, days_count,
@@ -26651,12 +24154,9 @@ SELECT
   NOW(),
   NOW()
 FROM rental_clients c
-WHERE c.name ILIKE '%Зельфира%' 
-   OR c.director_name ILIKE '%Зельфира%'
-   OR 'Зельфира' ILIKE '%' || c.name || '%'
-   OR 'Зельфира' ILIKE '%' || c.director_name || '%'
-LIMIT 1
-ON CONFLICT (order_number) DO NOTHING;
+WHERE (c.name = 'Зельфира' OR c.director_name = 'Зельфира')
+  AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 398)
+LIMIT 1;
 
 INSERT INTO rental_orders (
   order_number, client_id, status, start_date, end_date, days_count,
@@ -26683,12 +24183,9 @@ SELECT
   NOW(),
   NOW()
 FROM rental_clients c
-WHERE c.name ILIKE '%Эдик Заказы для групп%' 
-   OR c.director_name ILIKE '%Эдик Заказы для групп%'
-   OR 'Эдик Заказы для групп' ILIKE '%' || c.name || '%'
-   OR 'Эдик Заказы для групп' ILIKE '%' || c.director_name || '%'
-LIMIT 1
-ON CONFLICT (order_number) DO NOTHING;
+WHERE (c.name = 'Эдик Заказы для групп' OR c.director_name = 'Эдик Заказы для групп')
+  AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 397)
+LIMIT 1;
 
 INSERT INTO rental_orders (
   order_number, client_id, status, start_date, end_date, days_count,
@@ -26715,12 +24212,9 @@ SELECT
   NOW(),
   NOW()
 FROM rental_clients c
-WHERE c.name ILIKE '%Эдик Заказы для групп%' 
-   OR c.director_name ILIKE '%Эдик Заказы для групп%'
-   OR 'Эдик Заказы для групп' ILIKE '%' || c.name || '%'
-   OR 'Эдик Заказы для групп' ILIKE '%' || c.director_name || '%'
-LIMIT 1
-ON CONFLICT (order_number) DO NOTHING;
+WHERE (c.name = 'Эдик Заказы для групп' OR c.director_name = 'Эдик Заказы для групп')
+  AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 396)
+LIMIT 1;
 
 INSERT INTO rental_orders (
   order_number, client_id, status, start_date, end_date, days_count,
@@ -26747,12 +24241,9 @@ SELECT
   NOW(),
   NOW()
 FROM rental_clients c
-WHERE c.name ILIKE '%Титова Галина (Эллинлайн)%' 
-   OR c.director_name ILIKE '%Титова Галина (Эллинлайн)%'
-   OR 'Титова Галина (Эллинлайн)' ILIKE '%' || c.name || '%'
-   OR 'Титова Галина (Эллинлайн)' ILIKE '%' || c.director_name || '%'
-LIMIT 1
-ON CONFLICT (order_number) DO NOTHING;
+WHERE (c.name = 'Титова Галина (Эллинлайн)' OR c.director_name = 'Титова Галина (Эллинлайн)')
+  AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 395)
+LIMIT 1;
 
 INSERT INTO rental_orders (
   order_number, client_id, status, start_date, end_date, days_count,
@@ -26779,12 +24270,9 @@ SELECT
   NOW(),
   NOW()
 FROM rental_clients c
-WHERE c.name ILIKE '%Альберт (КТ)%' 
-   OR c.director_name ILIKE '%Альберт (КТ)%'
-   OR 'Альберт (КТ)' ILIKE '%' || c.name || '%'
-   OR 'Альберт (КТ)' ILIKE '%' || c.director_name || '%'
-LIMIT 1
-ON CONFLICT (order_number) DO NOTHING;
+WHERE (c.name = 'Альберт (КТ)' OR c.director_name = 'Альберт (КТ)')
+  AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 394)
+LIMIT 1;
 
 INSERT INTO rental_orders (
   order_number, client_id, status, start_date, end_date, days_count,
@@ -26811,12 +24299,9 @@ SELECT
   NOW(),
   NOW()
 FROM rental_clients c
-WHERE c.name ILIKE '%Альберт (КТ)%' 
-   OR c.director_name ILIKE '%Альберт (КТ)%'
-   OR 'Альберт (КТ)' ILIKE '%' || c.name || '%'
-   OR 'Альберт (КТ)' ILIKE '%' || c.director_name || '%'
-LIMIT 1
-ON CONFLICT (order_number) DO NOTHING;
+WHERE (c.name = 'Альберт (КТ)' OR c.director_name = 'Альберт (КТ)')
+  AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 393)
+LIMIT 1;
 
 INSERT INTO rental_orders (
   order_number, client_id, status, start_date, end_date, days_count,
@@ -26843,12 +24328,9 @@ SELECT
   NOW(),
   NOW()
 FROM rental_clients c
-WHERE c.name ILIKE '%Лейла%' 
-   OR c.director_name ILIKE '%Лейла%'
-   OR 'Лейла' ILIKE '%' || c.name || '%'
-   OR 'Лейла' ILIKE '%' || c.director_name || '%'
-LIMIT 1
-ON CONFLICT (order_number) DO NOTHING;
+WHERE (c.name = 'Лейла' OR c.director_name = 'Лейла')
+  AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 392)
+LIMIT 1;
 
 INSERT INTO rental_orders (
   order_number, client_id, status, start_date, end_date, days_count,
@@ -26875,12 +24357,9 @@ SELECT
   NOW(),
   NOW()
 FROM rental_clients c
-WHERE c.name ILIKE '%Эдик Заказы для групп%' 
-   OR c.director_name ILIKE '%Эдик Заказы для групп%'
-   OR 'Эдик Заказы для групп' ILIKE '%' || c.name || '%'
-   OR 'Эдик Заказы для групп' ILIKE '%' || c.director_name || '%'
-LIMIT 1
-ON CONFLICT (order_number) DO NOTHING;
+WHERE (c.name = 'Эдик Заказы для групп' OR c.director_name = 'Эдик Заказы для групп')
+  AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 391)
+LIMIT 1;
 
 INSERT INTO rental_orders (
   order_number, client_id, status, start_date, end_date, days_count,
@@ -26907,12 +24386,9 @@ SELECT
   NOW(),
   NOW()
 FROM rental_clients c
-WHERE c.name ILIKE '%Искандер%' 
-   OR c.director_name ILIKE '%Искандер%'
-   OR 'Искандер' ILIKE '%' || c.name || '%'
-   OR 'Искандер' ILIKE '%' || c.director_name || '%'
-LIMIT 1
-ON CONFLICT (order_number) DO NOTHING;
+WHERE (c.name = 'Искандер' OR c.director_name = 'Искандер')
+  AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 390)
+LIMIT 1;
 
 INSERT INTO rental_orders (
   order_number, client_id, status, start_date, end_date, days_count,
@@ -26939,12 +24415,9 @@ SELECT
   NOW(),
   NOW()
 FROM rental_clients c
-WHERE c.name ILIKE '%Эдик Заказы для групп%' 
-   OR c.director_name ILIKE '%Эдик Заказы для групп%'
-   OR 'Эдик Заказы для групп' ILIKE '%' || c.name || '%'
-   OR 'Эдик Заказы для групп' ILIKE '%' || c.director_name || '%'
-LIMIT 1
-ON CONFLICT (order_number) DO NOTHING;
+WHERE (c.name = 'Эдик Заказы для групп' OR c.director_name = 'Эдик Заказы для групп')
+  AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 389)
+LIMIT 1;
 
 INSERT INTO rental_orders (
   order_number, client_id, status, start_date, end_date, days_count,
@@ -26971,12 +24444,9 @@ SELECT
   NOW(),
   NOW()
 FROM rental_clients c
-WHERE c.name ILIKE '%Ирина%' 
-   OR c.director_name ILIKE '%Ирина%'
-   OR 'Ирина' ILIKE '%' || c.name || '%'
-   OR 'Ирина' ILIKE '%' || c.director_name || '%'
-LIMIT 1
-ON CONFLICT (order_number) DO NOTHING;
+WHERE (c.name = 'Ирина' OR c.director_name = 'Ирина')
+  AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 388)
+LIMIT 1;
 
 INSERT INTO rental_orders (
   order_number, client_id, status, start_date, end_date, days_count,
@@ -27003,12 +24473,9 @@ SELECT
   NOW(),
   NOW()
 FROM rental_clients c
-WHERE c.name ILIKE '%Мира (ИП)%' 
-   OR c.director_name ILIKE '%Мира (ИП)%'
-   OR 'Мира (ИП)' ILIKE '%' || c.name || '%'
-   OR 'Мира (ИП)' ILIKE '%' || c.director_name || '%'
-LIMIT 1
-ON CONFLICT (order_number) DO NOTHING;
+WHERE (c.name = 'Мира (ИП)' OR c.director_name = 'Мира (ИП)')
+  AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 387)
+LIMIT 1;
 
 INSERT INTO rental_orders (
   order_number, client_id, status, start_date, end_date, days_count,
@@ -27035,12 +24502,9 @@ SELECT
   NOW(),
   NOW()
 FROM rental_clients c
-WHERE c.name ILIKE '%Эдик Заказы для групп%' 
-   OR c.director_name ILIKE '%Эдик Заказы для групп%'
-   OR 'Эдик Заказы для групп' ILIKE '%' || c.name || '%'
-   OR 'Эдик Заказы для групп' ILIKE '%' || c.director_name || '%'
-LIMIT 1
-ON CONFLICT (order_number) DO NOTHING;
+WHERE (c.name = 'Эдик Заказы для групп' OR c.director_name = 'Эдик Заказы для групп')
+  AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 386)
+LIMIT 1;
 
 INSERT INTO rental_orders (
   order_number, client_id, status, start_date, end_date, days_count,
@@ -27067,12 +24531,9 @@ SELECT
   NOW(),
   NOW()
 FROM rental_clients c
-WHERE c.name ILIKE '%Эдик Заказы для групп%' 
-   OR c.director_name ILIKE '%Эдик Заказы для групп%'
-   OR 'Эдик Заказы для групп' ILIKE '%' || c.name || '%'
-   OR 'Эдик Заказы для групп' ILIKE '%' || c.director_name || '%'
-LIMIT 1
-ON CONFLICT (order_number) DO NOTHING;
+WHERE (c.name = 'Эдик Заказы для групп' OR c.director_name = 'Эдик Заказы для групп')
+  AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 385)
+LIMIT 1;
 
 INSERT INTO rental_orders (
   order_number, client_id, status, start_date, end_date, days_count,
@@ -27099,12 +24560,9 @@ SELECT
   NOW(),
   NOW()
 FROM rental_clients c
-WHERE c.name ILIKE '%Ильмира%' 
-   OR c.director_name ILIKE '%Ильмира%'
-   OR 'Ильмира' ILIKE '%' || c.name || '%'
-   OR 'Ильмира' ILIKE '%' || c.director_name || '%'
-LIMIT 1
-ON CONFLICT (order_number) DO NOTHING;
+WHERE (c.name = 'Ильмира' OR c.director_name = 'Ильмира')
+  AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 384)
+LIMIT 1;
 
 INSERT INTO rental_orders (
   order_number, client_id, status, start_date, end_date, days_count,
@@ -27131,12 +24589,9 @@ SELECT
   NOW(),
   NOW()
 FROM rental_clients c
-WHERE c.name ILIKE '%Ильмира%' 
-   OR c.director_name ILIKE '%Ильмира%'
-   OR 'Ильмира' ILIKE '%' || c.name || '%'
-   OR 'Ильмира' ILIKE '%' || c.director_name || '%'
-LIMIT 1
-ON CONFLICT (order_number) DO NOTHING;
+WHERE (c.name = 'Ильмира' OR c.director_name = 'Ильмира')
+  AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 383)
+LIMIT 1;
 
 INSERT INTO rental_orders (
   order_number, client_id, status, start_date, end_date, days_count,
@@ -27163,12 +24618,9 @@ SELECT
   NOW(),
   NOW()
 FROM rental_clients c
-WHERE c.name ILIKE '%Альберт (КТ)%' 
-   OR c.director_name ILIKE '%Альберт (КТ)%'
-   OR 'Альберт (КТ)' ILIKE '%' || c.name || '%'
-   OR 'Альберт (КТ)' ILIKE '%' || c.director_name || '%'
-LIMIT 1
-ON CONFLICT (order_number) DO NOTHING;
+WHERE (c.name = 'Альберт (КТ)' OR c.director_name = 'Альберт (КТ)')
+  AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 382)
+LIMIT 1;
 
 INSERT INTO rental_orders (
   order_number, client_id, status, start_date, end_date, days_count,
@@ -27195,12 +24647,9 @@ SELECT
   NOW(),
   NOW()
 FROM rental_clients c
-WHERE c.name ILIKE '%Татьяна (Гольфстрим)%' 
-   OR c.director_name ILIKE '%Татьяна (Гольфстрим)%'
-   OR 'Татьяна (Гольфстрим)' ILIKE '%' || c.name || '%'
-   OR 'Татьяна (Гольфстрим)' ILIKE '%' || c.director_name || '%'
-LIMIT 1
-ON CONFLICT (order_number) DO NOTHING;
+WHERE (c.name = 'Татьяна (Гольфстрим)' OR c.director_name = 'Татьяна (Гольфстрим)')
+  AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 381)
+LIMIT 1;
 
 INSERT INTO rental_orders (
   order_number, client_id, status, start_date, end_date, days_count,
@@ -27227,12 +24676,9 @@ SELECT
   NOW(),
   NOW()
 FROM rental_clients c
-WHERE c.name ILIKE '%Александр%' 
-   OR c.director_name ILIKE '%Александр%'
-   OR 'Александр' ILIKE '%' || c.name || '%'
-   OR 'Александр' ILIKE '%' || c.director_name || '%'
-LIMIT 1
-ON CONFLICT (order_number) DO NOTHING;
+WHERE (c.name = 'Александр' OR c.director_name = 'Александр')
+  AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 380)
+LIMIT 1;
 
 INSERT INTO rental_orders (
   order_number, client_id, status, start_date, end_date, days_count,
@@ -27259,12 +24705,9 @@ SELECT
   NOW(),
   NOW()
 FROM rental_clients c
-WHERE c.name ILIKE '%Мария Экскурсовод%' 
-   OR c.director_name ILIKE '%Мария Экскурсовод%'
-   OR 'Мария Экскурсовод' ILIKE '%' || c.name || '%'
-   OR 'Мария Экскурсовод' ILIKE '%' || c.director_name || '%'
-LIMIT 1
-ON CONFLICT (order_number) DO NOTHING;
+WHERE (c.name = 'Мария Экскурсовод' OR c.director_name = 'Мария Экскурсовод')
+  AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 379)
+LIMIT 1;
 
 INSERT INTO rental_orders (
   order_number, client_id, status, start_date, end_date, days_count,
@@ -27291,12 +24734,9 @@ SELECT
   NOW(),
   NOW()
 FROM rental_clients c
-WHERE c.name ILIKE '%Эдик Заказы для групп%' 
-   OR c.director_name ILIKE '%Эдик Заказы для групп%'
-   OR 'Эдик Заказы для групп' ILIKE '%' || c.name || '%'
-   OR 'Эдик Заказы для групп' ILIKE '%' || c.director_name || '%'
-LIMIT 1
-ON CONFLICT (order_number) DO NOTHING;
+WHERE (c.name = 'Эдик Заказы для групп' OR c.director_name = 'Эдик Заказы для групп')
+  AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 378)
+LIMIT 1;
 
 INSERT INTO rental_orders (
   order_number, client_id, status, start_date, end_date, days_count,
@@ -27323,12 +24763,9 @@ SELECT
   NOW(),
   NOW()
 FROM rental_clients c
-WHERE c.name ILIKE '%Сергей (Авангард)%' 
-   OR c.director_name ILIKE '%Сергей (Авангард)%'
-   OR 'Сергей (Авангард)' ILIKE '%' || c.name || '%'
-   OR 'Сергей (Авангард)' ILIKE '%' || c.director_name || '%'
-LIMIT 1
-ON CONFLICT (order_number) DO NOTHING;
+WHERE (c.name = 'Сергей (Авангард)' OR c.director_name = 'Сергей (Авангард)')
+  AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 377)
+LIMIT 1;
 
 INSERT INTO rental_orders (
   order_number, client_id, status, start_date, end_date, days_count,
@@ -27355,12 +24792,9 @@ SELECT
   NOW(),
   NOW()
 FROM rental_clients c
-WHERE c.name ILIKE '%Элина (Сититур)%' 
-   OR c.director_name ILIKE '%Элина (Сититур)%'
-   OR 'Элина (Сититур)' ILIKE '%' || c.name || '%'
-   OR 'Элина (Сититур)' ILIKE '%' || c.director_name || '%'
-LIMIT 1
-ON CONFLICT (order_number) DO NOTHING;
+WHERE (c.name = 'Элина (Сититур)' OR c.director_name = 'Элина (Сититур)')
+  AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 376)
+LIMIT 1;
 
 INSERT INTO rental_orders (
   order_number, client_id, status, start_date, end_date, days_count,
@@ -27387,12 +24821,9 @@ SELECT
   NOW(),
   NOW()
 FROM rental_clients c
-WHERE c.name ILIKE '%Анюта Родионова (Родина-тур)%' 
-   OR c.director_name ILIKE '%Анюта Родионова (Родина-тур)%'
-   OR 'Анюта Родионова (Родина-тур)' ILIKE '%' || c.name || '%'
-   OR 'Анюта Родионова (Родина-тур)' ILIKE '%' || c.director_name || '%'
-LIMIT 1
-ON CONFLICT (order_number) DO NOTHING;
+WHERE (c.name = 'Анюта Родионова (Родина-тур)' OR c.director_name = 'Анюта Родионова (Родина-тур)')
+  AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 375)
+LIMIT 1;
 
 INSERT INTO rental_orders (
   order_number, client_id, status, start_date, end_date, days_count,
@@ -27419,12 +24850,9 @@ SELECT
   NOW(),
   NOW()
 FROM rental_clients c
-WHERE c.name ILIKE '%Мира (ИП)%' 
-   OR c.director_name ILIKE '%Мира (ИП)%'
-   OR 'Мира (ИП)' ILIKE '%' || c.name || '%'
-   OR 'Мира (ИП)' ILIKE '%' || c.director_name || '%'
-LIMIT 1
-ON CONFLICT (order_number) DO NOTHING;
+WHERE (c.name = 'Мира (ИП)' OR c.director_name = 'Мира (ИП)')
+  AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 374)
+LIMIT 1;
 
 INSERT INTO rental_orders (
   order_number, client_id, status, start_date, end_date, days_count,
@@ -27451,12 +24879,9 @@ SELECT
   NOW(),
   NOW()
 FROM rental_clients c
-WHERE c.name ILIKE '%Алексей%' 
-   OR c.director_name ILIKE '%Алексей%'
-   OR 'Алексей' ILIKE '%' || c.name || '%'
-   OR 'Алексей' ILIKE '%' || c.director_name || '%'
-LIMIT 1
-ON CONFLICT (order_number) DO NOTHING;
+WHERE (c.name = 'Алексей' OR c.director_name = 'Алексей')
+  AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 373)
+LIMIT 1;
 
 INSERT INTO rental_orders (
   order_number, client_id, status, start_date, end_date, days_count,
@@ -27483,12 +24908,9 @@ SELECT
   NOW(),
   NOW()
 FROM rental_clients c
-WHERE c.name ILIKE '%Алексей%' 
-   OR c.director_name ILIKE '%Алексей%'
-   OR 'Алексей' ILIKE '%' || c.name || '%'
-   OR 'Алексей' ILIKE '%' || c.director_name || '%'
-LIMIT 1
-ON CONFLICT (order_number) DO NOTHING;
+WHERE (c.name = 'Алексей' OR c.director_name = 'Алексей')
+  AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 372)
+LIMIT 1;
 
 INSERT INTO rental_orders (
   order_number, client_id, status, start_date, end_date, days_count,
@@ -27515,12 +24937,9 @@ SELECT
   NOW(),
   NOW()
 FROM rental_clients c
-WHERE c.name ILIKE '%Алексей%' 
-   OR c.director_name ILIKE '%Алексей%'
-   OR 'Алексей' ILIKE '%' || c.name || '%'
-   OR 'Алексей' ILIKE '%' || c.director_name || '%'
-LIMIT 1
-ON CONFLICT (order_number) DO NOTHING;
+WHERE (c.name = 'Алексей' OR c.director_name = 'Алексей')
+  AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 371)
+LIMIT 1;
 
 INSERT INTO rental_orders (
   order_number, client_id, status, start_date, end_date, days_count,
@@ -27547,12 +24966,9 @@ SELECT
   NOW(),
   NOW()
 FROM rental_clients c
-WHERE c.name ILIKE '%Гульнара%' 
-   OR c.director_name ILIKE '%Гульнара%'
-   OR 'Гульнара' ILIKE '%' || c.name || '%'
-   OR 'Гульнара' ILIKE '%' || c.director_name || '%'
-LIMIT 1
-ON CONFLICT (order_number) DO NOTHING;
+WHERE (c.name = 'Гульнара' OR c.director_name = 'Гульнара')
+  AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 370)
+LIMIT 1;
 
 INSERT INTO rental_orders (
   order_number, client_id, status, start_date, end_date, days_count,
@@ -27579,12 +24995,9 @@ SELECT
   NOW(),
   NOW()
 FROM rental_clients c
-WHERE c.name ILIKE '%Искандер%' 
-   OR c.director_name ILIKE '%Искандер%'
-   OR 'Искандер' ILIKE '%' || c.name || '%'
-   OR 'Искандер' ILIKE '%' || c.director_name || '%'
-LIMIT 1
-ON CONFLICT (order_number) DO NOTHING;
+WHERE (c.name = 'Искандер' OR c.director_name = 'Искандер')
+  AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 369)
+LIMIT 1;
 
 INSERT INTO rental_orders (
   order_number, client_id, status, start_date, end_date, days_count,
@@ -27611,12 +25024,9 @@ SELECT
   NOW(),
   NOW()
 FROM rental_clients c
-WHERE c.name ILIKE '%Татьяна (Гольфстрим)%' 
-   OR c.director_name ILIKE '%Татьяна (Гольфстрим)%'
-   OR 'Татьяна (Гольфстрим)' ILIKE '%' || c.name || '%'
-   OR 'Татьяна (Гольфстрим)' ILIKE '%' || c.director_name || '%'
-LIMIT 1
-ON CONFLICT (order_number) DO NOTHING;
+WHERE (c.name = 'Татьяна (Гольфстрим)' OR c.director_name = 'Татьяна (Гольфстрим)')
+  AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 368)
+LIMIT 1;
 
 INSERT INTO rental_orders (
   order_number, client_id, status, start_date, end_date, days_count,
@@ -27643,12 +25053,9 @@ SELECT
   NOW(),
   NOW()
 FROM rental_clients c
-WHERE c.name ILIKE '%Альберт (КТ)%' 
-   OR c.director_name ILIKE '%Альберт (КТ)%'
-   OR 'Альберт (КТ)' ILIKE '%' || c.name || '%'
-   OR 'Альберт (КТ)' ILIKE '%' || c.director_name || '%'
-LIMIT 1
-ON CONFLICT (order_number) DO NOTHING;
+WHERE (c.name = 'Альберт (КТ)' OR c.director_name = 'Альберт (КТ)')
+  AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 367)
+LIMIT 1;
 
 INSERT INTO rental_orders (
   order_number, client_id, status, start_date, end_date, days_count,
@@ -27675,12 +25082,9 @@ SELECT
   NOW(),
   NOW()
 FROM rental_clients c
-WHERE c.name ILIKE '%Екатерина%' 
-   OR c.director_name ILIKE '%Екатерина%'
-   OR 'Екатерина' ILIKE '%' || c.name || '%'
-   OR 'Екатерина' ILIKE '%' || c.director_name || '%'
-LIMIT 1
-ON CONFLICT (order_number) DO NOTHING;
+WHERE (c.name = 'Екатерина' OR c.director_name = 'Екатерина')
+  AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 366)
+LIMIT 1;
 
 INSERT INTO rental_orders (
   order_number, client_id, status, start_date, end_date, days_count,
@@ -27707,12 +25111,9 @@ SELECT
   NOW(),
   NOW()
 FROM rental_clients c
-WHERE c.name ILIKE '%Татьяна (Гольфстрим)%' 
-   OR c.director_name ILIKE '%Татьяна (Гольфстрим)%'
-   OR 'Татьяна (Гольфстрим)' ILIKE '%' || c.name || '%'
-   OR 'Татьяна (Гольфстрим)' ILIKE '%' || c.director_name || '%'
-LIMIT 1
-ON CONFLICT (order_number) DO NOTHING;
+WHERE (c.name = 'Татьяна (Гольфстрим)' OR c.director_name = 'Татьяна (Гольфстрим)')
+  AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 365)
+LIMIT 1;
 
 INSERT INTO rental_orders (
   order_number, client_id, status, start_date, end_date, days_count,
@@ -27739,12 +25140,9 @@ SELECT
   NOW(),
   NOW()
 FROM rental_clients c
-WHERE c.name ILIKE '%Наталья%' 
-   OR c.director_name ILIKE '%Наталья%'
-   OR 'Наталья' ILIKE '%' || c.name || '%'
-   OR 'Наталья' ILIKE '%' || c.director_name || '%'
-LIMIT 1
-ON CONFLICT (order_number) DO NOTHING;
+WHERE (c.name = 'Наталья' OR c.director_name = 'Наталья')
+  AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 364)
+LIMIT 1;
 
 INSERT INTO rental_orders (
   order_number, client_id, status, start_date, end_date, days_count,
@@ -27771,12 +25169,9 @@ SELECT
   NOW(),
   NOW()
 FROM rental_clients c
-WHERE c.name ILIKE '%Татьяна (Гольфстрим)%' 
-   OR c.director_name ILIKE '%Татьяна (Гольфстрим)%'
-   OR 'Татьяна (Гольфстрим)' ILIKE '%' || c.name || '%'
-   OR 'Татьяна (Гольфстрим)' ILIKE '%' || c.director_name || '%'
-LIMIT 1
-ON CONFLICT (order_number) DO NOTHING;
+WHERE (c.name = 'Татьяна (Гольфстрим)' OR c.director_name = 'Татьяна (Гольфстрим)')
+  AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 363)
+LIMIT 1;
 
 INSERT INTO rental_orders (
   order_number, client_id, status, start_date, end_date, days_count,
@@ -27803,12 +25198,9 @@ SELECT
   NOW(),
   NOW()
 FROM rental_clients c
-WHERE c.name ILIKE '%Татьяна (Гольфстрим)%' 
-   OR c.director_name ILIKE '%Татьяна (Гольфстрим)%'
-   OR 'Татьяна (Гольфстрим)' ILIKE '%' || c.name || '%'
-   OR 'Татьяна (Гольфстрим)' ILIKE '%' || c.director_name || '%'
-LIMIT 1
-ON CONFLICT (order_number) DO NOTHING;
+WHERE (c.name = 'Татьяна (Гольфстрим)' OR c.director_name = 'Татьяна (Гольфстрим)')
+  AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 362)
+LIMIT 1;
 
 INSERT INTO rental_orders (
   order_number, client_id, status, start_date, end_date, days_count,
@@ -27835,12 +25227,9 @@ SELECT
   NOW(),
   NOW()
 FROM rental_clients c
-WHERE c.name ILIKE '%Татьяна (Гольфстрим)%' 
-   OR c.director_name ILIKE '%Татьяна (Гольфстрим)%'
-   OR 'Татьяна (Гольфстрим)' ILIKE '%' || c.name || '%'
-   OR 'Татьяна (Гольфстрим)' ILIKE '%' || c.director_name || '%'
-LIMIT 1
-ON CONFLICT (order_number) DO NOTHING;
+WHERE (c.name = 'Татьяна (Гольфстрим)' OR c.director_name = 'Татьяна (Гольфстрим)')
+  AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 361)
+LIMIT 1;
 
 INSERT INTO rental_orders (
   order_number, client_id, status, start_date, end_date, days_count,
@@ -27867,12 +25256,9 @@ SELECT
   NOW(),
   NOW()
 FROM rental_clients c
-WHERE c.name ILIKE '%Татьяна (Гольфстрим)%' 
-   OR c.director_name ILIKE '%Татьяна (Гольфстрим)%'
-   OR 'Татьяна (Гольфстрим)' ILIKE '%' || c.name || '%'
-   OR 'Татьяна (Гольфстрим)' ILIKE '%' || c.director_name || '%'
-LIMIT 1
-ON CONFLICT (order_number) DO NOTHING;
+WHERE (c.name = 'Татьяна (Гольфстрим)' OR c.director_name = 'Татьяна (Гольфстрим)')
+  AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 360)
+LIMIT 1;
 
 INSERT INTO rental_orders (
   order_number, client_id, status, start_date, end_date, days_count,
@@ -27899,12 +25285,9 @@ SELECT
   NOW(),
   NOW()
 FROM rental_clients c
-WHERE c.name ILIKE '%Татьяна (Гольфстрим)%' 
-   OR c.director_name ILIKE '%Татьяна (Гольфстрим)%'
-   OR 'Татьяна (Гольфстрим)' ILIKE '%' || c.name || '%'
-   OR 'Татьяна (Гольфстрим)' ILIKE '%' || c.director_name || '%'
-LIMIT 1
-ON CONFLICT (order_number) DO NOTHING;
+WHERE (c.name = 'Татьяна (Гольфстрим)' OR c.director_name = 'Татьяна (Гольфстрим)')
+  AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 359)
+LIMIT 1;
 
 INSERT INTO rental_orders (
   order_number, client_id, status, start_date, end_date, days_count,
@@ -27931,12 +25314,9 @@ SELECT
   NOW(),
   NOW()
 FROM rental_clients c
-WHERE c.name ILIKE '%Юлия Воронова%' 
-   OR c.director_name ILIKE '%Юлия Воронова%'
-   OR 'Юлия Воронова' ILIKE '%' || c.name || '%'
-   OR 'Юлия Воронова' ILIKE '%' || c.director_name || '%'
-LIMIT 1
-ON CONFLICT (order_number) DO NOTHING;
+WHERE (c.name = 'Юлия Воронова' OR c.director_name = 'Юлия Воронова')
+  AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 358)
+LIMIT 1;
 
 INSERT INTO rental_orders (
   order_number, client_id, status, start_date, end_date, days_count,
@@ -27963,12 +25343,9 @@ SELECT
   NOW(),
   NOW()
 FROM rental_clients c
-WHERE c.name ILIKE '%Юлия Воронова%' 
-   OR c.director_name ILIKE '%Юлия Воронова%'
-   OR 'Юлия Воронова' ILIKE '%' || c.name || '%'
-   OR 'Юлия Воронова' ILIKE '%' || c.director_name || '%'
-LIMIT 1
-ON CONFLICT (order_number) DO NOTHING;
+WHERE (c.name = 'Юлия Воронова' OR c.director_name = 'Юлия Воронова')
+  AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 357)
+LIMIT 1;
 
 INSERT INTO rental_orders (
   order_number, client_id, status, start_date, end_date, days_count,
@@ -27995,12 +25372,9 @@ SELECT
   NOW(),
   NOW()
 FROM rental_clients c
-WHERE c.name ILIKE '%Альберт (КТ)%' 
-   OR c.director_name ILIKE '%Альберт (КТ)%'
-   OR 'Альберт (КТ)' ILIKE '%' || c.name || '%'
-   OR 'Альберт (КТ)' ILIKE '%' || c.director_name || '%'
-LIMIT 1
-ON CONFLICT (order_number) DO NOTHING;
+WHERE (c.name = 'Альберт (КТ)' OR c.director_name = 'Альберт (КТ)')
+  AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 356)
+LIMIT 1;
 
 INSERT INTO rental_orders (
   order_number, client_id, status, start_date, end_date, days_count,
@@ -28027,12 +25401,9 @@ SELECT
   NOW(),
   NOW()
 FROM rental_clients c
-WHERE c.name ILIKE '%Альберт (КТ)%' 
-   OR c.director_name ILIKE '%Альберт (КТ)%'
-   OR 'Альберт (КТ)' ILIKE '%' || c.name || '%'
-   OR 'Альберт (КТ)' ILIKE '%' || c.director_name || '%'
-LIMIT 1
-ON CONFLICT (order_number) DO NOTHING;
+WHERE (c.name = 'Альберт (КТ)' OR c.director_name = 'Альберт (КТ)')
+  AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 355)
+LIMIT 1;
 
 INSERT INTO rental_orders (
   order_number, client_id, status, start_date, end_date, days_count,
@@ -28059,12 +25430,9 @@ SELECT
   NOW(),
   NOW()
 FROM rental_clients c
-WHERE c.name ILIKE '%Альберт (КТ)%' 
-   OR c.director_name ILIKE '%Альберт (КТ)%'
-   OR 'Альберт (КТ)' ILIKE '%' || c.name || '%'
-   OR 'Альберт (КТ)' ILIKE '%' || c.director_name || '%'
-LIMIT 1
-ON CONFLICT (order_number) DO NOTHING;
+WHERE (c.name = 'Альберт (КТ)' OR c.director_name = 'Альберт (КТ)')
+  AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 354)
+LIMIT 1;
 
 INSERT INTO rental_orders (
   order_number, client_id, status, start_date, end_date, days_count,
@@ -28091,12 +25459,9 @@ SELECT
   NOW(),
   NOW()
 FROM rental_clients c
-WHERE c.name ILIKE '%Альберт (КТ)%' 
-   OR c.director_name ILIKE '%Альберт (КТ)%'
-   OR 'Альберт (КТ)' ILIKE '%' || c.name || '%'
-   OR 'Альберт (КТ)' ILIKE '%' || c.director_name || '%'
-LIMIT 1
-ON CONFLICT (order_number) DO NOTHING;
+WHERE (c.name = 'Альберт (КТ)' OR c.director_name = 'Альберт (КТ)')
+  AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 353)
+LIMIT 1;
 
 INSERT INTO rental_orders (
   order_number, client_id, status, start_date, end_date, days_count,
@@ -28123,12 +25488,9 @@ SELECT
   NOW(),
   NOW()
 FROM rental_clients c
-WHERE c.name ILIKE '%Эдик Заказы для групп%' 
-   OR c.director_name ILIKE '%Эдик Заказы для групп%'
-   OR 'Эдик Заказы для групп' ILIKE '%' || c.name || '%'
-   OR 'Эдик Заказы для групп' ILIKE '%' || c.director_name || '%'
-LIMIT 1
-ON CONFLICT (order_number) DO NOTHING;
+WHERE (c.name = 'Эдик Заказы для групп' OR c.director_name = 'Эдик Заказы для групп')
+  AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 352)
+LIMIT 1;
 
 INSERT INTO rental_orders (
   order_number, client_id, status, start_date, end_date, days_count,
@@ -28155,12 +25517,9 @@ SELECT
   NOW(),
   NOW()
 FROM rental_clients c
-WHERE c.name ILIKE '%Эдик Заказы для групп%' 
-   OR c.director_name ILIKE '%Эдик Заказы для групп%'
-   OR 'Эдик Заказы для групп' ILIKE '%' || c.name || '%'
-   OR 'Эдик Заказы для групп' ILIKE '%' || c.director_name || '%'
-LIMIT 1
-ON CONFLICT (order_number) DO NOTHING;
+WHERE (c.name = 'Эдик Заказы для групп' OR c.director_name = 'Эдик Заказы для групп')
+  AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 351)
+LIMIT 1;
 
 INSERT INTO rental_orders (
   order_number, client_id, status, start_date, end_date, days_count,
@@ -28187,12 +25546,9 @@ SELECT
   NOW(),
   NOW()
 FROM rental_clients c
-WHERE c.name ILIKE '%Мария Экскурсовод%' 
-   OR c.director_name ILIKE '%Мария Экскурсовод%'
-   OR 'Мария Экскурсовод' ILIKE '%' || c.name || '%'
-   OR 'Мария Экскурсовод' ILIKE '%' || c.director_name || '%'
-LIMIT 1
-ON CONFLICT (order_number) DO NOTHING;
+WHERE (c.name = 'Мария Экскурсовод' OR c.director_name = 'Мария Экскурсовод')
+  AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 350)
+LIMIT 1;
 
 INSERT INTO rental_orders (
   order_number, client_id, status, start_date, end_date, days_count,
@@ -28219,12 +25575,9 @@ SELECT
   NOW(),
   NOW()
 FROM rental_clients c
-WHERE c.name ILIKE '%Альберт (КТ)%' 
-   OR c.director_name ILIKE '%Альберт (КТ)%'
-   OR 'Альберт (КТ)' ILIKE '%' || c.name || '%'
-   OR 'Альберт (КТ)' ILIKE '%' || c.director_name || '%'
-LIMIT 1
-ON CONFLICT (order_number) DO NOTHING;
+WHERE (c.name = 'Альберт (КТ)' OR c.director_name = 'Альберт (КТ)')
+  AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 349)
+LIMIT 1;
 
 INSERT INTO rental_orders (
   order_number, client_id, status, start_date, end_date, days_count,
@@ -28251,12 +25604,9 @@ SELECT
   NOW(),
   NOW()
 FROM rental_clients c
-WHERE c.name ILIKE '%Валентина Экскурсовод%' 
-   OR c.director_name ILIKE '%Валентина Экскурсовод%'
-   OR 'Валентина Экскурсовод' ILIKE '%' || c.name || '%'
-   OR 'Валентина Экскурсовод' ILIKE '%' || c.director_name || '%'
-LIMIT 1
-ON CONFLICT (order_number) DO NOTHING;
+WHERE (c.name = 'Валентина Экскурсовод' OR c.director_name = 'Валентина Экскурсовод')
+  AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 348)
+LIMIT 1;
 
 INSERT INTO rental_orders (
   order_number, client_id, status, start_date, end_date, days_count,
@@ -28283,12 +25633,9 @@ SELECT
   NOW(),
   NOW()
 FROM rental_clients c
-WHERE c.name ILIKE '%Елена Марковна ( черный список)%' 
-   OR c.director_name ILIKE '%Елена Марковна ( черный список)%'
-   OR 'Елена Марковна ( черный список)' ILIKE '%' || c.name || '%'
-   OR 'Елена Марковна ( черный список)' ILIKE '%' || c.director_name || '%'
-LIMIT 1
-ON CONFLICT (order_number) DO NOTHING;
+WHERE (c.name = 'Елена Марковна ( черный список)' OR c.director_name = 'Елена Марковна ( черный список)')
+  AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 347)
+LIMIT 1;
 
 INSERT INTO rental_orders (
   order_number, client_id, status, start_date, end_date, days_count,
@@ -28315,12 +25662,9 @@ SELECT
   NOW(),
   NOW()
 FROM rental_clients c
-WHERE c.name ILIKE '%Ксения%' 
-   OR c.director_name ILIKE '%Ксения%'
-   OR 'Ксения' ILIKE '%' || c.name || '%'
-   OR 'Ксения' ILIKE '%' || c.director_name || '%'
-LIMIT 1
-ON CONFLICT (order_number) DO NOTHING;
+WHERE (c.name = 'Ксения' OR c.director_name = 'Ксения')
+  AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 346)
+LIMIT 1;
 
 INSERT INTO rental_orders (
   order_number, client_id, status, start_date, end_date, days_count,
@@ -28347,12 +25691,9 @@ SELECT
   NOW(),
   NOW()
 FROM rental_clients c
-WHERE c.name ILIKE '%Галина%' 
-   OR c.director_name ILIKE '%Галина%'
-   OR 'Галина' ILIKE '%' || c.name || '%'
-   OR 'Галина' ILIKE '%' || c.director_name || '%'
-LIMIT 1
-ON CONFLICT (order_number) DO NOTHING;
+WHERE (c.name = 'Галина' OR c.director_name = 'Галина')
+  AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 345)
+LIMIT 1;
 
 INSERT INTO rental_orders (
   order_number, client_id, status, start_date, end_date, days_count,
@@ -28379,12 +25720,9 @@ SELECT
   NOW(),
   NOW()
 FROM rental_clients c
-WHERE c.name ILIKE '%Галина%' 
-   OR c.director_name ILIKE '%Галина%'
-   OR 'Галина' ILIKE '%' || c.name || '%'
-   OR 'Галина' ILIKE '%' || c.director_name || '%'
-LIMIT 1
-ON CONFLICT (order_number) DO NOTHING;
+WHERE (c.name = 'Галина' OR c.director_name = 'Галина')
+  AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 344)
+LIMIT 1;
 
 INSERT INTO rental_orders (
   order_number, client_id, status, start_date, end_date, days_count,
@@ -28411,12 +25749,9 @@ SELECT
   NOW(),
   NOW()
 FROM rental_clients c
-WHERE c.name ILIKE '%Галина%' 
-   OR c.director_name ILIKE '%Галина%'
-   OR 'Галина' ILIKE '%' || c.name || '%'
-   OR 'Галина' ILIKE '%' || c.director_name || '%'
-LIMIT 1
-ON CONFLICT (order_number) DO NOTHING;
+WHERE (c.name = 'Галина' OR c.director_name = 'Галина')
+  AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 343)
+LIMIT 1;
 
 INSERT INTO rental_orders (
   order_number, client_id, status, start_date, end_date, days_count,
@@ -28443,12 +25778,9 @@ SELECT
   NOW(),
   NOW()
 FROM rental_clients c
-WHERE c.name ILIKE '%Лиля Экскурсовод%' 
-   OR c.director_name ILIKE '%Лиля Экскурсовод%'
-   OR 'Лиля Экскурсовод' ILIKE '%' || c.name || '%'
-   OR 'Лиля Экскурсовод' ILIKE '%' || c.director_name || '%'
-LIMIT 1
-ON CONFLICT (order_number) DO NOTHING;
+WHERE (c.name = 'Лиля Экскурсовод' OR c.director_name = 'Лиля Экскурсовод')
+  AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 342)
+LIMIT 1;
 
 INSERT INTO rental_orders (
   order_number, client_id, status, start_date, end_date, days_count,
@@ -28475,12 +25807,9 @@ SELECT
   NOW(),
   NOW()
 FROM rental_clients c
-WHERE c.name ILIKE '%Сергей (Авангард)%' 
-   OR c.director_name ILIKE '%Сергей (Авангард)%'
-   OR 'Сергей (Авангард)' ILIKE '%' || c.name || '%'
-   OR 'Сергей (Авангард)' ILIKE '%' || c.director_name || '%'
-LIMIT 1
-ON CONFLICT (order_number) DO NOTHING;
+WHERE (c.name = 'Сергей (Авангард)' OR c.director_name = 'Сергей (Авангард)')
+  AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 341)
+LIMIT 1;
 
 INSERT INTO rental_orders (
   order_number, client_id, status, start_date, end_date, days_count,
@@ -28507,12 +25836,9 @@ SELECT
   NOW(),
   NOW()
 FROM rental_clients c
-WHERE c.name ILIKE '%Сергей (Авангард)%' 
-   OR c.director_name ILIKE '%Сергей (Авангард)%'
-   OR 'Сергей (Авангард)' ILIKE '%' || c.name || '%'
-   OR 'Сергей (Авангард)' ILIKE '%' || c.director_name || '%'
-LIMIT 1
-ON CONFLICT (order_number) DO NOTHING;
+WHERE (c.name = 'Сергей (Авангард)' OR c.director_name = 'Сергей (Авангард)')
+  AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 340)
+LIMIT 1;
 
 INSERT INTO rental_orders (
   order_number, client_id, status, start_date, end_date, days_count,
@@ -28539,12 +25865,9 @@ SELECT
   NOW(),
   NOW()
 FROM rental_clients c
-WHERE c.name ILIKE '%Светлана Клиент%' 
-   OR c.director_name ILIKE '%Светлана Клиент%'
-   OR 'Светлана Клиент' ILIKE '%' || c.name || '%'
-   OR 'Светлана Клиент' ILIKE '%' || c.director_name || '%'
-LIMIT 1
-ON CONFLICT (order_number) DO NOTHING;
+WHERE (c.name = 'Светлана Клиент' OR c.director_name = 'Светлана Клиент')
+  AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 339)
+LIMIT 1;
 
 INSERT INTO rental_orders (
   order_number, client_id, status, start_date, end_date, days_count,
@@ -28571,12 +25894,9 @@ SELECT
   NOW(),
   NOW()
 FROM rental_clients c
-WHERE c.name ILIKE '%Ольга Волковец%' 
-   OR c.director_name ILIKE '%Ольга Волковец%'
-   OR 'Ольга Волковец' ILIKE '%' || c.name || '%'
-   OR 'Ольга Волковец' ILIKE '%' || c.director_name || '%'
-LIMIT 1
-ON CONFLICT (order_number) DO NOTHING;
+WHERE (c.name = 'Ольга Волковец' OR c.director_name = 'Ольга Волковец')
+  AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 338)
+LIMIT 1;
 
 INSERT INTO rental_orders (
   order_number, client_id, status, start_date, end_date, days_count,
@@ -28603,12 +25923,9 @@ SELECT
   NOW(),
   NOW()
 FROM rental_clients c
-WHERE c.name ILIKE '%Эмилия%' 
-   OR c.director_name ILIKE '%Эмилия%'
-   OR 'Эмилия' ILIKE '%' || c.name || '%'
-   OR 'Эмилия' ILIKE '%' || c.director_name || '%'
-LIMIT 1
-ON CONFLICT (order_number) DO NOTHING;
+WHERE (c.name = 'Эмилия' OR c.director_name = 'Эмилия')
+  AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 337)
+LIMIT 1;
 
 INSERT INTO rental_orders (
   order_number, client_id, status, start_date, end_date, days_count,
@@ -28635,12 +25952,9 @@ SELECT
   NOW(),
   NOW()
 FROM rental_clients c
-WHERE c.name ILIKE '%Зульхиза Кутлучурина%' 
-   OR c.director_name ILIKE '%Зульхиза Кутлучурина%'
-   OR 'Зульхиза Кутлучурина' ILIKE '%' || c.name || '%'
-   OR 'Зульхиза Кутлучурина' ILIKE '%' || c.director_name || '%'
-LIMIT 1
-ON CONFLICT (order_number) DO NOTHING;
+WHERE (c.name = 'Зульхиза Кутлучурина' OR c.director_name = 'Зульхиза Кутлучурина')
+  AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 335)
+LIMIT 1;
 
 INSERT INTO rental_orders (
   order_number, client_id, status, start_date, end_date, days_count,
@@ -28667,12 +25981,9 @@ SELECT
   NOW(),
   NOW()
 FROM rental_clients c
-WHERE c.name ILIKE '%Эдик Заказы для групп%' 
-   OR c.director_name ILIKE '%Эдик Заказы для групп%'
-   OR 'Эдик Заказы для групп' ILIKE '%' || c.name || '%'
-   OR 'Эдик Заказы для групп' ILIKE '%' || c.director_name || '%'
-LIMIT 1
-ON CONFLICT (order_number) DO NOTHING;
+WHERE (c.name = 'Эдик Заказы для групп' OR c.director_name = 'Эдик Заказы для групп')
+  AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 334)
+LIMIT 1;
 
 INSERT INTO rental_orders (
   order_number, client_id, status, start_date, end_date, days_count,
@@ -28699,12 +26010,9 @@ SELECT
   NOW(),
   NOW()
 FROM rental_clients c
-WHERE c.name ILIKE '%Камилла%' 
-   OR c.director_name ILIKE '%Камилла%'
-   OR 'Камилла' ILIKE '%' || c.name || '%'
-   OR 'Камилла' ILIKE '%' || c.director_name || '%'
-LIMIT 1
-ON CONFLICT (order_number) DO NOTHING;
+WHERE (c.name = 'Камилла' OR c.director_name = 'Камилла')
+  AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 333)
+LIMIT 1;
 
 INSERT INTO rental_orders (
   order_number, client_id, status, start_date, end_date, days_count,
@@ -28731,12 +26039,9 @@ SELECT
   NOW(),
   NOW()
 FROM rental_clients c
-WHERE c.name ILIKE '%Мира (ИП)%' 
-   OR c.director_name ILIKE '%Мира (ИП)%'
-   OR 'Мира (ИП)' ILIKE '%' || c.name || '%'
-   OR 'Мира (ИП)' ILIKE '%' || c.director_name || '%'
-LIMIT 1
-ON CONFLICT (order_number) DO NOTHING;
+WHERE (c.name = 'Мира (ИП)' OR c.director_name = 'Мира (ИП)')
+  AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 332)
+LIMIT 1;
 
 INSERT INTO rental_orders (
   order_number, client_id, status, start_date, end_date, days_count,
@@ -28763,12 +26068,9 @@ SELECT
   NOW(),
   NOW()
 FROM rental_clients c
-WHERE c.name ILIKE '%Артем Агафонов%' 
-   OR c.director_name ILIKE '%Артем Агафонов%'
-   OR 'Артем Агафонов' ILIKE '%' || c.name || '%'
-   OR 'Артем Агафонов' ILIKE '%' || c.director_name || '%'
-LIMIT 1
-ON CONFLICT (order_number) DO NOTHING;
+WHERE (c.name = 'Артем Агафонов' OR c.director_name = 'Артем Агафонов')
+  AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 331)
+LIMIT 1;
 
 INSERT INTO rental_orders (
   order_number, client_id, status, start_date, end_date, days_count,
@@ -28795,12 +26097,9 @@ SELECT
   NOW(),
   NOW()
 FROM rental_clients c
-WHERE c.name ILIKE '%Мария Экскурсовод%' 
-   OR c.director_name ILIKE '%Мария Экскурсовод%'
-   OR 'Мария Экскурсовод' ILIKE '%' || c.name || '%'
-   OR 'Мария Экскурсовод' ILIKE '%' || c.director_name || '%'
-LIMIT 1
-ON CONFLICT (order_number) DO NOTHING;
+WHERE (c.name = 'Мария Экскурсовод' OR c.director_name = 'Мария Экскурсовод')
+  AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 330)
+LIMIT 1;
 
 INSERT INTO rental_orders (
   order_number, client_id, status, start_date, end_date, days_count,
@@ -28827,12 +26126,9 @@ SELECT
   NOW(),
   NOW()
 FROM rental_clients c
-WHERE c.name ILIKE '%Мария Экскурсовод%' 
-   OR c.director_name ILIKE '%Мария Экскурсовод%'
-   OR 'Мария Экскурсовод' ILIKE '%' || c.name || '%'
-   OR 'Мария Экскурсовод' ILIKE '%' || c.director_name || '%'
-LIMIT 1
-ON CONFLICT (order_number) DO NOTHING;
+WHERE (c.name = 'Мария Экскурсовод' OR c.director_name = 'Мария Экскурсовод')
+  AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 329)
+LIMIT 1;
 
 INSERT INTO rental_orders (
   order_number, client_id, status, start_date, end_date, days_count,
@@ -28859,12 +26155,9 @@ SELECT
   NOW(),
   NOW()
 FROM rental_clients c
-WHERE c.name ILIKE '%Мария Экскурсовод%' 
-   OR c.director_name ILIKE '%Мария Экскурсовод%'
-   OR 'Мария Экскурсовод' ILIKE '%' || c.name || '%'
-   OR 'Мария Экскурсовод' ILIKE '%' || c.director_name || '%'
-LIMIT 1
-ON CONFLICT (order_number) DO NOTHING;
+WHERE (c.name = 'Мария Экскурсовод' OR c.director_name = 'Мария Экскурсовод')
+  AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 328)
+LIMIT 1;
 
 INSERT INTO rental_orders (
   order_number, client_id, status, start_date, end_date, days_count,
@@ -28891,12 +26184,9 @@ SELECT
   NOW(),
   NOW()
 FROM rental_clients c
-WHERE c.name ILIKE '%Гульнара%' 
-   OR c.director_name ILIKE '%Гульнара%'
-   OR 'Гульнара' ILIKE '%' || c.name || '%'
-   OR 'Гульнара' ILIKE '%' || c.director_name || '%'
-LIMIT 1
-ON CONFLICT (order_number) DO NOTHING;
+WHERE (c.name = 'Гульнара' OR c.director_name = 'Гульнара')
+  AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 327)
+LIMIT 1;
 
 INSERT INTO rental_orders (
   order_number, client_id, status, start_date, end_date, days_count,
@@ -28923,12 +26213,9 @@ SELECT
   NOW(),
   NOW()
 FROM rental_clients c
-WHERE c.name ILIKE '%Татьяна (Гольфстрим)%' 
-   OR c.director_name ILIKE '%Татьяна (Гольфстрим)%'
-   OR 'Татьяна (Гольфстрим)' ILIKE '%' || c.name || '%'
-   OR 'Татьяна (Гольфстрим)' ILIKE '%' || c.director_name || '%'
-LIMIT 1
-ON CONFLICT (order_number) DO NOTHING;
+WHERE (c.name = 'Татьяна (Гольфстрим)' OR c.director_name = 'Татьяна (Гольфстрим)')
+  AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 326)
+LIMIT 1;
 
 INSERT INTO rental_orders (
   order_number, client_id, status, start_date, end_date, days_count,
@@ -28955,12 +26242,9 @@ SELECT
   NOW(),
   NOW()
 FROM rental_clients c
-WHERE c.name ILIKE '%Татьяна (Гольфстрим)%' 
-   OR c.director_name ILIKE '%Татьяна (Гольфстрим)%'
-   OR 'Татьяна (Гольфстрим)' ILIKE '%' || c.name || '%'
-   OR 'Татьяна (Гольфстрим)' ILIKE '%' || c.director_name || '%'
-LIMIT 1
-ON CONFLICT (order_number) DO NOTHING;
+WHERE (c.name = 'Татьяна (Гольфстрим)' OR c.director_name = 'Татьяна (Гольфстрим)')
+  AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 324)
+LIMIT 1;
 
 INSERT INTO rental_orders (
   order_number, client_id, status, start_date, end_date, days_count,
@@ -28987,12 +26271,9 @@ SELECT
   NOW(),
   NOW()
 FROM rental_clients c
-WHERE c.name ILIKE '%Татьяна (Гольфстрим)%' 
-   OR c.director_name ILIKE '%Татьяна (Гольфстрим)%'
-   OR 'Татьяна (Гольфстрим)' ILIKE '%' || c.name || '%'
-   OR 'Татьяна (Гольфстрим)' ILIKE '%' || c.director_name || '%'
-LIMIT 1
-ON CONFLICT (order_number) DO NOTHING;
+WHERE (c.name = 'Татьяна (Гольфстрим)' OR c.director_name = 'Татьяна (Гольфстрим)')
+  AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 323)
+LIMIT 1;
 
 INSERT INTO rental_orders (
   order_number, client_id, status, start_date, end_date, days_count,
@@ -29019,12 +26300,9 @@ SELECT
   NOW(),
   NOW()
 FROM rental_clients c
-WHERE c.name ILIKE '%Татьяна (Гольфстрим)%' 
-   OR c.director_name ILIKE '%Татьяна (Гольфстрим)%'
-   OR 'Татьяна (Гольфстрим)' ILIKE '%' || c.name || '%'
-   OR 'Татьяна (Гольфстрим)' ILIKE '%' || c.director_name || '%'
-LIMIT 1
-ON CONFLICT (order_number) DO NOTHING;
+WHERE (c.name = 'Татьяна (Гольфстрим)' OR c.director_name = 'Татьяна (Гольфстрим)')
+  AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 322)
+LIMIT 1;
 
 INSERT INTO rental_orders (
   order_number, client_id, status, start_date, end_date, days_count,
@@ -29051,12 +26329,9 @@ SELECT
   NOW(),
   NOW()
 FROM rental_clients c
-WHERE c.name ILIKE '%Татьяна (Гольфстрим)%' 
-   OR c.director_name ILIKE '%Татьяна (Гольфстрим)%'
-   OR 'Татьяна (Гольфстрим)' ILIKE '%' || c.name || '%'
-   OR 'Татьяна (Гольфстрим)' ILIKE '%' || c.director_name || '%'
-LIMIT 1
-ON CONFLICT (order_number) DO NOTHING;
+WHERE (c.name = 'Татьяна (Гольфстрим)' OR c.director_name = 'Татьяна (Гольфстрим)')
+  AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 321)
+LIMIT 1;
 
 INSERT INTO rental_orders (
   order_number, client_id, status, start_date, end_date, days_count,
@@ -29083,12 +26358,9 @@ SELECT
   NOW(),
   NOW()
 FROM rental_clients c
-WHERE c.name ILIKE '%Татьяна (Гольфстрим)%' 
-   OR c.director_name ILIKE '%Татьяна (Гольфстрим)%'
-   OR 'Татьяна (Гольфстрим)' ILIKE '%' || c.name || '%'
-   OR 'Татьяна (Гольфстрим)' ILIKE '%' || c.director_name || '%'
-LIMIT 1
-ON CONFLICT (order_number) DO NOTHING;
+WHERE (c.name = 'Татьяна (Гольфстрим)' OR c.director_name = 'Татьяна (Гольфстрим)')
+  AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 320)
+LIMIT 1;
 
 INSERT INTO rental_orders (
   order_number, client_id, status, start_date, end_date, days_count,
@@ -29115,12 +26387,9 @@ SELECT
   NOW(),
   NOW()
 FROM rental_clients c
-WHERE c.name ILIKE '%Татьяна (Гольфстрим)%' 
-   OR c.director_name ILIKE '%Татьяна (Гольфстрим)%'
-   OR 'Татьяна (Гольфстрим)' ILIKE '%' || c.name || '%'
-   OR 'Татьяна (Гольфстрим)' ILIKE '%' || c.director_name || '%'
-LIMIT 1
-ON CONFLICT (order_number) DO NOTHING;
+WHERE (c.name = 'Татьяна (Гольфстрим)' OR c.director_name = 'Татьяна (Гольфстрим)')
+  AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 319)
+LIMIT 1;
 
 INSERT INTO rental_orders (
   order_number, client_id, status, start_date, end_date, days_count,
@@ -29147,12 +26416,9 @@ SELECT
   NOW(),
   NOW()
 FROM rental_clients c
-WHERE c.name ILIKE '%Татьяна (Гольфстрим)%' 
-   OR c.director_name ILIKE '%Татьяна (Гольфстрим)%'
-   OR 'Татьяна (Гольфстрим)' ILIKE '%' || c.name || '%'
-   OR 'Татьяна (Гольфстрим)' ILIKE '%' || c.director_name || '%'
-LIMIT 1
-ON CONFLICT (order_number) DO NOTHING;
+WHERE (c.name = 'Татьяна (Гольфстрим)' OR c.director_name = 'Татьяна (Гольфстрим)')
+  AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 318)
+LIMIT 1;
 
 INSERT INTO rental_orders (
   order_number, client_id, status, start_date, end_date, days_count,
@@ -29179,12 +26445,9 @@ SELECT
   NOW(),
   NOW()
 FROM rental_clients c
-WHERE c.name ILIKE '%Татьяна (Гольфстрим)%' 
-   OR c.director_name ILIKE '%Татьяна (Гольфстрим)%'
-   OR 'Татьяна (Гольфстрим)' ILIKE '%' || c.name || '%'
-   OR 'Татьяна (Гольфстрим)' ILIKE '%' || c.director_name || '%'
-LIMIT 1
-ON CONFLICT (order_number) DO NOTHING;
+WHERE (c.name = 'Татьяна (Гольфстрим)' OR c.director_name = 'Татьяна (Гольфстрим)')
+  AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 317)
+LIMIT 1;
 
 INSERT INTO rental_orders (
   order_number, client_id, status, start_date, end_date, days_count,
@@ -29211,12 +26474,9 @@ SELECT
   NOW(),
   NOW()
 FROM rental_clients c
-WHERE c.name ILIKE '%Татьяна (Гольфстрим)%' 
-   OR c.director_name ILIKE '%Татьяна (Гольфстрим)%'
-   OR 'Татьяна (Гольфстрим)' ILIKE '%' || c.name || '%'
-   OR 'Татьяна (Гольфстрим)' ILIKE '%' || c.director_name || '%'
-LIMIT 1
-ON CONFLICT (order_number) DO NOTHING;
+WHERE (c.name = 'Татьяна (Гольфстрим)' OR c.director_name = 'Татьяна (Гольфстрим)')
+  AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 316)
+LIMIT 1;
 
 INSERT INTO rental_orders (
   order_number, client_id, status, start_date, end_date, days_count,
@@ -29243,12 +26503,9 @@ SELECT
   NOW(),
   NOW()
 FROM rental_clients c
-WHERE c.name ILIKE '%Татьяна (Гольфстрим)%' 
-   OR c.director_name ILIKE '%Татьяна (Гольфстрим)%'
-   OR 'Татьяна (Гольфстрим)' ILIKE '%' || c.name || '%'
-   OR 'Татьяна (Гольфстрим)' ILIKE '%' || c.director_name || '%'
-LIMIT 1
-ON CONFLICT (order_number) DO NOTHING;
+WHERE (c.name = 'Татьяна (Гольфстрим)' OR c.director_name = 'Татьяна (Гольфстрим)')
+  AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 315)
+LIMIT 1;
 
 INSERT INTO rental_orders (
   order_number, client_id, status, start_date, end_date, days_count,
@@ -29275,12 +26532,9 @@ SELECT
   NOW(),
   NOW()
 FROM rental_clients c
-WHERE c.name ILIKE '%Татьяна (Гольфстрим)%' 
-   OR c.director_name ILIKE '%Татьяна (Гольфстрим)%'
-   OR 'Татьяна (Гольфстрим)' ILIKE '%' || c.name || '%'
-   OR 'Татьяна (Гольфстрим)' ILIKE '%' || c.director_name || '%'
-LIMIT 1
-ON CONFLICT (order_number) DO NOTHING;
+WHERE (c.name = 'Татьяна (Гольфстрим)' OR c.director_name = 'Татьяна (Гольфстрим)')
+  AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 314)
+LIMIT 1;
 
 INSERT INTO rental_orders (
   order_number, client_id, status, start_date, end_date, days_count,
@@ -29307,12 +26561,9 @@ SELECT
   NOW(),
   NOW()
 FROM rental_clients c
-WHERE c.name ILIKE '%Татьяна (Гольфстрим)%' 
-   OR c.director_name ILIKE '%Татьяна (Гольфстрим)%'
-   OR 'Татьяна (Гольфстрим)' ILIKE '%' || c.name || '%'
-   OR 'Татьяна (Гольфстрим)' ILIKE '%' || c.director_name || '%'
-LIMIT 1
-ON CONFLICT (order_number) DO NOTHING;
+WHERE (c.name = 'Татьяна (Гольфстрим)' OR c.director_name = 'Татьяна (Гольфстрим)')
+  AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 313)
+LIMIT 1;
 
 INSERT INTO rental_orders (
   order_number, client_id, status, start_date, end_date, days_count,
@@ -29339,12 +26590,9 @@ SELECT
   NOW(),
   NOW()
 FROM rental_clients c
-WHERE c.name ILIKE '%Андрей (Экскурс)%' 
-   OR c.director_name ILIKE '%Андрей (Экскурс)%'
-   OR 'Андрей (Экскурс)' ILIKE '%' || c.name || '%'
-   OR 'Андрей (Экскурс)' ILIKE '%' || c.director_name || '%'
-LIMIT 1
-ON CONFLICT (order_number) DO NOTHING;
+WHERE (c.name = 'Андрей (Экскурс)' OR c.director_name = 'Андрей (Экскурс)')
+  AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 310)
+LIMIT 1;
 
 INSERT INTO rental_orders (
   order_number, client_id, status, start_date, end_date, days_count,
@@ -29371,12 +26619,9 @@ SELECT
   NOW(),
   NOW()
 FROM rental_clients c
-WHERE c.name ILIKE '%Зульхиза Кутлучурина%' 
-   OR c.director_name ILIKE '%Зульхиза Кутлучурина%'
-   OR 'Зульхиза Кутлучурина' ILIKE '%' || c.name || '%'
-   OR 'Зульхиза Кутлучурина' ILIKE '%' || c.director_name || '%'
-LIMIT 1
-ON CONFLICT (order_number) DO NOTHING;
+WHERE (c.name = 'Зульхиза Кутлучурина' OR c.director_name = 'Зульхиза Кутлучурина')
+  AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 308)
+LIMIT 1;
 
 INSERT INTO rental_orders (
   order_number, client_id, status, start_date, end_date, days_count,
@@ -29403,12 +26648,9 @@ SELECT
   NOW(),
   NOW()
 FROM rental_clients c
-WHERE c.name ILIKE '%Мира (ИП)%' 
-   OR c.director_name ILIKE '%Мира (ИП)%'
-   OR 'Мира (ИП)' ILIKE '%' || c.name || '%'
-   OR 'Мира (ИП)' ILIKE '%' || c.director_name || '%'
-LIMIT 1
-ON CONFLICT (order_number) DO NOTHING;
+WHERE (c.name = 'Мира (ИП)' OR c.director_name = 'Мира (ИП)')
+  AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 307)
+LIMIT 1;
 
 INSERT INTO rental_orders (
   order_number, client_id, status, start_date, end_date, days_count,
@@ -29435,12 +26677,9 @@ SELECT
   NOW(),
   NOW()
 FROM rental_clients c
-WHERE c.name ILIKE '%Сергей (Авангард)%' 
-   OR c.director_name ILIKE '%Сергей (Авангард)%'
-   OR 'Сергей (Авангард)' ILIKE '%' || c.name || '%'
-   OR 'Сергей (Авангард)' ILIKE '%' || c.director_name || '%'
-LIMIT 1
-ON CONFLICT (order_number) DO NOTHING;
+WHERE (c.name = 'Сергей (Авангард)' OR c.director_name = 'Сергей (Авангард)')
+  AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 306)
+LIMIT 1;
 
 INSERT INTO rental_orders (
   order_number, client_id, status, start_date, end_date, days_count,
@@ -29467,12 +26706,9 @@ SELECT
   NOW(),
   NOW()
 FROM rental_clients c
-WHERE c.name ILIKE '%Зельфира%' 
-   OR c.director_name ILIKE '%Зельфира%'
-   OR 'Зельфира' ILIKE '%' || c.name || '%'
-   OR 'Зельфира' ILIKE '%' || c.director_name || '%'
-LIMIT 1
-ON CONFLICT (order_number) DO NOTHING;
+WHERE (c.name = 'Зельфира' OR c.director_name = 'Зельфира')
+  AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 305)
+LIMIT 1;
 
 INSERT INTO rental_orders (
   order_number, client_id, status, start_date, end_date, days_count,
@@ -29499,12 +26735,9 @@ SELECT
   NOW(),
   NOW()
 FROM rental_clients c
-WHERE c.name ILIKE '%Юлия Воронова%' 
-   OR c.director_name ILIKE '%Юлия Воронова%'
-   OR 'Юлия Воронова' ILIKE '%' || c.name || '%'
-   OR 'Юлия Воронова' ILIKE '%' || c.director_name || '%'
-LIMIT 1
-ON CONFLICT (order_number) DO NOTHING;
+WHERE (c.name = 'Юлия Воронова' OR c.director_name = 'Юлия Воронова')
+  AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 304)
+LIMIT 1;
 
 INSERT INTO rental_orders (
   order_number, client_id, status, start_date, end_date, days_count,
@@ -29531,12 +26764,9 @@ SELECT
   NOW(),
   NOW()
 FROM rental_clients c
-WHERE c.name ILIKE '%Морозова%' 
-   OR c.director_name ILIKE '%Морозова%'
-   OR 'Морозова' ILIKE '%' || c.name || '%'
-   OR 'Морозова' ILIKE '%' || c.director_name || '%'
-LIMIT 1
-ON CONFLICT (order_number) DO NOTHING;
+WHERE (c.name = 'Морозова' OR c.director_name = 'Морозова')
+  AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 303)
+LIMIT 1;
 
 INSERT INTO rental_orders (
   order_number, client_id, status, start_date, end_date, days_count,
@@ -29563,12 +26793,9 @@ SELECT
   NOW(),
   NOW()
 FROM rental_clients c
-WHERE c.name ILIKE '%Зельфира%' 
-   OR c.director_name ILIKE '%Зельфира%'
-   OR 'Зельфира' ILIKE '%' || c.name || '%'
-   OR 'Зельфира' ILIKE '%' || c.director_name || '%'
-LIMIT 1
-ON CONFLICT (order_number) DO NOTHING;
+WHERE (c.name = 'Зельфира' OR c.director_name = 'Зельфира')
+  AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 302)
+LIMIT 1;
 
 INSERT INTO rental_orders (
   order_number, client_id, status, start_date, end_date, days_count,
@@ -29595,12 +26822,9 @@ SELECT
   NOW(),
   NOW()
 FROM rental_clients c
-WHERE c.name ILIKE '%Эдик Заказы для групп%' 
-   OR c.director_name ILIKE '%Эдик Заказы для групп%'
-   OR 'Эдик Заказы для групп' ILIKE '%' || c.name || '%'
-   OR 'Эдик Заказы для групп' ILIKE '%' || c.director_name || '%'
-LIMIT 1
-ON CONFLICT (order_number) DO NOTHING;
+WHERE (c.name = 'Эдик Заказы для групп' OR c.director_name = 'Эдик Заказы для групп')
+  AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 301)
+LIMIT 1;
 
 INSERT INTO rental_orders (
   order_number, client_id, status, start_date, end_date, days_count,
@@ -29627,12 +26851,9 @@ SELECT
   NOW(),
   NOW()
 FROM rental_clients c
-WHERE c.name ILIKE '%Айрат Нурмухаммадов%' 
-   OR c.director_name ILIKE '%Айрат Нурмухаммадов%'
-   OR 'Айрат Нурмухаммадов' ILIKE '%' || c.name || '%'
-   OR 'Айрат Нурмухаммадов' ILIKE '%' || c.director_name || '%'
-LIMIT 1
-ON CONFLICT (order_number) DO NOTHING;
+WHERE (c.name = 'Айрат Нурмухаммадов' OR c.director_name = 'Айрат Нурмухаммадов')
+  AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 300)
+LIMIT 1;
 
 INSERT INTO rental_orders (
   order_number, client_id, status, start_date, end_date, days_count,
@@ -29659,12 +26880,9 @@ SELECT
   NOW(),
   NOW()
 FROM rental_clients c
-WHERE c.name ILIKE '%Гульнара%' 
-   OR c.director_name ILIKE '%Гульнара%'
-   OR 'Гульнара' ILIKE '%' || c.name || '%'
-   OR 'Гульнара' ILIKE '%' || c.director_name || '%'
-LIMIT 1
-ON CONFLICT (order_number) DO NOTHING;
+WHERE (c.name = 'Гульнара' OR c.director_name = 'Гульнара')
+  AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 299)
+LIMIT 1;
 
 INSERT INTO rental_orders (
   order_number, client_id, status, start_date, end_date, days_count,
@@ -29691,12 +26909,9 @@ SELECT
   NOW(),
   NOW()
 FROM rental_clients c
-WHERE c.name ILIKE '%Татьяна (Гольфстрим)%' 
-   OR c.director_name ILIKE '%Татьяна (Гольфстрим)%'
-   OR 'Татьяна (Гольфстрим)' ILIKE '%' || c.name || '%'
-   OR 'Татьяна (Гольфстрим)' ILIKE '%' || c.director_name || '%'
-LIMIT 1
-ON CONFLICT (order_number) DO NOTHING;
+WHERE (c.name = 'Татьяна (Гольфстрим)' OR c.director_name = 'Татьяна (Гольфстрим)')
+  AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 298)
+LIMIT 1;
 
 INSERT INTO rental_orders (
   order_number, client_id, status, start_date, end_date, days_count,
@@ -29723,12 +26938,9 @@ SELECT
   NOW(),
   NOW()
 FROM rental_clients c
-WHERE c.name ILIKE '%Альберт (КТ)%' 
-   OR c.director_name ILIKE '%Альберт (КТ)%'
-   OR 'Альберт (КТ)' ILIKE '%' || c.name || '%'
-   OR 'Альберт (КТ)' ILIKE '%' || c.director_name || '%'
-LIMIT 1
-ON CONFLICT (order_number) DO NOTHING;
+WHERE (c.name = 'Альберт (КТ)' OR c.director_name = 'Альберт (КТ)')
+  AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 297)
+LIMIT 1;
 
 INSERT INTO rental_orders (
   order_number, client_id, status, start_date, end_date, days_count,
@@ -29755,12 +26967,9 @@ SELECT
   NOW(),
   NOW()
 FROM rental_clients c
-WHERE c.name ILIKE '%Татьяна (Гольфстрим)%' 
-   OR c.director_name ILIKE '%Татьяна (Гольфстрим)%'
-   OR 'Татьяна (Гольфстрим)' ILIKE '%' || c.name || '%'
-   OR 'Татьяна (Гольфстрим)' ILIKE '%' || c.director_name || '%'
-LIMIT 1
-ON CONFLICT (order_number) DO NOTHING;
+WHERE (c.name = 'Татьяна (Гольфстрим)' OR c.director_name = 'Татьяна (Гольфстрим)')
+  AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 296)
+LIMIT 1;
 
 INSERT INTO rental_orders (
   order_number, client_id, status, start_date, end_date, days_count,
@@ -29787,12 +26996,9 @@ SELECT
   NOW(),
   NOW()
 FROM rental_clients c
-WHERE c.name ILIKE '%Татьяна (Гольфстрим)%' 
-   OR c.director_name ILIKE '%Татьяна (Гольфстрим)%'
-   OR 'Татьяна (Гольфстрим)' ILIKE '%' || c.name || '%'
-   OR 'Татьяна (Гольфстрим)' ILIKE '%' || c.director_name || '%'
-LIMIT 1
-ON CONFLICT (order_number) DO NOTHING;
+WHERE (c.name = 'Татьяна (Гольфстрим)' OR c.director_name = 'Татьяна (Гольфстрим)')
+  AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 295)
+LIMIT 1;
 
 INSERT INTO rental_orders (
   order_number, client_id, status, start_date, end_date, days_count,
@@ -29819,12 +27025,9 @@ SELECT
   NOW(),
   NOW()
 FROM rental_clients c
-WHERE c.name ILIKE '%Татьяна (Гольфстрим)%' 
-   OR c.director_name ILIKE '%Татьяна (Гольфстрим)%'
-   OR 'Татьяна (Гольфстрим)' ILIKE '%' || c.name || '%'
-   OR 'Татьяна (Гольфстрим)' ILIKE '%' || c.director_name || '%'
-LIMIT 1
-ON CONFLICT (order_number) DO NOTHING;
+WHERE (c.name = 'Татьяна (Гольфстрим)' OR c.director_name = 'Татьяна (Гольфстрим)')
+  AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 294)
+LIMIT 1;
 
 INSERT INTO rental_orders (
   order_number, client_id, status, start_date, end_date, days_count,
@@ -29851,12 +27054,9 @@ SELECT
   NOW(),
   NOW()
 FROM rental_clients c
-WHERE c.name ILIKE '%Сергей (Авангард)%' 
-   OR c.director_name ILIKE '%Сергей (Авангард)%'
-   OR 'Сергей (Авангард)' ILIKE '%' || c.name || '%'
-   OR 'Сергей (Авангард)' ILIKE '%' || c.director_name || '%'
-LIMIT 1
-ON CONFLICT (order_number) DO NOTHING;
+WHERE (c.name = 'Сергей (Авангард)' OR c.director_name = 'Сергей (Авангард)')
+  AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 293)
+LIMIT 1;
 
 INSERT INTO rental_orders (
   order_number, client_id, status, start_date, end_date, days_count,
@@ -29883,12 +27083,9 @@ SELECT
   NOW(),
   NOW()
 FROM rental_clients c
-WHERE c.name ILIKE '%Татьяна%' 
-   OR c.director_name ILIKE '%Татьяна%'
-   OR 'Татьяна' ILIKE '%' || c.name || '%'
-   OR 'Татьяна' ILIKE '%' || c.director_name || '%'
-LIMIT 1
-ON CONFLICT (order_number) DO NOTHING;
+WHERE (c.name = 'Татьяна' OR c.director_name = 'Татьяна')
+  AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 292)
+LIMIT 1;
 
 INSERT INTO rental_orders (
   order_number, client_id, status, start_date, end_date, days_count,
@@ -29915,12 +27112,9 @@ SELECT
   NOW(),
   NOW()
 FROM rental_clients c
-WHERE c.name ILIKE '%Татьяна%' 
-   OR c.director_name ILIKE '%Татьяна%'
-   OR 'Татьяна' ILIKE '%' || c.name || '%'
-   OR 'Татьяна' ILIKE '%' || c.director_name || '%'
-LIMIT 1
-ON CONFLICT (order_number) DO NOTHING;
+WHERE (c.name = 'Татьяна' OR c.director_name = 'Татьяна')
+  AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 291)
+LIMIT 1;
 
 INSERT INTO rental_orders (
   order_number, client_id, status, start_date, end_date, days_count,
@@ -29947,12 +27141,9 @@ SELECT
   NOW(),
   NOW()
 FROM rental_clients c
-WHERE c.name ILIKE '%Мира (ИП)%' 
-   OR c.director_name ILIKE '%Мира (ИП)%'
-   OR 'Мира (ИП)' ILIKE '%' || c.name || '%'
-   OR 'Мира (ИП)' ILIKE '%' || c.director_name || '%'
-LIMIT 1
-ON CONFLICT (order_number) DO NOTHING;
+WHERE (c.name = 'Мира (ИП)' OR c.director_name = 'Мира (ИП)')
+  AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 290)
+LIMIT 1;
 
 INSERT INTO rental_orders (
   order_number, client_id, status, start_date, end_date, days_count,
@@ -29979,12 +27170,9 @@ SELECT
   NOW(),
   NOW()
 FROM rental_clients c
-WHERE c.name ILIKE '%Андрей%' 
-   OR c.director_name ILIKE '%Андрей%'
-   OR 'Андрей' ILIKE '%' || c.name || '%'
-   OR 'Андрей' ILIKE '%' || c.director_name || '%'
-LIMIT 1
-ON CONFLICT (order_number) DO NOTHING;
+WHERE (c.name = 'Андрей' OR c.director_name = 'Андрей')
+  AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 289)
+LIMIT 1;
 
 INSERT INTO rental_orders (
   order_number, client_id, status, start_date, end_date, days_count,
@@ -30011,12 +27199,9 @@ SELECT
   NOW(),
   NOW()
 FROM rental_clients c
-WHERE c.name ILIKE '%Наталья%' 
-   OR c.director_name ILIKE '%Наталья%'
-   OR 'Наталья' ILIKE '%' || c.name || '%'
-   OR 'Наталья' ILIKE '%' || c.director_name || '%'
-LIMIT 1
-ON CONFLICT (order_number) DO NOTHING;
+WHERE (c.name = 'Наталья' OR c.director_name = 'Наталья')
+  AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 288)
+LIMIT 1;
 
 INSERT INTO rental_orders (
   order_number, client_id, status, start_date, end_date, days_count,
@@ -30043,12 +27228,9 @@ SELECT
   NOW(),
   NOW()
 FROM rental_clients c
-WHERE c.name ILIKE '%Наталья%' 
-   OR c.director_name ILIKE '%Наталья%'
-   OR 'Наталья' ILIKE '%' || c.name || '%'
-   OR 'Наталья' ILIKE '%' || c.director_name || '%'
-LIMIT 1
-ON CONFLICT (order_number) DO NOTHING;
+WHERE (c.name = 'Наталья' OR c.director_name = 'Наталья')
+  AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 287)
+LIMIT 1;
 
 INSERT INTO rental_orders (
   order_number, client_id, status, start_date, end_date, days_count,
@@ -30075,12 +27257,9 @@ SELECT
   NOW(),
   NOW()
 FROM rental_clients c
-WHERE c.name ILIKE '%Мира (ИП)%' 
-   OR c.director_name ILIKE '%Мира (ИП)%'
-   OR 'Мира (ИП)' ILIKE '%' || c.name || '%'
-   OR 'Мира (ИП)' ILIKE '%' || c.director_name || '%'
-LIMIT 1
-ON CONFLICT (order_number) DO NOTHING;
+WHERE (c.name = 'Мира (ИП)' OR c.director_name = 'Мира (ИП)')
+  AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 286)
+LIMIT 1;
 
 INSERT INTO rental_orders (
   order_number, client_id, status, start_date, end_date, days_count,
@@ -30107,12 +27286,9 @@ SELECT
   NOW(),
   NOW()
 FROM rental_clients c
-WHERE c.name ILIKE '%Зульхиза Кутлучурина%' 
-   OR c.director_name ILIKE '%Зульхиза Кутлучурина%'
-   OR 'Зульхиза Кутлучурина' ILIKE '%' || c.name || '%'
-   OR 'Зульхиза Кутлучурина' ILIKE '%' || c.director_name || '%'
-LIMIT 1
-ON CONFLICT (order_number) DO NOTHING;
+WHERE (c.name = 'Зульхиза Кутлучурина' OR c.director_name = 'Зульхиза Кутлучурина')
+  AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 283)
+LIMIT 1;
 
 INSERT INTO rental_orders (
   order_number, client_id, status, start_date, end_date, days_count,
@@ -30139,12 +27315,9 @@ SELECT
   NOW(),
   NOW()
 FROM rental_clients c
-WHERE c.name ILIKE '%Зульхиза Кутлучурина%' 
-   OR c.director_name ILIKE '%Зульхиза Кутлучурина%'
-   OR 'Зульхиза Кутлучурина' ILIKE '%' || c.name || '%'
-   OR 'Зульхиза Кутлучурина' ILIKE '%' || c.director_name || '%'
-LIMIT 1
-ON CONFLICT (order_number) DO NOTHING;
+WHERE (c.name = 'Зульхиза Кутлучурина' OR c.director_name = 'Зульхиза Кутлучурина')
+  AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 282)
+LIMIT 1;
 
 INSERT INTO rental_orders (
   order_number, client_id, status, start_date, end_date, days_count,
@@ -30171,12 +27344,9 @@ SELECT
   NOW(),
   NOW()
 FROM rental_clients c
-WHERE c.name ILIKE '%Зульхиза Кутлучурина%' 
-   OR c.director_name ILIKE '%Зульхиза Кутлучурина%'
-   OR 'Зульхиза Кутлучурина' ILIKE '%' || c.name || '%'
-   OR 'Зульхиза Кутлучурина' ILIKE '%' || c.director_name || '%'
-LIMIT 1
-ON CONFLICT (order_number) DO NOTHING;
+WHERE (c.name = 'Зульхиза Кутлучурина' OR c.director_name = 'Зульхиза Кутлучурина')
+  AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 281)
+LIMIT 1;
 
 INSERT INTO rental_orders (
   order_number, client_id, status, start_date, end_date, days_count,
@@ -30203,12 +27373,9 @@ SELECT
   NOW(),
   NOW()
 FROM rental_clients c
-WHERE c.name ILIKE '%Гульнара%' 
-   OR c.director_name ILIKE '%Гульнара%'
-   OR 'Гульнара' ILIKE '%' || c.name || '%'
-   OR 'Гульнара' ILIKE '%' || c.director_name || '%'
-LIMIT 1
-ON CONFLICT (order_number) DO NOTHING;
+WHERE (c.name = 'Гульнара' OR c.director_name = 'Гульнара')
+  AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 280)
+LIMIT 1;
 
 INSERT INTO rental_orders (
   order_number, client_id, status, start_date, end_date, days_count,
@@ -30235,12 +27402,9 @@ SELECT
   NOW(),
   NOW()
 FROM rental_clients c
-WHERE c.name ILIKE '%Зульхиза Кутлучурина%' 
-   OR c.director_name ILIKE '%Зульхиза Кутлучурина%'
-   OR 'Зульхиза Кутлучурина' ILIKE '%' || c.name || '%'
-   OR 'Зульхиза Кутлучурина' ILIKE '%' || c.director_name || '%'
-LIMIT 1
-ON CONFLICT (order_number) DO NOTHING;
+WHERE (c.name = 'Зульхиза Кутлучурина' OR c.director_name = 'Зульхиза Кутлучурина')
+  AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 279)
+LIMIT 1;
 
 INSERT INTO rental_orders (
   order_number, client_id, status, start_date, end_date, days_count,
@@ -30267,12 +27431,9 @@ SELECT
   NOW(),
   NOW()
 FROM rental_clients c
-WHERE c.name ILIKE '%Мира (ИП)%' 
-   OR c.director_name ILIKE '%Мира (ИП)%'
-   OR 'Мира (ИП)' ILIKE '%' || c.name || '%'
-   OR 'Мира (ИП)' ILIKE '%' || c.director_name || '%'
-LIMIT 1
-ON CONFLICT (order_number) DO NOTHING;
+WHERE (c.name = 'Мира (ИП)' OR c.director_name = 'Мира (ИП)')
+  AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 278)
+LIMIT 1;
 
 INSERT INTO rental_orders (
   order_number, client_id, status, start_date, end_date, days_count,
@@ -30299,12 +27460,9 @@ SELECT
   NOW(),
   NOW()
 FROM rental_clients c
-WHERE c.name ILIKE '%Татьяна (Гольфстрим)%' 
-   OR c.director_name ILIKE '%Татьяна (Гольфстрим)%'
-   OR 'Татьяна (Гольфстрим)' ILIKE '%' || c.name || '%'
-   OR 'Татьяна (Гольфстрим)' ILIKE '%' || c.director_name || '%'
-LIMIT 1
-ON CONFLICT (order_number) DO NOTHING;
+WHERE (c.name = 'Татьяна (Гольфстрим)' OR c.director_name = 'Татьяна (Гольфстрим)')
+  AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 277)
+LIMIT 1;
 
 INSERT INTO rental_orders (
   order_number, client_id, status, start_date, end_date, days_count,
@@ -30331,12 +27489,9 @@ SELECT
   NOW(),
   NOW()
 FROM rental_clients c
-WHERE c.name ILIKE '%Татьяна (Гольфстрим)%' 
-   OR c.director_name ILIKE '%Татьяна (Гольфстрим)%'
-   OR 'Татьяна (Гольфстрим)' ILIKE '%' || c.name || '%'
-   OR 'Татьяна (Гольфстрим)' ILIKE '%' || c.director_name || '%'
-LIMIT 1
-ON CONFLICT (order_number) DO NOTHING;
+WHERE (c.name = 'Татьяна (Гольфстрим)' OR c.director_name = 'Татьяна (Гольфстрим)')
+  AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 276)
+LIMIT 1;
 
 INSERT INTO rental_orders (
   order_number, client_id, status, start_date, end_date, days_count,
@@ -30363,12 +27518,9 @@ SELECT
   NOW(),
   NOW()
 FROM rental_clients c
-WHERE c.name ILIKE '%Зельфира%' 
-   OR c.director_name ILIKE '%Зельфира%'
-   OR 'Зельфира' ILIKE '%' || c.name || '%'
-   OR 'Зельфира' ILIKE '%' || c.director_name || '%'
-LIMIT 1
-ON CONFLICT (order_number) DO NOTHING;
+WHERE (c.name = 'Зельфира' OR c.director_name = 'Зельфира')
+  AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 275)
+LIMIT 1;
 
 INSERT INTO rental_orders (
   order_number, client_id, status, start_date, end_date, days_count,
@@ -30395,12 +27547,9 @@ SELECT
   NOW(),
   NOW()
 FROM rental_clients c
-WHERE c.name ILIKE '%Наталья%' 
-   OR c.director_name ILIKE '%Наталья%'
-   OR 'Наталья' ILIKE '%' || c.name || '%'
-   OR 'Наталья' ILIKE '%' || c.director_name || '%'
-LIMIT 1
-ON CONFLICT (order_number) DO NOTHING;
+WHERE (c.name = 'Наталья' OR c.director_name = 'Наталья')
+  AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 274)
+LIMIT 1;
 
 INSERT INTO rental_orders (
   order_number, client_id, status, start_date, end_date, days_count,
@@ -30427,12 +27576,9 @@ SELECT
   NOW(),
   NOW()
 FROM rental_clients c
-WHERE c.name ILIKE '%Мария%' 
-   OR c.director_name ILIKE '%Мария%'
-   OR 'Мария' ILIKE '%' || c.name || '%'
-   OR 'Мария' ILIKE '%' || c.director_name || '%'
-LIMIT 1
-ON CONFLICT (order_number) DO NOTHING;
+WHERE (c.name = 'Мария' OR c.director_name = 'Мария')
+  AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 272)
+LIMIT 1;
 
 INSERT INTO rental_orders (
   order_number, client_id, status, start_date, end_date, days_count,
@@ -30459,12 +27605,9 @@ SELECT
   NOW(),
   NOW()
 FROM rental_clients c
-WHERE c.name ILIKE '%Елена%' 
-   OR c.director_name ILIKE '%Елена%'
-   OR 'Елена' ILIKE '%' || c.name || '%'
-   OR 'Елена' ILIKE '%' || c.director_name || '%'
-LIMIT 1
-ON CONFLICT (order_number) DO NOTHING;
+WHERE (c.name = 'Елена' OR c.director_name = 'Елена')
+  AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 271)
+LIMIT 1;
 
 INSERT INTO rental_orders (
   order_number, client_id, status, start_date, end_date, days_count,
@@ -30491,12 +27634,9 @@ SELECT
   NOW(),
   NOW()
 FROM rental_clients c
-WHERE c.name ILIKE '%Татьяна (Гольфстрим)%' 
-   OR c.director_name ILIKE '%Татьяна (Гольфстрим)%'
-   OR 'Татьяна (Гольфстрим)' ILIKE '%' || c.name || '%'
-   OR 'Татьяна (Гольфстрим)' ILIKE '%' || c.director_name || '%'
-LIMIT 1
-ON CONFLICT (order_number) DO NOTHING;
+WHERE (c.name = 'Татьяна (Гольфстрим)' OR c.director_name = 'Татьяна (Гольфстрим)')
+  AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 270)
+LIMIT 1;
 
 INSERT INTO rental_orders (
   order_number, client_id, status, start_date, end_date, days_count,
@@ -30523,12 +27663,9 @@ SELECT
   NOW(),
   NOW()
 FROM rental_clients c
-WHERE c.name ILIKE '%Элина (Сититур)%' 
-   OR c.director_name ILIKE '%Элина (Сититур)%'
-   OR 'Элина (Сититур)' ILIKE '%' || c.name || '%'
-   OR 'Элина (Сититур)' ILIKE '%' || c.director_name || '%'
-LIMIT 1
-ON CONFLICT (order_number) DO NOTHING;
+WHERE (c.name = 'Элина (Сититур)' OR c.director_name = 'Элина (Сититур)')
+  AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 269)
+LIMIT 1;
 
 INSERT INTO rental_orders (
   order_number, client_id, status, start_date, end_date, days_count,
@@ -30555,12 +27692,9 @@ SELECT
   NOW(),
   NOW()
 FROM rental_clients c
-WHERE c.name ILIKE '%Алина Минеева%' 
-   OR c.director_name ILIKE '%Алина Минеева%'
-   OR 'Алина Минеева' ILIKE '%' || c.name || '%'
-   OR 'Алина Минеева' ILIKE '%' || c.director_name || '%'
-LIMIT 1
-ON CONFLICT (order_number) DO NOTHING;
+WHERE (c.name = 'Алина Минеева' OR c.director_name = 'Алина Минеева')
+  AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 268)
+LIMIT 1;
 
 INSERT INTO rental_orders (
   order_number, client_id, status, start_date, end_date, days_count,
@@ -30587,12 +27721,9 @@ SELECT
   NOW(),
   NOW()
 FROM rental_clients c
-WHERE c.name ILIKE '%Любовь Ким%' 
-   OR c.director_name ILIKE '%Любовь Ким%'
-   OR 'Любовь Ким' ILIKE '%' || c.name || '%'
-   OR 'Любовь Ким' ILIKE '%' || c.director_name || '%'
-LIMIT 1
-ON CONFLICT (order_number) DO NOTHING;
+WHERE (c.name = 'Любовь Ким' OR c.director_name = 'Любовь Ким')
+  AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 267)
+LIMIT 1;
 
 INSERT INTO rental_orders (
   order_number, client_id, status, start_date, end_date, days_count,
@@ -30619,12 +27750,9 @@ SELECT
   NOW(),
   NOW()
 FROM rental_clients c
-WHERE c.name ILIKE '%Наталья Жукова%' 
-   OR c.director_name ILIKE '%Наталья Жукова%'
-   OR 'Наталья Жукова' ILIKE '%' || c.name || '%'
-   OR 'Наталья Жукова' ILIKE '%' || c.director_name || '%'
-LIMIT 1
-ON CONFLICT (order_number) DO NOTHING;
+WHERE (c.name = 'Наталья Жукова' OR c.director_name = 'Наталья Жукова')
+  AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 266)
+LIMIT 1;
 
 INSERT INTO rental_orders (
   order_number, client_id, status, start_date, end_date, days_count,
@@ -30651,12 +27779,9 @@ SELECT
   NOW(),
   NOW()
 FROM rental_clients c
-WHERE c.name ILIKE '%Зульхиза Кутлучурина%' 
-   OR c.director_name ILIKE '%Зульхиза Кутлучурина%'
-   OR 'Зульхиза Кутлучурина' ILIKE '%' || c.name || '%'
-   OR 'Зульхиза Кутлучурина' ILIKE '%' || c.director_name || '%'
-LIMIT 1
-ON CONFLICT (order_number) DO NOTHING;
+WHERE (c.name = 'Зульхиза Кутлучурина' OR c.director_name = 'Зульхиза Кутлучурина')
+  AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 265)
+LIMIT 1;
 
 INSERT INTO rental_orders (
   order_number, client_id, status, start_date, end_date, days_count,
@@ -30683,12 +27808,9 @@ SELECT
   NOW(),
   NOW()
 FROM rental_clients c
-WHERE c.name ILIKE '%Анюта Родионова (Родина-тур)%' 
-   OR c.director_name ILIKE '%Анюта Родионова (Родина-тур)%'
-   OR 'Анюта Родионова (Родина-тур)' ILIKE '%' || c.name || '%'
-   OR 'Анюта Родионова (Родина-тур)' ILIKE '%' || c.director_name || '%'
-LIMIT 1
-ON CONFLICT (order_number) DO NOTHING;
+WHERE (c.name = 'Анюта Родионова (Родина-тур)' OR c.director_name = 'Анюта Родионова (Родина-тур)')
+  AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 264)
+LIMIT 1;
 
 INSERT INTO rental_orders (
   order_number, client_id, status, start_date, end_date, days_count,
@@ -30715,12 +27837,9 @@ SELECT
   NOW(),
   NOW()
 FROM rental_clients c
-WHERE c.name ILIKE '%Юлия Воронова%' 
-   OR c.director_name ILIKE '%Юлия Воронова%'
-   OR 'Юлия Воронова' ILIKE '%' || c.name || '%'
-   OR 'Юлия Воронова' ILIKE '%' || c.director_name || '%'
-LIMIT 1
-ON CONFLICT (order_number) DO NOTHING;
+WHERE (c.name = 'Юлия Воронова' OR c.director_name = 'Юлия Воронова')
+  AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 263)
+LIMIT 1;
 
 INSERT INTO rental_orders (
   order_number, client_id, status, start_date, end_date, days_count,
@@ -30747,12 +27866,9 @@ SELECT
   NOW(),
   NOW()
 FROM rental_clients c
-WHERE c.name ILIKE '%Эдик Заказы для групп%' 
-   OR c.director_name ILIKE '%Эдик Заказы для групп%'
-   OR 'Эдик Заказы для групп' ILIKE '%' || c.name || '%'
-   OR 'Эдик Заказы для групп' ILIKE '%' || c.director_name || '%'
-LIMIT 1
-ON CONFLICT (order_number) DO NOTHING;
+WHERE (c.name = 'Эдик Заказы для групп' OR c.director_name = 'Эдик Заказы для групп')
+  AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 262)
+LIMIT 1;
 
 INSERT INTO rental_orders (
   order_number, client_id, status, start_date, end_date, days_count,
@@ -30779,12 +27895,9 @@ SELECT
   NOW(),
   NOW()
 FROM rental_clients c
-WHERE c.name ILIKE '%Эдик Заказы для групп%' 
-   OR c.director_name ILIKE '%Эдик Заказы для групп%'
-   OR 'Эдик Заказы для групп' ILIKE '%' || c.name || '%'
-   OR 'Эдик Заказы для групп' ILIKE '%' || c.director_name || '%'
-LIMIT 1
-ON CONFLICT (order_number) DO NOTHING;
+WHERE (c.name = 'Эдик Заказы для групп' OR c.director_name = 'Эдик Заказы для групп')
+  AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 261)
+LIMIT 1;
 
 INSERT INTO rental_orders (
   order_number, client_id, status, start_date, end_date, days_count,
@@ -30811,12 +27924,9 @@ SELECT
   NOW(),
   NOW()
 FROM rental_clients c
-WHERE c.name ILIKE '%Екатерина%' 
-   OR c.director_name ILIKE '%Екатерина%'
-   OR 'Екатерина' ILIKE '%' || c.name || '%'
-   OR 'Екатерина' ILIKE '%' || c.director_name || '%'
-LIMIT 1
-ON CONFLICT (order_number) DO NOTHING;
+WHERE (c.name = 'Екатерина' OR c.director_name = 'Екатерина')
+  AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 260)
+LIMIT 1;
 
 INSERT INTO rental_orders (
   order_number, client_id, status, start_date, end_date, days_count,
@@ -30843,12 +27953,9 @@ SELECT
   NOW(),
   NOW()
 FROM rental_clients c
-WHERE c.name ILIKE '%Марианна%' 
-   OR c.director_name ILIKE '%Марианна%'
-   OR 'Марианна' ILIKE '%' || c.name || '%'
-   OR 'Марианна' ILIKE '%' || c.director_name || '%'
-LIMIT 1
-ON CONFLICT (order_number) DO NOTHING;
+WHERE (c.name = 'Марианна' OR c.director_name = 'Марианна')
+  AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 259)
+LIMIT 1;
 
 INSERT INTO rental_orders (
   order_number, client_id, status, start_date, end_date, days_count,
@@ -30875,12 +27982,9 @@ SELECT
   NOW(),
   NOW()
 FROM rental_clients c
-WHERE c.name ILIKE '%Наталья Жукова%' 
-   OR c.director_name ILIKE '%Наталья Жукова%'
-   OR 'Наталья Жукова' ILIKE '%' || c.name || '%'
-   OR 'Наталья Жукова' ILIKE '%' || c.director_name || '%'
-LIMIT 1
-ON CONFLICT (order_number) DO NOTHING;
+WHERE (c.name = 'Наталья Жукова' OR c.director_name = 'Наталья Жукова')
+  AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 258)
+LIMIT 1;
 
 INSERT INTO rental_orders (
   order_number, client_id, status, start_date, end_date, days_count,
@@ -30907,12 +28011,9 @@ SELECT
   NOW(),
   NOW()
 FROM rental_clients c
-WHERE c.name ILIKE '%Эдик Заказы для групп%' 
-   OR c.director_name ILIKE '%Эдик Заказы для групп%'
-   OR 'Эдик Заказы для групп' ILIKE '%' || c.name || '%'
-   OR 'Эдик Заказы для групп' ILIKE '%' || c.director_name || '%'
-LIMIT 1
-ON CONFLICT (order_number) DO NOTHING;
+WHERE (c.name = 'Эдик Заказы для групп' OR c.director_name = 'Эдик Заказы для групп')
+  AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 257)
+LIMIT 1;
 
 INSERT INTO rental_orders (
   order_number, client_id, status, start_date, end_date, days_count,
@@ -30939,12 +28040,9 @@ SELECT
   NOW(),
   NOW()
 FROM rental_clients c
-WHERE c.name ILIKE '%Татьяна (Гольфстрим)%' 
-   OR c.director_name ILIKE '%Татьяна (Гольфстрим)%'
-   OR 'Татьяна (Гольфстрим)' ILIKE '%' || c.name || '%'
-   OR 'Татьяна (Гольфстрим)' ILIKE '%' || c.director_name || '%'
-LIMIT 1
-ON CONFLICT (order_number) DO NOTHING;
+WHERE (c.name = 'Татьяна (Гольфстрим)' OR c.director_name = 'Татьяна (Гольфстрим)')
+  AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 256)
+LIMIT 1;
 
 INSERT INTO rental_orders (
   order_number, client_id, status, start_date, end_date, days_count,
@@ -30971,12 +28069,9 @@ SELECT
   NOW(),
   NOW()
 FROM rental_clients c
-WHERE c.name ILIKE '%Гульнара%' 
-   OR c.director_name ILIKE '%Гульнара%'
-   OR 'Гульнара' ILIKE '%' || c.name || '%'
-   OR 'Гульнара' ILIKE '%' || c.director_name || '%'
-LIMIT 1
-ON CONFLICT (order_number) DO NOTHING;
+WHERE (c.name = 'Гульнара' OR c.director_name = 'Гульнара')
+  AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 255)
+LIMIT 1;
 
 INSERT INTO rental_orders (
   order_number, client_id, status, start_date, end_date, days_count,
@@ -31003,12 +28098,9 @@ SELECT
   NOW(),
   NOW()
 FROM rental_clients c
-WHERE c.name ILIKE '%Камила Ягудина%' 
-   OR c.director_name ILIKE '%Камила Ягудина%'
-   OR 'Камила Ягудина' ILIKE '%' || c.name || '%'
-   OR 'Камила Ягудина' ILIKE '%' || c.director_name || '%'
-LIMIT 1
-ON CONFLICT (order_number) DO NOTHING;
+WHERE (c.name = 'Камила Ягудина' OR c.director_name = 'Камила Ягудина')
+  AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 254)
+LIMIT 1;
 
 INSERT INTO rental_orders (
   order_number, client_id, status, start_date, end_date, days_count,
@@ -31035,12 +28127,9 @@ SELECT
   NOW(),
   NOW()
 FROM rental_clients c
-WHERE c.name ILIKE '%Игорь Воронов%' 
-   OR c.director_name ILIKE '%Игорь Воронов%'
-   OR 'Игорь Воронов' ILIKE '%' || c.name || '%'
-   OR 'Игорь Воронов' ILIKE '%' || c.director_name || '%'
-LIMIT 1
-ON CONFLICT (order_number) DO NOTHING;
+WHERE (c.name = 'Игорь Воронов' OR c.director_name = 'Игорь Воронов')
+  AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 253)
+LIMIT 1;
 
 INSERT INTO rental_orders (
   order_number, client_id, status, start_date, end_date, days_count,
@@ -31067,12 +28156,9 @@ SELECT
   NOW(),
   NOW()
 FROM rental_clients c
-WHERE c.name ILIKE '%Нина Салькова%' 
-   OR c.director_name ILIKE '%Нина Салькова%'
-   OR 'Нина Салькова' ILIKE '%' || c.name || '%'
-   OR 'Нина Салькова' ILIKE '%' || c.director_name || '%'
-LIMIT 1
-ON CONFLICT (order_number) DO NOTHING;
+WHERE (c.name = 'Нина Салькова' OR c.director_name = 'Нина Салькова')
+  AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 252)
+LIMIT 1;
 
 INSERT INTO rental_orders (
   order_number, client_id, status, start_date, end_date, days_count,
@@ -31099,12 +28185,9 @@ SELECT
   NOW(),
   NOW()
 FROM rental_clients c
-WHERE c.name ILIKE '%Ирина Михайловна%' 
-   OR c.director_name ILIKE '%Ирина Михайловна%'
-   OR 'Ирина Михайловна' ILIKE '%' || c.name || '%'
-   OR 'Ирина Михайловна' ILIKE '%' || c.director_name || '%'
-LIMIT 1
-ON CONFLICT (order_number) DO NOTHING;
+WHERE (c.name = 'Ирина Михайловна' OR c.director_name = 'Ирина Михайловна')
+  AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 251)
+LIMIT 1;
 
 INSERT INTO rental_orders (
   order_number, client_id, status, start_date, end_date, days_count,
@@ -31131,12 +28214,9 @@ SELECT
   NOW(),
   NOW()
 FROM rental_clients c
-WHERE c.name ILIKE '%Камила Ягудина%' 
-   OR c.director_name ILIKE '%Камила Ягудина%'
-   OR 'Камила Ягудина' ILIKE '%' || c.name || '%'
-   OR 'Камила Ягудина' ILIKE '%' || c.director_name || '%'
-LIMIT 1
-ON CONFLICT (order_number) DO NOTHING;
+WHERE (c.name = 'Камила Ягудина' OR c.director_name = 'Камила Ягудина')
+  AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 250)
+LIMIT 1;
 
 INSERT INTO rental_orders (
   order_number, client_id, status, start_date, end_date, days_count,
@@ -31163,12 +28243,9 @@ SELECT
   NOW(),
   NOW()
 FROM rental_clients c
-WHERE c.name ILIKE '%Игорь Воронов%' 
-   OR c.director_name ILIKE '%Игорь Воронов%'
-   OR 'Игорь Воронов' ILIKE '%' || c.name || '%'
-   OR 'Игорь Воронов' ILIKE '%' || c.director_name || '%'
-LIMIT 1
-ON CONFLICT (order_number) DO NOTHING;
+WHERE (c.name = 'Игорь Воронов' OR c.director_name = 'Игорь Воронов')
+  AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 249)
+LIMIT 1;
 
 INSERT INTO rental_orders (
   order_number, client_id, status, start_date, end_date, days_count,
@@ -31195,12 +28272,9 @@ SELECT
   NOW(),
   NOW()
 FROM rental_clients c
-WHERE c.name ILIKE '%Юлианна%' 
-   OR c.director_name ILIKE '%Юлианна%'
-   OR 'Юлианна' ILIKE '%' || c.name || '%'
-   OR 'Юлианна' ILIKE '%' || c.director_name || '%'
-LIMIT 1
-ON CONFLICT (order_number) DO NOTHING;
+WHERE (c.name = 'Юлианна' OR c.director_name = 'Юлианна')
+  AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 248)
+LIMIT 1;
 
 INSERT INTO rental_orders (
   order_number, client_id, status, start_date, end_date, days_count,
@@ -31227,12 +28301,9 @@ SELECT
   NOW(),
   NOW()
 FROM rental_clients c
-WHERE c.name ILIKE '%Евгения Заговорина%' 
-   OR c.director_name ILIKE '%Евгения Заговорина%'
-   OR 'Евгения Заговорина' ILIKE '%' || c.name || '%'
-   OR 'Евгения Заговорина' ILIKE '%' || c.director_name || '%'
-LIMIT 1
-ON CONFLICT (order_number) DO NOTHING;
+WHERE (c.name = 'Евгения Заговорина' OR c.director_name = 'Евгения Заговорина')
+  AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 247)
+LIMIT 1;
 
 INSERT INTO rental_orders (
   order_number, client_id, status, start_date, end_date, days_count,
@@ -31259,12 +28330,9 @@ SELECT
   NOW(),
   NOW()
 FROM rental_clients c
-WHERE c.name ILIKE '%Мира (ИП)%' 
-   OR c.director_name ILIKE '%Мира (ИП)%'
-   OR 'Мира (ИП)' ILIKE '%' || c.name || '%'
-   OR 'Мира (ИП)' ILIKE '%' || c.director_name || '%'
-LIMIT 1
-ON CONFLICT (order_number) DO NOTHING;
+WHERE (c.name = 'Мира (ИП)' OR c.director_name = 'Мира (ИП)')
+  AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 246)
+LIMIT 1;
 
 INSERT INTO rental_orders (
   order_number, client_id, status, start_date, end_date, days_count,
@@ -31291,12 +28359,9 @@ SELECT
   NOW(),
   NOW()
 FROM rental_clients c
-WHERE c.name ILIKE '%Мира (ИП)%' 
-   OR c.director_name ILIKE '%Мира (ИП)%'
-   OR 'Мира (ИП)' ILIKE '%' || c.name || '%'
-   OR 'Мира (ИП)' ILIKE '%' || c.director_name || '%'
-LIMIT 1
-ON CONFLICT (order_number) DO NOTHING;
+WHERE (c.name = 'Мира (ИП)' OR c.director_name = 'Мира (ИП)')
+  AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 245)
+LIMIT 1;
 
 INSERT INTO rental_orders (
   order_number, client_id, status, start_date, end_date, days_count,
@@ -31323,12 +28388,9 @@ SELECT
   NOW(),
   NOW()
 FROM rental_clients c
-WHERE c.name ILIKE '%Мира (ИП)%' 
-   OR c.director_name ILIKE '%Мира (ИП)%'
-   OR 'Мира (ИП)' ILIKE '%' || c.name || '%'
-   OR 'Мира (ИП)' ILIKE '%' || c.director_name || '%'
-LIMIT 1
-ON CONFLICT (order_number) DO NOTHING;
+WHERE (c.name = 'Мира (ИП)' OR c.director_name = 'Мира (ИП)')
+  AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 244)
+LIMIT 1;
 
 INSERT INTO rental_orders (
   order_number, client_id, status, start_date, end_date, days_count,
@@ -31355,12 +28417,9 @@ SELECT
   NOW(),
   NOW()
 FROM rental_clients c
-WHERE c.name ILIKE '%Салькова Нина%' 
-   OR c.director_name ILIKE '%Салькова Нина%'
-   OR 'Салькова Нина' ILIKE '%' || c.name || '%'
-   OR 'Салькова Нина' ILIKE '%' || c.director_name || '%'
-LIMIT 1
-ON CONFLICT (order_number) DO NOTHING;
+WHERE (c.name = 'Салькова Нина' OR c.director_name = 'Салькова Нина')
+  AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 243)
+LIMIT 1;
 
 INSERT INTO rental_orders (
   order_number, client_id, status, start_date, end_date, days_count,
@@ -31387,12 +28446,9 @@ SELECT
   NOW(),
   NOW()
 FROM rental_clients c
-WHERE c.name ILIKE '%Наталья Рыжкова%' 
-   OR c.director_name ILIKE '%Наталья Рыжкова%'
-   OR 'Наталья Рыжкова' ILIKE '%' || c.name || '%'
-   OR 'Наталья Рыжкова' ILIKE '%' || c.director_name || '%'
-LIMIT 1
-ON CONFLICT (order_number) DO NOTHING;
+WHERE (c.name = 'Наталья Рыжкова' OR c.director_name = 'Наталья Рыжкова')
+  AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 242)
+LIMIT 1;
 
 INSERT INTO rental_orders (
   order_number, client_id, status, start_date, end_date, days_count,
@@ -31419,12 +28475,9 @@ SELECT
   NOW(),
   NOW()
 FROM rental_clients c
-WHERE c.name ILIKE '%Элина (Сититур)%' 
-   OR c.director_name ILIKE '%Элина (Сититур)%'
-   OR 'Элина (Сититур)' ILIKE '%' || c.name || '%'
-   OR 'Элина (Сититур)' ILIKE '%' || c.director_name || '%'
-LIMIT 1
-ON CONFLICT (order_number) DO NOTHING;
+WHERE (c.name = 'Элина (Сититур)' OR c.director_name = 'Элина (Сититур)')
+  AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 241)
+LIMIT 1;
 
 INSERT INTO rental_orders (
   order_number, client_id, status, start_date, end_date, days_count,
@@ -31451,12 +28504,9 @@ SELECT
   NOW(),
   NOW()
 FROM rental_clients c
-WHERE c.name ILIKE '%Артем Агафонов%' 
-   OR c.director_name ILIKE '%Артем Агафонов%'
-   OR 'Артем Агафонов' ILIKE '%' || c.name || '%'
-   OR 'Артем Агафонов' ILIKE '%' || c.director_name || '%'
-LIMIT 1
-ON CONFLICT (order_number) DO NOTHING;
+WHERE (c.name = 'Артем Агафонов' OR c.director_name = 'Артем Агафонов')
+  AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 240)
+LIMIT 1;
 
 INSERT INTO rental_orders (
   order_number, client_id, status, start_date, end_date, days_count,
@@ -31483,12 +28533,9 @@ SELECT
   NOW(),
   NOW()
 FROM rental_clients c
-WHERE c.name ILIKE '%Гульнара%' 
-   OR c.director_name ILIKE '%Гульнара%'
-   OR 'Гульнара' ILIKE '%' || c.name || '%'
-   OR 'Гульнара' ILIKE '%' || c.director_name || '%'
-LIMIT 1
-ON CONFLICT (order_number) DO NOTHING;
+WHERE (c.name = 'Гульнара' OR c.director_name = 'Гульнара')
+  AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 239)
+LIMIT 1;
 
 INSERT INTO rental_orders (
   order_number, client_id, status, start_date, end_date, days_count,
@@ -31515,12 +28562,9 @@ SELECT
   NOW(),
   NOW()
 FROM rental_clients c
-WHERE c.name ILIKE '%Юлианна%' 
-   OR c.director_name ILIKE '%Юлианна%'
-   OR 'Юлианна' ILIKE '%' || c.name || '%'
-   OR 'Юлианна' ILIKE '%' || c.director_name || '%'
-LIMIT 1
-ON CONFLICT (order_number) DO NOTHING;
+WHERE (c.name = 'Юлианна' OR c.director_name = 'Юлианна')
+  AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 238)
+LIMIT 1;
 
 INSERT INTO rental_orders (
   order_number, client_id, status, start_date, end_date, days_count,
@@ -31547,12 +28591,9 @@ SELECT
   NOW(),
   NOW()
 FROM rental_clients c
-WHERE c.name ILIKE '%Юлианна%' 
-   OR c.director_name ILIKE '%Юлианна%'
-   OR 'Юлианна' ILIKE '%' || c.name || '%'
-   OR 'Юлианна' ILIKE '%' || c.director_name || '%'
-LIMIT 1
-ON CONFLICT (order_number) DO NOTHING;
+WHERE (c.name = 'Юлианна' OR c.director_name = 'Юлианна')
+  AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 237)
+LIMIT 1;
 
 INSERT INTO rental_orders (
   order_number, client_id, status, start_date, end_date, days_count,
@@ -31579,12 +28620,9 @@ SELECT
   NOW(),
   NOW()
 FROM rental_clients c
-WHERE c.name ILIKE '%Автокруиз%' 
-   OR c.director_name ILIKE '%Автокруиз%'
-   OR 'Автокруиз' ILIKE '%' || c.name || '%'
-   OR 'Автокруиз' ILIKE '%' || c.director_name || '%'
-LIMIT 1
-ON CONFLICT (order_number) DO NOTHING;
+WHERE (c.name = 'Автокруиз' OR c.director_name = 'Автокруиз')
+  AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 236)
+LIMIT 1;
 
 INSERT INTO rental_orders (
   order_number, client_id, status, start_date, end_date, days_count,
@@ -31611,12 +28649,9 @@ SELECT
   NOW(),
   NOW()
 FROM rental_clients c
-WHERE c.name ILIKE '%Мария%' 
-   OR c.director_name ILIKE '%Мария%'
-   OR 'Мария' ILIKE '%' || c.name || '%'
-   OR 'Мария' ILIKE '%' || c.director_name || '%'
-LIMIT 1
-ON CONFLICT (order_number) DO NOTHING;
+WHERE (c.name = 'Мария' OR c.director_name = 'Мария')
+  AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 235)
+LIMIT 1;
 
 INSERT INTO rental_orders (
   order_number, client_id, status, start_date, end_date, days_count,
@@ -31643,12 +28678,9 @@ SELECT
   NOW(),
   NOW()
 FROM rental_clients c
-WHERE c.name ILIKE '%Оксана%' 
-   OR c.director_name ILIKE '%Оксана%'
-   OR 'Оксана' ILIKE '%' || c.name || '%'
-   OR 'Оксана' ILIKE '%' || c.director_name || '%'
-LIMIT 1
-ON CONFLICT (order_number) DO NOTHING;
+WHERE (c.name = 'Оксана' OR c.director_name = 'Оксана')
+  AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 234)
+LIMIT 1;
 
 INSERT INTO rental_orders (
   order_number, client_id, status, start_date, end_date, days_count,
@@ -31675,12 +28707,9 @@ SELECT
   NOW(),
   NOW()
 FROM rental_clients c
-WHERE c.name ILIKE '%Эдик Заказы для групп%' 
-   OR c.director_name ILIKE '%Эдик Заказы для групп%'
-   OR 'Эдик Заказы для групп' ILIKE '%' || c.name || '%'
-   OR 'Эдик Заказы для групп' ILIKE '%' || c.director_name || '%'
-LIMIT 1
-ON CONFLICT (order_number) DO NOTHING;
+WHERE (c.name = 'Эдик Заказы для групп' OR c.director_name = 'Эдик Заказы для групп')
+  AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 232)
+LIMIT 1;
 
 INSERT INTO rental_orders (
   order_number, client_id, status, start_date, end_date, days_count,
@@ -31707,12 +28736,9 @@ SELECT
   NOW(),
   NOW()
 FROM rental_clients c
-WHERE c.name ILIKE '%Эдик Заказы для групп%' 
-   OR c.director_name ILIKE '%Эдик Заказы для групп%'
-   OR 'Эдик Заказы для групп' ILIKE '%' || c.name || '%'
-   OR 'Эдик Заказы для групп' ILIKE '%' || c.director_name || '%'
-LIMIT 1
-ON CONFLICT (order_number) DO NOTHING;
+WHERE (c.name = 'Эдик Заказы для групп' OR c.director_name = 'Эдик Заказы для групп')
+  AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 231)
+LIMIT 1;
 
 INSERT INTO rental_orders (
   order_number, client_id, status, start_date, end_date, days_count,
@@ -31739,12 +28765,9 @@ SELECT
   NOW(),
   NOW()
 FROM rental_clients c
-WHERE c.name ILIKE '%Эдик Заказы для групп%' 
-   OR c.director_name ILIKE '%Эдик Заказы для групп%'
-   OR 'Эдик Заказы для групп' ILIKE '%' || c.name || '%'
-   OR 'Эдик Заказы для групп' ILIKE '%' || c.director_name || '%'
-LIMIT 1
-ON CONFLICT (order_number) DO NOTHING;
+WHERE (c.name = 'Эдик Заказы для групп' OR c.director_name = 'Эдик Заказы для групп')
+  AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 230)
+LIMIT 1;
 
 INSERT INTO rental_orders (
   order_number, client_id, status, start_date, end_date, days_count,
@@ -31771,12 +28794,9 @@ SELECT
   NOW(),
   NOW()
 FROM rental_clients c
-WHERE c.name ILIKE '%Анюта Родионова (Родина-тур)%' 
-   OR c.director_name ILIKE '%Анюта Родионова (Родина-тур)%'
-   OR 'Анюта Родионова (Родина-тур)' ILIKE '%' || c.name || '%'
-   OR 'Анюта Родионова (Родина-тур)' ILIKE '%' || c.director_name || '%'
-LIMIT 1
-ON CONFLICT (order_number) DO NOTHING;
+WHERE (c.name = 'Анюта Родионова (Родина-тур)' OR c.director_name = 'Анюта Родионова (Родина-тур)')
+  AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 229)
+LIMIT 1;
 
 INSERT INTO rental_orders (
   order_number, client_id, status, start_date, end_date, days_count,
@@ -31803,12 +28823,9 @@ SELECT
   NOW(),
   NOW()
 FROM rental_clients c
-WHERE c.name ILIKE '%Клиент%' 
-   OR c.director_name ILIKE '%Клиент%'
-   OR 'Клиент' ILIKE '%' || c.name || '%'
-   OR 'Клиент' ILIKE '%' || c.director_name || '%'
-LIMIT 1
-ON CONFLICT (order_number) DO NOTHING;
+WHERE (c.name = 'Клиент' OR c.director_name = 'Клиент')
+  AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 228)
+LIMIT 1;
 
 INSERT INTO rental_orders (
   order_number, client_id, status, start_date, end_date, days_count,
@@ -31835,12 +28852,9 @@ SELECT
   NOW(),
   NOW()
 FROM rental_clients c
-WHERE c.name ILIKE '%Галия%' 
-   OR c.director_name ILIKE '%Галия%'
-   OR 'Галия' ILIKE '%' || c.name || '%'
-   OR 'Галия' ILIKE '%' || c.director_name || '%'
-LIMIT 1
-ON CONFLICT (order_number) DO NOTHING;
+WHERE (c.name = 'Галия' OR c.director_name = 'Галия')
+  AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 227)
+LIMIT 1;
 
 INSERT INTO rental_orders (
   order_number, client_id, status, start_date, end_date, days_count,
@@ -31867,12 +28881,9 @@ SELECT
   NOW(),
   NOW()
 FROM rental_clients c
-WHERE c.name ILIKE '%Андрей Вологда%' 
-   OR c.director_name ILIKE '%Андрей Вологда%'
-   OR 'Андрей Вологда' ILIKE '%' || c.name || '%'
-   OR 'Андрей Вологда' ILIKE '%' || c.director_name || '%'
-LIMIT 1
-ON CONFLICT (order_number) DO NOTHING;
+WHERE (c.name = 'Андрей Вологда' OR c.director_name = 'Андрей Вологда')
+  AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 226)
+LIMIT 1;
 
 INSERT INTO rental_orders (
   order_number, client_id, status, start_date, end_date, days_count,
@@ -31899,12 +28910,9 @@ SELECT
   NOW(),
   NOW()
 FROM rental_clients c
-WHERE c.name ILIKE '%Сергей%' 
-   OR c.director_name ILIKE '%Сергей%'
-   OR 'Сергей' ILIKE '%' || c.name || '%'
-   OR 'Сергей' ILIKE '%' || c.director_name || '%'
-LIMIT 1
-ON CONFLICT (order_number) DO NOTHING;
+WHERE (c.name = 'Сергей' OR c.director_name = 'Сергей')
+  AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 225)
+LIMIT 1;
 
 INSERT INTO rental_orders (
   order_number, client_id, status, start_date, end_date, days_count,
@@ -31931,12 +28939,9 @@ SELECT
   NOW(),
   NOW()
 FROM rental_clients c
-WHERE c.name ILIKE '%Мира (ИП)%' 
-   OR c.director_name ILIKE '%Мира (ИП)%'
-   OR 'Мира (ИП)' ILIKE '%' || c.name || '%'
-   OR 'Мира (ИП)' ILIKE '%' || c.director_name || '%'
-LIMIT 1
-ON CONFLICT (order_number) DO NOTHING;
+WHERE (c.name = 'Мира (ИП)' OR c.director_name = 'Мира (ИП)')
+  AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 224)
+LIMIT 1;
 
 INSERT INTO rental_orders (
   order_number, client_id, status, start_date, end_date, days_count,
@@ -31963,12 +28968,9 @@ SELECT
   NOW(),
   NOW()
 FROM rental_clients c
-WHERE c.name ILIKE '%Зельфира%' 
-   OR c.director_name ILIKE '%Зельфира%'
-   OR 'Зельфира' ILIKE '%' || c.name || '%'
-   OR 'Зельфира' ILIKE '%' || c.director_name || '%'
-LIMIT 1
-ON CONFLICT (order_number) DO NOTHING;
+WHERE (c.name = 'Зельфира' OR c.director_name = 'Зельфира')
+  AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 223)
+LIMIT 1;
 
 INSERT INTO rental_orders (
   order_number, client_id, status, start_date, end_date, days_count,
@@ -31995,12 +28997,9 @@ SELECT
   NOW(),
   NOW()
 FROM rental_clients c
-WHERE c.name ILIKE '%Юлианна%' 
-   OR c.director_name ILIKE '%Юлианна%'
-   OR 'Юлианна' ILIKE '%' || c.name || '%'
-   OR 'Юлианна' ILIKE '%' || c.director_name || '%'
-LIMIT 1
-ON CONFLICT (order_number) DO NOTHING;
+WHERE (c.name = 'Юлианна' OR c.director_name = 'Юлианна')
+  AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 222)
+LIMIT 1;
 
 INSERT INTO rental_orders (
   order_number, client_id, status, start_date, end_date, days_count,
@@ -32027,12 +29026,9 @@ SELECT
   NOW(),
   NOW()
 FROM rental_clients c
-WHERE c.name ILIKE '%Камилла%' 
-   OR c.director_name ILIKE '%Камилла%'
-   OR 'Камилла' ILIKE '%' || c.name || '%'
-   OR 'Камилла' ILIKE '%' || c.director_name || '%'
-LIMIT 1
-ON CONFLICT (order_number) DO NOTHING;
+WHERE (c.name = 'Камилла' OR c.director_name = 'Камилла')
+  AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 221)
+LIMIT 1;
 
 INSERT INTO rental_orders (
   order_number, client_id, status, start_date, end_date, days_count,
@@ -32059,12 +29055,9 @@ SELECT
   NOW(),
   NOW()
 FROM rental_clients c
-WHERE c.name ILIKE '%Мария Экскурсовод%' 
-   OR c.director_name ILIKE '%Мария Экскурсовод%'
-   OR 'Мария Экскурсовод' ILIKE '%' || c.name || '%'
-   OR 'Мария Экскурсовод' ILIKE '%' || c.director_name || '%'
-LIMIT 1
-ON CONFLICT (order_number) DO NOTHING;
+WHERE (c.name = 'Мария Экскурсовод' OR c.director_name = 'Мария Экскурсовод')
+  AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 220)
+LIMIT 1;
 
 INSERT INTO rental_orders (
   order_number, client_id, status, start_date, end_date, days_count,
@@ -32091,12 +29084,9 @@ SELECT
   NOW(),
   NOW()
 FROM rental_clients c
-WHERE c.name ILIKE '%Наталья%' 
-   OR c.director_name ILIKE '%Наталья%'
-   OR 'Наталья' ILIKE '%' || c.name || '%'
-   OR 'Наталья' ILIKE '%' || c.director_name || '%'
-LIMIT 1
-ON CONFLICT (order_number) DO NOTHING;
+WHERE (c.name = 'Наталья' OR c.director_name = 'Наталья')
+  AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 219)
+LIMIT 1;
 
 INSERT INTO rental_orders (
   order_number, client_id, status, start_date, end_date, days_count,
@@ -32123,12 +29113,9 @@ SELECT
   NOW(),
   NOW()
 FROM rental_clients c
-WHERE c.name ILIKE '%Гульназ%' 
-   OR c.director_name ILIKE '%Гульназ%'
-   OR 'Гульназ' ILIKE '%' || c.name || '%'
-   OR 'Гульназ' ILIKE '%' || c.director_name || '%'
-LIMIT 1
-ON CONFLICT (order_number) DO NOTHING;
+WHERE (c.name = 'Гульназ' OR c.director_name = 'Гульназ')
+  AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 218)
+LIMIT 1;
 
 INSERT INTO rental_orders (
   order_number, client_id, status, start_date, end_date, days_count,
@@ -32155,12 +29142,9 @@ SELECT
   NOW(),
   NOW()
 FROM rental_clients c
-WHERE c.name ILIKE '%Клиент%' 
-   OR c.director_name ILIKE '%Клиент%'
-   OR 'Клиент' ILIKE '%' || c.name || '%'
-   OR 'Клиент' ILIKE '%' || c.director_name || '%'
-LIMIT 1
-ON CONFLICT (order_number) DO NOTHING;
+WHERE (c.name = 'Клиент' OR c.director_name = 'Клиент')
+  AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 217)
+LIMIT 1;
 
 INSERT INTO rental_orders (
   order_number, client_id, status, start_date, end_date, days_count,
@@ -32187,12 +29171,9 @@ SELECT
   NOW(),
   NOW()
 FROM rental_clients c
-WHERE c.name ILIKE '%Алина Минеева%' 
-   OR c.director_name ILIKE '%Алина Минеева%'
-   OR 'Алина Минеева' ILIKE '%' || c.name || '%'
-   OR 'Алина Минеева' ILIKE '%' || c.director_name || '%'
-LIMIT 1
-ON CONFLICT (order_number) DO NOTHING;
+WHERE (c.name = 'Алина Минеева' OR c.director_name = 'Алина Минеева')
+  AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 216)
+LIMIT 1;
 
 INSERT INTO rental_orders (
   order_number, client_id, status, start_date, end_date, days_count,
@@ -32219,12 +29200,9 @@ SELECT
   NOW(),
   NOW()
 FROM rental_clients c
-WHERE c.name ILIKE '%Алина Минеева%' 
-   OR c.director_name ILIKE '%Алина Минеева%'
-   OR 'Алина Минеева' ILIKE '%' || c.name || '%'
-   OR 'Алина Минеева' ILIKE '%' || c.director_name || '%'
-LIMIT 1
-ON CONFLICT (order_number) DO NOTHING;
+WHERE (c.name = 'Алина Минеева' OR c.director_name = 'Алина Минеева')
+  AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 215)
+LIMIT 1;
 
 INSERT INTO rental_orders (
   order_number, client_id, status, start_date, end_date, days_count,
@@ -32251,12 +29229,9 @@ SELECT
   NOW(),
   NOW()
 FROM rental_clients c
-WHERE c.name ILIKE '%Алина Минеева%' 
-   OR c.director_name ILIKE '%Алина Минеева%'
-   OR 'Алина Минеева' ILIKE '%' || c.name || '%'
-   OR 'Алина Минеева' ILIKE '%' || c.director_name || '%'
-LIMIT 1
-ON CONFLICT (order_number) DO NOTHING;
+WHERE (c.name = 'Алина Минеева' OR c.director_name = 'Алина Минеева')
+  AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 214)
+LIMIT 1;
 
 INSERT INTO rental_orders (
   order_number, client_id, status, start_date, end_date, days_count,
@@ -32283,12 +29258,9 @@ SELECT
   NOW(),
   NOW()
 FROM rental_clients c
-WHERE c.name ILIKE '%Юлия Воронова%' 
-   OR c.director_name ILIKE '%Юлия Воронова%'
-   OR 'Юлия Воронова' ILIKE '%' || c.name || '%'
-   OR 'Юлия Воронова' ILIKE '%' || c.director_name || '%'
-LIMIT 1
-ON CONFLICT (order_number) DO NOTHING;
+WHERE (c.name = 'Юлия Воронова' OR c.director_name = 'Юлия Воронова')
+  AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 213)
+LIMIT 1;
 
 INSERT INTO rental_orders (
   order_number, client_id, status, start_date, end_date, days_count,
@@ -32315,12 +29287,9 @@ SELECT
   NOW(),
   NOW()
 FROM rental_clients c
-WHERE c.name ILIKE '%Юлия Воронова%' 
-   OR c.director_name ILIKE '%Юлия Воронова%'
-   OR 'Юлия Воронова' ILIKE '%' || c.name || '%'
-   OR 'Юлия Воронова' ILIKE '%' || c.director_name || '%'
-LIMIT 1
-ON CONFLICT (order_number) DO NOTHING;
+WHERE (c.name = 'Юлия Воронова' OR c.director_name = 'Юлия Воронова')
+  AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 212)
+LIMIT 1;
 
 INSERT INTO rental_orders (
   order_number, client_id, status, start_date, end_date, days_count,
@@ -32347,12 +29316,9 @@ SELECT
   NOW(),
   NOW()
 FROM rental_clients c
-WHERE c.name ILIKE '%Екатерина Кореева%' 
-   OR c.director_name ILIKE '%Екатерина Кореева%'
-   OR 'Екатерина Кореева' ILIKE '%' || c.name || '%'
-   OR 'Екатерина Кореева' ILIKE '%' || c.director_name || '%'
-LIMIT 1
-ON CONFLICT (order_number) DO NOTHING;
+WHERE (c.name = 'Екатерина Кореева' OR c.director_name = 'Екатерина Кореева')
+  AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 211)
+LIMIT 1;
 
 INSERT INTO rental_orders (
   order_number, client_id, status, start_date, end_date, days_count,
@@ -32379,12 +29345,9 @@ SELECT
   NOW(),
   NOW()
 FROM rental_clients c
-WHERE c.name ILIKE '%Камила Ягудина%' 
-   OR c.director_name ILIKE '%Камила Ягудина%'
-   OR 'Камила Ягудина' ILIKE '%' || c.name || '%'
-   OR 'Камила Ягудина' ILIKE '%' || c.director_name || '%'
-LIMIT 1
-ON CONFLICT (order_number) DO NOTHING;
+WHERE (c.name = 'Камила Ягудина' OR c.director_name = 'Камила Ягудина')
+  AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 210)
+LIMIT 1;
 
 INSERT INTO rental_orders (
   order_number, client_id, status, start_date, end_date, days_count,
@@ -32411,12 +29374,9 @@ SELECT
   NOW(),
   NOW()
 FROM rental_clients c
-WHERE c.name ILIKE '%Зельфира%' 
-   OR c.director_name ILIKE '%Зельфира%'
-   OR 'Зельфира' ILIKE '%' || c.name || '%'
-   OR 'Зельфира' ILIKE '%' || c.director_name || '%'
-LIMIT 1
-ON CONFLICT (order_number) DO NOTHING;
+WHERE (c.name = 'Зельфира' OR c.director_name = 'Зельфира')
+  AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 208)
+LIMIT 1;
 
 INSERT INTO rental_orders (
   order_number, client_id, status, start_date, end_date, days_count,
@@ -32443,12 +29403,9 @@ SELECT
   NOW(),
   NOW()
 FROM rental_clients c
-WHERE c.name ILIKE '%Юлианна%' 
-   OR c.director_name ILIKE '%Юлианна%'
-   OR 'Юлианна' ILIKE '%' || c.name || '%'
-   OR 'Юлианна' ILIKE '%' || c.director_name || '%'
-LIMIT 1
-ON CONFLICT (order_number) DO NOTHING;
+WHERE (c.name = 'Юлианна' OR c.director_name = 'Юлианна')
+  AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 207)
+LIMIT 1;
 
 INSERT INTO rental_orders (
   order_number, client_id, status, start_date, end_date, days_count,
@@ -32475,12 +29432,9 @@ SELECT
   NOW(),
   NOW()
 FROM rental_clients c
-WHERE c.name ILIKE '%Мария Экскурсовод%' 
-   OR c.director_name ILIKE '%Мария Экскурсовод%'
-   OR 'Мария Экскурсовод' ILIKE '%' || c.name || '%'
-   OR 'Мария Экскурсовод' ILIKE '%' || c.director_name || '%'
-LIMIT 1
-ON CONFLICT (order_number) DO NOTHING;
+WHERE (c.name = 'Мария Экскурсовод' OR c.director_name = 'Мария Экскурсовод')
+  AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 206)
+LIMIT 1;
 
 INSERT INTO rental_orders (
   order_number, client_id, status, start_date, end_date, days_count,
@@ -32507,12 +29461,9 @@ SELECT
   NOW(),
   NOW()
 FROM rental_clients c
-WHERE c.name ILIKE '%Гульнара%' 
-   OR c.director_name ILIKE '%Гульнара%'
-   OR 'Гульнара' ILIKE '%' || c.name || '%'
-   OR 'Гульнара' ILIKE '%' || c.director_name || '%'
-LIMIT 1
-ON CONFLICT (order_number) DO NOTHING;
+WHERE (c.name = 'Гульнара' OR c.director_name = 'Гульнара')
+  AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 205)
+LIMIT 1;
 
 INSERT INTO rental_orders (
   order_number, client_id, status, start_date, end_date, days_count,
@@ -32539,12 +29490,9 @@ SELECT
   NOW(),
   NOW()
 FROM rental_clients c
-WHERE c.name ILIKE '%Гульнара%' 
-   OR c.director_name ILIKE '%Гульнара%'
-   OR 'Гульнара' ILIKE '%' || c.name || '%'
-   OR 'Гульнара' ILIKE '%' || c.director_name || '%'
-LIMIT 1
-ON CONFLICT (order_number) DO NOTHING;
+WHERE (c.name = 'Гульнара' OR c.director_name = 'Гульнара')
+  AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 204)
+LIMIT 1;
 
 INSERT INTO rental_orders (
   order_number, client_id, status, start_date, end_date, days_count,
@@ -32571,12 +29519,9 @@ SELECT
   NOW(),
   NOW()
 FROM rental_clients c
-WHERE c.name ILIKE '%Алёна Лазука%' 
-   OR c.director_name ILIKE '%Алёна Лазука%'
-   OR 'Алёна Лазука' ILIKE '%' || c.name || '%'
-   OR 'Алёна Лазука' ILIKE '%' || c.director_name || '%'
-LIMIT 1
-ON CONFLICT (order_number) DO NOTHING;
+WHERE (c.name = 'Алёна Лазука' OR c.director_name = 'Алёна Лазука')
+  AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 203)
+LIMIT 1;
 
 INSERT INTO rental_orders (
   order_number, client_id, status, start_date, end_date, days_count,
@@ -32603,12 +29548,9 @@ SELECT
   NOW(),
   NOW()
 FROM rental_clients c
-WHERE c.name ILIKE '%Автокруиз%' 
-   OR c.director_name ILIKE '%Автокруиз%'
-   OR 'Автокруиз' ILIKE '%' || c.name || '%'
-   OR 'Автокруиз' ILIKE '%' || c.director_name || '%'
-LIMIT 1
-ON CONFLICT (order_number) DO NOTHING;
+WHERE (c.name = 'Автокруиз' OR c.director_name = 'Автокруиз')
+  AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 202)
+LIMIT 1;
 
 INSERT INTO rental_orders (
   order_number, client_id, status, start_date, end_date, days_count,
@@ -32635,12 +29577,9 @@ SELECT
   NOW(),
   NOW()
 FROM rental_clients c
-WHERE c.name ILIKE '%Зельфира%' 
-   OR c.director_name ILIKE '%Зельфира%'
-   OR 'Зельфира' ILIKE '%' || c.name || '%'
-   OR 'Зельфира' ILIKE '%' || c.director_name || '%'
-LIMIT 1
-ON CONFLICT (order_number) DO NOTHING;
+WHERE (c.name = 'Зельфира' OR c.director_name = 'Зельфира')
+  AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 201)
+LIMIT 1;
 
 INSERT INTO rental_orders (
   order_number, client_id, status, start_date, end_date, days_count,
@@ -32667,12 +29606,9 @@ SELECT
   NOW(),
   NOW()
 FROM rental_clients c
-WHERE c.name ILIKE '%Наталья Рыжкова%' 
-   OR c.director_name ILIKE '%Наталья Рыжкова%'
-   OR 'Наталья Рыжкова' ILIKE '%' || c.name || '%'
-   OR 'Наталья Рыжкова' ILIKE '%' || c.director_name || '%'
-LIMIT 1
-ON CONFLICT (order_number) DO NOTHING;
+WHERE (c.name = 'Наталья Рыжкова' OR c.director_name = 'Наталья Рыжкова')
+  AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 200)
+LIMIT 1;
 
 INSERT INTO rental_orders (
   order_number, client_id, status, start_date, end_date, days_count,
@@ -32699,12 +29635,9 @@ SELECT
   NOW(),
   NOW()
 FROM rental_clients c
-WHERE c.name ILIKE '%Лиля Экскурсовод%' 
-   OR c.director_name ILIKE '%Лиля Экскурсовод%'
-   OR 'Лиля Экскурсовод' ILIKE '%' || c.name || '%'
-   OR 'Лиля Экскурсовод' ILIKE '%' || c.director_name || '%'
-LIMIT 1
-ON CONFLICT (order_number) DO NOTHING;
+WHERE (c.name = 'Лиля Экскурсовод' OR c.director_name = 'Лиля Экскурсовод')
+  AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 199)
+LIMIT 1;
 
 INSERT INTO rental_orders (
   order_number, client_id, status, start_date, end_date, days_count,
@@ -32731,12 +29664,9 @@ SELECT
   NOW(),
   NOW()
 FROM rental_clients c
-WHERE c.name ILIKE '%Татьяна (Гольфстрим)%' 
-   OR c.director_name ILIKE '%Татьяна (Гольфстрим)%'
-   OR 'Татьяна (Гольфстрим)' ILIKE '%' || c.name || '%'
-   OR 'Татьяна (Гольфстрим)' ILIKE '%' || c.director_name || '%'
-LIMIT 1
-ON CONFLICT (order_number) DO NOTHING;
+WHERE (c.name = 'Татьяна (Гольфстрим)' OR c.director_name = 'Татьяна (Гольфстрим)')
+  AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 198)
+LIMIT 1;
 
 INSERT INTO rental_orders (
   order_number, client_id, status, start_date, end_date, days_count,
@@ -32763,12 +29693,9 @@ SELECT
   NOW(),
   NOW()
 FROM rental_clients c
-WHERE c.name ILIKE '%Татьяна (Гольфстрим)%' 
-   OR c.director_name ILIKE '%Татьяна (Гольфстрим)%'
-   OR 'Татьяна (Гольфстрим)' ILIKE '%' || c.name || '%'
-   OR 'Татьяна (Гольфстрим)' ILIKE '%' || c.director_name || '%'
-LIMIT 1
-ON CONFLICT (order_number) DO NOTHING;
+WHERE (c.name = 'Татьяна (Гольфстрим)' OR c.director_name = 'Татьяна (Гольфстрим)')
+  AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 197)
+LIMIT 1;
 
 INSERT INTO rental_orders (
   order_number, client_id, status, start_date, end_date, days_count,
@@ -32795,12 +29722,9 @@ SELECT
   NOW(),
   NOW()
 FROM rental_clients c
-WHERE c.name ILIKE '%Татьяна (Гольфстрим)%' 
-   OR c.director_name ILIKE '%Татьяна (Гольфстрим)%'
-   OR 'Татьяна (Гольфстрим)' ILIKE '%' || c.name || '%'
-   OR 'Татьяна (Гольфстрим)' ILIKE '%' || c.director_name || '%'
-LIMIT 1
-ON CONFLICT (order_number) DO NOTHING;
+WHERE (c.name = 'Татьяна (Гольфстрим)' OR c.director_name = 'Татьяна (Гольфстрим)')
+  AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 196)
+LIMIT 1;
 
 INSERT INTO rental_orders (
   order_number, client_id, status, start_date, end_date, days_count,
@@ -32827,12 +29751,9 @@ SELECT
   NOW(),
   NOW()
 FROM rental_clients c
-WHERE c.name ILIKE '%Сергей%' 
-   OR c.director_name ILIKE '%Сергей%'
-   OR 'Сергей' ILIKE '%' || c.name || '%'
-   OR 'Сергей' ILIKE '%' || c.director_name || '%'
-LIMIT 1
-ON CONFLICT (order_number) DO NOTHING;
+WHERE (c.name = 'Сергей' OR c.director_name = 'Сергей')
+  AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 195)
+LIMIT 1;
 
 INSERT INTO rental_orders (
   order_number, client_id, status, start_date, end_date, days_count,
@@ -32859,12 +29780,9 @@ SELECT
   NOW(),
   NOW()
 FROM rental_clients c
-WHERE c.name ILIKE '%Любовь Ким%' 
-   OR c.director_name ILIKE '%Любовь Ким%'
-   OR 'Любовь Ким' ILIKE '%' || c.name || '%'
-   OR 'Любовь Ким' ILIKE '%' || c.director_name || '%'
-LIMIT 1
-ON CONFLICT (order_number) DO NOTHING;
+WHERE (c.name = 'Любовь Ким' OR c.director_name = 'Любовь Ким')
+  AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 194)
+LIMIT 1;
 
 INSERT INTO rental_orders (
   order_number, client_id, status, start_date, end_date, days_count,
@@ -32891,12 +29809,9 @@ SELECT
   NOW(),
   NOW()
 FROM rental_clients c
-WHERE c.name ILIKE '%Мария Экскурсовод%' 
-   OR c.director_name ILIKE '%Мария Экскурсовод%'
-   OR 'Мария Экскурсовод' ILIKE '%' || c.name || '%'
-   OR 'Мария Экскурсовод' ILIKE '%' || c.director_name || '%'
-LIMIT 1
-ON CONFLICT (order_number) DO NOTHING;
+WHERE (c.name = 'Мария Экскурсовод' OR c.director_name = 'Мария Экскурсовод')
+  AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 193)
+LIMIT 1;
 
 INSERT INTO rental_orders (
   order_number, client_id, status, start_date, end_date, days_count,
@@ -32923,12 +29838,9 @@ SELECT
   NOW(),
   NOW()
 FROM rental_clients c
-WHERE c.name ILIKE '%Андрей (Экскурс)%' 
-   OR c.director_name ILIKE '%Андрей (Экскурс)%'
-   OR 'Андрей (Экскурс)' ILIKE '%' || c.name || '%'
-   OR 'Андрей (Экскурс)' ILIKE '%' || c.director_name || '%'
-LIMIT 1
-ON CONFLICT (order_number) DO NOTHING;
+WHERE (c.name = 'Андрей (Экскурс)' OR c.director_name = 'Андрей (Экскурс)')
+  AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 192)
+LIMIT 1;
 
 INSERT INTO rental_orders (
   order_number, client_id, status, start_date, end_date, days_count,
@@ -32955,12 +29867,9 @@ SELECT
   NOW(),
   NOW()
 FROM rental_clients c
-WHERE c.name ILIKE '%Автокруиз%' 
-   OR c.director_name ILIKE '%Автокруиз%'
-   OR 'Автокруиз' ILIKE '%' || c.name || '%'
-   OR 'Автокруиз' ILIKE '%' || c.director_name || '%'
-LIMIT 1
-ON CONFLICT (order_number) DO NOTHING;
+WHERE (c.name = 'Автокруиз' OR c.director_name = 'Автокруиз')
+  AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 191)
+LIMIT 1;
 
 INSERT INTO rental_orders (
   order_number, client_id, status, start_date, end_date, days_count,
@@ -32987,12 +29896,9 @@ SELECT
   NOW(),
   NOW()
 FROM rental_clients c
-WHERE c.name ILIKE '%Юлианна%' 
-   OR c.director_name ILIKE '%Юлианна%'
-   OR 'Юлианна' ILIKE '%' || c.name || '%'
-   OR 'Юлианна' ILIKE '%' || c.director_name || '%'
-LIMIT 1
-ON CONFLICT (order_number) DO NOTHING;
+WHERE (c.name = 'Юлианна' OR c.director_name = 'Юлианна')
+  AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 190)
+LIMIT 1;
 
 INSERT INTO rental_orders (
   order_number, client_id, status, start_date, end_date, days_count,
@@ -33019,12 +29925,9 @@ SELECT
   NOW(),
   NOW()
 FROM rental_clients c
-WHERE c.name ILIKE '%Юлианна%' 
-   OR c.director_name ILIKE '%Юлианна%'
-   OR 'Юлианна' ILIKE '%' || c.name || '%'
-   OR 'Юлианна' ILIKE '%' || c.director_name || '%'
-LIMIT 1
-ON CONFLICT (order_number) DO NOTHING;
+WHERE (c.name = 'Юлианна' OR c.director_name = 'Юлианна')
+  AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 189)
+LIMIT 1;
 
 INSERT INTO rental_orders (
   order_number, client_id, status, start_date, end_date, days_count,
@@ -33051,12 +29954,9 @@ SELECT
   NOW(),
   NOW()
 FROM rental_clients c
-WHERE c.name ILIKE '%Галина Тур Москва%' 
-   OR c.director_name ILIKE '%Галина Тур Москва%'
-   OR 'Галина Тур Москва' ILIKE '%' || c.name || '%'
-   OR 'Галина Тур Москва' ILIKE '%' || c.director_name || '%'
-LIMIT 1
-ON CONFLICT (order_number) DO NOTHING;
+WHERE (c.name = 'Галина Тур Москва' OR c.director_name = 'Галина Тур Москва')
+  AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 188)
+LIMIT 1;
 
 INSERT INTO rental_orders (
   order_number, client_id, status, start_date, end_date, days_count,
@@ -33083,12 +29983,9 @@ SELECT
   NOW(),
   NOW()
 FROM rental_clients c
-WHERE c.name ILIKE '%Зельфира%' 
-   OR c.director_name ILIKE '%Зельфира%'
-   OR 'Зельфира' ILIKE '%' || c.name || '%'
-   OR 'Зельфира' ILIKE '%' || c.director_name || '%'
-LIMIT 1
-ON CONFLICT (order_number) DO NOTHING;
+WHERE (c.name = 'Зельфира' OR c.director_name = 'Зельфира')
+  AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 187)
+LIMIT 1;
 
 INSERT INTO rental_orders (
   order_number, client_id, status, start_date, end_date, days_count,
@@ -33115,12 +30012,9 @@ SELECT
   NOW(),
   NOW()
 FROM rental_clients c
-WHERE c.name ILIKE '%Зельфира%' 
-   OR c.director_name ILIKE '%Зельфира%'
-   OR 'Зельфира' ILIKE '%' || c.name || '%'
-   OR 'Зельфира' ILIKE '%' || c.director_name || '%'
-LIMIT 1
-ON CONFLICT (order_number) DO NOTHING;
+WHERE (c.name = 'Зельфира' OR c.director_name = 'Зельфира')
+  AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 186)
+LIMIT 1;
 
 INSERT INTO rental_orders (
   order_number, client_id, status, start_date, end_date, days_count,
@@ -33147,12 +30041,9 @@ SELECT
   NOW(),
   NOW()
 FROM rental_clients c
-WHERE c.name ILIKE '%Снежана%' 
-   OR c.director_name ILIKE '%Снежана%'
-   OR 'Снежана' ILIKE '%' || c.name || '%'
-   OR 'Снежана' ILIKE '%' || c.director_name || '%'
-LIMIT 1
-ON CONFLICT (order_number) DO NOTHING;
+WHERE (c.name = 'Снежана' OR c.director_name = 'Снежана')
+  AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 185)
+LIMIT 1;
 
 INSERT INTO rental_orders (
   order_number, client_id, status, start_date, end_date, days_count,
@@ -33179,12 +30070,9 @@ SELECT
   NOW(),
   NOW()
 FROM rental_clients c
-WHERE c.name ILIKE '%Автокруиз%' 
-   OR c.director_name ILIKE '%Автокруиз%'
-   OR 'Автокруиз' ILIKE '%' || c.name || '%'
-   OR 'Автокруиз' ILIKE '%' || c.director_name || '%'
-LIMIT 1
-ON CONFLICT (order_number) DO NOTHING;
+WHERE (c.name = 'Автокруиз' OR c.director_name = 'Автокруиз')
+  AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 184)
+LIMIT 1;
 
 INSERT INTO rental_orders (
   order_number, client_id, status, start_date, end_date, days_count,
@@ -33211,12 +30099,9 @@ SELECT
   NOW(),
   NOW()
 FROM rental_clients c
-WHERE c.name ILIKE '%Лиля Экскурсовод%' 
-   OR c.director_name ILIKE '%Лиля Экскурсовод%'
-   OR 'Лиля Экскурсовод' ILIKE '%' || c.name || '%'
-   OR 'Лиля Экскурсовод' ILIKE '%' || c.director_name || '%'
-LIMIT 1
-ON CONFLICT (order_number) DO NOTHING;
+WHERE (c.name = 'Лиля Экскурсовод' OR c.director_name = 'Лиля Экскурсовод')
+  AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 183)
+LIMIT 1;
 
 INSERT INTO rental_orders (
   order_number, client_id, status, start_date, end_date, days_count,
@@ -33243,12 +30128,9 @@ SELECT
   NOW(),
   NOW()
 FROM rental_clients c
-WHERE c.name ILIKE '%Мария Экскурсовод%' 
-   OR c.director_name ILIKE '%Мария Экскурсовод%'
-   OR 'Мария Экскурсовод' ILIKE '%' || c.name || '%'
-   OR 'Мария Экскурсовод' ILIKE '%' || c.director_name || '%'
-LIMIT 1
-ON CONFLICT (order_number) DO NOTHING;
+WHERE (c.name = 'Мария Экскурсовод' OR c.director_name = 'Мария Экскурсовод')
+  AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 182)
+LIMIT 1;
 
 INSERT INTO rental_orders (
   order_number, client_id, status, start_date, end_date, days_count,
@@ -33275,12 +30157,9 @@ SELECT
   NOW(),
   NOW()
 FROM rental_clients c
-WHERE c.name ILIKE '%Татьяна Чуб%' 
-   OR c.director_name ILIKE '%Татьяна Чуб%'
-   OR 'Татьяна Чуб' ILIKE '%' || c.name || '%'
-   OR 'Татьяна Чуб' ILIKE '%' || c.director_name || '%'
-LIMIT 1
-ON CONFLICT (order_number) DO NOTHING;
+WHERE (c.name = 'Татьяна Чуб' OR c.director_name = 'Татьяна Чуб')
+  AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 181)
+LIMIT 1;
 
 INSERT INTO rental_orders (
   order_number, client_id, status, start_date, end_date, days_count,
@@ -33307,12 +30186,9 @@ SELECT
   NOW(),
   NOW()
 FROM rental_clients c
-WHERE c.name ILIKE '%Андрей Вологда%' 
-   OR c.director_name ILIKE '%Андрей Вологда%'
-   OR 'Андрей Вологда' ILIKE '%' || c.name || '%'
-   OR 'Андрей Вологда' ILIKE '%' || c.director_name || '%'
-LIMIT 1
-ON CONFLICT (order_number) DO NOTHING;
+WHERE (c.name = 'Андрей Вологда' OR c.director_name = 'Андрей Вологда')
+  AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 180)
+LIMIT 1;
 
 INSERT INTO rental_orders (
   order_number, client_id, status, start_date, end_date, days_count,
@@ -33339,12 +30215,9 @@ SELECT
   NOW(),
   NOW()
 FROM rental_clients c
-WHERE c.name ILIKE '%Гульнара%' 
-   OR c.director_name ILIKE '%Гульнара%'
-   OR 'Гульнара' ILIKE '%' || c.name || '%'
-   OR 'Гульнара' ILIKE '%' || c.director_name || '%'
-LIMIT 1
-ON CONFLICT (order_number) DO NOTHING;
+WHERE (c.name = 'Гульнара' OR c.director_name = 'Гульнара')
+  AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 179)
+LIMIT 1;
 
 INSERT INTO rental_orders (
   order_number, client_id, status, start_date, end_date, days_count,
@@ -33371,12 +30244,9 @@ SELECT
   NOW(),
   NOW()
 FROM rental_clients c
-WHERE c.name ILIKE '%Наталья%' 
-   OR c.director_name ILIKE '%Наталья%'
-   OR 'Наталья' ILIKE '%' || c.name || '%'
-   OR 'Наталья' ILIKE '%' || c.director_name || '%'
-LIMIT 1
-ON CONFLICT (order_number) DO NOTHING;
+WHERE (c.name = 'Наталья' OR c.director_name = 'Наталья')
+  AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 178)
+LIMIT 1;
 
 INSERT INTO rental_orders (
   order_number, client_id, status, start_date, end_date, days_count,
@@ -33403,12 +30273,9 @@ SELECT
   NOW(),
   NOW()
 FROM rental_clients c
-WHERE c.name ILIKE '%Галия%' 
-   OR c.director_name ILIKE '%Галия%'
-   OR 'Галия' ILIKE '%' || c.name || '%'
-   OR 'Галия' ILIKE '%' || c.director_name || '%'
-LIMIT 1
-ON CONFLICT (order_number) DO NOTHING;
+WHERE (c.name = 'Галия' OR c.director_name = 'Галия')
+  AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 177)
+LIMIT 1;
 
 INSERT INTO rental_orders (
   order_number, client_id, status, start_date, end_date, days_count,
@@ -33435,12 +30302,9 @@ SELECT
   NOW(),
   NOW()
 FROM rental_clients c
-WHERE c.name ILIKE '%Анюта Родионова (Родина-тур)%' 
-   OR c.director_name ILIKE '%Анюта Родионова (Родина-тур)%'
-   OR 'Анюта Родионова (Родина-тур)' ILIKE '%' || c.name || '%'
-   OR 'Анюта Родионова (Родина-тур)' ILIKE '%' || c.director_name || '%'
-LIMIT 1
-ON CONFLICT (order_number) DO NOTHING;
+WHERE (c.name = 'Анюта Родионова (Родина-тур)' OR c.director_name = 'Анюта Родионова (Родина-тур)')
+  AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 176)
+LIMIT 1;
 
 INSERT INTO rental_orders (
   order_number, client_id, status, start_date, end_date, days_count,
@@ -33467,12 +30331,9 @@ SELECT
   NOW(),
   NOW()
 FROM rental_clients c
-WHERE c.name ILIKE '%Элина (Сититур)%' 
-   OR c.director_name ILIKE '%Элина (Сититур)%'
-   OR 'Элина (Сититур)' ILIKE '%' || c.name || '%'
-   OR 'Элина (Сититур)' ILIKE '%' || c.director_name || '%'
-LIMIT 1
-ON CONFLICT (order_number) DO NOTHING;
+WHERE (c.name = 'Элина (Сититур)' OR c.director_name = 'Элина (Сититур)')
+  AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 175)
+LIMIT 1;
 
 INSERT INTO rental_orders (
   order_number, client_id, status, start_date, end_date, days_count,
@@ -33499,12 +30360,9 @@ SELECT
   NOW(),
   NOW()
 FROM rental_clients c
-WHERE c.name ILIKE '%Гульфия%' 
-   OR c.director_name ILIKE '%Гульфия%'
-   OR 'Гульфия' ILIKE '%' || c.name || '%'
-   OR 'Гульфия' ILIKE '%' || c.director_name || '%'
-LIMIT 1
-ON CONFLICT (order_number) DO NOTHING;
+WHERE (c.name = 'Гульфия' OR c.director_name = 'Гульфия')
+  AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 174)
+LIMIT 1;
 
 INSERT INTO rental_orders (
   order_number, client_id, status, start_date, end_date, days_count,
@@ -33531,12 +30389,9 @@ SELECT
   NOW(),
   NOW()
 FROM rental_clients c
-WHERE c.name ILIKE '%Юлианна%' 
-   OR c.director_name ILIKE '%Юлианна%'
-   OR 'Юлианна' ILIKE '%' || c.name || '%'
-   OR 'Юлианна' ILIKE '%' || c.director_name || '%'
-LIMIT 1
-ON CONFLICT (order_number) DO NOTHING;
+WHERE (c.name = 'Юлианна' OR c.director_name = 'Юлианна')
+  AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 173)
+LIMIT 1;
 
 INSERT INTO rental_orders (
   order_number, client_id, status, start_date, end_date, days_count,
@@ -33563,12 +30418,9 @@ SELECT
   NOW(),
   NOW()
 FROM rental_clients c
-WHERE c.name ILIKE '%Лиля Экскурсовод%' 
-   OR c.director_name ILIKE '%Лиля Экскурсовод%'
-   OR 'Лиля Экскурсовод' ILIKE '%' || c.name || '%'
-   OR 'Лиля Экскурсовод' ILIKE '%' || c.director_name || '%'
-LIMIT 1
-ON CONFLICT (order_number) DO NOTHING;
+WHERE (c.name = 'Лиля Экскурсовод' OR c.director_name = 'Лиля Экскурсовод')
+  AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 172)
+LIMIT 1;
 
 INSERT INTO rental_orders (
   order_number, client_id, status, start_date, end_date, days_count,
@@ -33595,12 +30447,9 @@ SELECT
   NOW(),
   NOW()
 FROM rental_clients c
-WHERE c.name ILIKE '%Татьяна (Гольфстрим)%' 
-   OR c.director_name ILIKE '%Татьяна (Гольфстрим)%'
-   OR 'Татьяна (Гольфстрим)' ILIKE '%' || c.name || '%'
-   OR 'Татьяна (Гольфстрим)' ILIKE '%' || c.director_name || '%'
-LIMIT 1
-ON CONFLICT (order_number) DO NOTHING;
+WHERE (c.name = 'Татьяна (Гольфстрим)' OR c.director_name = 'Татьяна (Гольфстрим)')
+  AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 171)
+LIMIT 1;
 
 INSERT INTO rental_orders (
   order_number, client_id, status, start_date, end_date, days_count,
@@ -33627,12 +30476,9 @@ SELECT
   NOW(),
   NOW()
 FROM rental_clients c
-WHERE c.name ILIKE '%Татьяна (Гольфстрим)%' 
-   OR c.director_name ILIKE '%Татьяна (Гольфстрим)%'
-   OR 'Татьяна (Гольфстрим)' ILIKE '%' || c.name || '%'
-   OR 'Татьяна (Гольфстрим)' ILIKE '%' || c.director_name || '%'
-LIMIT 1
-ON CONFLICT (order_number) DO NOTHING;
+WHERE (c.name = 'Татьяна (Гольфстрим)' OR c.director_name = 'Татьяна (Гольфстрим)')
+  AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 170)
+LIMIT 1;
 
 INSERT INTO rental_orders (
   order_number, client_id, status, start_date, end_date, days_count,
@@ -33659,12 +30505,9 @@ SELECT
   NOW(),
   NOW()
 FROM rental_clients c
-WHERE c.name ILIKE '%Мария Экскурсовод%' 
-   OR c.director_name ILIKE '%Мария Экскурсовод%'
-   OR 'Мария Экскурсовод' ILIKE '%' || c.name || '%'
-   OR 'Мария Экскурсовод' ILIKE '%' || c.director_name || '%'
-LIMIT 1
-ON CONFLICT (order_number) DO NOTHING;
+WHERE (c.name = 'Мария Экскурсовод' OR c.director_name = 'Мария Экскурсовод')
+  AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 169)
+LIMIT 1;
 
 INSERT INTO rental_orders (
   order_number, client_id, status, start_date, end_date, days_count,
@@ -33691,12 +30534,9 @@ SELECT
   NOW(),
   NOW()
 FROM rental_clients c
-WHERE c.name ILIKE '%Гульнара%' 
-   OR c.director_name ILIKE '%Гульнара%'
-   OR 'Гульнара' ILIKE '%' || c.name || '%'
-   OR 'Гульнара' ILIKE '%' || c.director_name || '%'
-LIMIT 1
-ON CONFLICT (order_number) DO NOTHING;
+WHERE (c.name = 'Гульнара' OR c.director_name = 'Гульнара')
+  AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 168)
+LIMIT 1;
 
 INSERT INTO rental_orders (
   order_number, client_id, status, start_date, end_date, days_count,
@@ -33723,12 +30563,9 @@ SELECT
   NOW(),
   NOW()
 FROM rental_clients c
-WHERE c.name ILIKE '%Зельфира%' 
-   OR c.director_name ILIKE '%Зельфира%'
-   OR 'Зельфира' ILIKE '%' || c.name || '%'
-   OR 'Зельфира' ILIKE '%' || c.director_name || '%'
-LIMIT 1
-ON CONFLICT (order_number) DO NOTHING;
+WHERE (c.name = 'Зельфира' OR c.director_name = 'Зельфира')
+  AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 167)
+LIMIT 1;
 
 INSERT INTO rental_orders (
   order_number, client_id, status, start_date, end_date, days_count,
@@ -33755,12 +30592,9 @@ SELECT
   NOW(),
   NOW()
 FROM rental_clients c
-WHERE c.name ILIKE '%Светлана%' 
-   OR c.director_name ILIKE '%Светлана%'
-   OR 'Светлана' ILIKE '%' || c.name || '%'
-   OR 'Светлана' ILIKE '%' || c.director_name || '%'
-LIMIT 1
-ON CONFLICT (order_number) DO NOTHING;
+WHERE (c.name = 'Светлана' OR c.director_name = 'Светлана')
+  AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 166)
+LIMIT 1;
 
 INSERT INTO rental_orders (
   order_number, client_id, status, start_date, end_date, days_count,
@@ -33787,12 +30621,9 @@ SELECT
   NOW(),
   NOW()
 FROM rental_clients c
-WHERE c.name ILIKE '%Яна Янова%' 
-   OR c.director_name ILIKE '%Яна Янова%'
-   OR 'Яна Янова' ILIKE '%' || c.name || '%'
-   OR 'Яна Янова' ILIKE '%' || c.director_name || '%'
-LIMIT 1
-ON CONFLICT (order_number) DO NOTHING;
+WHERE (c.name = 'Яна Янова' OR c.director_name = 'Яна Янова')
+  AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 165)
+LIMIT 1;
 
 INSERT INTO rental_orders (
   order_number, client_id, status, start_date, end_date, days_count,
@@ -33819,12 +30650,9 @@ SELECT
   NOW(),
   NOW()
 FROM rental_clients c
-WHERE c.name ILIKE '%Мария Экскурсовод%' 
-   OR c.director_name ILIKE '%Мария Экскурсовод%'
-   OR 'Мария Экскурсовод' ILIKE '%' || c.name || '%'
-   OR 'Мария Экскурсовод' ILIKE '%' || c.director_name || '%'
-LIMIT 1
-ON CONFLICT (order_number) DO NOTHING;
+WHERE (c.name = 'Мария Экскурсовод' OR c.director_name = 'Мария Экскурсовод')
+  AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 164)
+LIMIT 1;
 
 INSERT INTO rental_orders (
   order_number, client_id, status, start_date, end_date, days_count,
@@ -33851,12 +30679,9 @@ SELECT
   NOW(),
   NOW()
 FROM rental_clients c
-WHERE c.name ILIKE '%Гульфия%' 
-   OR c.director_name ILIKE '%Гульфия%'
-   OR 'Гульфия' ILIKE '%' || c.name || '%'
-   OR 'Гульфия' ILIKE '%' || c.director_name || '%'
-LIMIT 1
-ON CONFLICT (order_number) DO NOTHING;
+WHERE (c.name = 'Гульфия' OR c.director_name = 'Гульфия')
+  AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 163)
+LIMIT 1;
 
 INSERT INTO rental_orders (
   order_number, client_id, status, start_date, end_date, days_count,
@@ -33883,12 +30708,9 @@ SELECT
   NOW(),
   NOW()
 FROM rental_clients c
-WHERE c.name ILIKE '%Светлана%' 
-   OR c.director_name ILIKE '%Светлана%'
-   OR 'Светлана' ILIKE '%' || c.name || '%'
-   OR 'Светлана' ILIKE '%' || c.director_name || '%'
-LIMIT 1
-ON CONFLICT (order_number) DO NOTHING;
+WHERE (c.name = 'Светлана' OR c.director_name = 'Светлана')
+  AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 162)
+LIMIT 1;
 
 INSERT INTO rental_orders (
   order_number, client_id, status, start_date, end_date, days_count,
@@ -33915,12 +30737,9 @@ SELECT
   NOW(),
   NOW()
 FROM rental_clients c
-WHERE c.name ILIKE '%Екатерина%' 
-   OR c.director_name ILIKE '%Екатерина%'
-   OR 'Екатерина' ILIKE '%' || c.name || '%'
-   OR 'Екатерина' ILIKE '%' || c.director_name || '%'
-LIMIT 1
-ON CONFLICT (order_number) DO NOTHING;
+WHERE (c.name = 'Екатерина' OR c.director_name = 'Екатерина')
+  AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 161)
+LIMIT 1;
 
 INSERT INTO rental_orders (
   order_number, client_id, status, start_date, end_date, days_count,
@@ -33947,12 +30766,9 @@ SELECT
   NOW(),
   NOW()
 FROM rental_clients c
-WHERE c.name ILIKE '%Рамис%' 
-   OR c.director_name ILIKE '%Рамис%'
-   OR 'Рамис' ILIKE '%' || c.name || '%'
-   OR 'Рамис' ILIKE '%' || c.director_name || '%'
-LIMIT 1
-ON CONFLICT (order_number) DO NOTHING;
+WHERE (c.name = 'Рамис' OR c.director_name = 'Рамис')
+  AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 160)
+LIMIT 1;
 
 INSERT INTO rental_orders (
   order_number, client_id, status, start_date, end_date, days_count,
@@ -33979,12 +30795,9 @@ SELECT
   NOW(),
   NOW()
 FROM rental_clients c
-WHERE c.name ILIKE '%Яна Янова%' 
-   OR c.director_name ILIKE '%Яна Янова%'
-   OR 'Яна Янова' ILIKE '%' || c.name || '%'
-   OR 'Яна Янова' ILIKE '%' || c.director_name || '%'
-LIMIT 1
-ON CONFLICT (order_number) DO NOTHING;
+WHERE (c.name = 'Яна Янова' OR c.director_name = 'Яна Янова')
+  AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 159)
+LIMIT 1;
 
 INSERT INTO rental_orders (
   order_number, client_id, status, start_date, end_date, days_count,
@@ -34011,12 +30824,9 @@ SELECT
   NOW(),
   NOW()
 FROM rental_clients c
-WHERE c.name ILIKE '%Елена Игнатьева%' 
-   OR c.director_name ILIKE '%Елена Игнатьева%'
-   OR 'Елена Игнатьева' ILIKE '%' || c.name || '%'
-   OR 'Елена Игнатьева' ILIKE '%' || c.director_name || '%'
-LIMIT 1
-ON CONFLICT (order_number) DO NOTHING;
+WHERE (c.name = 'Елена Игнатьева' OR c.director_name = 'Елена Игнатьева')
+  AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 158)
+LIMIT 1;
 
 INSERT INTO rental_orders (
   order_number, client_id, status, start_date, end_date, days_count,
@@ -34043,12 +30853,9 @@ SELECT
   NOW(),
   NOW()
 FROM rental_clients c
-WHERE c.name ILIKE '%Елена Экскурсовод%' 
-   OR c.director_name ILIKE '%Елена Экскурсовод%'
-   OR 'Елена Экскурсовод' ILIKE '%' || c.name || '%'
-   OR 'Елена Экскурсовод' ILIKE '%' || c.director_name || '%'
-LIMIT 1
-ON CONFLICT (order_number) DO NOTHING;
+WHERE (c.name = 'Елена Экскурсовод' OR c.director_name = 'Елена Экскурсовод')
+  AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 157)
+LIMIT 1;
 
 INSERT INTO rental_orders (
   order_number, client_id, status, start_date, end_date, days_count,
@@ -34075,12 +30882,9 @@ SELECT
   NOW(),
   NOW()
 FROM rental_clients c
-WHERE c.name ILIKE '%Юлия Воронова%' 
-   OR c.director_name ILIKE '%Юлия Воронова%'
-   OR 'Юлия Воронова' ILIKE '%' || c.name || '%'
-   OR 'Юлия Воронова' ILIKE '%' || c.director_name || '%'
-LIMIT 1
-ON CONFLICT (order_number) DO NOTHING;
+WHERE (c.name = 'Юлия Воронова' OR c.director_name = 'Юлия Воронова')
+  AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 156)
+LIMIT 1;
 
 INSERT INTO rental_orders (
   order_number, client_id, status, start_date, end_date, days_count,
@@ -34107,12 +30911,9 @@ SELECT
   NOW(),
   NOW()
 FROM rental_clients c
-WHERE c.name ILIKE '%Мира (ИП)%' 
-   OR c.director_name ILIKE '%Мира (ИП)%'
-   OR 'Мира (ИП)' ILIKE '%' || c.name || '%'
-   OR 'Мира (ИП)' ILIKE '%' || c.director_name || '%'
-LIMIT 1
-ON CONFLICT (order_number) DO NOTHING;
+WHERE (c.name = 'Мира (ИП)' OR c.director_name = 'Мира (ИП)')
+  AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 155)
+LIMIT 1;
 
 INSERT INTO rental_orders (
   order_number, client_id, status, start_date, end_date, days_count,
@@ -34139,12 +30940,9 @@ SELECT
   NOW(),
   NOW()
 FROM rental_clients c
-WHERE c.name ILIKE '%Эдик Заказы для групп%' 
-   OR c.director_name ILIKE '%Эдик Заказы для групп%'
-   OR 'Эдик Заказы для групп' ILIKE '%' || c.name || '%'
-   OR 'Эдик Заказы для групп' ILIKE '%' || c.director_name || '%'
-LIMIT 1
-ON CONFLICT (order_number) DO NOTHING;
+WHERE (c.name = 'Эдик Заказы для групп' OR c.director_name = 'Эдик Заказы для групп')
+  AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 154)
+LIMIT 1;
 
 INSERT INTO rental_orders (
   order_number, client_id, status, start_date, end_date, days_count,
@@ -34171,12 +30969,9 @@ SELECT
   NOW(),
   NOW()
 FROM rental_clients c
-WHERE c.name ILIKE '%Алина Сафина%' 
-   OR c.director_name ILIKE '%Алина Сафина%'
-   OR 'Алина Сафина' ILIKE '%' || c.name || '%'
-   OR 'Алина Сафина' ILIKE '%' || c.director_name || '%'
-LIMIT 1
-ON CONFLICT (order_number) DO NOTHING;
+WHERE (c.name = 'Алина Сафина' OR c.director_name = 'Алина Сафина')
+  AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 153)
+LIMIT 1;
 
 INSERT INTO rental_orders (
   order_number, client_id, status, start_date, end_date, days_count,
@@ -34203,12 +30998,9 @@ SELECT
   NOW(),
   NOW()
 FROM rental_clients c
-WHERE c.name ILIKE '%Наргиз%' 
-   OR c.director_name ILIKE '%Наргиз%'
-   OR 'Наргиз' ILIKE '%' || c.name || '%'
-   OR 'Наргиз' ILIKE '%' || c.director_name || '%'
-LIMIT 1
-ON CONFLICT (order_number) DO NOTHING;
+WHERE (c.name = 'Наргиз' OR c.director_name = 'Наргиз')
+  AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 152)
+LIMIT 1;
 
 INSERT INTO rental_orders (
   order_number, client_id, status, start_date, end_date, days_count,
@@ -34235,12 +31027,9 @@ SELECT
   NOW(),
   NOW()
 FROM rental_clients c
-WHERE c.name ILIKE '%Светлана%' 
-   OR c.director_name ILIKE '%Светлана%'
-   OR 'Светлана' ILIKE '%' || c.name || '%'
-   OR 'Светлана' ILIKE '%' || c.director_name || '%'
-LIMIT 1
-ON CONFLICT (order_number) DO NOTHING;
+WHERE (c.name = 'Светлана' OR c.director_name = 'Светлана')
+  AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 151)
+LIMIT 1;
 
 INSERT INTO rental_orders (
   order_number, client_id, status, start_date, end_date, days_count,
@@ -34267,12 +31056,9 @@ SELECT
   NOW(),
   NOW()
 FROM rental_clients c
-WHERE c.name ILIKE '%Татьяна (Гольфстрим)%' 
-   OR c.director_name ILIKE '%Татьяна (Гольфстрим)%'
-   OR 'Татьяна (Гольфстрим)' ILIKE '%' || c.name || '%'
-   OR 'Татьяна (Гольфстрим)' ILIKE '%' || c.director_name || '%'
-LIMIT 1
-ON CONFLICT (order_number) DO NOTHING;
+WHERE (c.name = 'Татьяна (Гольфстрим)' OR c.director_name = 'Татьяна (Гольфстрим)')
+  AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 150)
+LIMIT 1;
 
 INSERT INTO rental_orders (
   order_number, client_id, status, start_date, end_date, days_count,
@@ -34299,12 +31085,9 @@ SELECT
   NOW(),
   NOW()
 FROM rental_clients c
-WHERE c.name ILIKE '%Андрей Вологда%' 
-   OR c.director_name ILIKE '%Андрей Вологда%'
-   OR 'Андрей Вологда' ILIKE '%' || c.name || '%'
-   OR 'Андрей Вологда' ILIKE '%' || c.director_name || '%'
-LIMIT 1
-ON CONFLICT (order_number) DO NOTHING;
+WHERE (c.name = 'Андрей Вологда' OR c.director_name = 'Андрей Вологда')
+  AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 149)
+LIMIT 1;
 
 INSERT INTO rental_orders (
   order_number, client_id, status, start_date, end_date, days_count,
@@ -34331,12 +31114,9 @@ SELECT
   NOW(),
   NOW()
 FROM rental_clients c
-WHERE c.name ILIKE '%Мария Экскурсовод%' 
-   OR c.director_name ILIKE '%Мария Экскурсовод%'
-   OR 'Мария Экскурсовод' ILIKE '%' || c.name || '%'
-   OR 'Мария Экскурсовод' ILIKE '%' || c.director_name || '%'
-LIMIT 1
-ON CONFLICT (order_number) DO NOTHING;
+WHERE (c.name = 'Мария Экскурсовод' OR c.director_name = 'Мария Экскурсовод')
+  AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 148)
+LIMIT 1;
 
 INSERT INTO rental_orders (
   order_number, client_id, status, start_date, end_date, days_count,
@@ -34363,12 +31143,9 @@ SELECT
   NOW(),
   NOW()
 FROM rental_clients c
-WHERE c.name ILIKE '%Клиент%' 
-   OR c.director_name ILIKE '%Клиент%'
-   OR 'Клиент' ILIKE '%' || c.name || '%'
-   OR 'Клиент' ILIKE '%' || c.director_name || '%'
-LIMIT 1
-ON CONFLICT (order_number) DO NOTHING;
+WHERE (c.name = 'Клиент' OR c.director_name = 'Клиент')
+  AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 147)
+LIMIT 1;
 
 INSERT INTO rental_orders (
   order_number, client_id, status, start_date, end_date, days_count,
@@ -34395,12 +31172,9 @@ SELECT
   NOW(),
   NOW()
 FROM rental_clients c
-WHERE c.name ILIKE '%Ксения%' 
-   OR c.director_name ILIKE '%Ксения%'
-   OR 'Ксения' ILIKE '%' || c.name || '%'
-   OR 'Ксения' ILIKE '%' || c.director_name || '%'
-LIMIT 1
-ON CONFLICT (order_number) DO NOTHING;
+WHERE (c.name = 'Ксения' OR c.director_name = 'Ксения')
+  AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 146)
+LIMIT 1;
 
 INSERT INTO rental_orders (
   order_number, client_id, status, start_date, end_date, days_count,
@@ -34427,12 +31201,9 @@ SELECT
   NOW(),
   NOW()
 FROM rental_clients c
-WHERE c.name ILIKE '%Юлианна%' 
-   OR c.director_name ILIKE '%Юлианна%'
-   OR 'Юлианна' ILIKE '%' || c.name || '%'
-   OR 'Юлианна' ILIKE '%' || c.director_name || '%'
-LIMIT 1
-ON CONFLICT (order_number) DO NOTHING;
+WHERE (c.name = 'Юлианна' OR c.director_name = 'Юлианна')
+  AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 145)
+LIMIT 1;
 
 INSERT INTO rental_orders (
   order_number, client_id, status, start_date, end_date, days_count,
@@ -34459,12 +31230,9 @@ SELECT
   NOW(),
   NOW()
 FROM rental_clients c
-WHERE c.name ILIKE '%София%' 
-   OR c.director_name ILIKE '%София%'
-   OR 'София' ILIKE '%' || c.name || '%'
-   OR 'София' ILIKE '%' || c.director_name || '%'
-LIMIT 1
-ON CONFLICT (order_number) DO NOTHING;
+WHERE (c.name = 'София' OR c.director_name = 'София')
+  AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 144)
+LIMIT 1;
 
 INSERT INTO rental_orders (
   order_number, client_id, status, start_date, end_date, days_count,
@@ -34491,12 +31259,9 @@ SELECT
   NOW(),
   NOW()
 FROM rental_clients c
-WHERE c.name ILIKE '%Сергей%' 
-   OR c.director_name ILIKE '%Сергей%'
-   OR 'Сергей' ILIKE '%' || c.name || '%'
-   OR 'Сергей' ILIKE '%' || c.director_name || '%'
-LIMIT 1
-ON CONFLICT (order_number) DO NOTHING;
+WHERE (c.name = 'Сергей' OR c.director_name = 'Сергей')
+  AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 143)
+LIMIT 1;
 
 INSERT INTO rental_orders (
   order_number, client_id, status, start_date, end_date, days_count,
@@ -34523,12 +31288,9 @@ SELECT
   NOW(),
   NOW()
 FROM rental_clients c
-WHERE c.name ILIKE '%Яна Янова%' 
-   OR c.director_name ILIKE '%Яна Янова%'
-   OR 'Яна Янова' ILIKE '%' || c.name || '%'
-   OR 'Яна Янова' ILIKE '%' || c.director_name || '%'
-LIMIT 1
-ON CONFLICT (order_number) DO NOTHING;
+WHERE (c.name = 'Яна Янова' OR c.director_name = 'Яна Янова')
+  AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 142)
+LIMIT 1;
 
 INSERT INTO rental_orders (
   order_number, client_id, status, start_date, end_date, days_count,
@@ -34555,12 +31317,9 @@ SELECT
   NOW(),
   NOW()
 FROM rental_clients c
-WHERE c.name ILIKE '%Юлия Воронова%' 
-   OR c.director_name ILIKE '%Юлия Воронова%'
-   OR 'Юлия Воронова' ILIKE '%' || c.name || '%'
-   OR 'Юлия Воронова' ILIKE '%' || c.director_name || '%'
-LIMIT 1
-ON CONFLICT (order_number) DO NOTHING;
+WHERE (c.name = 'Юлия Воронова' OR c.director_name = 'Юлия Воронова')
+  AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 140)
+LIMIT 1;
 
 INSERT INTO rental_orders (
   order_number, client_id, status, start_date, end_date, days_count,
@@ -34587,12 +31346,9 @@ SELECT
   NOW(),
   NOW()
 FROM rental_clients c
-WHERE c.name ILIKE '%Яна Янова%' 
-   OR c.director_name ILIKE '%Яна Янова%'
-   OR 'Яна Янова' ILIKE '%' || c.name || '%'
-   OR 'Яна Янова' ILIKE '%' || c.director_name || '%'
-LIMIT 1
-ON CONFLICT (order_number) DO NOTHING;
+WHERE (c.name = 'Яна Янова' OR c.director_name = 'Яна Янова')
+  AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 139)
+LIMIT 1;
 
 INSERT INTO rental_orders (
   order_number, client_id, status, start_date, end_date, days_count,
@@ -34619,12 +31375,9 @@ SELECT
   NOW(),
   NOW()
 FROM rental_clients c
-WHERE c.name ILIKE '%Татьяна (Гольфстрим)%' 
-   OR c.director_name ILIKE '%Татьяна (Гольфстрим)%'
-   OR 'Татьяна (Гольфстрим)' ILIKE '%' || c.name || '%'
-   OR 'Татьяна (Гольфстрим)' ILIKE '%' || c.director_name || '%'
-LIMIT 1
-ON CONFLICT (order_number) DO NOTHING;
+WHERE (c.name = 'Татьяна (Гольфстрим)' OR c.director_name = 'Татьяна (Гольфстрим)')
+  AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 138)
+LIMIT 1;
 
 INSERT INTO rental_orders (
   order_number, client_id, status, start_date, end_date, days_count,
@@ -34651,12 +31404,9 @@ SELECT
   NOW(),
   NOW()
 FROM rental_clients c
-WHERE c.name ILIKE '%Наталья%' 
-   OR c.director_name ILIKE '%Наталья%'
-   OR 'Наталья' ILIKE '%' || c.name || '%'
-   OR 'Наталья' ILIKE '%' || c.director_name || '%'
-LIMIT 1
-ON CONFLICT (order_number) DO NOTHING;
+WHERE (c.name = 'Наталья' OR c.director_name = 'Наталья')
+  AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 137)
+LIMIT 1;
 
 INSERT INTO rental_orders (
   order_number, client_id, status, start_date, end_date, days_count,
@@ -34683,12 +31433,9 @@ SELECT
   NOW(),
   NOW()
 FROM rental_clients c
-WHERE c.name ILIKE '%Мария Экскурсовод%' 
-   OR c.director_name ILIKE '%Мария Экскурсовод%'
-   OR 'Мария Экскурсовод' ILIKE '%' || c.name || '%'
-   OR 'Мария Экскурсовод' ILIKE '%' || c.director_name || '%'
-LIMIT 1
-ON CONFLICT (order_number) DO NOTHING;
+WHERE (c.name = 'Мария Экскурсовод' OR c.director_name = 'Мария Экскурсовод')
+  AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 136)
+LIMIT 1;
 
 INSERT INTO rental_orders (
   order_number, client_id, status, start_date, end_date, days_count,
@@ -34715,12 +31462,9 @@ SELECT
   NOW(),
   NOW()
 FROM rental_clients c
-WHERE c.name ILIKE '%Анюта Родионова (Родина-тур)%' 
-   OR c.director_name ILIKE '%Анюта Родионова (Родина-тур)%'
-   OR 'Анюта Родионова (Родина-тур)' ILIKE '%' || c.name || '%'
-   OR 'Анюта Родионова (Родина-тур)' ILIKE '%' || c.director_name || '%'
-LIMIT 1
-ON CONFLICT (order_number) DO NOTHING;
+WHERE (c.name = 'Анюта Родионова (Родина-тур)' OR c.director_name = 'Анюта Родионова (Родина-тур)')
+  AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 135)
+LIMIT 1;
 
 INSERT INTO rental_orders (
   order_number, client_id, status, start_date, end_date, days_count,
@@ -34747,12 +31491,9 @@ SELECT
   NOW(),
   NOW()
 FROM rental_clients c
-WHERE c.name ILIKE '%Андрей (Экскурс)%' 
-   OR c.director_name ILIKE '%Андрей (Экскурс)%'
-   OR 'Андрей (Экскурс)' ILIKE '%' || c.name || '%'
-   OR 'Андрей (Экскурс)' ILIKE '%' || c.director_name || '%'
-LIMIT 1
-ON CONFLICT (order_number) DO NOTHING;
+WHERE (c.name = 'Андрей (Экскурс)' OR c.director_name = 'Андрей (Экскурс)')
+  AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 134)
+LIMIT 1;
 
 INSERT INTO rental_orders (
   order_number, client_id, status, start_date, end_date, days_count,
@@ -34779,12 +31520,9 @@ SELECT
   NOW(),
   NOW()
 FROM rental_clients c
-WHERE c.name ILIKE '%Зуфар(Аграрный Университет)%' 
-   OR c.director_name ILIKE '%Зуфар(Аграрный Университет)%'
-   OR 'Зуфар(Аграрный Университет)' ILIKE '%' || c.name || '%'
-   OR 'Зуфар(Аграрный Университет)' ILIKE '%' || c.director_name || '%'
-LIMIT 1
-ON CONFLICT (order_number) DO NOTHING;
+WHERE (c.name = 'Зуфар(Аграрный Университет)' OR c.director_name = 'Зуфар(Аграрный Университет)')
+  AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 133)
+LIMIT 1;
 
 INSERT INTO rental_orders (
   order_number, client_id, status, start_date, end_date, days_count,
@@ -34811,12 +31549,9 @@ SELECT
   NOW(),
   NOW()
 FROM rental_clients c
-WHERE c.name ILIKE '%Алсу%' 
-   OR c.director_name ILIKE '%Алсу%'
-   OR 'Алсу' ILIKE '%' || c.name || '%'
-   OR 'Алсу' ILIKE '%' || c.director_name || '%'
-LIMIT 1
-ON CONFLICT (order_number) DO NOTHING;
+WHERE (c.name = 'Алсу' OR c.director_name = 'Алсу')
+  AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 132)
+LIMIT 1;
 
 INSERT INTO rental_orders (
   order_number, client_id, status, start_date, end_date, days_count,
@@ -34843,12 +31578,9 @@ SELECT
   NOW(),
   NOW()
 FROM rental_clients c
-WHERE c.name ILIKE '%Алина Сафина%' 
-   OR c.director_name ILIKE '%Алина Сафина%'
-   OR 'Алина Сафина' ILIKE '%' || c.name || '%'
-   OR 'Алина Сафина' ILIKE '%' || c.director_name || '%'
-LIMIT 1
-ON CONFLICT (order_number) DO NOTHING;
+WHERE (c.name = 'Алина Сафина' OR c.director_name = 'Алина Сафина')
+  AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 131)
+LIMIT 1;
 
 INSERT INTO rental_orders (
   order_number, client_id, status, start_date, end_date, days_count,
@@ -34875,12 +31607,9 @@ SELECT
   NOW(),
   NOW()
 FROM rental_clients c
-WHERE c.name ILIKE '%Яна Янова%' 
-   OR c.director_name ILIKE '%Яна Янова%'
-   OR 'Яна Янова' ILIKE '%' || c.name || '%'
-   OR 'Яна Янова' ILIKE '%' || c.director_name || '%'
-LIMIT 1
-ON CONFLICT (order_number) DO NOTHING;
+WHERE (c.name = 'Яна Янова' OR c.director_name = 'Яна Янова')
+  AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 130)
+LIMIT 1;
 
 INSERT INTO rental_orders (
   order_number, client_id, status, start_date, end_date, days_count,
@@ -34907,12 +31636,9 @@ SELECT
   NOW(),
   NOW()
 FROM rental_clients c
-WHERE c.name ILIKE '%Сергей (Авангард)%' 
-   OR c.director_name ILIKE '%Сергей (Авангард)%'
-   OR 'Сергей (Авангард)' ILIKE '%' || c.name || '%'
-   OR 'Сергей (Авангард)' ILIKE '%' || c.director_name || '%'
-LIMIT 1
-ON CONFLICT (order_number) DO NOTHING;
+WHERE (c.name = 'Сергей (Авангард)' OR c.director_name = 'Сергей (Авангард)')
+  AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 129)
+LIMIT 1;
 
 INSERT INTO rental_orders (
   order_number, client_id, status, start_date, end_date, days_count,
@@ -34939,12 +31665,9 @@ SELECT
   NOW(),
   NOW()
 FROM rental_clients c
-WHERE c.name ILIKE '%Наталья%' 
-   OR c.director_name ILIKE '%Наталья%'
-   OR 'Наталья' ILIKE '%' || c.name || '%'
-   OR 'Наталья' ILIKE '%' || c.director_name || '%'
-LIMIT 1
-ON CONFLICT (order_number) DO NOTHING;
+WHERE (c.name = 'Наталья' OR c.director_name = 'Наталья')
+  AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 128)
+LIMIT 1;
 
 INSERT INTO rental_orders (
   order_number, client_id, status, start_date, end_date, days_count,
@@ -34971,12 +31694,9 @@ SELECT
   NOW(),
   NOW()
 FROM rental_clients c
-WHERE c.name ILIKE '%Яна Янова%' 
-   OR c.director_name ILIKE '%Яна Янова%'
-   OR 'Яна Янова' ILIKE '%' || c.name || '%'
-   OR 'Яна Янова' ILIKE '%' || c.director_name || '%'
-LIMIT 1
-ON CONFLICT (order_number) DO NOTHING;
+WHERE (c.name = 'Яна Янова' OR c.director_name = 'Яна Янова')
+  AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 127)
+LIMIT 1;
 
 INSERT INTO rental_orders (
   order_number, client_id, status, start_date, end_date, days_count,
@@ -35003,12 +31723,9 @@ SELECT
   NOW(),
   NOW()
 FROM rental_clients c
-WHERE c.name ILIKE '%Зельфира%' 
-   OR c.director_name ILIKE '%Зельфира%'
-   OR 'Зельфира' ILIKE '%' || c.name || '%'
-   OR 'Зельфира' ILIKE '%' || c.director_name || '%'
-LIMIT 1
-ON CONFLICT (order_number) DO NOTHING;
+WHERE (c.name = 'Зельфира' OR c.director_name = 'Зельфира')
+  AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 126)
+LIMIT 1;
 
 INSERT INTO rental_orders (
   order_number, client_id, status, start_date, end_date, days_count,
@@ -35035,12 +31752,9 @@ SELECT
   NOW(),
   NOW()
 FROM rental_clients c
-WHERE c.name ILIKE '%Алина Сафина%' 
-   OR c.director_name ILIKE '%Алина Сафина%'
-   OR 'Алина Сафина' ILIKE '%' || c.name || '%'
-   OR 'Алина Сафина' ILIKE '%' || c.director_name || '%'
-LIMIT 1
-ON CONFLICT (order_number) DO NOTHING;
+WHERE (c.name = 'Алина Сафина' OR c.director_name = 'Алина Сафина')
+  AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 125)
+LIMIT 1;
 
 INSERT INTO rental_orders (
   order_number, client_id, status, start_date, end_date, days_count,
@@ -35067,12 +31781,9 @@ SELECT
   NOW(),
   NOW()
 FROM rental_clients c
-WHERE c.name ILIKE '%Данил (Антей Групп)%' 
-   OR c.director_name ILIKE '%Данил (Антей Групп)%'
-   OR 'Данил (Антей Групп)' ILIKE '%' || c.name || '%'
-   OR 'Данил (Антей Групп)' ILIKE '%' || c.director_name || '%'
-LIMIT 1
-ON CONFLICT (order_number) DO NOTHING;
+WHERE (c.name = 'Данил (Антей Групп)' OR c.director_name = 'Данил (Антей Групп)')
+  AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 124)
+LIMIT 1;
 
 INSERT INTO rental_orders (
   order_number, client_id, status, start_date, end_date, days_count,
@@ -35099,12 +31810,9 @@ SELECT
   NOW(),
   NOW()
 FROM rental_clients c
-WHERE c.name ILIKE '%Марат Даутов%' 
-   OR c.director_name ILIKE '%Марат Даутов%'
-   OR 'Марат Даутов' ILIKE '%' || c.name || '%'
-   OR 'Марат Даутов' ILIKE '%' || c.director_name || '%'
-LIMIT 1
-ON CONFLICT (order_number) DO NOTHING;
+WHERE (c.name = 'Марат Даутов' OR c.director_name = 'Марат Даутов')
+  AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 123)
+LIMIT 1;
 
 INSERT INTO rental_orders (
   order_number, client_id, status, start_date, end_date, days_count,
@@ -35131,12 +31839,9 @@ SELECT
   NOW(),
   NOW()
 FROM rental_clients c
-WHERE c.name ILIKE '%Гульфия%' 
-   OR c.director_name ILIKE '%Гульфия%'
-   OR 'Гульфия' ILIKE '%' || c.name || '%'
-   OR 'Гульфия' ILIKE '%' || c.director_name || '%'
-LIMIT 1
-ON CONFLICT (order_number) DO NOTHING;
+WHERE (c.name = 'Гульфия' OR c.director_name = 'Гульфия')
+  AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 122)
+LIMIT 1;
 
 INSERT INTO rental_orders (
   order_number, client_id, status, start_date, end_date, days_count,
@@ -35163,12 +31868,9 @@ SELECT
   NOW(),
   NOW()
 FROM rental_clients c
-WHERE c.name ILIKE '%Рамис%' 
-   OR c.director_name ILIKE '%Рамис%'
-   OR 'Рамис' ILIKE '%' || c.name || '%'
-   OR 'Рамис' ILIKE '%' || c.director_name || '%'
-LIMIT 1
-ON CONFLICT (order_number) DO NOTHING;
+WHERE (c.name = 'Рамис' OR c.director_name = 'Рамис')
+  AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 121)
+LIMIT 1;
 
 INSERT INTO rental_orders (
   order_number, client_id, status, start_date, end_date, days_count,
@@ -35195,12 +31897,9 @@ SELECT
   NOW(),
   NOW()
 FROM rental_clients c
-WHERE c.name ILIKE '%Рамис%' 
-   OR c.director_name ILIKE '%Рамис%'
-   OR 'Рамис' ILIKE '%' || c.name || '%'
-   OR 'Рамис' ILIKE '%' || c.director_name || '%'
-LIMIT 1
-ON CONFLICT (order_number) DO NOTHING;
+WHERE (c.name = 'Рамис' OR c.director_name = 'Рамис')
+  AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 120)
+LIMIT 1;
 
 INSERT INTO rental_orders (
   order_number, client_id, status, start_date, end_date, days_count,
@@ -35227,12 +31926,9 @@ SELECT
   NOW(),
   NOW()
 FROM rental_clients c
-WHERE c.name ILIKE '%Мира (ИП)%' 
-   OR c.director_name ILIKE '%Мира (ИП)%'
-   OR 'Мира (ИП)' ILIKE '%' || c.name || '%'
-   OR 'Мира (ИП)' ILIKE '%' || c.director_name || '%'
-LIMIT 1
-ON CONFLICT (order_number) DO NOTHING;
+WHERE (c.name = 'Мира (ИП)' OR c.director_name = 'Мира (ИП)')
+  AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 119)
+LIMIT 1;
 
 INSERT INTO rental_orders (
   order_number, client_id, status, start_date, end_date, days_count,
@@ -35259,12 +31955,9 @@ SELECT
   NOW(),
   NOW()
 FROM rental_clients c
-WHERE c.name ILIKE '%Гульнара%' 
-   OR c.director_name ILIKE '%Гульнара%'
-   OR 'Гульнара' ILIKE '%' || c.name || '%'
-   OR 'Гульнара' ILIKE '%' || c.director_name || '%'
-LIMIT 1
-ON CONFLICT (order_number) DO NOTHING;
+WHERE (c.name = 'Гульнара' OR c.director_name = 'Гульнара')
+  AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 118)
+LIMIT 1;
 
 INSERT INTO rental_orders (
   order_number, client_id, status, start_date, end_date, days_count,
@@ -35291,12 +31984,9 @@ SELECT
   NOW(),
   NOW()
 FROM rental_clients c
-WHERE c.name ILIKE '%Галия%' 
-   OR c.director_name ILIKE '%Галия%'
-   OR 'Галия' ILIKE '%' || c.name || '%'
-   OR 'Галия' ILIKE '%' || c.director_name || '%'
-LIMIT 1
-ON CONFLICT (order_number) DO NOTHING;
+WHERE (c.name = 'Галия' OR c.director_name = 'Галия')
+  AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 117)
+LIMIT 1;
 
 INSERT INTO rental_orders (
   order_number, client_id, status, start_date, end_date, days_count,
@@ -35323,12 +32013,9 @@ SELECT
   NOW(),
   NOW()
 FROM rental_clients c
-WHERE c.name ILIKE '%Зельфира%' 
-   OR c.director_name ILIKE '%Зельфира%'
-   OR 'Зельфира' ILIKE '%' || c.name || '%'
-   OR 'Зельфира' ILIKE '%' || c.director_name || '%'
-LIMIT 1
-ON CONFLICT (order_number) DO NOTHING;
+WHERE (c.name = 'Зельфира' OR c.director_name = 'Зельфира')
+  AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 116)
+LIMIT 1;
 
 INSERT INTO rental_orders (
   order_number, client_id, status, start_date, end_date, days_count,
@@ -35355,12 +32042,9 @@ SELECT
   NOW(),
   NOW()
 FROM rental_clients c
-WHERE c.name ILIKE '%Артем Агафонов%' 
-   OR c.director_name ILIKE '%Артем Агафонов%'
-   OR 'Артем Агафонов' ILIKE '%' || c.name || '%'
-   OR 'Артем Агафонов' ILIKE '%' || c.director_name || '%'
-LIMIT 1
-ON CONFLICT (order_number) DO NOTHING;
+WHERE (c.name = 'Артем Агафонов' OR c.director_name = 'Артем Агафонов')
+  AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 115)
+LIMIT 1;
 
 INSERT INTO rental_orders (
   order_number, client_id, status, start_date, end_date, days_count,
@@ -35387,12 +32071,9 @@ SELECT
   NOW(),
   NOW()
 FROM rental_clients c
-WHERE c.name ILIKE '%Сергей (Авангард)%' 
-   OR c.director_name ILIKE '%Сергей (Авангард)%'
-   OR 'Сергей (Авангард)' ILIKE '%' || c.name || '%'
-   OR 'Сергей (Авангард)' ILIKE '%' || c.director_name || '%'
-LIMIT 1
-ON CONFLICT (order_number) DO NOTHING;
+WHERE (c.name = 'Сергей (Авангард)' OR c.director_name = 'Сергей (Авангард)')
+  AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 114)
+LIMIT 1;
 
 INSERT INTO rental_orders (
   order_number, client_id, status, start_date, end_date, days_count,
@@ -35419,12 +32100,9 @@ SELECT
   NOW(),
   NOW()
 FROM rental_clients c
-WHERE c.name ILIKE '%Юлия Воронова%' 
-   OR c.director_name ILIKE '%Юлия Воронова%'
-   OR 'Юлия Воронова' ILIKE '%' || c.name || '%'
-   OR 'Юлия Воронова' ILIKE '%' || c.director_name || '%'
-LIMIT 1
-ON CONFLICT (order_number) DO NOTHING;
+WHERE (c.name = 'Юлия Воронова' OR c.director_name = 'Юлия Воронова')
+  AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 113)
+LIMIT 1;
 
 INSERT INTO rental_orders (
   order_number, client_id, status, start_date, end_date, days_count,
@@ -35451,12 +32129,9 @@ SELECT
   NOW(),
   NOW()
 FROM rental_clients c
-WHERE c.name ILIKE '%Татьяна (Гольфстрим)%' 
-   OR c.director_name ILIKE '%Татьяна (Гольфстрим)%'
-   OR 'Татьяна (Гольфстрим)' ILIKE '%' || c.name || '%'
-   OR 'Татьяна (Гольфстрим)' ILIKE '%' || c.director_name || '%'
-LIMIT 1
-ON CONFLICT (order_number) DO NOTHING;
+WHERE (c.name = 'Татьяна (Гольфстрим)' OR c.director_name = 'Татьяна (Гольфстрим)')
+  AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 112)
+LIMIT 1;
 
 INSERT INTO rental_orders (
   order_number, client_id, status, start_date, end_date, days_count,
@@ -35483,12 +32158,9 @@ SELECT
   NOW(),
   NOW()
 FROM rental_clients c
-WHERE c.name ILIKE '%Татьяна (Гольфстрим)%' 
-   OR c.director_name ILIKE '%Татьяна (Гольфстрим)%'
-   OR 'Татьяна (Гольфстрим)' ILIKE '%' || c.name || '%'
-   OR 'Татьяна (Гольфстрим)' ILIKE '%' || c.director_name || '%'
-LIMIT 1
-ON CONFLICT (order_number) DO NOTHING;
+WHERE (c.name = 'Татьяна (Гольфстрим)' OR c.director_name = 'Татьяна (Гольфстрим)')
+  AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 111)
+LIMIT 1;
 
 INSERT INTO rental_orders (
   order_number, client_id, status, start_date, end_date, days_count,
@@ -35515,12 +32187,9 @@ SELECT
   NOW(),
   NOW()
 FROM rental_clients c
-WHERE c.name ILIKE '%Татьяна (Гольфстрим)%' 
-   OR c.director_name ILIKE '%Татьяна (Гольфстрим)%'
-   OR 'Татьяна (Гольфстрим)' ILIKE '%' || c.name || '%'
-   OR 'Татьяна (Гольфстрим)' ILIKE '%' || c.director_name || '%'
-LIMIT 1
-ON CONFLICT (order_number) DO NOTHING;
+WHERE (c.name = 'Татьяна (Гольфстрим)' OR c.director_name = 'Татьяна (Гольфстрим)')
+  AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 110)
+LIMIT 1;
 
 INSERT INTO rental_orders (
   order_number, client_id, status, start_date, end_date, days_count,
@@ -35547,12 +32216,9 @@ SELECT
   NOW(),
   NOW()
 FROM rental_clients c
-WHERE c.name ILIKE '%Татьяна (Гольфстрим)%' 
-   OR c.director_name ILIKE '%Татьяна (Гольфстрим)%'
-   OR 'Татьяна (Гольфстрим)' ILIKE '%' || c.name || '%'
-   OR 'Татьяна (Гольфстрим)' ILIKE '%' || c.director_name || '%'
-LIMIT 1
-ON CONFLICT (order_number) DO NOTHING;
+WHERE (c.name = 'Татьяна (Гольфстрим)' OR c.director_name = 'Татьяна (Гольфстрим)')
+  AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 109)
+LIMIT 1;
 
 INSERT INTO rental_orders (
   order_number, client_id, status, start_date, end_date, days_count,
@@ -35579,12 +32245,9 @@ SELECT
   NOW(),
   NOW()
 FROM rental_clients c
-WHERE c.name ILIKE '%Татьяна (Гольфстрим)%' 
-   OR c.director_name ILIKE '%Татьяна (Гольфстрим)%'
-   OR 'Татьяна (Гольфстрим)' ILIKE '%' || c.name || '%'
-   OR 'Татьяна (Гольфстрим)' ILIKE '%' || c.director_name || '%'
-LIMIT 1
-ON CONFLICT (order_number) DO NOTHING;
+WHERE (c.name = 'Татьяна (Гольфстрим)' OR c.director_name = 'Татьяна (Гольфстрим)')
+  AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 108)
+LIMIT 1;
 
 INSERT INTO rental_orders (
   order_number, client_id, status, start_date, end_date, days_count,
@@ -35611,12 +32274,9 @@ SELECT
   NOW(),
   NOW()
 FROM rental_clients c
-WHERE c.name ILIKE '%Татьяна (Гольфстрим)%' 
-   OR c.director_name ILIKE '%Татьяна (Гольфстрим)%'
-   OR 'Татьяна (Гольфстрим)' ILIKE '%' || c.name || '%'
-   OR 'Татьяна (Гольфстрим)' ILIKE '%' || c.director_name || '%'
-LIMIT 1
-ON CONFLICT (order_number) DO NOTHING;
+WHERE (c.name = 'Татьяна (Гольфстрим)' OR c.director_name = 'Татьяна (Гольфстрим)')
+  AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 107)
+LIMIT 1;
 
 INSERT INTO rental_orders (
   order_number, client_id, status, start_date, end_date, days_count,
@@ -35643,12 +32303,9 @@ SELECT
   NOW(),
   NOW()
 FROM rental_clients c
-WHERE c.name ILIKE '%Мария Экскурсовод%' 
-   OR c.director_name ILIKE '%Мария Экскурсовод%'
-   OR 'Мария Экскурсовод' ILIKE '%' || c.name || '%'
-   OR 'Мария Экскурсовод' ILIKE '%' || c.director_name || '%'
-LIMIT 1
-ON CONFLICT (order_number) DO NOTHING;
+WHERE (c.name = 'Мария Экскурсовод' OR c.director_name = 'Мария Экскурсовод')
+  AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 106)
+LIMIT 1;
 
 INSERT INTO rental_orders (
   order_number, client_id, status, start_date, end_date, days_count,
@@ -35675,12 +32332,9 @@ SELECT
   NOW(),
   NOW()
 FROM rental_clients c
-WHERE c.name ILIKE '%Динар (ТатКабель)%' 
-   OR c.director_name ILIKE '%Динар (ТатКабель)%'
-   OR 'Динар (ТатКабель)' ILIKE '%' || c.name || '%'
-   OR 'Динар (ТатКабель)' ILIKE '%' || c.director_name || '%'
-LIMIT 1
-ON CONFLICT (order_number) DO NOTHING;
+WHERE (c.name = 'Динар (ТатКабель)' OR c.director_name = 'Динар (ТатКабель)')
+  AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 105)
+LIMIT 1;
 
 INSERT INTO rental_orders (
   order_number, client_id, status, start_date, end_date, days_count,
@@ -35707,12 +32361,9 @@ SELECT
   NOW(),
   NOW()
 FROM rental_clients c
-WHERE c.name ILIKE '%Гульфия%' 
-   OR c.director_name ILIKE '%Гульфия%'
-   OR 'Гульфия' ILIKE '%' || c.name || '%'
-   OR 'Гульфия' ILIKE '%' || c.director_name || '%'
-LIMIT 1
-ON CONFLICT (order_number) DO NOTHING;
+WHERE (c.name = 'Гульфия' OR c.director_name = 'Гульфия')
+  AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 104)
+LIMIT 1;
 
 INSERT INTO rental_orders (
   order_number, client_id, status, start_date, end_date, days_count,
@@ -35739,12 +32390,9 @@ SELECT
   NOW(),
   NOW()
 FROM rental_clients c
-WHERE c.name ILIKE '%Гульфия%' 
-   OR c.director_name ILIKE '%Гульфия%'
-   OR 'Гульфия' ILIKE '%' || c.name || '%'
-   OR 'Гульфия' ILIKE '%' || c.director_name || '%'
-LIMIT 1
-ON CONFLICT (order_number) DO NOTHING;
+WHERE (c.name = 'Гульфия' OR c.director_name = 'Гульфия')
+  AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 103)
+LIMIT 1;
 
 INSERT INTO rental_orders (
   order_number, client_id, status, start_date, end_date, days_count,
@@ -35771,12 +32419,9 @@ SELECT
   NOW(),
   NOW()
 FROM rental_clients c
-WHERE c.name ILIKE '%Андрей Вологда%' 
-   OR c.director_name ILIKE '%Андрей Вологда%'
-   OR 'Андрей Вологда' ILIKE '%' || c.name || '%'
-   OR 'Андрей Вологда' ILIKE '%' || c.director_name || '%'
-LIMIT 1
-ON CONFLICT (order_number) DO NOTHING;
+WHERE (c.name = 'Андрей Вологда' OR c.director_name = 'Андрей Вологда')
+  AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 102)
+LIMIT 1;
 
 INSERT INTO rental_orders (
   order_number, client_id, status, start_date, end_date, days_count,
@@ -35803,12 +32448,9 @@ SELECT
   NOW(),
   NOW()
 FROM rental_clients c
-WHERE c.name ILIKE '%Ильмира%' 
-   OR c.director_name ILIKE '%Ильмира%'
-   OR 'Ильмира' ILIKE '%' || c.name || '%'
-   OR 'Ильмира' ILIKE '%' || c.director_name || '%'
-LIMIT 1
-ON CONFLICT (order_number) DO NOTHING;
+WHERE (c.name = 'Ильмира' OR c.director_name = 'Ильмира')
+  AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 101)
+LIMIT 1;
 
 INSERT INTO rental_orders (
   order_number, client_id, status, start_date, end_date, days_count,
@@ -35835,12 +32477,9 @@ SELECT
   NOW(),
   NOW()
 FROM rental_clients c
-WHERE c.name ILIKE '%Эдик Заказы для групп%' 
-   OR c.director_name ILIKE '%Эдик Заказы для групп%'
-   OR 'Эдик Заказы для групп' ILIKE '%' || c.name || '%'
-   OR 'Эдик Заказы для групп' ILIKE '%' || c.director_name || '%'
-LIMIT 1
-ON CONFLICT (order_number) DO NOTHING;
+WHERE (c.name = 'Эдик Заказы для групп' OR c.director_name = 'Эдик Заказы для групп')
+  AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 100)
+LIMIT 1;
 
 INSERT INTO rental_orders (
   order_number, client_id, status, start_date, end_date, days_count,
@@ -35867,12 +32506,9 @@ SELECT
   NOW(),
   NOW()
 FROM rental_clients c
-WHERE c.name ILIKE '%Эмилия%' 
-   OR c.director_name ILIKE '%Эмилия%'
-   OR 'Эмилия' ILIKE '%' || c.name || '%'
-   OR 'Эмилия' ILIKE '%' || c.director_name || '%'
-LIMIT 1
-ON CONFLICT (order_number) DO NOTHING;
+WHERE (c.name = 'Эмилия' OR c.director_name = 'Эмилия')
+  AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 99)
+LIMIT 1;
 
 INSERT INTO rental_orders (
   order_number, client_id, status, start_date, end_date, days_count,
@@ -35899,12 +32535,9 @@ SELECT
   NOW(),
   NOW()
 FROM rental_clients c
-WHERE c.name ILIKE '%Юлианна%' 
-   OR c.director_name ILIKE '%Юлианна%'
-   OR 'Юлианна' ILIKE '%' || c.name || '%'
-   OR 'Юлианна' ILIKE '%' || c.director_name || '%'
-LIMIT 1
-ON CONFLICT (order_number) DO NOTHING;
+WHERE (c.name = 'Юлианна' OR c.director_name = 'Юлианна')
+  AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 98)
+LIMIT 1;
 
 INSERT INTO rental_orders (
   order_number, client_id, status, start_date, end_date, days_count,
@@ -35931,12 +32564,9 @@ SELECT
   NOW(),
   NOW()
 FROM rental_clients c
-WHERE c.name ILIKE '%Сергей (Авангард)%' 
-   OR c.director_name ILIKE '%Сергей (Авангард)%'
-   OR 'Сергей (Авангард)' ILIKE '%' || c.name || '%'
-   OR 'Сергей (Авангард)' ILIKE '%' || c.director_name || '%'
-LIMIT 1
-ON CONFLICT (order_number) DO NOTHING;
+WHERE (c.name = 'Сергей (Авангард)' OR c.director_name = 'Сергей (Авангард)')
+  AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 97)
+LIMIT 1;
 
 INSERT INTO rental_orders (
   order_number, client_id, status, start_date, end_date, days_count,
@@ -35963,12 +32593,9 @@ SELECT
   NOW(),
   NOW()
 FROM rental_clients c
-WHERE c.name ILIKE '%Ирина Обыденникова%' 
-   OR c.director_name ILIKE '%Ирина Обыденникова%'
-   OR 'Ирина Обыденникова' ILIKE '%' || c.name || '%'
-   OR 'Ирина Обыденникова' ILIKE '%' || c.director_name || '%'
-LIMIT 1
-ON CONFLICT (order_number) DO NOTHING;
+WHERE (c.name = 'Ирина Обыденникова' OR c.director_name = 'Ирина Обыденникова')
+  AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 96)
+LIMIT 1;
 
 INSERT INTO rental_orders (
   order_number, client_id, status, start_date, end_date, days_count,
@@ -35995,12 +32622,9 @@ SELECT
   NOW(),
   NOW()
 FROM rental_clients c
-WHERE c.name ILIKE '%Елена (Магазин Путешествий)%' 
-   OR c.director_name ILIKE '%Елена (Магазин Путешествий)%'
-   OR 'Елена (Магазин Путешествий)' ILIKE '%' || c.name || '%'
-   OR 'Елена (Магазин Путешествий)' ILIKE '%' || c.director_name || '%'
-LIMIT 1
-ON CONFLICT (order_number) DO NOTHING;
+WHERE (c.name = 'Елена (Магазин Путешествий)' OR c.director_name = 'Елена (Магазин Путешествий)')
+  AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 95)
+LIMIT 1;
 
 INSERT INTO rental_orders (
   order_number, client_id, status, start_date, end_date, days_count,
@@ -36027,12 +32651,9 @@ SELECT
   NOW(),
   NOW()
 FROM rental_clients c
-WHERE c.name ILIKE '%Татьяна (Гольфстрим)%' 
-   OR c.director_name ILIKE '%Татьяна (Гольфстрим)%'
-   OR 'Татьяна (Гольфстрим)' ILIKE '%' || c.name || '%'
-   OR 'Татьяна (Гольфстрим)' ILIKE '%' || c.director_name || '%'
-LIMIT 1
-ON CONFLICT (order_number) DO NOTHING;
+WHERE (c.name = 'Татьяна (Гольфстрим)' OR c.director_name = 'Татьяна (Гольфстрим)')
+  AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 94)
+LIMIT 1;
 
 INSERT INTO rental_orders (
   order_number, client_id, status, start_date, end_date, days_count,
@@ -36059,12 +32680,9 @@ SELECT
   NOW(),
   NOW()
 FROM rental_clients c
-WHERE c.name ILIKE '%Татьяна (Гольфстрим)%' 
-   OR c.director_name ILIKE '%Татьяна (Гольфстрим)%'
-   OR 'Татьяна (Гольфстрим)' ILIKE '%' || c.name || '%'
-   OR 'Татьяна (Гольфстрим)' ILIKE '%' || c.director_name || '%'
-LIMIT 1
-ON CONFLICT (order_number) DO NOTHING;
+WHERE (c.name = 'Татьяна (Гольфстрим)' OR c.director_name = 'Татьяна (Гольфстрим)')
+  AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 93)
+LIMIT 1;
 
 INSERT INTO rental_orders (
   order_number, client_id, status, start_date, end_date, days_count,
@@ -36091,12 +32709,9 @@ SELECT
   NOW(),
   NOW()
 FROM rental_clients c
-WHERE c.name ILIKE '%Татьяна (Гольфстрим)%' 
-   OR c.director_name ILIKE '%Татьяна (Гольфстрим)%'
-   OR 'Татьяна (Гольфстрим)' ILIKE '%' || c.name || '%'
-   OR 'Татьяна (Гольфстрим)' ILIKE '%' || c.director_name || '%'
-LIMIT 1
-ON CONFLICT (order_number) DO NOTHING;
+WHERE (c.name = 'Татьяна (Гольфстрим)' OR c.director_name = 'Татьяна (Гольфстрим)')
+  AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 92)
+LIMIT 1;
 
 INSERT INTO rental_orders (
   order_number, client_id, status, start_date, end_date, days_count,
@@ -36123,12 +32738,9 @@ SELECT
   NOW(),
   NOW()
 FROM rental_clients c
-WHERE c.name ILIKE '%Татьяна (Гольфстрим)%' 
-   OR c.director_name ILIKE '%Татьяна (Гольфстрим)%'
-   OR 'Татьяна (Гольфстрим)' ILIKE '%' || c.name || '%'
-   OR 'Татьяна (Гольфстрим)' ILIKE '%' || c.director_name || '%'
-LIMIT 1
-ON CONFLICT (order_number) DO NOTHING;
+WHERE (c.name = 'Татьяна (Гольфстрим)' OR c.director_name = 'Татьяна (Гольфстрим)')
+  AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 91)
+LIMIT 1;
 
 INSERT INTO rental_orders (
   order_number, client_id, status, start_date, end_date, days_count,
@@ -36155,12 +32767,9 @@ SELECT
   NOW(),
   NOW()
 FROM rental_clients c
-WHERE c.name ILIKE '%Татьяна (Гольфстрим)%' 
-   OR c.director_name ILIKE '%Татьяна (Гольфстрим)%'
-   OR 'Татьяна (Гольфстрим)' ILIKE '%' || c.name || '%'
-   OR 'Татьяна (Гольфстрим)' ILIKE '%' || c.director_name || '%'
-LIMIT 1
-ON CONFLICT (order_number) DO NOTHING;
+WHERE (c.name = 'Татьяна (Гольфстрим)' OR c.director_name = 'Татьяна (Гольфстрим)')
+  AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 90)
+LIMIT 1;
 
 INSERT INTO rental_orders (
   order_number, client_id, status, start_date, end_date, days_count,
@@ -36187,12 +32796,9 @@ SELECT
   NOW(),
   NOW()
 FROM rental_clients c
-WHERE c.name ILIKE '%Татьяна (Гольфстрим)%' 
-   OR c.director_name ILIKE '%Татьяна (Гольфстрим)%'
-   OR 'Татьяна (Гольфстрим)' ILIKE '%' || c.name || '%'
-   OR 'Татьяна (Гольфстрим)' ILIKE '%' || c.director_name || '%'
-LIMIT 1
-ON CONFLICT (order_number) DO NOTHING;
+WHERE (c.name = 'Татьяна (Гольфстрим)' OR c.director_name = 'Татьяна (Гольфстрим)')
+  AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 89)
+LIMIT 1;
 
 INSERT INTO rental_orders (
   order_number, client_id, status, start_date, end_date, days_count,
@@ -36219,12 +32825,9 @@ SELECT
   NOW(),
   NOW()
 FROM rental_clients c
-WHERE c.name ILIKE '%Ольга Лукоянова%' 
-   OR c.director_name ILIKE '%Ольга Лукоянова%'
-   OR 'Ольга Лукоянова' ILIKE '%' || c.name || '%'
-   OR 'Ольга Лукоянова' ILIKE '%' || c.director_name || '%'
-LIMIT 1
-ON CONFLICT (order_number) DO NOTHING;
+WHERE (c.name = 'Ольга Лукоянова' OR c.director_name = 'Ольга Лукоянова')
+  AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 88)
+LIMIT 1;
 
 INSERT INTO rental_orders (
   order_number, client_id, status, start_date, end_date, days_count,
@@ -36251,12 +32854,9 @@ SELECT
   NOW(),
   NOW()
 FROM rental_clients c
-WHERE c.name ILIKE '%Мира (ИП)%' 
-   OR c.director_name ILIKE '%Мира (ИП)%'
-   OR 'Мира (ИП)' ILIKE '%' || c.name || '%'
-   OR 'Мира (ИП)' ILIKE '%' || c.director_name || '%'
-LIMIT 1
-ON CONFLICT (order_number) DO NOTHING;
+WHERE (c.name = 'Мира (ИП)' OR c.director_name = 'Мира (ИП)')
+  AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 87)
+LIMIT 1;
 
 INSERT INTO rental_orders (
   order_number, client_id, status, start_date, end_date, days_count,
@@ -36283,12 +32883,9 @@ SELECT
   NOW(),
   NOW()
 FROM rental_clients c
-WHERE c.name ILIKE '%Наталья%' 
-   OR c.director_name ILIKE '%Наталья%'
-   OR 'Наталья' ILIKE '%' || c.name || '%'
-   OR 'Наталья' ILIKE '%' || c.director_name || '%'
-LIMIT 1
-ON CONFLICT (order_number) DO NOTHING;
+WHERE (c.name = 'Наталья' OR c.director_name = 'Наталья')
+  AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 86)
+LIMIT 1;
 
 INSERT INTO rental_orders (
   order_number, client_id, status, start_date, end_date, days_count,
@@ -36315,12 +32912,9 @@ SELECT
   NOW(),
   NOW()
 FROM rental_clients c
-WHERE c.name ILIKE '%Инна Экскурсовод%' 
-   OR c.director_name ILIKE '%Инна Экскурсовод%'
-   OR 'Инна Экскурсовод' ILIKE '%' || c.name || '%'
-   OR 'Инна Экскурсовод' ILIKE '%' || c.director_name || '%'
-LIMIT 1
-ON CONFLICT (order_number) DO NOTHING;
+WHERE (c.name = 'Инна Экскурсовод' OR c.director_name = 'Инна Экскурсовод')
+  AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 85)
+LIMIT 1;
 
 INSERT INTO rental_orders (
   order_number, client_id, status, start_date, end_date, days_count,
@@ -36347,12 +32941,9 @@ SELECT
   NOW(),
   NOW()
 FROM rental_clients c
-WHERE c.name ILIKE '%Татьяна (Гольфстрим)%' 
-   OR c.director_name ILIKE '%Татьяна (Гольфстрим)%'
-   OR 'Татьяна (Гольфстрим)' ILIKE '%' || c.name || '%'
-   OR 'Татьяна (Гольфстрим)' ILIKE '%' || c.director_name || '%'
-LIMIT 1
-ON CONFLICT (order_number) DO NOTHING;
+WHERE (c.name = 'Татьяна (Гольфстрим)' OR c.director_name = 'Татьяна (Гольфстрим)')
+  AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 84)
+LIMIT 1;
 
 INSERT INTO rental_orders (
   order_number, client_id, status, start_date, end_date, days_count,
@@ -36379,12 +32970,9 @@ SELECT
   NOW(),
   NOW()
 FROM rental_clients c
-WHERE c.name ILIKE '%Гульфия%' 
-   OR c.director_name ILIKE '%Гульфия%'
-   OR 'Гульфия' ILIKE '%' || c.name || '%'
-   OR 'Гульфия' ILIKE '%' || c.director_name || '%'
-LIMIT 1
-ON CONFLICT (order_number) DO NOTHING;
+WHERE (c.name = 'Гульфия' OR c.director_name = 'Гульфия')
+  AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 83)
+LIMIT 1;
 
 INSERT INTO rental_orders (
   order_number, client_id, status, start_date, end_date, days_count,
@@ -36411,12 +32999,9 @@ SELECT
   NOW(),
   NOW()
 FROM rental_clients c
-WHERE c.name ILIKE '%Мира (ИП)%' 
-   OR c.director_name ILIKE '%Мира (ИП)%'
-   OR 'Мира (ИП)' ILIKE '%' || c.name || '%'
-   OR 'Мира (ИП)' ILIKE '%' || c.director_name || '%'
-LIMIT 1
-ON CONFLICT (order_number) DO NOTHING;
+WHERE (c.name = 'Мира (ИП)' OR c.director_name = 'Мира (ИП)')
+  AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 82)
+LIMIT 1;
 
 INSERT INTO rental_orders (
   order_number, client_id, status, start_date, end_date, days_count,
@@ -36443,12 +33028,9 @@ SELECT
   NOW(),
   NOW()
 FROM rental_clients c
-WHERE c.name ILIKE '%Гульнара%' 
-   OR c.director_name ILIKE '%Гульнара%'
-   OR 'Гульнара' ILIKE '%' || c.name || '%'
-   OR 'Гульнара' ILIKE '%' || c.director_name || '%'
-LIMIT 1
-ON CONFLICT (order_number) DO NOTHING;
+WHERE (c.name = 'Гульнара' OR c.director_name = 'Гульнара')
+  AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 81)
+LIMIT 1;
 
 INSERT INTO rental_orders (
   order_number, client_id, status, start_date, end_date, days_count,
@@ -36475,12 +33057,9 @@ SELECT
   NOW(),
   NOW()
 FROM rental_clients c
-WHERE c.name ILIKE '%Ирина Обыденникова%' 
-   OR c.director_name ILIKE '%Ирина Обыденникова%'
-   OR 'Ирина Обыденникова' ILIKE '%' || c.name || '%'
-   OR 'Ирина Обыденникова' ILIKE '%' || c.director_name || '%'
-LIMIT 1
-ON CONFLICT (order_number) DO NOTHING;
+WHERE (c.name = 'Ирина Обыденникова' OR c.director_name = 'Ирина Обыденникова')
+  AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 80)
+LIMIT 1;
 
 INSERT INTO rental_orders (
   order_number, client_id, status, start_date, end_date, days_count,
@@ -36507,12 +33086,9 @@ SELECT
   NOW(),
   NOW()
 FROM rental_clients c
-WHERE c.name ILIKE '%Алёна Лазука%' 
-   OR c.director_name ILIKE '%Алёна Лазука%'
-   OR 'Алёна Лазука' ILIKE '%' || c.name || '%'
-   OR 'Алёна Лазука' ILIKE '%' || c.director_name || '%'
-LIMIT 1
-ON CONFLICT (order_number) DO NOTHING;
+WHERE (c.name = 'Алёна Лазука' OR c.director_name = 'Алёна Лазука')
+  AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 79)
+LIMIT 1;
 
 INSERT INTO rental_orders (
   order_number, client_id, status, start_date, end_date, days_count,
@@ -36539,12 +33115,9 @@ SELECT
   NOW(),
   NOW()
 FROM rental_clients c
-WHERE c.name ILIKE '%Екатерина%' 
-   OR c.director_name ILIKE '%Екатерина%'
-   OR 'Екатерина' ILIKE '%' || c.name || '%'
-   OR 'Екатерина' ILIKE '%' || c.director_name || '%'
-LIMIT 1
-ON CONFLICT (order_number) DO NOTHING;
+WHERE (c.name = 'Екатерина' OR c.director_name = 'Екатерина')
+  AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 78)
+LIMIT 1;
 
 INSERT INTO rental_orders (
   order_number, client_id, status, start_date, end_date, days_count,
@@ -36571,12 +33144,9 @@ SELECT
   NOW(),
   NOW()
 FROM rental_clients c
-WHERE c.name ILIKE '%Екатерина%' 
-   OR c.director_name ILIKE '%Екатерина%'
-   OR 'Екатерина' ILIKE '%' || c.name || '%'
-   OR 'Екатерина' ILIKE '%' || c.director_name || '%'
-LIMIT 1
-ON CONFLICT (order_number) DO NOTHING;
+WHERE (c.name = 'Екатерина' OR c.director_name = 'Екатерина')
+  AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 77)
+LIMIT 1;
 
 INSERT INTO rental_orders (
   order_number, client_id, status, start_date, end_date, days_count,
@@ -36603,12 +33173,9 @@ SELECT
   NOW(),
   NOW()
 FROM rental_clients c
-WHERE c.name ILIKE '%Екатерина Кореева%' 
-   OR c.director_name ILIKE '%Екатерина Кореева%'
-   OR 'Екатерина Кореева' ILIKE '%' || c.name || '%'
-   OR 'Екатерина Кореева' ILIKE '%' || c.director_name || '%'
-LIMIT 1
-ON CONFLICT (order_number) DO NOTHING;
+WHERE (c.name = 'Екатерина Кореева' OR c.director_name = 'Екатерина Кореева')
+  AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 76)
+LIMIT 1;
 
 INSERT INTO rental_orders (
   order_number, client_id, status, start_date, end_date, days_count,
@@ -36635,12 +33202,9 @@ SELECT
   NOW(),
   NOW()
 FROM rental_clients c
-WHERE c.name ILIKE '%Сергей (Авангард)%' 
-   OR c.director_name ILIKE '%Сергей (Авангард)%'
-   OR 'Сергей (Авангард)' ILIKE '%' || c.name || '%'
-   OR 'Сергей (Авангард)' ILIKE '%' || c.director_name || '%'
-LIMIT 1
-ON CONFLICT (order_number) DO NOTHING;
+WHERE (c.name = 'Сергей (Авангард)' OR c.director_name = 'Сергей (Авангард)')
+  AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 75)
+LIMIT 1;
 
 INSERT INTO rental_orders (
   order_number, client_id, status, start_date, end_date, days_count,
@@ -36667,12 +33231,9 @@ SELECT
   NOW(),
   NOW()
 FROM rental_clients c
-WHERE c.name ILIKE '%Татьяна (Гольфстрим)%' 
-   OR c.director_name ILIKE '%Татьяна (Гольфстрим)%'
-   OR 'Татьяна (Гольфстрим)' ILIKE '%' || c.name || '%'
-   OR 'Татьяна (Гольфстрим)' ILIKE '%' || c.director_name || '%'
-LIMIT 1
-ON CONFLICT (order_number) DO NOTHING;
+WHERE (c.name = 'Татьяна (Гольфстрим)' OR c.director_name = 'Татьяна (Гольфстрим)')
+  AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 74)
+LIMIT 1;
 
 INSERT INTO rental_orders (
   order_number, client_id, status, start_date, end_date, days_count,
@@ -36699,12 +33260,9 @@ SELECT
   NOW(),
   NOW()
 FROM rental_clients c
-WHERE c.name ILIKE '%Андрей (Экскурс)%' 
-   OR c.director_name ILIKE '%Андрей (Экскурс)%'
-   OR 'Андрей (Экскурс)' ILIKE '%' || c.name || '%'
-   OR 'Андрей (Экскурс)' ILIKE '%' || c.director_name || '%'
-LIMIT 1
-ON CONFLICT (order_number) DO NOTHING;
+WHERE (c.name = 'Андрей (Экскурс)' OR c.director_name = 'Андрей (Экскурс)')
+  AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 73)
+LIMIT 1;
 
 INSERT INTO rental_orders (
   order_number, client_id, status, start_date, end_date, days_count,
@@ -36731,12 +33289,9 @@ SELECT
   NOW(),
   NOW()
 FROM rental_clients c
-WHERE c.name ILIKE '%Елизавета Ткач%' 
-   OR c.director_name ILIKE '%Елизавета Ткач%'
-   OR 'Елизавета Ткач' ILIKE '%' || c.name || '%'
-   OR 'Елизавета Ткач' ILIKE '%' || c.director_name || '%'
-LIMIT 1
-ON CONFLICT (order_number) DO NOTHING;
+WHERE (c.name = 'Елизавета Ткач' OR c.director_name = 'Елизавета Ткач')
+  AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 72)
+LIMIT 1;
 
 INSERT INTO rental_orders (
   order_number, client_id, status, start_date, end_date, days_count,
@@ -36763,12 +33318,9 @@ SELECT
   NOW(),
   NOW()
 FROM rental_clients c
-WHERE c.name ILIKE '%Наталья Рыжкова%' 
-   OR c.director_name ILIKE '%Наталья Рыжкова%'
-   OR 'Наталья Рыжкова' ILIKE '%' || c.name || '%'
-   OR 'Наталья Рыжкова' ILIKE '%' || c.director_name || '%'
-LIMIT 1
-ON CONFLICT (order_number) DO NOTHING;
+WHERE (c.name = 'Наталья Рыжкова' OR c.director_name = 'Наталья Рыжкова')
+  AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 71)
+LIMIT 1;
 
 INSERT INTO rental_orders (
   order_number, client_id, status, start_date, end_date, days_count,
@@ -36795,12 +33347,9 @@ SELECT
   NOW(),
   NOW()
 FROM rental_clients c
-WHERE c.name ILIKE '%Нечаева Тамара%' 
-   OR c.director_name ILIKE '%Нечаева Тамара%'
-   OR 'Нечаева Тамара' ILIKE '%' || c.name || '%'
-   OR 'Нечаева Тамара' ILIKE '%' || c.director_name || '%'
-LIMIT 1
-ON CONFLICT (order_number) DO NOTHING;
+WHERE (c.name = 'Нечаева Тамара' OR c.director_name = 'Нечаева Тамара')
+  AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 70)
+LIMIT 1;
 
 INSERT INTO rental_orders (
   order_number, client_id, status, start_date, end_date, days_count,
@@ -36827,12 +33376,9 @@ SELECT
   NOW(),
   NOW()
 FROM rental_clients c
-WHERE c.name ILIKE '%Андрей Вологда%' 
-   OR c.director_name ILIKE '%Андрей Вологда%'
-   OR 'Андрей Вологда' ILIKE '%' || c.name || '%'
-   OR 'Андрей Вологда' ILIKE '%' || c.director_name || '%'
-LIMIT 1
-ON CONFLICT (order_number) DO NOTHING;
+WHERE (c.name = 'Андрей Вологда' OR c.director_name = 'Андрей Вологда')
+  AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 69)
+LIMIT 1;
 
 INSERT INTO rental_orders (
   order_number, client_id, status, start_date, end_date, days_count,
@@ -36859,12 +33405,9 @@ SELECT
   NOW(),
   NOW()
 FROM rental_clients c
-WHERE c.name ILIKE '%Зеленина%' 
-   OR c.director_name ILIKE '%Зеленина%'
-   OR 'Зеленина' ILIKE '%' || c.name || '%'
-   OR 'Зеленина' ILIKE '%' || c.director_name || '%'
-LIMIT 1
-ON CONFLICT (order_number) DO NOTHING;
+WHERE (c.name = 'Зеленина' OR c.director_name = 'Зеленина')
+  AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 68)
+LIMIT 1;
 
 INSERT INTO rental_orders (
   order_number, client_id, status, start_date, end_date, days_count,
@@ -36891,12 +33434,9 @@ SELECT
   NOW(),
   NOW()
 FROM rental_clients c
-WHERE c.name ILIKE '%Мария%' 
-   OR c.director_name ILIKE '%Мария%'
-   OR 'Мария' ILIKE '%' || c.name || '%'
-   OR 'Мария' ILIKE '%' || c.director_name || '%'
-LIMIT 1
-ON CONFLICT (order_number) DO NOTHING;
+WHERE (c.name = 'Мария' OR c.director_name = 'Мария')
+  AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 67)
+LIMIT 1;
 
 INSERT INTO rental_orders (
   order_number, client_id, status, start_date, end_date, days_count,
@@ -36923,12 +33463,9 @@ SELECT
   NOW(),
   NOW()
 FROM rental_clients c
-WHERE c.name ILIKE '%Мария%' 
-   OR c.director_name ILIKE '%Мария%'
-   OR 'Мария' ILIKE '%' || c.name || '%'
-   OR 'Мария' ILIKE '%' || c.director_name || '%'
-LIMIT 1
-ON CONFLICT (order_number) DO NOTHING;
+WHERE (c.name = 'Мария' OR c.director_name = 'Мария')
+  AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 66)
+LIMIT 1;
 
 INSERT INTO rental_orders (
   order_number, client_id, status, start_date, end_date, days_count,
@@ -36955,12 +33492,9 @@ SELECT
   NOW(),
   NOW()
 FROM rental_clients c
-WHERE c.name ILIKE '%Мария%' 
-   OR c.director_name ILIKE '%Мария%'
-   OR 'Мария' ILIKE '%' || c.name || '%'
-   OR 'Мария' ILIKE '%' || c.director_name || '%'
-LIMIT 1
-ON CONFLICT (order_number) DO NOTHING;
+WHERE (c.name = 'Мария' OR c.director_name = 'Мария')
+  AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 65)
+LIMIT 1;
 
 INSERT INTO rental_orders (
   order_number, client_id, status, start_date, end_date, days_count,
@@ -36987,12 +33521,9 @@ SELECT
   NOW(),
   NOW()
 FROM rental_clients c
-WHERE c.name ILIKE '%Татьяна (КБПИЭ)%' 
-   OR c.director_name ILIKE '%Татьяна (КБПИЭ)%'
-   OR 'Татьяна (КБПИЭ)' ILIKE '%' || c.name || '%'
-   OR 'Татьяна (КБПИЭ)' ILIKE '%' || c.director_name || '%'
-LIMIT 1
-ON CONFLICT (order_number) DO NOTHING;
+WHERE (c.name = 'Татьяна (КБПИЭ)' OR c.director_name = 'Татьяна (КБПИЭ)')
+  AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 64)
+LIMIT 1;
 
 INSERT INTO rental_orders (
   order_number, client_id, status, start_date, end_date, days_count,
@@ -37019,12 +33550,9 @@ SELECT
   NOW(),
   NOW()
 FROM rental_clients c
-WHERE c.name ILIKE '%Мира (ИП)%' 
-   OR c.director_name ILIKE '%Мира (ИП)%'
-   OR 'Мира (ИП)' ILIKE '%' || c.name || '%'
-   OR 'Мира (ИП)' ILIKE '%' || c.director_name || '%'
-LIMIT 1
-ON CONFLICT (order_number) DO NOTHING;
+WHERE (c.name = 'Мира (ИП)' OR c.director_name = 'Мира (ИП)')
+  AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 63)
+LIMIT 1;
 
 INSERT INTO rental_orders (
   order_number, client_id, status, start_date, end_date, days_count,
@@ -37051,12 +33579,9 @@ SELECT
   NOW(),
   NOW()
 FROM rental_clients c
-WHERE c.name ILIKE '%Мира (ИП)%' 
-   OR c.director_name ILIKE '%Мира (ИП)%'
-   OR 'Мира (ИП)' ILIKE '%' || c.name || '%'
-   OR 'Мира (ИП)' ILIKE '%' || c.director_name || '%'
-LIMIT 1
-ON CONFLICT (order_number) DO NOTHING;
+WHERE (c.name = 'Мира (ИП)' OR c.director_name = 'Мира (ИП)')
+  AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 62)
+LIMIT 1;
 
 INSERT INTO rental_orders (
   order_number, client_id, status, start_date, end_date, days_count,
@@ -37083,12 +33608,9 @@ SELECT
   NOW(),
   NOW()
 FROM rental_clients c
-WHERE c.name ILIKE '%Альберт (КТ)%' 
-   OR c.director_name ILIKE '%Альберт (КТ)%'
-   OR 'Альберт (КТ)' ILIKE '%' || c.name || '%'
-   OR 'Альберт (КТ)' ILIKE '%' || c.director_name || '%'
-LIMIT 1
-ON CONFLICT (order_number) DO NOTHING;
+WHERE (c.name = 'Альберт (КТ)' OR c.director_name = 'Альберт (КТ)')
+  AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 61)
+LIMIT 1;
 
 INSERT INTO rental_orders (
   order_number, client_id, status, start_date, end_date, days_count,
@@ -37115,12 +33637,9 @@ SELECT
   NOW(),
   NOW()
 FROM rental_clients c
-WHERE c.name ILIKE '%Татьяна (КБПИЭ)%' 
-   OR c.director_name ILIKE '%Татьяна (КБПИЭ)%'
-   OR 'Татьяна (КБПИЭ)' ILIKE '%' || c.name || '%'
-   OR 'Татьяна (КБПИЭ)' ILIKE '%' || c.director_name || '%'
-LIMIT 1
-ON CONFLICT (order_number) DO NOTHING;
+WHERE (c.name = 'Татьяна (КБПИЭ)' OR c.director_name = 'Татьяна (КБПИЭ)')
+  AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 60)
+LIMIT 1;
 
 INSERT INTO rental_orders (
   order_number, client_id, status, start_date, end_date, days_count,
@@ -37147,12 +33666,9 @@ SELECT
   NOW(),
   NOW()
 FROM rental_clients c
-WHERE c.name ILIKE '%Мира (ИП)%' 
-   OR c.director_name ILIKE '%Мира (ИП)%'
-   OR 'Мира (ИП)' ILIKE '%' || c.name || '%'
-   OR 'Мира (ИП)' ILIKE '%' || c.director_name || '%'
-LIMIT 1
-ON CONFLICT (order_number) DO NOTHING;
+WHERE (c.name = 'Мира (ИП)' OR c.director_name = 'Мира (ИП)')
+  AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 59)
+LIMIT 1;
 
 INSERT INTO rental_orders (
   order_number, client_id, status, start_date, end_date, days_count,
@@ -37179,12 +33695,9 @@ SELECT
   NOW(),
   NOW()
 FROM rental_clients c
-WHERE c.name ILIKE '%Галина%' 
-   OR c.director_name ILIKE '%Галина%'
-   OR 'Галина' ILIKE '%' || c.name || '%'
-   OR 'Галина' ILIKE '%' || c.director_name || '%'
-LIMIT 1
-ON CONFLICT (order_number) DO NOTHING;
+WHERE (c.name = 'Галина' OR c.director_name = 'Галина')
+  AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 58)
+LIMIT 1;
 
 INSERT INTO rental_orders (
   order_number, client_id, status, start_date, end_date, days_count,
@@ -37211,12 +33724,9 @@ SELECT
   NOW(),
   NOW()
 FROM rental_clients c
-WHERE c.name ILIKE '%Галина%' 
-   OR c.director_name ILIKE '%Галина%'
-   OR 'Галина' ILIKE '%' || c.name || '%'
-   OR 'Галина' ILIKE '%' || c.director_name || '%'
-LIMIT 1
-ON CONFLICT (order_number) DO NOTHING;
+WHERE (c.name = 'Галина' OR c.director_name = 'Галина')
+  AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 57)
+LIMIT 1;
 
 INSERT INTO rental_orders (
   order_number, client_id, status, start_date, end_date, days_count,
@@ -37243,12 +33753,9 @@ SELECT
   NOW(),
   NOW()
 FROM rental_clients c
-WHERE c.name ILIKE '%Галина%' 
-   OR c.director_name ILIKE '%Галина%'
-   OR 'Галина' ILIKE '%' || c.name || '%'
-   OR 'Галина' ILIKE '%' || c.director_name || '%'
-LIMIT 1
-ON CONFLICT (order_number) DO NOTHING;
+WHERE (c.name = 'Галина' OR c.director_name = 'Галина')
+  AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 56)
+LIMIT 1;
 
 INSERT INTO rental_orders (
   order_number, client_id, status, start_date, end_date, days_count,
@@ -37275,12 +33782,9 @@ SELECT
   NOW(),
   NOW()
 FROM rental_clients c
-WHERE c.name ILIKE '%Сергей (Авангард)%' 
-   OR c.director_name ILIKE '%Сергей (Авангард)%'
-   OR 'Сергей (Авангард)' ILIKE '%' || c.name || '%'
-   OR 'Сергей (Авангард)' ILIKE '%' || c.director_name || '%'
-LIMIT 1
-ON CONFLICT (order_number) DO NOTHING;
+WHERE (c.name = 'Сергей (Авангард)' OR c.director_name = 'Сергей (Авангард)')
+  AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 55)
+LIMIT 1;
 
 INSERT INTO rental_orders (
   order_number, client_id, status, start_date, end_date, days_count,
@@ -37307,12 +33811,9 @@ SELECT
   NOW(),
   NOW()
 FROM rental_clients c
-WHERE c.name ILIKE '%Татьяна (КБПИЭ)%' 
-   OR c.director_name ILIKE '%Татьяна (КБПИЭ)%'
-   OR 'Татьяна (КБПИЭ)' ILIKE '%' || c.name || '%'
-   OR 'Татьяна (КБПИЭ)' ILIKE '%' || c.director_name || '%'
-LIMIT 1
-ON CONFLICT (order_number) DO NOTHING;
+WHERE (c.name = 'Татьяна (КБПИЭ)' OR c.director_name = 'Татьяна (КБПИЭ)')
+  AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 54)
+LIMIT 1;
 
 INSERT INTO rental_orders (
   order_number, client_id, status, start_date, end_date, days_count,
@@ -37339,12 +33840,9 @@ SELECT
   NOW(),
   NOW()
 FROM rental_clients c
-WHERE c.name ILIKE '%Татьяна (КБПИЭ)%' 
-   OR c.director_name ILIKE '%Татьяна (КБПИЭ)%'
-   OR 'Татьяна (КБПИЭ)' ILIKE '%' || c.name || '%'
-   OR 'Татьяна (КБПИЭ)' ILIKE '%' || c.director_name || '%'
-LIMIT 1
-ON CONFLICT (order_number) DO NOTHING;
+WHERE (c.name = 'Татьяна (КБПИЭ)' OR c.director_name = 'Татьяна (КБПИЭ)')
+  AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 53)
+LIMIT 1;
 
 INSERT INTO rental_orders (
   order_number, client_id, status, start_date, end_date, days_count,
@@ -37371,12 +33869,9 @@ SELECT
   NOW(),
   NOW()
 FROM rental_clients c
-WHERE c.name ILIKE '%Татьяна (КБПИЭ)%' 
-   OR c.director_name ILIKE '%Татьяна (КБПИЭ)%'
-   OR 'Татьяна (КБПИЭ)' ILIKE '%' || c.name || '%'
-   OR 'Татьяна (КБПИЭ)' ILIKE '%' || c.director_name || '%'
-LIMIT 1
-ON CONFLICT (order_number) DO NOTHING;
+WHERE (c.name = 'Татьяна (КБПИЭ)' OR c.director_name = 'Татьяна (КБПИЭ)')
+  AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 52)
+LIMIT 1;
 
 INSERT INTO rental_orders (
   order_number, client_id, status, start_date, end_date, days_count,
@@ -37403,12 +33898,9 @@ SELECT
   NOW(),
   NOW()
 FROM rental_clients c
-WHERE c.name ILIKE '%Андрей (Экскурс)%' 
-   OR c.director_name ILIKE '%Андрей (Экскурс)%'
-   OR 'Андрей (Экскурс)' ILIKE '%' || c.name || '%'
-   OR 'Андрей (Экскурс)' ILIKE '%' || c.director_name || '%'
-LIMIT 1
-ON CONFLICT (order_number) DO NOTHING;
+WHERE (c.name = 'Андрей (Экскурс)' OR c.director_name = 'Андрей (Экскурс)')
+  AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 51)
+LIMIT 1;
 
 INSERT INTO rental_orders (
   order_number, client_id, status, start_date, end_date, days_count,
@@ -37435,12 +33927,9 @@ SELECT
   NOW(),
   NOW()
 FROM rental_clients c
-WHERE c.name ILIKE '%Татьяна (КБПИЭ)%' 
-   OR c.director_name ILIKE '%Татьяна (КБПИЭ)%'
-   OR 'Татьяна (КБПИЭ)' ILIKE '%' || c.name || '%'
-   OR 'Татьяна (КБПИЭ)' ILIKE '%' || c.director_name || '%'
-LIMIT 1
-ON CONFLICT (order_number) DO NOTHING;
+WHERE (c.name = 'Татьяна (КБПИЭ)' OR c.director_name = 'Татьяна (КБПИЭ)')
+  AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 50)
+LIMIT 1;
 
 INSERT INTO rental_orders (
   order_number, client_id, status, start_date, end_date, days_count,
@@ -37467,12 +33956,9 @@ SELECT
   NOW(),
   NOW()
 FROM rental_clients c
-WHERE c.name ILIKE '%Светлана Клиент%' 
-   OR c.director_name ILIKE '%Светлана Клиент%'
-   OR 'Светлана Клиент' ILIKE '%' || c.name || '%'
-   OR 'Светлана Клиент' ILIKE '%' || c.director_name || '%'
-LIMIT 1
-ON CONFLICT (order_number) DO NOTHING;
+WHERE (c.name = 'Светлана Клиент' OR c.director_name = 'Светлана Клиент')
+  AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 49)
+LIMIT 1;
 
 INSERT INTO rental_orders (
   order_number, client_id, status, start_date, end_date, days_count,
@@ -37499,12 +33985,9 @@ SELECT
   NOW(),
   NOW()
 FROM rental_clients c
-WHERE c.name ILIKE '%Татьяна (Гольфстрим)%' 
-   OR c.director_name ILIKE '%Татьяна (Гольфстрим)%'
-   OR 'Татьяна (Гольфстрим)' ILIKE '%' || c.name || '%'
-   OR 'Татьяна (Гольфстрим)' ILIKE '%' || c.director_name || '%'
-LIMIT 1
-ON CONFLICT (order_number) DO NOTHING;
+WHERE (c.name = 'Татьяна (Гольфстрим)' OR c.director_name = 'Татьяна (Гольфстрим)')
+  AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 48)
+LIMIT 1;
 
 INSERT INTO rental_orders (
   order_number, client_id, status, start_date, end_date, days_count,
@@ -37531,12 +34014,9 @@ SELECT
   NOW(),
   NOW()
 FROM rental_clients c
-WHERE c.name ILIKE '%Мира (ИП)%' 
-   OR c.director_name ILIKE '%Мира (ИП)%'
-   OR 'Мира (ИП)' ILIKE '%' || c.name || '%'
-   OR 'Мира (ИП)' ILIKE '%' || c.director_name || '%'
-LIMIT 1
-ON CONFLICT (order_number) DO NOTHING;
+WHERE (c.name = 'Мира (ИП)' OR c.director_name = 'Мира (ИП)')
+  AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 47)
+LIMIT 1;
 
 INSERT INTO rental_orders (
   order_number, client_id, status, start_date, end_date, days_count,
@@ -37563,12 +34043,9 @@ SELECT
   NOW(),
   NOW()
 FROM rental_clients c
-WHERE c.name ILIKE '%Альберт (КТ)%' 
-   OR c.director_name ILIKE '%Альберт (КТ)%'
-   OR 'Альберт (КТ)' ILIKE '%' || c.name || '%'
-   OR 'Альберт (КТ)' ILIKE '%' || c.director_name || '%'
-LIMIT 1
-ON CONFLICT (order_number) DO NOTHING;
+WHERE (c.name = 'Альберт (КТ)' OR c.director_name = 'Альберт (КТ)')
+  AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 46)
+LIMIT 1;
 
 INSERT INTO rental_orders (
   order_number, client_id, status, start_date, end_date, days_count,
@@ -37595,12 +34072,9 @@ SELECT
   NOW(),
   NOW()
 FROM rental_clients c
-WHERE c.name ILIKE '%Галия%' 
-   OR c.director_name ILIKE '%Галия%'
-   OR 'Галия' ILIKE '%' || c.name || '%'
-   OR 'Галия' ILIKE '%' || c.director_name || '%'
-LIMIT 1
-ON CONFLICT (order_number) DO NOTHING;
+WHERE (c.name = 'Галия' OR c.director_name = 'Галия')
+  AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 45)
+LIMIT 1;
 
 INSERT INTO rental_orders (
   order_number, client_id, status, start_date, end_date, days_count,
@@ -37627,12 +34101,9 @@ SELECT
   NOW(),
   NOW()
 FROM rental_clients c
-WHERE c.name ILIKE '%Андрей (Экскурс)%' 
-   OR c.director_name ILIKE '%Андрей (Экскурс)%'
-   OR 'Андрей (Экскурс)' ILIKE '%' || c.name || '%'
-   OR 'Андрей (Экскурс)' ILIKE '%' || c.director_name || '%'
-LIMIT 1
-ON CONFLICT (order_number) DO NOTHING;
+WHERE (c.name = 'Андрей (Экскурс)' OR c.director_name = 'Андрей (Экскурс)')
+  AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 44)
+LIMIT 1;
 
 INSERT INTO rental_orders (
   order_number, client_id, status, start_date, end_date, days_count,
@@ -37659,12 +34130,9 @@ SELECT
   NOW(),
   NOW()
 FROM rental_clients c
-WHERE c.name ILIKE '%Галина%' 
-   OR c.director_name ILIKE '%Галина%'
-   OR 'Галина' ILIKE '%' || c.name || '%'
-   OR 'Галина' ILIKE '%' || c.director_name || '%'
-LIMIT 1
-ON CONFLICT (order_number) DO NOTHING;
+WHERE (c.name = 'Галина' OR c.director_name = 'Галина')
+  AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 43)
+LIMIT 1;
 
 INSERT INTO rental_orders (
   order_number, client_id, status, start_date, end_date, days_count,
@@ -37691,12 +34159,9 @@ SELECT
   NOW(),
   NOW()
 FROM rental_clients c
-WHERE c.name ILIKE '%Тамара%' 
-   OR c.director_name ILIKE '%Тамара%'
-   OR 'Тамара' ILIKE '%' || c.name || '%'
-   OR 'Тамара' ILIKE '%' || c.director_name || '%'
-LIMIT 1
-ON CONFLICT (order_number) DO NOTHING;
+WHERE (c.name = 'Тамара' OR c.director_name = 'Тамара')
+  AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 42)
+LIMIT 1;
 
 INSERT INTO rental_orders (
   order_number, client_id, status, start_date, end_date, days_count,
@@ -37723,12 +34188,9 @@ SELECT
   NOW(),
   NOW()
 FROM rental_clients c
-WHERE c.name ILIKE '%Ольга Лукоянова%' 
-   OR c.director_name ILIKE '%Ольга Лукоянова%'
-   OR 'Ольга Лукоянова' ILIKE '%' || c.name || '%'
-   OR 'Ольга Лукоянова' ILIKE '%' || c.director_name || '%'
-LIMIT 1
-ON CONFLICT (order_number) DO NOTHING;
+WHERE (c.name = 'Ольга Лукоянова' OR c.director_name = 'Ольга Лукоянова')
+  AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 41)
+LIMIT 1;
 
 INSERT INTO rental_orders (
   order_number, client_id, status, start_date, end_date, days_count,
@@ -37755,12 +34217,9 @@ SELECT
   NOW(),
   NOW()
 FROM rental_clients c
-WHERE c.name ILIKE '%Андрей (Экскурс)%' 
-   OR c.director_name ILIKE '%Андрей (Экскурс)%'
-   OR 'Андрей (Экскурс)' ILIKE '%' || c.name || '%'
-   OR 'Андрей (Экскурс)' ILIKE '%' || c.director_name || '%'
-LIMIT 1
-ON CONFLICT (order_number) DO NOTHING;
+WHERE (c.name = 'Андрей (Экскурс)' OR c.director_name = 'Андрей (Экскурс)')
+  AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 40)
+LIMIT 1;
 
 INSERT INTO rental_orders (
   order_number, client_id, status, start_date, end_date, days_count,
@@ -37787,12 +34246,9 @@ SELECT
   NOW(),
   NOW()
 FROM rental_clients c
-WHERE c.name ILIKE '%Татьяна (КБПИЭ)%' 
-   OR c.director_name ILIKE '%Татьяна (КБПИЭ)%'
-   OR 'Татьяна (КБПИЭ)' ILIKE '%' || c.name || '%'
-   OR 'Татьяна (КБПИЭ)' ILIKE '%' || c.director_name || '%'
-LIMIT 1
-ON CONFLICT (order_number) DO NOTHING;
+WHERE (c.name = 'Татьяна (КБПИЭ)' OR c.director_name = 'Татьяна (КБПИЭ)')
+  AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 39)
+LIMIT 1;
 
 INSERT INTO rental_orders (
   order_number, client_id, status, start_date, end_date, days_count,
@@ -37819,12 +34275,9 @@ SELECT
   NOW(),
   NOW()
 FROM rental_clients c
-WHERE c.name ILIKE '%Татьяна (КБПИЭ)%' 
-   OR c.director_name ILIKE '%Татьяна (КБПИЭ)%'
-   OR 'Татьяна (КБПИЭ)' ILIKE '%' || c.name || '%'
-   OR 'Татьяна (КБПИЭ)' ILIKE '%' || c.director_name || '%'
-LIMIT 1
-ON CONFLICT (order_number) DO NOTHING;
+WHERE (c.name = 'Татьяна (КБПИЭ)' OR c.director_name = 'Татьяна (КБПИЭ)')
+  AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 38)
+LIMIT 1;
 
 INSERT INTO rental_orders (
   order_number, client_id, status, start_date, end_date, days_count,
@@ -37851,12 +34304,9 @@ SELECT
   NOW(),
   NOW()
 FROM rental_clients c
-WHERE c.name ILIKE '%Татьяна (Гольфстрим)%' 
-   OR c.director_name ILIKE '%Татьяна (Гольфстрим)%'
-   OR 'Татьяна (Гольфстрим)' ILIKE '%' || c.name || '%'
-   OR 'Татьяна (Гольфстрим)' ILIKE '%' || c.director_name || '%'
-LIMIT 1
-ON CONFLICT (order_number) DO NOTHING;
+WHERE (c.name = 'Татьяна (Гольфстрим)' OR c.director_name = 'Татьяна (Гольфстрим)')
+  AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 37)
+LIMIT 1;
 
 INSERT INTO rental_orders (
   order_number, client_id, status, start_date, end_date, days_count,
@@ -37883,12 +34333,9 @@ SELECT
   NOW(),
   NOW()
 FROM rental_clients c
-WHERE c.name ILIKE '%Татьяна (Гольфстрим)%' 
-   OR c.director_name ILIKE '%Татьяна (Гольфстрим)%'
-   OR 'Татьяна (Гольфстрим)' ILIKE '%' || c.name || '%'
-   OR 'Татьяна (Гольфстрим)' ILIKE '%' || c.director_name || '%'
-LIMIT 1
-ON CONFLICT (order_number) DO NOTHING;
+WHERE (c.name = 'Татьяна (Гольфстрим)' OR c.director_name = 'Татьяна (Гольфстрим)')
+  AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 36)
+LIMIT 1;
 
 INSERT INTO rental_orders (
   order_number, client_id, status, start_date, end_date, days_count,
@@ -37915,12 +34362,9 @@ SELECT
   NOW(),
   NOW()
 FROM rental_clients c
-WHERE c.name ILIKE '%Татьяна (Гольфстрим)%' 
-   OR c.director_name ILIKE '%Татьяна (Гольфстрим)%'
-   OR 'Татьяна (Гольфстрим)' ILIKE '%' || c.name || '%'
-   OR 'Татьяна (Гольфстрим)' ILIKE '%' || c.director_name || '%'
-LIMIT 1
-ON CONFLICT (order_number) DO NOTHING;
+WHERE (c.name = 'Татьяна (Гольфстрим)' OR c.director_name = 'Татьяна (Гольфстрим)')
+  AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 35)
+LIMIT 1;
 
 INSERT INTO rental_orders (
   order_number, client_id, status, start_date, end_date, days_count,
@@ -37947,12 +34391,9 @@ SELECT
   NOW(),
   NOW()
 FROM rental_clients c
-WHERE c.name ILIKE '%Татьяна (Гольфстрим)%' 
-   OR c.director_name ILIKE '%Татьяна (Гольфстрим)%'
-   OR 'Татьяна (Гольфстрим)' ILIKE '%' || c.name || '%'
-   OR 'Татьяна (Гольфстрим)' ILIKE '%' || c.director_name || '%'
-LIMIT 1
-ON CONFLICT (order_number) DO NOTHING;
+WHERE (c.name = 'Татьяна (Гольфстрим)' OR c.director_name = 'Татьяна (Гольфстрим)')
+  AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 34)
+LIMIT 1;
 
 INSERT INTO rental_orders (
   order_number, client_id, status, start_date, end_date, days_count,
@@ -37979,12 +34420,9 @@ SELECT
   NOW(),
   NOW()
 FROM rental_clients c
-WHERE c.name ILIKE '%Татьяна (Гольфстрим)%' 
-   OR c.director_name ILIKE '%Татьяна (Гольфстрим)%'
-   OR 'Татьяна (Гольфстрим)' ILIKE '%' || c.name || '%'
-   OR 'Татьяна (Гольфстрим)' ILIKE '%' || c.director_name || '%'
-LIMIT 1
-ON CONFLICT (order_number) DO NOTHING;
+WHERE (c.name = 'Татьяна (Гольфстрим)' OR c.director_name = 'Татьяна (Гольфстрим)')
+  AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 33)
+LIMIT 1;
 
 INSERT INTO rental_orders (
   order_number, client_id, status, start_date, end_date, days_count,
@@ -38011,12 +34449,9 @@ SELECT
   NOW(),
   NOW()
 FROM rental_clients c
-WHERE c.name ILIKE '%Татьяна (Гольфстрим)%' 
-   OR c.director_name ILIKE '%Татьяна (Гольфстрим)%'
-   OR 'Татьяна (Гольфстрим)' ILIKE '%' || c.name || '%'
-   OR 'Татьяна (Гольфстрим)' ILIKE '%' || c.director_name || '%'
-LIMIT 1
-ON CONFLICT (order_number) DO NOTHING;
+WHERE (c.name = 'Татьяна (Гольфстрим)' OR c.director_name = 'Татьяна (Гольфстрим)')
+  AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 32)
+LIMIT 1;
 
 INSERT INTO rental_orders (
   order_number, client_id, status, start_date, end_date, days_count,
@@ -38043,12 +34478,9 @@ SELECT
   NOW(),
   NOW()
 FROM rental_clients c
-WHERE c.name ILIKE '%Татьяна (Гольфстрим)%' 
-   OR c.director_name ILIKE '%Татьяна (Гольфстрим)%'
-   OR 'Татьяна (Гольфстрим)' ILIKE '%' || c.name || '%'
-   OR 'Татьяна (Гольфстрим)' ILIKE '%' || c.director_name || '%'
-LIMIT 1
-ON CONFLICT (order_number) DO NOTHING;
+WHERE (c.name = 'Татьяна (Гольфстрим)' OR c.director_name = 'Татьяна (Гольфстрим)')
+  AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 31)
+LIMIT 1;
 
 INSERT INTO rental_orders (
   order_number, client_id, status, start_date, end_date, days_count,
@@ -38075,12 +34507,9 @@ SELECT
   NOW(),
   NOW()
 FROM rental_clients c
-WHERE c.name ILIKE '%Татьяна (Гольфстрим)%' 
-   OR c.director_name ILIKE '%Татьяна (Гольфстрим)%'
-   OR 'Татьяна (Гольфстрим)' ILIKE '%' || c.name || '%'
-   OR 'Татьяна (Гольфстрим)' ILIKE '%' || c.director_name || '%'
-LIMIT 1
-ON CONFLICT (order_number) DO NOTHING;
+WHERE (c.name = 'Татьяна (Гольфстрим)' OR c.director_name = 'Татьяна (Гольфстрим)')
+  AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 30)
+LIMIT 1;
 
 INSERT INTO rental_orders (
   order_number, client_id, status, start_date, end_date, days_count,
@@ -38107,12 +34536,9 @@ SELECT
   NOW(),
   NOW()
 FROM rental_clients c
-WHERE c.name ILIKE '%Татьяна (Гольфстрим)%' 
-   OR c.director_name ILIKE '%Татьяна (Гольфстрим)%'
-   OR 'Татьяна (Гольфстрим)' ILIKE '%' || c.name || '%'
-   OR 'Татьяна (Гольфстрим)' ILIKE '%' || c.director_name || '%'
-LIMIT 1
-ON CONFLICT (order_number) DO NOTHING;
+WHERE (c.name = 'Татьяна (Гольфстрим)' OR c.director_name = 'Татьяна (Гольфстрим)')
+  AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 29)
+LIMIT 1;
 
 INSERT INTO rental_orders (
   order_number, client_id, status, start_date, end_date, days_count,
@@ -38139,12 +34565,9 @@ SELECT
   NOW(),
   NOW()
 FROM rental_clients c
-WHERE c.name ILIKE '%Татьяна (Гольфстрим)%' 
-   OR c.director_name ILIKE '%Татьяна (Гольфстрим)%'
-   OR 'Татьяна (Гольфстрим)' ILIKE '%' || c.name || '%'
-   OR 'Татьяна (Гольфстрим)' ILIKE '%' || c.director_name || '%'
-LIMIT 1
-ON CONFLICT (order_number) DO NOTHING;
+WHERE (c.name = 'Татьяна (Гольфстрим)' OR c.director_name = 'Татьяна (Гольфстрим)')
+  AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 28)
+LIMIT 1;
 
 INSERT INTO rental_orders (
   order_number, client_id, status, start_date, end_date, days_count,
@@ -38171,12 +34594,9 @@ SELECT
   NOW(),
   NOW()
 FROM rental_clients c
-WHERE c.name ILIKE '%Татьяна (Гольфстрим)%' 
-   OR c.director_name ILIKE '%Татьяна (Гольфстрим)%'
-   OR 'Татьяна (Гольфстрим)' ILIKE '%' || c.name || '%'
-   OR 'Татьяна (Гольфстрим)' ILIKE '%' || c.director_name || '%'
-LIMIT 1
-ON CONFLICT (order_number) DO NOTHING;
+WHERE (c.name = 'Татьяна (Гольфстрим)' OR c.director_name = 'Татьяна (Гольфстрим)')
+  AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 27)
+LIMIT 1;
 
 INSERT INTO rental_orders (
   order_number, client_id, status, start_date, end_date, days_count,
@@ -38203,12 +34623,9 @@ SELECT
   NOW(),
   NOW()
 FROM rental_clients c
-WHERE c.name ILIKE '%Татьяна (Гольфстрим)%' 
-   OR c.director_name ILIKE '%Татьяна (Гольфстрим)%'
-   OR 'Татьяна (Гольфстрим)' ILIKE '%' || c.name || '%'
-   OR 'Татьяна (Гольфстрим)' ILIKE '%' || c.director_name || '%'
-LIMIT 1
-ON CONFLICT (order_number) DO NOTHING;
+WHERE (c.name = 'Татьяна (Гольфстрим)' OR c.director_name = 'Татьяна (Гольфстрим)')
+  AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 26)
+LIMIT 1;
 
 INSERT INTO rental_orders (
   order_number, client_id, status, start_date, end_date, days_count,
@@ -38235,12 +34652,9 @@ SELECT
   NOW(),
   NOW()
 FROM rental_clients c
-WHERE c.name ILIKE '%Татьяна (Гольфстрим)%' 
-   OR c.director_name ILIKE '%Татьяна (Гольфстрим)%'
-   OR 'Татьяна (Гольфстрим)' ILIKE '%' || c.name || '%'
-   OR 'Татьяна (Гольфстрим)' ILIKE '%' || c.director_name || '%'
-LIMIT 1
-ON CONFLICT (order_number) DO NOTHING;
+WHERE (c.name = 'Татьяна (Гольфстрим)' OR c.director_name = 'Татьяна (Гольфстрим)')
+  AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 25)
+LIMIT 1;
 
 INSERT INTO rental_orders (
   order_number, client_id, status, start_date, end_date, days_count,
@@ -38267,12 +34681,9 @@ SELECT
   NOW(),
   NOW()
 FROM rental_clients c
-WHERE c.name ILIKE '%Татьяна (Гольфстрим)%' 
-   OR c.director_name ILIKE '%Татьяна (Гольфстрим)%'
-   OR 'Татьяна (Гольфстрим)' ILIKE '%' || c.name || '%'
-   OR 'Татьяна (Гольфстрим)' ILIKE '%' || c.director_name || '%'
-LIMIT 1
-ON CONFLICT (order_number) DO NOTHING;
+WHERE (c.name = 'Татьяна (Гольфстрим)' OR c.director_name = 'Татьяна (Гольфстрим)')
+  AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 24)
+LIMIT 1;
 
 INSERT INTO rental_orders (
   order_number, client_id, status, start_date, end_date, days_count,
@@ -38299,12 +34710,9 @@ SELECT
   NOW(),
   NOW()
 FROM rental_clients c
-WHERE c.name ILIKE '%Татьяна (Гольфстрим)%' 
-   OR c.director_name ILIKE '%Татьяна (Гольфстрим)%'
-   OR 'Татьяна (Гольфстрим)' ILIKE '%' || c.name || '%'
-   OR 'Татьяна (Гольфстрим)' ILIKE '%' || c.director_name || '%'
-LIMIT 1
-ON CONFLICT (order_number) DO NOTHING;
+WHERE (c.name = 'Татьяна (Гольфстрим)' OR c.director_name = 'Татьяна (Гольфстрим)')
+  AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 23)
+LIMIT 1;
 
 INSERT INTO rental_orders (
   order_number, client_id, status, start_date, end_date, days_count,
@@ -38331,12 +34739,9 @@ SELECT
   NOW(),
   NOW()
 FROM rental_clients c
-WHERE c.name ILIKE '%Элина (Сититур)%' 
-   OR c.director_name ILIKE '%Элина (Сититур)%'
-   OR 'Элина (Сититур)' ILIKE '%' || c.name || '%'
-   OR 'Элина (Сититур)' ILIKE '%' || c.director_name || '%'
-LIMIT 1
-ON CONFLICT (order_number) DO NOTHING;
+WHERE (c.name = 'Элина (Сититур)' OR c.director_name = 'Элина (Сититур)')
+  AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 22)
+LIMIT 1;
 
 INSERT INTO rental_orders (
   order_number, client_id, status, start_date, end_date, days_count,
@@ -38363,12 +34768,9 @@ SELECT
   NOW(),
   NOW()
 FROM rental_clients c
-WHERE c.name ILIKE '%Татьяна (Гольфстрим)%' 
-   OR c.director_name ILIKE '%Татьяна (Гольфстрим)%'
-   OR 'Татьяна (Гольфстрим)' ILIKE '%' || c.name || '%'
-   OR 'Татьяна (Гольфстрим)' ILIKE '%' || c.director_name || '%'
-LIMIT 1
-ON CONFLICT (order_number) DO NOTHING;
+WHERE (c.name = 'Татьяна (Гольфстрим)' OR c.director_name = 'Татьяна (Гольфстрим)')
+  AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 19)
+LIMIT 1;
 
 INSERT INTO rental_orders (
   order_number, client_id, status, start_date, end_date, days_count,
@@ -38395,12 +34797,9 @@ SELECT
   NOW(),
   NOW()
 FROM rental_clients c
-WHERE c.name ILIKE '%Юлия Воронова%' 
-   OR c.director_name ILIKE '%Юлия Воронова%'
-   OR 'Юлия Воронова' ILIKE '%' || c.name || '%'
-   OR 'Юлия Воронова' ILIKE '%' || c.director_name || '%'
-LIMIT 1
-ON CONFLICT (order_number) DO NOTHING;
+WHERE (c.name = 'Юлия Воронова' OR c.director_name = 'Юлия Воронова')
+  AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 18)
+LIMIT 1;
 
 INSERT INTO rental_orders (
   order_number, client_id, status, start_date, end_date, days_count,
@@ -38427,12 +34826,9 @@ SELECT
   NOW(),
   NOW()
 FROM rental_clients c
-WHERE c.name ILIKE '%Елена Игнатьева%' 
-   OR c.director_name ILIKE '%Елена Игнатьева%'
-   OR 'Елена Игнатьева' ILIKE '%' || c.name || '%'
-   OR 'Елена Игнатьева' ILIKE '%' || c.director_name || '%'
-LIMIT 1
-ON CONFLICT (order_number) DO NOTHING;
+WHERE (c.name = 'Елена Игнатьева' OR c.director_name = 'Елена Игнатьева')
+  AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 17)
+LIMIT 1;
 
 INSERT INTO rental_orders (
   order_number, client_id, status, start_date, end_date, days_count,
@@ -38459,12 +34855,9 @@ SELECT
   NOW(),
   NOW()
 FROM rental_clients c
-WHERE c.name ILIKE '%Татьяна Чуб%' 
-   OR c.director_name ILIKE '%Татьяна Чуб%'
-   OR 'Татьяна Чуб' ILIKE '%' || c.name || '%'
-   OR 'Татьяна Чуб' ILIKE '%' || c.director_name || '%'
-LIMIT 1
-ON CONFLICT (order_number) DO NOTHING;
+WHERE (c.name = 'Татьяна Чуб' OR c.director_name = 'Татьяна Чуб')
+  AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 16)
+LIMIT 1;
 
 INSERT INTO rental_orders (
   order_number, client_id, status, start_date, end_date, days_count,
@@ -38491,12 +34884,9 @@ SELECT
   NOW(),
   NOW()
 FROM rental_clients c
-WHERE c.name ILIKE '%Мария Батяева%' 
-   OR c.director_name ILIKE '%Мария Батяева%'
-   OR 'Мария Батяева' ILIKE '%' || c.name || '%'
-   OR 'Мария Батяева' ILIKE '%' || c.director_name || '%'
-LIMIT 1
-ON CONFLICT (order_number) DO NOTHING;
+WHERE (c.name = 'Мария Батяева' OR c.director_name = 'Мария Батяева')
+  AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 15)
+LIMIT 1;
 
 INSERT INTO rental_orders (
   order_number, client_id, status, start_date, end_date, days_count,
@@ -38523,12 +34913,9 @@ SELECT
   NOW(),
   NOW()
 FROM rental_clients c
-WHERE c.name ILIKE '%Алина Сафина%' 
-   OR c.director_name ILIKE '%Алина Сафина%'
-   OR 'Алина Сафина' ILIKE '%' || c.name || '%'
-   OR 'Алина Сафина' ILIKE '%' || c.director_name || '%'
-LIMIT 1
-ON CONFLICT (order_number) DO NOTHING;
+WHERE (c.name = 'Алина Сафина' OR c.director_name = 'Алина Сафина')
+  AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 14)
+LIMIT 1;
 
 INSERT INTO rental_orders (
   order_number, client_id, status, start_date, end_date, days_count,
@@ -38555,12 +34942,9 @@ SELECT
   NOW(),
   NOW()
 FROM rental_clients c
-WHERE c.name ILIKE '%Татьяна (Гольфстрим)%' 
-   OR c.director_name ILIKE '%Татьяна (Гольфстрим)%'
-   OR 'Татьяна (Гольфстрим)' ILIKE '%' || c.name || '%'
-   OR 'Татьяна (Гольфстрим)' ILIKE '%' || c.director_name || '%'
-LIMIT 1
-ON CONFLICT (order_number) DO NOTHING;
+WHERE (c.name = 'Татьяна (Гольфстрим)' OR c.director_name = 'Татьяна (Гольфстрим)')
+  AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 13)
+LIMIT 1;
 
 INSERT INTO rental_orders (
   order_number, client_id, status, start_date, end_date, days_count,
@@ -38587,12 +34971,9 @@ SELECT
   NOW(),
   NOW()
 FROM rental_clients c
-WHERE c.name ILIKE '%Галина%' 
-   OR c.director_name ILIKE '%Галина%'
-   OR 'Галина' ILIKE '%' || c.name || '%'
-   OR 'Галина' ILIKE '%' || c.director_name || '%'
-LIMIT 1
-ON CONFLICT (order_number) DO NOTHING;
+WHERE (c.name = 'Галина' OR c.director_name = 'Галина')
+  AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 12)
+LIMIT 1;
 
 INSERT INTO rental_orders (
   order_number, client_id, status, start_date, end_date, days_count,
@@ -38619,12 +35000,9 @@ SELECT
   NOW(),
   NOW()
 FROM rental_clients c
-WHERE c.name ILIKE '%Наталья Рыжкова%' 
-   OR c.director_name ILIKE '%Наталья Рыжкова%'
-   OR 'Наталья Рыжкова' ILIKE '%' || c.name || '%'
-   OR 'Наталья Рыжкова' ILIKE '%' || c.director_name || '%'
-LIMIT 1
-ON CONFLICT (order_number) DO NOTHING;
+WHERE (c.name = 'Наталья Рыжкова' OR c.director_name = 'Наталья Рыжкова')
+  AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 11)
+LIMIT 1;
 
 INSERT INTO rental_orders (
   order_number, client_id, status, start_date, end_date, days_count,
@@ -38651,12 +35029,9 @@ SELECT
   NOW(),
   NOW()
 FROM rental_clients c
-WHERE c.name ILIKE '%Татьяна (Гольфстрим)%' 
-   OR c.director_name ILIKE '%Татьяна (Гольфстрим)%'
-   OR 'Татьяна (Гольфстрим)' ILIKE '%' || c.name || '%'
-   OR 'Татьяна (Гольфстрим)' ILIKE '%' || c.director_name || '%'
-LIMIT 1
-ON CONFLICT (order_number) DO NOTHING;
+WHERE (c.name = 'Татьяна (Гольфстрим)' OR c.director_name = 'Татьяна (Гольфстрим)')
+  AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 9)
+LIMIT 1;
 
 INSERT INTO rental_orders (
   order_number, client_id, status, start_date, end_date, days_count,
@@ -38683,12 +35058,9 @@ SELECT
   NOW(),
   NOW()
 FROM rental_clients c
-WHERE c.name ILIKE '%Татьяна (Гольфстрим)%' 
-   OR c.director_name ILIKE '%Татьяна (Гольфстрим)%'
-   OR 'Татьяна (Гольфстрим)' ILIKE '%' || c.name || '%'
-   OR 'Татьяна (Гольфстрим)' ILIKE '%' || c.director_name || '%'
-LIMIT 1
-ON CONFLICT (order_number) DO NOTHING;
+WHERE (c.name = 'Татьяна (Гольфстрим)' OR c.director_name = 'Татьяна (Гольфстрим)')
+  AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 8)
+LIMIT 1;
 
 INSERT INTO rental_orders (
   order_number, client_id, status, start_date, end_date, days_count,
@@ -38715,12 +35087,9 @@ SELECT
   NOW(),
   NOW()
 FROM rental_clients c
-WHERE c.name ILIKE '%Татьяна (Гольфстрим)%' 
-   OR c.director_name ILIKE '%Татьяна (Гольфстрим)%'
-   OR 'Татьяна (Гольфстрим)' ILIKE '%' || c.name || '%'
-   OR 'Татьяна (Гольфстрим)' ILIKE '%' || c.director_name || '%'
-LIMIT 1
-ON CONFLICT (order_number) DO NOTHING;
+WHERE (c.name = 'Татьяна (Гольфстрим)' OR c.director_name = 'Татьяна (Гольфстрим)')
+  AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 7)
+LIMIT 1;
 
 INSERT INTO rental_orders (
   order_number, client_id, status, start_date, end_date, days_count,
@@ -38747,12 +35116,9 @@ SELECT
   NOW(),
   NOW()
 FROM rental_clients c
-WHERE c.name ILIKE '%Татьяна (Гольфстрим)%' 
-   OR c.director_name ILIKE '%Татьяна (Гольфстрим)%'
-   OR 'Татьяна (Гольфстрим)' ILIKE '%' || c.name || '%'
-   OR 'Татьяна (Гольфстрим)' ILIKE '%' || c.director_name || '%'
-LIMIT 1
-ON CONFLICT (order_number) DO NOTHING;
+WHERE (c.name = 'Татьяна (Гольфстрим)' OR c.director_name = 'Татьяна (Гольфстрим)')
+  AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 6)
+LIMIT 1;
 
 INSERT INTO rental_orders (
   order_number, client_id, status, start_date, end_date, days_count,
@@ -38779,12 +35145,9 @@ SELECT
   NOW(),
   NOW()
 FROM rental_clients c
-WHERE c.name ILIKE '%Наталья%' 
-   OR c.director_name ILIKE '%Наталья%'
-   OR 'Наталья' ILIKE '%' || c.name || '%'
-   OR 'Наталья' ILIKE '%' || c.director_name || '%'
-LIMIT 1
-ON CONFLICT (order_number) DO NOTHING;
+WHERE (c.name = 'Наталья' OR c.director_name = 'Наталья')
+  AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 5)
+LIMIT 1;
 
 INSERT INTO rental_orders (
   order_number, client_id, status, start_date, end_date, days_count,
@@ -38811,12 +35174,9 @@ SELECT
   NOW(),
   NOW()
 FROM rental_clients c
-WHERE c.name ILIKE '%Галия%' 
-   OR c.director_name ILIKE '%Галия%'
-   OR 'Галия' ILIKE '%' || c.name || '%'
-   OR 'Галия' ILIKE '%' || c.director_name || '%'
-LIMIT 1
-ON CONFLICT (order_number) DO NOTHING;
+WHERE (c.name = 'Галия' OR c.director_name = 'Галия')
+  AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 4)
+LIMIT 1;
 
 INSERT INTO rental_orders (
   order_number, client_id, status, start_date, end_date, days_count,
@@ -38843,9 +35203,6 @@ SELECT
   NOW(),
   NOW()
 FROM rental_clients c
-WHERE c.name ILIKE '%Альберт (КТ)%' 
-   OR c.director_name ILIKE '%Альберт (КТ)%'
-   OR 'Альберт (КТ)' ILIKE '%' || c.name || '%'
-   OR 'Альберт (КТ)' ILIKE '%' || c.director_name || '%'
-LIMIT 1
-ON CONFLICT (order_number) DO NOTHING;
+WHERE (c.name = 'Альберт (КТ)' OR c.director_name = 'Альберт (КТ)')
+  AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 3)
+LIMIT 1;
