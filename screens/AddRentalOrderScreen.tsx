@@ -384,7 +384,10 @@ export default function AddRentalOrderScreen() {
     return rentalClients.filter(c =>
       c.isActive && (
         c.name.toLowerCase().includes(query) ||
-        c.phone?.toLowerCase().includes(query)
+        c.directorName?.toLowerCase().includes(query) ||
+        c.phone?.toLowerCase().includes(query) ||
+        c.email?.toLowerCase().includes(query) ||
+        c.inn?.toLowerCase().includes(query)
       )
     );
   }, [rentalClients, clientSearch]);
@@ -1019,16 +1022,16 @@ export default function AddRentalOrderScreen() {
                 >
                   <View style={[styles.clientAvatar, { backgroundColor: item.type === "company" ? theme.primary : theme.secondary }]}>
                     <ThemedText style={styles.avatarText}>
-                      {item.name.slice(0, 2).toUpperCase()}
+                      {(item.type === "company" && item.directorName ? item.directorName : item.name).slice(0, 2).toUpperCase()}
                     </ThemedText>
                   </View>
                   <View style={styles.clientInfo}>
-                    <ThemedText style={styles.clientName}>{item.name}</ThemedText>
-                    {item.phone ? (
-                      <ThemedText style={[styles.clientPhone, { color: theme.textSecondary }]}>
-                        {item.phone}
-                      </ThemedText>
-                    ) : null}
+                    <ThemedText style={styles.clientName}>
+                      {item.type === "company" && item.directorName ? item.directorName : item.name}
+                    </ThemedText>
+                    <ThemedText style={[styles.clientPhone, { color: theme.textSecondary }]} numberOfLines={1}>
+                      {item.type === "company" && item.directorName ? item.name : (item.phone || "")}
+                    </ThemedText>
                   </View>
                   <ThemedText style={[styles.clientPrice, { color: theme.primary }]}>
                     {item.defaultPrice}₽
