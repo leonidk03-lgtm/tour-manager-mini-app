@@ -81,6 +81,7 @@ export default function RentalClientsScreen() {
       const query = searchQuery.toLowerCase();
       result = result.filter(c =>
         c.name.toLowerCase().includes(query) ||
+        c.directorName?.toLowerCase().includes(query) ||
         c.phone?.toLowerCase().includes(query) ||
         c.email?.toLowerCase().includes(query) ||
         c.inn?.toLowerCase().includes(query)
