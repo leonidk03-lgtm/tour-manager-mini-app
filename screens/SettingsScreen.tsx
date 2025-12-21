@@ -148,7 +148,7 @@ export default function SettingsScreen() {
                 onPress={() => { setPriceInput(String(radioGuidePrice)); setShowPriceModal(true); }}
               />
               <AppIcon
-                icon="cpu"
+                icon="tool"
                 label="Себестоим."
                 color="#AF52DE"
                 badge={`${rentalCostPerReceiver}₽`}

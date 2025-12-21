@@ -510,6 +510,26 @@ const SVG_ICONS: Record<string, (size: number, color: string) => React.ReactNode
       <Line x1="6" y1="20" x2="6" y2="14" />
     </Svg>
   ),
+  "bell": (s, c) => (
+    <Svg width={s} height={s} viewBox="0 0 24 24" fill="none" stroke={c} strokeWidth={2} strokeLinecap="round" strokeLinejoin="round">
+      <Path d="M18 8A6 6 0 0 0 6 8c0 7-3 9-3 9h18s-3-2-3-9" />
+      <Path d="M13.73 21a2 2 0 0 1-3.46 0" />
+    </Svg>
+  ),
+  "gift": (s, c) => (
+    <Svg width={s} height={s} viewBox="0 0 24 24" fill="none" stroke={c} strokeWidth={2} strokeLinecap="round" strokeLinejoin="round">
+      <Polyline points="20 12 20 22 4 22 4 12" />
+      <Rect x="2" y="7" width="20" height="5" />
+      <Line x1="12" y1="22" x2="12" y2="7" />
+      <Path d="M12 7H7.5a2.5 2.5 0 0 1 0-5C11 2 12 7 12 7z" />
+      <Path d="M12 7h4.5a2.5 2.5 0 0 0 0-5C13 2 12 7 12 7z" />
+    </Svg>
+  ),
+  "tool": (s, c) => (
+    <Svg width={s} height={s} viewBox="0 0 24 24" fill="none" stroke={c} strokeWidth={2} strokeLinecap="round" strokeLinejoin="round">
+      <Path d="M14.7 6.3a1 1 0 0 0 0 1.4l1.6 1.6a1 1 0 0 0 1.4 0l3.77-3.77a6 6 0 0 1-7.94 7.94l-6.91 6.91a2.12 2.12 0 0 1-3-3l6.91-6.91a6 6 0 0 1 7.94-7.94l-3.76 3.76z" />
+    </Svg>
+  ),
   "activity": (s, c) => (
     <Svg width={s} height={s} viewBox="0 0 24 24" fill="none" stroke={c} strokeWidth={2} strokeLinecap="round" strokeLinejoin="round">
       <Polyline points="22 12 18 12 15 21 9 3 6 12 2 12" />
