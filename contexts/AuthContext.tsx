@@ -1,5 +1,5 @@
 import { createContext, useContext, useState, useEffect, ReactNode, useCallback } from 'react';
-import { supabase, Profile, UserRole, initSupabaseFromStorage, PermissionKey, ManagerPermissions } from '@/lib/supabase';
+import { supabase, Profile, UserRole, initSupabaseFromStorage, PermissionKey, ManagerPermissions, DashboardConfig } from '@/lib/supabase';
 import { Session, User } from '@supabase/supabase-js';
 
 interface AuthContextType {
@@ -21,6 +21,7 @@ interface AuthContextType {
   updateManagerDisplayName: (managerId: string, displayName: string) => Promise<{ error: string | null }>;
   updateManagerPermissions: (managerId: string, permissions: ManagerPermissions) => Promise<{ error: string | null }>;
   updateManagerCommissions: (managerId: string, ownerPercent: number, executorPercent: number, servicePercent?: number) => Promise<{ error: string | null }>;
+  updateDashboardConfig: (config: DashboardConfig) => Promise<{ error: string | null }>;
   managers: Profile[];
   refreshManagers: () => Promise<void>;
 }
@@ -422,6 +423,31 @@ export function AuthProvider({ children }: { children: ReactNode }) {
     }
   };
 
+  const updateDashboardConfig = async (config: DashboardConfig): Promise<{ error: string | null }> => {
+    if (!user) {
+      return { error: 'Пользователь не авторизован' };
+    }
+
+    try {
+      const { error } = await supabase
+        .from('profiles')
+        .update({ 
+          dashboard_config: config,
+          updated_at: new Date().toISOString() 
+        })
+        .eq('id', user.id);
+
+      if (error) {
+        return { error: error.message };
+      }
+
+      setProfile(prev => prev ? { ...prev, dashboard_config: config } : prev);
+      return { error: null };
+    } catch (err) {
+      return { error: 'Ошибка при сохранении настроек дашборда' };
+    }
+  };
+
   return (
     <AuthContext.Provider
       value={{
@@ -443,6 +469,7 @@ export function AuthProvider({ children }: { children: ReactNode }) {
         updateManagerDisplayName,
         updateManagerPermissions,
         updateManagerCommissions,
+        updateDashboardConfig,
         managers,
         refreshManagers,
       }}

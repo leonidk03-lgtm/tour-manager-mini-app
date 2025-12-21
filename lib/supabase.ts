@@ -175,6 +175,39 @@ export const PERMISSION_GROUPS: PermissionGroup[] = [
 
 export type ManagerPermissions = Partial<Record<PermissionKey, boolean>>;
 
+export type DashboardWidgetKey = 
+  | 'kpi_cards'
+  | 'period_summary'
+  | 'alerts'
+  | 'today_excursions'
+  | 'rental_section';
+
+export const DASHBOARD_WIDGET_DEFINITIONS: { key: DashboardWidgetKey; label: string; description: string }[] = [
+  { key: 'kpi_cards', label: 'KPI карточки', description: 'Прибыль, доход, расходы, участники' },
+  { key: 'period_summary', label: 'Сводка по периодам', description: 'Неделя и месяц' },
+  { key: 'alerts', label: 'Оповещения', description: 'Низкий заряд, запас, просроченные' },
+  { key: 'today_excursions', label: 'Экскурсии на сегодня', description: 'Список экскурсий' },
+  { key: 'rental_section', label: 'Аренда', description: 'Активные заказы аренды' },
+];
+
+export interface DashboardConfig {
+  widgets: {
+    key: DashboardWidgetKey;
+    visible: boolean;
+    order: number;
+  }[];
+}
+
+export const DEFAULT_DASHBOARD_CONFIG: DashboardConfig = {
+  widgets: [
+    { key: 'kpi_cards', visible: true, order: 0 },
+    { key: 'period_summary', visible: true, order: 1 },
+    { key: 'alerts', visible: true, order: 2 },
+    { key: 'today_excursions', visible: true, order: 3 },
+    { key: 'rental_section', visible: true, order: 4 },
+  ],
+};
+
 export interface Profile {
   id: string;
   email: string;
@@ -185,6 +218,7 @@ export interface Profile {
   owner_commission_percent?: number;
   executor_commission_percent?: number;
   service_commission_percent?: number;
+  dashboard_config?: DashboardConfig;
   created_at: string;
   updated_at: string;
 }
