@@ -328,7 +328,10 @@ export default function RentalServicesScreen() {
                   Списание со склада
                 </ThemedText>
                 <Pressable
-                  onPress={() => setItemPickerVisible(true)}
+                  onPress={() => {
+                    setModalVisible(false);
+                    setTimeout(() => setItemPickerVisible(true), 100);
+                  }}
                   style={[
                     styles.pickerButton,
                     {
@@ -391,6 +394,7 @@ export default function RentalServicesScreen() {
                 onPress={() => {
                   setWriteoffItemId(null);
                   setItemPickerVisible(false);
+                  setTimeout(() => setModalVisible(true), 100);
                 }}
                 style={[
                   styles.pickerItem,
@@ -408,6 +412,7 @@ export default function RentalServicesScreen() {
                   onPress={() => {
                     setWriteoffItemId(item.id);
                     setItemPickerVisible(false);
+                    setTimeout(() => setModalVisible(true), 100);
                   }}
                   style={[
                     styles.pickerItem,
