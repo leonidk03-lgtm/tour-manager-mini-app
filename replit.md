@@ -79,6 +79,18 @@ Automatic commission calculation when orders are marked as paid:
 **Database Setup**: 
 - Execute `sql/rental_commissions_setup.sql` in Supabase SQL Editor to create the commissions table and add commission fields to profiles.
 - Execute `sql/equipment_losses_rental_update.sql` to add rental_order_id column to equipment_losses table for tracking losses from rental orders.
+- Execute `sql/rental_permissions_setup.sql` to migrate existing rental permissions to granular sub-permissions.
+
+### Granular Rental Permissions
+The rental module uses granular permissions for fine-grained access control:
+- **rental**: Legacy permission - grants access to all rental sections (for backwards compatibility)
+- **rental_clients**: Access to Clients section
+- **rental_orders**: Access to Orders section
+- **rental_payments**: Access to Payments section
+- **rental_commissions**: Access to Commissions section
+- **rental_calendar**: Access to Calendar section
+
+Permissions are managed per-manager in Admin Panel -> Manager Details. Users with the legacy `rental` permission automatically get access to all sections. Admins always have full access.
 
 ### Equipment Loss Tracking
 Equipment losses can be registered from both excursion radio guide assignments and rental orders:
