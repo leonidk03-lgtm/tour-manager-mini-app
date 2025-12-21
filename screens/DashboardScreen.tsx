@@ -222,7 +222,7 @@ export default function DashboardScreen() {
   const { theme } = useTheme();
   const navigation = useNavigation<NavigationProp<MainTabParamList>>();
   const { excursions, tourTypes, additionalServices, transactions, radioGuideKits, equipmentItems } = useData();
-  const { rentalOrders, rentalClients } = useRental();
+  const { rentalOrders, rentalClients, rentalPayments } = useRental();
   const { isAdmin, hasPermission, profile } = useAuth();
   const [referenceDate, setReferenceDate] = useState(new Date());
   const [refreshing, setRefreshing] = useState(false);
@@ -387,23 +387,32 @@ export default function DashboardScreen() {
   const rentalStats = useMemo(() => {
     const tomorrow = new Date(referenceDate);
     tomorrow.setDate(tomorrow.getDate() + 1);
-    const { startDate, endDate } = getDateRangeForPeriod("day", tomorrow);
-    const startDateObj = new Date(startDate);
-    const endDateObj = new Date(endDate);
+    const { startDate: tomorrowStart, endDate: tomorrowEnd } = getDateRangeForPeriod("day", tomorrow);
+    const tomorrowStartObj = new Date(tomorrowStart);
+    const tomorrowEndObj = new Date(tomorrowEnd);
     
     const tomorrowOrders = rentalOrders.filter(order => {
       const orderDate = new Date(order.startDate);
-      return orderDate >= startDateObj && orderDate <= endDateObj;
+      return orderDate >= tomorrowStartObj && orderDate <= tomorrowEndObj;
     });
     
     const activeCount = rentalOrders.filter(order => 
       order.status === 'new' || order.status === 'issued'
     ).length;
+
+    const { startDate: todayStart, endDate: todayEnd } = getDateRangeForPeriod("day", referenceDate);
+    const todayStartObj = new Date(todayStart);
+    const todayEndObj = new Date(todayEnd);
     
-    const tomorrowRevenue = tomorrowOrders.reduce((sum, order) => sum + (order.totalPrice || 0), 0);
+    const todayPayments = rentalPayments.filter(payment => {
+      const paymentDate = new Date(payment.createdAt);
+      return paymentDate >= todayStartObj && paymentDate <= todayEndObj;
+    });
     
-    return { active: activeCount, tomorrowOrders: tomorrowOrders.length, tomorrowRevenue };
-  }, [rentalOrders, referenceDate]);
+    const todayPaymentsTotal = todayPayments.reduce((sum, payment) => sum + payment.amount, 0);
+    
+    return { active: activeCount, tomorrowOrders: tomorrowOrders.length, todayPaymentsTotal };
+  }, [rentalOrders, rentalPayments, referenceDate]);
 
   const alerts = useMemo(() => {
     const alertsList: { icon: string; title: string; description: string; color: string; key: string }[] = [];
@@ -662,31 +671,10 @@ export default function DashboardScreen() {
                     </ThemedView>
                     <ThemedView style={[styles.rentalKpiCard, { backgroundColor: theme.backgroundSecondary }]}>
                       <Icon name="dollar-sign" size={18} color={theme.success} />
-                      <ThemedText style={[styles.rentalKpiValue, { color: theme.success }]}>{formatCurrency(rentalStats.tomorrowRevenue)}</ThemedText>
+                      <ThemedText style={[styles.rentalKpiValue, { color: theme.success }]}>{formatCurrency(rentalStats.todayPaymentsTotal)}</ThemedText>
                       <ThemedText style={[styles.rentalKpiLabel, { color: theme.textSecondary }]}>Доход</ThemedText>
                     </ThemedView>
                   </View>
-                  
-                  {activeRentalOrders.length > 0 ? (
-                    activeRentalOrders.map(order => (
-                      <RentalOrderCard
-                        key={order.id}
-                        clientName={getClientName(order.clientId)}
-                        status={order.status}
-                        kits={order.kitCount}
-                        startDate={order.startDate}
-                        endDate={order.endDate}
-                        onPress={() => navigation.navigate('SettingsTab' as never, { screen: 'RentalOrderDetail', params: { orderId: order.id } } as never)}
-                      />
-                    ))
-                  ) : (
-                    <ThemedView style={[styles.emptyCard, { backgroundColor: theme.backgroundSecondary }]}>
-                      <Icon name="check-circle" size={24} color={theme.success} />
-                      <ThemedText style={[styles.emptyText, { color: theme.textSecondary }]}>
-                        Нет активных заказов
-                      </ThemedText>
-                    </ThemedView>
-                  )}
                 </View>
               );
 
