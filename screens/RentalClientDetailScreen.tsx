@@ -16,6 +16,7 @@ import { useSafeAreaInsets } from "react-native-safe-area-context";
 import { useNavigation, useRoute, RouteProp, NavigationProp } from "@react-navigation/native";
 import * as Clipboard from "expo-clipboard";
 import * as Sharing from "expo-sharing";
+import DateTimePicker from "@react-native-community/datetimepicker";
 import { Icon } from "@/components/Icon";
 import { ThemedText } from "@/components/ThemedText";
 import { ThemedView } from "@/components/ThemedView";
@@ -85,6 +86,11 @@ export default function RentalClientDetailScreen() {
   const [bulkPaymentNotes, setBulkPaymentNotes] = useState("");
   const [isBulkPaymentProcessing, setIsBulkPaymentProcessing] = useState(false);
 
+  const [reconciliationStartDate, setReconciliationStartDate] = useState<Date | null>(null);
+  const [reconciliationEndDate, setReconciliationEndDate] = useState<Date | null>(null);
+  const [showStartDatePicker, setShowStartDatePicker] = useState(false);
+  const [showEndDatePicker, setShowEndDatePicker] = useState(false);
+
   const clientOrders = useMemo(() => {
     if (!client) return [];
     return rentalOrders.filter(o => o.clientId === client.id).sort((a, b) => 
@@ -96,6 +102,24 @@ export default function RentalClientDetailScreen() {
     if (!client) return [];
     return getClientUnpaidOrders(client.id);
   }, [client, getClientUnpaidOrders]);
+
+  const filteredUnpaidOrders = useMemo(() => {
+    let filtered = unpaidOrders;
+    
+    if (reconciliationStartDate) {
+      const startOfDay = new Date(reconciliationStartDate);
+      startOfDay.setHours(0, 0, 0, 0);
+      filtered = filtered.filter(order => new Date(order.startDate) >= startOfDay);
+    }
+    
+    if (reconciliationEndDate) {
+      const endOfDay = new Date(reconciliationEndDate);
+      endOfDay.setHours(23, 59, 59, 999);
+      filtered = filtered.filter(order => new Date(order.startDate) <= endOfDay);
+    }
+    
+    return filtered;
+  }, [unpaidOrders, reconciliationStartDate, reconciliationEndDate]);
 
   const stats = useMemo(() => {
     const totalOrders = clientOrders.length;
@@ -260,13 +284,20 @@ export default function RentalClientDetailScreen() {
     const lines: string[] = [];
     lines.push(`СВЕРКА: ${client.name}`);
     lines.push(`Дата: ${formatDate(new Date().toISOString())}`);
+    
+    if (reconciliationStartDate || reconciliationEndDate) {
+      const periodStart = reconciliationStartDate ? formatDate(reconciliationStartDate.toISOString()) : "...";
+      const periodEnd = reconciliationEndDate ? formatDate(reconciliationEndDate.toISOString()) : "...";
+      lines.push(`Период: ${periodStart} - ${periodEnd}`);
+    }
+    
     lines.push("");
     lines.push("НЕОПЛАЧЕННЫЕ ЗАКАЗЫ:");
     lines.push("─".repeat(40));
 
     let total = 0;
 
-    unpaidOrders.forEach((order, index) => {
+    filteredUnpaidOrders.forEach((order, index) => {
       const remaining = getOrderRemainingAmount(order.id);
       total += remaining;
 
@@ -370,8 +401,8 @@ export default function RentalClientDetailScreen() {
   };
 
   const totalUnpaidAmount = useMemo(() => {
-    return unpaidOrders.reduce((sum, order) => sum + getOrderRemainingAmount(order.id), 0);
-  }, [unpaidOrders, getOrderRemainingAmount]);
+    return filteredUnpaidOrders.reduce((sum, order) => sum + getOrderRemainingAmount(order.id), 0);
+  }, [filteredUnpaidOrders, getOrderRemainingAmount]);
 
   return (
     <ThemedView style={styles.container}>
@@ -996,26 +1027,98 @@ export default function RentalClientDetailScreen() {
           <View style={[styles.modalContent, { backgroundColor: theme.backgroundDefault, maxHeight: "85%" }]}>
             <View style={styles.modalHeader}>
               <ThemedText style={styles.modalTitle}>Сверка</ThemedText>
-              <Pressable onPress={() => setShowReconciliationModal(false)}>
+              <Pressable onPress={() => {
+                setReconciliationStartDate(null);
+                setReconciliationEndDate(null);
+                setShowReconciliationModal(false);
+              }}>
                 <Icon name="x" size={24} color={theme.text} />
               </Pressable>
             </View>
 
             <ScrollView style={styles.modalBody} showsVerticalScrollIndicator={false}>
               <ThemedText style={[styles.reconciliationTitle, { color: theme.textSecondary }]}>
-                Неоплаченные заказы
+                Период (по дате начала заказа)
+              </ThemedText>
+              
+              <View style={styles.periodRow}>
+                <View style={styles.periodDateBox}>
+                  <ThemedText style={[styles.periodLabel, { color: theme.textSecondary }]}>С:</ThemedText>
+                  <Pressable 
+                    onPress={() => setShowStartDatePicker(true)}
+                    style={[styles.periodDateBtn, { backgroundColor: theme.backgroundSecondary }]}
+                  >
+                    <ThemedText>
+                      {reconciliationStartDate ? formatDate(reconciliationStartDate.toISOString()) : "Выбрать"}
+                    </ThemedText>
+                    {reconciliationStartDate ? (
+                      <Pressable onPress={() => setReconciliationStartDate(null)} hitSlop={8}>
+                        <Icon name="x" size={16} color={theme.textSecondary} />
+                      </Pressable>
+                    ) : (
+                      <Icon name="calendar" size={16} color={theme.textSecondary} />
+                    )}
+                  </Pressable>
+                </View>
+                
+                <View style={styles.periodDateBox}>
+                  <ThemedText style={[styles.periodLabel, { color: theme.textSecondary }]}>По:</ThemedText>
+                  <Pressable 
+                    onPress={() => setShowEndDatePicker(true)}
+                    style={[styles.periodDateBtn, { backgroundColor: theme.backgroundSecondary }]}
+                  >
+                    <ThemedText>
+                      {reconciliationEndDate ? formatDate(reconciliationEndDate.toISOString()) : "Выбрать"}
+                    </ThemedText>
+                    {reconciliationEndDate ? (
+                      <Pressable onPress={() => setReconciliationEndDate(null)} hitSlop={8}>
+                        <Icon name="x" size={16} color={theme.textSecondary} />
+                      </Pressable>
+                    ) : (
+                      <Icon name="calendar" size={16} color={theme.textSecondary} />
+                    )}
+                  </Pressable>
+                </View>
+              </View>
+
+              {(showStartDatePicker && Platform.OS !== "web") ? (
+                <DateTimePicker
+                  value={reconciliationStartDate || new Date()}
+                  mode="date"
+                  display="spinner"
+                  onChange={(event, date) => {
+                    setShowStartDatePicker(false);
+                    if (date) setReconciliationStartDate(date);
+                  }}
+                />
+              ) : null}
+
+              {(showEndDatePicker && Platform.OS !== "web") ? (
+                <DateTimePicker
+                  value={reconciliationEndDate || new Date()}
+                  mode="date"
+                  display="spinner"
+                  onChange={(event, date) => {
+                    setShowEndDatePicker(false);
+                    if (date) setReconciliationEndDate(date);
+                  }}
+                />
+              ) : null}
+
+              <ThemedText style={[styles.reconciliationTitle, { color: theme.textSecondary, marginTop: Spacing.md }]}>
+                Неоплаченные заказы ({filteredUnpaidOrders.length})
               </ThemedText>
 
-              {unpaidOrders.length === 0 ? (
+              {filteredUnpaidOrders.length === 0 ? (
                 <View style={[styles.emptyReconciliation, { backgroundColor: theme.backgroundSecondary }]}>
                   <Icon name="check-circle" size={32} color={theme.success} />
                   <ThemedText style={{ color: theme.textSecondary, marginTop: Spacing.sm }}>
-                    Все заказы оплачены
+                    {unpaidOrders.length === 0 ? "Все заказы оплачены" : "Нет заказов за выбранный период"}
                   </ThemedText>
                 </View>
               ) : (
                 <View style={styles.reconciliationList}>
-                  {unpaidOrders.map((order, index) => {
+                  {filteredUnpaidOrders.map((order, index) => {
                     const remaining = getOrderRemainingAmount(order.id);
                     const orderServices = rentalOrderServices.filter(s => s.orderId === order.id);
 
@@ -1086,7 +1189,7 @@ export default function RentalClientDetailScreen() {
                 </View>
               )}
 
-              {unpaidOrders.length > 0 ? (
+              {filteredUnpaidOrders.length > 0 ? (
                 <>
                   <View style={[styles.reconciliationTotal, { backgroundColor: theme.primary + "15" }]}>
                     <ThemedText style={{ fontWeight: "600" }}>ИТОГО К ОПЛАТЕ:</ThemedText>
@@ -1525,6 +1628,30 @@ const styles = StyleSheet.create({
     fontWeight: "500",
     textTransform: "uppercase",
     marginBottom: Spacing.md,
+  },
+  periodRow: {
+    flexDirection: "row",
+    gap: Spacing.md,
+    marginBottom: Spacing.md,
+  },
+  periodDateBox: {
+    flex: 1,
+    flexDirection: "row",
+    alignItems: "center",
+    gap: Spacing.sm,
+  },
+  periodLabel: {
+    fontSize: 13,
+    fontWeight: "500",
+  },
+  periodDateBtn: {
+    flex: 1,
+    flexDirection: "row",
+    justifyContent: "space-between",
+    alignItems: "center",
+    paddingHorizontal: Spacing.sm,
+    paddingVertical: Spacing.sm,
+    borderRadius: BorderRadius.md,
   },
   emptyReconciliation: {
     padding: Spacing.xl,
