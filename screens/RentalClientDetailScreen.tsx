@@ -9,6 +9,8 @@ import {
   FlatList,
   Linking,
   Platform,
+  KeyboardAvoidingView,
+  ScrollView,
 } from "react-native";
 import { useSafeAreaInsets } from "react-native-safe-area-context";
 import { useNavigation, useRoute, RouteProp, NavigationProp } from "@react-navigation/native";
@@ -433,16 +435,20 @@ export default function RentalClientDetailScreen() {
       </ScreenScrollView>
 
       <Modal visible={showEditModal} animationType="slide" transparent>
-        <View style={[styles.modalOverlay, { justifyContent: "flex-end" }]}>
-          <View style={[styles.modalContent, { backgroundColor: theme.backgroundDefault }]}>
-            <View style={styles.modalHeader}>
-              <ThemedText style={styles.modalTitle}>Редактировать клиента</ThemedText>
-              <Pressable onPress={() => setShowEditModal(false)}>
-                <Icon name="x" size={24} color={theme.text} />
-              </Pressable>
-            </View>
+        <KeyboardAvoidingView 
+          behavior={Platform.OS === "ios" ? "padding" : "height"}
+          style={{ flex: 1 }}
+        >
+          <View style={[styles.modalOverlay, { justifyContent: "flex-end" }]}>
+            <View style={[styles.modalContent, { backgroundColor: theme.backgroundDefault, maxHeight: "90%" }]}>
+              <View style={styles.modalHeader}>
+                <ThemedText style={styles.modalTitle}>Редактировать клиента</ThemedText>
+                <Pressable onPress={() => setShowEditModal(false)}>
+                  <Icon name="x" size={24} color={theme.text} />
+                </Pressable>
+              </View>
 
-            <View style={styles.modalBody}>
+              <ScrollView style={styles.modalBody} showsVerticalScrollIndicator={false}>
               <View style={styles.typeRow}>
                 <Pressable
                   onPress={() => setEditType("individual")}
@@ -576,15 +582,17 @@ export default function RentalClientDetailScreen() {
                 numberOfLines={3}
               />
 
-              <Pressable
-                onPress={handleSaveEdit}
-                style={[styles.saveBtn, { backgroundColor: theme.primary }]}
-              >
-                <ThemedText style={{ color: "#fff", fontWeight: "600" }}>Сохранить</ThemedText>
-              </Pressable>
+                <Pressable
+                  onPress={handleSaveEdit}
+                  style={[styles.saveBtn, { backgroundColor: theme.primary }]}
+                >
+                  <ThemedText style={{ color: "#fff", fontWeight: "600" }}>Сохранить</ThemedText>
+                </Pressable>
+                <View style={{ height: Spacing.xl }} />
+              </ScrollView>
             </View>
           </View>
-        </View>
+        </KeyboardAvoidingView>
       </Modal>
 
       <Modal visible={showManagerModal} animationType="slide" transparent>

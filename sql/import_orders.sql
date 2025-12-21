@@ -26,8 +26,12 @@ SELECT
   NOW(),
   NOW()
 FROM rental_clients c
-WHERE (c.name = 'Эдик Заказы для групп' OR c.director_name = 'Эдик Заказы для групп')
-  AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 1273)
+WHERE (
+  c.name = 'Эдик Заказы для групп' 
+  OR c.director_name = 'Эдик Заказы для групп'
+  OR COALESCE(c.director_name, c.name) = 'Эдик Заказы для групп'
+)
+AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 1273)
 LIMIT 1;
 
 INSERT INTO rental_orders (
@@ -55,8 +59,12 @@ SELECT
   NOW(),
   NOW()
 FROM rental_clients c
-WHERE (c.name = 'Эдик Заказы для групп' OR c.director_name = 'Эдик Заказы для групп')
-  AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 1272)
+WHERE (
+  c.name = 'Эдик Заказы для групп' 
+  OR c.director_name = 'Эдик Заказы для групп'
+  OR COALESCE(c.director_name, c.name) = 'Эдик Заказы для групп'
+)
+AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 1272)
 LIMIT 1;
 
 INSERT INTO rental_orders (
@@ -84,8 +92,12 @@ SELECT
   NOW(),
   NOW()
 FROM rental_clients c
-WHERE (c.name = 'София' OR c.director_name = 'София')
-  AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 1271)
+WHERE (
+  c.name = 'София' 
+  OR c.director_name = 'София'
+  OR COALESCE(c.director_name, c.name) = 'София'
+)
+AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 1271)
 LIMIT 1;
 
 INSERT INTO rental_orders (
@@ -113,8 +125,12 @@ SELECT
   NOW(),
   NOW()
 FROM rental_clients c
-WHERE (c.name = 'Арсен (Юнион)' OR c.director_name = 'Арсен (Юнион)')
-  AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 1270)
+WHERE (
+  c.name = 'Арсен (Юнион)' 
+  OR c.director_name = 'Арсен (Юнион)'
+  OR COALESCE(c.director_name, c.name) = 'Арсен (Юнион)'
+)
+AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 1270)
 LIMIT 1;
 
 INSERT INTO rental_orders (
@@ -142,8 +158,12 @@ SELECT
   NOW(),
   NOW()
 FROM rental_clients c
-WHERE (c.name = 'Арсен (Юнион)' OR c.director_name = 'Арсен (Юнион)')
-  AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 1269)
+WHERE (
+  c.name = 'Арсен (Юнион)' 
+  OR c.director_name = 'Арсен (Юнион)'
+  OR COALESCE(c.director_name, c.name) = 'Арсен (Юнион)'
+)
+AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 1269)
 LIMIT 1;
 
 INSERT INTO rental_orders (
@@ -171,8 +191,12 @@ SELECT
   NOW(),
   NOW()
 FROM rental_clients c
-WHERE (c.name = 'Арсен (Юнион)' OR c.director_name = 'Арсен (Юнион)')
-  AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 1268)
+WHERE (
+  c.name = 'Арсен (Юнион)' 
+  OR c.director_name = 'Арсен (Юнион)'
+  OR COALESCE(c.director_name, c.name) = 'Арсен (Юнион)'
+)
+AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 1268)
 LIMIT 1;
 
 INSERT INTO rental_orders (
@@ -200,8 +224,12 @@ SELECT
   NOW(),
   NOW()
 FROM rental_clients c
-WHERE (c.name = 'Арсен (Юнион)' OR c.director_name = 'Арсен (Юнион)')
-  AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 1267)
+WHERE (
+  c.name = 'Арсен (Юнион)' 
+  OR c.director_name = 'Арсен (Юнион)'
+  OR COALESCE(c.director_name, c.name) = 'Арсен (Юнион)'
+)
+AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 1267)
 LIMIT 1;
 
 INSERT INTO rental_orders (
@@ -229,8 +257,12 @@ SELECT
   NOW(),
   NOW()
 FROM rental_clients c
-WHERE (c.name = 'Арсен (Юнион)' OR c.director_name = 'Арсен (Юнион)')
-  AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 1266)
+WHERE (
+  c.name = 'Арсен (Юнион)' 
+  OR c.director_name = 'Арсен (Юнион)'
+  OR COALESCE(c.director_name, c.name) = 'Арсен (Юнион)'
+)
+AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 1266)
 LIMIT 1;
 
 INSERT INTO rental_orders (
@@ -258,8 +290,12 @@ SELECT
   NOW(),
   NOW()
 FROM rental_clients c
-WHERE (c.name = 'Арсен (Юнион)' OR c.director_name = 'Арсен (Юнион)')
-  AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 1265)
+WHERE (
+  c.name = 'Арсен (Юнион)' 
+  OR c.director_name = 'Арсен (Юнион)'
+  OR COALESCE(c.director_name, c.name) = 'Арсен (Юнион)'
+)
+AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 1265)
 LIMIT 1;
 
 INSERT INTO rental_orders (
@@ -287,8 +323,12 @@ SELECT
   NOW(),
   NOW()
 FROM rental_clients c
-WHERE (c.name = 'Арсен (Юнион)' OR c.director_name = 'Арсен (Юнион)')
-  AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 1264)
+WHERE (
+  c.name = 'Арсен (Юнион)' 
+  OR c.director_name = 'Арсен (Юнион)'
+  OR COALESCE(c.director_name, c.name) = 'Арсен (Юнион)'
+)
+AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 1264)
 LIMIT 1;
 
 INSERT INTO rental_orders (
@@ -316,8 +356,12 @@ SELECT
   NOW(),
   NOW()
 FROM rental_clients c
-WHERE (c.name = 'Арсен (Юнион)' OR c.director_name = 'Арсен (Юнион)')
-  AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 1263)
+WHERE (
+  c.name = 'Арсен (Юнион)' 
+  OR c.director_name = 'Арсен (Юнион)'
+  OR COALESCE(c.director_name, c.name) = 'Арсен (Юнион)'
+)
+AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 1263)
 LIMIT 1;
 
 INSERT INTO rental_orders (
@@ -345,8 +389,12 @@ SELECT
   NOW(),
   NOW()
 FROM rental_clients c
-WHERE (c.name = 'Арсен (Юнион)' OR c.director_name = 'Арсен (Юнион)')
-  AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 1262)
+WHERE (
+  c.name = 'Арсен (Юнион)' 
+  OR c.director_name = 'Арсен (Юнион)'
+  OR COALESCE(c.director_name, c.name) = 'Арсен (Юнион)'
+)
+AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 1262)
 LIMIT 1;
 
 INSERT INTO rental_orders (
@@ -374,8 +422,12 @@ SELECT
   NOW(),
   NOW()
 FROM rental_clients c
-WHERE (c.name = 'Арсен (Юнион)' OR c.director_name = 'Арсен (Юнион)')
-  AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 1261)
+WHERE (
+  c.name = 'Арсен (Юнион)' 
+  OR c.director_name = 'Арсен (Юнион)'
+  OR COALESCE(c.director_name, c.name) = 'Арсен (Юнион)'
+)
+AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 1261)
 LIMIT 1;
 
 INSERT INTO rental_orders (
@@ -403,8 +455,12 @@ SELECT
   NOW(),
   NOW()
 FROM rental_clients c
-WHERE (c.name = 'Арсен (Юнион)' OR c.director_name = 'Арсен (Юнион)')
-  AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 1260)
+WHERE (
+  c.name = 'Арсен (Юнион)' 
+  OR c.director_name = 'Арсен (Юнион)'
+  OR COALESCE(c.director_name, c.name) = 'Арсен (Юнион)'
+)
+AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 1260)
 LIMIT 1;
 
 INSERT INTO rental_orders (
@@ -432,8 +488,12 @@ SELECT
   NOW(),
   NOW()
 FROM rental_clients c
-WHERE (c.name = 'Арсен (Юнион)' OR c.director_name = 'Арсен (Юнион)')
-  AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 1259)
+WHERE (
+  c.name = 'Арсен (Юнион)' 
+  OR c.director_name = 'Арсен (Юнион)'
+  OR COALESCE(c.director_name, c.name) = 'Арсен (Юнион)'
+)
+AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 1259)
 LIMIT 1;
 
 INSERT INTO rental_orders (
@@ -461,8 +521,12 @@ SELECT
   NOW(),
   NOW()
 FROM rental_clients c
-WHERE (c.name = 'Зельфира' OR c.director_name = 'Зельфира')
-  AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 1258)
+WHERE (
+  c.name = 'Зельфира' 
+  OR c.director_name = 'Зельфира'
+  OR COALESCE(c.director_name, c.name) = 'Зельфира'
+)
+AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 1258)
 LIMIT 1;
 
 INSERT INTO rental_orders (
@@ -490,8 +554,12 @@ SELECT
   NOW(),
   NOW()
 FROM rental_clients c
-WHERE (c.name = 'Зельфира' OR c.director_name = 'Зельфира')
-  AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 1257)
+WHERE (
+  c.name = 'Зельфира' 
+  OR c.director_name = 'Зельфира'
+  OR COALESCE(c.director_name, c.name) = 'Зельфира'
+)
+AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 1257)
 LIMIT 1;
 
 INSERT INTO rental_orders (
@@ -519,8 +587,12 @@ SELECT
   NOW(),
   NOW()
 FROM rental_clients c
-WHERE (c.name = 'Зельфира' OR c.director_name = 'Зельфира')
-  AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 1256)
+WHERE (
+  c.name = 'Зельфира' 
+  OR c.director_name = 'Зельфира'
+  OR COALESCE(c.director_name, c.name) = 'Зельфира'
+)
+AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 1256)
 LIMIT 1;
 
 INSERT INTO rental_orders (
@@ -548,8 +620,12 @@ SELECT
   NOW(),
   NOW()
 FROM rental_clients c
-WHERE (c.name = 'Эвелина (Инициатива)' OR c.director_name = 'Эвелина (Инициатива)')
-  AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 1255)
+WHERE (
+  c.name = 'Эвелина (Инициатива)' 
+  OR c.director_name = 'Эвелина (Инициатива)'
+  OR COALESCE(c.director_name, c.name) = 'Эвелина (Инициатива)'
+)
+AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 1255)
 LIMIT 1;
 
 INSERT INTO rental_orders (
@@ -577,8 +653,12 @@ SELECT
   NOW(),
   NOW()
 FROM rental_clients c
-WHERE (c.name = 'Эвелина (Инициатива)' OR c.director_name = 'Эвелина (Инициатива)')
-  AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 1254)
+WHERE (
+  c.name = 'Эвелина (Инициатива)' 
+  OR c.director_name = 'Эвелина (Инициатива)'
+  OR COALESCE(c.director_name, c.name) = 'Эвелина (Инициатива)'
+)
+AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 1254)
 LIMIT 1;
 
 INSERT INTO rental_orders (
@@ -606,8 +686,12 @@ SELECT
   NOW(),
   NOW()
 FROM rental_clients c
-WHERE (c.name = 'Эвелина (Инициатива)' OR c.director_name = 'Эвелина (Инициатива)')
-  AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 1253)
+WHERE (
+  c.name = 'Эвелина (Инициатива)' 
+  OR c.director_name = 'Эвелина (Инициатива)'
+  OR COALESCE(c.director_name, c.name) = 'Эвелина (Инициатива)'
+)
+AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 1253)
 LIMIT 1;
 
 INSERT INTO rental_orders (
@@ -635,8 +719,12 @@ SELECT
   NOW(),
   NOW()
 FROM rental_clients c
-WHERE (c.name = 'Эвелина (Инициатива)' OR c.director_name = 'Эвелина (Инициатива)')
-  AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 1252)
+WHERE (
+  c.name = 'Эвелина (Инициатива)' 
+  OR c.director_name = 'Эвелина (Инициатива)'
+  OR COALESCE(c.director_name, c.name) = 'Эвелина (Инициатива)'
+)
+AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 1252)
 LIMIT 1;
 
 INSERT INTO rental_orders (
@@ -664,8 +752,12 @@ SELECT
   NOW(),
   NOW()
 FROM rental_clients c
-WHERE (c.name = 'Эвелина (Инициатива)' OR c.director_name = 'Эвелина (Инициатива)')
-  AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 1251)
+WHERE (
+  c.name = 'Эвелина (Инициатива)' 
+  OR c.director_name = 'Эвелина (Инициатива)'
+  OR COALESCE(c.director_name, c.name) = 'Эвелина (Инициатива)'
+)
+AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 1251)
 LIMIT 1;
 
 INSERT INTO rental_orders (
@@ -693,8 +785,12 @@ SELECT
   NOW(),
   NOW()
 FROM rental_clients c
-WHERE (c.name = 'Мария Экскурсовод' OR c.director_name = 'Мария Экскурсовод')
-  AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 1250)
+WHERE (
+  c.name = 'Мария Экскурсовод' 
+  OR c.director_name = 'Мария Экскурсовод'
+  OR COALESCE(c.director_name, c.name) = 'Мария Экскурсовод'
+)
+AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 1250)
 LIMIT 1;
 
 INSERT INTO rental_orders (
@@ -722,8 +818,12 @@ SELECT
   NOW(),
   NOW()
 FROM rental_clients c
-WHERE (c.name = 'Элина (Сититур)' OR c.director_name = 'Элина (Сититур)')
-  AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 1249)
+WHERE (
+  c.name = 'Элина (Сититур)' 
+  OR c.director_name = 'Элина (Сититур)'
+  OR COALESCE(c.director_name, c.name) = 'Элина (Сититур)'
+)
+AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 1249)
 LIMIT 1;
 
 INSERT INTO rental_orders (
@@ -751,8 +851,12 @@ SELECT
   NOW(),
   NOW()
 FROM rental_clients c
-WHERE (c.name = 'Ляйсан (Казань 360)' OR c.director_name = 'Ляйсан (Казань 360)')
-  AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 1248)
+WHERE (
+  c.name = 'Ляйсан (Казань 360)' 
+  OR c.director_name = 'Ляйсан (Казань 360)'
+  OR COALESCE(c.director_name, c.name) = 'Ляйсан (Казань 360)'
+)
+AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 1248)
 LIMIT 1;
 
 INSERT INTO rental_orders (
@@ -780,8 +884,12 @@ SELECT
   NOW(),
   NOW()
 FROM rental_clients c
-WHERE (c.name = 'Ляйсан (Казань 360)' OR c.director_name = 'Ляйсан (Казань 360)')
-  AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 1247)
+WHERE (
+  c.name = 'Ляйсан (Казань 360)' 
+  OR c.director_name = 'Ляйсан (Казань 360)'
+  OR COALESCE(c.director_name, c.name) = 'Ляйсан (Казань 360)'
+)
+AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 1247)
 LIMIT 1;
 
 INSERT INTO rental_orders (
@@ -809,8 +917,12 @@ SELECT
   NOW(),
   NOW()
 FROM rental_clients c
-WHERE (c.name = 'Мира (ИП)' OR c.director_name = 'Мира (ИП)')
-  AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 1246)
+WHERE (
+  c.name = 'Мира (ИП)' 
+  OR c.director_name = 'Мира (ИП)'
+  OR COALESCE(c.director_name, c.name) = 'Мира (ИП)'
+)
+AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 1246)
 LIMIT 1;
 
 INSERT INTO rental_orders (
@@ -838,8 +950,12 @@ SELECT
   NOW(),
   NOW()
 FROM rental_clients c
-WHERE (c.name = 'Любовь (ТИЦ)' OR c.director_name = 'Любовь (ТИЦ)')
-  AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 1245)
+WHERE (
+  c.name = 'Любовь (ТИЦ)' 
+  OR c.director_name = 'Любовь (ТИЦ)'
+  OR COALESCE(c.director_name, c.name) = 'Любовь (ТИЦ)'
+)
+AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 1245)
 LIMIT 1;
 
 INSERT INTO rental_orders (
@@ -867,8 +983,12 @@ SELECT
   NOW(),
   NOW()
 FROM rental_clients c
-WHERE (c.name = 'Мария Экскурсовод' OR c.director_name = 'Мария Экскурсовод')
-  AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 1244)
+WHERE (
+  c.name = 'Мария Экскурсовод' 
+  OR c.director_name = 'Мария Экскурсовод'
+  OR COALESCE(c.director_name, c.name) = 'Мария Экскурсовод'
+)
+AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 1244)
 LIMIT 1;
 
 INSERT INTO rental_orders (
@@ -896,8 +1016,12 @@ SELECT
   NOW(),
   NOW()
 FROM rental_clients c
-WHERE (c.name = 'Мария Экскурсовод' OR c.director_name = 'Мария Экскурсовод')
-  AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 1243)
+WHERE (
+  c.name = 'Мария Экскурсовод' 
+  OR c.director_name = 'Мария Экскурсовод'
+  OR COALESCE(c.director_name, c.name) = 'Мария Экскурсовод'
+)
+AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 1243)
 LIMIT 1;
 
 INSERT INTO rental_orders (
@@ -925,8 +1049,12 @@ SELECT
   NOW(),
   NOW()
 FROM rental_clients c
-WHERE (c.name = 'Мария Экскурсовод' OR c.director_name = 'Мария Экскурсовод')
-  AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 1242)
+WHERE (
+  c.name = 'Мария Экскурсовод' 
+  OR c.director_name = 'Мария Экскурсовод'
+  OR COALESCE(c.director_name, c.name) = 'Мария Экскурсовод'
+)
+AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 1242)
 LIMIT 1;
 
 INSERT INTO rental_orders (
@@ -954,8 +1082,12 @@ SELECT
   NOW(),
   NOW()
 FROM rental_clients c
-WHERE (c.name = 'Арсен (Юнион)' OR c.director_name = 'Арсен (Юнион)')
-  AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 1241)
+WHERE (
+  c.name = 'Арсен (Юнион)' 
+  OR c.director_name = 'Арсен (Юнион)'
+  OR COALESCE(c.director_name, c.name) = 'Арсен (Юнион)'
+)
+AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 1241)
 LIMIT 1;
 
 INSERT INTO rental_orders (
@@ -983,8 +1115,12 @@ SELECT
   NOW(),
   NOW()
 FROM rental_clients c
-WHERE (c.name = 'Елена (Конгресс Авиа)' OR c.director_name = 'Елена (Конгресс Авиа)')
-  AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 1240)
+WHERE (
+  c.name = 'Елена (Конгресс Авиа)' 
+  OR c.director_name = 'Елена (Конгресс Авиа)'
+  OR COALESCE(c.director_name, c.name) = 'Елена (Конгресс Авиа)'
+)
+AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 1240)
 LIMIT 1;
 
 INSERT INTO rental_orders (
@@ -1012,8 +1148,12 @@ SELECT
   NOW(),
   NOW()
 FROM rental_clients c
-WHERE (c.name = 'Ляйсан (Казань 360)' OR c.director_name = 'Ляйсан (Казань 360)')
-  AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 1239)
+WHERE (
+  c.name = 'Ляйсан (Казань 360)' 
+  OR c.director_name = 'Ляйсан (Казань 360)'
+  OR COALESCE(c.director_name, c.name) = 'Ляйсан (Казань 360)'
+)
+AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 1239)
 LIMIT 1;
 
 INSERT INTO rental_orders (
@@ -1041,8 +1181,12 @@ SELECT
   NOW(),
   NOW()
 FROM rental_clients c
-WHERE (c.name = 'Ляйсан (Казань 360)' OR c.director_name = 'Ляйсан (Казань 360)')
-  AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 1238)
+WHERE (
+  c.name = 'Ляйсан (Казань 360)' 
+  OR c.director_name = 'Ляйсан (Казань 360)'
+  OR COALESCE(c.director_name, c.name) = 'Ляйсан (Казань 360)'
+)
+AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 1238)
 LIMIT 1;
 
 INSERT INTO rental_orders (
@@ -1070,8 +1214,12 @@ SELECT
   NOW(),
   NOW()
 FROM rental_clients c
-WHERE (c.name = 'Карина (технологии путешествий)' OR c.director_name = 'Карина (технологии путешествий)')
-  AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 1237)
+WHERE (
+  c.name = 'Карина (технологии путешествий)' 
+  OR c.director_name = 'Карина (технологии путешествий)'
+  OR COALESCE(c.director_name, c.name) = 'Карина (технологии путешествий)'
+)
+AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 1237)
 LIMIT 1;
 
 INSERT INTO rental_orders (
@@ -1099,8 +1247,12 @@ SELECT
   NOW(),
   NOW()
 FROM rental_clients c
-WHERE (c.name = 'Ляйсан (Казань 360)' OR c.director_name = 'Ляйсан (Казань 360)')
-  AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 1236)
+WHERE (
+  c.name = 'Ляйсан (Казань 360)' 
+  OR c.director_name = 'Ляйсан (Казань 360)'
+  OR COALESCE(c.director_name, c.name) = 'Ляйсан (Казань 360)'
+)
+AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 1236)
 LIMIT 1;
 
 INSERT INTO rental_orders (
@@ -1128,8 +1280,12 @@ SELECT
   NOW(),
   NOW()
 FROM rental_clients c
-WHERE (c.name = 'Ляйсан (Казань 360)' OR c.director_name = 'Ляйсан (Казань 360)')
-  AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 1235)
+WHERE (
+  c.name = 'Ляйсан (Казань 360)' 
+  OR c.director_name = 'Ляйсан (Казань 360)'
+  OR COALESCE(c.director_name, c.name) = 'Ляйсан (Казань 360)'
+)
+AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 1235)
 LIMIT 1;
 
 INSERT INTO rental_orders (
@@ -1157,8 +1313,12 @@ SELECT
   NOW(),
   NOW()
 FROM rental_clients c
-WHERE (c.name = 'Ляйсан (Казань 360)' OR c.director_name = 'Ляйсан (Казань 360)')
-  AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 1234)
+WHERE (
+  c.name = 'Ляйсан (Казань 360)' 
+  OR c.director_name = 'Ляйсан (Казань 360)'
+  OR COALESCE(c.director_name, c.name) = 'Ляйсан (Казань 360)'
+)
+AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 1234)
 LIMIT 1;
 
 INSERT INTO rental_orders (
@@ -1186,8 +1346,12 @@ SELECT
   NOW(),
   NOW()
 FROM rental_clients c
-WHERE (c.name = 'Ляйсан (Казань 360)' OR c.director_name = 'Ляйсан (Казань 360)')
-  AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 1233)
+WHERE (
+  c.name = 'Ляйсан (Казань 360)' 
+  OR c.director_name = 'Ляйсан (Казань 360)'
+  OR COALESCE(c.director_name, c.name) = 'Ляйсан (Казань 360)'
+)
+AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 1233)
 LIMIT 1;
 
 INSERT INTO rental_orders (
@@ -1215,8 +1379,12 @@ SELECT
   NOW(),
   NOW()
 FROM rental_clients c
-WHERE (c.name = 'Эдик Заказы для групп' OR c.director_name = 'Эдик Заказы для групп')
-  AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 1232)
+WHERE (
+  c.name = 'Эдик Заказы для групп' 
+  OR c.director_name = 'Эдик Заказы для групп'
+  OR COALESCE(c.director_name, c.name) = 'Эдик Заказы для групп'
+)
+AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 1232)
 LIMIT 1;
 
 INSERT INTO rental_orders (
@@ -1244,8 +1412,12 @@ SELECT
   NOW(),
   NOW()
 FROM rental_clients c
-WHERE (c.name = 'Ляйсан (Казань 360)' OR c.director_name = 'Ляйсан (Казань 360)')
-  AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 1231)
+WHERE (
+  c.name = 'Ляйсан (Казань 360)' 
+  OR c.director_name = 'Ляйсан (Казань 360)'
+  OR COALESCE(c.director_name, c.name) = 'Ляйсан (Казань 360)'
+)
+AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 1231)
 LIMIT 1;
 
 INSERT INTO rental_orders (
@@ -1273,8 +1445,12 @@ SELECT
   NOW(),
   NOW()
 FROM rental_clients c
-WHERE (c.name = 'Ляйсан (Казань 360)' OR c.director_name = 'Ляйсан (Казань 360)')
-  AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 1230)
+WHERE (
+  c.name = 'Ляйсан (Казань 360)' 
+  OR c.director_name = 'Ляйсан (Казань 360)'
+  OR COALESCE(c.director_name, c.name) = 'Ляйсан (Казань 360)'
+)
+AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 1230)
 LIMIT 1;
 
 INSERT INTO rental_orders (
@@ -1302,8 +1478,12 @@ SELECT
   NOW(),
   NOW()
 FROM rental_clients c
-WHERE (c.name = 'Ляйсан (Казань 360)' OR c.director_name = 'Ляйсан (Казань 360)')
-  AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 1229)
+WHERE (
+  c.name = 'Ляйсан (Казань 360)' 
+  OR c.director_name = 'Ляйсан (Казань 360)'
+  OR COALESCE(c.director_name, c.name) = 'Ляйсан (Казань 360)'
+)
+AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 1229)
 LIMIT 1;
 
 INSERT INTO rental_orders (
@@ -1331,8 +1511,12 @@ SELECT
   NOW(),
   NOW()
 FROM rental_clients c
-WHERE (c.name = 'Ляйсан (Казань 360)' OR c.director_name = 'Ляйсан (Казань 360)')
-  AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 1228)
+WHERE (
+  c.name = 'Ляйсан (Казань 360)' 
+  OR c.director_name = 'Ляйсан (Казань 360)'
+  OR COALESCE(c.director_name, c.name) = 'Ляйсан (Казань 360)'
+)
+AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 1228)
 LIMIT 1;
 
 INSERT INTO rental_orders (
@@ -1360,8 +1544,12 @@ SELECT
   NOW(),
   NOW()
 FROM rental_clients c
-WHERE (c.name = 'Ляйсан (Казань 360)' OR c.director_name = 'Ляйсан (Казань 360)')
-  AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 1227)
+WHERE (
+  c.name = 'Ляйсан (Казань 360)' 
+  OR c.director_name = 'Ляйсан (Казань 360)'
+  OR COALESCE(c.director_name, c.name) = 'Ляйсан (Казань 360)'
+)
+AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 1227)
 LIMIT 1;
 
 INSERT INTO rental_orders (
@@ -1389,8 +1577,12 @@ SELECT
   NOW(),
   NOW()
 FROM rental_clients c
-WHERE (c.name = 'Ляйсан (Казань 360)' OR c.director_name = 'Ляйсан (Казань 360)')
-  AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 1226)
+WHERE (
+  c.name = 'Ляйсан (Казань 360)' 
+  OR c.director_name = 'Ляйсан (Казань 360)'
+  OR COALESCE(c.director_name, c.name) = 'Ляйсан (Казань 360)'
+)
+AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 1226)
 LIMIT 1;
 
 INSERT INTO rental_orders (
@@ -1418,8 +1610,12 @@ SELECT
   NOW(),
   NOW()
 FROM rental_clients c
-WHERE (c.name = 'Ляйсан (Казань 360)' OR c.director_name = 'Ляйсан (Казань 360)')
-  AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 1225)
+WHERE (
+  c.name = 'Ляйсан (Казань 360)' 
+  OR c.director_name = 'Ляйсан (Казань 360)'
+  OR COALESCE(c.director_name, c.name) = 'Ляйсан (Казань 360)'
+)
+AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 1225)
 LIMIT 1;
 
 INSERT INTO rental_orders (
@@ -1447,8 +1643,12 @@ SELECT
   NOW(),
   NOW()
 FROM rental_clients c
-WHERE (c.name = 'Андрей (Экскурс)' OR c.director_name = 'Андрей (Экскурс)')
-  AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 1224)
+WHERE (
+  c.name = 'Андрей (Экскурс)' 
+  OR c.director_name = 'Андрей (Экскурс)'
+  OR COALESCE(c.director_name, c.name) = 'Андрей (Экскурс)'
+)
+AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 1224)
 LIMIT 1;
 
 INSERT INTO rental_orders (
@@ -1476,8 +1676,12 @@ SELECT
   NOW(),
   NOW()
 FROM rental_clients c
-WHERE (c.name = 'Андрей (Экскурс)' OR c.director_name = 'Андрей (Экскурс)')
-  AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 1223)
+WHERE (
+  c.name = 'Андрей (Экскурс)' 
+  OR c.director_name = 'Андрей (Экскурс)'
+  OR COALESCE(c.director_name, c.name) = 'Андрей (Экскурс)'
+)
+AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 1223)
 LIMIT 1;
 
 INSERT INTO rental_orders (
@@ -1505,8 +1709,12 @@ SELECT
   NOW(),
   NOW()
 FROM rental_clients c
-WHERE (c.name = 'Екатерина Кореева' OR c.director_name = 'Екатерина Кореева')
-  AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 1222)
+WHERE (
+  c.name = 'Екатерина Кореева' 
+  OR c.director_name = 'Екатерина Кореева'
+  OR COALESCE(c.director_name, c.name) = 'Екатерина Кореева'
+)
+AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 1222)
 LIMIT 1;
 
 INSERT INTO rental_orders (
@@ -1534,8 +1742,12 @@ SELECT
   NOW(),
   NOW()
 FROM rental_clients c
-WHERE (c.name = 'Искандер' OR c.director_name = 'Искандер')
-  AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 1221)
+WHERE (
+  c.name = 'Искандер' 
+  OR c.director_name = 'Искандер'
+  OR COALESCE(c.director_name, c.name) = 'Искандер'
+)
+AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 1221)
 LIMIT 1;
 
 INSERT INTO rental_orders (
@@ -1563,8 +1775,12 @@ SELECT
   NOW(),
   NOW()
 FROM rental_clients c
-WHERE (c.name = 'Ольга' OR c.director_name = 'Ольга')
-  AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 1220)
+WHERE (
+  c.name = 'Ольга' 
+  OR c.director_name = 'Ольга'
+  OR COALESCE(c.director_name, c.name) = 'Ольга'
+)
+AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 1220)
 LIMIT 1;
 
 INSERT INTO rental_orders (
@@ -1592,8 +1808,12 @@ SELECT
   NOW(),
   NOW()
 FROM rental_clients c
-WHERE (c.name = 'Галия' OR c.director_name = 'Галия')
-  AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 1219)
+WHERE (
+  c.name = 'Галия' 
+  OR c.director_name = 'Галия'
+  OR COALESCE(c.director_name, c.name) = 'Галия'
+)
+AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 1219)
 LIMIT 1;
 
 INSERT INTO rental_orders (
@@ -1621,8 +1841,12 @@ SELECT
   NOW(),
   NOW()
 FROM rental_clients c
-WHERE (c.name = 'Андрей (Экскурс)' OR c.director_name = 'Андрей (Экскурс)')
-  AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 1218)
+WHERE (
+  c.name = 'Андрей (Экскурс)' 
+  OR c.director_name = 'Андрей (Экскурс)'
+  OR COALESCE(c.director_name, c.name) = 'Андрей (Экскурс)'
+)
+AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 1218)
 LIMIT 1;
 
 INSERT INTO rental_orders (
@@ -1650,8 +1874,12 @@ SELECT
   NOW(),
   NOW()
 FROM rental_clients c
-WHERE (c.name = 'Айгуль Файзуллина' OR c.director_name = 'Айгуль Файзуллина')
-  AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 1217)
+WHERE (
+  c.name = 'Айгуль Файзуллина' 
+  OR c.director_name = 'Айгуль Файзуллина'
+  OR COALESCE(c.director_name, c.name) = 'Айгуль Файзуллина'
+)
+AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 1217)
 LIMIT 1;
 
 INSERT INTO rental_orders (
@@ -1679,8 +1907,12 @@ SELECT
   NOW(),
   NOW()
 FROM rental_clients c
-WHERE (c.name = 'Татьяна (Гольфстрим)' OR c.director_name = 'Татьяна (Гольфстрим)')
-  AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 1216)
+WHERE (
+  c.name = 'Татьяна (Гольфстрим)' 
+  OR c.director_name = 'Татьяна (Гольфстрим)'
+  OR COALESCE(c.director_name, c.name) = 'Татьяна (Гольфстрим)'
+)
+AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 1216)
 LIMIT 1;
 
 INSERT INTO rental_orders (
@@ -1708,8 +1940,12 @@ SELECT
   NOW(),
   NOW()
 FROM rental_clients c
-WHERE (c.name = 'Ленар (ИП Ножкин)' OR c.director_name = 'Ленар (ИП Ножкин)')
-  AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 1215)
+WHERE (
+  c.name = 'Ленар (ИП Ножкин)' 
+  OR c.director_name = 'Ленар (ИП Ножкин)'
+  OR COALESCE(c.director_name, c.name) = 'Ленар (ИП Ножкин)'
+)
+AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 1215)
 LIMIT 1;
 
 INSERT INTO rental_orders (
@@ -1737,8 +1973,12 @@ SELECT
   NOW(),
   NOW()
 FROM rental_clients c
-WHERE (c.name = 'Галия' OR c.director_name = 'Галия')
-  AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 1214)
+WHERE (
+  c.name = 'Галия' 
+  OR c.director_name = 'Галия'
+  OR COALESCE(c.director_name, c.name) = 'Галия'
+)
+AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 1214)
 LIMIT 1;
 
 INSERT INTO rental_orders (
@@ -1766,8 +2006,12 @@ SELECT
   NOW(),
   NOW()
 FROM rental_clients c
-WHERE (c.name = 'Галина (Тур Урал)' OR c.director_name = 'Галина (Тур Урал)')
-  AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 1212)
+WHERE (
+  c.name = 'Галина (Тур Урал)' 
+  OR c.director_name = 'Галина (Тур Урал)'
+  OR COALESCE(c.director_name, c.name) = 'Галина (Тур Урал)'
+)
+AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 1212)
 LIMIT 1;
 
 INSERT INTO rental_orders (
@@ -1795,8 +2039,12 @@ SELECT
   NOW(),
   NOW()
 FROM rental_clients c
-WHERE (c.name = 'Галина (Тур Урал)' OR c.director_name = 'Галина (Тур Урал)')
-  AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 1211)
+WHERE (
+  c.name = 'Галина (Тур Урал)' 
+  OR c.director_name = 'Галина (Тур Урал)'
+  OR COALESCE(c.director_name, c.name) = 'Галина (Тур Урал)'
+)
+AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 1211)
 LIMIT 1;
 
 INSERT INTO rental_orders (
@@ -1824,8 +2072,12 @@ SELECT
   NOW(),
   NOW()
 FROM rental_clients c
-WHERE (c.name = 'Галина (Тур Урал)' OR c.director_name = 'Галина (Тур Урал)')
-  AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 1210)
+WHERE (
+  c.name = 'Галина (Тур Урал)' 
+  OR c.director_name = 'Галина (Тур Урал)'
+  OR COALESCE(c.director_name, c.name) = 'Галина (Тур Урал)'
+)
+AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 1210)
 LIMIT 1;
 
 INSERT INTO rental_orders (
@@ -1853,8 +2105,12 @@ SELECT
   NOW(),
   NOW()
 FROM rental_clients c
-WHERE (c.name = 'Галина (Тур Урал)' OR c.director_name = 'Галина (Тур Урал)')
-  AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 1209)
+WHERE (
+  c.name = 'Галина (Тур Урал)' 
+  OR c.director_name = 'Галина (Тур Урал)'
+  OR COALESCE(c.director_name, c.name) = 'Галина (Тур Урал)'
+)
+AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 1209)
 LIMIT 1;
 
 INSERT INTO rental_orders (
@@ -1882,8 +2138,12 @@ SELECT
   NOW(),
   NOW()
 FROM rental_clients c
-WHERE (c.name = 'Галина (Тур Урал)' OR c.director_name = 'Галина (Тур Урал)')
-  AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 1208)
+WHERE (
+  c.name = 'Галина (Тур Урал)' 
+  OR c.director_name = 'Галина (Тур Урал)'
+  OR COALESCE(c.director_name, c.name) = 'Галина (Тур Урал)'
+)
+AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 1208)
 LIMIT 1;
 
 INSERT INTO rental_orders (
@@ -1911,8 +2171,12 @@ SELECT
   NOW(),
   NOW()
 FROM rental_clients c
-WHERE (c.name = 'Галина (Тур Урал)' OR c.director_name = 'Галина (Тур Урал)')
-  AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 1207)
+WHERE (
+  c.name = 'Галина (Тур Урал)' 
+  OR c.director_name = 'Галина (Тур Урал)'
+  OR COALESCE(c.director_name, c.name) = 'Галина (Тур Урал)'
+)
+AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 1207)
 LIMIT 1;
 
 INSERT INTO rental_orders (
@@ -1940,8 +2204,12 @@ SELECT
   NOW(),
   NOW()
 FROM rental_clients c
-WHERE (c.name = 'Галина (Тур Урал)' OR c.director_name = 'Галина (Тур Урал)')
-  AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 1206)
+WHERE (
+  c.name = 'Галина (Тур Урал)' 
+  OR c.director_name = 'Галина (Тур Урал)'
+  OR COALESCE(c.director_name, c.name) = 'Галина (Тур Урал)'
+)
+AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 1206)
 LIMIT 1;
 
 INSERT INTO rental_orders (
@@ -1969,8 +2237,12 @@ SELECT
   NOW(),
   NOW()
 FROM rental_clients c
-WHERE (c.name = 'Эдик Заказы для групп' OR c.director_name = 'Эдик Заказы для групп')
-  AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 1205)
+WHERE (
+  c.name = 'Эдик Заказы для групп' 
+  OR c.director_name = 'Эдик Заказы для групп'
+  OR COALESCE(c.director_name, c.name) = 'Эдик Заказы для групп'
+)
+AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 1205)
 LIMIT 1;
 
 INSERT INTO rental_orders (
@@ -1998,8 +2270,12 @@ SELECT
   NOW(),
   NOW()
 FROM rental_clients c
-WHERE (c.name = 'Александр Романов' OR c.director_name = 'Александр Романов')
-  AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 1204)
+WHERE (
+  c.name = 'Александр Романов' 
+  OR c.director_name = 'Александр Романов'
+  OR COALESCE(c.director_name, c.name) = 'Александр Романов'
+)
+AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 1204)
 LIMIT 1;
 
 INSERT INTO rental_orders (
@@ -2027,8 +2303,12 @@ SELECT
   NOW(),
   NOW()
 FROM rental_clients c
-WHERE (c.name = 'Ляйсан (Казань 360)' OR c.director_name = 'Ляйсан (Казань 360)')
-  AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 1203)
+WHERE (
+  c.name = 'Ляйсан (Казань 360)' 
+  OR c.director_name = 'Ляйсан (Казань 360)'
+  OR COALESCE(c.director_name, c.name) = 'Ляйсан (Казань 360)'
+)
+AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 1203)
 LIMIT 1;
 
 INSERT INTO rental_orders (
@@ -2056,8 +2336,12 @@ SELECT
   NOW(),
   NOW()
 FROM rental_clients c
-WHERE (c.name = 'Арсен (Юнион)' OR c.director_name = 'Арсен (Юнион)')
-  AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 1202)
+WHERE (
+  c.name = 'Арсен (Юнион)' 
+  OR c.director_name = 'Арсен (Юнион)'
+  OR COALESCE(c.director_name, c.name) = 'Арсен (Юнион)'
+)
+AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 1202)
 LIMIT 1;
 
 INSERT INTO rental_orders (
@@ -2085,8 +2369,12 @@ SELECT
   NOW(),
   NOW()
 FROM rental_clients c
-WHERE (c.name = 'Эдик Заказы для групп' OR c.director_name = 'Эдик Заказы для групп')
-  AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 1201)
+WHERE (
+  c.name = 'Эдик Заказы для групп' 
+  OR c.director_name = 'Эдик Заказы для групп'
+  OR COALESCE(c.director_name, c.name) = 'Эдик Заказы для групп'
+)
+AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 1201)
 LIMIT 1;
 
 INSERT INTO rental_orders (
@@ -2114,8 +2402,12 @@ SELECT
   NOW(),
   NOW()
 FROM rental_clients c
-WHERE (c.name = 'Екатерина' OR c.director_name = 'Екатерина')
-  AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 1200)
+WHERE (
+  c.name = 'Екатерина' 
+  OR c.director_name = 'Екатерина'
+  OR COALESCE(c.director_name, c.name) = 'Екатерина'
+)
+AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 1200)
 LIMIT 1;
 
 INSERT INTO rental_orders (
@@ -2143,8 +2435,12 @@ SELECT
   NOW(),
   NOW()
 FROM rental_clients c
-WHERE (c.name = 'Эдик Заказы для групп' OR c.director_name = 'Эдик Заказы для групп')
-  AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 1199)
+WHERE (
+  c.name = 'Эдик Заказы для групп' 
+  OR c.director_name = 'Эдик Заказы для групп'
+  OR COALESCE(c.director_name, c.name) = 'Эдик Заказы для групп'
+)
+AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 1199)
 LIMIT 1;
 
 INSERT INTO rental_orders (
@@ -2172,8 +2468,12 @@ SELECT
   NOW(),
   NOW()
 FROM rental_clients c
-WHERE (c.name = 'Зульхиза Кутлучурина' OR c.director_name = 'Зульхиза Кутлучурина')
-  AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 1198)
+WHERE (
+  c.name = 'Зульхиза Кутлучурина' 
+  OR c.director_name = 'Зульхиза Кутлучурина'
+  OR COALESCE(c.director_name, c.name) = 'Зульхиза Кутлучурина'
+)
+AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 1198)
 LIMIT 1;
 
 INSERT INTO rental_orders (
@@ -2201,8 +2501,12 @@ SELECT
   NOW(),
   NOW()
 FROM rental_clients c
-WHERE (c.name = 'Галина (Тур Урал)' OR c.director_name = 'Галина (Тур Урал)')
-  AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 1197)
+WHERE (
+  c.name = 'Галина (Тур Урал)' 
+  OR c.director_name = 'Галина (Тур Урал)'
+  OR COALESCE(c.director_name, c.name) = 'Галина (Тур Урал)'
+)
+AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 1197)
 LIMIT 1;
 
 INSERT INTO rental_orders (
@@ -2230,8 +2534,12 @@ SELECT
   NOW(),
   NOW()
 FROM rental_clients c
-WHERE (c.name = 'Зульхиза Кутлучурина' OR c.director_name = 'Зульхиза Кутлучурина')
-  AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 1196)
+WHERE (
+  c.name = 'Зульхиза Кутлучурина' 
+  OR c.director_name = 'Зульхиза Кутлучурина'
+  OR COALESCE(c.director_name, c.name) = 'Зульхиза Кутлучурина'
+)
+AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 1196)
 LIMIT 1;
 
 INSERT INTO rental_orders (
@@ -2259,8 +2567,12 @@ SELECT
   NOW(),
   NOW()
 FROM rental_clients c
-WHERE (c.name = 'Артем Агафонов' OR c.director_name = 'Артем Агафонов')
-  AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 1195)
+WHERE (
+  c.name = 'Артем Агафонов' 
+  OR c.director_name = 'Артем Агафонов'
+  OR COALESCE(c.director_name, c.name) = 'Артем Агафонов'
+)
+AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 1195)
 LIMIT 1;
 
 INSERT INTO rental_orders (
@@ -2288,8 +2600,12 @@ SELECT
   NOW(),
   NOW()
 FROM rental_clients c
-WHERE (c.name = 'Татьяна (Гольфстрим)' OR c.director_name = 'Татьяна (Гольфстрим)')
-  AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 1194)
+WHERE (
+  c.name = 'Татьяна (Гольфстрим)' 
+  OR c.director_name = 'Татьяна (Гольфстрим)'
+  OR COALESCE(c.director_name, c.name) = 'Татьяна (Гольфстрим)'
+)
+AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 1194)
 LIMIT 1;
 
 INSERT INTO rental_orders (
@@ -2317,8 +2633,12 @@ SELECT
   NOW(),
   NOW()
 FROM rental_clients c
-WHERE (c.name = 'Ляйсан (Казань 360)' OR c.director_name = 'Ляйсан (Казань 360)')
-  AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 1193)
+WHERE (
+  c.name = 'Ляйсан (Казань 360)' 
+  OR c.director_name = 'Ляйсан (Казань 360)'
+  OR COALESCE(c.director_name, c.name) = 'Ляйсан (Казань 360)'
+)
+AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 1193)
 LIMIT 1;
 
 INSERT INTO rental_orders (
@@ -2346,8 +2666,12 @@ SELECT
   NOW(),
   NOW()
 FROM rental_clients c
-WHERE (c.name = 'Любовь (ТИЦ)' OR c.director_name = 'Любовь (ТИЦ)')
-  AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 1192)
+WHERE (
+  c.name = 'Любовь (ТИЦ)' 
+  OR c.director_name = 'Любовь (ТИЦ)'
+  OR COALESCE(c.director_name, c.name) = 'Любовь (ТИЦ)'
+)
+AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 1192)
 LIMIT 1;
 
 INSERT INTO rental_orders (
@@ -2375,8 +2699,12 @@ SELECT
   NOW(),
   NOW()
 FROM rental_clients c
-WHERE (c.name = 'Любовь (ТИЦ)' OR c.director_name = 'Любовь (ТИЦ)')
-  AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 1191)
+WHERE (
+  c.name = 'Любовь (ТИЦ)' 
+  OR c.director_name = 'Любовь (ТИЦ)'
+  OR COALESCE(c.director_name, c.name) = 'Любовь (ТИЦ)'
+)
+AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 1191)
 LIMIT 1;
 
 INSERT INTO rental_orders (
@@ -2404,8 +2732,12 @@ SELECT
   NOW(),
   NOW()
 FROM rental_clients c
-WHERE (c.name = 'Альберт (КТ)' OR c.director_name = 'Альберт (КТ)')
-  AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 1190)
+WHERE (
+  c.name = 'Альберт (КТ)' 
+  OR c.director_name = 'Альберт (КТ)'
+  OR COALESCE(c.director_name, c.name) = 'Альберт (КТ)'
+)
+AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 1190)
 LIMIT 1;
 
 INSERT INTO rental_orders (
@@ -2433,8 +2765,12 @@ SELECT
   NOW(),
   NOW()
 FROM rental_clients c
-WHERE (c.name = 'Эдик Заказы для групп' OR c.director_name = 'Эдик Заказы для групп')
-  AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 1189)
+WHERE (
+  c.name = 'Эдик Заказы для групп' 
+  OR c.director_name = 'Эдик Заказы для групп'
+  OR COALESCE(c.director_name, c.name) = 'Эдик Заказы для групп'
+)
+AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 1189)
 LIMIT 1;
 
 INSERT INTO rental_orders (
@@ -2462,8 +2798,12 @@ SELECT
   NOW(),
   NOW()
 FROM rental_clients c
-WHERE (c.name = 'Любовь (ТИЦ)' OR c.director_name = 'Любовь (ТИЦ)')
-  AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 1188)
+WHERE (
+  c.name = 'Любовь (ТИЦ)' 
+  OR c.director_name = 'Любовь (ТИЦ)'
+  OR COALESCE(c.director_name, c.name) = 'Любовь (ТИЦ)'
+)
+AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 1188)
 LIMIT 1;
 
 INSERT INTO rental_orders (
@@ -2491,8 +2831,12 @@ SELECT
   NOW(),
   NOW()
 FROM rental_clients c
-WHERE (c.name = 'Арсен (Юнион)' OR c.director_name = 'Арсен (Юнион)')
-  AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 1187)
+WHERE (
+  c.name = 'Арсен (Юнион)' 
+  OR c.director_name = 'Арсен (Юнион)'
+  OR COALESCE(c.director_name, c.name) = 'Арсен (Юнион)'
+)
+AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 1187)
 LIMIT 1;
 
 INSERT INTO rental_orders (
@@ -2520,8 +2864,12 @@ SELECT
   NOW(),
   NOW()
 FROM rental_clients c
-WHERE (c.name = 'Арсен (Юнион)' OR c.director_name = 'Арсен (Юнион)')
-  AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 1186)
+WHERE (
+  c.name = 'Арсен (Юнион)' 
+  OR c.director_name = 'Арсен (Юнион)'
+  OR COALESCE(c.director_name, c.name) = 'Арсен (Юнион)'
+)
+AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 1186)
 LIMIT 1;
 
 INSERT INTO rental_orders (
@@ -2549,8 +2897,12 @@ SELECT
   NOW(),
   NOW()
 FROM rental_clients c
-WHERE (c.name = 'Ирина (Иль Мио Тур)' OR c.director_name = 'Ирина (Иль Мио Тур)')
-  AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 1185)
+WHERE (
+  c.name = 'Ирина (Иль Мио Тур)' 
+  OR c.director_name = 'Ирина (Иль Мио Тур)'
+  OR COALESCE(c.director_name, c.name) = 'Ирина (Иль Мио Тур)'
+)
+AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 1185)
 LIMIT 1;
 
 INSERT INTO rental_orders (
@@ -2578,8 +2930,12 @@ SELECT
   NOW(),
   NOW()
 FROM rental_clients c
-WHERE (c.name = 'Зельфира' OR c.director_name = 'Зельфира')
-  AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 1184)
+WHERE (
+  c.name = 'Зельфира' 
+  OR c.director_name = 'Зельфира'
+  OR COALESCE(c.director_name, c.name) = 'Зельфира'
+)
+AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 1184)
 LIMIT 1;
 
 INSERT INTO rental_orders (
@@ -2607,8 +2963,12 @@ SELECT
   NOW(),
   NOW()
 FROM rental_clients c
-WHERE (c.name = 'Зельфира' OR c.director_name = 'Зельфира')
-  AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 1183)
+WHERE (
+  c.name = 'Зельфира' 
+  OR c.director_name = 'Зельфира'
+  OR COALESCE(c.director_name, c.name) = 'Зельфира'
+)
+AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 1183)
 LIMIT 1;
 
 INSERT INTO rental_orders (
@@ -2636,8 +2996,12 @@ SELECT
   NOW(),
   NOW()
 FROM rental_clients c
-WHERE (c.name = 'Любовь Ким' OR c.director_name = 'Любовь Ким')
-  AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 1182)
+WHERE (
+  c.name = 'Любовь Ким' 
+  OR c.director_name = 'Любовь Ким'
+  OR COALESCE(c.director_name, c.name) = 'Любовь Ким'
+)
+AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 1182)
 LIMIT 1;
 
 INSERT INTO rental_orders (
@@ -2665,8 +3029,12 @@ SELECT
   NOW(),
   NOW()
 FROM rental_clients c
-WHERE (c.name = 'Искандер' OR c.director_name = 'Искандер')
-  AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 1181)
+WHERE (
+  c.name = 'Искандер' 
+  OR c.director_name = 'Искандер'
+  OR COALESCE(c.director_name, c.name) = 'Искандер'
+)
+AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 1181)
 LIMIT 1;
 
 INSERT INTO rental_orders (
@@ -2694,8 +3062,12 @@ SELECT
   NOW(),
   NOW()
 FROM rental_clients c
-WHERE (c.name = 'Любовь (ТИЦ)' OR c.director_name = 'Любовь (ТИЦ)')
-  AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 1180)
+WHERE (
+  c.name = 'Любовь (ТИЦ)' 
+  OR c.director_name = 'Любовь (ТИЦ)'
+  OR COALESCE(c.director_name, c.name) = 'Любовь (ТИЦ)'
+)
+AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 1180)
 LIMIT 1;
 
 INSERT INTO rental_orders (
@@ -2723,8 +3095,12 @@ SELECT
   NOW(),
   NOW()
 FROM rental_clients c
-WHERE (c.name = 'Мария Экскурсовод' OR c.director_name = 'Мария Экскурсовод')
-  AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 1179)
+WHERE (
+  c.name = 'Мария Экскурсовод' 
+  OR c.director_name = 'Мария Экскурсовод'
+  OR COALESCE(c.director_name, c.name) = 'Мария Экскурсовод'
+)
+AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 1179)
 LIMIT 1;
 
 INSERT INTO rental_orders (
@@ -2752,8 +3128,12 @@ SELECT
   NOW(),
   NOW()
 FROM rental_clients c
-WHERE (c.name = 'Альберт (КТ)' OR c.director_name = 'Альберт (КТ)')
-  AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 1178)
+WHERE (
+  c.name = 'Альберт (КТ)' 
+  OR c.director_name = 'Альберт (КТ)'
+  OR COALESCE(c.director_name, c.name) = 'Альберт (КТ)'
+)
+AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 1178)
 LIMIT 1;
 
 INSERT INTO rental_orders (
@@ -2781,8 +3161,12 @@ SELECT
   NOW(),
   NOW()
 FROM rental_clients c
-WHERE (c.name = 'Ольга Лотова' OR c.director_name = 'Ольга Лотова')
-  AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 1177)
+WHERE (
+  c.name = 'Ольга Лотова' 
+  OR c.director_name = 'Ольга Лотова'
+  OR COALESCE(c.director_name, c.name) = 'Ольга Лотова'
+)
+AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 1177)
 LIMIT 1;
 
 INSERT INTO rental_orders (
@@ -2810,8 +3194,12 @@ SELECT
   NOW(),
   NOW()
 FROM rental_clients c
-WHERE (c.name = 'Альберт (КТ)' OR c.director_name = 'Альберт (КТ)')
-  AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 1176)
+WHERE (
+  c.name = 'Альберт (КТ)' 
+  OR c.director_name = 'Альберт (КТ)'
+  OR COALESCE(c.director_name, c.name) = 'Альберт (КТ)'
+)
+AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 1176)
 LIMIT 1;
 
 INSERT INTO rental_orders (
@@ -2839,8 +3227,12 @@ SELECT
   NOW(),
   NOW()
 FROM rental_clients c
-WHERE (c.name = 'Татьяна (Гольфстрим)' OR c.director_name = 'Татьяна (Гольфстрим)')
-  AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 1175)
+WHERE (
+  c.name = 'Татьяна (Гольфстрим)' 
+  OR c.director_name = 'Татьяна (Гольфстрим)'
+  OR COALESCE(c.director_name, c.name) = 'Татьяна (Гольфстрим)'
+)
+AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 1175)
 LIMIT 1;
 
 INSERT INTO rental_orders (
@@ -2868,8 +3260,12 @@ SELECT
   NOW(),
   NOW()
 FROM rental_clients c
-WHERE (c.name = 'Татьяна (Гольфстрим)' OR c.director_name = 'Татьяна (Гольфстрим)')
-  AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 1174)
+WHERE (
+  c.name = 'Татьяна (Гольфстрим)' 
+  OR c.director_name = 'Татьяна (Гольфстрим)'
+  OR COALESCE(c.director_name, c.name) = 'Татьяна (Гольфстрим)'
+)
+AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 1174)
 LIMIT 1;
 
 INSERT INTO rental_orders (
@@ -2897,8 +3293,12 @@ SELECT
   NOW(),
   NOW()
 FROM rental_clients c
-WHERE (c.name = 'Татьяна (Гольфстрим)' OR c.director_name = 'Татьяна (Гольфстрим)')
-  AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 1173)
+WHERE (
+  c.name = 'Татьяна (Гольфстрим)' 
+  OR c.director_name = 'Татьяна (Гольфстрим)'
+  OR COALESCE(c.director_name, c.name) = 'Татьяна (Гольфстрим)'
+)
+AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 1173)
 LIMIT 1;
 
 INSERT INTO rental_orders (
@@ -2926,8 +3326,12 @@ SELECT
   NOW(),
   NOW()
 FROM rental_clients c
-WHERE (c.name = 'Татьяна (Гольфстрим)' OR c.director_name = 'Татьяна (Гольфстрим)')
-  AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 1172)
+WHERE (
+  c.name = 'Татьяна (Гольфстрим)' 
+  OR c.director_name = 'Татьяна (Гольфстрим)'
+  OR COALESCE(c.director_name, c.name) = 'Татьяна (Гольфстрим)'
+)
+AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 1172)
 LIMIT 1;
 
 INSERT INTO rental_orders (
@@ -2955,8 +3359,12 @@ SELECT
   NOW(),
   NOW()
 FROM rental_clients c
-WHERE (c.name = 'Татьяна (Гольфстрим)' OR c.director_name = 'Татьяна (Гольфстрим)')
-  AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 1171)
+WHERE (
+  c.name = 'Татьяна (Гольфстрим)' 
+  OR c.director_name = 'Татьяна (Гольфстрим)'
+  OR COALESCE(c.director_name, c.name) = 'Татьяна (Гольфстрим)'
+)
+AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 1171)
 LIMIT 1;
 
 INSERT INTO rental_orders (
@@ -2984,8 +3392,12 @@ SELECT
   NOW(),
   NOW()
 FROM rental_clients c
-WHERE (c.name = 'Любовь (ТИЦ)' OR c.director_name = 'Любовь (ТИЦ)')
-  AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 1170)
+WHERE (
+  c.name = 'Любовь (ТИЦ)' 
+  OR c.director_name = 'Любовь (ТИЦ)'
+  OR COALESCE(c.director_name, c.name) = 'Любовь (ТИЦ)'
+)
+AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 1170)
 LIMIT 1;
 
 INSERT INTO rental_orders (
@@ -3013,8 +3425,12 @@ SELECT
   NOW(),
   NOW()
 FROM rental_clients c
-WHERE (c.name = 'Татьяна (Гольфстрим)' OR c.director_name = 'Татьяна (Гольфстрим)')
-  AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 1169)
+WHERE (
+  c.name = 'Татьяна (Гольфстрим)' 
+  OR c.director_name = 'Татьяна (Гольфстрим)'
+  OR COALESCE(c.director_name, c.name) = 'Татьяна (Гольфстрим)'
+)
+AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 1169)
 LIMIT 1;
 
 INSERT INTO rental_orders (
@@ -3042,8 +3458,12 @@ SELECT
   NOW(),
   NOW()
 FROM rental_clients c
-WHERE (c.name = 'Галина (Тур Урал)' OR c.director_name = 'Галина (Тур Урал)')
-  AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 1168)
+WHERE (
+  c.name = 'Галина (Тур Урал)' 
+  OR c.director_name = 'Галина (Тур Урал)'
+  OR COALESCE(c.director_name, c.name) = 'Галина (Тур Урал)'
+)
+AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 1168)
 LIMIT 1;
 
 INSERT INTO rental_orders (
@@ -3071,8 +3491,12 @@ SELECT
   NOW(),
   NOW()
 FROM rental_clients c
-WHERE (c.name = 'Зульхиза Кутлучурина' OR c.director_name = 'Зульхиза Кутлучурина')
-  AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 1167)
+WHERE (
+  c.name = 'Зульхиза Кутлучурина' 
+  OR c.director_name = 'Зульхиза Кутлучурина'
+  OR COALESCE(c.director_name, c.name) = 'Зульхиза Кутлучурина'
+)
+AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 1167)
 LIMIT 1;
 
 INSERT INTO rental_orders (
@@ -3100,8 +3524,12 @@ SELECT
   NOW(),
   NOW()
 FROM rental_clients c
-WHERE (c.name = 'Татьяна (Гольфстрим)' OR c.director_name = 'Татьяна (Гольфстрим)')
-  AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 1166)
+WHERE (
+  c.name = 'Татьяна (Гольфстрим)' 
+  OR c.director_name = 'Татьяна (Гольфстрим)'
+  OR COALESCE(c.director_name, c.name) = 'Татьяна (Гольфстрим)'
+)
+AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 1166)
 LIMIT 1;
 
 INSERT INTO rental_orders (
@@ -3129,8 +3557,12 @@ SELECT
   NOW(),
   NOW()
 FROM rental_clients c
-WHERE (c.name = 'Татьяна (Гольфстрим)' OR c.director_name = 'Татьяна (Гольфстрим)')
-  AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 1165)
+WHERE (
+  c.name = 'Татьяна (Гольфстрим)' 
+  OR c.director_name = 'Татьяна (Гольфстрим)'
+  OR COALESCE(c.director_name, c.name) = 'Татьяна (Гольфстрим)'
+)
+AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 1165)
 LIMIT 1;
 
 INSERT INTO rental_orders (
@@ -3158,8 +3590,12 @@ SELECT
   NOW(),
   NOW()
 FROM rental_clients c
-WHERE (c.name = 'Любовь (ТИЦ)' OR c.director_name = 'Любовь (ТИЦ)')
-  AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 1164)
+WHERE (
+  c.name = 'Любовь (ТИЦ)' 
+  OR c.director_name = 'Любовь (ТИЦ)'
+  OR COALESCE(c.director_name, c.name) = 'Любовь (ТИЦ)'
+)
+AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 1164)
 LIMIT 1;
 
 INSERT INTO rental_orders (
@@ -3187,8 +3623,12 @@ SELECT
   NOW(),
   NOW()
 FROM rental_clients c
-WHERE (c.name = 'Элина (Сититур)' OR c.director_name = 'Элина (Сититур)')
-  AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 1163)
+WHERE (
+  c.name = 'Элина (Сититур)' 
+  OR c.director_name = 'Элина (Сититур)'
+  OR COALESCE(c.director_name, c.name) = 'Элина (Сититур)'
+)
+AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 1163)
 LIMIT 1;
 
 INSERT INTO rental_orders (
@@ -3216,8 +3656,12 @@ SELECT
   NOW(),
   NOW()
 FROM rental_clients c
-WHERE (c.name = 'Андрей (Экскурс)' OR c.director_name = 'Андрей (Экскурс)')
-  AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 1162)
+WHERE (
+  c.name = 'Андрей (Экскурс)' 
+  OR c.director_name = 'Андрей (Экскурс)'
+  OR COALESCE(c.director_name, c.name) = 'Андрей (Экскурс)'
+)
+AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 1162)
 LIMIT 1;
 
 INSERT INTO rental_orders (
@@ -3245,8 +3689,12 @@ SELECT
   NOW(),
   NOW()
 FROM rental_clients c
-WHERE (c.name = 'Альберт (КТ)' OR c.director_name = 'Альберт (КТ)')
-  AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 1161)
+WHERE (
+  c.name = 'Альберт (КТ)' 
+  OR c.director_name = 'Альберт (КТ)'
+  OR COALESCE(c.director_name, c.name) = 'Альберт (КТ)'
+)
+AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 1161)
 LIMIT 1;
 
 INSERT INTO rental_orders (
@@ -3274,8 +3722,12 @@ SELECT
   NOW(),
   NOW()
 FROM rental_clients c
-WHERE (c.name = 'Мария Экскурсовод' OR c.director_name = 'Мария Экскурсовод')
-  AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 1160)
+WHERE (
+  c.name = 'Мария Экскурсовод' 
+  OR c.director_name = 'Мария Экскурсовод'
+  OR COALESCE(c.director_name, c.name) = 'Мария Экскурсовод'
+)
+AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 1160)
 LIMIT 1;
 
 INSERT INTO rental_orders (
@@ -3303,8 +3755,12 @@ SELECT
   NOW(),
   NOW()
 FROM rental_clients c
-WHERE (c.name = 'Наталья Флот' OR c.director_name = 'Наталья Флот')
-  AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 1159)
+WHERE (
+  c.name = 'Наталья Флот' 
+  OR c.director_name = 'Наталья Флот'
+  OR COALESCE(c.director_name, c.name) = 'Наталья Флот'
+)
+AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 1159)
 LIMIT 1;
 
 INSERT INTO rental_orders (
@@ -3332,8 +3788,12 @@ SELECT
   NOW(),
   NOW()
 FROM rental_clients c
-WHERE (c.name = 'Карина (технологии путешествий)' OR c.director_name = 'Карина (технологии путешествий)')
-  AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 1158)
+WHERE (
+  c.name = 'Карина (технологии путешествий)' 
+  OR c.director_name = 'Карина (технологии путешествий)'
+  OR COALESCE(c.director_name, c.name) = 'Карина (технологии путешествий)'
+)
+AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 1158)
 LIMIT 1;
 
 INSERT INTO rental_orders (
@@ -3361,8 +3821,12 @@ SELECT
   NOW(),
   NOW()
 FROM rental_clients c
-WHERE (c.name = 'Алексей' OR c.director_name = 'Алексей')
-  AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 1157)
+WHERE (
+  c.name = 'Алексей' 
+  OR c.director_name = 'Алексей'
+  OR COALESCE(c.director_name, c.name) = 'Алексей'
+)
+AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 1157)
 LIMIT 1;
 
 INSERT INTO rental_orders (
@@ -3390,8 +3854,12 @@ SELECT
   NOW(),
   NOW()
 FROM rental_clients c
-WHERE (c.name = 'Эдик Заказы для групп' OR c.director_name = 'Эдик Заказы для групп')
-  AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 1156)
+WHERE (
+  c.name = 'Эдик Заказы для групп' 
+  OR c.director_name = 'Эдик Заказы для групп'
+  OR COALESCE(c.director_name, c.name) = 'Эдик Заказы для групп'
+)
+AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 1156)
 LIMIT 1;
 
 INSERT INTO rental_orders (
@@ -3419,8 +3887,12 @@ SELECT
   NOW(),
   NOW()
 FROM rental_clients c
-WHERE (c.name = 'Любовь (ТИЦ)' OR c.director_name = 'Любовь (ТИЦ)')
-  AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 1155)
+WHERE (
+  c.name = 'Любовь (ТИЦ)' 
+  OR c.director_name = 'Любовь (ТИЦ)'
+  OR COALESCE(c.director_name, c.name) = 'Любовь (ТИЦ)'
+)
+AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 1155)
 LIMIT 1;
 
 INSERT INTO rental_orders (
@@ -3448,8 +3920,12 @@ SELECT
   NOW(),
   NOW()
 FROM rental_clients c
-WHERE (c.name = 'Любовь (ТИЦ)' OR c.director_name = 'Любовь (ТИЦ)')
-  AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 1154)
+WHERE (
+  c.name = 'Любовь (ТИЦ)' 
+  OR c.director_name = 'Любовь (ТИЦ)'
+  OR COALESCE(c.director_name, c.name) = 'Любовь (ТИЦ)'
+)
+AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 1154)
 LIMIT 1;
 
 INSERT INTO rental_orders (
@@ -3477,8 +3953,12 @@ SELECT
   NOW(),
   NOW()
 FROM rental_clients c
-WHERE (c.name = 'Эдик Заказы для групп' OR c.director_name = 'Эдик Заказы для групп')
-  AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 1153)
+WHERE (
+  c.name = 'Эдик Заказы для групп' 
+  OR c.director_name = 'Эдик Заказы для групп'
+  OR COALESCE(c.director_name, c.name) = 'Эдик Заказы для групп'
+)
+AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 1153)
 LIMIT 1;
 
 INSERT INTO rental_orders (
@@ -3506,8 +3986,12 @@ SELECT
   NOW(),
   NOW()
 FROM rental_clients c
-WHERE (c.name = 'Эдик Заказы для групп' OR c.director_name = 'Эдик Заказы для групп')
-  AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 1152)
+WHERE (
+  c.name = 'Эдик Заказы для групп' 
+  OR c.director_name = 'Эдик Заказы для групп'
+  OR COALESCE(c.director_name, c.name) = 'Эдик Заказы для групп'
+)
+AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 1152)
 LIMIT 1;
 
 INSERT INTO rental_orders (
@@ -3535,8 +4019,12 @@ SELECT
   NOW(),
   NOW()
 FROM rental_clients c
-WHERE (c.name = 'Елена' OR c.director_name = 'Елена')
-  AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 1151)
+WHERE (
+  c.name = 'Елена' 
+  OR c.director_name = 'Елена'
+  OR COALESCE(c.director_name, c.name) = 'Елена'
+)
+AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 1151)
 LIMIT 1;
 
 INSERT INTO rental_orders (
@@ -3564,8 +4052,12 @@ SELECT
   NOW(),
   NOW()
 FROM rental_clients c
-WHERE (c.name = 'Любовь (ТИЦ)' OR c.director_name = 'Любовь (ТИЦ)')
-  AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 1150)
+WHERE (
+  c.name = 'Любовь (ТИЦ)' 
+  OR c.director_name = 'Любовь (ТИЦ)'
+  OR COALESCE(c.director_name, c.name) = 'Любовь (ТИЦ)'
+)
+AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 1150)
 LIMIT 1;
 
 INSERT INTO rental_orders (
@@ -3593,8 +4085,12 @@ SELECT
   NOW(),
   NOW()
 FROM rental_clients c
-WHERE (c.name = 'Любовь (ТИЦ)' OR c.director_name = 'Любовь (ТИЦ)')
-  AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 1149)
+WHERE (
+  c.name = 'Любовь (ТИЦ)' 
+  OR c.director_name = 'Любовь (ТИЦ)'
+  OR COALESCE(c.director_name, c.name) = 'Любовь (ТИЦ)'
+)
+AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 1149)
 LIMIT 1;
 
 INSERT INTO rental_orders (
@@ -3622,8 +4118,12 @@ SELECT
   NOW(),
   NOW()
 FROM rental_clients c
-WHERE (c.name = 'Татьяна (Гольфстрим)' OR c.director_name = 'Татьяна (Гольфстрим)')
-  AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 1148)
+WHERE (
+  c.name = 'Татьяна (Гольфстрим)' 
+  OR c.director_name = 'Татьяна (Гольфстрим)'
+  OR COALESCE(c.director_name, c.name) = 'Татьяна (Гольфстрим)'
+)
+AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 1148)
 LIMIT 1;
 
 INSERT INTO rental_orders (
@@ -3651,8 +4151,12 @@ SELECT
   NOW(),
   NOW()
 FROM rental_clients c
-WHERE (c.name = 'Мария Экскурсовод' OR c.director_name = 'Мария Экскурсовод')
-  AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 1147)
+WHERE (
+  c.name = 'Мария Экскурсовод' 
+  OR c.director_name = 'Мария Экскурсовод'
+  OR COALESCE(c.director_name, c.name) = 'Мария Экскурсовод'
+)
+AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 1147)
 LIMIT 1;
 
 INSERT INTO rental_orders (
@@ -3680,8 +4184,12 @@ SELECT
   NOW(),
   NOW()
 FROM rental_clients c
-WHERE (c.name = 'Гузелия' OR c.director_name = 'Гузелия')
-  AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 1146)
+WHERE (
+  c.name = 'Гузелия' 
+  OR c.director_name = 'Гузелия'
+  OR COALESCE(c.director_name, c.name) = 'Гузелия'
+)
+AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 1146)
 LIMIT 1;
 
 INSERT INTO rental_orders (
@@ -3709,8 +4217,12 @@ SELECT
   NOW(),
   NOW()
 FROM rental_clients c
-WHERE (c.name = 'Юлия Супрунова (от Миры)' OR c.director_name = 'Юлия Супрунова (от Миры)')
-  AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 1145)
+WHERE (
+  c.name = 'Юлия Супрунова (от Миры)' 
+  OR c.director_name = 'Юлия Супрунова (от Миры)'
+  OR COALESCE(c.director_name, c.name) = 'Юлия Супрунова (от Миры)'
+)
+AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 1145)
 LIMIT 1;
 
 INSERT INTO rental_orders (
@@ -3738,8 +4250,12 @@ SELECT
   NOW(),
   NOW()
 FROM rental_clients c
-WHERE (c.name = 'Любовь (ТИЦ)' OR c.director_name = 'Любовь (ТИЦ)')
-  AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 1144)
+WHERE (
+  c.name = 'Любовь (ТИЦ)' 
+  OR c.director_name = 'Любовь (ТИЦ)'
+  OR COALESCE(c.director_name, c.name) = 'Любовь (ТИЦ)'
+)
+AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 1144)
 LIMIT 1;
 
 INSERT INTO rental_orders (
@@ -3767,8 +4283,12 @@ SELECT
   NOW(),
   NOW()
 FROM rental_clients c
-WHERE (c.name = 'Ольга (Сиалия)' OR c.director_name = 'Ольга (Сиалия)')
-  AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 1143)
+WHERE (
+  c.name = 'Ольга (Сиалия)' 
+  OR c.director_name = 'Ольга (Сиалия)'
+  OR COALESCE(c.director_name, c.name) = 'Ольга (Сиалия)'
+)
+AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 1143)
 LIMIT 1;
 
 INSERT INTO rental_orders (
@@ -3796,8 +4316,12 @@ SELECT
   NOW(),
   NOW()
 FROM rental_clients c
-WHERE (c.name = 'Эвелина (Инициатива)' OR c.director_name = 'Эвелина (Инициатива)')
-  AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 1142)
+WHERE (
+  c.name = 'Эвелина (Инициатива)' 
+  OR c.director_name = 'Эвелина (Инициатива)'
+  OR COALESCE(c.director_name, c.name) = 'Эвелина (Инициатива)'
+)
+AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 1142)
 LIMIT 1;
 
 INSERT INTO rental_orders (
@@ -3825,8 +4349,12 @@ SELECT
   NOW(),
   NOW()
 FROM rental_clients c
-WHERE (c.name = 'Галина (Тур Урал)' OR c.director_name = 'Галина (Тур Урал)')
-  AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 1141)
+WHERE (
+  c.name = 'Галина (Тур Урал)' 
+  OR c.director_name = 'Галина (Тур Урал)'
+  OR COALESCE(c.director_name, c.name) = 'Галина (Тур Урал)'
+)
+AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 1141)
 LIMIT 1;
 
 INSERT INTO rental_orders (
@@ -3854,8 +4382,12 @@ SELECT
   NOW(),
   NOW()
 FROM rental_clients c
-WHERE (c.name = 'Галина (Тур Урал)' OR c.director_name = 'Галина (Тур Урал)')
-  AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 1140)
+WHERE (
+  c.name = 'Галина (Тур Урал)' 
+  OR c.director_name = 'Галина (Тур Урал)'
+  OR COALESCE(c.director_name, c.name) = 'Галина (Тур Урал)'
+)
+AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 1140)
 LIMIT 1;
 
 INSERT INTO rental_orders (
@@ -3883,8 +4415,12 @@ SELECT
   NOW(),
   NOW()
 FROM rental_clients c
-WHERE (c.name = 'Галина (Тур Урал)' OR c.director_name = 'Галина (Тур Урал)')
-  AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 1139)
+WHERE (
+  c.name = 'Галина (Тур Урал)' 
+  OR c.director_name = 'Галина (Тур Урал)'
+  OR COALESCE(c.director_name, c.name) = 'Галина (Тур Урал)'
+)
+AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 1139)
 LIMIT 1;
 
 INSERT INTO rental_orders (
@@ -3912,8 +4448,12 @@ SELECT
   NOW(),
   NOW()
 FROM rental_clients c
-WHERE (c.name = 'Юлия (Рыжий Слон)' OR c.director_name = 'Юлия (Рыжий Слон)')
-  AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 1138)
+WHERE (
+  c.name = 'Юлия (Рыжий Слон)' 
+  OR c.director_name = 'Юлия (Рыжий Слон)'
+  OR COALESCE(c.director_name, c.name) = 'Юлия (Рыжий Слон)'
+)
+AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 1138)
 LIMIT 1;
 
 INSERT INTO rental_orders (
@@ -3941,8 +4481,12 @@ SELECT
   NOW(),
   NOW()
 FROM rental_clients c
-WHERE (c.name = 'Гузель (Юралс)' OR c.director_name = 'Гузель (Юралс)')
-  AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 1137)
+WHERE (
+  c.name = 'Гузель (Юралс)' 
+  OR c.director_name = 'Гузель (Юралс)'
+  OR COALESCE(c.director_name, c.name) = 'Гузель (Юралс)'
+)
+AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 1137)
 LIMIT 1;
 
 INSERT INTO rental_orders (
@@ -3970,8 +4514,12 @@ SELECT
   NOW(),
   NOW()
 FROM rental_clients c
-WHERE (c.name = 'Любовь (ТИЦ)' OR c.director_name = 'Любовь (ТИЦ)')
-  AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 1136)
+WHERE (
+  c.name = 'Любовь (ТИЦ)' 
+  OR c.director_name = 'Любовь (ТИЦ)'
+  OR COALESCE(c.director_name, c.name) = 'Любовь (ТИЦ)'
+)
+AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 1136)
 LIMIT 1;
 
 INSERT INTO rental_orders (
@@ -3999,8 +4547,12 @@ SELECT
   NOW(),
   NOW()
 FROM rental_clients c
-WHERE (c.name = 'Любовь (ТИЦ)' OR c.director_name = 'Любовь (ТИЦ)')
-  AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 1135)
+WHERE (
+  c.name = 'Любовь (ТИЦ)' 
+  OR c.director_name = 'Любовь (ТИЦ)'
+  OR COALESCE(c.director_name, c.name) = 'Любовь (ТИЦ)'
+)
+AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 1135)
 LIMIT 1;
 
 INSERT INTO rental_orders (
@@ -4028,8 +4580,12 @@ SELECT
   NOW(),
   NOW()
 FROM rental_clients c
-WHERE (c.name = 'Екатерина «Романова Трэвел»' OR c.director_name = 'Екатерина «Романова Трэвел»')
-  AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 1134)
+WHERE (
+  c.name = 'Екатерина «Романова Трэвел»' 
+  OR c.director_name = 'Екатерина «Романова Трэвел»'
+  OR COALESCE(c.director_name, c.name) = 'Екатерина «Романова Трэвел»'
+)
+AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 1134)
 LIMIT 1;
 
 INSERT INTO rental_orders (
@@ -4057,8 +4613,12 @@ SELECT
   NOW(),
   NOW()
 FROM rental_clients c
-WHERE (c.name = 'Дмитрий (Алабуга-Волокно)' OR c.director_name = 'Дмитрий (Алабуга-Волокно)')
-  AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 1133)
+WHERE (
+  c.name = 'Дмитрий (Алабуга-Волокно)' 
+  OR c.director_name = 'Дмитрий (Алабуга-Волокно)'
+  OR COALESCE(c.director_name, c.name) = 'Дмитрий (Алабуга-Волокно)'
+)
+AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 1133)
 LIMIT 1;
 
 INSERT INTO rental_orders (
@@ -4086,8 +4646,12 @@ SELECT
   NOW(),
   NOW()
 FROM rental_clients c
-WHERE (c.name = 'Арсен (Юнион)' OR c.director_name = 'Арсен (Юнион)')
-  AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 1132)
+WHERE (
+  c.name = 'Арсен (Юнион)' 
+  OR c.director_name = 'Арсен (Юнион)'
+  OR COALESCE(c.director_name, c.name) = 'Арсен (Юнион)'
+)
+AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 1132)
 LIMIT 1;
 
 INSERT INTO rental_orders (
@@ -4115,8 +4679,12 @@ SELECT
   NOW(),
   NOW()
 FROM rental_clients c
-WHERE (c.name = 'Елена' OR c.director_name = 'Елена')
-  AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 1131)
+WHERE (
+  c.name = 'Елена' 
+  OR c.director_name = 'Елена'
+  OR COALESCE(c.director_name, c.name) = 'Елена'
+)
+AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 1131)
 LIMIT 1;
 
 INSERT INTO rental_orders (
@@ -4144,8 +4712,12 @@ SELECT
   NOW(),
   NOW()
 FROM rental_clients c
-WHERE (c.name = 'Марина Экс' OR c.director_name = 'Марина Экс')
-  AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 1130)
+WHERE (
+  c.name = 'Марина Экс' 
+  OR c.director_name = 'Марина Экс'
+  OR COALESCE(c.director_name, c.name) = 'Марина Экс'
+)
+AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 1130)
 LIMIT 1;
 
 INSERT INTO rental_orders (
@@ -4173,8 +4745,12 @@ SELECT
   NOW(),
   NOW()
 FROM rental_clients c
-WHERE (c.name = 'Мария Экскурсовод' OR c.director_name = 'Мария Экскурсовод')
-  AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 1129)
+WHERE (
+  c.name = 'Мария Экскурсовод' 
+  OR c.director_name = 'Мария Экскурсовод'
+  OR COALESCE(c.director_name, c.name) = 'Мария Экскурсовод'
+)
+AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 1129)
 LIMIT 1;
 
 INSERT INTO rental_orders (
@@ -4202,8 +4778,12 @@ SELECT
   NOW(),
   NOW()
 FROM rental_clients c
-WHERE (c.name = 'Любовь (ТИЦ)' OR c.director_name = 'Любовь (ТИЦ)')
-  AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 1128)
+WHERE (
+  c.name = 'Любовь (ТИЦ)' 
+  OR c.director_name = 'Любовь (ТИЦ)'
+  OR COALESCE(c.director_name, c.name) = 'Любовь (ТИЦ)'
+)
+AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 1128)
 LIMIT 1;
 
 INSERT INTO rental_orders (
@@ -4231,8 +4811,12 @@ SELECT
   NOW(),
   NOW()
 FROM rental_clients c
-WHERE (c.name = 'Карина (технологии путешествий)' OR c.director_name = 'Карина (технологии путешествий)')
-  AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 1127)
+WHERE (
+  c.name = 'Карина (технологии путешествий)' 
+  OR c.director_name = 'Карина (технологии путешествий)'
+  OR COALESCE(c.director_name, c.name) = 'Карина (технологии путешествий)'
+)
+AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 1127)
 LIMIT 1;
 
 INSERT INTO rental_orders (
@@ -4260,8 +4844,12 @@ SELECT
   NOW(),
   NOW()
 FROM rental_clients c
-WHERE (c.name = 'Карина (технологии путешествий)' OR c.director_name = 'Карина (технологии путешествий)')
-  AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 1126)
+WHERE (
+  c.name = 'Карина (технологии путешествий)' 
+  OR c.director_name = 'Карина (технологии путешествий)'
+  OR COALESCE(c.director_name, c.name) = 'Карина (технологии путешествий)'
+)
+AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 1126)
 LIMIT 1;
 
 INSERT INTO rental_orders (
@@ -4289,8 +4877,12 @@ SELECT
   NOW(),
   NOW()
 FROM rental_clients c
-WHERE (c.name = 'Ляйсан (Казань 360)' OR c.director_name = 'Ляйсан (Казань 360)')
-  AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 1125)
+WHERE (
+  c.name = 'Ляйсан (Казань 360)' 
+  OR c.director_name = 'Ляйсан (Казань 360)'
+  OR COALESCE(c.director_name, c.name) = 'Ляйсан (Казань 360)'
+)
+AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 1125)
 LIMIT 1;
 
 INSERT INTO rental_orders (
@@ -4318,8 +4910,12 @@ SELECT
   NOW(),
   NOW()
 FROM rental_clients c
-WHERE (c.name = 'Любовь (ТИЦ)' OR c.director_name = 'Любовь (ТИЦ)')
-  AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 1124)
+WHERE (
+  c.name = 'Любовь (ТИЦ)' 
+  OR c.director_name = 'Любовь (ТИЦ)'
+  OR COALESCE(c.director_name, c.name) = 'Любовь (ТИЦ)'
+)
+AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 1124)
 LIMIT 1;
 
 INSERT INTO rental_orders (
@@ -4347,8 +4943,12 @@ SELECT
   NOW(),
   NOW()
 FROM rental_clients c
-WHERE (c.name = 'Любовь (ТИЦ)' OR c.director_name = 'Любовь (ТИЦ)')
-  AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 1123)
+WHERE (
+  c.name = 'Любовь (ТИЦ)' 
+  OR c.director_name = 'Любовь (ТИЦ)'
+  OR COALESCE(c.director_name, c.name) = 'Любовь (ТИЦ)'
+)
+AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 1123)
 LIMIT 1;
 
 INSERT INTO rental_orders (
@@ -4376,8 +4976,12 @@ SELECT
   NOW(),
   NOW()
 FROM rental_clients c
-WHERE (c.name = 'Любовь (ТИЦ)' OR c.director_name = 'Любовь (ТИЦ)')
-  AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 1122)
+WHERE (
+  c.name = 'Любовь (ТИЦ)' 
+  OR c.director_name = 'Любовь (ТИЦ)'
+  OR COALESCE(c.director_name, c.name) = 'Любовь (ТИЦ)'
+)
+AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 1122)
 LIMIT 1;
 
 INSERT INTO rental_orders (
@@ -4405,8 +5009,12 @@ SELECT
   NOW(),
   NOW()
 FROM rental_clients c
-WHERE (c.name = 'Эдик Заказы для групп' OR c.director_name = 'Эдик Заказы для групп')
-  AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 1121)
+WHERE (
+  c.name = 'Эдик Заказы для групп' 
+  OR c.director_name = 'Эдик Заказы для групп'
+  OR COALESCE(c.director_name, c.name) = 'Эдик Заказы для групп'
+)
+AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 1121)
 LIMIT 1;
 
 INSERT INTO rental_orders (
@@ -4434,8 +5042,12 @@ SELECT
   NOW(),
   NOW()
 FROM rental_clients c
-WHERE (c.name = 'Эдик Заказы для групп' OR c.director_name = 'Эдик Заказы для групп')
-  AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 1120)
+WHERE (
+  c.name = 'Эдик Заказы для групп' 
+  OR c.director_name = 'Эдик Заказы для групп'
+  OR COALESCE(c.director_name, c.name) = 'Эдик Заказы для групп'
+)
+AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 1120)
 LIMIT 1;
 
 INSERT INTO rental_orders (
@@ -4463,8 +5075,12 @@ SELECT
   NOW(),
   NOW()
 FROM rental_clients c
-WHERE (c.name = 'Эдик Заказы для групп' OR c.director_name = 'Эдик Заказы для групп')
-  AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 1119)
+WHERE (
+  c.name = 'Эдик Заказы для групп' 
+  OR c.director_name = 'Эдик Заказы для групп'
+  OR COALESCE(c.director_name, c.name) = 'Эдик Заказы для групп'
+)
+AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 1119)
 LIMIT 1;
 
 INSERT INTO rental_orders (
@@ -4492,8 +5108,12 @@ SELECT
   NOW(),
   NOW()
 FROM rental_clients c
-WHERE (c.name = 'Эдик Заказы для групп' OR c.director_name = 'Эдик Заказы для групп')
-  AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 1118)
+WHERE (
+  c.name = 'Эдик Заказы для групп' 
+  OR c.director_name = 'Эдик Заказы для групп'
+  OR COALESCE(c.director_name, c.name) = 'Эдик Заказы для групп'
+)
+AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 1118)
 LIMIT 1;
 
 INSERT INTO rental_orders (
@@ -4521,8 +5141,12 @@ SELECT
   NOW(),
   NOW()
 FROM rental_clients c
-WHERE (c.name = 'Инна Экскурсовод' OR c.director_name = 'Инна Экскурсовод')
-  AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 1117)
+WHERE (
+  c.name = 'Инна Экскурсовод' 
+  OR c.director_name = 'Инна Экскурсовод'
+  OR COALESCE(c.director_name, c.name) = 'Инна Экскурсовод'
+)
+AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 1117)
 LIMIT 1;
 
 INSERT INTO rental_orders (
@@ -4550,8 +5174,12 @@ SELECT
   NOW(),
   NOW()
 FROM rental_clients c
-WHERE (c.name = 'Любовь (ТИЦ)' OR c.director_name = 'Любовь (ТИЦ)')
-  AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 1116)
+WHERE (
+  c.name = 'Любовь (ТИЦ)' 
+  OR c.director_name = 'Любовь (ТИЦ)'
+  OR COALESCE(c.director_name, c.name) = 'Любовь (ТИЦ)'
+)
+AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 1116)
 LIMIT 1;
 
 INSERT INTO rental_orders (
@@ -4579,8 +5207,12 @@ SELECT
   NOW(),
   NOW()
 FROM rental_clients c
-WHERE (c.name = 'Мария (ОСР)' OR c.director_name = 'Мария (ОСР)')
-  AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 1115)
+WHERE (
+  c.name = 'Мария (ОСР)' 
+  OR c.director_name = 'Мария (ОСР)'
+  OR COALESCE(c.director_name, c.name) = 'Мария (ОСР)'
+)
+AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 1115)
 LIMIT 1;
 
 INSERT INTO rental_orders (
@@ -4608,8 +5240,12 @@ SELECT
   NOW(),
   NOW()
 FROM rental_clients c
-WHERE (c.name = 'Любовь (ТИЦ)' OR c.director_name = 'Любовь (ТИЦ)')
-  AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 1114)
+WHERE (
+  c.name = 'Любовь (ТИЦ)' 
+  OR c.director_name = 'Любовь (ТИЦ)'
+  OR COALESCE(c.director_name, c.name) = 'Любовь (ТИЦ)'
+)
+AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 1114)
 LIMIT 1;
 
 INSERT INTO rental_orders (
@@ -4637,8 +5273,12 @@ SELECT
   NOW(),
   NOW()
 FROM rental_clients c
-WHERE (c.name = 'Титова Галина (Эллинлайн)' OR c.director_name = 'Титова Галина (Эллинлайн)')
-  AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 1113)
+WHERE (
+  c.name = 'Титова Галина (Эллинлайн)' 
+  OR c.director_name = 'Титова Галина (Эллинлайн)'
+  OR COALESCE(c.director_name, c.name) = 'Титова Галина (Эллинлайн)'
+)
+AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 1113)
 LIMIT 1;
 
 INSERT INTO rental_orders (
@@ -4666,8 +5306,12 @@ SELECT
   NOW(),
   NOW()
 FROM rental_clients c
-WHERE (c.name = 'Татьяна (Гольфстрим)' OR c.director_name = 'Татьяна (Гольфстрим)')
-  AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 1112)
+WHERE (
+  c.name = 'Татьяна (Гольфстрим)' 
+  OR c.director_name = 'Татьяна (Гольфстрим)'
+  OR COALESCE(c.director_name, c.name) = 'Татьяна (Гольфстрим)'
+)
+AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 1112)
 LIMIT 1;
 
 INSERT INTO rental_orders (
@@ -4695,8 +5339,12 @@ SELECT
   NOW(),
   NOW()
 FROM rental_clients c
-WHERE (c.name = 'Ляйсан (Казань 360)' OR c.director_name = 'Ляйсан (Казань 360)')
-  AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 1111)
+WHERE (
+  c.name = 'Ляйсан (Казань 360)' 
+  OR c.director_name = 'Ляйсан (Казань 360)'
+  OR COALESCE(c.director_name, c.name) = 'Ляйсан (Казань 360)'
+)
+AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 1111)
 LIMIT 1;
 
 INSERT INTO rental_orders (
@@ -4724,8 +5372,12 @@ SELECT
   NOW(),
   NOW()
 FROM rental_clients c
-WHERE (c.name = 'Ляйсан (Казань 360)' OR c.director_name = 'Ляйсан (Казань 360)')
-  AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 1110)
+WHERE (
+  c.name = 'Ляйсан (Казань 360)' 
+  OR c.director_name = 'Ляйсан (Казань 360)'
+  OR COALESCE(c.director_name, c.name) = 'Ляйсан (Казань 360)'
+)
+AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 1110)
 LIMIT 1;
 
 INSERT INTO rental_orders (
@@ -4753,8 +5405,12 @@ SELECT
   NOW(),
   NOW()
 FROM rental_clients c
-WHERE (c.name = 'Татьяна (Гольфстрим)' OR c.director_name = 'Татьяна (Гольфстрим)')
-  AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 1109)
+WHERE (
+  c.name = 'Татьяна (Гольфстрим)' 
+  OR c.director_name = 'Татьяна (Гольфстрим)'
+  OR COALESCE(c.director_name, c.name) = 'Татьяна (Гольфстрим)'
+)
+AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 1109)
 LIMIT 1;
 
 INSERT INTO rental_orders (
@@ -4782,8 +5438,12 @@ SELECT
   NOW(),
   NOW()
 FROM rental_clients c
-WHERE (c.name = 'Татьяна Чуб' OR c.director_name = 'Татьяна Чуб')
-  AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 1108)
+WHERE (
+  c.name = 'Татьяна Чуб' 
+  OR c.director_name = 'Татьяна Чуб'
+  OR COALESCE(c.director_name, c.name) = 'Татьяна Чуб'
+)
+AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 1108)
 LIMIT 1;
 
 INSERT INTO rental_orders (
@@ -4811,8 +5471,12 @@ SELECT
   NOW(),
   NOW()
 FROM rental_clients c
-WHERE (c.name = 'Эдик Заказы для групп' OR c.director_name = 'Эдик Заказы для групп')
-  AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 1107)
+WHERE (
+  c.name = 'Эдик Заказы для групп' 
+  OR c.director_name = 'Эдик Заказы для групп'
+  OR COALESCE(c.director_name, c.name) = 'Эдик Заказы для групп'
+)
+AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 1107)
 LIMIT 1;
 
 INSERT INTO rental_orders (
@@ -4840,8 +5504,12 @@ SELECT
   NOW(),
   NOW()
 FROM rental_clients c
-WHERE (c.name = 'Эвелина (Инициатива)' OR c.director_name = 'Эвелина (Инициатива)')
-  AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 1106)
+WHERE (
+  c.name = 'Эвелина (Инициатива)' 
+  OR c.director_name = 'Эвелина (Инициатива)'
+  OR COALESCE(c.director_name, c.name) = 'Эвелина (Инициатива)'
+)
+AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 1106)
 LIMIT 1;
 
 INSERT INTO rental_orders (
@@ -4869,8 +5537,12 @@ SELECT
   NOW(),
   NOW()
 FROM rental_clients c
-WHERE (c.name = 'Мария (ОСР)' OR c.director_name = 'Мария (ОСР)')
-  AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 1105)
+WHERE (
+  c.name = 'Мария (ОСР)' 
+  OR c.director_name = 'Мария (ОСР)'
+  OR COALESCE(c.director_name, c.name) = 'Мария (ОСР)'
+)
+AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 1105)
 LIMIT 1;
 
 INSERT INTO rental_orders (
@@ -4898,8 +5570,12 @@ SELECT
   NOW(),
   NOW()
 FROM rental_clients c
-WHERE (c.name = 'Эдик Заказы для групп' OR c.director_name = 'Эдик Заказы для групп')
-  AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 1104)
+WHERE (
+  c.name = 'Эдик Заказы для групп' 
+  OR c.director_name = 'Эдик Заказы для групп'
+  OR COALESCE(c.director_name, c.name) = 'Эдик Заказы для групп'
+)
+AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 1104)
 LIMIT 1;
 
 INSERT INTO rental_orders (
@@ -4927,8 +5603,12 @@ SELECT
   NOW(),
   NOW()
 FROM rental_clients c
-WHERE (c.name = 'Любовь Ким' OR c.director_name = 'Любовь Ким')
-  AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 1103)
+WHERE (
+  c.name = 'Любовь Ким' 
+  OR c.director_name = 'Любовь Ким'
+  OR COALESCE(c.director_name, c.name) = 'Любовь Ким'
+)
+AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 1103)
 LIMIT 1;
 
 INSERT INTO rental_orders (
@@ -4956,8 +5636,12 @@ SELECT
   NOW(),
   NOW()
 FROM rental_clients c
-WHERE (c.name = 'Любовь Ким' OR c.director_name = 'Любовь Ким')
-  AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 1102)
+WHERE (
+  c.name = 'Любовь Ким' 
+  OR c.director_name = 'Любовь Ким'
+  OR COALESCE(c.director_name, c.name) = 'Любовь Ким'
+)
+AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 1102)
 LIMIT 1;
 
 INSERT INTO rental_orders (
@@ -4985,8 +5669,12 @@ SELECT
   NOW(),
   NOW()
 FROM rental_clients c
-WHERE (c.name = 'Зельфира' OR c.director_name = 'Зельфира')
-  AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 1101)
+WHERE (
+  c.name = 'Зельфира' 
+  OR c.director_name = 'Зельфира'
+  OR COALESCE(c.director_name, c.name) = 'Зельфира'
+)
+AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 1101)
 LIMIT 1;
 
 INSERT INTO rental_orders (
@@ -5014,8 +5702,12 @@ SELECT
   NOW(),
   NOW()
 FROM rental_clients c
-WHERE (c.name = 'Екатерина' OR c.director_name = 'Екатерина')
-  AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 1100)
+WHERE (
+  c.name = 'Екатерина' 
+  OR c.director_name = 'Екатерина'
+  OR COALESCE(c.director_name, c.name) = 'Екатерина'
+)
+AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 1100)
 LIMIT 1;
 
 INSERT INTO rental_orders (
@@ -5043,8 +5735,12 @@ SELECT
   NOW(),
   NOW()
 FROM rental_clients c
-WHERE (c.name = 'Владимир Нежданов' OR c.director_name = 'Владимир Нежданов')
-  AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 1099)
+WHERE (
+  c.name = 'Владимир Нежданов' 
+  OR c.director_name = 'Владимир Нежданов'
+  OR COALESCE(c.director_name, c.name) = 'Владимир Нежданов'
+)
+AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 1099)
 LIMIT 1;
 
 INSERT INTO rental_orders (
@@ -5072,8 +5768,12 @@ SELECT
   NOW(),
   NOW()
 FROM rental_clients c
-WHERE (c.name = 'Галия' OR c.director_name = 'Галия')
-  AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 1098)
+WHERE (
+  c.name = 'Галия' 
+  OR c.director_name = 'Галия'
+  OR COALESCE(c.director_name, c.name) = 'Галия'
+)
+AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 1098)
 LIMIT 1;
 
 INSERT INTO rental_orders (
@@ -5101,8 +5801,12 @@ SELECT
   NOW(),
   NOW()
 FROM rental_clients c
-WHERE (c.name = 'Елена (Конгресс Авиа)' OR c.director_name = 'Елена (Конгресс Авиа)')
-  AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 1097)
+WHERE (
+  c.name = 'Елена (Конгресс Авиа)' 
+  OR c.director_name = 'Елена (Конгресс Авиа)'
+  OR COALESCE(c.director_name, c.name) = 'Елена (Конгресс Авиа)'
+)
+AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 1097)
 LIMIT 1;
 
 INSERT INTO rental_orders (
@@ -5130,8 +5834,12 @@ SELECT
   NOW(),
   NOW()
 FROM rental_clients c
-WHERE (c.name = 'Татьяна (Агентство Удачи)' OR c.director_name = 'Татьяна (Агентство Удачи)')
-  AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 1096)
+WHERE (
+  c.name = 'Татьяна (Агентство Удачи)' 
+  OR c.director_name = 'Татьяна (Агентство Удачи)'
+  OR COALESCE(c.director_name, c.name) = 'Татьяна (Агентство Удачи)'
+)
+AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 1096)
 LIMIT 1;
 
 INSERT INTO rental_orders (
@@ -5159,8 +5867,12 @@ SELECT
   NOW(),
   NOW()
 FROM rental_clients c
-WHERE (c.name = 'Ляйсан (Казань 360)' OR c.director_name = 'Ляйсан (Казань 360)')
-  AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 1095)
+WHERE (
+  c.name = 'Ляйсан (Казань 360)' 
+  OR c.director_name = 'Ляйсан (Казань 360)'
+  OR COALESCE(c.director_name, c.name) = 'Ляйсан (Казань 360)'
+)
+AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 1095)
 LIMIT 1;
 
 INSERT INTO rental_orders (
@@ -5188,8 +5900,12 @@ SELECT
   NOW(),
   NOW()
 FROM rental_clients c
-WHERE (c.name = 'Дамир (Экскурс)' OR c.director_name = 'Дамир (Экскурс)')
-  AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 1094)
+WHERE (
+  c.name = 'Дамир (Экскурс)' 
+  OR c.director_name = 'Дамир (Экскурс)'
+  OR COALESCE(c.director_name, c.name) = 'Дамир (Экскурс)'
+)
+AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 1094)
 LIMIT 1;
 
 INSERT INTO rental_orders (
@@ -5217,8 +5933,12 @@ SELECT
   NOW(),
   NOW()
 FROM rental_clients c
-WHERE (c.name = 'Ленар (ИП Ножкин)' OR c.director_name = 'Ленар (ИП Ножкин)')
-  AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 1093)
+WHERE (
+  c.name = 'Ленар (ИП Ножкин)' 
+  OR c.director_name = 'Ленар (ИП Ножкин)'
+  OR COALESCE(c.director_name, c.name) = 'Ленар (ИП Ножкин)'
+)
+AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 1093)
 LIMIT 1;
 
 INSERT INTO rental_orders (
@@ -5246,8 +5966,12 @@ SELECT
   NOW(),
   NOW()
 FROM rental_clients c
-WHERE (c.name = 'Искандер' OR c.director_name = 'Искандер')
-  AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 1092)
+WHERE (
+  c.name = 'Искандер' 
+  OR c.director_name = 'Искандер'
+  OR COALESCE(c.director_name, c.name) = 'Искандер'
+)
+AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 1092)
 LIMIT 1;
 
 INSERT INTO rental_orders (
@@ -5275,8 +5999,12 @@ SELECT
   NOW(),
   NOW()
 FROM rental_clients c
-WHERE (c.name = 'Любовь (ТИЦ)' OR c.director_name = 'Любовь (ТИЦ)')
-  AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 1091)
+WHERE (
+  c.name = 'Любовь (ТИЦ)' 
+  OR c.director_name = 'Любовь (ТИЦ)'
+  OR COALESCE(c.director_name, c.name) = 'Любовь (ТИЦ)'
+)
+AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 1091)
 LIMIT 1;
 
 INSERT INTO rental_orders (
@@ -5304,8 +6032,12 @@ SELECT
   NOW(),
   NOW()
 FROM rental_clients c
-WHERE (c.name = 'Екатерина Кореева' OR c.director_name = 'Екатерина Кореева')
-  AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 1090)
+WHERE (
+  c.name = 'Екатерина Кореева' 
+  OR c.director_name = 'Екатерина Кореева'
+  OR COALESCE(c.director_name, c.name) = 'Екатерина Кореева'
+)
+AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 1090)
 LIMIT 1;
 
 INSERT INTO rental_orders (
@@ -5333,8 +6065,12 @@ SELECT
   NOW(),
   NOW()
 FROM rental_clients c
-WHERE (c.name = 'Арсен (Юнион)' OR c.director_name = 'Арсен (Юнион)')
-  AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 1089)
+WHERE (
+  c.name = 'Арсен (Юнион)' 
+  OR c.director_name = 'Арсен (Юнион)'
+  OR COALESCE(c.director_name, c.name) = 'Арсен (Юнион)'
+)
+AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 1089)
 LIMIT 1;
 
 INSERT INTO rental_orders (
@@ -5362,8 +6098,12 @@ SELECT
   NOW(),
   NOW()
 FROM rental_clients c
-WHERE (c.name = 'Арсен (Юнион)' OR c.director_name = 'Арсен (Юнион)')
-  AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 1088)
+WHERE (
+  c.name = 'Арсен (Юнион)' 
+  OR c.director_name = 'Арсен (Юнион)'
+  OR COALESCE(c.director_name, c.name) = 'Арсен (Юнион)'
+)
+AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 1088)
 LIMIT 1;
 
 INSERT INTO rental_orders (
@@ -5391,8 +6131,12 @@ SELECT
   NOW(),
   NOW()
 FROM rental_clients c
-WHERE (c.name = 'Галия' OR c.director_name = 'Галия')
-  AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 1087)
+WHERE (
+  c.name = 'Галия' 
+  OR c.director_name = 'Галия'
+  OR COALESCE(c.director_name, c.name) = 'Галия'
+)
+AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 1087)
 LIMIT 1;
 
 INSERT INTO rental_orders (
@@ -5420,8 +6164,12 @@ SELECT
   NOW(),
   NOW()
 FROM rental_clients c
-WHERE (c.name = 'Юлия Супрунова (от Миры)' OR c.director_name = 'Юлия Супрунова (от Миры)')
-  AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 1086)
+WHERE (
+  c.name = 'Юлия Супрунова (от Миры)' 
+  OR c.director_name = 'Юлия Супрунова (от Миры)'
+  OR COALESCE(c.director_name, c.name) = 'Юлия Супрунова (от Миры)'
+)
+AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 1086)
 LIMIT 1;
 
 INSERT INTO rental_orders (
@@ -5449,8 +6197,12 @@ SELECT
   NOW(),
   NOW()
 FROM rental_clients c
-WHERE (c.name = 'Сафина Алина (ФРГРТ)' OR c.director_name = 'Сафина Алина (ФРГРТ)')
-  AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 1085)
+WHERE (
+  c.name = 'Сафина Алина (ФРГРТ)' 
+  OR c.director_name = 'Сафина Алина (ФРГРТ)'
+  OR COALESCE(c.director_name, c.name) = 'Сафина Алина (ФРГРТ)'
+)
+AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 1085)
 LIMIT 1;
 
 INSERT INTO rental_orders (
@@ -5478,8 +6230,12 @@ SELECT
   NOW(),
   NOW()
 FROM rental_clients c
-WHERE (c.name = 'Татьяна (Гольфстрим)' OR c.director_name = 'Татьяна (Гольфстрим)')
-  AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 1084)
+WHERE (
+  c.name = 'Татьяна (Гольфстрим)' 
+  OR c.director_name = 'Татьяна (Гольфстрим)'
+  OR COALESCE(c.director_name, c.name) = 'Татьяна (Гольфстрим)'
+)
+AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 1084)
 LIMIT 1;
 
 INSERT INTO rental_orders (
@@ -5507,8 +6263,12 @@ SELECT
   NOW(),
   NOW()
 FROM rental_clients c
-WHERE (c.name = 'Татьяна (Гольфстрим)' OR c.director_name = 'Татьяна (Гольфстрим)')
-  AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 1083)
+WHERE (
+  c.name = 'Татьяна (Гольфстрим)' 
+  OR c.director_name = 'Татьяна (Гольфстрим)'
+  OR COALESCE(c.director_name, c.name) = 'Татьяна (Гольфстрим)'
+)
+AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 1083)
 LIMIT 1;
 
 INSERT INTO rental_orders (
@@ -5536,8 +6296,12 @@ SELECT
   NOW(),
   NOW()
 FROM rental_clients c
-WHERE (c.name = 'Мария Экскурсовод' OR c.director_name = 'Мария Экскурсовод')
-  AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 1082)
+WHERE (
+  c.name = 'Мария Экскурсовод' 
+  OR c.director_name = 'Мария Экскурсовод'
+  OR COALESCE(c.director_name, c.name) = 'Мария Экскурсовод'
+)
+AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 1082)
 LIMIT 1;
 
 INSERT INTO rental_orders (
@@ -5565,8 +6329,12 @@ SELECT
   NOW(),
   NOW()
 FROM rental_clients c
-WHERE (c.name = 'Мира (ИП)' OR c.director_name = 'Мира (ИП)')
-  AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 1081)
+WHERE (
+  c.name = 'Мира (ИП)' 
+  OR c.director_name = 'Мира (ИП)'
+  OR COALESCE(c.director_name, c.name) = 'Мира (ИП)'
+)
+AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 1081)
 LIMIT 1;
 
 INSERT INTO rental_orders (
@@ -5594,8 +6362,12 @@ SELECT
   NOW(),
   NOW()
 FROM rental_clients c
-WHERE (c.name = 'Вадим' OR c.director_name = 'Вадим')
-  AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 1080)
+WHERE (
+  c.name = 'Вадим' 
+  OR c.director_name = 'Вадим'
+  OR COALESCE(c.director_name, c.name) = 'Вадим'
+)
+AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 1080)
 LIMIT 1;
 
 INSERT INTO rental_orders (
@@ -5623,8 +6395,12 @@ SELECT
   NOW(),
   NOW()
 FROM rental_clients c
-WHERE (c.name = 'Мария Экскурсовод' OR c.director_name = 'Мария Экскурсовод')
-  AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 1079)
+WHERE (
+  c.name = 'Мария Экскурсовод' 
+  OR c.director_name = 'Мария Экскурсовод'
+  OR COALESCE(c.director_name, c.name) = 'Мария Экскурсовод'
+)
+AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 1079)
 LIMIT 1;
 
 INSERT INTO rental_orders (
@@ -5652,8 +6428,12 @@ SELECT
   NOW(),
   NOW()
 FROM rental_clients c
-WHERE (c.name = 'Эдик Заказы для групп' OR c.director_name = 'Эдик Заказы для групп')
-  AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 1078)
+WHERE (
+  c.name = 'Эдик Заказы для групп' 
+  OR c.director_name = 'Эдик Заказы для групп'
+  OR COALESCE(c.director_name, c.name) = 'Эдик Заказы для групп'
+)
+AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 1078)
 LIMIT 1;
 
 INSERT INTO rental_orders (
@@ -5681,8 +6461,12 @@ SELECT
   NOW(),
   NOW()
 FROM rental_clients c
-WHERE (c.name = 'Татьяна (Гольфстрим)' OR c.director_name = 'Татьяна (Гольфстрим)')
-  AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 1077)
+WHERE (
+  c.name = 'Татьяна (Гольфстрим)' 
+  OR c.director_name = 'Татьяна (Гольфстрим)'
+  OR COALESCE(c.director_name, c.name) = 'Татьяна (Гольфстрим)'
+)
+AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 1077)
 LIMIT 1;
 
 INSERT INTO rental_orders (
@@ -5710,8 +6494,12 @@ SELECT
   NOW(),
   NOW()
 FROM rental_clients c
-WHERE (c.name = 'Татьяна (Гольфстрим)' OR c.director_name = 'Татьяна (Гольфстрим)')
-  AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 1076)
+WHERE (
+  c.name = 'Татьяна (Гольфстрим)' 
+  OR c.director_name = 'Татьяна (Гольфстрим)'
+  OR COALESCE(c.director_name, c.name) = 'Татьяна (Гольфстрим)'
+)
+AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 1076)
 LIMIT 1;
 
 INSERT INTO rental_orders (
@@ -5739,8 +6527,12 @@ SELECT
   NOW(),
   NOW()
 FROM rental_clients c
-WHERE (c.name = 'Татьяна (Гольфстрим)' OR c.director_name = 'Татьяна (Гольфстрим)')
-  AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 1075)
+WHERE (
+  c.name = 'Татьяна (Гольфстрим)' 
+  OR c.director_name = 'Татьяна (Гольфстрим)'
+  OR COALESCE(c.director_name, c.name) = 'Татьяна (Гольфстрим)'
+)
+AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 1075)
 LIMIT 1;
 
 INSERT INTO rental_orders (
@@ -5768,8 +6560,12 @@ SELECT
   NOW(),
   NOW()
 FROM rental_clients c
-WHERE (c.name = 'Татьяна (Гольфстрим)' OR c.director_name = 'Татьяна (Гольфстрим)')
-  AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 1074)
+WHERE (
+  c.name = 'Татьяна (Гольфстрим)' 
+  OR c.director_name = 'Татьяна (Гольфстрим)'
+  OR COALESCE(c.director_name, c.name) = 'Татьяна (Гольфстрим)'
+)
+AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 1074)
 LIMIT 1;
 
 INSERT INTO rental_orders (
@@ -5797,8 +6593,12 @@ SELECT
   NOW(),
   NOW()
 FROM rental_clients c
-WHERE (c.name = 'Татьяна (Гольфстрим)' OR c.director_name = 'Татьяна (Гольфстрим)')
-  AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 1073)
+WHERE (
+  c.name = 'Татьяна (Гольфстрим)' 
+  OR c.director_name = 'Татьяна (Гольфстрим)'
+  OR COALESCE(c.director_name, c.name) = 'Татьяна (Гольфстрим)'
+)
+AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 1073)
 LIMIT 1;
 
 INSERT INTO rental_orders (
@@ -5826,8 +6626,12 @@ SELECT
   NOW(),
   NOW()
 FROM rental_clients c
-WHERE (c.name = 'Екатерина Кореева' OR c.director_name = 'Екатерина Кореева')
-  AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 1072)
+WHERE (
+  c.name = 'Екатерина Кореева' 
+  OR c.director_name = 'Екатерина Кореева'
+  OR COALESCE(c.director_name, c.name) = 'Екатерина Кореева'
+)
+AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 1072)
 LIMIT 1;
 
 INSERT INTO rental_orders (
@@ -5855,8 +6659,12 @@ SELECT
   NOW(),
   NOW()
 FROM rental_clients c
-WHERE (c.name = 'Ольга (Сиалия)' OR c.director_name = 'Ольга (Сиалия)')
-  AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 1071)
+WHERE (
+  c.name = 'Ольга (Сиалия)' 
+  OR c.director_name = 'Ольга (Сиалия)'
+  OR COALESCE(c.director_name, c.name) = 'Ольга (Сиалия)'
+)
+AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 1071)
 LIMIT 1;
 
 INSERT INTO rental_orders (
@@ -5884,8 +6692,12 @@ SELECT
   NOW(),
   NOW()
 FROM rental_clients c
-WHERE (c.name = 'Карина (технологии путешествий)' OR c.director_name = 'Карина (технологии путешествий)')
-  AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 1070)
+WHERE (
+  c.name = 'Карина (технологии путешествий)' 
+  OR c.director_name = 'Карина (технологии путешествий)'
+  OR COALESCE(c.director_name, c.name) = 'Карина (технологии путешествий)'
+)
+AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 1070)
 LIMIT 1;
 
 INSERT INTO rental_orders (
@@ -5913,8 +6725,12 @@ SELECT
   NOW(),
   NOW()
 FROM rental_clients c
-WHERE (c.name = 'Зельфира' OR c.director_name = 'Зельфира')
-  AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 1069)
+WHERE (
+  c.name = 'Зельфира' 
+  OR c.director_name = 'Зельфира'
+  OR COALESCE(c.director_name, c.name) = 'Зельфира'
+)
+AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 1069)
 LIMIT 1;
 
 INSERT INTO rental_orders (
@@ -5942,8 +6758,12 @@ SELECT
   NOW(),
   NOW()
 FROM rental_clients c
-WHERE (c.name = 'Эдик Заказы для групп' OR c.director_name = 'Эдик Заказы для групп')
-  AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 1068)
+WHERE (
+  c.name = 'Эдик Заказы для групп' 
+  OR c.director_name = 'Эдик Заказы для групп'
+  OR COALESCE(c.director_name, c.name) = 'Эдик Заказы для групп'
+)
+AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 1068)
 LIMIT 1;
 
 INSERT INTO rental_orders (
@@ -5971,8 +6791,12 @@ SELECT
   NOW(),
   NOW()
 FROM rental_clients c
-WHERE (c.name = 'Любовь (ТИЦ)' OR c.director_name = 'Любовь (ТИЦ)')
-  AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 1067)
+WHERE (
+  c.name = 'Любовь (ТИЦ)' 
+  OR c.director_name = 'Любовь (ТИЦ)'
+  OR COALESCE(c.director_name, c.name) = 'Любовь (ТИЦ)'
+)
+AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 1067)
 LIMIT 1;
 
 INSERT INTO rental_orders (
@@ -6000,8 +6824,12 @@ SELECT
   NOW(),
   NOW()
 FROM rental_clients c
-WHERE (c.name = 'Любовь (ТИЦ)' OR c.director_name = 'Любовь (ТИЦ)')
-  AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 1066)
+WHERE (
+  c.name = 'Любовь (ТИЦ)' 
+  OR c.director_name = 'Любовь (ТИЦ)'
+  OR COALESCE(c.director_name, c.name) = 'Любовь (ТИЦ)'
+)
+AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 1066)
 LIMIT 1;
 
 INSERT INTO rental_orders (
@@ -6029,8 +6857,12 @@ SELECT
   NOW(),
   NOW()
 FROM rental_clients c
-WHERE (c.name = 'Арсен (Юнион)' OR c.director_name = 'Арсен (Юнион)')
-  AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 1065)
+WHERE (
+  c.name = 'Арсен (Юнион)' 
+  OR c.director_name = 'Арсен (Юнион)'
+  OR COALESCE(c.director_name, c.name) = 'Арсен (Юнион)'
+)
+AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 1065)
 LIMIT 1;
 
 INSERT INTO rental_orders (
@@ -6058,8 +6890,12 @@ SELECT
   NOW(),
   NOW()
 FROM rental_clients c
-WHERE (c.name = 'Татьяна (Гольфстрим)' OR c.director_name = 'Татьяна (Гольфстрим)')
-  AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 1064)
+WHERE (
+  c.name = 'Татьяна (Гольфстрим)' 
+  OR c.director_name = 'Татьяна (Гольфстрим)'
+  OR COALESCE(c.director_name, c.name) = 'Татьяна (Гольфстрим)'
+)
+AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 1064)
 LIMIT 1;
 
 INSERT INTO rental_orders (
@@ -6087,8 +6923,12 @@ SELECT
   NOW(),
   NOW()
 FROM rental_clients c
-WHERE (c.name = 'Зульхиза Кутлучурина' OR c.director_name = 'Зульхиза Кутлучурина')
-  AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 1063)
+WHERE (
+  c.name = 'Зульхиза Кутлучурина' 
+  OR c.director_name = 'Зульхиза Кутлучурина'
+  OR COALESCE(c.director_name, c.name) = 'Зульхиза Кутлучурина'
+)
+AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 1063)
 LIMIT 1;
 
 INSERT INTO rental_orders (
@@ -6116,8 +6956,12 @@ SELECT
   NOW(),
   NOW()
 FROM rental_clients c
-WHERE (c.name = 'Андрей (Экскурс)' OR c.director_name = 'Андрей (Экскурс)')
-  AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 1062)
+WHERE (
+  c.name = 'Андрей (Экскурс)' 
+  OR c.director_name = 'Андрей (Экскурс)'
+  OR COALESCE(c.director_name, c.name) = 'Андрей (Экскурс)'
+)
+AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 1062)
 LIMIT 1;
 
 INSERT INTO rental_orders (
@@ -6145,8 +6989,12 @@ SELECT
   NOW(),
   NOW()
 FROM rental_clients c
-WHERE (c.name = 'Татьяна' OR c.director_name = 'Татьяна')
-  AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 1061)
+WHERE (
+  c.name = 'Татьяна' 
+  OR c.director_name = 'Татьяна'
+  OR COALESCE(c.director_name, c.name) = 'Татьяна'
+)
+AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 1061)
 LIMIT 1;
 
 INSERT INTO rental_orders (
@@ -6174,8 +7022,12 @@ SELECT
   NOW(),
   NOW()
 FROM rental_clients c
-WHERE (c.name = 'Ольга' OR c.director_name = 'Ольга')
-  AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 1060)
+WHERE (
+  c.name = 'Ольга' 
+  OR c.director_name = 'Ольга'
+  OR COALESCE(c.director_name, c.name) = 'Ольга'
+)
+AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 1060)
 LIMIT 1;
 
 INSERT INTO rental_orders (
@@ -6203,8 +7055,12 @@ SELECT
   NOW(),
   NOW()
 FROM rental_clients c
-WHERE (c.name = 'Айрат Нурмухаммадов' OR c.director_name = 'Айрат Нурмухаммадов')
-  AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 1059)
+WHERE (
+  c.name = 'Айрат Нурмухаммадов' 
+  OR c.director_name = 'Айрат Нурмухаммадов'
+  OR COALESCE(c.director_name, c.name) = 'Айрат Нурмухаммадов'
+)
+AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 1059)
 LIMIT 1;
 
 INSERT INTO rental_orders (
@@ -6232,8 +7088,12 @@ SELECT
   NOW(),
   NOW()
 FROM rental_clients c
-WHERE (c.name = 'Айрат Нурмухаммадов' OR c.director_name = 'Айрат Нурмухаммадов')
-  AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 1058)
+WHERE (
+  c.name = 'Айрат Нурмухаммадов' 
+  OR c.director_name = 'Айрат Нурмухаммадов'
+  OR COALESCE(c.director_name, c.name) = 'Айрат Нурмухаммадов'
+)
+AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 1058)
 LIMIT 1;
 
 INSERT INTO rental_orders (
@@ -6261,8 +7121,12 @@ SELECT
   NOW(),
   NOW()
 FROM rental_clients c
-WHERE (c.name = 'Эдик Заказы для групп' OR c.director_name = 'Эдик Заказы для групп')
-  AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 1057)
+WHERE (
+  c.name = 'Эдик Заказы для групп' 
+  OR c.director_name = 'Эдик Заказы для групп'
+  OR COALESCE(c.director_name, c.name) = 'Эдик Заказы для групп'
+)
+AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 1057)
 LIMIT 1;
 
 INSERT INTO rental_orders (
@@ -6290,8 +7154,12 @@ SELECT
   NOW(),
   NOW()
 FROM rental_clients c
-WHERE (c.name = 'Любовь (ТИЦ)' OR c.director_name = 'Любовь (ТИЦ)')
-  AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 1056)
+WHERE (
+  c.name = 'Любовь (ТИЦ)' 
+  OR c.director_name = 'Любовь (ТИЦ)'
+  OR COALESCE(c.director_name, c.name) = 'Любовь (ТИЦ)'
+)
+AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 1056)
 LIMIT 1;
 
 INSERT INTO rental_orders (
@@ -6319,8 +7187,12 @@ SELECT
   NOW(),
   NOW()
 FROM rental_clients c
-WHERE (c.name = 'Екатерина «Романова Трэвел»' OR c.director_name = 'Екатерина «Романова Трэвел»')
-  AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 1055)
+WHERE (
+  c.name = 'Екатерина «Романова Трэвел»' 
+  OR c.director_name = 'Екатерина «Романова Трэвел»'
+  OR COALESCE(c.director_name, c.name) = 'Екатерина «Романова Трэвел»'
+)
+AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 1055)
 LIMIT 1;
 
 INSERT INTO rental_orders (
@@ -6348,8 +7220,12 @@ SELECT
   NOW(),
   NOW()
 FROM rental_clients c
-WHERE (c.name = 'Екатерина' OR c.director_name = 'Екатерина')
-  AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 1054)
+WHERE (
+  c.name = 'Екатерина' 
+  OR c.director_name = 'Екатерина'
+  OR COALESCE(c.director_name, c.name) = 'Екатерина'
+)
+AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 1054)
 LIMIT 1;
 
 INSERT INTO rental_orders (
@@ -6377,8 +7253,12 @@ SELECT
   NOW(),
   NOW()
 FROM rental_clients c
-WHERE (c.name = 'Екатерина' OR c.director_name = 'Екатерина')
-  AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 1053)
+WHERE (
+  c.name = 'Екатерина' 
+  OR c.director_name = 'Екатерина'
+  OR COALESCE(c.director_name, c.name) = 'Екатерина'
+)
+AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 1053)
 LIMIT 1;
 
 INSERT INTO rental_orders (
@@ -6406,8 +7286,12 @@ SELECT
   NOW(),
   NOW()
 FROM rental_clients c
-WHERE (c.name = 'Татьяна (Мои Каникулы) (Круиз)' OR c.director_name = 'Татьяна (Мои Каникулы) (Круиз)')
-  AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 1052)
+WHERE (
+  c.name = 'Татьяна (Мои Каникулы) (Круиз)' 
+  OR c.director_name = 'Татьяна (Мои Каникулы) (Круиз)'
+  OR COALESCE(c.director_name, c.name) = 'Татьяна (Мои Каникулы) (Круиз)'
+)
+AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 1052)
 LIMIT 1;
 
 INSERT INTO rental_orders (
@@ -6435,8 +7319,12 @@ SELECT
   NOW(),
   NOW()
 FROM rental_clients c
-WHERE (c.name = 'Управление Природными Территориями (УПТ)' OR c.director_name = 'Управление Природными Территориями (УПТ)')
-  AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 1051)
+WHERE (
+  c.name = 'Управление Природными Территориями (УПТ)' 
+  OR c.director_name = 'Управление Природными Территориями (УПТ)'
+  OR COALESCE(c.director_name, c.name) = 'Управление Природными Территориями (УПТ)'
+)
+AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 1051)
 LIMIT 1;
 
 INSERT INTO rental_orders (
@@ -6464,8 +7352,12 @@ SELECT
   NOW(),
   NOW()
 FROM rental_clients c
-WHERE (c.name = 'Зельфира' OR c.director_name = 'Зельфира')
-  AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 1050)
+WHERE (
+  c.name = 'Зельфира' 
+  OR c.director_name = 'Зельфира'
+  OR COALESCE(c.director_name, c.name) = 'Зельфира'
+)
+AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 1050)
 LIMIT 1;
 
 INSERT INTO rental_orders (
@@ -6493,8 +7385,12 @@ SELECT
   NOW(),
   NOW()
 FROM rental_clients c
-WHERE (c.name = 'Любовь Ким' OR c.director_name = 'Любовь Ким')
-  AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 1049)
+WHERE (
+  c.name = 'Любовь Ким' 
+  OR c.director_name = 'Любовь Ким'
+  OR COALESCE(c.director_name, c.name) = 'Любовь Ким'
+)
+AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 1049)
 LIMIT 1;
 
 INSERT INTO rental_orders (
@@ -6522,8 +7418,12 @@ SELECT
   NOW(),
   NOW()
 FROM rental_clients c
-WHERE (c.name = 'Елена (Конгресс Авиа)' OR c.director_name = 'Елена (Конгресс Авиа)')
-  AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 1048)
+WHERE (
+  c.name = 'Елена (Конгресс Авиа)' 
+  OR c.director_name = 'Елена (Конгресс Авиа)'
+  OR COALESCE(c.director_name, c.name) = 'Елена (Конгресс Авиа)'
+)
+AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 1048)
 LIMIT 1;
 
 INSERT INTO rental_orders (
@@ -6551,8 +7451,12 @@ SELECT
   NOW(),
   NOW()
 FROM rental_clients c
-WHERE (c.name = 'Эдик Заказы для групп' OR c.director_name = 'Эдик Заказы для групп')
-  AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 1046)
+WHERE (
+  c.name = 'Эдик Заказы для групп' 
+  OR c.director_name = 'Эдик Заказы для групп'
+  OR COALESCE(c.director_name, c.name) = 'Эдик Заказы для групп'
+)
+AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 1046)
 LIMIT 1;
 
 INSERT INTO rental_orders (
@@ -6580,8 +7484,12 @@ SELECT
   NOW(),
   NOW()
 FROM rental_clients c
-WHERE (c.name = 'Галина Тур Москва' OR c.director_name = 'Галина Тур Москва')
-  AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 1044)
+WHERE (
+  c.name = 'Галина Тур Москва' 
+  OR c.director_name = 'Галина Тур Москва'
+  OR COALESCE(c.director_name, c.name) = 'Галина Тур Москва'
+)
+AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 1044)
 LIMIT 1;
 
 INSERT INTO rental_orders (
@@ -6609,8 +7517,12 @@ SELECT
   NOW(),
   NOW()
 FROM rental_clients c
-WHERE (c.name = 'Галия' OR c.director_name = 'Галия')
-  AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 1043)
+WHERE (
+  c.name = 'Галия' 
+  OR c.director_name = 'Галия'
+  OR COALESCE(c.director_name, c.name) = 'Галия'
+)
+AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 1043)
 LIMIT 1;
 
 INSERT INTO rental_orders (
@@ -6638,8 +7550,12 @@ SELECT
   NOW(),
   NOW()
 FROM rental_clients c
-WHERE (c.name = 'Инна Экскурсовод' OR c.director_name = 'Инна Экскурсовод')
-  AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 1042)
+WHERE (
+  c.name = 'Инна Экскурсовод' 
+  OR c.director_name = 'Инна Экскурсовод'
+  OR COALESCE(c.director_name, c.name) = 'Инна Экскурсовод'
+)
+AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 1042)
 LIMIT 1;
 
 INSERT INTO rental_orders (
@@ -6667,8 +7583,12 @@ SELECT
   NOW(),
   NOW()
 FROM rental_clients c
-WHERE (c.name = 'Мария Экскурсовод' OR c.director_name = 'Мария Экскурсовод')
-  AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 1041)
+WHERE (
+  c.name = 'Мария Экскурсовод' 
+  OR c.director_name = 'Мария Экскурсовод'
+  OR COALESCE(c.director_name, c.name) = 'Мария Экскурсовод'
+)
+AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 1041)
 LIMIT 1;
 
 INSERT INTO rental_orders (
@@ -6696,8 +7616,12 @@ SELECT
   NOW(),
   NOW()
 FROM rental_clients c
-WHERE (c.name = 'Карина (технологии путешествий)' OR c.director_name = 'Карина (технологии путешествий)')
-  AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 1040)
+WHERE (
+  c.name = 'Карина (технологии путешествий)' 
+  OR c.director_name = 'Карина (технологии путешествий)'
+  OR COALESCE(c.director_name, c.name) = 'Карина (технологии путешествий)'
+)
+AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 1040)
 LIMIT 1;
 
 INSERT INTO rental_orders (
@@ -6725,8 +7649,12 @@ SELECT
   NOW(),
   NOW()
 FROM rental_clients c
-WHERE (c.name = 'Любовь (ТИЦ)' OR c.director_name = 'Любовь (ТИЦ)')
-  AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 1039)
+WHERE (
+  c.name = 'Любовь (ТИЦ)' 
+  OR c.director_name = 'Любовь (ТИЦ)'
+  OR COALESCE(c.director_name, c.name) = 'Любовь (ТИЦ)'
+)
+AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 1039)
 LIMIT 1;
 
 INSERT INTO rental_orders (
@@ -6754,8 +7682,12 @@ SELECT
   NOW(),
   NOW()
 FROM rental_clients c
-WHERE (c.name = 'Галина (Тур Урал)' OR c.director_name = 'Галина (Тур Урал)')
-  AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 1038)
+WHERE (
+  c.name = 'Галина (Тур Урал)' 
+  OR c.director_name = 'Галина (Тур Урал)'
+  OR COALESCE(c.director_name, c.name) = 'Галина (Тур Урал)'
+)
+AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 1038)
 LIMIT 1;
 
 INSERT INTO rental_orders (
@@ -6783,8 +7715,12 @@ SELECT
   NOW(),
   NOW()
 FROM rental_clients c
-WHERE (c.name = 'Давид (КФУ)' OR c.director_name = 'Давид (КФУ)')
-  AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 1037)
+WHERE (
+  c.name = 'Давид (КФУ)' 
+  OR c.director_name = 'Давид (КФУ)'
+  OR COALESCE(c.director_name, c.name) = 'Давид (КФУ)'
+)
+AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 1037)
 LIMIT 1;
 
 INSERT INTO rental_orders (
@@ -6812,8 +7748,12 @@ SELECT
   NOW(),
   NOW()
 FROM rental_clients c
-WHERE (c.name = 'Мария' OR c.director_name = 'Мария')
-  AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 1036)
+WHERE (
+  c.name = 'Мария' 
+  OR c.director_name = 'Мария'
+  OR COALESCE(c.director_name, c.name) = 'Мария'
+)
+AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 1036)
 LIMIT 1;
 
 INSERT INTO rental_orders (
@@ -6841,8 +7781,12 @@ SELECT
   NOW(),
   NOW()
 FROM rental_clients c
-WHERE (c.name = 'Мария' OR c.director_name = 'Мария')
-  AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 1035)
+WHERE (
+  c.name = 'Мария' 
+  OR c.director_name = 'Мария'
+  OR COALESCE(c.director_name, c.name) = 'Мария'
+)
+AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 1035)
 LIMIT 1;
 
 INSERT INTO rental_orders (
@@ -6870,8 +7814,12 @@ SELECT
   NOW(),
   NOW()
 FROM rental_clients c
-WHERE (c.name = 'Ирина Пронина' OR c.director_name = 'Ирина Пронина')
-  AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 1034)
+WHERE (
+  c.name = 'Ирина Пронина' 
+  OR c.director_name = 'Ирина Пронина'
+  OR COALESCE(c.director_name, c.name) = 'Ирина Пронина'
+)
+AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 1034)
 LIMIT 1;
 
 INSERT INTO rental_orders (
@@ -6899,8 +7847,12 @@ SELECT
   NOW(),
   NOW()
 FROM rental_clients c
-WHERE (c.name = 'Арсен (Юнион)' OR c.director_name = 'Арсен (Юнион)')
-  AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 1033)
+WHERE (
+  c.name = 'Арсен (Юнион)' 
+  OR c.director_name = 'Арсен (Юнион)'
+  OR COALESCE(c.director_name, c.name) = 'Арсен (Юнион)'
+)
+AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 1033)
 LIMIT 1;
 
 INSERT INTO rental_orders (
@@ -6928,8 +7880,12 @@ SELECT
   NOW(),
   NOW()
 FROM rental_clients c
-WHERE (c.name = 'Арсен (Юнион)' OR c.director_name = 'Арсен (Юнион)')
-  AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 1032)
+WHERE (
+  c.name = 'Арсен (Юнион)' 
+  OR c.director_name = 'Арсен (Юнион)'
+  OR COALESCE(c.director_name, c.name) = 'Арсен (Юнион)'
+)
+AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 1032)
 LIMIT 1;
 
 INSERT INTO rental_orders (
@@ -6957,8 +7913,12 @@ SELECT
   NOW(),
   NOW()
 FROM rental_clients c
-WHERE (c.name = 'Любовь (ТИЦ)' OR c.director_name = 'Любовь (ТИЦ)')
-  AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 1031)
+WHERE (
+  c.name = 'Любовь (ТИЦ)' 
+  OR c.director_name = 'Любовь (ТИЦ)'
+  OR COALESCE(c.director_name, c.name) = 'Любовь (ТИЦ)'
+)
+AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 1031)
 LIMIT 1;
 
 INSERT INTO rental_orders (
@@ -6986,8 +7946,12 @@ SELECT
   NOW(),
   NOW()
 FROM rental_clients c
-WHERE (c.name = 'Екатерина' OR c.director_name = 'Екатерина')
-  AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 1030)
+WHERE (
+  c.name = 'Екатерина' 
+  OR c.director_name = 'Екатерина'
+  OR COALESCE(c.director_name, c.name) = 'Екатерина'
+)
+AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 1030)
 LIMIT 1;
 
 INSERT INTO rental_orders (
@@ -7015,8 +7979,12 @@ SELECT
   NOW(),
   NOW()
 FROM rental_clients c
-WHERE (c.name = 'Зельфира' OR c.director_name = 'Зельфира')
-  AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 1029)
+WHERE (
+  c.name = 'Зельфира' 
+  OR c.director_name = 'Зельфира'
+  OR COALESCE(c.director_name, c.name) = 'Зельфира'
+)
+AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 1029)
 LIMIT 1;
 
 INSERT INTO rental_orders (
@@ -7044,8 +8012,12 @@ SELECT
   NOW(),
   NOW()
 FROM rental_clients c
-WHERE (c.name = 'Любовь (ТИЦ)' OR c.director_name = 'Любовь (ТИЦ)')
-  AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 1027)
+WHERE (
+  c.name = 'Любовь (ТИЦ)' 
+  OR c.director_name = 'Любовь (ТИЦ)'
+  OR COALESCE(c.director_name, c.name) = 'Любовь (ТИЦ)'
+)
+AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 1027)
 LIMIT 1;
 
 INSERT INTO rental_orders (
@@ -7073,8 +8045,12 @@ SELECT
   NOW(),
   NOW()
 FROM rental_clients c
-WHERE (c.name = 'Алина Сафина' OR c.director_name = 'Алина Сафина')
-  AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 1026)
+WHERE (
+  c.name = 'Алина Сафина' 
+  OR c.director_name = 'Алина Сафина'
+  OR COALESCE(c.director_name, c.name) = 'Алина Сафина'
+)
+AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 1026)
 LIMIT 1;
 
 INSERT INTO rental_orders (
@@ -7102,8 +8078,12 @@ SELECT
   NOW(),
   NOW()
 FROM rental_clients c
-WHERE (c.name = 'Татьяна (Гольфстрим)' OR c.director_name = 'Татьяна (Гольфстрим)')
-  AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 1025)
+WHERE (
+  c.name = 'Татьяна (Гольфстрим)' 
+  OR c.director_name = 'Татьяна (Гольфстрим)'
+  OR COALESCE(c.director_name, c.name) = 'Татьяна (Гольфстрим)'
+)
+AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 1025)
 LIMIT 1;
 
 INSERT INTO rental_orders (
@@ -7131,8 +8111,12 @@ SELECT
   NOW(),
   NOW()
 FROM rental_clients c
-WHERE (c.name = 'Татьяна (Гольфстрим)' OR c.director_name = 'Татьяна (Гольфстрим)')
-  AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 1024)
+WHERE (
+  c.name = 'Татьяна (Гольфстрим)' 
+  OR c.director_name = 'Татьяна (Гольфстрим)'
+  OR COALESCE(c.director_name, c.name) = 'Татьяна (Гольфстрим)'
+)
+AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 1024)
 LIMIT 1;
 
 INSERT INTO rental_orders (
@@ -7160,8 +8144,12 @@ SELECT
   NOW(),
   NOW()
 FROM rental_clients c
-WHERE (c.name = 'Александр' OR c.director_name = 'Александр')
-  AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 1023)
+WHERE (
+  c.name = 'Александр' 
+  OR c.director_name = 'Александр'
+  OR COALESCE(c.director_name, c.name) = 'Александр'
+)
+AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 1023)
 LIMIT 1;
 
 INSERT INTO rental_orders (
@@ -7189,8 +8177,12 @@ SELECT
   NOW(),
   NOW()
 FROM rental_clients c
-WHERE (c.name = 'Андрей СПБ' OR c.director_name = 'Андрей СПБ')
-  AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 1022)
+WHERE (
+  c.name = 'Андрей СПБ' 
+  OR c.director_name = 'Андрей СПБ'
+  OR COALESCE(c.director_name, c.name) = 'Андрей СПБ'
+)
+AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 1022)
 LIMIT 1;
 
 INSERT INTO rental_orders (
@@ -7218,8 +8210,12 @@ SELECT
   NOW(),
   NOW()
 FROM rental_clients c
-WHERE (c.name = 'Ирина (Иль Мио Тур)' OR c.director_name = 'Ирина (Иль Мио Тур)')
-  AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 1021)
+WHERE (
+  c.name = 'Ирина (Иль Мио Тур)' 
+  OR c.director_name = 'Ирина (Иль Мио Тур)'
+  OR COALESCE(c.director_name, c.name) = 'Ирина (Иль Мио Тур)'
+)
+AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 1021)
 LIMIT 1;
 
 INSERT INTO rental_orders (
@@ -7247,8 +8243,12 @@ SELECT
   NOW(),
   NOW()
 FROM rental_clients c
-WHERE (c.name = 'Ляйсан (Казань 360)' OR c.director_name = 'Ляйсан (Казань 360)')
-  AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 1020)
+WHERE (
+  c.name = 'Ляйсан (Казань 360)' 
+  OR c.director_name = 'Ляйсан (Казань 360)'
+  OR COALESCE(c.director_name, c.name) = 'Ляйсан (Казань 360)'
+)
+AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 1020)
 LIMIT 1;
 
 INSERT INTO rental_orders (
@@ -7276,8 +8276,12 @@ SELECT
   NOW(),
   NOW()
 FROM rental_clients c
-WHERE (c.name = 'Татьяна Чуб' OR c.director_name = 'Татьяна Чуб')
-  AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 1019)
+WHERE (
+  c.name = 'Татьяна Чуб' 
+  OR c.director_name = 'Татьяна Чуб'
+  OR COALESCE(c.director_name, c.name) = 'Татьяна Чуб'
+)
+AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 1019)
 LIMIT 1;
 
 INSERT INTO rental_orders (
@@ -7305,8 +8309,12 @@ SELECT
   NOW(),
   NOW()
 FROM rental_clients c
-WHERE (c.name = 'Зульхиза Кутлучурина' OR c.director_name = 'Зульхиза Кутлучурина')
-  AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 1018)
+WHERE (
+  c.name = 'Зульхиза Кутлучурина' 
+  OR c.director_name = 'Зульхиза Кутлучурина'
+  OR COALESCE(c.director_name, c.name) = 'Зульхиза Кутлучурина'
+)
+AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 1018)
 LIMIT 1;
 
 INSERT INTO rental_orders (
@@ -7334,8 +8342,12 @@ SELECT
   NOW(),
   NOW()
 FROM rental_clients c
-WHERE (c.name = 'Анастасия' OR c.director_name = 'Анастасия')
-  AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 1017)
+WHERE (
+  c.name = 'Анастасия' 
+  OR c.director_name = 'Анастасия'
+  OR COALESCE(c.director_name, c.name) = 'Анастасия'
+)
+AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 1017)
 LIMIT 1;
 
 INSERT INTO rental_orders (
@@ -7363,8 +8375,12 @@ SELECT
   NOW(),
   NOW()
 FROM rental_clients c
-WHERE (c.name = 'Управление Природными Территориями (УПТ)' OR c.director_name = 'Управление Природными Территориями (УПТ)')
-  AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 1016)
+WHERE (
+  c.name = 'Управление Природными Территориями (УПТ)' 
+  OR c.director_name = 'Управление Природными Территориями (УПТ)'
+  OR COALESCE(c.director_name, c.name) = 'Управление Природными Территориями (УПТ)'
+)
+AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 1016)
 LIMIT 1;
 
 INSERT INTO rental_orders (
@@ -7392,8 +8408,12 @@ SELECT
   NOW(),
   NOW()
 FROM rental_clients c
-WHERE (c.name = 'Татьяна (Гольфстрим)' OR c.director_name = 'Татьяна (Гольфстрим)')
-  AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 1015)
+WHERE (
+  c.name = 'Татьяна (Гольфстрим)' 
+  OR c.director_name = 'Татьяна (Гольфстрим)'
+  OR COALESCE(c.director_name, c.name) = 'Татьяна (Гольфстрим)'
+)
+AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 1015)
 LIMIT 1;
 
 INSERT INTO rental_orders (
@@ -7421,8 +8441,12 @@ SELECT
   NOW(),
   NOW()
 FROM rental_clients c
-WHERE (c.name = 'Анюта Родионова (Родина-тур)' OR c.director_name = 'Анюта Родионова (Родина-тур)')
-  AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 1014)
+WHERE (
+  c.name = 'Анюта Родионова (Родина-тур)' 
+  OR c.director_name = 'Анюта Родионова (Родина-тур)'
+  OR COALESCE(c.director_name, c.name) = 'Анюта Родионова (Родина-тур)'
+)
+AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 1014)
 LIMIT 1;
 
 INSERT INTO rental_orders (
@@ -7450,8 +8474,12 @@ SELECT
   NOW(),
   NOW()
 FROM rental_clients c
-WHERE (c.name = 'Эдик Заказы для групп' OR c.director_name = 'Эдик Заказы для групп')
-  AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 1012)
+WHERE (
+  c.name = 'Эдик Заказы для групп' 
+  OR c.director_name = 'Эдик Заказы для групп'
+  OR COALESCE(c.director_name, c.name) = 'Эдик Заказы для групп'
+)
+AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 1012)
 LIMIT 1;
 
 INSERT INTO rental_orders (
@@ -7479,8 +8507,12 @@ SELECT
   NOW(),
   NOW()
 FROM rental_clients c
-WHERE (c.name = 'Александр' OR c.director_name = 'Александр')
-  AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 1011)
+WHERE (
+  c.name = 'Александр' 
+  OR c.director_name = 'Александр'
+  OR COALESCE(c.director_name, c.name) = 'Александр'
+)
+AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 1011)
 LIMIT 1;
 
 INSERT INTO rental_orders (
@@ -7508,8 +8540,12 @@ SELECT
   NOW(),
   NOW()
 FROM rental_clients c
-WHERE (c.name = 'Марина Экс' OR c.director_name = 'Марина Экс')
-  AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 1010)
+WHERE (
+  c.name = 'Марина Экс' 
+  OR c.director_name = 'Марина Экс'
+  OR COALESCE(c.director_name, c.name) = 'Марина Экс'
+)
+AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 1010)
 LIMIT 1;
 
 INSERT INTO rental_orders (
@@ -7537,8 +8573,12 @@ SELECT
   NOW(),
   NOW()
 FROM rental_clients c
-WHERE (c.name = 'Екатерина Кореева' OR c.director_name = 'Екатерина Кореева')
-  AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 1009)
+WHERE (
+  c.name = 'Екатерина Кореева' 
+  OR c.director_name = 'Екатерина Кореева'
+  OR COALESCE(c.director_name, c.name) = 'Екатерина Кореева'
+)
+AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 1009)
 LIMIT 1;
 
 INSERT INTO rental_orders (
@@ -7566,8 +8606,12 @@ SELECT
   NOW(),
   NOW()
 FROM rental_clients c
-WHERE (c.name = 'Ольга (Тольятти)' OR c.director_name = 'Ольга (Тольятти)')
-  AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 1008)
+WHERE (
+  c.name = 'Ольга (Тольятти)' 
+  OR c.director_name = 'Ольга (Тольятти)'
+  OR COALESCE(c.director_name, c.name) = 'Ольга (Тольятти)'
+)
+AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 1008)
 LIMIT 1;
 
 INSERT INTO rental_orders (
@@ -7595,8 +8639,12 @@ SELECT
   NOW(),
   NOW()
 FROM rental_clients c
-WHERE (c.name = 'Любовь (ТИЦ)' OR c.director_name = 'Любовь (ТИЦ)')
-  AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 1007)
+WHERE (
+  c.name = 'Любовь (ТИЦ)' 
+  OR c.director_name = 'Любовь (ТИЦ)'
+  OR COALESCE(c.director_name, c.name) = 'Любовь (ТИЦ)'
+)
+AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 1007)
 LIMIT 1;
 
 INSERT INTO rental_orders (
@@ -7624,8 +8672,12 @@ SELECT
   NOW(),
   NOW()
 FROM rental_clients c
-WHERE (c.name = 'Арсен (Юнион)' OR c.director_name = 'Арсен (Юнион)')
-  AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 1006)
+WHERE (
+  c.name = 'Арсен (Юнион)' 
+  OR c.director_name = 'Арсен (Юнион)'
+  OR COALESCE(c.director_name, c.name) = 'Арсен (Юнион)'
+)
+AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 1006)
 LIMIT 1;
 
 INSERT INTO rental_orders (
@@ -7653,8 +8705,12 @@ SELECT
   NOW(),
   NOW()
 FROM rental_clients c
-WHERE (c.name = 'Любовь (ТИЦ)' OR c.director_name = 'Любовь (ТИЦ)')
-  AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 1005)
+WHERE (
+  c.name = 'Любовь (ТИЦ)' 
+  OR c.director_name = 'Любовь (ТИЦ)'
+  OR COALESCE(c.director_name, c.name) = 'Любовь (ТИЦ)'
+)
+AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 1005)
 LIMIT 1;
 
 INSERT INTO rental_orders (
@@ -7682,8 +8738,12 @@ SELECT
   NOW(),
   NOW()
 FROM rental_clients c
-WHERE (c.name = 'Любовь (ТИЦ)' OR c.director_name = 'Любовь (ТИЦ)')
-  AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 1004)
+WHERE (
+  c.name = 'Любовь (ТИЦ)' 
+  OR c.director_name = 'Любовь (ТИЦ)'
+  OR COALESCE(c.director_name, c.name) = 'Любовь (ТИЦ)'
+)
+AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 1004)
 LIMIT 1;
 
 INSERT INTO rental_orders (
@@ -7711,8 +8771,12 @@ SELECT
   NOW(),
   NOW()
 FROM rental_clients c
-WHERE (c.name = 'Гузелия' OR c.director_name = 'Гузелия')
-  AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 1003)
+WHERE (
+  c.name = 'Гузелия' 
+  OR c.director_name = 'Гузелия'
+  OR COALESCE(c.director_name, c.name) = 'Гузелия'
+)
+AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 1003)
 LIMIT 1;
 
 INSERT INTO rental_orders (
@@ -7740,8 +8804,12 @@ SELECT
   NOW(),
   NOW()
 FROM rental_clients c
-WHERE (c.name = 'Эдик Заказы для групп' OR c.director_name = 'Эдик Заказы для групп')
-  AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 1002)
+WHERE (
+  c.name = 'Эдик Заказы для групп' 
+  OR c.director_name = 'Эдик Заказы для групп'
+  OR COALESCE(c.director_name, c.name) = 'Эдик Заказы для групп'
+)
+AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 1002)
 LIMIT 1;
 
 INSERT INTO rental_orders (
@@ -7769,8 +8837,12 @@ SELECT
   NOW(),
   NOW()
 FROM rental_clients c
-WHERE (c.name = 'Юлия (Рыжий Слон)' OR c.director_name = 'Юлия (Рыжий Слон)')
-  AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 1001)
+WHERE (
+  c.name = 'Юлия (Рыжий Слон)' 
+  OR c.director_name = 'Юлия (Рыжий Слон)'
+  OR COALESCE(c.director_name, c.name) = 'Юлия (Рыжий Слон)'
+)
+AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 1001)
 LIMIT 1;
 
 INSERT INTO rental_orders (
@@ -7798,8 +8870,12 @@ SELECT
   NOW(),
   NOW()
 FROM rental_clients c
-WHERE (c.name = 'Мира (ИП)' OR c.director_name = 'Мира (ИП)')
-  AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 1000)
+WHERE (
+  c.name = 'Мира (ИП)' 
+  OR c.director_name = 'Мира (ИП)'
+  OR COALESCE(c.director_name, c.name) = 'Мира (ИП)'
+)
+AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 1000)
 LIMIT 1;
 
 INSERT INTO rental_orders (
@@ -7827,8 +8903,12 @@ SELECT
   NOW(),
   NOW()
 FROM rental_clients c
-WHERE (c.name = 'Лариса Перминова' OR c.director_name = 'Лариса Перминова')
-  AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 999)
+WHERE (
+  c.name = 'Лариса Перминова' 
+  OR c.director_name = 'Лариса Перминова'
+  OR COALESCE(c.director_name, c.name) = 'Лариса Перминова'
+)
+AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 999)
 LIMIT 1;
 
 INSERT INTO rental_orders (
@@ -7856,8 +8936,12 @@ SELECT
   NOW(),
   NOW()
 FROM rental_clients c
-WHERE (c.name = 'Гузелия' OR c.director_name = 'Гузелия')
-  AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 998)
+WHERE (
+  c.name = 'Гузелия' 
+  OR c.director_name = 'Гузелия'
+  OR COALESCE(c.director_name, c.name) = 'Гузелия'
+)
+AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 998)
 LIMIT 1;
 
 INSERT INTO rental_orders (
@@ -7885,8 +8969,12 @@ SELECT
   NOW(),
   NOW()
 FROM rental_clients c
-WHERE (c.name = 'Ольга (Сиалия)' OR c.director_name = 'Ольга (Сиалия)')
-  AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 997)
+WHERE (
+  c.name = 'Ольга (Сиалия)' 
+  OR c.director_name = 'Ольга (Сиалия)'
+  OR COALESCE(c.director_name, c.name) = 'Ольга (Сиалия)'
+)
+AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 997)
 LIMIT 1;
 
 INSERT INTO rental_orders (
@@ -7914,8 +9002,12 @@ SELECT
   NOW(),
   NOW()
 FROM rental_clients c
-WHERE (c.name = 'Рената (Твоя Казань)' OR c.director_name = 'Рената (Твоя Казань)')
-  AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 996)
+WHERE (
+  c.name = 'Рената (Твоя Казань)' 
+  OR c.director_name = 'Рената (Твоя Казань)'
+  OR COALESCE(c.director_name, c.name) = 'Рената (Твоя Казань)'
+)
+AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 996)
 LIMIT 1;
 
 INSERT INTO rental_orders (
@@ -7943,8 +9035,12 @@ SELECT
   NOW(),
   NOW()
 FROM rental_clients c
-WHERE (c.name = 'Эвелина (Инициатива)' OR c.director_name = 'Эвелина (Инициатива)')
-  AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 995)
+WHERE (
+  c.name = 'Эвелина (Инициатива)' 
+  OR c.director_name = 'Эвелина (Инициатива)'
+  OR COALESCE(c.director_name, c.name) = 'Эвелина (Инициатива)'
+)
+AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 995)
 LIMIT 1;
 
 INSERT INTO rental_orders (
@@ -7972,8 +9068,12 @@ SELECT
   NOW(),
   NOW()
 FROM rental_clients c
-WHERE (c.name = 'Зульхиза Кутлучурина' OR c.director_name = 'Зульхиза Кутлучурина')
-  AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 994)
+WHERE (
+  c.name = 'Зульхиза Кутлучурина' 
+  OR c.director_name = 'Зульхиза Кутлучурина'
+  OR COALESCE(c.director_name, c.name) = 'Зульхиза Кутлучурина'
+)
+AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 994)
 LIMIT 1;
 
 INSERT INTO rental_orders (
@@ -8001,8 +9101,12 @@ SELECT
   NOW(),
   NOW()
 FROM rental_clients c
-WHERE (c.name = 'Анастасия' OR c.director_name = 'Анастасия')
-  AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 993)
+WHERE (
+  c.name = 'Анастасия' 
+  OR c.director_name = 'Анастасия'
+  OR COALESCE(c.director_name, c.name) = 'Анастасия'
+)
+AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 993)
 LIMIT 1;
 
 INSERT INTO rental_orders (
@@ -8030,8 +9134,12 @@ SELECT
   NOW(),
   NOW()
 FROM rental_clients c
-WHERE (c.name = 'Жанна' OR c.director_name = 'Жанна')
-  AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 992)
+WHERE (
+  c.name = 'Жанна' 
+  OR c.director_name = 'Жанна'
+  OR COALESCE(c.director_name, c.name) = 'Жанна'
+)
+AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 992)
 LIMIT 1;
 
 INSERT INTO rental_orders (
@@ -8059,8 +9167,12 @@ SELECT
   NOW(),
   NOW()
 FROM rental_clients c
-WHERE (c.name = 'Татьяна (Гольфстрим)' OR c.director_name = 'Татьяна (Гольфстрим)')
-  AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 990)
+WHERE (
+  c.name = 'Татьяна (Гольфстрим)' 
+  OR c.director_name = 'Татьяна (Гольфстрим)'
+  OR COALESCE(c.director_name, c.name) = 'Татьяна (Гольфстрим)'
+)
+AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 990)
 LIMIT 1;
 
 INSERT INTO rental_orders (
@@ -8088,8 +9200,12 @@ SELECT
   NOW(),
   NOW()
 FROM rental_clients c
-WHERE (c.name = 'Анюта Родионова (Родина-тур)' OR c.director_name = 'Анюта Родионова (Родина-тур)')
-  AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 989)
+WHERE (
+  c.name = 'Анюта Родионова (Родина-тур)' 
+  OR c.director_name = 'Анюта Родионова (Родина-тур)'
+  OR COALESCE(c.director_name, c.name) = 'Анюта Родионова (Родина-тур)'
+)
+AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 989)
 LIMIT 1;
 
 INSERT INTO rental_orders (
@@ -8117,8 +9233,12 @@ SELECT
   NOW(),
   NOW()
 FROM rental_clients c
-WHERE (c.name = 'Айрат Нурмухаммадов' OR c.director_name = 'Айрат Нурмухаммадов')
-  AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 988)
+WHERE (
+  c.name = 'Айрат Нурмухаммадов' 
+  OR c.director_name = 'Айрат Нурмухаммадов'
+  OR COALESCE(c.director_name, c.name) = 'Айрат Нурмухаммадов'
+)
+AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 988)
 LIMIT 1;
 
 INSERT INTO rental_orders (
@@ -8146,8 +9266,12 @@ SELECT
   NOW(),
   NOW()
 FROM rental_clients c
-WHERE (c.name = 'Юлианна' OR c.director_name = 'Юлианна')
-  AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 987)
+WHERE (
+  c.name = 'Юлианна' 
+  OR c.director_name = 'Юлианна'
+  OR COALESCE(c.director_name, c.name) = 'Юлианна'
+)
+AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 987)
 LIMIT 1;
 
 INSERT INTO rental_orders (
@@ -8175,8 +9299,12 @@ SELECT
   NOW(),
   NOW()
 FROM rental_clients c
-WHERE (c.name = 'Фируза' OR c.director_name = 'Фируза')
-  AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 986)
+WHERE (
+  c.name = 'Фируза' 
+  OR c.director_name = 'Фируза'
+  OR COALESCE(c.director_name, c.name) = 'Фируза'
+)
+AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 986)
 LIMIT 1;
 
 INSERT INTO rental_orders (
@@ -8204,8 +9332,12 @@ SELECT
   NOW(),
   NOW()
 FROM rental_clients c
-WHERE (c.name = 'Эвелина (Инициатива)' OR c.director_name = 'Эвелина (Инициатива)')
-  AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 985)
+WHERE (
+  c.name = 'Эвелина (Инициатива)' 
+  OR c.director_name = 'Эвелина (Инициатива)'
+  OR COALESCE(c.director_name, c.name) = 'Эвелина (Инициатива)'
+)
+AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 985)
 LIMIT 1;
 
 INSERT INTO rental_orders (
@@ -8233,8 +9365,12 @@ SELECT
   NOW(),
   NOW()
 FROM rental_clients c
-WHERE (c.name = 'Эвелина (Инициатива)' OR c.director_name = 'Эвелина (Инициатива)')
-  AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 984)
+WHERE (
+  c.name = 'Эвелина (Инициатива)' 
+  OR c.director_name = 'Эвелина (Инициатива)'
+  OR COALESCE(c.director_name, c.name) = 'Эвелина (Инициатива)'
+)
+AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 984)
 LIMIT 1;
 
 INSERT INTO rental_orders (
@@ -8262,8 +9398,12 @@ SELECT
   NOW(),
   NOW()
 FROM rental_clients c
-WHERE (c.name = 'Эвелина (Инициатива)' OR c.director_name = 'Эвелина (Инициатива)')
-  AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 983)
+WHERE (
+  c.name = 'Эвелина (Инициатива)' 
+  OR c.director_name = 'Эвелина (Инициатива)'
+  OR COALESCE(c.director_name, c.name) = 'Эвелина (Инициатива)'
+)
+AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 983)
 LIMIT 1;
 
 INSERT INTO rental_orders (
@@ -8291,8 +9431,12 @@ SELECT
   NOW(),
   NOW()
 FROM rental_clients c
-WHERE (c.name = 'Эвелина (Инициатива)' OR c.director_name = 'Эвелина (Инициатива)')
-  AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 982)
+WHERE (
+  c.name = 'Эвелина (Инициатива)' 
+  OR c.director_name = 'Эвелина (Инициатива)'
+  OR COALESCE(c.director_name, c.name) = 'Эвелина (Инициатива)'
+)
+AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 982)
 LIMIT 1;
 
 INSERT INTO rental_orders (
@@ -8320,8 +9464,12 @@ SELECT
   NOW(),
   NOW()
 FROM rental_clients c
-WHERE (c.name = 'Эвелина (Инициатива)' OR c.director_name = 'Эвелина (Инициатива)')
-  AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 981)
+WHERE (
+  c.name = 'Эвелина (Инициатива)' 
+  OR c.director_name = 'Эвелина (Инициатива)'
+  OR COALESCE(c.director_name, c.name) = 'Эвелина (Инициатива)'
+)
+AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 981)
 LIMIT 1;
 
 INSERT INTO rental_orders (
@@ -8349,8 +9497,12 @@ SELECT
   NOW(),
   NOW()
 FROM rental_clients c
-WHERE (c.name = 'Эвелина (Инициатива)' OR c.director_name = 'Эвелина (Инициатива)')
-  AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 980)
+WHERE (
+  c.name = 'Эвелина (Инициатива)' 
+  OR c.director_name = 'Эвелина (Инициатива)'
+  OR COALESCE(c.director_name, c.name) = 'Эвелина (Инициатива)'
+)
+AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 980)
 LIMIT 1;
 
 INSERT INTO rental_orders (
@@ -8378,8 +9530,12 @@ SELECT
   NOW(),
   NOW()
 FROM rental_clients c
-WHERE (c.name = 'Эвелина (Инициатива)' OR c.director_name = 'Эвелина (Инициатива)')
-  AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 979)
+WHERE (
+  c.name = 'Эвелина (Инициатива)' 
+  OR c.director_name = 'Эвелина (Инициатива)'
+  OR COALESCE(c.director_name, c.name) = 'Эвелина (Инициатива)'
+)
+AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 979)
 LIMIT 1;
 
 INSERT INTO rental_orders (
@@ -8407,8 +9563,12 @@ SELECT
   NOW(),
   NOW()
 FROM rental_clients c
-WHERE (c.name = 'Эвелина (Инициатива)' OR c.director_name = 'Эвелина (Инициатива)')
-  AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 978)
+WHERE (
+  c.name = 'Эвелина (Инициатива)' 
+  OR c.director_name = 'Эвелина (Инициатива)'
+  OR COALESCE(c.director_name, c.name) = 'Эвелина (Инициатива)'
+)
+AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 978)
 LIMIT 1;
 
 INSERT INTO rental_orders (
@@ -8436,8 +9596,12 @@ SELECT
   NOW(),
   NOW()
 FROM rental_clients c
-WHERE (c.name = 'Эвелина (Инициатива)' OR c.director_name = 'Эвелина (Инициатива)')
-  AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 977)
+WHERE (
+  c.name = 'Эвелина (Инициатива)' 
+  OR c.director_name = 'Эвелина (Инициатива)'
+  OR COALESCE(c.director_name, c.name) = 'Эвелина (Инициатива)'
+)
+AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 977)
 LIMIT 1;
 
 INSERT INTO rental_orders (
@@ -8465,8 +9629,12 @@ SELECT
   NOW(),
   NOW()
 FROM rental_clients c
-WHERE (c.name = 'Эвелина (Инициатива)' OR c.director_name = 'Эвелина (Инициатива)')
-  AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 976)
+WHERE (
+  c.name = 'Эвелина (Инициатива)' 
+  OR c.director_name = 'Эвелина (Инициатива)'
+  OR COALESCE(c.director_name, c.name) = 'Эвелина (Инициатива)'
+)
+AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 976)
 LIMIT 1;
 
 INSERT INTO rental_orders (
@@ -8494,8 +9662,12 @@ SELECT
   NOW(),
   NOW()
 FROM rental_clients c
-WHERE (c.name = 'Эвелина (Инициатива)' OR c.director_name = 'Эвелина (Инициатива)')
-  AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 975)
+WHERE (
+  c.name = 'Эвелина (Инициатива)' 
+  OR c.director_name = 'Эвелина (Инициатива)'
+  OR COALESCE(c.director_name, c.name) = 'Эвелина (Инициатива)'
+)
+AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 975)
 LIMIT 1;
 
 INSERT INTO rental_orders (
@@ -8523,8 +9695,12 @@ SELECT
   NOW(),
   NOW()
 FROM rental_clients c
-WHERE (c.name = 'Арсен (Юнион)' OR c.director_name = 'Арсен (Юнион)')
-  AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 974)
+WHERE (
+  c.name = 'Арсен (Юнион)' 
+  OR c.director_name = 'Арсен (Юнион)'
+  OR COALESCE(c.director_name, c.name) = 'Арсен (Юнион)'
+)
+AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 974)
 LIMIT 1;
 
 INSERT INTO rental_orders (
@@ -8552,8 +9728,12 @@ SELECT
   NOW(),
   NOW()
 FROM rental_clients c
-WHERE (c.name = 'Арсен (Юнион)' OR c.director_name = 'Арсен (Юнион)')
-  AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 973)
+WHERE (
+  c.name = 'Арсен (Юнион)' 
+  OR c.director_name = 'Арсен (Юнион)'
+  OR COALESCE(c.director_name, c.name) = 'Арсен (Юнион)'
+)
+AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 973)
 LIMIT 1;
 
 INSERT INTO rental_orders (
@@ -8581,8 +9761,12 @@ SELECT
   NOW(),
   NOW()
 FROM rental_clients c
-WHERE (c.name = 'Эвелина (Инициатива)' OR c.director_name = 'Эвелина (Инициатива)')
-  AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 972)
+WHERE (
+  c.name = 'Эвелина (Инициатива)' 
+  OR c.director_name = 'Эвелина (Инициатива)'
+  OR COALESCE(c.director_name, c.name) = 'Эвелина (Инициатива)'
+)
+AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 972)
 LIMIT 1;
 
 INSERT INTO rental_orders (
@@ -8610,8 +9794,12 @@ SELECT
   NOW(),
   NOW()
 FROM rental_clients c
-WHERE (c.name = 'Эвелина (Инициатива)' OR c.director_name = 'Эвелина (Инициатива)')
-  AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 971)
+WHERE (
+  c.name = 'Эвелина (Инициатива)' 
+  OR c.director_name = 'Эвелина (Инициатива)'
+  OR COALESCE(c.director_name, c.name) = 'Эвелина (Инициатива)'
+)
+AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 971)
 LIMIT 1;
 
 INSERT INTO rental_orders (
@@ -8639,8 +9827,12 @@ SELECT
   NOW(),
   NOW()
 FROM rental_clients c
-WHERE (c.name = 'Ленар (ИП Ножкин)' OR c.director_name = 'Ленар (ИП Ножкин)')
-  AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 970)
+WHERE (
+  c.name = 'Ленар (ИП Ножкин)' 
+  OR c.director_name = 'Ленар (ИП Ножкин)'
+  OR COALESCE(c.director_name, c.name) = 'Ленар (ИП Ножкин)'
+)
+AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 970)
 LIMIT 1;
 
 INSERT INTO rental_orders (
@@ -8668,8 +9860,12 @@ SELECT
   NOW(),
   NOW()
 FROM rental_clients c
-WHERE (c.name = 'Андрей (Экскурс)' OR c.director_name = 'Андрей (Экскурс)')
-  AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 969)
+WHERE (
+  c.name = 'Андрей (Экскурс)' 
+  OR c.director_name = 'Андрей (Экскурс)'
+  OR COALESCE(c.director_name, c.name) = 'Андрей (Экскурс)'
+)
+AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 969)
 LIMIT 1;
 
 INSERT INTO rental_orders (
@@ -8697,8 +9893,12 @@ SELECT
   NOW(),
   NOW()
 FROM rental_clients c
-WHERE (c.name = 'Зельфира' OR c.director_name = 'Зельфира')
-  AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 968)
+WHERE (
+  c.name = 'Зельфира' 
+  OR c.director_name = 'Зельфира'
+  OR COALESCE(c.director_name, c.name) = 'Зельфира'
+)
+AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 968)
 LIMIT 1;
 
 INSERT INTO rental_orders (
@@ -8726,8 +9926,12 @@ SELECT
   NOW(),
   NOW()
 FROM rental_clients c
-WHERE (c.name = 'Камила Ягудина' OR c.director_name = 'Камила Ягудина')
-  AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 967)
+WHERE (
+  c.name = 'Камила Ягудина' 
+  OR c.director_name = 'Камила Ягудина'
+  OR COALESCE(c.director_name, c.name) = 'Камила Ягудина'
+)
+AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 967)
 LIMIT 1;
 
 INSERT INTO rental_orders (
@@ -8755,8 +9959,12 @@ SELECT
   NOW(),
   NOW()
 FROM rental_clients c
-WHERE (c.name = 'Любовь (ТИЦ)' OR c.director_name = 'Любовь (ТИЦ)')
-  AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 966)
+WHERE (
+  c.name = 'Любовь (ТИЦ)' 
+  OR c.director_name = 'Любовь (ТИЦ)'
+  OR COALESCE(c.director_name, c.name) = 'Любовь (ТИЦ)'
+)
+AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 966)
 LIMIT 1;
 
 INSERT INTO rental_orders (
@@ -8784,8 +9992,12 @@ SELECT
   NOW(),
   NOW()
 FROM rental_clients c
-WHERE (c.name = 'Любовь (ТИЦ)' OR c.director_name = 'Любовь (ТИЦ)')
-  AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 965)
+WHERE (
+  c.name = 'Любовь (ТИЦ)' 
+  OR c.director_name = 'Любовь (ТИЦ)'
+  OR COALESCE(c.director_name, c.name) = 'Любовь (ТИЦ)'
+)
+AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 965)
 LIMIT 1;
 
 INSERT INTO rental_orders (
@@ -8813,8 +10025,12 @@ SELECT
   NOW(),
   NOW()
 FROM rental_clients c
-WHERE (c.name = 'Мария Экскурсовод' OR c.director_name = 'Мария Экскурсовод')
-  AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 964)
+WHERE (
+  c.name = 'Мария Экскурсовод' 
+  OR c.director_name = 'Мария Экскурсовод'
+  OR COALESCE(c.director_name, c.name) = 'Мария Экскурсовод'
+)
+AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 964)
 LIMIT 1;
 
 INSERT INTO rental_orders (
@@ -8842,8 +10058,12 @@ SELECT
   NOW(),
   NOW()
 FROM rental_clients c
-WHERE (c.name = 'Галина Тур Москва' OR c.director_name = 'Галина Тур Москва')
-  AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 963)
+WHERE (
+  c.name = 'Галина Тур Москва' 
+  OR c.director_name = 'Галина Тур Москва'
+  OR COALESCE(c.director_name, c.name) = 'Галина Тур Москва'
+)
+AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 963)
 LIMIT 1;
 
 INSERT INTO rental_orders (
@@ -8871,8 +10091,12 @@ SELECT
   NOW(),
   NOW()
 FROM rental_clients c
-WHERE (c.name = 'Ольга (Дольче Вита)' OR c.director_name = 'Ольга (Дольче Вита)')
-  AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 962)
+WHERE (
+  c.name = 'Ольга (Дольче Вита)' 
+  OR c.director_name = 'Ольга (Дольче Вита)'
+  OR COALESCE(c.director_name, c.name) = 'Ольга (Дольче Вита)'
+)
+AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 962)
 LIMIT 1;
 
 INSERT INTO rental_orders (
@@ -8900,8 +10124,12 @@ SELECT
   NOW(),
   NOW()
 FROM rental_clients c
-WHERE (c.name = 'Сафина Алина (ФРГРТ)' OR c.director_name = 'Сафина Алина (ФРГРТ)')
-  AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 961)
+WHERE (
+  c.name = 'Сафина Алина (ФРГРТ)' 
+  OR c.director_name = 'Сафина Алина (ФРГРТ)'
+  OR COALESCE(c.director_name, c.name) = 'Сафина Алина (ФРГРТ)'
+)
+AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 961)
 LIMIT 1;
 
 INSERT INTO rental_orders (
@@ -8929,8 +10157,12 @@ SELECT
   NOW(),
   NOW()
 FROM rental_clients c
-WHERE (c.name = 'Артем Агафонов' OR c.director_name = 'Артем Агафонов')
-  AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 960)
+WHERE (
+  c.name = 'Артем Агафонов' 
+  OR c.director_name = 'Артем Агафонов'
+  OR COALESCE(c.director_name, c.name) = 'Артем Агафонов'
+)
+AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 960)
 LIMIT 1;
 
 INSERT INTO rental_orders (
@@ -8958,8 +10190,12 @@ SELECT
   NOW(),
   NOW()
 FROM rental_clients c
-WHERE (c.name = 'Татьяна (Гольфстрим)' OR c.director_name = 'Татьяна (Гольфстрим)')
-  AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 959)
+WHERE (
+  c.name = 'Татьяна (Гольфстрим)' 
+  OR c.director_name = 'Татьяна (Гольфстрим)'
+  OR COALESCE(c.director_name, c.name) = 'Татьяна (Гольфстрим)'
+)
+AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 959)
 LIMIT 1;
 
 INSERT INTO rental_orders (
@@ -8987,8 +10223,12 @@ SELECT
   NOW(),
   NOW()
 FROM rental_clients c
-WHERE (c.name = 'Гузелия' OR c.director_name = 'Гузелия')
-  AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 958)
+WHERE (
+  c.name = 'Гузелия' 
+  OR c.director_name = 'Гузелия'
+  OR COALESCE(c.director_name, c.name) = 'Гузелия'
+)
+AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 958)
 LIMIT 1;
 
 INSERT INTO rental_orders (
@@ -9016,8 +10256,12 @@ SELECT
   NOW(),
   NOW()
 FROM rental_clients c
-WHERE (c.name = 'Андрей (Экскурс)' OR c.director_name = 'Андрей (Экскурс)')
-  AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 957)
+WHERE (
+  c.name = 'Андрей (Экскурс)' 
+  OR c.director_name = 'Андрей (Экскурс)'
+  OR COALESCE(c.director_name, c.name) = 'Андрей (Экскурс)'
+)
+AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 957)
 LIMIT 1;
 
 INSERT INTO rental_orders (
@@ -9045,8 +10289,12 @@ SELECT
   NOW(),
   NOW()
 FROM rental_clients c
-WHERE (c.name = 'Анвар Каримов' OR c.director_name = 'Анвар Каримов')
-  AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 956)
+WHERE (
+  c.name = 'Анвар Каримов' 
+  OR c.director_name = 'Анвар Каримов'
+  OR COALESCE(c.director_name, c.name) = 'Анвар Каримов'
+)
+AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 956)
 LIMIT 1;
 
 INSERT INTO rental_orders (
@@ -9074,8 +10322,12 @@ SELECT
   NOW(),
   NOW()
 FROM rental_clients c
-WHERE (c.name = 'Галина (Тур Урал)' OR c.director_name = 'Галина (Тур Урал)')
-  AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 955)
+WHERE (
+  c.name = 'Галина (Тур Урал)' 
+  OR c.director_name = 'Галина (Тур Урал)'
+  OR COALESCE(c.director_name, c.name) = 'Галина (Тур Урал)'
+)
+AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 955)
 LIMIT 1;
 
 INSERT INTO rental_orders (
@@ -9103,8 +10355,12 @@ SELECT
   NOW(),
   NOW()
 FROM rental_clients c
-WHERE (c.name = 'Татьяна (Гольфстрим)' OR c.director_name = 'Татьяна (Гольфстрим)')
-  AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 954)
+WHERE (
+  c.name = 'Татьяна (Гольфстрим)' 
+  OR c.director_name = 'Татьяна (Гольфстрим)'
+  OR COALESCE(c.director_name, c.name) = 'Татьяна (Гольфстрим)'
+)
+AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 954)
 LIMIT 1;
 
 INSERT INTO rental_orders (
@@ -9132,8 +10388,12 @@ SELECT
   NOW(),
   NOW()
 FROM rental_clients c
-WHERE (c.name = 'Арсен (Юнион)' OR c.director_name = 'Арсен (Юнион)')
-  AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 953)
+WHERE (
+  c.name = 'Арсен (Юнион)' 
+  OR c.director_name = 'Арсен (Юнион)'
+  OR COALESCE(c.director_name, c.name) = 'Арсен (Юнион)'
+)
+AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 953)
 LIMIT 1;
 
 INSERT INTO rental_orders (
@@ -9161,8 +10421,12 @@ SELECT
   NOW(),
   NOW()
 FROM rental_clients c
-WHERE (c.name = 'Ольга (Дольче Вита)' OR c.director_name = 'Ольга (Дольче Вита)')
-  AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 952)
+WHERE (
+  c.name = 'Ольга (Дольче Вита)' 
+  OR c.director_name = 'Ольга (Дольче Вита)'
+  OR COALESCE(c.director_name, c.name) = 'Ольга (Дольче Вита)'
+)
+AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 952)
 LIMIT 1;
 
 INSERT INTO rental_orders (
@@ -9190,8 +10454,12 @@ SELECT
   NOW(),
   NOW()
 FROM rental_clients c
-WHERE (c.name = 'Камила Ягудина' OR c.director_name = 'Камила Ягудина')
-  AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 951)
+WHERE (
+  c.name = 'Камила Ягудина' 
+  OR c.director_name = 'Камила Ягудина'
+  OR COALESCE(c.director_name, c.name) = 'Камила Ягудина'
+)
+AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 951)
 LIMIT 1;
 
 INSERT INTO rental_orders (
@@ -9219,8 +10487,12 @@ SELECT
   NOW(),
   NOW()
 FROM rental_clients c
-WHERE (c.name = 'Инна Экскурсовод' OR c.director_name = 'Инна Экскурсовод')
-  AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 950)
+WHERE (
+  c.name = 'Инна Экскурсовод' 
+  OR c.director_name = 'Инна Экскурсовод'
+  OR COALESCE(c.director_name, c.name) = 'Инна Экскурсовод'
+)
+AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 950)
 LIMIT 1;
 
 INSERT INTO rental_orders (
@@ -9248,8 +10520,12 @@ SELECT
   NOW(),
   NOW()
 FROM rental_clients c
-WHERE (c.name = 'Мира (ИП)' OR c.director_name = 'Мира (ИП)')
-  AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 949)
+WHERE (
+  c.name = 'Мира (ИП)' 
+  OR c.director_name = 'Мира (ИП)'
+  OR COALESCE(c.director_name, c.name) = 'Мира (ИП)'
+)
+AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 949)
 LIMIT 1;
 
 INSERT INTO rental_orders (
@@ -9277,8 +10553,12 @@ SELECT
   NOW(),
   NOW()
 FROM rental_clients c
-WHERE (c.name = 'Эдик Заказы для групп' OR c.director_name = 'Эдик Заказы для групп')
-  AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 948)
+WHERE (
+  c.name = 'Эдик Заказы для групп' 
+  OR c.director_name = 'Эдик Заказы для групп'
+  OR COALESCE(c.director_name, c.name) = 'Эдик Заказы для групп'
+)
+AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 948)
 LIMIT 1;
 
 INSERT INTO rental_orders (
@@ -9306,8 +10586,12 @@ SELECT
   NOW(),
   NOW()
 FROM rental_clients c
-WHERE (c.name = 'Сафина Алина (ФРГРТ)' OR c.director_name = 'Сафина Алина (ФРГРТ)')
-  AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 947)
+WHERE (
+  c.name = 'Сафина Алина (ФРГРТ)' 
+  OR c.director_name = 'Сафина Алина (ФРГРТ)'
+  OR COALESCE(c.director_name, c.name) = 'Сафина Алина (ФРГРТ)'
+)
+AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 947)
 LIMIT 1;
 
 INSERT INTO rental_orders (
@@ -9335,8 +10619,12 @@ SELECT
   NOW(),
   NOW()
 FROM rental_clients c
-WHERE (c.name = 'Руслан (Тимсофт)' OR c.director_name = 'Руслан (Тимсофт)')
-  AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 946)
+WHERE (
+  c.name = 'Руслан (Тимсофт)' 
+  OR c.director_name = 'Руслан (Тимсофт)'
+  OR COALESCE(c.director_name, c.name) = 'Руслан (Тимсофт)'
+)
+AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 946)
 LIMIT 1;
 
 INSERT INTO rental_orders (
@@ -9364,8 +10652,12 @@ SELECT
   NOW(),
   NOW()
 FROM rental_clients c
-WHERE (c.name = 'Любовь (ТИЦ)' OR c.director_name = 'Любовь (ТИЦ)')
-  AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 945)
+WHERE (
+  c.name = 'Любовь (ТИЦ)' 
+  OR c.director_name = 'Любовь (ТИЦ)'
+  OR COALESCE(c.director_name, c.name) = 'Любовь (ТИЦ)'
+)
+AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 945)
 LIMIT 1;
 
 INSERT INTO rental_orders (
@@ -9393,8 +10685,12 @@ SELECT
   NOW(),
   NOW()
 FROM rental_clients c
-WHERE (c.name = 'Любовь (ТИЦ)' OR c.director_name = 'Любовь (ТИЦ)')
-  AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 944)
+WHERE (
+  c.name = 'Любовь (ТИЦ)' 
+  OR c.director_name = 'Любовь (ТИЦ)'
+  OR COALESCE(c.director_name, c.name) = 'Любовь (ТИЦ)'
+)
+AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 944)
 LIMIT 1;
 
 INSERT INTO rental_orders (
@@ -9422,8 +10718,12 @@ SELECT
   NOW(),
   NOW()
 FROM rental_clients c
-WHERE (c.name = 'Эдик Заказы для групп' OR c.director_name = 'Эдик Заказы для групп')
-  AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 943)
+WHERE (
+  c.name = 'Эдик Заказы для групп' 
+  OR c.director_name = 'Эдик Заказы для групп'
+  OR COALESCE(c.director_name, c.name) = 'Эдик Заказы для групп'
+)
+AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 943)
 LIMIT 1;
 
 INSERT INTO rental_orders (
@@ -9451,8 +10751,12 @@ SELECT
   NOW(),
   NOW()
 FROM rental_clients c
-WHERE (c.name = 'Наталья' OR c.director_name = 'Наталья')
-  AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 942)
+WHERE (
+  c.name = 'Наталья' 
+  OR c.director_name = 'Наталья'
+  OR COALESCE(c.director_name, c.name) = 'Наталья'
+)
+AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 942)
 LIMIT 1;
 
 INSERT INTO rental_orders (
@@ -9480,8 +10784,12 @@ SELECT
   NOW(),
   NOW()
 FROM rental_clients c
-WHERE (c.name = 'Гузелия' OR c.director_name = 'Гузелия')
-  AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 941)
+WHERE (
+  c.name = 'Гузелия' 
+  OR c.director_name = 'Гузелия'
+  OR COALESCE(c.director_name, c.name) = 'Гузелия'
+)
+AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 941)
 LIMIT 1;
 
 INSERT INTO rental_orders (
@@ -9509,8 +10817,12 @@ SELECT
   NOW(),
   NOW()
 FROM rental_clients c
-WHERE (c.name = 'Мария Экскурсовод' OR c.director_name = 'Мария Экскурсовод')
-  AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 940)
+WHERE (
+  c.name = 'Мария Экскурсовод' 
+  OR c.director_name = 'Мария Экскурсовод'
+  OR COALESCE(c.director_name, c.name) = 'Мария Экскурсовод'
+)
+AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 940)
 LIMIT 1;
 
 INSERT INTO rental_orders (
@@ -9538,8 +10850,12 @@ SELECT
   NOW(),
   NOW()
 FROM rental_clients c
-WHERE (c.name = 'Алексей' OR c.director_name = 'Алексей')
-  AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 939)
+WHERE (
+  c.name = 'Алексей' 
+  OR c.director_name = 'Алексей'
+  OR COALESCE(c.director_name, c.name) = 'Алексей'
+)
+AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 939)
 LIMIT 1;
 
 INSERT INTO rental_orders (
@@ -9567,8 +10883,12 @@ SELECT
   NOW(),
   NOW()
 FROM rental_clients c
-WHERE (c.name = 'Ольга (Дольче Вита)' OR c.director_name = 'Ольга (Дольче Вита)')
-  AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 938)
+WHERE (
+  c.name = 'Ольга (Дольче Вита)' 
+  OR c.director_name = 'Ольга (Дольче Вита)'
+  OR COALESCE(c.director_name, c.name) = 'Ольга (Дольче Вита)'
+)
+AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 938)
 LIMIT 1;
 
 INSERT INTO rental_orders (
@@ -9596,8 +10916,12 @@ SELECT
   NOW(),
   NOW()
 FROM rental_clients c
-WHERE (c.name = 'Арсен (Юнион)' OR c.director_name = 'Арсен (Юнион)')
-  AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 937)
+WHERE (
+  c.name = 'Арсен (Юнион)' 
+  OR c.director_name = 'Арсен (Юнион)'
+  OR COALESCE(c.director_name, c.name) = 'Арсен (Юнион)'
+)
+AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 937)
 LIMIT 1;
 
 INSERT INTO rental_orders (
@@ -9625,8 +10949,12 @@ SELECT
   NOW(),
   NOW()
 FROM rental_clients c
-WHERE (c.name = 'Арсен (Юнион)' OR c.director_name = 'Арсен (Юнион)')
-  AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 936)
+WHERE (
+  c.name = 'Арсен (Юнион)' 
+  OR c.director_name = 'Арсен (Юнион)'
+  OR COALESCE(c.director_name, c.name) = 'Арсен (Юнион)'
+)
+AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 936)
 LIMIT 1;
 
 INSERT INTO rental_orders (
@@ -9654,8 +10982,12 @@ SELECT
   NOW(),
   NOW()
 FROM rental_clients c
-WHERE (c.name = 'Элина (Сититур)' OR c.director_name = 'Элина (Сититур)')
-  AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 935)
+WHERE (
+  c.name = 'Элина (Сититур)' 
+  OR c.director_name = 'Элина (Сититур)'
+  OR COALESCE(c.director_name, c.name) = 'Элина (Сититур)'
+)
+AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 935)
 LIMIT 1;
 
 INSERT INTO rental_orders (
@@ -9683,8 +11015,12 @@ SELECT
   NOW(),
   NOW()
 FROM rental_clients c
-WHERE (c.name = 'Ольга' OR c.director_name = 'Ольга')
-  AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 934)
+WHERE (
+  c.name = 'Ольга' 
+  OR c.director_name = 'Ольга'
+  OR COALESCE(c.director_name, c.name) = 'Ольга'
+)
+AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 934)
 LIMIT 1;
 
 INSERT INTO rental_orders (
@@ -9712,8 +11048,12 @@ SELECT
   NOW(),
   NOW()
 FROM rental_clients c
-WHERE (c.name = 'Гульназ' OR c.director_name = 'Гульназ')
-  AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 933)
+WHERE (
+  c.name = 'Гульназ' 
+  OR c.director_name = 'Гульназ'
+  OR COALESCE(c.director_name, c.name) = 'Гульназ'
+)
+AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 933)
 LIMIT 1;
 
 INSERT INTO rental_orders (
@@ -9741,8 +11081,12 @@ SELECT
   NOW(),
   NOW()
 FROM rental_clients c
-WHERE (c.name = 'Вера' OR c.director_name = 'Вера')
-  AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 932)
+WHERE (
+  c.name = 'Вера' 
+  OR c.director_name = 'Вера'
+  OR COALESCE(c.director_name, c.name) = 'Вера'
+)
+AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 932)
 LIMIT 1;
 
 INSERT INTO rental_orders (
@@ -9770,8 +11114,12 @@ SELECT
   NOW(),
   NOW()
 FROM rental_clients c
-WHERE (c.name = 'Алла (Вятские Поляны)' OR c.director_name = 'Алла (Вятские Поляны)')
-  AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 931)
+WHERE (
+  c.name = 'Алла (Вятские Поляны)' 
+  OR c.director_name = 'Алла (Вятские Поляны)'
+  OR COALESCE(c.director_name, c.name) = 'Алла (Вятские Поляны)'
+)
+AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 931)
 LIMIT 1;
 
 INSERT INTO rental_orders (
@@ -9799,8 +11147,12 @@ SELECT
   NOW(),
   NOW()
 FROM rental_clients c
-WHERE (c.name = 'Любовь (ТИЦ)' OR c.director_name = 'Любовь (ТИЦ)')
-  AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 930)
+WHERE (
+  c.name = 'Любовь (ТИЦ)' 
+  OR c.director_name = 'Любовь (ТИЦ)'
+  OR COALESCE(c.director_name, c.name) = 'Любовь (ТИЦ)'
+)
+AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 930)
 LIMIT 1;
 
 INSERT INTO rental_orders (
@@ -9828,8 +11180,12 @@ SELECT
   NOW(),
   NOW()
 FROM rental_clients c
-WHERE (c.name = 'Любовь (ТИЦ)' OR c.director_name = 'Любовь (ТИЦ)')
-  AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 929)
+WHERE (
+  c.name = 'Любовь (ТИЦ)' 
+  OR c.director_name = 'Любовь (ТИЦ)'
+  OR COALESCE(c.director_name, c.name) = 'Любовь (ТИЦ)'
+)
+AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 929)
 LIMIT 1;
 
 INSERT INTO rental_orders (
@@ -9857,8 +11213,12 @@ SELECT
   NOW(),
   NOW()
 FROM rental_clients c
-WHERE (c.name = 'Зельфира' OR c.director_name = 'Зельфира')
-  AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 928)
+WHERE (
+  c.name = 'Зельфира' 
+  OR c.director_name = 'Зельфира'
+  OR COALESCE(c.director_name, c.name) = 'Зельфира'
+)
+AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 928)
 LIMIT 1;
 
 INSERT INTO rental_orders (
@@ -9886,8 +11246,12 @@ SELECT
   NOW(),
   NOW()
 FROM rental_clients c
-WHERE (c.name = 'Зельфира' OR c.director_name = 'Зельфира')
-  AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 927)
+WHERE (
+  c.name = 'Зельфира' 
+  OR c.director_name = 'Зельфира'
+  OR COALESCE(c.director_name, c.name) = 'Зельфира'
+)
+AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 927)
 LIMIT 1;
 
 INSERT INTO rental_orders (
@@ -9915,8 +11279,12 @@ SELECT
   NOW(),
   NOW()
 FROM rental_clients c
-WHERE (c.name = 'Любовь (ТИЦ)' OR c.director_name = 'Любовь (ТИЦ)')
-  AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 926)
+WHERE (
+  c.name = 'Любовь (ТИЦ)' 
+  OR c.director_name = 'Любовь (ТИЦ)'
+  OR COALESCE(c.director_name, c.name) = 'Любовь (ТИЦ)'
+)
+AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 926)
 LIMIT 1;
 
 INSERT INTO rental_orders (
@@ -9944,8 +11312,12 @@ SELECT
   NOW(),
   NOW()
 FROM rental_clients c
-WHERE (c.name = 'Артем Агафонов' OR c.director_name = 'Артем Агафонов')
-  AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 925)
+WHERE (
+  c.name = 'Артем Агафонов' 
+  OR c.director_name = 'Артем Агафонов'
+  OR COALESCE(c.director_name, c.name) = 'Артем Агафонов'
+)
+AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 925)
 LIMIT 1;
 
 INSERT INTO rental_orders (
@@ -9973,8 +11345,12 @@ SELECT
   NOW(),
   NOW()
 FROM rental_clients c
-WHERE (c.name = 'Любовь (ТИЦ)' OR c.director_name = 'Любовь (ТИЦ)')
-  AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 924)
+WHERE (
+  c.name = 'Любовь (ТИЦ)' 
+  OR c.director_name = 'Любовь (ТИЦ)'
+  OR COALESCE(c.director_name, c.name) = 'Любовь (ТИЦ)'
+)
+AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 924)
 LIMIT 1;
 
 INSERT INTO rental_orders (
@@ -10002,8 +11378,12 @@ SELECT
   NOW(),
   NOW()
 FROM rental_clients c
-WHERE (c.name = 'Екатерина' OR c.director_name = 'Екатерина')
-  AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 923)
+WHERE (
+  c.name = 'Екатерина' 
+  OR c.director_name = 'Екатерина'
+  OR COALESCE(c.director_name, c.name) = 'Екатерина'
+)
+AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 923)
 LIMIT 1;
 
 INSERT INTO rental_orders (
@@ -10031,8 +11411,12 @@ SELECT
   NOW(),
   NOW()
 FROM rental_clients c
-WHERE (c.name = 'Ольга (Дольче Вита)' OR c.director_name = 'Ольга (Дольче Вита)')
-  AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 922)
+WHERE (
+  c.name = 'Ольга (Дольче Вита)' 
+  OR c.director_name = 'Ольга (Дольче Вита)'
+  OR COALESCE(c.director_name, c.name) = 'Ольга (Дольче Вита)'
+)
+AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 922)
 LIMIT 1;
 
 INSERT INTO rental_orders (
@@ -10060,8 +11444,12 @@ SELECT
   NOW(),
   NOW()
 FROM rental_clients c
-WHERE (c.name = 'Ольга (Дольче Вита)' OR c.director_name = 'Ольга (Дольче Вита)')
-  AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 921)
+WHERE (
+  c.name = 'Ольга (Дольче Вита)' 
+  OR c.director_name = 'Ольга (Дольче Вита)'
+  OR COALESCE(c.director_name, c.name) = 'Ольга (Дольче Вита)'
+)
+AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 921)
 LIMIT 1;
 
 INSERT INTO rental_orders (
@@ -10089,8 +11477,12 @@ SELECT
   NOW(),
   NOW()
 FROM rental_clients c
-WHERE (c.name = 'Ольга (Дольче Вита)' OR c.director_name = 'Ольга (Дольче Вита)')
-  AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 920)
+WHERE (
+  c.name = 'Ольга (Дольче Вита)' 
+  OR c.director_name = 'Ольга (Дольче Вита)'
+  OR COALESCE(c.director_name, c.name) = 'Ольга (Дольче Вита)'
+)
+AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 920)
 LIMIT 1;
 
 INSERT INTO rental_orders (
@@ -10118,8 +11510,12 @@ SELECT
   NOW(),
   NOW()
 FROM rental_clients c
-WHERE (c.name = 'Ольга (Сиалия)' OR c.director_name = 'Ольга (Сиалия)')
-  AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 919)
+WHERE (
+  c.name = 'Ольга (Сиалия)' 
+  OR c.director_name = 'Ольга (Сиалия)'
+  OR COALESCE(c.director_name, c.name) = 'Ольга (Сиалия)'
+)
+AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 919)
 LIMIT 1;
 
 INSERT INTO rental_orders (
@@ -10147,8 +11543,12 @@ SELECT
   NOW(),
   NOW()
 FROM rental_clients c
-WHERE (c.name = 'Гульнара' OR c.director_name = 'Гульнара')
-  AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 918)
+WHERE (
+  c.name = 'Гульнара' 
+  OR c.director_name = 'Гульнара'
+  OR COALESCE(c.director_name, c.name) = 'Гульнара'
+)
+AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 918)
 LIMIT 1;
 
 INSERT INTO rental_orders (
@@ -10176,8 +11576,12 @@ SELECT
   NOW(),
   NOW()
 FROM rental_clients c
-WHERE (c.name = 'Мира (ИП)' OR c.director_name = 'Мира (ИП)')
-  AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 917)
+WHERE (
+  c.name = 'Мира (ИП)' 
+  OR c.director_name = 'Мира (ИП)'
+  OR COALESCE(c.director_name, c.name) = 'Мира (ИП)'
+)
+AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 917)
 LIMIT 1;
 
 INSERT INTO rental_orders (
@@ -10205,8 +11609,12 @@ SELECT
   NOW(),
   NOW()
 FROM rental_clients c
-WHERE (c.name = 'Юлианна' OR c.director_name = 'Юлианна')
-  AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 916)
+WHERE (
+  c.name = 'Юлианна' 
+  OR c.director_name = 'Юлианна'
+  OR COALESCE(c.director_name, c.name) = 'Юлианна'
+)
+AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 916)
 LIMIT 1;
 
 INSERT INTO rental_orders (
@@ -10234,8 +11642,12 @@ SELECT
   NOW(),
   NOW()
 FROM rental_clients c
-WHERE (c.name = 'Арсен (Юнион)' OR c.director_name = 'Арсен (Юнион)')
-  AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 915)
+WHERE (
+  c.name = 'Арсен (Юнион)' 
+  OR c.director_name = 'Арсен (Юнион)'
+  OR COALESCE(c.director_name, c.name) = 'Арсен (Юнион)'
+)
+AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 915)
 LIMIT 1;
 
 INSERT INTO rental_orders (
@@ -10263,8 +11675,12 @@ SELECT
   NOW(),
   NOW()
 FROM rental_clients c
-WHERE (c.name = 'Арсен (Юнион)' OR c.director_name = 'Арсен (Юнион)')
-  AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 914)
+WHERE (
+  c.name = 'Арсен (Юнион)' 
+  OR c.director_name = 'Арсен (Юнион)'
+  OR COALESCE(c.director_name, c.name) = 'Арсен (Юнион)'
+)
+AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 914)
 LIMIT 1;
 
 INSERT INTO rental_orders (
@@ -10292,8 +11708,12 @@ SELECT
   NOW(),
   NOW()
 FROM rental_clients c
-WHERE (c.name = 'Елена' OR c.director_name = 'Елена')
-  AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 913)
+WHERE (
+  c.name = 'Елена' 
+  OR c.director_name = 'Елена'
+  OR COALESCE(c.director_name, c.name) = 'Елена'
+)
+AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 913)
 LIMIT 1;
 
 INSERT INTO rental_orders (
@@ -10321,8 +11741,12 @@ SELECT
   NOW(),
   NOW()
 FROM rental_clients c
-WHERE (c.name = 'Алина Минеева' OR c.director_name = 'Алина Минеева')
-  AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 912)
+WHERE (
+  c.name = 'Алина Минеева' 
+  OR c.director_name = 'Алина Минеева'
+  OR COALESCE(c.director_name, c.name) = 'Алина Минеева'
+)
+AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 912)
 LIMIT 1;
 
 INSERT INTO rental_orders (
@@ -10350,8 +11774,12 @@ SELECT
   NOW(),
   NOW()
 FROM rental_clients c
-WHERE (c.name = 'Мария Экскурсовод' OR c.director_name = 'Мария Экскурсовод')
-  AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 911)
+WHERE (
+  c.name = 'Мария Экскурсовод' 
+  OR c.director_name = 'Мария Экскурсовод'
+  OR COALESCE(c.director_name, c.name) = 'Мария Экскурсовод'
+)
+AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 911)
 LIMIT 1;
 
 INSERT INTO rental_orders (
@@ -10379,8 +11807,12 @@ SELECT
   NOW(),
   NOW()
 FROM rental_clients c
-WHERE (c.name = 'Любовь (ТИЦ)' OR c.director_name = 'Любовь (ТИЦ)')
-  AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 909)
+WHERE (
+  c.name = 'Любовь (ТИЦ)' 
+  OR c.director_name = 'Любовь (ТИЦ)'
+  OR COALESCE(c.director_name, c.name) = 'Любовь (ТИЦ)'
+)
+AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 909)
 LIMIT 1;
 
 INSERT INTO rental_orders (
@@ -10408,8 +11840,12 @@ SELECT
   NOW(),
   NOW()
 FROM rental_clients c
-WHERE (c.name = 'Ляйсан (Казань 360)' OR c.director_name = 'Ляйсан (Казань 360)')
-  AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 908)
+WHERE (
+  c.name = 'Ляйсан (Казань 360)' 
+  OR c.director_name = 'Ляйсан (Казань 360)'
+  OR COALESCE(c.director_name, c.name) = 'Ляйсан (Казань 360)'
+)
+AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 908)
 LIMIT 1;
 
 INSERT INTO rental_orders (
@@ -10437,8 +11873,12 @@ SELECT
   NOW(),
   NOW()
 FROM rental_clients c
-WHERE (c.name = 'Ляйсан (Казань 360)' OR c.director_name = 'Ляйсан (Казань 360)')
-  AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 907)
+WHERE (
+  c.name = 'Ляйсан (Казань 360)' 
+  OR c.director_name = 'Ляйсан (Казань 360)'
+  OR COALESCE(c.director_name, c.name) = 'Ляйсан (Казань 360)'
+)
+AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 907)
 LIMIT 1;
 
 INSERT INTO rental_orders (
@@ -10466,8 +11906,12 @@ SELECT
   NOW(),
   NOW()
 FROM rental_clients c
-WHERE (c.name = 'Татьяна Чуб' OR c.director_name = 'Татьяна Чуб')
-  AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 906)
+WHERE (
+  c.name = 'Татьяна Чуб' 
+  OR c.director_name = 'Татьяна Чуб'
+  OR COALESCE(c.director_name, c.name) = 'Татьяна Чуб'
+)
+AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 906)
 LIMIT 1;
 
 INSERT INTO rental_orders (
@@ -10495,8 +11939,12 @@ SELECT
   NOW(),
   NOW()
 FROM rental_clients c
-WHERE (c.name = 'Алла (Вятские Поляны)' OR c.director_name = 'Алла (Вятские Поляны)')
-  AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 905)
+WHERE (
+  c.name = 'Алла (Вятские Поляны)' 
+  OR c.director_name = 'Алла (Вятские Поляны)'
+  OR COALESCE(c.director_name, c.name) = 'Алла (Вятские Поляны)'
+)
+AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 905)
 LIMIT 1;
 
 INSERT INTO rental_orders (
@@ -10524,8 +11972,12 @@ SELECT
   NOW(),
   NOW()
 FROM rental_clients c
-WHERE (c.name = 'Ольга (Дольче Вита)' OR c.director_name = 'Ольга (Дольче Вита)')
-  AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 904)
+WHERE (
+  c.name = 'Ольга (Дольче Вита)' 
+  OR c.director_name = 'Ольга (Дольче Вита)'
+  OR COALESCE(c.director_name, c.name) = 'Ольга (Дольче Вита)'
+)
+AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 904)
 LIMIT 1;
 
 INSERT INTO rental_orders (
@@ -10553,8 +12005,12 @@ SELECT
   NOW(),
   NOW()
 FROM rental_clients c
-WHERE (c.name = 'Гузель (Юралс)' OR c.director_name = 'Гузель (Юралс)')
-  AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 903)
+WHERE (
+  c.name = 'Гузель (Юралс)' 
+  OR c.director_name = 'Гузель (Юралс)'
+  OR COALESCE(c.director_name, c.name) = 'Гузель (Юралс)'
+)
+AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 903)
 LIMIT 1;
 
 INSERT INTO rental_orders (
@@ -10582,8 +12038,12 @@ SELECT
   NOW(),
   NOW()
 FROM rental_clients c
-WHERE (c.name = 'Инна Экскурсовод' OR c.director_name = 'Инна Экскурсовод')
-  AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 902)
+WHERE (
+  c.name = 'Инна Экскурсовод' 
+  OR c.director_name = 'Инна Экскурсовод'
+  OR COALESCE(c.director_name, c.name) = 'Инна Экскурсовод'
+)
+AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 902)
 LIMIT 1;
 
 INSERT INTO rental_orders (
@@ -10611,8 +12071,12 @@ SELECT
   NOW(),
   NOW()
 FROM rental_clients c
-WHERE (c.name = 'Алина Минеева' OR c.director_name = 'Алина Минеева')
-  AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 901)
+WHERE (
+  c.name = 'Алина Минеева' 
+  OR c.director_name = 'Алина Минеева'
+  OR COALESCE(c.director_name, c.name) = 'Алина Минеева'
+)
+AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 901)
 LIMIT 1;
 
 INSERT INTO rental_orders (
@@ -10640,8 +12104,12 @@ SELECT
   NOW(),
   NOW()
 FROM rental_clients c
-WHERE (c.name = 'Анюта Родионова (Родина-тур)' OR c.director_name = 'Анюта Родионова (Родина-тур)')
-  AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 900)
+WHERE (
+  c.name = 'Анюта Родионова (Родина-тур)' 
+  OR c.director_name = 'Анюта Родионова (Родина-тур)'
+  OR COALESCE(c.director_name, c.name) = 'Анюта Родионова (Родина-тур)'
+)
+AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 900)
 LIMIT 1;
 
 INSERT INTO rental_orders (
@@ -10669,8 +12137,12 @@ SELECT
   NOW(),
   NOW()
 FROM rental_clients c
-WHERE (c.name = 'Зельфира' OR c.director_name = 'Зельфира')
-  AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 899)
+WHERE (
+  c.name = 'Зельфира' 
+  OR c.director_name = 'Зельфира'
+  OR COALESCE(c.director_name, c.name) = 'Зельфира'
+)
+AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 899)
 LIMIT 1;
 
 INSERT INTO rental_orders (
@@ -10698,8 +12170,12 @@ SELECT
   NOW(),
   NOW()
 FROM rental_clients c
-WHERE (c.name = 'Зельфира' OR c.director_name = 'Зельфира')
-  AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 898)
+WHERE (
+  c.name = 'Зельфира' 
+  OR c.director_name = 'Зельфира'
+  OR COALESCE(c.director_name, c.name) = 'Зельфира'
+)
+AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 898)
 LIMIT 1;
 
 INSERT INTO rental_orders (
@@ -10727,8 +12203,12 @@ SELECT
   NOW(),
   NOW()
 FROM rental_clients c
-WHERE (c.name = 'Эвелина (Инициатива)' OR c.director_name = 'Эвелина (Инициатива)')
-  AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 897)
+WHERE (
+  c.name = 'Эвелина (Инициатива)' 
+  OR c.director_name = 'Эвелина (Инициатива)'
+  OR COALESCE(c.director_name, c.name) = 'Эвелина (Инициатива)'
+)
+AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 897)
 LIMIT 1;
 
 INSERT INTO rental_orders (
@@ -10756,8 +12236,12 @@ SELECT
   NOW(),
   NOW()
 FROM rental_clients c
-WHERE (c.name = 'Арсен (Юнион)' OR c.director_name = 'Арсен (Юнион)')
-  AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 896)
+WHERE (
+  c.name = 'Арсен (Юнион)' 
+  OR c.director_name = 'Арсен (Юнион)'
+  OR COALESCE(c.director_name, c.name) = 'Арсен (Юнион)'
+)
+AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 896)
 LIMIT 1;
 
 INSERT INTO rental_orders (
@@ -10785,8 +12269,12 @@ SELECT
   NOW(),
   NOW()
 FROM rental_clients c
-WHERE (c.name = 'Любовь (ТИЦ)' OR c.director_name = 'Любовь (ТИЦ)')
-  AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 895)
+WHERE (
+  c.name = 'Любовь (ТИЦ)' 
+  OR c.director_name = 'Любовь (ТИЦ)'
+  OR COALESCE(c.director_name, c.name) = 'Любовь (ТИЦ)'
+)
+AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 895)
 LIMIT 1;
 
 INSERT INTO rental_orders (
@@ -10814,8 +12302,12 @@ SELECT
   NOW(),
   NOW()
 FROM rental_clients c
-WHERE (c.name = 'Рената (Твоя Казань)' OR c.director_name = 'Рената (Твоя Казань)')
-  AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 894)
+WHERE (
+  c.name = 'Рената (Твоя Казань)' 
+  OR c.director_name = 'Рената (Твоя Казань)'
+  OR COALESCE(c.director_name, c.name) = 'Рената (Твоя Казань)'
+)
+AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 894)
 LIMIT 1;
 
 INSERT INTO rental_orders (
@@ -10843,8 +12335,12 @@ SELECT
   NOW(),
   NOW()
 FROM rental_clients c
-WHERE (c.name = 'Любовь (ТИЦ)' OR c.director_name = 'Любовь (ТИЦ)')
-  AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 893)
+WHERE (
+  c.name = 'Любовь (ТИЦ)' 
+  OR c.director_name = 'Любовь (ТИЦ)'
+  OR COALESCE(c.director_name, c.name) = 'Любовь (ТИЦ)'
+)
+AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 893)
 LIMIT 1;
 
 INSERT INTO rental_orders (
@@ -10872,8 +12368,12 @@ SELECT
   NOW(),
   NOW()
 FROM rental_clients c
-WHERE (c.name = 'Любовь (ТИЦ)' OR c.director_name = 'Любовь (ТИЦ)')
-  AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 892)
+WHERE (
+  c.name = 'Любовь (ТИЦ)' 
+  OR c.director_name = 'Любовь (ТИЦ)'
+  OR COALESCE(c.director_name, c.name) = 'Любовь (ТИЦ)'
+)
+AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 892)
 LIMIT 1;
 
 INSERT INTO rental_orders (
@@ -10901,8 +12401,12 @@ SELECT
   NOW(),
   NOW()
 FROM rental_clients c
-WHERE (c.name = 'Любовь (ТИЦ)' OR c.director_name = 'Любовь (ТИЦ)')
-  AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 891)
+WHERE (
+  c.name = 'Любовь (ТИЦ)' 
+  OR c.director_name = 'Любовь (ТИЦ)'
+  OR COALESCE(c.director_name, c.name) = 'Любовь (ТИЦ)'
+)
+AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 891)
 LIMIT 1;
 
 INSERT INTO rental_orders (
@@ -10930,8 +12434,12 @@ SELECT
   NOW(),
   NOW()
 FROM rental_clients c
-WHERE (c.name = 'Ирина (Иль Мио Тур)' OR c.director_name = 'Ирина (Иль Мио Тур)')
-  AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 890)
+WHERE (
+  c.name = 'Ирина (Иль Мио Тур)' 
+  OR c.director_name = 'Ирина (Иль Мио Тур)'
+  OR COALESCE(c.director_name, c.name) = 'Ирина (Иль Мио Тур)'
+)
+AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 890)
 LIMIT 1;
 
 INSERT INTO rental_orders (
@@ -10959,8 +12467,12 @@ SELECT
   NOW(),
   NOW()
 FROM rental_clients c
-WHERE (c.name = 'Мария Экскурсовод' OR c.director_name = 'Мария Экскурсовод')
-  AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 889)
+WHERE (
+  c.name = 'Мария Экскурсовод' 
+  OR c.director_name = 'Мария Экскурсовод'
+  OR COALESCE(c.director_name, c.name) = 'Мария Экскурсовод'
+)
+AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 889)
 LIMIT 1;
 
 INSERT INTO rental_orders (
@@ -10988,8 +12500,12 @@ SELECT
   NOW(),
   NOW()
 FROM rental_clients c
-WHERE (c.name = 'Мария Экскурсовод' OR c.director_name = 'Мария Экскурсовод')
-  AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 888)
+WHERE (
+  c.name = 'Мария Экскурсовод' 
+  OR c.director_name = 'Мария Экскурсовод'
+  OR COALESCE(c.director_name, c.name) = 'Мария Экскурсовод'
+)
+AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 888)
 LIMIT 1;
 
 INSERT INTO rental_orders (
@@ -11017,8 +12533,12 @@ SELECT
   NOW(),
   NOW()
 FROM rental_clients c
-WHERE (c.name = 'Эдик Заказы для групп' OR c.director_name = 'Эдик Заказы для групп')
-  AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 887)
+WHERE (
+  c.name = 'Эдик Заказы для групп' 
+  OR c.director_name = 'Эдик Заказы для групп'
+  OR COALESCE(c.director_name, c.name) = 'Эдик Заказы для групп'
+)
+AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 887)
 LIMIT 1;
 
 INSERT INTO rental_orders (
@@ -11046,8 +12566,12 @@ SELECT
   NOW(),
   NOW()
 FROM rental_clients c
-WHERE (c.name = 'Эдик Заказы для групп' OR c.director_name = 'Эдик Заказы для групп')
-  AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 886)
+WHERE (
+  c.name = 'Эдик Заказы для групп' 
+  OR c.director_name = 'Эдик Заказы для групп'
+  OR COALESCE(c.director_name, c.name) = 'Эдик Заказы для групп'
+)
+AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 886)
 LIMIT 1;
 
 INSERT INTO rental_orders (
@@ -11075,8 +12599,12 @@ SELECT
   NOW(),
   NOW()
 FROM rental_clients c
-WHERE (c.name = 'Владимир Нежданов' OR c.director_name = 'Владимир Нежданов')
-  AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 885)
+WHERE (
+  c.name = 'Владимир Нежданов' 
+  OR c.director_name = 'Владимир Нежданов'
+  OR COALESCE(c.director_name, c.name) = 'Владимир Нежданов'
+)
+AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 885)
 LIMIT 1;
 
 INSERT INTO rental_orders (
@@ -11104,8 +12632,12 @@ SELECT
   NOW(),
   NOW()
 FROM rental_clients c
-WHERE (c.name = 'Артем Агафонов' OR c.director_name = 'Артем Агафонов')
-  AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 884)
+WHERE (
+  c.name = 'Артем Агафонов' 
+  OR c.director_name = 'Артем Агафонов'
+  OR COALESCE(c.director_name, c.name) = 'Артем Агафонов'
+)
+AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 884)
 LIMIT 1;
 
 INSERT INTO rental_orders (
@@ -11133,8 +12665,12 @@ SELECT
   NOW(),
   NOW()
 FROM rental_clients c
-WHERE (c.name = 'Андрей (Экскурс)' OR c.director_name = 'Андрей (Экскурс)')
-  AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 883)
+WHERE (
+  c.name = 'Андрей (Экскурс)' 
+  OR c.director_name = 'Андрей (Экскурс)'
+  OR COALESCE(c.director_name, c.name) = 'Андрей (Экскурс)'
+)
+AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 883)
 LIMIT 1;
 
 INSERT INTO rental_orders (
@@ -11162,8 +12698,12 @@ SELECT
   NOW(),
   NOW()
 FROM rental_clients c
-WHERE (c.name = 'Мира (ИП)' OR c.director_name = 'Мира (ИП)')
-  AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 882)
+WHERE (
+  c.name = 'Мира (ИП)' 
+  OR c.director_name = 'Мира (ИП)'
+  OR COALESCE(c.director_name, c.name) = 'Мира (ИП)'
+)
+AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 882)
 LIMIT 1;
 
 INSERT INTO rental_orders (
@@ -11191,8 +12731,12 @@ SELECT
   NOW(),
   NOW()
 FROM rental_clients c
-WHERE (c.name = 'Сергей' OR c.director_name = 'Сергей')
-  AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 881)
+WHERE (
+  c.name = 'Сергей' 
+  OR c.director_name = 'Сергей'
+  OR COALESCE(c.director_name, c.name) = 'Сергей'
+)
+AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 881)
 LIMIT 1;
 
 INSERT INTO rental_orders (
@@ -11220,8 +12764,12 @@ SELECT
   NOW(),
   NOW()
 FROM rental_clients c
-WHERE (c.name = 'Татьяна (Гольфстрим)' OR c.director_name = 'Татьяна (Гольфстрим)')
-  AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 880)
+WHERE (
+  c.name = 'Татьяна (Гольфстрим)' 
+  OR c.director_name = 'Татьяна (Гольфстрим)'
+  OR COALESCE(c.director_name, c.name) = 'Татьяна (Гольфстрим)'
+)
+AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 880)
 LIMIT 1;
 
 INSERT INTO rental_orders (
@@ -11249,8 +12797,12 @@ SELECT
   NOW(),
   NOW()
 FROM rental_clients c
-WHERE (c.name = 'Любовь (ТИЦ)' OR c.director_name = 'Любовь (ТИЦ)')
-  AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 879)
+WHERE (
+  c.name = 'Любовь (ТИЦ)' 
+  OR c.director_name = 'Любовь (ТИЦ)'
+  OR COALESCE(c.director_name, c.name) = 'Любовь (ТИЦ)'
+)
+AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 879)
 LIMIT 1;
 
 INSERT INTO rental_orders (
@@ -11278,8 +12830,12 @@ SELECT
   NOW(),
   NOW()
 FROM rental_clients c
-WHERE (c.name = 'Ольга (Сиалия)' OR c.director_name = 'Ольга (Сиалия)')
-  AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 878)
+WHERE (
+  c.name = 'Ольга (Сиалия)' 
+  OR c.director_name = 'Ольга (Сиалия)'
+  OR COALESCE(c.director_name, c.name) = 'Ольга (Сиалия)'
+)
+AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 878)
 LIMIT 1;
 
 INSERT INTO rental_orders (
@@ -11307,8 +12863,12 @@ SELECT
   NOW(),
   NOW()
 FROM rental_clients c
-WHERE (c.name = 'Арсен (Юнион)' OR c.director_name = 'Арсен (Юнион)')
-  AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 877)
+WHERE (
+  c.name = 'Арсен (Юнион)' 
+  OR c.director_name = 'Арсен (Юнион)'
+  OR COALESCE(c.director_name, c.name) = 'Арсен (Юнион)'
+)
+AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 877)
 LIMIT 1;
 
 INSERT INTO rental_orders (
@@ -11336,8 +12896,12 @@ SELECT
   NOW(),
   NOW()
 FROM rental_clients c
-WHERE (c.name = 'Арсен (Юнион)' OR c.director_name = 'Арсен (Юнион)')
-  AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 876)
+WHERE (
+  c.name = 'Арсен (Юнион)' 
+  OR c.director_name = 'Арсен (Юнион)'
+  OR COALESCE(c.director_name, c.name) = 'Арсен (Юнион)'
+)
+AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 876)
 LIMIT 1;
 
 INSERT INTO rental_orders (
@@ -11365,8 +12929,12 @@ SELECT
   NOW(),
   NOW()
 FROM rental_clients c
-WHERE (c.name = 'Ленар (ИП Ножкин)' OR c.director_name = 'Ленар (ИП Ножкин)')
-  AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 875)
+WHERE (
+  c.name = 'Ленар (ИП Ножкин)' 
+  OR c.director_name = 'Ленар (ИП Ножкин)'
+  OR COALESCE(c.director_name, c.name) = 'Ленар (ИП Ножкин)'
+)
+AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 875)
 LIMIT 1;
 
 INSERT INTO rental_orders (
@@ -11394,8 +12962,12 @@ SELECT
   NOW(),
   NOW()
 FROM rental_clients c
-WHERE (c.name = 'Эдик Заказы для групп' OR c.director_name = 'Эдик Заказы для групп')
-  AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 874)
+WHERE (
+  c.name = 'Эдик Заказы для групп' 
+  OR c.director_name = 'Эдик Заказы для групп'
+  OR COALESCE(c.director_name, c.name) = 'Эдик Заказы для групп'
+)
+AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 874)
 LIMIT 1;
 
 INSERT INTO rental_orders (
@@ -11423,8 +12995,12 @@ SELECT
   NOW(),
   NOW()
 FROM rental_clients c
-WHERE (c.name = 'Ольга (Дольче Вита)' OR c.director_name = 'Ольга (Дольче Вита)')
-  AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 873)
+WHERE (
+  c.name = 'Ольга (Дольче Вита)' 
+  OR c.director_name = 'Ольга (Дольче Вита)'
+  OR COALESCE(c.director_name, c.name) = 'Ольга (Дольче Вита)'
+)
+AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 873)
 LIMIT 1;
 
 INSERT INTO rental_orders (
@@ -11452,8 +13028,12 @@ SELECT
   NOW(),
   NOW()
 FROM rental_clients c
-WHERE (c.name = 'Екатерина' OR c.director_name = 'Екатерина')
-  AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 872)
+WHERE (
+  c.name = 'Екатерина' 
+  OR c.director_name = 'Екатерина'
+  OR COALESCE(c.director_name, c.name) = 'Екатерина'
+)
+AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 872)
 LIMIT 1;
 
 INSERT INTO rental_orders (
@@ -11481,8 +13061,12 @@ SELECT
   NOW(),
   NOW()
 FROM rental_clients c
-WHERE (c.name = 'Виктор (Мастерминд)' OR c.director_name = 'Виктор (Мастерминд)')
-  AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 871)
+WHERE (
+  c.name = 'Виктор (Мастерминд)' 
+  OR c.director_name = 'Виктор (Мастерминд)'
+  OR COALESCE(c.director_name, c.name) = 'Виктор (Мастерминд)'
+)
+AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 871)
 LIMIT 1;
 
 INSERT INTO rental_orders (
@@ -11510,8 +13094,12 @@ SELECT
   NOW(),
   NOW()
 FROM rental_clients c
-WHERE (c.name = 'Ирина (Иль Мио Тур)' OR c.director_name = 'Ирина (Иль Мио Тур)')
-  AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 870)
+WHERE (
+  c.name = 'Ирина (Иль Мио Тур)' 
+  OR c.director_name = 'Ирина (Иль Мио Тур)'
+  OR COALESCE(c.director_name, c.name) = 'Ирина (Иль Мио Тур)'
+)
+AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 870)
 LIMIT 1;
 
 INSERT INTO rental_orders (
@@ -11539,8 +13127,12 @@ SELECT
   NOW(),
   NOW()
 FROM rental_clients c
-WHERE (c.name = 'Мария Экскурсовод' OR c.director_name = 'Мария Экскурсовод')
-  AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 869)
+WHERE (
+  c.name = 'Мария Экскурсовод' 
+  OR c.director_name = 'Мария Экскурсовод'
+  OR COALESCE(c.director_name, c.name) = 'Мария Экскурсовод'
+)
+AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 869)
 LIMIT 1;
 
 INSERT INTO rental_orders (
@@ -11568,8 +13160,12 @@ SELECT
   NOW(),
   NOW()
 FROM rental_clients c
-WHERE (c.name = 'Татьяна (Агентство Удачи)' OR c.director_name = 'Татьяна (Агентство Удачи)')
-  AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 868)
+WHERE (
+  c.name = 'Татьяна (Агентство Удачи)' 
+  OR c.director_name = 'Татьяна (Агентство Удачи)'
+  OR COALESCE(c.director_name, c.name) = 'Татьяна (Агентство Удачи)'
+)
+AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 868)
 LIMIT 1;
 
 INSERT INTO rental_orders (
@@ -11597,8 +13193,12 @@ SELECT
   NOW(),
   NOW()
 FROM rental_clients c
-WHERE (c.name = 'Валентина Воронкова (Ввел Ком)' OR c.director_name = 'Валентина Воронкова (Ввел Ком)')
-  AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 867)
+WHERE (
+  c.name = 'Валентина Воронкова (Ввел Ком)' 
+  OR c.director_name = 'Валентина Воронкова (Ввел Ком)'
+  OR COALESCE(c.director_name, c.name) = 'Валентина Воронкова (Ввел Ком)'
+)
+AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 867)
 LIMIT 1;
 
 INSERT INTO rental_orders (
@@ -11626,8 +13226,12 @@ SELECT
   NOW(),
   NOW()
 FROM rental_clients c
-WHERE (c.name = 'Фируза' OR c.director_name = 'Фируза')
-  AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 866)
+WHERE (
+  c.name = 'Фируза' 
+  OR c.director_name = 'Фируза'
+  OR COALESCE(c.director_name, c.name) = 'Фируза'
+)
+AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 866)
 LIMIT 1;
 
 INSERT INTO rental_orders (
@@ -11655,8 +13259,12 @@ SELECT
   NOW(),
   NOW()
 FROM rental_clients c
-WHERE (c.name = 'Ольга (Дольче Вита)' OR c.director_name = 'Ольга (Дольче Вита)')
-  AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 865)
+WHERE (
+  c.name = 'Ольга (Дольче Вита)' 
+  OR c.director_name = 'Ольга (Дольче Вита)'
+  OR COALESCE(c.director_name, c.name) = 'Ольга (Дольче Вита)'
+)
+AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 865)
 LIMIT 1;
 
 INSERT INTO rental_orders (
@@ -11684,8 +13292,12 @@ SELECT
   NOW(),
   NOW()
 FROM rental_clients c
-WHERE (c.name = 'Ольга (Дольче Вита)' OR c.director_name = 'Ольга (Дольче Вита)')
-  AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 864)
+WHERE (
+  c.name = 'Ольга (Дольче Вита)' 
+  OR c.director_name = 'Ольга (Дольче Вита)'
+  OR COALESCE(c.director_name, c.name) = 'Ольга (Дольче Вита)'
+)
+AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 864)
 LIMIT 1;
 
 INSERT INTO rental_orders (
@@ -11713,8 +13325,12 @@ SELECT
   NOW(),
   NOW()
 FROM rental_clients c
-WHERE (c.name = 'Ольга (Дольче Вита)' OR c.director_name = 'Ольга (Дольче Вита)')
-  AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 863)
+WHERE (
+  c.name = 'Ольга (Дольче Вита)' 
+  OR c.director_name = 'Ольга (Дольче Вита)'
+  OR COALESCE(c.director_name, c.name) = 'Ольга (Дольче Вита)'
+)
+AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 863)
 LIMIT 1;
 
 INSERT INTO rental_orders (
@@ -11742,8 +13358,12 @@ SELECT
   NOW(),
   NOW()
 FROM rental_clients c
-WHERE (c.name = 'Татьяна' OR c.director_name = 'Татьяна')
-  AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 862)
+WHERE (
+  c.name = 'Татьяна' 
+  OR c.director_name = 'Татьяна'
+  OR COALESCE(c.director_name, c.name) = 'Татьяна'
+)
+AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 862)
 LIMIT 1;
 
 INSERT INTO rental_orders (
@@ -11771,8 +13391,12 @@ SELECT
   NOW(),
   NOW()
 FROM rental_clients c
-WHERE (c.name = 'Любовь (ТИЦ)' OR c.director_name = 'Любовь (ТИЦ)')
-  AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 861)
+WHERE (
+  c.name = 'Любовь (ТИЦ)' 
+  OR c.director_name = 'Любовь (ТИЦ)'
+  OR COALESCE(c.director_name, c.name) = 'Любовь (ТИЦ)'
+)
+AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 861)
 LIMIT 1;
 
 INSERT INTO rental_orders (
@@ -11800,8 +13424,12 @@ SELECT
   NOW(),
   NOW()
 FROM rental_clients c
-WHERE (c.name = 'Арсен (Юнион)' OR c.director_name = 'Арсен (Юнион)')
-  AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 860)
+WHERE (
+  c.name = 'Арсен (Юнион)' 
+  OR c.director_name = 'Арсен (Юнион)'
+  OR COALESCE(c.director_name, c.name) = 'Арсен (Юнион)'
+)
+AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 860)
 LIMIT 1;
 
 INSERT INTO rental_orders (
@@ -11829,8 +13457,12 @@ SELECT
   NOW(),
   NOW()
 FROM rental_clients c
-WHERE (c.name = 'Мира (ИП)' OR c.director_name = 'Мира (ИП)')
-  AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 859)
+WHERE (
+  c.name = 'Мира (ИП)' 
+  OR c.director_name = 'Мира (ИП)'
+  OR COALESCE(c.director_name, c.name) = 'Мира (ИП)'
+)
+AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 859)
 LIMIT 1;
 
 INSERT INTO rental_orders (
@@ -11858,8 +13490,12 @@ SELECT
   NOW(),
   NOW()
 FROM rental_clients c
-WHERE (c.name = 'Арсен (Юнион)' OR c.director_name = 'Арсен (Юнион)')
-  AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 858)
+WHERE (
+  c.name = 'Арсен (Юнион)' 
+  OR c.director_name = 'Арсен (Юнион)'
+  OR COALESCE(c.director_name, c.name) = 'Арсен (Юнион)'
+)
+AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 858)
 LIMIT 1;
 
 INSERT INTO rental_orders (
@@ -11887,8 +13523,12 @@ SELECT
   NOW(),
   NOW()
 FROM rental_clients c
-WHERE (c.name = 'Елена (Конгресс Авиа)' OR c.director_name = 'Елена (Конгресс Авиа)')
-  AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 857)
+WHERE (
+  c.name = 'Елена (Конгресс Авиа)' 
+  OR c.director_name = 'Елена (Конгресс Авиа)'
+  OR COALESCE(c.director_name, c.name) = 'Елена (Конгресс Авиа)'
+)
+AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 857)
 LIMIT 1;
 
 INSERT INTO rental_orders (
@@ -11916,8 +13556,12 @@ SELECT
   NOW(),
   NOW()
 FROM rental_clients c
-WHERE (c.name = 'Галина (Тур Урал)' OR c.director_name = 'Галина (Тур Урал)')
-  AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 856)
+WHERE (
+  c.name = 'Галина (Тур Урал)' 
+  OR c.director_name = 'Галина (Тур Урал)'
+  OR COALESCE(c.director_name, c.name) = 'Галина (Тур Урал)'
+)
+AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 856)
 LIMIT 1;
 
 INSERT INTO rental_orders (
@@ -11945,8 +13589,12 @@ SELECT
   NOW(),
   NOW()
 FROM rental_clients c
-WHERE (c.name = 'Мира (ИП)' OR c.director_name = 'Мира (ИП)')
-  AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 855)
+WHERE (
+  c.name = 'Мира (ИП)' 
+  OR c.director_name = 'Мира (ИП)'
+  OR COALESCE(c.director_name, c.name) = 'Мира (ИП)'
+)
+AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 855)
 LIMIT 1;
 
 INSERT INTO rental_orders (
@@ -11974,8 +13622,12 @@ SELECT
   NOW(),
   NOW()
 FROM rental_clients c
-WHERE (c.name = 'Зельфира' OR c.director_name = 'Зельфира')
-  AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 854)
+WHERE (
+  c.name = 'Зельфира' 
+  OR c.director_name = 'Зельфира'
+  OR COALESCE(c.director_name, c.name) = 'Зельфира'
+)
+AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 854)
 LIMIT 1;
 
 INSERT INTO rental_orders (
@@ -12003,8 +13655,12 @@ SELECT
   NOW(),
   NOW()
 FROM rental_clients c
-WHERE (c.name = 'Инна Экскурсовод' OR c.director_name = 'Инна Экскурсовод')
-  AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 853)
+WHERE (
+  c.name = 'Инна Экскурсовод' 
+  OR c.director_name = 'Инна Экскурсовод'
+  OR COALESCE(c.director_name, c.name) = 'Инна Экскурсовод'
+)
+AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 853)
 LIMIT 1;
 
 INSERT INTO rental_orders (
@@ -12032,8 +13688,12 @@ SELECT
   NOW(),
   NOW()
 FROM rental_clients c
-WHERE (c.name = 'Камила Ягудина' OR c.director_name = 'Камила Ягудина')
-  AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 852)
+WHERE (
+  c.name = 'Камила Ягудина' 
+  OR c.director_name = 'Камила Ягудина'
+  OR COALESCE(c.director_name, c.name) = 'Камила Ягудина'
+)
+AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 852)
 LIMIT 1;
 
 INSERT INTO rental_orders (
@@ -12061,8 +13721,12 @@ SELECT
   NOW(),
   NOW()
 FROM rental_clients c
-WHERE (c.name = 'Екатерина' OR c.director_name = 'Екатерина')
-  AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 851)
+WHERE (
+  c.name = 'Екатерина' 
+  OR c.director_name = 'Екатерина'
+  OR COALESCE(c.director_name, c.name) = 'Екатерина'
+)
+AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 851)
 LIMIT 1;
 
 INSERT INTO rental_orders (
@@ -12090,8 +13754,12 @@ SELECT
   NOW(),
   NOW()
 FROM rental_clients c
-WHERE (c.name = 'Татьяна (Гольфстрим)' OR c.director_name = 'Татьяна (Гольфстрим)')
-  AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 850)
+WHERE (
+  c.name = 'Татьяна (Гольфстрим)' 
+  OR c.director_name = 'Татьяна (Гольфстрим)'
+  OR COALESCE(c.director_name, c.name) = 'Татьяна (Гольфстрим)'
+)
+AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 850)
 LIMIT 1;
 
 INSERT INTO rental_orders (
@@ -12119,8 +13787,12 @@ SELECT
   NOW(),
   NOW()
 FROM rental_clients c
-WHERE (c.name = 'Гульнара' OR c.director_name = 'Гульнара')
-  AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 849)
+WHERE (
+  c.name = 'Гульнара' 
+  OR c.director_name = 'Гульнара'
+  OR COALESCE(c.director_name, c.name) = 'Гульнара'
+)
+AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 849)
 LIMIT 1;
 
 INSERT INTO rental_orders (
@@ -12148,8 +13820,12 @@ SELECT
   NOW(),
   NOW()
 FROM rental_clients c
-WHERE (c.name = 'Яна Янова' OR c.director_name = 'Яна Янова')
-  AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 848)
+WHERE (
+  c.name = 'Яна Янова' 
+  OR c.director_name = 'Яна Янова'
+  OR COALESCE(c.director_name, c.name) = 'Яна Янова'
+)
+AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 848)
 LIMIT 1;
 
 INSERT INTO rental_orders (
@@ -12177,8 +13853,12 @@ SELECT
   NOW(),
   NOW()
 FROM rental_clients c
-WHERE (c.name = 'Арсен (Юнион)' OR c.director_name = 'Арсен (Юнион)')
-  AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 847)
+WHERE (
+  c.name = 'Арсен (Юнион)' 
+  OR c.director_name = 'Арсен (Юнион)'
+  OR COALESCE(c.director_name, c.name) = 'Арсен (Юнион)'
+)
+AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 847)
 LIMIT 1;
 
 INSERT INTO rental_orders (
@@ -12206,8 +13886,12 @@ SELECT
   NOW(),
   NOW()
 FROM rental_clients c
-WHERE (c.name = 'Ольга (Сиалия)' OR c.director_name = 'Ольга (Сиалия)')
-  AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 846)
+WHERE (
+  c.name = 'Ольга (Сиалия)' 
+  OR c.director_name = 'Ольга (Сиалия)'
+  OR COALESCE(c.director_name, c.name) = 'Ольга (Сиалия)'
+)
+AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 846)
 LIMIT 1;
 
 INSERT INTO rental_orders (
@@ -12235,8 +13919,12 @@ SELECT
   NOW(),
   NOW()
 FROM rental_clients c
-WHERE (c.name = 'Гузель (Юралс)' OR c.director_name = 'Гузель (Юралс)')
-  AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 845)
+WHERE (
+  c.name = 'Гузель (Юралс)' 
+  OR c.director_name = 'Гузель (Юралс)'
+  OR COALESCE(c.director_name, c.name) = 'Гузель (Юралс)'
+)
+AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 845)
 LIMIT 1;
 
 INSERT INTO rental_orders (
@@ -12264,8 +13952,12 @@ SELECT
   NOW(),
   NOW()
 FROM rental_clients c
-WHERE (c.name = 'Элина (Сититур)' OR c.director_name = 'Элина (Сититур)')
-  AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 844)
+WHERE (
+  c.name = 'Элина (Сититур)' 
+  OR c.director_name = 'Элина (Сититур)'
+  OR COALESCE(c.director_name, c.name) = 'Элина (Сититур)'
+)
+AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 844)
 LIMIT 1;
 
 INSERT INTO rental_orders (
@@ -12293,8 +13985,12 @@ SELECT
   NOW(),
   NOW()
 FROM rental_clients c
-WHERE (c.name = 'Ольга' OR c.director_name = 'Ольга')
-  AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 843)
+WHERE (
+  c.name = 'Ольга' 
+  OR c.director_name = 'Ольга'
+  OR COALESCE(c.director_name, c.name) = 'Ольга'
+)
+AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 843)
 LIMIT 1;
 
 INSERT INTO rental_orders (
@@ -12322,8 +14018,12 @@ SELECT
   NOW(),
   NOW()
 FROM rental_clients c
-WHERE (c.name = 'Анюта Родионова (Родина-тур)' OR c.director_name = 'Анюта Родионова (Родина-тур)')
-  AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 842)
+WHERE (
+  c.name = 'Анюта Родионова (Родина-тур)' 
+  OR c.director_name = 'Анюта Родионова (Родина-тур)'
+  OR COALESCE(c.director_name, c.name) = 'Анюта Родионова (Родина-тур)'
+)
+AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 842)
 LIMIT 1;
 
 INSERT INTO rental_orders (
@@ -12351,8 +14051,12 @@ SELECT
   NOW(),
   NOW()
 FROM rental_clients c
-WHERE (c.name = 'Ольга (Дольче Вита)' OR c.director_name = 'Ольга (Дольче Вита)')
-  AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 841)
+WHERE (
+  c.name = 'Ольга (Дольче Вита)' 
+  OR c.director_name = 'Ольга (Дольче Вита)'
+  OR COALESCE(c.director_name, c.name) = 'Ольга (Дольче Вита)'
+)
+AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 841)
 LIMIT 1;
 
 INSERT INTO rental_orders (
@@ -12380,8 +14084,12 @@ SELECT
   NOW(),
   NOW()
 FROM rental_clients c
-WHERE (c.name = 'Арсен (Юнион)' OR c.director_name = 'Арсен (Юнион)')
-  AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 840)
+WHERE (
+  c.name = 'Арсен (Юнион)' 
+  OR c.director_name = 'Арсен (Юнион)'
+  OR COALESCE(c.director_name, c.name) = 'Арсен (Юнион)'
+)
+AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 840)
 LIMIT 1;
 
 INSERT INTO rental_orders (
@@ -12409,8 +14117,12 @@ SELECT
   NOW(),
   NOW()
 FROM rental_clients c
-WHERE (c.name = 'Любовь (ТИЦ)' OR c.director_name = 'Любовь (ТИЦ)')
-  AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 839)
+WHERE (
+  c.name = 'Любовь (ТИЦ)' 
+  OR c.director_name = 'Любовь (ТИЦ)'
+  OR COALESCE(c.director_name, c.name) = 'Любовь (ТИЦ)'
+)
+AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 839)
 LIMIT 1;
 
 INSERT INTO rental_orders (
@@ -12438,8 +14150,12 @@ SELECT
   NOW(),
   NOW()
 FROM rental_clients c
-WHERE (c.name = 'Наталья Компания' OR c.director_name = 'Наталья Компания')
-  AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 838)
+WHERE (
+  c.name = 'Наталья Компания' 
+  OR c.director_name = 'Наталья Компания'
+  OR COALESCE(c.director_name, c.name) = 'Наталья Компания'
+)
+AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 838)
 LIMIT 1;
 
 INSERT INTO rental_orders (
@@ -12467,8 +14183,12 @@ SELECT
   NOW(),
   NOW()
 FROM rental_clients c
-WHERE (c.name = 'Любовь (ТИЦ)' OR c.director_name = 'Любовь (ТИЦ)')
-  AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 837)
+WHERE (
+  c.name = 'Любовь (ТИЦ)' 
+  OR c.director_name = 'Любовь (ТИЦ)'
+  OR COALESCE(c.director_name, c.name) = 'Любовь (ТИЦ)'
+)
+AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 837)
 LIMIT 1;
 
 INSERT INTO rental_orders (
@@ -12496,8 +14216,12 @@ SELECT
   NOW(),
   NOW()
 FROM rental_clients c
-WHERE (c.name = 'Артем Агафонов' OR c.director_name = 'Артем Агафонов')
-  AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 835)
+WHERE (
+  c.name = 'Артем Агафонов' 
+  OR c.director_name = 'Артем Агафонов'
+  OR COALESCE(c.director_name, c.name) = 'Артем Агафонов'
+)
+AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 835)
 LIMIT 1;
 
 INSERT INTO rental_orders (
@@ -12525,8 +14249,12 @@ SELECT
   NOW(),
   NOW()
 FROM rental_clients c
-WHERE (c.name = 'Зульхиза Кутлучурина' OR c.director_name = 'Зульхиза Кутлучурина')
-  AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 834)
+WHERE (
+  c.name = 'Зульхиза Кутлучурина' 
+  OR c.director_name = 'Зульхиза Кутлучурина'
+  OR COALESCE(c.director_name, c.name) = 'Зульхиза Кутлучурина'
+)
+AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 834)
 LIMIT 1;
 
 INSERT INTO rental_orders (
@@ -12554,8 +14282,12 @@ SELECT
   NOW(),
   NOW()
 FROM rental_clients c
-WHERE (c.name = 'Татьяна (Гольфстрим)' OR c.director_name = 'Татьяна (Гольфстрим)')
-  AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 833)
+WHERE (
+  c.name = 'Татьяна (Гольфстрим)' 
+  OR c.director_name = 'Татьяна (Гольфстрим)'
+  OR COALESCE(c.director_name, c.name) = 'Татьяна (Гольфстрим)'
+)
+AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 833)
 LIMIT 1;
 
 INSERT INTO rental_orders (
@@ -12583,8 +14315,12 @@ SELECT
   NOW(),
   NOW()
 FROM rental_clients c
-WHERE (c.name = 'Ольга (Дольче Вита)' OR c.director_name = 'Ольга (Дольче Вита)')
-  AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 832)
+WHERE (
+  c.name = 'Ольга (Дольче Вита)' 
+  OR c.director_name = 'Ольга (Дольче Вита)'
+  OR COALESCE(c.director_name, c.name) = 'Ольга (Дольче Вита)'
+)
+AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 832)
 LIMIT 1;
 
 INSERT INTO rental_orders (
@@ -12612,8 +14348,12 @@ SELECT
   NOW(),
   NOW()
 FROM rental_clients c
-WHERE (c.name = 'Мария (ОСР)' OR c.director_name = 'Мария (ОСР)')
-  AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 831)
+WHERE (
+  c.name = 'Мария (ОСР)' 
+  OR c.director_name = 'Мария (ОСР)'
+  OR COALESCE(c.director_name, c.name) = 'Мария (ОСР)'
+)
+AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 831)
 LIMIT 1;
 
 INSERT INTO rental_orders (
@@ -12641,8 +14381,12 @@ SELECT
   NOW(),
   NOW()
 FROM rental_clients c
-WHERE (c.name = 'Галина (Тур Урал)' OR c.director_name = 'Галина (Тур Урал)')
-  AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 830)
+WHERE (
+  c.name = 'Галина (Тур Урал)' 
+  OR c.director_name = 'Галина (Тур Урал)'
+  OR COALESCE(c.director_name, c.name) = 'Галина (Тур Урал)'
+)
+AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 830)
 LIMIT 1;
 
 INSERT INTO rental_orders (
@@ -12670,8 +14414,12 @@ SELECT
   NOW(),
   NOW()
 FROM rental_clients c
-WHERE (c.name = 'Айгуль Файзуллина' OR c.director_name = 'Айгуль Файзуллина')
-  AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 829)
+WHERE (
+  c.name = 'Айгуль Файзуллина' 
+  OR c.director_name = 'Айгуль Файзуллина'
+  OR COALESCE(c.director_name, c.name) = 'Айгуль Файзуллина'
+)
+AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 829)
 LIMIT 1;
 
 INSERT INTO rental_orders (
@@ -12699,8 +14447,12 @@ SELECT
   NOW(),
   NOW()
 FROM rental_clients c
-WHERE (c.name = 'Эвелина (Инициатива)' OR c.director_name = 'Эвелина (Инициатива)')
-  AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 828)
+WHERE (
+  c.name = 'Эвелина (Инициатива)' 
+  OR c.director_name = 'Эвелина (Инициатива)'
+  OR COALESCE(c.director_name, c.name) = 'Эвелина (Инициатива)'
+)
+AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 828)
 LIMIT 1;
 
 INSERT INTO rental_orders (
@@ -12728,8 +14480,12 @@ SELECT
   NOW(),
   NOW()
 FROM rental_clients c
-WHERE (c.name = 'Екатерина Кореева' OR c.director_name = 'Екатерина Кореева')
-  AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 827)
+WHERE (
+  c.name = 'Екатерина Кореева' 
+  OR c.director_name = 'Екатерина Кореева'
+  OR COALESCE(c.director_name, c.name) = 'Екатерина Кореева'
+)
+AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 827)
 LIMIT 1;
 
 INSERT INTO rental_orders (
@@ -12757,8 +14513,12 @@ SELECT
   NOW(),
   NOW()
 FROM rental_clients c
-WHERE (c.name = 'Эдик Заказы для групп' OR c.director_name = 'Эдик Заказы для групп')
-  AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 826)
+WHERE (
+  c.name = 'Эдик Заказы для групп' 
+  OR c.director_name = 'Эдик Заказы для групп'
+  OR COALESCE(c.director_name, c.name) = 'Эдик Заказы для групп'
+)
+AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 826)
 LIMIT 1;
 
 INSERT INTO rental_orders (
@@ -12786,8 +14546,12 @@ SELECT
   NOW(),
   NOW()
 FROM rental_clients c
-WHERE (c.name = 'Зельфира' OR c.director_name = 'Зельфира')
-  AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 825)
+WHERE (
+  c.name = 'Зельфира' 
+  OR c.director_name = 'Зельфира'
+  OR COALESCE(c.director_name, c.name) = 'Зельфира'
+)
+AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 825)
 LIMIT 1;
 
 INSERT INTO rental_orders (
@@ -12815,8 +14579,12 @@ SELECT
   NOW(),
   NOW()
 FROM rental_clients c
-WHERE (c.name = 'Татьяна (Гольфстрим)' OR c.director_name = 'Татьяна (Гольфстрим)')
-  AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 824)
+WHERE (
+  c.name = 'Татьяна (Гольфстрим)' 
+  OR c.director_name = 'Татьяна (Гольфстрим)'
+  OR COALESCE(c.director_name, c.name) = 'Татьяна (Гольфстрим)'
+)
+AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 824)
 LIMIT 1;
 
 INSERT INTO rental_orders (
@@ -12844,8 +14612,12 @@ SELECT
   NOW(),
   NOW()
 FROM rental_clients c
-WHERE (c.name = 'Татьяна (Гольфстрим)' OR c.director_name = 'Татьяна (Гольфстрим)')
-  AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 823)
+WHERE (
+  c.name = 'Татьяна (Гольфстрим)' 
+  OR c.director_name = 'Татьяна (Гольфстрим)'
+  OR COALESCE(c.director_name, c.name) = 'Татьяна (Гольфстрим)'
+)
+AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 823)
 LIMIT 1;
 
 INSERT INTO rental_orders (
@@ -12873,8 +14645,12 @@ SELECT
   NOW(),
   NOW()
 FROM rental_clients c
-WHERE (c.name = 'Эдик Заказы для групп' OR c.director_name = 'Эдик Заказы для групп')
-  AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 822)
+WHERE (
+  c.name = 'Эдик Заказы для групп' 
+  OR c.director_name = 'Эдик Заказы для групп'
+  OR COALESCE(c.director_name, c.name) = 'Эдик Заказы для групп'
+)
+AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 822)
 LIMIT 1;
 
 INSERT INTO rental_orders (
@@ -12902,8 +14678,12 @@ SELECT
   NOW(),
   NOW()
 FROM rental_clients c
-WHERE (c.name = 'Фируза' OR c.director_name = 'Фируза')
-  AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 821)
+WHERE (
+  c.name = 'Фируза' 
+  OR c.director_name = 'Фируза'
+  OR COALESCE(c.director_name, c.name) = 'Фируза'
+)
+AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 821)
 LIMIT 1;
 
 INSERT INTO rental_orders (
@@ -12931,8 +14711,12 @@ SELECT
   NOW(),
   NOW()
 FROM rental_clients c
-WHERE (c.name = 'Альберт (КТ)' OR c.director_name = 'Альберт (КТ)')
-  AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 820)
+WHERE (
+  c.name = 'Альберт (КТ)' 
+  OR c.director_name = 'Альберт (КТ)'
+  OR COALESCE(c.director_name, c.name) = 'Альберт (КТ)'
+)
+AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 820)
 LIMIT 1;
 
 INSERT INTO rental_orders (
@@ -12960,8 +14744,12 @@ SELECT
   NOW(),
   NOW()
 FROM rental_clients c
-WHERE (c.name = 'Инна Экскурсовод' OR c.director_name = 'Инна Экскурсовод')
-  AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 819)
+WHERE (
+  c.name = 'Инна Экскурсовод' 
+  OR c.director_name = 'Инна Экскурсовод'
+  OR COALESCE(c.director_name, c.name) = 'Инна Экскурсовод'
+)
+AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 819)
 LIMIT 1;
 
 INSERT INTO rental_orders (
@@ -12989,8 +14777,12 @@ SELECT
   NOW(),
   NOW()
 FROM rental_clients c
-WHERE (c.name = 'Артем Агафонов' OR c.director_name = 'Артем Агафонов')
-  AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 818)
+WHERE (
+  c.name = 'Артем Агафонов' 
+  OR c.director_name = 'Артем Агафонов'
+  OR COALESCE(c.director_name, c.name) = 'Артем Агафонов'
+)
+AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 818)
 LIMIT 1;
 
 INSERT INTO rental_orders (
@@ -13018,8 +14810,12 @@ SELECT
   NOW(),
   NOW()
 FROM rental_clients c
-WHERE (c.name = 'Мира (ИП)' OR c.director_name = 'Мира (ИП)')
-  AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 817)
+WHERE (
+  c.name = 'Мира (ИП)' 
+  OR c.director_name = 'Мира (ИП)'
+  OR COALESCE(c.director_name, c.name) = 'Мира (ИП)'
+)
+AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 817)
 LIMIT 1;
 
 INSERT INTO rental_orders (
@@ -13047,8 +14843,12 @@ SELECT
   NOW(),
   NOW()
 FROM rental_clients c
-WHERE (c.name = 'Альберт (КТ)' OR c.director_name = 'Альберт (КТ)')
-  AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 816)
+WHERE (
+  c.name = 'Альберт (КТ)' 
+  OR c.director_name = 'Альберт (КТ)'
+  OR COALESCE(c.director_name, c.name) = 'Альберт (КТ)'
+)
+AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 816)
 LIMIT 1;
 
 INSERT INTO rental_orders (
@@ -13076,8 +14876,12 @@ SELECT
   NOW(),
   NOW()
 FROM rental_clients c
-WHERE (c.name = 'Альберт (КТ)' OR c.director_name = 'Альберт (КТ)')
-  AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 815)
+WHERE (
+  c.name = 'Альберт (КТ)' 
+  OR c.director_name = 'Альберт (КТ)'
+  OR COALESCE(c.director_name, c.name) = 'Альберт (КТ)'
+)
+AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 815)
 LIMIT 1;
 
 INSERT INTO rental_orders (
@@ -13105,8 +14909,12 @@ SELECT
   NOW(),
   NOW()
 FROM rental_clients c
-WHERE (c.name = 'Альберт (КТ)' OR c.director_name = 'Альберт (КТ)')
-  AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 814)
+WHERE (
+  c.name = 'Альберт (КТ)' 
+  OR c.director_name = 'Альберт (КТ)'
+  OR COALESCE(c.director_name, c.name) = 'Альберт (КТ)'
+)
+AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 814)
 LIMIT 1;
 
 INSERT INTO rental_orders (
@@ -13134,8 +14942,12 @@ SELECT
   NOW(),
   NOW()
 FROM rental_clients c
-WHERE (c.name = 'Ленар (ИП Ножкин)' OR c.director_name = 'Ленар (ИП Ножкин)')
-  AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 813)
+WHERE (
+  c.name = 'Ленар (ИП Ножкин)' 
+  OR c.director_name = 'Ленар (ИП Ножкин)'
+  OR COALESCE(c.director_name, c.name) = 'Ленар (ИП Ножкин)'
+)
+AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 813)
 LIMIT 1;
 
 INSERT INTO rental_orders (
@@ -13163,8 +14975,12 @@ SELECT
   NOW(),
   NOW()
 FROM rental_clients c
-WHERE (c.name = 'Любовь (ТИЦ)' OR c.director_name = 'Любовь (ТИЦ)')
-  AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 812)
+WHERE (
+  c.name = 'Любовь (ТИЦ)' 
+  OR c.director_name = 'Любовь (ТИЦ)'
+  OR COALESCE(c.director_name, c.name) = 'Любовь (ТИЦ)'
+)
+AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 812)
 LIMIT 1;
 
 INSERT INTO rental_orders (
@@ -13192,8 +15008,12 @@ SELECT
   NOW(),
   NOW()
 FROM rental_clients c
-WHERE (c.name = 'Арсен (Юнион)' OR c.director_name = 'Арсен (Юнион)')
-  AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 811)
+WHERE (
+  c.name = 'Арсен (Юнион)' 
+  OR c.director_name = 'Арсен (Юнион)'
+  OR COALESCE(c.director_name, c.name) = 'Арсен (Юнион)'
+)
+AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 811)
 LIMIT 1;
 
 INSERT INTO rental_orders (
@@ -13221,8 +15041,12 @@ SELECT
   NOW(),
   NOW()
 FROM rental_clients c
-WHERE (c.name = 'Арсен (Юнион)' OR c.director_name = 'Арсен (Юнион)')
-  AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 810)
+WHERE (
+  c.name = 'Арсен (Юнион)' 
+  OR c.director_name = 'Арсен (Юнион)'
+  OR COALESCE(c.director_name, c.name) = 'Арсен (Юнион)'
+)
+AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 810)
 LIMIT 1;
 
 INSERT INTO rental_orders (
@@ -13250,8 +15074,12 @@ SELECT
   NOW(),
   NOW()
 FROM rental_clients c
-WHERE (c.name = 'Ольга (Сиалия)' OR c.director_name = 'Ольга (Сиалия)')
-  AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 809)
+WHERE (
+  c.name = 'Ольга (Сиалия)' 
+  OR c.director_name = 'Ольга (Сиалия)'
+  OR COALESCE(c.director_name, c.name) = 'Ольга (Сиалия)'
+)
+AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 809)
 LIMIT 1;
 
 INSERT INTO rental_orders (
@@ -13279,8 +15107,12 @@ SELECT
   NOW(),
   NOW()
 FROM rental_clients c
-WHERE (c.name = 'Камила Ягудина' OR c.director_name = 'Камила Ягудина')
-  AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 808)
+WHERE (
+  c.name = 'Камила Ягудина' 
+  OR c.director_name = 'Камила Ягудина'
+  OR COALESCE(c.director_name, c.name) = 'Камила Ягудина'
+)
+AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 808)
 LIMIT 1;
 
 INSERT INTO rental_orders (
@@ -13308,8 +15140,12 @@ SELECT
   NOW(),
   NOW()
 FROM rental_clients c
-WHERE (c.name = 'Екатерина' OR c.director_name = 'Екатерина')
-  AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 807)
+WHERE (
+  c.name = 'Екатерина' 
+  OR c.director_name = 'Екатерина'
+  OR COALESCE(c.director_name, c.name) = 'Екатерина'
+)
+AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 807)
 LIMIT 1;
 
 INSERT INTO rental_orders (
@@ -13337,8 +15173,12 @@ SELECT
   NOW(),
   NOW()
 FROM rental_clients c
-WHERE (c.name = 'Любовь (ТИЦ)' OR c.director_name = 'Любовь (ТИЦ)')
-  AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 806)
+WHERE (
+  c.name = 'Любовь (ТИЦ)' 
+  OR c.director_name = 'Любовь (ТИЦ)'
+  OR COALESCE(c.director_name, c.name) = 'Любовь (ТИЦ)'
+)
+AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 806)
 LIMIT 1;
 
 INSERT INTO rental_orders (
@@ -13366,8 +15206,12 @@ SELECT
   NOW(),
   NOW()
 FROM rental_clients c
-WHERE (c.name = 'Любовь (ТИЦ)' OR c.director_name = 'Любовь (ТИЦ)')
-  AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 805)
+WHERE (
+  c.name = 'Любовь (ТИЦ)' 
+  OR c.director_name = 'Любовь (ТИЦ)'
+  OR COALESCE(c.director_name, c.name) = 'Любовь (ТИЦ)'
+)
+AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 805)
 LIMIT 1;
 
 INSERT INTO rental_orders (
@@ -13395,8 +15239,12 @@ SELECT
   NOW(),
   NOW()
 FROM rental_clients c
-WHERE (c.name = 'Елена (Конгресс Авиа)' OR c.director_name = 'Елена (Конгресс Авиа)')
-  AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 804)
+WHERE (
+  c.name = 'Елена (Конгресс Авиа)' 
+  OR c.director_name = 'Елена (Конгресс Авиа)'
+  OR COALESCE(c.director_name, c.name) = 'Елена (Конгресс Авиа)'
+)
+AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 804)
 LIMIT 1;
 
 INSERT INTO rental_orders (
@@ -13424,8 +15272,12 @@ SELECT
   NOW(),
   NOW()
 FROM rental_clients c
-WHERE (c.name = 'Альберт (КТ)' OR c.director_name = 'Альберт (КТ)')
-  AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 803)
+WHERE (
+  c.name = 'Альберт (КТ)' 
+  OR c.director_name = 'Альберт (КТ)'
+  OR COALESCE(c.director_name, c.name) = 'Альберт (КТ)'
+)
+AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 803)
 LIMIT 1;
 
 INSERT INTO rental_orders (
@@ -13453,8 +15305,12 @@ SELECT
   NOW(),
   NOW()
 FROM rental_clients c
-WHERE (c.name = 'Эдик Заказы для групп' OR c.director_name = 'Эдик Заказы для групп')
-  AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 802)
+WHERE (
+  c.name = 'Эдик Заказы для групп' 
+  OR c.director_name = 'Эдик Заказы для групп'
+  OR COALESCE(c.director_name, c.name) = 'Эдик Заказы для групп'
+)
+AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 802)
 LIMIT 1;
 
 INSERT INTO rental_orders (
@@ -13482,8 +15338,12 @@ SELECT
   NOW(),
   NOW()
 FROM rental_clients c
-WHERE (c.name = 'Ольга' OR c.director_name = 'Ольга')
-  AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 801)
+WHERE (
+  c.name = 'Ольга' 
+  OR c.director_name = 'Ольга'
+  OR COALESCE(c.director_name, c.name) = 'Ольга'
+)
+AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 801)
 LIMIT 1;
 
 INSERT INTO rental_orders (
@@ -13511,8 +15371,12 @@ SELECT
   NOW(),
   NOW()
 FROM rental_clients c
-WHERE (c.name = 'Любовь (ТИЦ)' OR c.director_name = 'Любовь (ТИЦ)')
-  AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 800)
+WHERE (
+  c.name = 'Любовь (ТИЦ)' 
+  OR c.director_name = 'Любовь (ТИЦ)'
+  OR COALESCE(c.director_name, c.name) = 'Любовь (ТИЦ)'
+)
+AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 800)
 LIMIT 1;
 
 INSERT INTO rental_orders (
@@ -13540,8 +15404,12 @@ SELECT
   NOW(),
   NOW()
 FROM rental_clients c
-WHERE (c.name = 'Любовь (ТИЦ)' OR c.director_name = 'Любовь (ТИЦ)')
-  AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 799)
+WHERE (
+  c.name = 'Любовь (ТИЦ)' 
+  OR c.director_name = 'Любовь (ТИЦ)'
+  OR COALESCE(c.director_name, c.name) = 'Любовь (ТИЦ)'
+)
+AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 799)
 LIMIT 1;
 
 INSERT INTO rental_orders (
@@ -13569,8 +15437,12 @@ SELECT
   NOW(),
   NOW()
 FROM rental_clients c
-WHERE (c.name = 'Альберт (КТ)' OR c.director_name = 'Альберт (КТ)')
-  AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 798)
+WHERE (
+  c.name = 'Альберт (КТ)' 
+  OR c.director_name = 'Альберт (КТ)'
+  OR COALESCE(c.director_name, c.name) = 'Альберт (КТ)'
+)
+AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 798)
 LIMIT 1;
 
 INSERT INTO rental_orders (
@@ -13598,8 +15470,12 @@ SELECT
   NOW(),
   NOW()
 FROM rental_clients c
-WHERE (c.name = 'Александр' OR c.director_name = 'Александр')
-  AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 797)
+WHERE (
+  c.name = 'Александр' 
+  OR c.director_name = 'Александр'
+  OR COALESCE(c.director_name, c.name) = 'Александр'
+)
+AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 797)
 LIMIT 1;
 
 INSERT INTO rental_orders (
@@ -13627,8 +15503,12 @@ SELECT
   NOW(),
   NOW()
 FROM rental_clients c
-WHERE (c.name = 'Екатерина' OR c.director_name = 'Екатерина')
-  AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 796)
+WHERE (
+  c.name = 'Екатерина' 
+  OR c.director_name = 'Екатерина'
+  OR COALESCE(c.director_name, c.name) = 'Екатерина'
+)
+AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 796)
 LIMIT 1;
 
 INSERT INTO rental_orders (
@@ -13656,8 +15536,12 @@ SELECT
   NOW(),
   NOW()
 FROM rental_clients c
-WHERE (c.name = 'Арсен (Юнион)' OR c.director_name = 'Арсен (Юнион)')
-  AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 795)
+WHERE (
+  c.name = 'Арсен (Юнион)' 
+  OR c.director_name = 'Арсен (Юнион)'
+  OR COALESCE(c.director_name, c.name) = 'Арсен (Юнион)'
+)
+AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 795)
 LIMIT 1;
 
 INSERT INTO rental_orders (
@@ -13685,8 +15569,12 @@ SELECT
   NOW(),
   NOW()
 FROM rental_clients c
-WHERE (c.name = 'Арсен (Юнион)' OR c.director_name = 'Арсен (Юнион)')
-  AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 794)
+WHERE (
+  c.name = 'Арсен (Юнион)' 
+  OR c.director_name = 'Арсен (Юнион)'
+  OR COALESCE(c.director_name, c.name) = 'Арсен (Юнион)'
+)
+AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 794)
 LIMIT 1;
 
 INSERT INTO rental_orders (
@@ -13714,8 +15602,12 @@ SELECT
   NOW(),
   NOW()
 FROM rental_clients c
-WHERE (c.name = 'Ольга (Сиалия)' OR c.director_name = 'Ольга (Сиалия)')
-  AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 792)
+WHERE (
+  c.name = 'Ольга (Сиалия)' 
+  OR c.director_name = 'Ольга (Сиалия)'
+  OR COALESCE(c.director_name, c.name) = 'Ольга (Сиалия)'
+)
+AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 792)
 LIMIT 1;
 
 INSERT INTO rental_orders (
@@ -13743,8 +15635,12 @@ SELECT
   NOW(),
   NOW()
 FROM rental_clients c
-WHERE (c.name = 'Галина Тур Москва' OR c.director_name = 'Галина Тур Москва')
-  AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 791)
+WHERE (
+  c.name = 'Галина Тур Москва' 
+  OR c.director_name = 'Галина Тур Москва'
+  OR COALESCE(c.director_name, c.name) = 'Галина Тур Москва'
+)
+AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 791)
 LIMIT 1;
 
 INSERT INTO rental_orders (
@@ -13772,8 +15668,12 @@ SELECT
   NOW(),
   NOW()
 FROM rental_clients c
-WHERE (c.name = 'Ольга' OR c.director_name = 'Ольга')
-  AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 790)
+WHERE (
+  c.name = 'Ольга' 
+  OR c.director_name = 'Ольга'
+  OR COALESCE(c.director_name, c.name) = 'Ольга'
+)
+AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 790)
 LIMIT 1;
 
 INSERT INTO rental_orders (
@@ -13801,8 +15701,12 @@ SELECT
   NOW(),
   NOW()
 FROM rental_clients c
-WHERE (c.name = 'Екатерина' OR c.director_name = 'Екатерина')
-  AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 789)
+WHERE (
+  c.name = 'Екатерина' 
+  OR c.director_name = 'Екатерина'
+  OR COALESCE(c.director_name, c.name) = 'Екатерина'
+)
+AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 789)
 LIMIT 1;
 
 INSERT INTO rental_orders (
@@ -13830,8 +15734,12 @@ SELECT
   NOW(),
   NOW()
 FROM rental_clients c
-WHERE (c.name = 'Эдик Заказы для групп' OR c.director_name = 'Эдик Заказы для групп')
-  AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 788)
+WHERE (
+  c.name = 'Эдик Заказы для групп' 
+  OR c.director_name = 'Эдик Заказы для групп'
+  OR COALESCE(c.director_name, c.name) = 'Эдик Заказы для групп'
+)
+AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 788)
 LIMIT 1;
 
 INSERT INTO rental_orders (
@@ -13859,8 +15767,12 @@ SELECT
   NOW(),
   NOW()
 FROM rental_clients c
-WHERE (c.name = 'Зельфира' OR c.director_name = 'Зельфира')
-  AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 786)
+WHERE (
+  c.name = 'Зельфира' 
+  OR c.director_name = 'Зельфира'
+  OR COALESCE(c.director_name, c.name) = 'Зельфира'
+)
+AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 786)
 LIMIT 1;
 
 INSERT INTO rental_orders (
@@ -13888,8 +15800,12 @@ SELECT
   NOW(),
   NOW()
 FROM rental_clients c
-WHERE (c.name = 'Родина-тур' OR c.director_name = 'Родина-тур')
-  AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 785)
+WHERE (
+  c.name = 'Родина-тур' 
+  OR c.director_name = 'Родина-тур'
+  OR COALESCE(c.director_name, c.name) = 'Родина-тур'
+)
+AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 785)
 LIMIT 1;
 
 INSERT INTO rental_orders (
@@ -13917,8 +15833,12 @@ SELECT
   NOW(),
   NOW()
 FROM rental_clients c
-WHERE (c.name = 'Татьяна Чуб' OR c.director_name = 'Татьяна Чуб')
-  AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 784)
+WHERE (
+  c.name = 'Татьяна Чуб' 
+  OR c.director_name = 'Татьяна Чуб'
+  OR COALESCE(c.director_name, c.name) = 'Татьяна Чуб'
+)
+AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 784)
 LIMIT 1;
 
 INSERT INTO rental_orders (
@@ -13946,8 +15866,12 @@ SELECT
   NOW(),
   NOW()
 FROM rental_clients c
-WHERE (c.name = 'Галина (Тур Урал)' OR c.director_name = 'Галина (Тур Урал)')
-  AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 783)
+WHERE (
+  c.name = 'Галина (Тур Урал)' 
+  OR c.director_name = 'Галина (Тур Урал)'
+  OR COALESCE(c.director_name, c.name) = 'Галина (Тур Урал)'
+)
+AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 783)
 LIMIT 1;
 
 INSERT INTO rental_orders (
@@ -13975,8 +15899,12 @@ SELECT
   NOW(),
   NOW()
 FROM rental_clients c
-WHERE (c.name = 'Любовь (ТИЦ)' OR c.director_name = 'Любовь (ТИЦ)')
-  AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 782)
+WHERE (
+  c.name = 'Любовь (ТИЦ)' 
+  OR c.director_name = 'Любовь (ТИЦ)'
+  OR COALESCE(c.director_name, c.name) = 'Любовь (ТИЦ)'
+)
+AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 782)
 LIMIT 1;
 
 INSERT INTO rental_orders (
@@ -14004,8 +15932,12 @@ SELECT
   NOW(),
   NOW()
 FROM rental_clients c
-WHERE (c.name = 'Любовь (ТИЦ)' OR c.director_name = 'Любовь (ТИЦ)')
-  AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 781)
+WHERE (
+  c.name = 'Любовь (ТИЦ)' 
+  OR c.director_name = 'Любовь (ТИЦ)'
+  OR COALESCE(c.director_name, c.name) = 'Любовь (ТИЦ)'
+)
+AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 781)
 LIMIT 1;
 
 INSERT INTO rental_orders (
@@ -14033,8 +15965,12 @@ SELECT
   NOW(),
   NOW()
 FROM rental_clients c
-WHERE (c.name = 'Дарья' OR c.director_name = 'Дарья')
-  AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 780)
+WHERE (
+  c.name = 'Дарья' 
+  OR c.director_name = 'Дарья'
+  OR COALESCE(c.director_name, c.name) = 'Дарья'
+)
+AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 780)
 LIMIT 1;
 
 INSERT INTO rental_orders (
@@ -14062,8 +15998,12 @@ SELECT
   NOW(),
   NOW()
 FROM rental_clients c
-WHERE (c.name = 'Гузель (Юралс)' OR c.director_name = 'Гузель (Юралс)')
-  AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 779)
+WHERE (
+  c.name = 'Гузель (Юралс)' 
+  OR c.director_name = 'Гузель (Юралс)'
+  OR COALESCE(c.director_name, c.name) = 'Гузель (Юралс)'
+)
+AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 779)
 LIMIT 1;
 
 INSERT INTO rental_orders (
@@ -14091,8 +16031,12 @@ SELECT
   NOW(),
   NOW()
 FROM rental_clients c
-WHERE (c.name = 'Эвелина (Инициатива)' OR c.director_name = 'Эвелина (Инициатива)')
-  AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 777)
+WHERE (
+  c.name = 'Эвелина (Инициатива)' 
+  OR c.director_name = 'Эвелина (Инициатива)'
+  OR COALESCE(c.director_name, c.name) = 'Эвелина (Инициатива)'
+)
+AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 777)
 LIMIT 1;
 
 INSERT INTO rental_orders (
@@ -14120,8 +16064,12 @@ SELECT
   NOW(),
   NOW()
 FROM rental_clients c
-WHERE (c.name = 'Екатерина (ОЛТА Трэвел)' OR c.director_name = 'Екатерина (ОЛТА Трэвел)')
-  AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 776)
+WHERE (
+  c.name = 'Екатерина (ОЛТА Трэвел)' 
+  OR c.director_name = 'Екатерина (ОЛТА Трэвел)'
+  OR COALESCE(c.director_name, c.name) = 'Екатерина (ОЛТА Трэвел)'
+)
+AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 776)
 LIMIT 1;
 
 INSERT INTO rental_orders (
@@ -14149,8 +16097,12 @@ SELECT
   NOW(),
   NOW()
 FROM rental_clients c
-WHERE (c.name = 'Ольга (Дольче Вита)' OR c.director_name = 'Ольга (Дольче Вита)')
-  AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 775)
+WHERE (
+  c.name = 'Ольга (Дольче Вита)' 
+  OR c.director_name = 'Ольга (Дольче Вита)'
+  OR COALESCE(c.director_name, c.name) = 'Ольга (Дольче Вита)'
+)
+AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 775)
 LIMIT 1;
 
 INSERT INTO rental_orders (
@@ -14178,8 +16130,12 @@ SELECT
   NOW(),
   NOW()
 FROM rental_clients c
-WHERE (c.name = 'Ольга (Дольче Вита)' OR c.director_name = 'Ольга (Дольче Вита)')
-  AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 774)
+WHERE (
+  c.name = 'Ольга (Дольче Вита)' 
+  OR c.director_name = 'Ольга (Дольче Вита)'
+  OR COALESCE(c.director_name, c.name) = 'Ольга (Дольче Вита)'
+)
+AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 774)
 LIMIT 1;
 
 INSERT INTO rental_orders (
@@ -14207,8 +16163,12 @@ SELECT
   NOW(),
   NOW()
 FROM rental_clients c
-WHERE (c.name = 'Ирина (Иль Мио Тур)' OR c.director_name = 'Ирина (Иль Мио Тур)')
-  AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 773)
+WHERE (
+  c.name = 'Ирина (Иль Мио Тур)' 
+  OR c.director_name = 'Ирина (Иль Мио Тур)'
+  OR COALESCE(c.director_name, c.name) = 'Ирина (Иль Мио Тур)'
+)
+AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 773)
 LIMIT 1;
 
 INSERT INTO rental_orders (
@@ -14236,8 +16196,12 @@ SELECT
   NOW(),
   NOW()
 FROM rental_clients c
-WHERE (c.name = 'Мария Экскурсовод' OR c.director_name = 'Мария Экскурсовод')
-  AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 772)
+WHERE (
+  c.name = 'Мария Экскурсовод' 
+  OR c.director_name = 'Мария Экскурсовод'
+  OR COALESCE(c.director_name, c.name) = 'Мария Экскурсовод'
+)
+AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 772)
 LIMIT 1;
 
 INSERT INTO rental_orders (
@@ -14265,8 +16229,12 @@ SELECT
   NOW(),
   NOW()
 FROM rental_clients c
-WHERE (c.name = 'Татьяна (Гольфстрим)' OR c.director_name = 'Татьяна (Гольфстрим)')
-  AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 771)
+WHERE (
+  c.name = 'Татьяна (Гольфстрим)' 
+  OR c.director_name = 'Татьяна (Гольфстрим)'
+  OR COALESCE(c.director_name, c.name) = 'Татьяна (Гольфстрим)'
+)
+AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 771)
 LIMIT 1;
 
 INSERT INTO rental_orders (
@@ -14294,8 +16262,12 @@ SELECT
   NOW(),
   NOW()
 FROM rental_clients c
-WHERE (c.name = 'Арсен (Юнион)' OR c.director_name = 'Арсен (Юнион)')
-  AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 769)
+WHERE (
+  c.name = 'Арсен (Юнион)' 
+  OR c.director_name = 'Арсен (Юнион)'
+  OR COALESCE(c.director_name, c.name) = 'Арсен (Юнион)'
+)
+AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 769)
 LIMIT 1;
 
 INSERT INTO rental_orders (
@@ -14323,8 +16295,12 @@ SELECT
   NOW(),
   NOW()
 FROM rental_clients c
-WHERE (c.name = 'Арсен (Юнион)' OR c.director_name = 'Арсен (Юнион)')
-  AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 768)
+WHERE (
+  c.name = 'Арсен (Юнион)' 
+  OR c.director_name = 'Арсен (Юнион)'
+  OR COALESCE(c.director_name, c.name) = 'Арсен (Юнион)'
+)
+AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 768)
 LIMIT 1;
 
 INSERT INTO rental_orders (
@@ -14352,8 +16328,12 @@ SELECT
   NOW(),
   NOW()
 FROM rental_clients c
-WHERE (c.name = 'Зельфира' OR c.director_name = 'Зельфира')
-  AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 767)
+WHERE (
+  c.name = 'Зельфира' 
+  OR c.director_name = 'Зельфира'
+  OR COALESCE(c.director_name, c.name) = 'Зельфира'
+)
+AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 767)
 LIMIT 1;
 
 INSERT INTO rental_orders (
@@ -14381,8 +16361,12 @@ SELECT
   NOW(),
   NOW()
 FROM rental_clients c
-WHERE (c.name = 'Альберт (КТ)' OR c.director_name = 'Альберт (КТ)')
-  AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 765)
+WHERE (
+  c.name = 'Альберт (КТ)' 
+  OR c.director_name = 'Альберт (КТ)'
+  OR COALESCE(c.director_name, c.name) = 'Альберт (КТ)'
+)
+AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 765)
 LIMIT 1;
 
 INSERT INTO rental_orders (
@@ -14410,8 +16394,12 @@ SELECT
   NOW(),
   NOW()
 FROM rental_clients c
-WHERE (c.name = 'Мира (ИП)' OR c.director_name = 'Мира (ИП)')
-  AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 764)
+WHERE (
+  c.name = 'Мира (ИП)' 
+  OR c.director_name = 'Мира (ИП)'
+  OR COALESCE(c.director_name, c.name) = 'Мира (ИП)'
+)
+AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 764)
 LIMIT 1;
 
 INSERT INTO rental_orders (
@@ -14439,8 +16427,12 @@ SELECT
   NOW(),
   NOW()
 FROM rental_clients c
-WHERE (c.name = 'Ирина (Иль Мио Тур)' OR c.director_name = 'Ирина (Иль Мио Тур)')
-  AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 763)
+WHERE (
+  c.name = 'Ирина (Иль Мио Тур)' 
+  OR c.director_name = 'Ирина (Иль Мио Тур)'
+  OR COALESCE(c.director_name, c.name) = 'Ирина (Иль Мио Тур)'
+)
+AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 763)
 LIMIT 1;
 
 INSERT INTO rental_orders (
@@ -14468,8 +16460,12 @@ SELECT
   NOW(),
   NOW()
 FROM rental_clients c
-WHERE (c.name = 'Родина-тур' OR c.director_name = 'Родина-тур')
-  AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 762)
+WHERE (
+  c.name = 'Родина-тур' 
+  OR c.director_name = 'Родина-тур'
+  OR COALESCE(c.director_name, c.name) = 'Родина-тур'
+)
+AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 762)
 LIMIT 1;
 
 INSERT INTO rental_orders (
@@ -14497,8 +16493,12 @@ SELECT
   NOW(),
   NOW()
 FROM rental_clients c
-WHERE (c.name = 'Ирина Пронина' OR c.director_name = 'Ирина Пронина')
-  AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 761)
+WHERE (
+  c.name = 'Ирина Пронина' 
+  OR c.director_name = 'Ирина Пронина'
+  OR COALESCE(c.director_name, c.name) = 'Ирина Пронина'
+)
+AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 761)
 LIMIT 1;
 
 INSERT INTO rental_orders (
@@ -14526,8 +16526,12 @@ SELECT
   NOW(),
   NOW()
 FROM rental_clients c
-WHERE (c.name = 'Татьяна (Гольфстрим)' OR c.director_name = 'Татьяна (Гольфстрим)')
-  AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 760)
+WHERE (
+  c.name = 'Татьяна (Гольфстрим)' 
+  OR c.director_name = 'Татьяна (Гольфстрим)'
+  OR COALESCE(c.director_name, c.name) = 'Татьяна (Гольфстрим)'
+)
+AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 760)
 LIMIT 1;
 
 INSERT INTO rental_orders (
@@ -14555,8 +16559,12 @@ SELECT
   NOW(),
   NOW()
 FROM rental_clients c
-WHERE (c.name = 'Алексей' OR c.director_name = 'Алексей')
-  AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 759)
+WHERE (
+  c.name = 'Алексей' 
+  OR c.director_name = 'Алексей'
+  OR COALESCE(c.director_name, c.name) = 'Алексей'
+)
+AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 759)
 LIMIT 1;
 
 INSERT INTO rental_orders (
@@ -14584,8 +16592,12 @@ SELECT
   NOW(),
   NOW()
 FROM rental_clients c
-WHERE (c.name = 'Юлианна' OR c.director_name = 'Юлианна')
-  AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 758)
+WHERE (
+  c.name = 'Юлианна' 
+  OR c.director_name = 'Юлианна'
+  OR COALESCE(c.director_name, c.name) = 'Юлианна'
+)
+AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 758)
 LIMIT 1;
 
 INSERT INTO rental_orders (
@@ -14613,8 +16625,12 @@ SELECT
   NOW(),
   NOW()
 FROM rental_clients c
-WHERE (c.name = 'Зульхиза Кутлучурина' OR c.director_name = 'Зульхиза Кутлучурина')
-  AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 757)
+WHERE (
+  c.name = 'Зульхиза Кутлучурина' 
+  OR c.director_name = 'Зульхиза Кутлучурина'
+  OR COALESCE(c.director_name, c.name) = 'Зульхиза Кутлучурина'
+)
+AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 757)
 LIMIT 1;
 
 INSERT INTO rental_orders (
@@ -14642,8 +16658,12 @@ SELECT
   NOW(),
   NOW()
 FROM rental_clients c
-WHERE (c.name = 'Ляйсан (Казань 360)' OR c.director_name = 'Ляйсан (Казань 360)')
-  AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 756)
+WHERE (
+  c.name = 'Ляйсан (Казань 360)' 
+  OR c.director_name = 'Ляйсан (Казань 360)'
+  OR COALESCE(c.director_name, c.name) = 'Ляйсан (Казань 360)'
+)
+AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 756)
 LIMIT 1;
 
 INSERT INTO rental_orders (
@@ -14671,8 +16691,12 @@ SELECT
   NOW(),
   NOW()
 FROM rental_clients c
-WHERE (c.name = 'Екатерина' OR c.director_name = 'Екатерина')
-  AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 755)
+WHERE (
+  c.name = 'Екатерина' 
+  OR c.director_name = 'Екатерина'
+  OR COALESCE(c.director_name, c.name) = 'Екатерина'
+)
+AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 755)
 LIMIT 1;
 
 INSERT INTO rental_orders (
@@ -14700,8 +16724,12 @@ SELECT
   NOW(),
   NOW()
 FROM rental_clients c
-WHERE (c.name = 'Юлианна' OR c.director_name = 'Юлианна')
-  AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 754)
+WHERE (
+  c.name = 'Юлианна' 
+  OR c.director_name = 'Юлианна'
+  OR COALESCE(c.director_name, c.name) = 'Юлианна'
+)
+AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 754)
 LIMIT 1;
 
 INSERT INTO rental_orders (
@@ -14729,8 +16757,12 @@ SELECT
   NOW(),
   NOW()
 FROM rental_clients c
-WHERE (c.name = 'Юлианна' OR c.director_name = 'Юлианна')
-  AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 753)
+WHERE (
+  c.name = 'Юлианна' 
+  OR c.director_name = 'Юлианна'
+  OR COALESCE(c.director_name, c.name) = 'Юлианна'
+)
+AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 753)
 LIMIT 1;
 
 INSERT INTO rental_orders (
@@ -14758,8 +16790,12 @@ SELECT
   NOW(),
   NOW()
 FROM rental_clients c
-WHERE (c.name = 'Эдик Заказы для групп' OR c.director_name = 'Эдик Заказы для групп')
-  AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 752)
+WHERE (
+  c.name = 'Эдик Заказы для групп' 
+  OR c.director_name = 'Эдик Заказы для групп'
+  OR COALESCE(c.director_name, c.name) = 'Эдик Заказы для групп'
+)
+AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 752)
 LIMIT 1;
 
 INSERT INTO rental_orders (
@@ -14787,8 +16823,12 @@ SELECT
   NOW(),
   NOW()
 FROM rental_clients c
-WHERE (c.name = 'Елена Павловна' OR c.director_name = 'Елена Павловна')
-  AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 751)
+WHERE (
+  c.name = 'Елена Павловна' 
+  OR c.director_name = 'Елена Павловна'
+  OR COALESCE(c.director_name, c.name) = 'Елена Павловна'
+)
+AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 751)
 LIMIT 1;
 
 INSERT INTO rental_orders (
@@ -14816,8 +16856,12 @@ SELECT
   NOW(),
   NOW()
 FROM rental_clients c
-WHERE (c.name = 'Алина Минеева' OR c.director_name = 'Алина Минеева')
-  AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 750)
+WHERE (
+  c.name = 'Алина Минеева' 
+  OR c.director_name = 'Алина Минеева'
+  OR COALESCE(c.director_name, c.name) = 'Алина Минеева'
+)
+AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 750)
 LIMIT 1;
 
 INSERT INTO rental_orders (
@@ -14845,8 +16889,12 @@ SELECT
   NOW(),
   NOW()
 FROM rental_clients c
-WHERE (c.name = 'Имя' OR c.director_name = 'Имя')
-  AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 749)
+WHERE (
+  c.name = 'Имя' 
+  OR c.director_name = 'Имя'
+  OR COALESCE(c.director_name, c.name) = 'Имя'
+)
+AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 749)
 LIMIT 1;
 
 INSERT INTO rental_orders (
@@ -14874,8 +16922,12 @@ SELECT
   NOW(),
   NOW()
 FROM rental_clients c
-WHERE (c.name = 'Наталья' OR c.director_name = 'Наталья')
-  AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 748)
+WHERE (
+  c.name = 'Наталья' 
+  OR c.director_name = 'Наталья'
+  OR COALESCE(c.director_name, c.name) = 'Наталья'
+)
+AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 748)
 LIMIT 1;
 
 INSERT INTO rental_orders (
@@ -14903,8 +16955,12 @@ SELECT
   NOW(),
   NOW()
 FROM rental_clients c
-WHERE (c.name = 'Екатерина Кореева' OR c.director_name = 'Екатерина Кореева')
-  AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 747)
+WHERE (
+  c.name = 'Екатерина Кореева' 
+  OR c.director_name = 'Екатерина Кореева'
+  OR COALESCE(c.director_name, c.name) = 'Екатерина Кореева'
+)
+AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 747)
 LIMIT 1;
 
 INSERT INTO rental_orders (
@@ -14932,8 +16988,12 @@ SELECT
   NOW(),
   NOW()
 FROM rental_clients c
-WHERE (c.name = 'Татьяна (Гольфстрим)' OR c.director_name = 'Татьяна (Гольфстрим)')
-  AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 746)
+WHERE (
+  c.name = 'Татьяна (Гольфстрим)' 
+  OR c.director_name = 'Татьяна (Гольфстрим)'
+  OR COALESCE(c.director_name, c.name) = 'Татьяна (Гольфстрим)'
+)
+AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 746)
 LIMIT 1;
 
 INSERT INTO rental_orders (
@@ -14961,8 +17021,12 @@ SELECT
   NOW(),
   NOW()
 FROM rental_clients c
-WHERE (c.name = 'Арсен (Юнион)' OR c.director_name = 'Арсен (Юнион)')
-  AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 745)
+WHERE (
+  c.name = 'Арсен (Юнион)' 
+  OR c.director_name = 'Арсен (Юнион)'
+  OR COALESCE(c.director_name, c.name) = 'Арсен (Юнион)'
+)
+AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 745)
 LIMIT 1;
 
 INSERT INTO rental_orders (
@@ -14990,8 +17054,12 @@ SELECT
   NOW(),
   NOW()
 FROM rental_clients c
-WHERE (c.name = 'Любовь (ТИЦ)' OR c.director_name = 'Любовь (ТИЦ)')
-  AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 744)
+WHERE (
+  c.name = 'Любовь (ТИЦ)' 
+  OR c.director_name = 'Любовь (ТИЦ)'
+  OR COALESCE(c.director_name, c.name) = 'Любовь (ТИЦ)'
+)
+AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 744)
 LIMIT 1;
 
 INSERT INTO rental_orders (
@@ -15019,8 +17087,12 @@ SELECT
   NOW(),
   NOW()
 FROM rental_clients c
-WHERE (c.name = 'Анюта Родионова (Родина-тур)' OR c.director_name = 'Анюта Родионова (Родина-тур)')
-  AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 743)
+WHERE (
+  c.name = 'Анюта Родионова (Родина-тур)' 
+  OR c.director_name = 'Анюта Родионова (Родина-тур)'
+  OR COALESCE(c.director_name, c.name) = 'Анюта Родионова (Родина-тур)'
+)
+AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 743)
 LIMIT 1;
 
 INSERT INTO rental_orders (
@@ -15048,8 +17120,12 @@ SELECT
   NOW(),
   NOW()
 FROM rental_clients c
-WHERE (c.name = 'Екатерина' OR c.director_name = 'Екатерина')
-  AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 742)
+WHERE (
+  c.name = 'Екатерина' 
+  OR c.director_name = 'Екатерина'
+  OR COALESCE(c.director_name, c.name) = 'Екатерина'
+)
+AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 742)
 LIMIT 1;
 
 INSERT INTO rental_orders (
@@ -15077,8 +17153,12 @@ SELECT
   NOW(),
   NOW()
 FROM rental_clients c
-WHERE (c.name = 'Любовь (ТИЦ)' OR c.director_name = 'Любовь (ТИЦ)')
-  AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 741)
+WHERE (
+  c.name = 'Любовь (ТИЦ)' 
+  OR c.director_name = 'Любовь (ТИЦ)'
+  OR COALESCE(c.director_name, c.name) = 'Любовь (ТИЦ)'
+)
+AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 741)
 LIMIT 1;
 
 INSERT INTO rental_orders (
@@ -15106,8 +17186,12 @@ SELECT
   NOW(),
   NOW()
 FROM rental_clients c
-WHERE (c.name = 'Анастасия Пашинин (НК Транс Тур)' OR c.director_name = 'Анастасия Пашинин (НК Транс Тур)')
-  AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 740)
+WHERE (
+  c.name = 'Анастасия Пашинин (НК Транс Тур)' 
+  OR c.director_name = 'Анастасия Пашинин (НК Транс Тур)'
+  OR COALESCE(c.director_name, c.name) = 'Анастасия Пашинин (НК Транс Тур)'
+)
+AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 740)
 LIMIT 1;
 
 INSERT INTO rental_orders (
@@ -15135,8 +17219,12 @@ SELECT
   NOW(),
   NOW()
 FROM rental_clients c
-WHERE (c.name = 'Анастасия Пашинин (НК Транс Тур)' OR c.director_name = 'Анастасия Пашинин (НК Транс Тур)')
-  AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 739)
+WHERE (
+  c.name = 'Анастасия Пашинин (НК Транс Тур)' 
+  OR c.director_name = 'Анастасия Пашинин (НК Транс Тур)'
+  OR COALESCE(c.director_name, c.name) = 'Анастасия Пашинин (НК Транс Тур)'
+)
+AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 739)
 LIMIT 1;
 
 INSERT INTO rental_orders (
@@ -15164,8 +17252,12 @@ SELECT
   NOW(),
   NOW()
 FROM rental_clients c
-WHERE (c.name = 'Анастасия Пашинин (НК Транс Тур)' OR c.director_name = 'Анастасия Пашинин (НК Транс Тур)')
-  AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 738)
+WHERE (
+  c.name = 'Анастасия Пашинин (НК Транс Тур)' 
+  OR c.director_name = 'Анастасия Пашинин (НК Транс Тур)'
+  OR COALESCE(c.director_name, c.name) = 'Анастасия Пашинин (НК Транс Тур)'
+)
+AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 738)
 LIMIT 1;
 
 INSERT INTO rental_orders (
@@ -15193,8 +17285,12 @@ SELECT
   NOW(),
   NOW()
 FROM rental_clients c
-WHERE (c.name = 'Анастасия Пашинин (НК Транс Тур)' OR c.director_name = 'Анастасия Пашинин (НК Транс Тур)')
-  AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 737)
+WHERE (
+  c.name = 'Анастасия Пашинин (НК Транс Тур)' 
+  OR c.director_name = 'Анастасия Пашинин (НК Транс Тур)'
+  OR COALESCE(c.director_name, c.name) = 'Анастасия Пашинин (НК Транс Тур)'
+)
+AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 737)
 LIMIT 1;
 
 INSERT INTO rental_orders (
@@ -15222,8 +17318,12 @@ SELECT
   NOW(),
   NOW()
 FROM rental_clients c
-WHERE (c.name = 'Айгуль Файзуллина' OR c.director_name = 'Айгуль Файзуллина')
-  AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 736)
+WHERE (
+  c.name = 'Айгуль Файзуллина' 
+  OR c.director_name = 'Айгуль Файзуллина'
+  OR COALESCE(c.director_name, c.name) = 'Айгуль Файзуллина'
+)
+AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 736)
 LIMIT 1;
 
 INSERT INTO rental_orders (
@@ -15251,8 +17351,12 @@ SELECT
   NOW(),
   NOW()
 FROM rental_clients c
-WHERE (c.name = 'Анастасия Пашинин (НК Транс Тур)' OR c.director_name = 'Анастасия Пашинин (НК Транс Тур)')
-  AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 735)
+WHERE (
+  c.name = 'Анастасия Пашинин (НК Транс Тур)' 
+  OR c.director_name = 'Анастасия Пашинин (НК Транс Тур)'
+  OR COALESCE(c.director_name, c.name) = 'Анастасия Пашинин (НК Транс Тур)'
+)
+AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 735)
 LIMIT 1;
 
 INSERT INTO rental_orders (
@@ -15280,8 +17384,12 @@ SELECT
   NOW(),
   NOW()
 FROM rental_clients c
-WHERE (c.name = 'Эдик Заказы для групп' OR c.director_name = 'Эдик Заказы для групп')
-  AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 734)
+WHERE (
+  c.name = 'Эдик Заказы для групп' 
+  OR c.director_name = 'Эдик Заказы для групп'
+  OR COALESCE(c.director_name, c.name) = 'Эдик Заказы для групп'
+)
+AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 734)
 LIMIT 1;
 
 INSERT INTO rental_orders (
@@ -15309,8 +17417,12 @@ SELECT
   NOW(),
   NOW()
 FROM rental_clients c
-WHERE (c.name = 'Эдик Заказы для групп' OR c.director_name = 'Эдик Заказы для групп')
-  AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 733)
+WHERE (
+  c.name = 'Эдик Заказы для групп' 
+  OR c.director_name = 'Эдик Заказы для групп'
+  OR COALESCE(c.director_name, c.name) = 'Эдик Заказы для групп'
+)
+AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 733)
 LIMIT 1;
 
 INSERT INTO rental_orders (
@@ -15338,8 +17450,12 @@ SELECT
   NOW(),
   NOW()
 FROM rental_clients c
-WHERE (c.name = 'Эдик Заказы для групп' OR c.director_name = 'Эдик Заказы для групп')
-  AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 732)
+WHERE (
+  c.name = 'Эдик Заказы для групп' 
+  OR c.director_name = 'Эдик Заказы для групп'
+  OR COALESCE(c.director_name, c.name) = 'Эдик Заказы для групп'
+)
+AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 732)
 LIMIT 1;
 
 INSERT INTO rental_orders (
@@ -15367,8 +17483,12 @@ SELECT
   NOW(),
   NOW()
 FROM rental_clients c
-WHERE (c.name = 'Эдик Заказы для групп' OR c.director_name = 'Эдик Заказы для групп')
-  AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 731)
+WHERE (
+  c.name = 'Эдик Заказы для групп' 
+  OR c.director_name = 'Эдик Заказы для групп'
+  OR COALESCE(c.director_name, c.name) = 'Эдик Заказы для групп'
+)
+AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 731)
 LIMIT 1;
 
 INSERT INTO rental_orders (
@@ -15396,8 +17516,12 @@ SELECT
   NOW(),
   NOW()
 FROM rental_clients c
-WHERE (c.name = 'Эдик Заказы для групп' OR c.director_name = 'Эдик Заказы для групп')
-  AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 730)
+WHERE (
+  c.name = 'Эдик Заказы для групп' 
+  OR c.director_name = 'Эдик Заказы для групп'
+  OR COALESCE(c.director_name, c.name) = 'Эдик Заказы для групп'
+)
+AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 730)
 LIMIT 1;
 
 INSERT INTO rental_orders (
@@ -15425,8 +17549,12 @@ SELECT
   NOW(),
   NOW()
 FROM rental_clients c
-WHERE (c.name = 'Эдик Заказы для групп' OR c.director_name = 'Эдик Заказы для групп')
-  AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 729)
+WHERE (
+  c.name = 'Эдик Заказы для групп' 
+  OR c.director_name = 'Эдик Заказы для групп'
+  OR COALESCE(c.director_name, c.name) = 'Эдик Заказы для групп'
+)
+AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 729)
 LIMIT 1;
 
 INSERT INTO rental_orders (
@@ -15454,8 +17582,12 @@ SELECT
   NOW(),
   NOW()
 FROM rental_clients c
-WHERE (c.name = 'Эдик Заказы для групп' OR c.director_name = 'Эдик Заказы для групп')
-  AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 728)
+WHERE (
+  c.name = 'Эдик Заказы для групп' 
+  OR c.director_name = 'Эдик Заказы для групп'
+  OR COALESCE(c.director_name, c.name) = 'Эдик Заказы для групп'
+)
+AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 728)
 LIMIT 1;
 
 INSERT INTO rental_orders (
@@ -15483,8 +17615,12 @@ SELECT
   NOW(),
   NOW()
 FROM rental_clients c
-WHERE (c.name = 'Эдик Заказы для групп' OR c.director_name = 'Эдик Заказы для групп')
-  AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 727)
+WHERE (
+  c.name = 'Эдик Заказы для групп' 
+  OR c.director_name = 'Эдик Заказы для групп'
+  OR COALESCE(c.director_name, c.name) = 'Эдик Заказы для групп'
+)
+AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 727)
 LIMIT 1;
 
 INSERT INTO rental_orders (
@@ -15512,8 +17648,12 @@ SELECT
   NOW(),
   NOW()
 FROM rental_clients c
-WHERE (c.name = 'Эдик Заказы для групп' OR c.director_name = 'Эдик Заказы для групп')
-  AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 726)
+WHERE (
+  c.name = 'Эдик Заказы для групп' 
+  OR c.director_name = 'Эдик Заказы для групп'
+  OR COALESCE(c.director_name, c.name) = 'Эдик Заказы для групп'
+)
+AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 726)
 LIMIT 1;
 
 INSERT INTO rental_orders (
@@ -15541,8 +17681,12 @@ SELECT
   NOW(),
   NOW()
 FROM rental_clients c
-WHERE (c.name = 'Эдик Заказы для групп' OR c.director_name = 'Эдик Заказы для групп')
-  AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 725)
+WHERE (
+  c.name = 'Эдик Заказы для групп' 
+  OR c.director_name = 'Эдик Заказы для групп'
+  OR COALESCE(c.director_name, c.name) = 'Эдик Заказы для групп'
+)
+AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 725)
 LIMIT 1;
 
 INSERT INTO rental_orders (
@@ -15570,8 +17714,12 @@ SELECT
   NOW(),
   NOW()
 FROM rental_clients c
-WHERE (c.name = 'Екатерина' OR c.director_name = 'Екатерина')
-  AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 724)
+WHERE (
+  c.name = 'Екатерина' 
+  OR c.director_name = 'Екатерина'
+  OR COALESCE(c.director_name, c.name) = 'Екатерина'
+)
+AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 724)
 LIMIT 1;
 
 INSERT INTO rental_orders (
@@ -15599,8 +17747,12 @@ SELECT
   NOW(),
   NOW()
 FROM rental_clients c
-WHERE (c.name = 'Александра (Александрия)' OR c.director_name = 'Александра (Александрия)')
-  AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 723)
+WHERE (
+  c.name = 'Александра (Александрия)' 
+  OR c.director_name = 'Александра (Александрия)'
+  OR COALESCE(c.director_name, c.name) = 'Александра (Александрия)'
+)
+AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 723)
 LIMIT 1;
 
 INSERT INTO rental_orders (
@@ -15628,8 +17780,12 @@ SELECT
   NOW(),
   NOW()
 FROM rental_clients c
-WHERE (c.name = 'Эвелина (Инициатива)' OR c.director_name = 'Эвелина (Инициатива)')
-  AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 722)
+WHERE (
+  c.name = 'Эвелина (Инициатива)' 
+  OR c.director_name = 'Эвелина (Инициатива)'
+  OR COALESCE(c.director_name, c.name) = 'Эвелина (Инициатива)'
+)
+AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 722)
 LIMIT 1;
 
 INSERT INTO rental_orders (
@@ -15657,8 +17813,12 @@ SELECT
   NOW(),
   NOW()
 FROM rental_clients c
-WHERE (c.name = 'Любовь (ТИЦ)' OR c.director_name = 'Любовь (ТИЦ)')
-  AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 721)
+WHERE (
+  c.name = 'Любовь (ТИЦ)' 
+  OR c.director_name = 'Любовь (ТИЦ)'
+  OR COALESCE(c.director_name, c.name) = 'Любовь (ТИЦ)'
+)
+AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 721)
 LIMIT 1;
 
 INSERT INTO rental_orders (
@@ -15686,8 +17846,12 @@ SELECT
   NOW(),
   NOW()
 FROM rental_clients c
-WHERE (c.name = 'Мария Экскурсовод' OR c.director_name = 'Мария Экскурсовод')
-  AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 720)
+WHERE (
+  c.name = 'Мария Экскурсовод' 
+  OR c.director_name = 'Мария Экскурсовод'
+  OR COALESCE(c.director_name, c.name) = 'Мария Экскурсовод'
+)
+AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 720)
 LIMIT 1;
 
 INSERT INTO rental_orders (
@@ -15715,8 +17879,12 @@ SELECT
   NOW(),
   NOW()
 FROM rental_clients c
-WHERE (c.name = 'Карина (технологии путешествий)' OR c.director_name = 'Карина (технологии путешествий)')
-  AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 719)
+WHERE (
+  c.name = 'Карина (технологии путешествий)' 
+  OR c.director_name = 'Карина (технологии путешествий)'
+  OR COALESCE(c.director_name, c.name) = 'Карина (технологии путешествий)'
+)
+AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 719)
 LIMIT 1;
 
 INSERT INTO rental_orders (
@@ -15744,8 +17912,12 @@ SELECT
   NOW(),
   NOW()
 FROM rental_clients c
-WHERE (c.name = 'Ирина (Иль Мио Тур)' OR c.director_name = 'Ирина (Иль Мио Тур)')
-  AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 718)
+WHERE (
+  c.name = 'Ирина (Иль Мио Тур)' 
+  OR c.director_name = 'Ирина (Иль Мио Тур)'
+  OR COALESCE(c.director_name, c.name) = 'Ирина (Иль Мио Тур)'
+)
+AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 718)
 LIMIT 1;
 
 INSERT INTO rental_orders (
@@ -15773,8 +17945,12 @@ SELECT
   NOW(),
   NOW()
 FROM rental_clients c
-WHERE (c.name = 'Иванов Семён' OR c.director_name = 'Иванов Семён')
-  AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 716)
+WHERE (
+  c.name = 'Иванов Семён' 
+  OR c.director_name = 'Иванов Семён'
+  OR COALESCE(c.director_name, c.name) = 'Иванов Семён'
+)
+AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 716)
 LIMIT 1;
 
 INSERT INTO rental_orders (
@@ -15802,8 +17978,12 @@ SELECT
   NOW(),
   NOW()
 FROM rental_clients c
-WHERE (c.name = 'Анюта Родионова (Родина-тур)' OR c.director_name = 'Анюта Родионова (Родина-тур)')
-  AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 715)
+WHERE (
+  c.name = 'Анюта Родионова (Родина-тур)' 
+  OR c.director_name = 'Анюта Родионова (Родина-тур)'
+  OR COALESCE(c.director_name, c.name) = 'Анюта Родионова (Родина-тур)'
+)
+AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 715)
 LIMIT 1;
 
 INSERT INTO rental_orders (
@@ -15831,8 +18011,12 @@ SELECT
   NOW(),
   NOW()
 FROM rental_clients c
-WHERE (c.name = 'Ирина Пронина' OR c.director_name = 'Ирина Пронина')
-  AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 714)
+WHERE (
+  c.name = 'Ирина Пронина' 
+  OR c.director_name = 'Ирина Пронина'
+  OR COALESCE(c.director_name, c.name) = 'Ирина Пронина'
+)
+AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 714)
 LIMIT 1;
 
 INSERT INTO rental_orders (
@@ -15860,8 +18044,12 @@ SELECT
   NOW(),
   NOW()
 FROM rental_clients c
-WHERE (c.name = 'Лариса' OR c.director_name = 'Лариса')
-  AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 713)
+WHERE (
+  c.name = 'Лариса' 
+  OR c.director_name = 'Лариса'
+  OR COALESCE(c.director_name, c.name) = 'Лариса'
+)
+AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 713)
 LIMIT 1;
 
 INSERT INTO rental_orders (
@@ -15889,8 +18077,12 @@ SELECT
   NOW(),
   NOW()
 FROM rental_clients c
-WHERE (c.name = 'Рената (Твоя Казань)' OR c.director_name = 'Рената (Твоя Казань)')
-  AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 712)
+WHERE (
+  c.name = 'Рената (Твоя Казань)' 
+  OR c.director_name = 'Рената (Твоя Казань)'
+  OR COALESCE(c.director_name, c.name) = 'Рената (Твоя Казань)'
+)
+AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 712)
 LIMIT 1;
 
 INSERT INTO rental_orders (
@@ -15918,8 +18110,12 @@ SELECT
   NOW(),
   NOW()
 FROM rental_clients c
-WHERE (c.name = 'Арсен (Юнион)' OR c.director_name = 'Арсен (Юнион)')
-  AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 711)
+WHERE (
+  c.name = 'Арсен (Юнион)' 
+  OR c.director_name = 'Арсен (Юнион)'
+  OR COALESCE(c.director_name, c.name) = 'Арсен (Юнион)'
+)
+AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 711)
 LIMIT 1;
 
 INSERT INTO rental_orders (
@@ -15947,8 +18143,12 @@ SELECT
   NOW(),
   NOW()
 FROM rental_clients c
-WHERE (c.name = 'Инна Экскурсовод' OR c.director_name = 'Инна Экскурсовод')
-  AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 710)
+WHERE (
+  c.name = 'Инна Экскурсовод' 
+  OR c.director_name = 'Инна Экскурсовод'
+  OR COALESCE(c.director_name, c.name) = 'Инна Экскурсовод'
+)
+AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 710)
 LIMIT 1;
 
 INSERT INTO rental_orders (
@@ -15976,8 +18176,12 @@ SELECT
   NOW(),
   NOW()
 FROM rental_clients c
-WHERE (c.name = 'Татьяна Чуб' OR c.director_name = 'Татьяна Чуб')
-  AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 709)
+WHERE (
+  c.name = 'Татьяна Чуб' 
+  OR c.director_name = 'Татьяна Чуб'
+  OR COALESCE(c.director_name, c.name) = 'Татьяна Чуб'
+)
+AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 709)
 LIMIT 1;
 
 INSERT INTO rental_orders (
@@ -16005,8 +18209,12 @@ SELECT
   NOW(),
   NOW()
 FROM rental_clients c
-WHERE (c.name = 'Ляйсан (Казань 360)' OR c.director_name = 'Ляйсан (Казань 360)')
-  AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 708)
+WHERE (
+  c.name = 'Ляйсан (Казань 360)' 
+  OR c.director_name = 'Ляйсан (Казань 360)'
+  OR COALESCE(c.director_name, c.name) = 'Ляйсан (Казань 360)'
+)
+AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 708)
 LIMIT 1;
 
 INSERT INTO rental_orders (
@@ -16034,8 +18242,12 @@ SELECT
   NOW(),
   NOW()
 FROM rental_clients c
-WHERE (c.name = 'Ирина (Иль Мио Тур)' OR c.director_name = 'Ирина (Иль Мио Тур)')
-  AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 707)
+WHERE (
+  c.name = 'Ирина (Иль Мио Тур)' 
+  OR c.director_name = 'Ирина (Иль Мио Тур)'
+  OR COALESCE(c.director_name, c.name) = 'Ирина (Иль Мио Тур)'
+)
+AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 707)
 LIMIT 1;
 
 INSERT INTO rental_orders (
@@ -16063,8 +18275,12 @@ SELECT
   NOW(),
   NOW()
 FROM rental_clients c
-WHERE (c.name = 'Ирина (Иль Мио Тур)' OR c.director_name = 'Ирина (Иль Мио Тур)')
-  AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 706)
+WHERE (
+  c.name = 'Ирина (Иль Мио Тур)' 
+  OR c.director_name = 'Ирина (Иль Мио Тур)'
+  OR COALESCE(c.director_name, c.name) = 'Ирина (Иль Мио Тур)'
+)
+AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 706)
 LIMIT 1;
 
 INSERT INTO rental_orders (
@@ -16092,8 +18308,12 @@ SELECT
   NOW(),
   NOW()
 FROM rental_clients c
-WHERE (c.name = 'Иванов Семён' OR c.director_name = 'Иванов Семён')
-  AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 705)
+WHERE (
+  c.name = 'Иванов Семён' 
+  OR c.director_name = 'Иванов Семён'
+  OR COALESCE(c.director_name, c.name) = 'Иванов Семён'
+)
+AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 705)
 LIMIT 1;
 
 INSERT INTO rental_orders (
@@ -16121,8 +18341,12 @@ SELECT
   NOW(),
   NOW()
 FROM rental_clients c
-WHERE (c.name = 'Любовь (ТИЦ)' OR c.director_name = 'Любовь (ТИЦ)')
-  AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 704)
+WHERE (
+  c.name = 'Любовь (ТИЦ)' 
+  OR c.director_name = 'Любовь (ТИЦ)'
+  OR COALESCE(c.director_name, c.name) = 'Любовь (ТИЦ)'
+)
+AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 704)
 LIMIT 1;
 
 INSERT INTO rental_orders (
@@ -16150,8 +18374,12 @@ SELECT
   NOW(),
   NOW()
 FROM rental_clients c
-WHERE (c.name = 'Любовь (ТИЦ)' OR c.director_name = 'Любовь (ТИЦ)')
-  AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 703)
+WHERE (
+  c.name = 'Любовь (ТИЦ)' 
+  OR c.director_name = 'Любовь (ТИЦ)'
+  OR COALESCE(c.director_name, c.name) = 'Любовь (ТИЦ)'
+)
+AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 703)
 LIMIT 1;
 
 INSERT INTO rental_orders (
@@ -16179,8 +18407,12 @@ SELECT
   NOW(),
   NOW()
 FROM rental_clients c
-WHERE (c.name = 'Альберт (КТ)' OR c.director_name = 'Альберт (КТ)')
-  AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 702)
+WHERE (
+  c.name = 'Альберт (КТ)' 
+  OR c.director_name = 'Альберт (КТ)'
+  OR COALESCE(c.director_name, c.name) = 'Альберт (КТ)'
+)
+AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 702)
 LIMIT 1;
 
 INSERT INTO rental_orders (
@@ -16208,8 +18440,12 @@ SELECT
   NOW(),
   NOW()
 FROM rental_clients c
-WHERE (c.name = 'Татьяна (Гольфстрим)' OR c.director_name = 'Татьяна (Гольфстрим)')
-  AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 701)
+WHERE (
+  c.name = 'Татьяна (Гольфстрим)' 
+  OR c.director_name = 'Татьяна (Гольфстрим)'
+  OR COALESCE(c.director_name, c.name) = 'Татьяна (Гольфстрим)'
+)
+AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 701)
 LIMIT 1;
 
 INSERT INTO rental_orders (
@@ -16237,8 +18473,12 @@ SELECT
   NOW(),
   NOW()
 FROM rental_clients c
-WHERE (c.name = 'Эдик Заказы для групп' OR c.director_name = 'Эдик Заказы для групп')
-  AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 700)
+WHERE (
+  c.name = 'Эдик Заказы для групп' 
+  OR c.director_name = 'Эдик Заказы для групп'
+  OR COALESCE(c.director_name, c.name) = 'Эдик Заказы для групп'
+)
+AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 700)
 LIMIT 1;
 
 INSERT INTO rental_orders (
@@ -16266,8 +18506,12 @@ SELECT
   NOW(),
   NOW()
 FROM rental_clients c
-WHERE (c.name = 'Эдик Заказы для групп' OR c.director_name = 'Эдик Заказы для групп')
-  AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 699)
+WHERE (
+  c.name = 'Эдик Заказы для групп' 
+  OR c.director_name = 'Эдик Заказы для групп'
+  OR COALESCE(c.director_name, c.name) = 'Эдик Заказы для групп'
+)
+AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 699)
 LIMIT 1;
 
 INSERT INTO rental_orders (
@@ -16295,8 +18539,12 @@ SELECT
   NOW(),
   NOW()
 FROM rental_clients c
-WHERE (c.name = 'Валентина Экскурсовод' OR c.director_name = 'Валентина Экскурсовод')
-  AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 698)
+WHERE (
+  c.name = 'Валентина Экскурсовод' 
+  OR c.director_name = 'Валентина Экскурсовод'
+  OR COALESCE(c.director_name, c.name) = 'Валентина Экскурсовод'
+)
+AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 698)
 LIMIT 1;
 
 INSERT INTO rental_orders (
@@ -16324,8 +18572,12 @@ SELECT
   NOW(),
   NOW()
 FROM rental_clients c
-WHERE (c.name = 'Гульнара' OR c.director_name = 'Гульнара')
-  AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 697)
+WHERE (
+  c.name = 'Гульнара' 
+  OR c.director_name = 'Гульнара'
+  OR COALESCE(c.director_name, c.name) = 'Гульнара'
+)
+AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 697)
 LIMIT 1;
 
 INSERT INTO rental_orders (
@@ -16353,8 +18605,12 @@ SELECT
   NOW(),
   NOW()
 FROM rental_clients c
-WHERE (c.name = 'Твой Гид' OR c.director_name = 'Твой Гид')
-  AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 696)
+WHERE (
+  c.name = 'Твой Гид' 
+  OR c.director_name = 'Твой Гид'
+  OR COALESCE(c.director_name, c.name) = 'Твой Гид'
+)
+AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 696)
 LIMIT 1;
 
 INSERT INTO rental_orders (
@@ -16382,8 +18638,12 @@ SELECT
   NOW(),
   NOW()
 FROM rental_clients c
-WHERE (c.name = 'Татьяна (Гольфстрим)' OR c.director_name = 'Татьяна (Гольфстрим)')
-  AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 694)
+WHERE (
+  c.name = 'Татьяна (Гольфстрим)' 
+  OR c.director_name = 'Татьяна (Гольфстрим)'
+  OR COALESCE(c.director_name, c.name) = 'Татьяна (Гольфстрим)'
+)
+AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 694)
 LIMIT 1;
 
 INSERT INTO rental_orders (
@@ -16411,8 +18671,12 @@ SELECT
   NOW(),
   NOW()
 FROM rental_clients c
-WHERE (c.name = 'Татьяна (Гольфстрим)' OR c.director_name = 'Татьяна (Гольфстрим)')
-  AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 693)
+WHERE (
+  c.name = 'Татьяна (Гольфстрим)' 
+  OR c.director_name = 'Татьяна (Гольфстрим)'
+  OR COALESCE(c.director_name, c.name) = 'Татьяна (Гольфстрим)'
+)
+AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 693)
 LIMIT 1;
 
 INSERT INTO rental_orders (
@@ -16440,8 +18704,12 @@ SELECT
   NOW(),
   NOW()
 FROM rental_clients c
-WHERE (c.name = 'Татьяна (Гольфстрим)' OR c.director_name = 'Татьяна (Гольфстрим)')
-  AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 692)
+WHERE (
+  c.name = 'Татьяна (Гольфстрим)' 
+  OR c.director_name = 'Татьяна (Гольфстрим)'
+  OR COALESCE(c.director_name, c.name) = 'Татьяна (Гольфстрим)'
+)
+AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 692)
 LIMIT 1;
 
 INSERT INTO rental_orders (
@@ -16469,8 +18737,12 @@ SELECT
   NOW(),
   NOW()
 FROM rental_clients c
-WHERE (c.name = 'Татьяна (Гольфстрим)' OR c.director_name = 'Татьяна (Гольфстрим)')
-  AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 691)
+WHERE (
+  c.name = 'Татьяна (Гольфстрим)' 
+  OR c.director_name = 'Татьяна (Гольфстрим)'
+  OR COALESCE(c.director_name, c.name) = 'Татьяна (Гольфстрим)'
+)
+AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 691)
 LIMIT 1;
 
 INSERT INTO rental_orders (
@@ -16498,8 +18770,12 @@ SELECT
   NOW(),
   NOW()
 FROM rental_clients c
-WHERE (c.name = 'Любовь (ТИЦ)' OR c.director_name = 'Любовь (ТИЦ)')
-  AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 690)
+WHERE (
+  c.name = 'Любовь (ТИЦ)' 
+  OR c.director_name = 'Любовь (ТИЦ)'
+  OR COALESCE(c.director_name, c.name) = 'Любовь (ТИЦ)'
+)
+AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 690)
 LIMIT 1;
 
 INSERT INTO rental_orders (
@@ -16527,8 +18803,12 @@ SELECT
   NOW(),
   NOW()
 FROM rental_clients c
-WHERE (c.name = 'Рената (Твоя Казань)' OR c.director_name = 'Рената (Твоя Казань)')
-  AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 688)
+WHERE (
+  c.name = 'Рената (Твоя Казань)' 
+  OR c.director_name = 'Рената (Твоя Казань)'
+  OR COALESCE(c.director_name, c.name) = 'Рената (Твоя Казань)'
+)
+AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 688)
 LIMIT 1;
 
 INSERT INTO rental_orders (
@@ -16556,8 +18836,12 @@ SELECT
   NOW(),
   NOW()
 FROM rental_clients c
-WHERE (c.name = 'Татьяна (Агентство Удачи)' OR c.director_name = 'Татьяна (Агентство Удачи)')
-  AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 687)
+WHERE (
+  c.name = 'Татьяна (Агентство Удачи)' 
+  OR c.director_name = 'Татьяна (Агентство Удачи)'
+  OR COALESCE(c.director_name, c.name) = 'Татьяна (Агентство Удачи)'
+)
+AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 687)
 LIMIT 1;
 
 INSERT INTO rental_orders (
@@ -16585,8 +18869,12 @@ SELECT
   NOW(),
   NOW()
 FROM rental_clients c
-WHERE (c.name = 'Любовь (ТИЦ)' OR c.director_name = 'Любовь (ТИЦ)')
-  AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 686)
+WHERE (
+  c.name = 'Любовь (ТИЦ)' 
+  OR c.director_name = 'Любовь (ТИЦ)'
+  OR COALESCE(c.director_name, c.name) = 'Любовь (ТИЦ)'
+)
+AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 686)
 LIMIT 1;
 
 INSERT INTO rental_orders (
@@ -16614,8 +18902,12 @@ SELECT
   NOW(),
   NOW()
 FROM rental_clients c
-WHERE (c.name = 'Любовь (ТИЦ)' OR c.director_name = 'Любовь (ТИЦ)')
-  AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 685)
+WHERE (
+  c.name = 'Любовь (ТИЦ)' 
+  OR c.director_name = 'Любовь (ТИЦ)'
+  OR COALESCE(c.director_name, c.name) = 'Любовь (ТИЦ)'
+)
+AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 685)
 LIMIT 1;
 
 INSERT INTO rental_orders (
@@ -16643,8 +18935,12 @@ SELECT
   NOW(),
   NOW()
 FROM rental_clients c
-WHERE (c.name = 'Андрей (Экскурс)' OR c.director_name = 'Андрей (Экскурс)')
-  AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 684)
+WHERE (
+  c.name = 'Андрей (Экскурс)' 
+  OR c.director_name = 'Андрей (Экскурс)'
+  OR COALESCE(c.director_name, c.name) = 'Андрей (Экскурс)'
+)
+AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 684)
 LIMIT 1;
 
 INSERT INTO rental_orders (
@@ -16672,8 +18968,12 @@ SELECT
   NOW(),
   NOW()
 FROM rental_clients c
-WHERE (c.name = 'Любовь (ТИЦ)' OR c.director_name = 'Любовь (ТИЦ)')
-  AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 683)
+WHERE (
+  c.name = 'Любовь (ТИЦ)' 
+  OR c.director_name = 'Любовь (ТИЦ)'
+  OR COALESCE(c.director_name, c.name) = 'Любовь (ТИЦ)'
+)
+AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 683)
 LIMIT 1;
 
 INSERT INTO rental_orders (
@@ -16701,8 +19001,12 @@ SELECT
   NOW(),
   NOW()
 FROM rental_clients c
-WHERE (c.name = 'Яна (Вариот)' OR c.director_name = 'Яна (Вариот)')
-  AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 682)
+WHERE (
+  c.name = 'Яна (Вариот)' 
+  OR c.director_name = 'Яна (Вариот)'
+  OR COALESCE(c.director_name, c.name) = 'Яна (Вариот)'
+)
+AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 682)
 LIMIT 1;
 
 INSERT INTO rental_orders (
@@ -16730,8 +19034,12 @@ SELECT
   NOW(),
   NOW()
 FROM rental_clients c
-WHERE (c.name = 'Карина (технологии путешествий)' OR c.director_name = 'Карина (технологии путешествий)')
-  AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 681)
+WHERE (
+  c.name = 'Карина (технологии путешествий)' 
+  OR c.director_name = 'Карина (технологии путешествий)'
+  OR COALESCE(c.director_name, c.name) = 'Карина (технологии путешествий)'
+)
+AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 681)
 LIMIT 1;
 
 INSERT INTO rental_orders (
@@ -16759,8 +19067,12 @@ SELECT
   NOW(),
   NOW()
 FROM rental_clients c
-WHERE (c.name = 'Ольга' OR c.director_name = 'Ольга')
-  AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 680)
+WHERE (
+  c.name = 'Ольга' 
+  OR c.director_name = 'Ольга'
+  OR COALESCE(c.director_name, c.name) = 'Ольга'
+)
+AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 680)
 LIMIT 1;
 
 INSERT INTO rental_orders (
@@ -16788,8 +19100,12 @@ SELECT
   NOW(),
   NOW()
 FROM rental_clients c
-WHERE (c.name = 'Карина (технологии путешествий)' OR c.director_name = 'Карина (технологии путешествий)')
-  AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 678)
+WHERE (
+  c.name = 'Карина (технологии путешествий)' 
+  OR c.director_name = 'Карина (технологии путешествий)'
+  OR COALESCE(c.director_name, c.name) = 'Карина (технологии путешествий)'
+)
+AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 678)
 LIMIT 1;
 
 INSERT INTO rental_orders (
@@ -16817,8 +19133,12 @@ SELECT
   NOW(),
   NOW()
 FROM rental_clients c
-WHERE (c.name = 'Екатерина' OR c.director_name = 'Екатерина')
-  AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 677)
+WHERE (
+  c.name = 'Екатерина' 
+  OR c.director_name = 'Екатерина'
+  OR COALESCE(c.director_name, c.name) = 'Екатерина'
+)
+AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 677)
 LIMIT 1;
 
 INSERT INTO rental_orders (
@@ -16846,8 +19166,12 @@ SELECT
   NOW(),
   NOW()
 FROM rental_clients c
-WHERE (c.name = 'Лариса Позднякова' OR c.director_name = 'Лариса Позднякова')
-  AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 676)
+WHERE (
+  c.name = 'Лариса Позднякова' 
+  OR c.director_name = 'Лариса Позднякова'
+  OR COALESCE(c.director_name, c.name) = 'Лариса Позднякова'
+)
+AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 676)
 LIMIT 1;
 
 INSERT INTO rental_orders (
@@ -16875,8 +19199,12 @@ SELECT
   NOW(),
   NOW()
 FROM rental_clients c
-WHERE (c.name = 'Сергей (Авангард)' OR c.director_name = 'Сергей (Авангард)')
-  AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 675)
+WHERE (
+  c.name = 'Сергей (Авангард)' 
+  OR c.director_name = 'Сергей (Авангард)'
+  OR COALESCE(c.director_name, c.name) = 'Сергей (Авангард)'
+)
+AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 675)
 LIMIT 1;
 
 INSERT INTO rental_orders (
@@ -16904,8 +19232,12 @@ SELECT
   NOW(),
   NOW()
 FROM rental_clients c
-WHERE (c.name = 'Наталья' OR c.director_name = 'Наталья')
-  AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 674)
+WHERE (
+  c.name = 'Наталья' 
+  OR c.director_name = 'Наталья'
+  OR COALESCE(c.director_name, c.name) = 'Наталья'
+)
+AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 674)
 LIMIT 1;
 
 INSERT INTO rental_orders (
@@ -16933,8 +19265,12 @@ SELECT
   NOW(),
   NOW()
 FROM rental_clients c
-WHERE (c.name = 'Любовь (ТИЦ)' OR c.director_name = 'Любовь (ТИЦ)')
-  AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 672)
+WHERE (
+  c.name = 'Любовь (ТИЦ)' 
+  OR c.director_name = 'Любовь (ТИЦ)'
+  OR COALESCE(c.director_name, c.name) = 'Любовь (ТИЦ)'
+)
+AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 672)
 LIMIT 1;
 
 INSERT INTO rental_orders (
@@ -16962,8 +19298,12 @@ SELECT
   NOW(),
   NOW()
 FROM rental_clients c
-WHERE (c.name = 'Альберт (КТ)' OR c.director_name = 'Альберт (КТ)')
-  AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 671)
+WHERE (
+  c.name = 'Альберт (КТ)' 
+  OR c.director_name = 'Альберт (КТ)'
+  OR COALESCE(c.director_name, c.name) = 'Альберт (КТ)'
+)
+AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 671)
 LIMIT 1;
 
 INSERT INTO rental_orders (
@@ -16991,8 +19331,12 @@ SELECT
   NOW(),
   NOW()
 FROM rental_clients c
-WHERE (c.name = 'Любовь (ТИЦ)' OR c.director_name = 'Любовь (ТИЦ)')
-  AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 670)
+WHERE (
+  c.name = 'Любовь (ТИЦ)' 
+  OR c.director_name = 'Любовь (ТИЦ)'
+  OR COALESCE(c.director_name, c.name) = 'Любовь (ТИЦ)'
+)
+AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 670)
 LIMIT 1;
 
 INSERT INTO rental_orders (
@@ -17020,8 +19364,12 @@ SELECT
   NOW(),
   NOW()
 FROM rental_clients c
-WHERE (c.name = 'Любовь (ТИЦ)' OR c.director_name = 'Любовь (ТИЦ)')
-  AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 669)
+WHERE (
+  c.name = 'Любовь (ТИЦ)' 
+  OR c.director_name = 'Любовь (ТИЦ)'
+  OR COALESCE(c.director_name, c.name) = 'Любовь (ТИЦ)'
+)
+AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 669)
 LIMIT 1;
 
 INSERT INTO rental_orders (
@@ -17049,8 +19397,12 @@ SELECT
   NOW(),
   NOW()
 FROM rental_clients c
-WHERE (c.name = 'Андрей (Экскурс)' OR c.director_name = 'Андрей (Экскурс)')
-  AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 668)
+WHERE (
+  c.name = 'Андрей (Экскурс)' 
+  OR c.director_name = 'Андрей (Экскурс)'
+  OR COALESCE(c.director_name, c.name) = 'Андрей (Экскурс)'
+)
+AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 668)
 LIMIT 1;
 
 INSERT INTO rental_orders (
@@ -17078,8 +19430,12 @@ SELECT
   NOW(),
   NOW()
 FROM rental_clients c
-WHERE (c.name = 'Сергей' OR c.director_name = 'Сергей')
-  AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 667)
+WHERE (
+  c.name = 'Сергей' 
+  OR c.director_name = 'Сергей'
+  OR COALESCE(c.director_name, c.name) = 'Сергей'
+)
+AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 667)
 LIMIT 1;
 
 INSERT INTO rental_orders (
@@ -17107,8 +19463,12 @@ SELECT
   NOW(),
   NOW()
 FROM rental_clients c
-WHERE (c.name = 'Любовь (ТИЦ)' OR c.director_name = 'Любовь (ТИЦ)')
-  AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 666)
+WHERE (
+  c.name = 'Любовь (ТИЦ)' 
+  OR c.director_name = 'Любовь (ТИЦ)'
+  OR COALESCE(c.director_name, c.name) = 'Любовь (ТИЦ)'
+)
+AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 666)
 LIMIT 1;
 
 INSERT INTO rental_orders (
@@ -17136,8 +19496,12 @@ SELECT
   NOW(),
   NOW()
 FROM rental_clients c
-WHERE (c.name = 'Галина (Тур Урал)' OR c.director_name = 'Галина (Тур Урал)')
-  AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 664)
+WHERE (
+  c.name = 'Галина (Тур Урал)' 
+  OR c.director_name = 'Галина (Тур Урал)'
+  OR COALESCE(c.director_name, c.name) = 'Галина (Тур Урал)'
+)
+AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 664)
 LIMIT 1;
 
 INSERT INTO rental_orders (
@@ -17165,8 +19529,12 @@ SELECT
   NOW(),
   NOW()
 FROM rental_clients c
-WHERE (c.name = 'Гузель (Юралс)' OR c.director_name = 'Гузель (Юралс)')
-  AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 663)
+WHERE (
+  c.name = 'Гузель (Юралс)' 
+  OR c.director_name = 'Гузель (Юралс)'
+  OR COALESCE(c.director_name, c.name) = 'Гузель (Юралс)'
+)
+AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 663)
 LIMIT 1;
 
 INSERT INTO rental_orders (
@@ -17194,8 +19562,12 @@ SELECT
   NOW(),
   NOW()
 FROM rental_clients c
-WHERE (c.name = 'Галина (Тур Урал)' OR c.director_name = 'Галина (Тур Урал)')
-  AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 662)
+WHERE (
+  c.name = 'Галина (Тур Урал)' 
+  OR c.director_name = 'Галина (Тур Урал)'
+  OR COALESCE(c.director_name, c.name) = 'Галина (Тур Урал)'
+)
+AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 662)
 LIMIT 1;
 
 INSERT INTO rental_orders (
@@ -17223,8 +19595,12 @@ SELECT
   NOW(),
   NOW()
 FROM rental_clients c
-WHERE (c.name = 'Юлия (Рыжий Слон)' OR c.director_name = 'Юлия (Рыжий Слон)')
-  AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 661)
+WHERE (
+  c.name = 'Юлия (Рыжий Слон)' 
+  OR c.director_name = 'Юлия (Рыжий Слон)'
+  OR COALESCE(c.director_name, c.name) = 'Юлия (Рыжий Слон)'
+)
+AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 661)
 LIMIT 1;
 
 INSERT INTO rental_orders (
@@ -17252,8 +19628,12 @@ SELECT
   NOW(),
   NOW()
 FROM rental_clients c
-WHERE (c.name = 'Альберт (КТ)' OR c.director_name = 'Альберт (КТ)')
-  AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 660)
+WHERE (
+  c.name = 'Альберт (КТ)' 
+  OR c.director_name = 'Альберт (КТ)'
+  OR COALESCE(c.director_name, c.name) = 'Альберт (КТ)'
+)
+AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 660)
 LIMIT 1;
 
 INSERT INTO rental_orders (
@@ -17281,8 +19661,12 @@ SELECT
   NOW(),
   NOW()
 FROM rental_clients c
-WHERE (c.name = 'Галина (Тур Урал)' OR c.director_name = 'Галина (Тур Урал)')
-  AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 659)
+WHERE (
+  c.name = 'Галина (Тур Урал)' 
+  OR c.director_name = 'Галина (Тур Урал)'
+  OR COALESCE(c.director_name, c.name) = 'Галина (Тур Урал)'
+)
+AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 659)
 LIMIT 1;
 
 INSERT INTO rental_orders (
@@ -17310,8 +19694,12 @@ SELECT
   NOW(),
   NOW()
 FROM rental_clients c
-WHERE (c.name = 'Наталья' OR c.director_name = 'Наталья')
-  AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 658)
+WHERE (
+  c.name = 'Наталья' 
+  OR c.director_name = 'Наталья'
+  OR COALESCE(c.director_name, c.name) = 'Наталья'
+)
+AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 658)
 LIMIT 1;
 
 INSERT INTO rental_orders (
@@ -17339,8 +19727,12 @@ SELECT
   NOW(),
   NOW()
 FROM rental_clients c
-WHERE (c.name = 'Арсен (Юнион)' OR c.director_name = 'Арсен (Юнион)')
-  AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 657)
+WHERE (
+  c.name = 'Арсен (Юнион)' 
+  OR c.director_name = 'Арсен (Юнион)'
+  OR COALESCE(c.director_name, c.name) = 'Арсен (Юнион)'
+)
+AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 657)
 LIMIT 1;
 
 INSERT INTO rental_orders (
@@ -17368,8 +19760,12 @@ SELECT
   NOW(),
   NOW()
 FROM rental_clients c
-WHERE (c.name = 'Эвелина (Инициатива)' OR c.director_name = 'Эвелина (Инициатива)')
-  AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 656)
+WHERE (
+  c.name = 'Эвелина (Инициатива)' 
+  OR c.director_name = 'Эвелина (Инициатива)'
+  OR COALESCE(c.director_name, c.name) = 'Эвелина (Инициатива)'
+)
+AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 656)
 LIMIT 1;
 
 INSERT INTO rental_orders (
@@ -17397,8 +19793,12 @@ SELECT
   NOW(),
   NOW()
 FROM rental_clients c
-WHERE (c.name = 'Наталья Москва' OR c.director_name = 'Наталья Москва')
-  AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 655)
+WHERE (
+  c.name = 'Наталья Москва' 
+  OR c.director_name = 'Наталья Москва'
+  OR COALESCE(c.director_name, c.name) = 'Наталья Москва'
+)
+AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 655)
 LIMIT 1;
 
 INSERT INTO rental_orders (
@@ -17426,8 +19826,12 @@ SELECT
   NOW(),
   NOW()
 FROM rental_clients c
-WHERE (c.name = 'Инна Экскурсовод' OR c.director_name = 'Инна Экскурсовод')
-  AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 654)
+WHERE (
+  c.name = 'Инна Экскурсовод' 
+  OR c.director_name = 'Инна Экскурсовод'
+  OR COALESCE(c.director_name, c.name) = 'Инна Экскурсовод'
+)
+AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 654)
 LIMIT 1;
 
 INSERT INTO rental_orders (
@@ -17455,8 +19859,12 @@ SELECT
   NOW(),
   NOW()
 FROM rental_clients c
-WHERE (c.name = 'Алина Сафина' OR c.director_name = 'Алина Сафина')
-  AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 653)
+WHERE (
+  c.name = 'Алина Сафина' 
+  OR c.director_name = 'Алина Сафина'
+  OR COALESCE(c.director_name, c.name) = 'Алина Сафина'
+)
+AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 653)
 LIMIT 1;
 
 INSERT INTO rental_orders (
@@ -17484,8 +19892,12 @@ SELECT
   NOW(),
   NOW()
 FROM rental_clients c
-WHERE (c.name = 'Эдик Заказы для групп' OR c.director_name = 'Эдик Заказы для групп')
-  AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 652)
+WHERE (
+  c.name = 'Эдик Заказы для групп' 
+  OR c.director_name = 'Эдик Заказы для групп'
+  OR COALESCE(c.director_name, c.name) = 'Эдик Заказы для групп'
+)
+AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 652)
 LIMIT 1;
 
 INSERT INTO rental_orders (
@@ -17513,8 +19925,12 @@ SELECT
   NOW(),
   NOW()
 FROM rental_clients c
-WHERE (c.name = 'Альберт (КТ)' OR c.director_name = 'Альберт (КТ)')
-  AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 651)
+WHERE (
+  c.name = 'Альберт (КТ)' 
+  OR c.director_name = 'Альберт (КТ)'
+  OR COALESCE(c.director_name, c.name) = 'Альберт (КТ)'
+)
+AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 651)
 LIMIT 1;
 
 INSERT INTO rental_orders (
@@ -17542,8 +19958,12 @@ SELECT
   NOW(),
   NOW()
 FROM rental_clients c
-WHERE (c.name = 'Галия' OR c.director_name = 'Галия')
-  AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 650)
+WHERE (
+  c.name = 'Галия' 
+  OR c.director_name = 'Галия'
+  OR COALESCE(c.director_name, c.name) = 'Галия'
+)
+AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 650)
 LIMIT 1;
 
 INSERT INTO rental_orders (
@@ -17571,8 +19991,12 @@ SELECT
   NOW(),
   NOW()
 FROM rental_clients c
-WHERE (c.name = 'Светлана (Лана-тур Казань)' OR c.director_name = 'Светлана (Лана-тур Казань)')
-  AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 649)
+WHERE (
+  c.name = 'Светлана (Лана-тур Казань)' 
+  OR c.director_name = 'Светлана (Лана-тур Казань)'
+  OR COALESCE(c.director_name, c.name) = 'Светлана (Лана-тур Казань)'
+)
+AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 649)
 LIMIT 1;
 
 INSERT INTO rental_orders (
@@ -17600,8 +20024,12 @@ SELECT
   NOW(),
   NOW()
 FROM rental_clients c
-WHERE (c.name = 'Галина Рыжикова' OR c.director_name = 'Галина Рыжикова')
-  AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 648)
+WHERE (
+  c.name = 'Галина Рыжикова' 
+  OR c.director_name = 'Галина Рыжикова'
+  OR COALESCE(c.director_name, c.name) = 'Галина Рыжикова'
+)
+AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 648)
 LIMIT 1;
 
 INSERT INTO rental_orders (
@@ -17629,8 +20057,12 @@ SELECT
   NOW(),
   NOW()
 FROM rental_clients c
-WHERE (c.name = 'Вера (СК-Интур)' OR c.director_name = 'Вера (СК-Интур)')
-  AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 647)
+WHERE (
+  c.name = 'Вера (СК-Интур)' 
+  OR c.director_name = 'Вера (СК-Интур)'
+  OR COALESCE(c.director_name, c.name) = 'Вера (СК-Интур)'
+)
+AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 647)
 LIMIT 1;
 
 INSERT INTO rental_orders (
@@ -17658,8 +20090,12 @@ SELECT
   NOW(),
   NOW()
 FROM rental_clients c
-WHERE (c.name = 'Любовь (ТИЦ)' OR c.director_name = 'Любовь (ТИЦ)')
-  AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 646)
+WHERE (
+  c.name = 'Любовь (ТИЦ)' 
+  OR c.director_name = 'Любовь (ТИЦ)'
+  OR COALESCE(c.director_name, c.name) = 'Любовь (ТИЦ)'
+)
+AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 646)
 LIMIT 1;
 
 INSERT INTO rental_orders (
@@ -17687,8 +20123,12 @@ SELECT
   NOW(),
   NOW()
 FROM rental_clients c
-WHERE (c.name = 'Эвелина (Инициатива)' OR c.director_name = 'Эвелина (Инициатива)')
-  AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 645)
+WHERE (
+  c.name = 'Эвелина (Инициатива)' 
+  OR c.director_name = 'Эвелина (Инициатива)'
+  OR COALESCE(c.director_name, c.name) = 'Эвелина (Инициатива)'
+)
+AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 645)
 LIMIT 1;
 
 INSERT INTO rental_orders (
@@ -17716,8 +20156,12 @@ SELECT
   NOW(),
   NOW()
 FROM rental_clients c
-WHERE (c.name = 'Эвелина (Инициатива)' OR c.director_name = 'Эвелина (Инициатива)')
-  AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 644)
+WHERE (
+  c.name = 'Эвелина (Инициатива)' 
+  OR c.director_name = 'Эвелина (Инициатива)'
+  OR COALESCE(c.director_name, c.name) = 'Эвелина (Инициатива)'
+)
+AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 644)
 LIMIT 1;
 
 INSERT INTO rental_orders (
@@ -17745,8 +20189,12 @@ SELECT
   NOW(),
   NOW()
 FROM rental_clients c
-WHERE (c.name = 'Эвелина (Инициатива)' OR c.director_name = 'Эвелина (Инициатива)')
-  AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 643)
+WHERE (
+  c.name = 'Эвелина (Инициатива)' 
+  OR c.director_name = 'Эвелина (Инициатива)'
+  OR COALESCE(c.director_name, c.name) = 'Эвелина (Инициатива)'
+)
+AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 643)
 LIMIT 1;
 
 INSERT INTO rental_orders (
@@ -17774,8 +20222,12 @@ SELECT
   NOW(),
   NOW()
 FROM rental_clients c
-WHERE (c.name = 'Зельфира' OR c.director_name = 'Зельфира')
-  AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 642)
+WHERE (
+  c.name = 'Зельфира' 
+  OR c.director_name = 'Зельфира'
+  OR COALESCE(c.director_name, c.name) = 'Зельфира'
+)
+AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 642)
 LIMIT 1;
 
 INSERT INTO rental_orders (
@@ -17803,8 +20255,12 @@ SELECT
   NOW(),
   NOW()
 FROM rental_clients c
-WHERE (c.name = 'Эдик Заказы для групп' OR c.director_name = 'Эдик Заказы для групп')
-  AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 641)
+WHERE (
+  c.name = 'Эдик Заказы для групп' 
+  OR c.director_name = 'Эдик Заказы для групп'
+  OR COALESCE(c.director_name, c.name) = 'Эдик Заказы для групп'
+)
+AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 641)
 LIMIT 1;
 
 INSERT INTO rental_orders (
@@ -17832,8 +20288,12 @@ SELECT
   NOW(),
   NOW()
 FROM rental_clients c
-WHERE (c.name = 'Эдик Заказы для групп' OR c.director_name = 'Эдик Заказы для групп')
-  AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 640)
+WHERE (
+  c.name = 'Эдик Заказы для групп' 
+  OR c.director_name = 'Эдик Заказы для групп'
+  OR COALESCE(c.director_name, c.name) = 'Эдик Заказы для групп'
+)
+AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 640)
 LIMIT 1;
 
 INSERT INTO rental_orders (
@@ -17861,8 +20321,12 @@ SELECT
   NOW(),
   NOW()
 FROM rental_clients c
-WHERE (c.name = 'Эдик Заказы для групп' OR c.director_name = 'Эдик Заказы для групп')
-  AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 639)
+WHERE (
+  c.name = 'Эдик Заказы для групп' 
+  OR c.director_name = 'Эдик Заказы для групп'
+  OR COALESCE(c.director_name, c.name) = 'Эдик Заказы для групп'
+)
+AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 639)
 LIMIT 1;
 
 INSERT INTO rental_orders (
@@ -17890,8 +20354,12 @@ SELECT
   NOW(),
   NOW()
 FROM rental_clients c
-WHERE (c.name = 'Эдик Заказы для групп' OR c.director_name = 'Эдик Заказы для групп')
-  AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 638)
+WHERE (
+  c.name = 'Эдик Заказы для групп' 
+  OR c.director_name = 'Эдик Заказы для групп'
+  OR COALESCE(c.director_name, c.name) = 'Эдик Заказы для групп'
+)
+AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 638)
 LIMIT 1;
 
 INSERT INTO rental_orders (
@@ -17919,8 +20387,12 @@ SELECT
   NOW(),
   NOW()
 FROM rental_clients c
-WHERE (c.name = 'Эдик Заказы для групп' OR c.director_name = 'Эдик Заказы для групп')
-  AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 637)
+WHERE (
+  c.name = 'Эдик Заказы для групп' 
+  OR c.director_name = 'Эдик Заказы для групп'
+  OR COALESCE(c.director_name, c.name) = 'Эдик Заказы для групп'
+)
+AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 637)
 LIMIT 1;
 
 INSERT INTO rental_orders (
@@ -17948,8 +20420,12 @@ SELECT
   NOW(),
   NOW()
 FROM rental_clients c
-WHERE (c.name = 'Эдик Заказы для групп' OR c.director_name = 'Эдик Заказы для групп')
-  AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 634)
+WHERE (
+  c.name = 'Эдик Заказы для групп' 
+  OR c.director_name = 'Эдик Заказы для групп'
+  OR COALESCE(c.director_name, c.name) = 'Эдик Заказы для групп'
+)
+AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 634)
 LIMIT 1;
 
 INSERT INTO rental_orders (
@@ -17977,8 +20453,12 @@ SELECT
   NOW(),
   NOW()
 FROM rental_clients c
-WHERE (c.name = 'Эдик Заказы для групп' OR c.director_name = 'Эдик Заказы для групп')
-  AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 633)
+WHERE (
+  c.name = 'Эдик Заказы для групп' 
+  OR c.director_name = 'Эдик Заказы для групп'
+  OR COALESCE(c.director_name, c.name) = 'Эдик Заказы для групп'
+)
+AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 633)
 LIMIT 1;
 
 INSERT INTO rental_orders (
@@ -18006,8 +20486,12 @@ SELECT
   NOW(),
   NOW()
 FROM rental_clients c
-WHERE (c.name = 'Эдик Заказы для групп' OR c.director_name = 'Эдик Заказы для групп')
-  AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 632)
+WHERE (
+  c.name = 'Эдик Заказы для групп' 
+  OR c.director_name = 'Эдик Заказы для групп'
+  OR COALESCE(c.director_name, c.name) = 'Эдик Заказы для групп'
+)
+AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 632)
 LIMIT 1;
 
 INSERT INTO rental_orders (
@@ -18035,8 +20519,12 @@ SELECT
   NOW(),
   NOW()
 FROM rental_clients c
-WHERE (c.name = 'Эдик Заказы для групп' OR c.director_name = 'Эдик Заказы для групп')
-  AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 630)
+WHERE (
+  c.name = 'Эдик Заказы для групп' 
+  OR c.director_name = 'Эдик Заказы для групп'
+  OR COALESCE(c.director_name, c.name) = 'Эдик Заказы для групп'
+)
+AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 630)
 LIMIT 1;
 
 INSERT INTO rental_orders (
@@ -18064,8 +20552,12 @@ SELECT
   NOW(),
   NOW()
 FROM rental_clients c
-WHERE (c.name = 'Эдик Заказы для групп' OR c.director_name = 'Эдик Заказы для групп')
-  AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 629)
+WHERE (
+  c.name = 'Эдик Заказы для групп' 
+  OR c.director_name = 'Эдик Заказы для групп'
+  OR COALESCE(c.director_name, c.name) = 'Эдик Заказы для групп'
+)
+AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 629)
 LIMIT 1;
 
 INSERT INTO rental_orders (
@@ -18093,8 +20585,12 @@ SELECT
   NOW(),
   NOW()
 FROM rental_clients c
-WHERE (c.name = 'Эдик Заказы для групп' OR c.director_name = 'Эдик Заказы для групп')
-  AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 628)
+WHERE (
+  c.name = 'Эдик Заказы для групп' 
+  OR c.director_name = 'Эдик Заказы для групп'
+  OR COALESCE(c.director_name, c.name) = 'Эдик Заказы для групп'
+)
+AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 628)
 LIMIT 1;
 
 INSERT INTO rental_orders (
@@ -18122,8 +20618,12 @@ SELECT
   NOW(),
   NOW()
 FROM rental_clients c
-WHERE (c.name = 'Эдик Заказы для групп' OR c.director_name = 'Эдик Заказы для групп')
-  AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 627)
+WHERE (
+  c.name = 'Эдик Заказы для групп' 
+  OR c.director_name = 'Эдик Заказы для групп'
+  OR COALESCE(c.director_name, c.name) = 'Эдик Заказы для групп'
+)
+AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 627)
 LIMIT 1;
 
 INSERT INTO rental_orders (
@@ -18151,8 +20651,12 @@ SELECT
   NOW(),
   NOW()
 FROM rental_clients c
-WHERE (c.name = 'Ирина (Иль Мио Тур)' OR c.director_name = 'Ирина (Иль Мио Тур)')
-  AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 626)
+WHERE (
+  c.name = 'Ирина (Иль Мио Тур)' 
+  OR c.director_name = 'Ирина (Иль Мио Тур)'
+  OR COALESCE(c.director_name, c.name) = 'Ирина (Иль Мио Тур)'
+)
+AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 626)
 LIMIT 1;
 
 INSERT INTO rental_orders (
@@ -18180,8 +20684,12 @@ SELECT
   NOW(),
   NOW()
 FROM rental_clients c
-WHERE (c.name = 'Оксана' OR c.director_name = 'Оксана')
-  AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 625)
+WHERE (
+  c.name = 'Оксана' 
+  OR c.director_name = 'Оксана'
+  OR COALESCE(c.director_name, c.name) = 'Оксана'
+)
+AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 625)
 LIMIT 1;
 
 INSERT INTO rental_orders (
@@ -18209,8 +20717,12 @@ SELECT
   NOW(),
   NOW()
 FROM rental_clients c
-WHERE (c.name = 'Любовь (ТИЦ)' OR c.director_name = 'Любовь (ТИЦ)')
-  AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 624)
+WHERE (
+  c.name = 'Любовь (ТИЦ)' 
+  OR c.director_name = 'Любовь (ТИЦ)'
+  OR COALESCE(c.director_name, c.name) = 'Любовь (ТИЦ)'
+)
+AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 624)
 LIMIT 1;
 
 INSERT INTO rental_orders (
@@ -18238,8 +20750,12 @@ SELECT
   NOW(),
   NOW()
 FROM rental_clients c
-WHERE (c.name = 'Татьяна (Гольфстрим)' OR c.director_name = 'Татьяна (Гольфстрим)')
-  AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 623)
+WHERE (
+  c.name = 'Татьяна (Гольфстрим)' 
+  OR c.director_name = 'Татьяна (Гольфстрим)'
+  OR COALESCE(c.director_name, c.name) = 'Татьяна (Гольфстрим)'
+)
+AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 623)
 LIMIT 1;
 
 INSERT INTO rental_orders (
@@ -18267,8 +20783,12 @@ SELECT
   NOW(),
   NOW()
 FROM rental_clients c
-WHERE (c.name = 'Татьяна (Гольфстрим)' OR c.director_name = 'Татьяна (Гольфстрим)')
-  AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 622)
+WHERE (
+  c.name = 'Татьяна (Гольфстрим)' 
+  OR c.director_name = 'Татьяна (Гольфстрим)'
+  OR COALESCE(c.director_name, c.name) = 'Татьяна (Гольфстрим)'
+)
+AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 622)
 LIMIT 1;
 
 INSERT INTO rental_orders (
@@ -18296,8 +20816,12 @@ SELECT
   NOW(),
   NOW()
 FROM rental_clients c
-WHERE (c.name = 'Татьяна (Гольфстрим)' OR c.director_name = 'Татьяна (Гольфстрим)')
-  AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 621)
+WHERE (
+  c.name = 'Татьяна (Гольфстрим)' 
+  OR c.director_name = 'Татьяна (Гольфстрим)'
+  OR COALESCE(c.director_name, c.name) = 'Татьяна (Гольфстрим)'
+)
+AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 621)
 LIMIT 1;
 
 INSERT INTO rental_orders (
@@ -18325,8 +20849,12 @@ SELECT
   NOW(),
   NOW()
 FROM rental_clients c
-WHERE (c.name = 'Татьяна (Гольфстрим)' OR c.director_name = 'Татьяна (Гольфстрим)')
-  AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 620)
+WHERE (
+  c.name = 'Татьяна (Гольфстрим)' 
+  OR c.director_name = 'Татьяна (Гольфстрим)'
+  OR COALESCE(c.director_name, c.name) = 'Татьяна (Гольфстрим)'
+)
+AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 620)
 LIMIT 1;
 
 INSERT INTO rental_orders (
@@ -18354,8 +20882,12 @@ SELECT
   NOW(),
   NOW()
 FROM rental_clients c
-WHERE (c.name = 'Мария Экскурсовод' OR c.director_name = 'Мария Экскурсовод')
-  AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 619)
+WHERE (
+  c.name = 'Мария Экскурсовод' 
+  OR c.director_name = 'Мария Экскурсовод'
+  OR COALESCE(c.director_name, c.name) = 'Мария Экскурсовод'
+)
+AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 619)
 LIMIT 1;
 
 INSERT INTO rental_orders (
@@ -18383,8 +20915,12 @@ SELECT
   NOW(),
   NOW()
 FROM rental_clients c
-WHERE (c.name = 'Арсен (Юнион)' OR c.director_name = 'Арсен (Юнион)')
-  AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 618)
+WHERE (
+  c.name = 'Арсен (Юнион)' 
+  OR c.director_name = 'Арсен (Юнион)'
+  OR COALESCE(c.director_name, c.name) = 'Арсен (Юнион)'
+)
+AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 618)
 LIMIT 1;
 
 INSERT INTO rental_orders (
@@ -18412,8 +20948,12 @@ SELECT
   NOW(),
   NOW()
 FROM rental_clients c
-WHERE (c.name = 'Арсен (Юнион)' OR c.director_name = 'Арсен (Юнион)')
-  AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 617)
+WHERE (
+  c.name = 'Арсен (Юнион)' 
+  OR c.director_name = 'Арсен (Юнион)'
+  OR COALESCE(c.director_name, c.name) = 'Арсен (Юнион)'
+)
+AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 617)
 LIMIT 1;
 
 INSERT INTO rental_orders (
@@ -18441,8 +20981,12 @@ SELECT
   NOW(),
   NOW()
 FROM rental_clients c
-WHERE (c.name = 'Диляра' OR c.director_name = 'Диляра')
-  AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 615)
+WHERE (
+  c.name = 'Диляра' 
+  OR c.director_name = 'Диляра'
+  OR COALESCE(c.director_name, c.name) = 'Диляра'
+)
+AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 615)
 LIMIT 1;
 
 INSERT INTO rental_orders (
@@ -18470,8 +21014,12 @@ SELECT
   NOW(),
   NOW()
 FROM rental_clients c
-WHERE (c.name = 'Татьяна (Гольфстрим)' OR c.director_name = 'Татьяна (Гольфстрим)')
-  AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 614)
+WHERE (
+  c.name = 'Татьяна (Гольфстрим)' 
+  OR c.director_name = 'Татьяна (Гольфстрим)'
+  OR COALESCE(c.director_name, c.name) = 'Татьяна (Гольфстрим)'
+)
+AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 614)
 LIMIT 1;
 
 INSERT INTO rental_orders (
@@ -18499,8 +21047,12 @@ SELECT
   NOW(),
   NOW()
 FROM rental_clients c
-WHERE (c.name = 'Татьяна (Гольфстрим)' OR c.director_name = 'Татьяна (Гольфстрим)')
-  AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 613)
+WHERE (
+  c.name = 'Татьяна (Гольфстрим)' 
+  OR c.director_name = 'Татьяна (Гольфстрим)'
+  OR COALESCE(c.director_name, c.name) = 'Татьяна (Гольфстрим)'
+)
+AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 613)
 LIMIT 1;
 
 INSERT INTO rental_orders (
@@ -18528,8 +21080,12 @@ SELECT
   NOW(),
   NOW()
 FROM rental_clients c
-WHERE (c.name = 'Альберт (КТ)' OR c.director_name = 'Альберт (КТ)')
-  AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 612)
+WHERE (
+  c.name = 'Альберт (КТ)' 
+  OR c.director_name = 'Альберт (КТ)'
+  OR COALESCE(c.director_name, c.name) = 'Альберт (КТ)'
+)
+AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 612)
 LIMIT 1;
 
 INSERT INTO rental_orders (
@@ -18557,8 +21113,12 @@ SELECT
   NOW(),
   NOW()
 FROM rental_clients c
-WHERE (c.name = 'Любовь (ТИЦ)' OR c.director_name = 'Любовь (ТИЦ)')
-  AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 611)
+WHERE (
+  c.name = 'Любовь (ТИЦ)' 
+  OR c.director_name = 'Любовь (ТИЦ)'
+  OR COALESCE(c.director_name, c.name) = 'Любовь (ТИЦ)'
+)
+AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 611)
 LIMIT 1;
 
 INSERT INTO rental_orders (
@@ -18586,8 +21146,12 @@ SELECT
   NOW(),
   NOW()
 FROM rental_clients c
-WHERE (c.name = 'Галина (Тур Урал)' OR c.director_name = 'Галина (Тур Урал)')
-  AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 610)
+WHERE (
+  c.name = 'Галина (Тур Урал)' 
+  OR c.director_name = 'Галина (Тур Урал)'
+  OR COALESCE(c.director_name, c.name) = 'Галина (Тур Урал)'
+)
+AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 610)
 LIMIT 1;
 
 INSERT INTO rental_orders (
@@ -18615,8 +21179,12 @@ SELECT
   NOW(),
   NOW()
 FROM rental_clients c
-WHERE (c.name = 'Галина (Тур Урал)' OR c.director_name = 'Галина (Тур Урал)')
-  AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 609)
+WHERE (
+  c.name = 'Галина (Тур Урал)' 
+  OR c.director_name = 'Галина (Тур Урал)'
+  OR COALESCE(c.director_name, c.name) = 'Галина (Тур Урал)'
+)
+AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 609)
 LIMIT 1;
 
 INSERT INTO rental_orders (
@@ -18644,8 +21212,12 @@ SELECT
   NOW(),
   NOW()
 FROM rental_clients c
-WHERE (c.name = 'Любовь (ТИЦ)' OR c.director_name = 'Любовь (ТИЦ)')
-  AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 608)
+WHERE (
+  c.name = 'Любовь (ТИЦ)' 
+  OR c.director_name = 'Любовь (ТИЦ)'
+  OR COALESCE(c.director_name, c.name) = 'Любовь (ТИЦ)'
+)
+AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 608)
 LIMIT 1;
 
 INSERT INTO rental_orders (
@@ -18673,8 +21245,12 @@ SELECT
   NOW(),
   NOW()
 FROM rental_clients c
-WHERE (c.name = 'Арсен (Юнион)' OR c.director_name = 'Арсен (Юнион)')
-  AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 607)
+WHERE (
+  c.name = 'Арсен (Юнион)' 
+  OR c.director_name = 'Арсен (Юнион)'
+  OR COALESCE(c.director_name, c.name) = 'Арсен (Юнион)'
+)
+AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 607)
 LIMIT 1;
 
 INSERT INTO rental_orders (
@@ -18702,8 +21278,12 @@ SELECT
   NOW(),
   NOW()
 FROM rental_clients c
-WHERE (c.name = 'Арсен (Юнион)' OR c.director_name = 'Арсен (Юнион)')
-  AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 606)
+WHERE (
+  c.name = 'Арсен (Юнион)' 
+  OR c.director_name = 'Арсен (Юнион)'
+  OR COALESCE(c.director_name, c.name) = 'Арсен (Юнион)'
+)
+AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 606)
 LIMIT 1;
 
 INSERT INTO rental_orders (
@@ -18731,8 +21311,12 @@ SELECT
   NOW(),
   NOW()
 FROM rental_clients c
-WHERE (c.name = 'Арсен (Юнион)' OR c.director_name = 'Арсен (Юнион)')
-  AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 605)
+WHERE (
+  c.name = 'Арсен (Юнион)' 
+  OR c.director_name = 'Арсен (Юнион)'
+  OR COALESCE(c.director_name, c.name) = 'Арсен (Юнион)'
+)
+AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 605)
 LIMIT 1;
 
 INSERT INTO rental_orders (
@@ -18760,8 +21344,12 @@ SELECT
   NOW(),
   NOW()
 FROM rental_clients c
-WHERE (c.name = 'Ляйсан (Казань 360)' OR c.director_name = 'Ляйсан (Казань 360)')
-  AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 604)
+WHERE (
+  c.name = 'Ляйсан (Казань 360)' 
+  OR c.director_name = 'Ляйсан (Казань 360)'
+  OR COALESCE(c.director_name, c.name) = 'Ляйсан (Казань 360)'
+)
+AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 604)
 LIMIT 1;
 
 INSERT INTO rental_orders (
@@ -18789,8 +21377,12 @@ SELECT
   NOW(),
   NOW()
 FROM rental_clients c
-WHERE (c.name = 'Ирина (Иль Мио Тур)' OR c.director_name = 'Ирина (Иль Мио Тур)')
-  AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 602)
+WHERE (
+  c.name = 'Ирина (Иль Мио Тур)' 
+  OR c.director_name = 'Ирина (Иль Мио Тур)'
+  OR COALESCE(c.director_name, c.name) = 'Ирина (Иль Мио Тур)'
+)
+AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 602)
 LIMIT 1;
 
 INSERT INTO rental_orders (
@@ -18818,8 +21410,12 @@ SELECT
   NOW(),
   NOW()
 FROM rental_clients c
-WHERE (c.name = 'Галина (Тур Урал)' OR c.director_name = 'Галина (Тур Урал)')
-  AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 601)
+WHERE (
+  c.name = 'Галина (Тур Урал)' 
+  OR c.director_name = 'Галина (Тур Урал)'
+  OR COALESCE(c.director_name, c.name) = 'Галина (Тур Урал)'
+)
+AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 601)
 LIMIT 1;
 
 INSERT INTO rental_orders (
@@ -18847,8 +21443,12 @@ SELECT
   NOW(),
   NOW()
 FROM rental_clients c
-WHERE (c.name = 'Галина (Тур Урал)' OR c.director_name = 'Галина (Тур Урал)')
-  AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 600)
+WHERE (
+  c.name = 'Галина (Тур Урал)' 
+  OR c.director_name = 'Галина (Тур Урал)'
+  OR COALESCE(c.director_name, c.name) = 'Галина (Тур Урал)'
+)
+AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 600)
 LIMIT 1;
 
 INSERT INTO rental_orders (
@@ -18876,8 +21476,12 @@ SELECT
   NOW(),
   NOW()
 FROM rental_clients c
-WHERE (c.name = 'Эвелина (Инициатива)' OR c.director_name = 'Эвелина (Инициатива)')
-  AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 599)
+WHERE (
+  c.name = 'Эвелина (Инициатива)' 
+  OR c.director_name = 'Эвелина (Инициатива)'
+  OR COALESCE(c.director_name, c.name) = 'Эвелина (Инициатива)'
+)
+AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 599)
 LIMIT 1;
 
 INSERT INTO rental_orders (
@@ -18905,8 +21509,12 @@ SELECT
   NOW(),
   NOW()
 FROM rental_clients c
-WHERE (c.name = 'Эвелина (Инициатива)' OR c.director_name = 'Эвелина (Инициатива)')
-  AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 598)
+WHERE (
+  c.name = 'Эвелина (Инициатива)' 
+  OR c.director_name = 'Эвелина (Инициатива)'
+  OR COALESCE(c.director_name, c.name) = 'Эвелина (Инициатива)'
+)
+AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 598)
 LIMIT 1;
 
 INSERT INTO rental_orders (
@@ -18934,8 +21542,12 @@ SELECT
   NOW(),
   NOW()
 FROM rental_clients c
-WHERE (c.name = 'Галина (Тур Урал)' OR c.director_name = 'Галина (Тур Урал)')
-  AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 597)
+WHERE (
+  c.name = 'Галина (Тур Урал)' 
+  OR c.director_name = 'Галина (Тур Урал)'
+  OR COALESCE(c.director_name, c.name) = 'Галина (Тур Урал)'
+)
+AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 597)
 LIMIT 1;
 
 INSERT INTO rental_orders (
@@ -18963,8 +21575,12 @@ SELECT
   NOW(),
   NOW()
 FROM rental_clients c
-WHERE (c.name = 'Галина (Тур Урал)' OR c.director_name = 'Галина (Тур Урал)')
-  AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 596)
+WHERE (
+  c.name = 'Галина (Тур Урал)' 
+  OR c.director_name = 'Галина (Тур Урал)'
+  OR COALESCE(c.director_name, c.name) = 'Галина (Тур Урал)'
+)
+AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 596)
 LIMIT 1;
 
 INSERT INTO rental_orders (
@@ -18992,8 +21608,12 @@ SELECT
   NOW(),
   NOW()
 FROM rental_clients c
-WHERE (c.name = 'Галина (Тур Урал)' OR c.director_name = 'Галина (Тур Урал)')
-  AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 595)
+WHERE (
+  c.name = 'Галина (Тур Урал)' 
+  OR c.director_name = 'Галина (Тур Урал)'
+  OR COALESCE(c.director_name, c.name) = 'Галина (Тур Урал)'
+)
+AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 595)
 LIMIT 1;
 
 INSERT INTO rental_orders (
@@ -19021,8 +21641,12 @@ SELECT
   NOW(),
   NOW()
 FROM rental_clients c
-WHERE (c.name = 'Алексей' OR c.director_name = 'Алексей')
-  AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 594)
+WHERE (
+  c.name = 'Алексей' 
+  OR c.director_name = 'Алексей'
+  OR COALESCE(c.director_name, c.name) = 'Алексей'
+)
+AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 594)
 LIMIT 1;
 
 INSERT INTO rental_orders (
@@ -19050,8 +21674,12 @@ SELECT
   NOW(),
   NOW()
 FROM rental_clients c
-WHERE (c.name = 'Альберт (КТ)' OR c.director_name = 'Альберт (КТ)')
-  AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 593)
+WHERE (
+  c.name = 'Альберт (КТ)' 
+  OR c.director_name = 'Альберт (КТ)'
+  OR COALESCE(c.director_name, c.name) = 'Альберт (КТ)'
+)
+AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 593)
 LIMIT 1;
 
 INSERT INTO rental_orders (
@@ -19079,8 +21707,12 @@ SELECT
   NOW(),
   NOW()
 FROM rental_clients c
-WHERE (c.name = 'Ольга (Дольче Вита)' OR c.director_name = 'Ольга (Дольче Вита)')
-  AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 592)
+WHERE (
+  c.name = 'Ольга (Дольче Вита)' 
+  OR c.director_name = 'Ольга (Дольче Вита)'
+  OR COALESCE(c.director_name, c.name) = 'Ольга (Дольче Вита)'
+)
+AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 592)
 LIMIT 1;
 
 INSERT INTO rental_orders (
@@ -19108,8 +21740,12 @@ SELECT
   NOW(),
   NOW()
 FROM rental_clients c
-WHERE (c.name = 'Ольга (Дольче Вита)' OR c.director_name = 'Ольга (Дольче Вита)')
-  AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 591)
+WHERE (
+  c.name = 'Ольга (Дольче Вита)' 
+  OR c.director_name = 'Ольга (Дольче Вита)'
+  OR COALESCE(c.director_name, c.name) = 'Ольга (Дольче Вита)'
+)
+AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 591)
 LIMIT 1;
 
 INSERT INTO rental_orders (
@@ -19137,8 +21773,12 @@ SELECT
   NOW(),
   NOW()
 FROM rental_clients c
-WHERE (c.name = 'Елизавета Ткач' OR c.director_name = 'Елизавета Ткач')
-  AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 589)
+WHERE (
+  c.name = 'Елизавета Ткач' 
+  OR c.director_name = 'Елизавета Ткач'
+  OR COALESCE(c.director_name, c.name) = 'Елизавета Ткач'
+)
+AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 589)
 LIMIT 1;
 
 INSERT INTO rental_orders (
@@ -19166,8 +21806,12 @@ SELECT
   NOW(),
   NOW()
 FROM rental_clients c
-WHERE (c.name = 'Анюта Родионова (Родина-тур)' OR c.director_name = 'Анюта Родионова (Родина-тур)')
-  AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 588)
+WHERE (
+  c.name = 'Анюта Родионова (Родина-тур)' 
+  OR c.director_name = 'Анюта Родионова (Родина-тур)'
+  OR COALESCE(c.director_name, c.name) = 'Анюта Родионова (Родина-тур)'
+)
+AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 588)
 LIMIT 1;
 
 INSERT INTO rental_orders (
@@ -19195,8 +21839,12 @@ SELECT
   NOW(),
   NOW()
 FROM rental_clients c
-WHERE (c.name = 'Татьяна (Гольфстрим)' OR c.director_name = 'Татьяна (Гольфстрим)')
-  AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 587)
+WHERE (
+  c.name = 'Татьяна (Гольфстрим)' 
+  OR c.director_name = 'Татьяна (Гольфстрим)'
+  OR COALESCE(c.director_name, c.name) = 'Татьяна (Гольфстрим)'
+)
+AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 587)
 LIMIT 1;
 
 INSERT INTO rental_orders (
@@ -19224,8 +21872,12 @@ SELECT
   NOW(),
   NOW()
 FROM rental_clients c
-WHERE (c.name = 'Татьяна (Гольфстрим)' OR c.director_name = 'Татьяна (Гольфстрим)')
-  AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 586)
+WHERE (
+  c.name = 'Татьяна (Гольфстрим)' 
+  OR c.director_name = 'Татьяна (Гольфстрим)'
+  OR COALESCE(c.director_name, c.name) = 'Татьяна (Гольфстрим)'
+)
+AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 586)
 LIMIT 1;
 
 INSERT INTO rental_orders (
@@ -19253,8 +21905,12 @@ SELECT
   NOW(),
   NOW()
 FROM rental_clients c
-WHERE (c.name = 'Татьяна (Гольфстрим)' OR c.director_name = 'Татьяна (Гольфстрим)')
-  AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 585)
+WHERE (
+  c.name = 'Татьяна (Гольфстрим)' 
+  OR c.director_name = 'Татьяна (Гольфстрим)'
+  OR COALESCE(c.director_name, c.name) = 'Татьяна (Гольфстрим)'
+)
+AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 585)
 LIMIT 1;
 
 INSERT INTO rental_orders (
@@ -19282,8 +21938,12 @@ SELECT
   NOW(),
   NOW()
 FROM rental_clients c
-WHERE (c.name = 'Татьяна (Гольфстрим)' OR c.director_name = 'Татьяна (Гольфстрим)')
-  AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 584)
+WHERE (
+  c.name = 'Татьяна (Гольфстрим)' 
+  OR c.director_name = 'Татьяна (Гольфстрим)'
+  OR COALESCE(c.director_name, c.name) = 'Татьяна (Гольфстрим)'
+)
+AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 584)
 LIMIT 1;
 
 INSERT INTO rental_orders (
@@ -19311,8 +21971,12 @@ SELECT
   NOW(),
   NOW()
 FROM rental_clients c
-WHERE (c.name = 'Татьяна (Гольфстрим)' OR c.director_name = 'Татьяна (Гольфстрим)')
-  AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 583)
+WHERE (
+  c.name = 'Татьяна (Гольфстрим)' 
+  OR c.director_name = 'Татьяна (Гольфстрим)'
+  OR COALESCE(c.director_name, c.name) = 'Татьяна (Гольфстрим)'
+)
+AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 583)
 LIMIT 1;
 
 INSERT INTO rental_orders (
@@ -19340,8 +22004,12 @@ SELECT
   NOW(),
   NOW()
 FROM rental_clients c
-WHERE (c.name = 'Эдик Заказы для групп' OR c.director_name = 'Эдик Заказы для групп')
-  AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 582)
+WHERE (
+  c.name = 'Эдик Заказы для групп' 
+  OR c.director_name = 'Эдик Заказы для групп'
+  OR COALESCE(c.director_name, c.name) = 'Эдик Заказы для групп'
+)
+AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 582)
 LIMIT 1;
 
 INSERT INTO rental_orders (
@@ -19369,8 +22037,12 @@ SELECT
   NOW(),
   NOW()
 FROM rental_clients c
-WHERE (c.name = 'Светлана Зеленина' OR c.director_name = 'Светлана Зеленина')
-  AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 581)
+WHERE (
+  c.name = 'Светлана Зеленина' 
+  OR c.director_name = 'Светлана Зеленина'
+  OR COALESCE(c.director_name, c.name) = 'Светлана Зеленина'
+)
+AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 581)
 LIMIT 1;
 
 INSERT INTO rental_orders (
@@ -19398,8 +22070,12 @@ SELECT
   NOW(),
   NOW()
 FROM rental_clients c
-WHERE (c.name = 'Айрат Нурмухаммадов' OR c.director_name = 'Айрат Нурмухаммадов')
-  AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 580)
+WHERE (
+  c.name = 'Айрат Нурмухаммадов' 
+  OR c.director_name = 'Айрат Нурмухаммадов'
+  OR COALESCE(c.director_name, c.name) = 'Айрат Нурмухаммадов'
+)
+AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 580)
 LIMIT 1;
 
 INSERT INTO rental_orders (
@@ -19427,8 +22103,12 @@ SELECT
   NOW(),
   NOW()
 FROM rental_clients c
-WHERE (c.name = 'Гульнара' OR c.director_name = 'Гульнара')
-  AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 579)
+WHERE (
+  c.name = 'Гульнара' 
+  OR c.director_name = 'Гульнара'
+  OR COALESCE(c.director_name, c.name) = 'Гульнара'
+)
+AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 579)
 LIMIT 1;
 
 INSERT INTO rental_orders (
@@ -19456,8 +22136,12 @@ SELECT
   NOW(),
   NOW()
 FROM rental_clients c
-WHERE (c.name = 'Альберт (КТ)' OR c.director_name = 'Альберт (КТ)')
-  AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 578)
+WHERE (
+  c.name = 'Альберт (КТ)' 
+  OR c.director_name = 'Альберт (КТ)'
+  OR COALESCE(c.director_name, c.name) = 'Альберт (КТ)'
+)
+AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 578)
 LIMIT 1;
 
 INSERT INTO rental_orders (
@@ -19485,8 +22169,12 @@ SELECT
   NOW(),
   NOW()
 FROM rental_clients c
-WHERE (c.name = 'Валентина Экскурсовод' OR c.director_name = 'Валентина Экскурсовод')
-  AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 577)
+WHERE (
+  c.name = 'Валентина Экскурсовод' 
+  OR c.director_name = 'Валентина Экскурсовод'
+  OR COALESCE(c.director_name, c.name) = 'Валентина Экскурсовод'
+)
+AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 577)
 LIMIT 1;
 
 INSERT INTO rental_orders (
@@ -19514,8 +22202,12 @@ SELECT
   NOW(),
   NOW()
 FROM rental_clients c
-WHERE (c.name = 'Татьяна Чуб' OR c.director_name = 'Татьяна Чуб')
-  AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 576)
+WHERE (
+  c.name = 'Татьяна Чуб' 
+  OR c.director_name = 'Татьяна Чуб'
+  OR COALESCE(c.director_name, c.name) = 'Татьяна Чуб'
+)
+AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 576)
 LIMIT 1;
 
 INSERT INTO rental_orders (
@@ -19543,8 +22235,12 @@ SELECT
   NOW(),
   NOW()
 FROM rental_clients c
-WHERE (c.name = 'Татьяна Чуб' OR c.director_name = 'Татьяна Чуб')
-  AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 575)
+WHERE (
+  c.name = 'Татьяна Чуб' 
+  OR c.director_name = 'Татьяна Чуб'
+  OR COALESCE(c.director_name, c.name) = 'Татьяна Чуб'
+)
+AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 575)
 LIMIT 1;
 
 INSERT INTO rental_orders (
@@ -19572,8 +22268,12 @@ SELECT
   NOW(),
   NOW()
 FROM rental_clients c
-WHERE (c.name = 'Татьяна Чуб' OR c.director_name = 'Татьяна Чуб')
-  AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 574)
+WHERE (
+  c.name = 'Татьяна Чуб' 
+  OR c.director_name = 'Татьяна Чуб'
+  OR COALESCE(c.director_name, c.name) = 'Татьяна Чуб'
+)
+AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 574)
 LIMIT 1;
 
 INSERT INTO rental_orders (
@@ -19601,8 +22301,12 @@ SELECT
   NOW(),
   NOW()
 FROM rental_clients c
-WHERE (c.name = 'Татьяна Чуб' OR c.director_name = 'Татьяна Чуб')
-  AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 573)
+WHERE (
+  c.name = 'Татьяна Чуб' 
+  OR c.director_name = 'Татьяна Чуб'
+  OR COALESCE(c.director_name, c.name) = 'Татьяна Чуб'
+)
+AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 573)
 LIMIT 1;
 
 INSERT INTO rental_orders (
@@ -19630,8 +22334,12 @@ SELECT
   NOW(),
   NOW()
 FROM rental_clients c
-WHERE (c.name = 'Татьяна (Гольфстрим)' OR c.director_name = 'Татьяна (Гольфстрим)')
-  AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 572)
+WHERE (
+  c.name = 'Татьяна (Гольфстрим)' 
+  OR c.director_name = 'Татьяна (Гольфстрим)'
+  OR COALESCE(c.director_name, c.name) = 'Татьяна (Гольфстрим)'
+)
+AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 572)
 LIMIT 1;
 
 INSERT INTO rental_orders (
@@ -19659,8 +22367,12 @@ SELECT
   NOW(),
   NOW()
 FROM rental_clients c
-WHERE (c.name = 'Анна' OR c.director_name = 'Анна')
-  AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 571)
+WHERE (
+  c.name = 'Анна' 
+  OR c.director_name = 'Анна'
+  OR COALESCE(c.director_name, c.name) = 'Анна'
+)
+AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 571)
 LIMIT 1;
 
 INSERT INTO rental_orders (
@@ -19688,8 +22400,12 @@ SELECT
   NOW(),
   NOW()
 FROM rental_clients c
-WHERE (c.name = 'Эдик Заказы для групп' OR c.director_name = 'Эдик Заказы для групп')
-  AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 570)
+WHERE (
+  c.name = 'Эдик Заказы для групп' 
+  OR c.director_name = 'Эдик Заказы для групп'
+  OR COALESCE(c.director_name, c.name) = 'Эдик Заказы для групп'
+)
+AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 570)
 LIMIT 1;
 
 INSERT INTO rental_orders (
@@ -19717,8 +22433,12 @@ SELECT
   NOW(),
   NOW()
 FROM rental_clients c
-WHERE (c.name = 'Эдик Заказы для групп' OR c.director_name = 'Эдик Заказы для групп')
-  AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 569)
+WHERE (
+  c.name = 'Эдик Заказы для групп' 
+  OR c.director_name = 'Эдик Заказы для групп'
+  OR COALESCE(c.director_name, c.name) = 'Эдик Заказы для групп'
+)
+AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 569)
 LIMIT 1;
 
 INSERT INTO rental_orders (
@@ -19746,8 +22466,12 @@ SELECT
   NOW(),
   NOW()
 FROM rental_clients c
-WHERE (c.name = 'Константин' OR c.director_name = 'Константин')
-  AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 568)
+WHERE (
+  c.name = 'Константин' 
+  OR c.director_name = 'Константин'
+  OR COALESCE(c.director_name, c.name) = 'Константин'
+)
+AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 568)
 LIMIT 1;
 
 INSERT INTO rental_orders (
@@ -19775,8 +22499,12 @@ SELECT
   NOW(),
   NOW()
 FROM rental_clients c
-WHERE (c.name = 'Эдик Заказы для групп' OR c.director_name = 'Эдик Заказы для групп')
-  AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 567)
+WHERE (
+  c.name = 'Эдик Заказы для групп' 
+  OR c.director_name = 'Эдик Заказы для групп'
+  OR COALESCE(c.director_name, c.name) = 'Эдик Заказы для групп'
+)
+AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 567)
 LIMIT 1;
 
 INSERT INTO rental_orders (
@@ -19804,8 +22532,12 @@ SELECT
   NOW(),
   NOW()
 FROM rental_clients c
-WHERE (c.name = 'Юлия (Рыжий Слон)' OR c.director_name = 'Юлия (Рыжий Слон)')
-  AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 566)
+WHERE (
+  c.name = 'Юлия (Рыжий Слон)' 
+  OR c.director_name = 'Юлия (Рыжий Слон)'
+  OR COALESCE(c.director_name, c.name) = 'Юлия (Рыжий Слон)'
+)
+AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 566)
 LIMIT 1;
 
 INSERT INTO rental_orders (
@@ -19833,8 +22565,12 @@ SELECT
   NOW(),
   NOW()
 FROM rental_clients c
-WHERE (c.name = 'Татьяна Чуб' OR c.director_name = 'Татьяна Чуб')
-  AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 565)
+WHERE (
+  c.name = 'Татьяна Чуб' 
+  OR c.director_name = 'Татьяна Чуб'
+  OR COALESCE(c.director_name, c.name) = 'Татьяна Чуб'
+)
+AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 565)
 LIMIT 1;
 
 INSERT INTO rental_orders (
@@ -19862,8 +22598,12 @@ SELECT
   NOW(),
   NOW()
 FROM rental_clients c
-WHERE (c.name = 'Татьяна Чуб' OR c.director_name = 'Татьяна Чуб')
-  AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 563)
+WHERE (
+  c.name = 'Татьяна Чуб' 
+  OR c.director_name = 'Татьяна Чуб'
+  OR COALESCE(c.director_name, c.name) = 'Татьяна Чуб'
+)
+AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 563)
 LIMIT 1;
 
 INSERT INTO rental_orders (
@@ -19891,8 +22631,12 @@ SELECT
   NOW(),
   NOW()
 FROM rental_clients c
-WHERE (c.name = 'Елена Тамбова (Апрель)' OR c.director_name = 'Елена Тамбова (Апрель)')
-  AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 562)
+WHERE (
+  c.name = 'Елена Тамбова (Апрель)' 
+  OR c.director_name = 'Елена Тамбова (Апрель)'
+  OR COALESCE(c.director_name, c.name) = 'Елена Тамбова (Апрель)'
+)
+AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 562)
 LIMIT 1;
 
 INSERT INTO rental_orders (
@@ -19920,8 +22664,12 @@ SELECT
   NOW(),
   NOW()
 FROM rental_clients c
-WHERE (c.name = 'Анастасия Шадрина' OR c.director_name = 'Анастасия Шадрина')
-  AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 561)
+WHERE (
+  c.name = 'Анастасия Шадрина' 
+  OR c.director_name = 'Анастасия Шадрина'
+  OR COALESCE(c.director_name, c.name) = 'Анастасия Шадрина'
+)
+AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 561)
 LIMIT 1;
 
 INSERT INTO rental_orders (
@@ -19949,8 +22697,12 @@ SELECT
   NOW(),
   NOW()
 FROM rental_clients c
-WHERE (c.name = 'Мира (ИП)' OR c.director_name = 'Мира (ИП)')
-  AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 560)
+WHERE (
+  c.name = 'Мира (ИП)' 
+  OR c.director_name = 'Мира (ИП)'
+  OR COALESCE(c.director_name, c.name) = 'Мира (ИП)'
+)
+AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 560)
 LIMIT 1;
 
 INSERT INTO rental_orders (
@@ -19978,8 +22730,12 @@ SELECT
   NOW(),
   NOW()
 FROM rental_clients c
-WHERE (c.name = 'Мира (ИП)' OR c.director_name = 'Мира (ИП)')
-  AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 559)
+WHERE (
+  c.name = 'Мира (ИП)' 
+  OR c.director_name = 'Мира (ИП)'
+  OR COALESCE(c.director_name, c.name) = 'Мира (ИП)'
+)
+AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 559)
 LIMIT 1;
 
 INSERT INTO rental_orders (
@@ -20007,8 +22763,12 @@ SELECT
   NOW(),
   NOW()
 FROM rental_clients c
-WHERE (c.name = 'Гульнара' OR c.director_name = 'Гульнара')
-  AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 557)
+WHERE (
+  c.name = 'Гульнара' 
+  OR c.director_name = 'Гульнара'
+  OR COALESCE(c.director_name, c.name) = 'Гульнара'
+)
+AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 557)
 LIMIT 1;
 
 INSERT INTO rental_orders (
@@ -20036,8 +22796,12 @@ SELECT
   NOW(),
   NOW()
 FROM rental_clients c
-WHERE (c.name = 'Екатерина' OR c.director_name = 'Екатерина')
-  AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 556)
+WHERE (
+  c.name = 'Екатерина' 
+  OR c.director_name = 'Екатерина'
+  OR COALESCE(c.director_name, c.name) = 'Екатерина'
+)
+AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 556)
 LIMIT 1;
 
 INSERT INTO rental_orders (
@@ -20065,8 +22829,12 @@ SELECT
   NOW(),
   NOW()
 FROM rental_clients c
-WHERE (c.name = 'Эльвира' OR c.director_name = 'Эльвира')
-  AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 555)
+WHERE (
+  c.name = 'Эльвира' 
+  OR c.director_name = 'Эльвира'
+  OR COALESCE(c.director_name, c.name) = 'Эльвира'
+)
+AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 555)
 LIMIT 1;
 
 INSERT INTO rental_orders (
@@ -20094,8 +22862,12 @@ SELECT
   NOW(),
   NOW()
 FROM rental_clients c
-WHERE (c.name = 'Эдик Заказы для групп' OR c.director_name = 'Эдик Заказы для групп')
-  AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 554)
+WHERE (
+  c.name = 'Эдик Заказы для групп' 
+  OR c.director_name = 'Эдик Заказы для групп'
+  OR COALESCE(c.director_name, c.name) = 'Эдик Заказы для групп'
+)
+AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 554)
 LIMIT 1;
 
 INSERT INTO rental_orders (
@@ -20123,8 +22895,12 @@ SELECT
   NOW(),
   NOW()
 FROM rental_clients c
-WHERE (c.name = 'Эдик Заказы для групп' OR c.director_name = 'Эдик Заказы для групп')
-  AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 553)
+WHERE (
+  c.name = 'Эдик Заказы для групп' 
+  OR c.director_name = 'Эдик Заказы для групп'
+  OR COALESCE(c.director_name, c.name) = 'Эдик Заказы для групп'
+)
+AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 553)
 LIMIT 1;
 
 INSERT INTO rental_orders (
@@ -20152,8 +22928,12 @@ SELECT
   NOW(),
   NOW()
 FROM rental_clients c
-WHERE (c.name = 'Татьяна (Гольфстрим)' OR c.director_name = 'Татьяна (Гольфстрим)')
-  AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 551)
+WHERE (
+  c.name = 'Татьяна (Гольфстрим)' 
+  OR c.director_name = 'Татьяна (Гольфстрим)'
+  OR COALESCE(c.director_name, c.name) = 'Татьяна (Гольфстрим)'
+)
+AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 551)
 LIMIT 1;
 
 INSERT INTO rental_orders (
@@ -20181,8 +22961,12 @@ SELECT
   NOW(),
   NOW()
 FROM rental_clients c
-WHERE (c.name = 'Татьяна (Гольфстрим)' OR c.director_name = 'Татьяна (Гольфстрим)')
-  AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 550)
+WHERE (
+  c.name = 'Татьяна (Гольфстрим)' 
+  OR c.director_name = 'Татьяна (Гольфстрим)'
+  OR COALESCE(c.director_name, c.name) = 'Татьяна (Гольфстрим)'
+)
+AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 550)
 LIMIT 1;
 
 INSERT INTO rental_orders (
@@ -20210,8 +22994,12 @@ SELECT
   NOW(),
   NOW()
 FROM rental_clients c
-WHERE (c.name = 'Эдик Заказы для групп' OR c.director_name = 'Эдик Заказы для групп')
-  AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 548)
+WHERE (
+  c.name = 'Эдик Заказы для групп' 
+  OR c.director_name = 'Эдик Заказы для групп'
+  OR COALESCE(c.director_name, c.name) = 'Эдик Заказы для групп'
+)
+AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 548)
 LIMIT 1;
 
 INSERT INTO rental_orders (
@@ -20239,8 +23027,12 @@ SELECT
   NOW(),
   NOW()
 FROM rental_clients c
-WHERE (c.name = 'Мира (ИП)' OR c.director_name = 'Мира (ИП)')
-  AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 547)
+WHERE (
+  c.name = 'Мира (ИП)' 
+  OR c.director_name = 'Мира (ИП)'
+  OR COALESCE(c.director_name, c.name) = 'Мира (ИП)'
+)
+AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 547)
 LIMIT 1;
 
 INSERT INTO rental_orders (
@@ -20268,8 +23060,12 @@ SELECT
   NOW(),
   NOW()
 FROM rental_clients c
-WHERE (c.name = 'Татьяна (Гольфстрим)' OR c.director_name = 'Татьяна (Гольфстрим)')
-  AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 546)
+WHERE (
+  c.name = 'Татьяна (Гольфстрим)' 
+  OR c.director_name = 'Татьяна (Гольфстрим)'
+  OR COALESCE(c.director_name, c.name) = 'Татьяна (Гольфстрим)'
+)
+AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 546)
 LIMIT 1;
 
 INSERT INTO rental_orders (
@@ -20297,8 +23093,12 @@ SELECT
   NOW(),
   NOW()
 FROM rental_clients c
-WHERE (c.name = 'Антон' OR c.director_name = 'Антон')
-  AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 544)
+WHERE (
+  c.name = 'Антон' 
+  OR c.director_name = 'Антон'
+  OR COALESCE(c.director_name, c.name) = 'Антон'
+)
+AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 544)
 LIMIT 1;
 
 INSERT INTO rental_orders (
@@ -20326,8 +23126,12 @@ SELECT
   NOW(),
   NOW()
 FROM rental_clients c
-WHERE (c.name = 'Эдик Заказы для групп' OR c.director_name = 'Эдик Заказы для групп')
-  AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 543)
+WHERE (
+  c.name = 'Эдик Заказы для групп' 
+  OR c.director_name = 'Эдик Заказы для групп'
+  OR COALESCE(c.director_name, c.name) = 'Эдик Заказы для групп'
+)
+AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 543)
 LIMIT 1;
 
 INSERT INTO rental_orders (
@@ -20355,8 +23159,12 @@ SELECT
   NOW(),
   NOW()
 FROM rental_clients c
-WHERE (c.name = 'Мира (ИП)' OR c.director_name = 'Мира (ИП)')
-  AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 542)
+WHERE (
+  c.name = 'Мира (ИП)' 
+  OR c.director_name = 'Мира (ИП)'
+  OR COALESCE(c.director_name, c.name) = 'Мира (ИП)'
+)
+AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 542)
 LIMIT 1;
 
 INSERT INTO rental_orders (
@@ -20384,8 +23192,12 @@ SELECT
   NOW(),
   NOW()
 FROM rental_clients c
-WHERE (c.name = 'Эдик Заказы для групп' OR c.director_name = 'Эдик Заказы для групп')
-  AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 541)
+WHERE (
+  c.name = 'Эдик Заказы для групп' 
+  OR c.director_name = 'Эдик Заказы для групп'
+  OR COALESCE(c.director_name, c.name) = 'Эдик Заказы для групп'
+)
+AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 541)
 LIMIT 1;
 
 INSERT INTO rental_orders (
@@ -20413,8 +23225,12 @@ SELECT
   NOW(),
   NOW()
 FROM rental_clients c
-WHERE (c.name = 'Юлианна' OR c.director_name = 'Юлианна')
-  AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 540)
+WHERE (
+  c.name = 'Юлианна' 
+  OR c.director_name = 'Юлианна'
+  OR COALESCE(c.director_name, c.name) = 'Юлианна'
+)
+AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 540)
 LIMIT 1;
 
 INSERT INTO rental_orders (
@@ -20442,8 +23258,12 @@ SELECT
   NOW(),
   NOW()
 FROM rental_clients c
-WHERE (c.name = 'Эдик Заказы для групп' OR c.director_name = 'Эдик Заказы для групп')
-  AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 539)
+WHERE (
+  c.name = 'Эдик Заказы для групп' 
+  OR c.director_name = 'Эдик Заказы для групп'
+  OR COALESCE(c.director_name, c.name) = 'Эдик Заказы для групп'
+)
+AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 539)
 LIMIT 1;
 
 INSERT INTO rental_orders (
@@ -20471,8 +23291,12 @@ SELECT
   NOW(),
   NOW()
 FROM rental_clients c
-WHERE (c.name = 'Элина (Сититур)' OR c.director_name = 'Элина (Сититур)')
-  AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 537)
+WHERE (
+  c.name = 'Элина (Сититур)' 
+  OR c.director_name = 'Элина (Сититур)'
+  OR COALESCE(c.director_name, c.name) = 'Элина (Сититур)'
+)
+AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 537)
 LIMIT 1;
 
 INSERT INTO rental_orders (
@@ -20500,8 +23324,12 @@ SELECT
   NOW(),
   NOW()
 FROM rental_clients c
-WHERE (c.name = 'Ольга Лукоянова' OR c.director_name = 'Ольга Лукоянова')
-  AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 536)
+WHERE (
+  c.name = 'Ольга Лукоянова' 
+  OR c.director_name = 'Ольга Лукоянова'
+  OR COALESCE(c.director_name, c.name) = 'Ольга Лукоянова'
+)
+AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 536)
 LIMIT 1;
 
 INSERT INTO rental_orders (
@@ -20529,8 +23357,12 @@ SELECT
   NOW(),
   NOW()
 FROM rental_clients c
-WHERE (c.name = 'Юлия Воронова' OR c.director_name = 'Юлия Воронова')
-  AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 533)
+WHERE (
+  c.name = 'Юлия Воронова' 
+  OR c.director_name = 'Юлия Воронова'
+  OR COALESCE(c.director_name, c.name) = 'Юлия Воронова'
+)
+AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 533)
 LIMIT 1;
 
 INSERT INTO rental_orders (
@@ -20558,8 +23390,12 @@ SELECT
   NOW(),
   NOW()
 FROM rental_clients c
-WHERE (c.name = 'Татьяна (Гольфстрим)' OR c.director_name = 'Татьяна (Гольфстрим)')
-  AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 532)
+WHERE (
+  c.name = 'Татьяна (Гольфстрим)' 
+  OR c.director_name = 'Татьяна (Гольфстрим)'
+  OR COALESCE(c.director_name, c.name) = 'Татьяна (Гольфстрим)'
+)
+AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 532)
 LIMIT 1;
 
 INSERT INTO rental_orders (
@@ -20587,8 +23423,12 @@ SELECT
   NOW(),
   NOW()
 FROM rental_clients c
-WHERE (c.name = 'Татьяна (Гольфстрим)' OR c.director_name = 'Татьяна (Гольфстрим)')
-  AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 531)
+WHERE (
+  c.name = 'Татьяна (Гольфстрим)' 
+  OR c.director_name = 'Татьяна (Гольфстрим)'
+  OR COALESCE(c.director_name, c.name) = 'Татьяна (Гольфстрим)'
+)
+AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 531)
 LIMIT 1;
 
 INSERT INTO rental_orders (
@@ -20616,8 +23456,12 @@ SELECT
   NOW(),
   NOW()
 FROM rental_clients c
-WHERE (c.name = 'Виолетта' OR c.director_name = 'Виолетта')
-  AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 530)
+WHERE (
+  c.name = 'Виолетта' 
+  OR c.director_name = 'Виолетта'
+  OR COALESCE(c.director_name, c.name) = 'Виолетта'
+)
+AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 530)
 LIMIT 1;
 
 INSERT INTO rental_orders (
@@ -20645,8 +23489,12 @@ SELECT
   NOW(),
   NOW()
 FROM rental_clients c
-WHERE (c.name = 'Альберт (КТ)' OR c.director_name = 'Альберт (КТ)')
-  AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 529)
+WHERE (
+  c.name = 'Альберт (КТ)' 
+  OR c.director_name = 'Альберт (КТ)'
+  OR COALESCE(c.director_name, c.name) = 'Альберт (КТ)'
+)
+AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 529)
 LIMIT 1;
 
 INSERT INTO rental_orders (
@@ -20674,8 +23522,12 @@ SELECT
   NOW(),
   NOW()
 FROM rental_clients c
-WHERE (c.name = 'Альберт (КТ)' OR c.director_name = 'Альберт (КТ)')
-  AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 528)
+WHERE (
+  c.name = 'Альберт (КТ)' 
+  OR c.director_name = 'Альберт (КТ)'
+  OR COALESCE(c.director_name, c.name) = 'Альберт (КТ)'
+)
+AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 528)
 LIMIT 1;
 
 INSERT INTO rental_orders (
@@ -20703,8 +23555,12 @@ SELECT
   NOW(),
   NOW()
 FROM rental_clients c
-WHERE (c.name = 'Альберт (КТ)' OR c.director_name = 'Альберт (КТ)')
-  AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 527)
+WHERE (
+  c.name = 'Альберт (КТ)' 
+  OR c.director_name = 'Альберт (КТ)'
+  OR COALESCE(c.director_name, c.name) = 'Альберт (КТ)'
+)
+AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 527)
 LIMIT 1;
 
 INSERT INTO rental_orders (
@@ -20732,8 +23588,12 @@ SELECT
   NOW(),
   NOW()
 FROM rental_clients c
-WHERE (c.name = 'Татьяна (Гольфстрим)' OR c.director_name = 'Татьяна (Гольфстрим)')
-  AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 526)
+WHERE (
+  c.name = 'Татьяна (Гольфстрим)' 
+  OR c.director_name = 'Татьяна (Гольфстрим)'
+  OR COALESCE(c.director_name, c.name) = 'Татьяна (Гольфстрим)'
+)
+AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 526)
 LIMIT 1;
 
 INSERT INTO rental_orders (
@@ -20761,8 +23621,12 @@ SELECT
   NOW(),
   NOW()
 FROM rental_clients c
-WHERE (c.name = 'Татьяна (Гольфстрим)' OR c.director_name = 'Татьяна (Гольфстрим)')
-  AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 525)
+WHERE (
+  c.name = 'Татьяна (Гольфстрим)' 
+  OR c.director_name = 'Татьяна (Гольфстрим)'
+  OR COALESCE(c.director_name, c.name) = 'Татьяна (Гольфстрим)'
+)
+AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 525)
 LIMIT 1;
 
 INSERT INTO rental_orders (
@@ -20790,8 +23654,12 @@ SELECT
   NOW(),
   NOW()
 FROM rental_clients c
-WHERE (c.name = 'Мира (ИП)' OR c.director_name = 'Мира (ИП)')
-  AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 524)
+WHERE (
+  c.name = 'Мира (ИП)' 
+  OR c.director_name = 'Мира (ИП)'
+  OR COALESCE(c.director_name, c.name) = 'Мира (ИП)'
+)
+AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 524)
 LIMIT 1;
 
 INSERT INTO rental_orders (
@@ -20819,8 +23687,12 @@ SELECT
   NOW(),
   NOW()
 FROM rental_clients c
-WHERE (c.name = 'Гульнара' OR c.director_name = 'Гульнара')
-  AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 523)
+WHERE (
+  c.name = 'Гульнара' 
+  OR c.director_name = 'Гульнара'
+  OR COALESCE(c.director_name, c.name) = 'Гульнара'
+)
+AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 523)
 LIMIT 1;
 
 INSERT INTO rental_orders (
@@ -20848,8 +23720,12 @@ SELECT
   NOW(),
   NOW()
 FROM rental_clients c
-WHERE (c.name = 'Эдик Заказы для групп' OR c.director_name = 'Эдик Заказы для групп')
-  AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 522)
+WHERE (
+  c.name = 'Эдик Заказы для групп' 
+  OR c.director_name = 'Эдик Заказы для групп'
+  OR COALESCE(c.director_name, c.name) = 'Эдик Заказы для групп'
+)
+AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 522)
 LIMIT 1;
 
 INSERT INTO rental_orders (
@@ -20877,8 +23753,12 @@ SELECT
   NOW(),
   NOW()
 FROM rental_clients c
-WHERE (c.name = 'Татьяна (Гольфстрим)' OR c.director_name = 'Татьяна (Гольфстрим)')
-  AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 521)
+WHERE (
+  c.name = 'Татьяна (Гольфстрим)' 
+  OR c.director_name = 'Татьяна (Гольфстрим)'
+  OR COALESCE(c.director_name, c.name) = 'Татьяна (Гольфстрим)'
+)
+AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 521)
 LIMIT 1;
 
 INSERT INTO rental_orders (
@@ -20906,8 +23786,12 @@ SELECT
   NOW(),
   NOW()
 FROM rental_clients c
-WHERE (c.name = 'Зельфира' OR c.director_name = 'Зельфира')
-  AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 520)
+WHERE (
+  c.name = 'Зельфира' 
+  OR c.director_name = 'Зельфира'
+  OR COALESCE(c.director_name, c.name) = 'Зельфира'
+)
+AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 520)
 LIMIT 1;
 
 INSERT INTO rental_orders (
@@ -20935,8 +23819,12 @@ SELECT
   NOW(),
   NOW()
 FROM rental_clients c
-WHERE (c.name = 'Гульнара' OR c.director_name = 'Гульнара')
-  AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 519)
+WHERE (
+  c.name = 'Гульнара' 
+  OR c.director_name = 'Гульнара'
+  OR COALESCE(c.director_name, c.name) = 'Гульнара'
+)
+AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 519)
 LIMIT 1;
 
 INSERT INTO rental_orders (
@@ -20964,8 +23852,12 @@ SELECT
   NOW(),
   NOW()
 FROM rental_clients c
-WHERE (c.name = 'Татьяна (Гольфстрим)' OR c.director_name = 'Татьяна (Гольфстрим)')
-  AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 518)
+WHERE (
+  c.name = 'Татьяна (Гольфстрим)' 
+  OR c.director_name = 'Татьяна (Гольфстрим)'
+  OR COALESCE(c.director_name, c.name) = 'Татьяна (Гольфстрим)'
+)
+AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 518)
 LIMIT 1;
 
 INSERT INTO rental_orders (
@@ -20993,8 +23885,12 @@ SELECT
   NOW(),
   NOW()
 FROM rental_clients c
-WHERE (c.name = 'Татьяна (Гольфстрим)' OR c.director_name = 'Татьяна (Гольфстрим)')
-  AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 517)
+WHERE (
+  c.name = 'Татьяна (Гольфстрим)' 
+  OR c.director_name = 'Татьяна (Гольфстрим)'
+  OR COALESCE(c.director_name, c.name) = 'Татьяна (Гольфстрим)'
+)
+AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 517)
 LIMIT 1;
 
 INSERT INTO rental_orders (
@@ -21022,8 +23918,12 @@ SELECT
   NOW(),
   NOW()
 FROM rental_clients c
-WHERE (c.name = 'Татьяна (Гольфстрим)' OR c.director_name = 'Татьяна (Гольфстрим)')
-  AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 516)
+WHERE (
+  c.name = 'Татьяна (Гольфстрим)' 
+  OR c.director_name = 'Татьяна (Гольфстрим)'
+  OR COALESCE(c.director_name, c.name) = 'Татьяна (Гольфстрим)'
+)
+AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 516)
 LIMIT 1;
 
 INSERT INTO rental_orders (
@@ -21051,8 +23951,12 @@ SELECT
   NOW(),
   NOW()
 FROM rental_clients c
-WHERE (c.name = 'Татьяна (Гольфстрим)' OR c.director_name = 'Татьяна (Гольфстрим)')
-  AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 515)
+WHERE (
+  c.name = 'Татьяна (Гольфстрим)' 
+  OR c.director_name = 'Татьяна (Гольфстрим)'
+  OR COALESCE(c.director_name, c.name) = 'Татьяна (Гольфстрим)'
+)
+AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 515)
 LIMIT 1;
 
 INSERT INTO rental_orders (
@@ -21080,8 +23984,12 @@ SELECT
   NOW(),
   NOW()
 FROM rental_clients c
-WHERE (c.name = 'Сергей (Авангард)' OR c.director_name = 'Сергей (Авангард)')
-  AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 514)
+WHERE (
+  c.name = 'Сергей (Авангард)' 
+  OR c.director_name = 'Сергей (Авангард)'
+  OR COALESCE(c.director_name, c.name) = 'Сергей (Авангард)'
+)
+AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 514)
 LIMIT 1;
 
 INSERT INTO rental_orders (
@@ -21109,8 +24017,12 @@ SELECT
   NOW(),
   NOW()
 FROM rental_clients c
-WHERE (c.name = 'Юлия Воронова' OR c.director_name = 'Юлия Воронова')
-  AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 513)
+WHERE (
+  c.name = 'Юлия Воронова' 
+  OR c.director_name = 'Юлия Воронова'
+  OR COALESCE(c.director_name, c.name) = 'Юлия Воронова'
+)
+AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 513)
 LIMIT 1;
 
 INSERT INTO rental_orders (
@@ -21138,8 +24050,12 @@ SELECT
   NOW(),
   NOW()
 FROM rental_clients c
-WHERE (c.name = 'Мария Экскурсовод' OR c.director_name = 'Мария Экскурсовод')
-  AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 512)
+WHERE (
+  c.name = 'Мария Экскурсовод' 
+  OR c.director_name = 'Мария Экскурсовод'
+  OR COALESCE(c.director_name, c.name) = 'Мария Экскурсовод'
+)
+AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 512)
 LIMIT 1;
 
 INSERT INTO rental_orders (
@@ -21167,8 +24083,12 @@ SELECT
   NOW(),
   NOW()
 FROM rental_clients c
-WHERE (c.name = 'Элина (Сититур)' OR c.director_name = 'Элина (Сититур)')
-  AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 509)
+WHERE (
+  c.name = 'Элина (Сититур)' 
+  OR c.director_name = 'Элина (Сититур)'
+  OR COALESCE(c.director_name, c.name) = 'Элина (Сититур)'
+)
+AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 509)
 LIMIT 1;
 
 INSERT INTO rental_orders (
@@ -21196,8 +24116,12 @@ SELECT
   NOW(),
   NOW()
 FROM rental_clients c
-WHERE (c.name = 'Ирина Обыденникова' OR c.director_name = 'Ирина Обыденникова')
-  AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 508)
+WHERE (
+  c.name = 'Ирина Обыденникова' 
+  OR c.director_name = 'Ирина Обыденникова'
+  OR COALESCE(c.director_name, c.name) = 'Ирина Обыденникова'
+)
+AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 508)
 LIMIT 1;
 
 INSERT INTO rental_orders (
@@ -21225,8 +24149,12 @@ SELECT
   NOW(),
   NOW()
 FROM rental_clients c
-WHERE (c.name = 'Мира (ИП)' OR c.director_name = 'Мира (ИП)')
-  AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 507)
+WHERE (
+  c.name = 'Мира (ИП)' 
+  OR c.director_name = 'Мира (ИП)'
+  OR COALESCE(c.director_name, c.name) = 'Мира (ИП)'
+)
+AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 507)
 LIMIT 1;
 
 INSERT INTO rental_orders (
@@ -21254,8 +24182,12 @@ SELECT
   NOW(),
   NOW()
 FROM rental_clients c
-WHERE (c.name = 'Мира (ИП)' OR c.director_name = 'Мира (ИП)')
-  AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 506)
+WHERE (
+  c.name = 'Мира (ИП)' 
+  OR c.director_name = 'Мира (ИП)'
+  OR COALESCE(c.director_name, c.name) = 'Мира (ИП)'
+)
+AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 506)
 LIMIT 1;
 
 INSERT INTO rental_orders (
@@ -21283,8 +24215,12 @@ SELECT
   NOW(),
   NOW()
 FROM rental_clients c
-WHERE (c.name = 'Андрей (Экскурс)' OR c.director_name = 'Андрей (Экскурс)')
-  AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 505)
+WHERE (
+  c.name = 'Андрей (Экскурс)' 
+  OR c.director_name = 'Андрей (Экскурс)'
+  OR COALESCE(c.director_name, c.name) = 'Андрей (Экскурс)'
+)
+AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 505)
 LIMIT 1;
 
 INSERT INTO rental_orders (
@@ -21312,8 +24248,12 @@ SELECT
   NOW(),
   NOW()
 FROM rental_clients c
-WHERE (c.name = 'Мария Экскурсовод' OR c.director_name = 'Мария Экскурсовод')
-  AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 504)
+WHERE (
+  c.name = 'Мария Экскурсовод' 
+  OR c.director_name = 'Мария Экскурсовод'
+  OR COALESCE(c.director_name, c.name) = 'Мария Экскурсовод'
+)
+AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 504)
 LIMIT 1;
 
 INSERT INTO rental_orders (
@@ -21341,8 +24281,12 @@ SELECT
   NOW(),
   NOW()
 FROM rental_clients c
-WHERE (c.name = 'Анастасия' OR c.director_name = 'Анастасия')
-  AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 503)
+WHERE (
+  c.name = 'Анастасия' 
+  OR c.director_name = 'Анастасия'
+  OR COALESCE(c.director_name, c.name) = 'Анастасия'
+)
+AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 503)
 LIMIT 1;
 
 INSERT INTO rental_orders (
@@ -21370,8 +24314,12 @@ SELECT
   NOW(),
   NOW()
 FROM rental_clients c
-WHERE (c.name = 'Галия' OR c.director_name = 'Галия')
-  AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 502)
+WHERE (
+  c.name = 'Галия' 
+  OR c.director_name = 'Галия'
+  OR COALESCE(c.director_name, c.name) = 'Галия'
+)
+AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 502)
 LIMIT 1;
 
 INSERT INTO rental_orders (
@@ -21399,8 +24347,12 @@ SELECT
   NOW(),
   NOW()
 FROM rental_clients c
-WHERE (c.name = 'Мария Экскурсовод' OR c.director_name = 'Мария Экскурсовод')
-  AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 501)
+WHERE (
+  c.name = 'Мария Экскурсовод' 
+  OR c.director_name = 'Мария Экскурсовод'
+  OR COALESCE(c.director_name, c.name) = 'Мария Экскурсовод'
+)
+AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 501)
 LIMIT 1;
 
 INSERT INTO rental_orders (
@@ -21428,8 +24380,12 @@ SELECT
   NOW(),
   NOW()
 FROM rental_clients c
-WHERE (c.name = 'Альберт (КТ)' OR c.director_name = 'Альберт (КТ)')
-  AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 500)
+WHERE (
+  c.name = 'Альберт (КТ)' 
+  OR c.director_name = 'Альберт (КТ)'
+  OR COALESCE(c.director_name, c.name) = 'Альберт (КТ)'
+)
+AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 500)
 LIMIT 1;
 
 INSERT INTO rental_orders (
@@ -21457,8 +24413,12 @@ SELECT
   NOW(),
   NOW()
 FROM rental_clients c
-WHERE (c.name = 'Эдик Заказы для групп' OR c.director_name = 'Эдик Заказы для групп')
-  AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 499)
+WHERE (
+  c.name = 'Эдик Заказы для групп' 
+  OR c.director_name = 'Эдик Заказы для групп'
+  OR COALESCE(c.director_name, c.name) = 'Эдик Заказы для групп'
+)
+AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 499)
 LIMIT 1;
 
 INSERT INTO rental_orders (
@@ -21486,8 +24446,12 @@ SELECT
   NOW(),
   NOW()
 FROM rental_clients c
-WHERE (c.name = 'Эдик Заказы для групп' OR c.director_name = 'Эдик Заказы для групп')
-  AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 498)
+WHERE (
+  c.name = 'Эдик Заказы для групп' 
+  OR c.director_name = 'Эдик Заказы для групп'
+  OR COALESCE(c.director_name, c.name) = 'Эдик Заказы для групп'
+)
+AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 498)
 LIMIT 1;
 
 INSERT INTO rental_orders (
@@ -21515,8 +24479,12 @@ SELECT
   NOW(),
   NOW()
 FROM rental_clients c
-WHERE (c.name = 'Эдик Заказы для групп' OR c.director_name = 'Эдик Заказы для групп')
-  AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 497)
+WHERE (
+  c.name = 'Эдик Заказы для групп' 
+  OR c.director_name = 'Эдик Заказы для групп'
+  OR COALESCE(c.director_name, c.name) = 'Эдик Заказы для групп'
+)
+AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 497)
 LIMIT 1;
 
 INSERT INTO rental_orders (
@@ -21544,8 +24512,12 @@ SELECT
   NOW(),
   NOW()
 FROM rental_clients c
-WHERE (c.name = 'Эдик Заказы для групп' OR c.director_name = 'Эдик Заказы для групп')
-  AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 496)
+WHERE (
+  c.name = 'Эдик Заказы для групп' 
+  OR c.director_name = 'Эдик Заказы для групп'
+  OR COALESCE(c.director_name, c.name) = 'Эдик Заказы для групп'
+)
+AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 496)
 LIMIT 1;
 
 INSERT INTO rental_orders (
@@ -21573,8 +24545,12 @@ SELECT
   NOW(),
   NOW()
 FROM rental_clients c
-WHERE (c.name = 'Наталья' OR c.director_name = 'Наталья')
-  AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 495)
+WHERE (
+  c.name = 'Наталья' 
+  OR c.director_name = 'Наталья'
+  OR COALESCE(c.director_name, c.name) = 'Наталья'
+)
+AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 495)
 LIMIT 1;
 
 INSERT INTO rental_orders (
@@ -21602,8 +24578,12 @@ SELECT
   NOW(),
   NOW()
 FROM rental_clients c
-WHERE (c.name = 'Наталья' OR c.director_name = 'Наталья')
-  AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 494)
+WHERE (
+  c.name = 'Наталья' 
+  OR c.director_name = 'Наталья'
+  OR COALESCE(c.director_name, c.name) = 'Наталья'
+)
+AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 494)
 LIMIT 1;
 
 INSERT INTO rental_orders (
@@ -21631,8 +24611,12 @@ SELECT
   NOW(),
   NOW()
 FROM rental_clients c
-WHERE (c.name = 'Альберт (КТ)' OR c.director_name = 'Альберт (КТ)')
-  AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 493)
+WHERE (
+  c.name = 'Альберт (КТ)' 
+  OR c.director_name = 'Альберт (КТ)'
+  OR COALESCE(c.director_name, c.name) = 'Альберт (КТ)'
+)
+AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 493)
 LIMIT 1;
 
 INSERT INTO rental_orders (
@@ -21660,8 +24644,12 @@ SELECT
   NOW(),
   NOW()
 FROM rental_clients c
-WHERE (c.name = 'Эдик Заказы для групп' OR c.director_name = 'Эдик Заказы для групп')
-  AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 492)
+WHERE (
+  c.name = 'Эдик Заказы для групп' 
+  OR c.director_name = 'Эдик Заказы для групп'
+  OR COALESCE(c.director_name, c.name) = 'Эдик Заказы для групп'
+)
+AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 492)
 LIMIT 1;
 
 INSERT INTO rental_orders (
@@ -21689,8 +24677,12 @@ SELECT
   NOW(),
   NOW()
 FROM rental_clients c
-WHERE (c.name = 'Татьяна (Гольфстрим)' OR c.director_name = 'Татьяна (Гольфстрим)')
-  AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 491)
+WHERE (
+  c.name = 'Татьяна (Гольфстрим)' 
+  OR c.director_name = 'Татьяна (Гольфстрим)'
+  OR COALESCE(c.director_name, c.name) = 'Татьяна (Гольфстрим)'
+)
+AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 491)
 LIMIT 1;
 
 INSERT INTO rental_orders (
@@ -21718,8 +24710,12 @@ SELECT
   NOW(),
   NOW()
 FROM rental_clients c
-WHERE (c.name = 'Юлия (Рыжий Слон)' OR c.director_name = 'Юлия (Рыжий Слон)')
-  AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 490)
+WHERE (
+  c.name = 'Юлия (Рыжий Слон)' 
+  OR c.director_name = 'Юлия (Рыжий Слон)'
+  OR COALESCE(c.director_name, c.name) = 'Юлия (Рыжий Слон)'
+)
+AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 490)
 LIMIT 1;
 
 INSERT INTO rental_orders (
@@ -21747,8 +24743,12 @@ SELECT
   NOW(),
   NOW()
 FROM rental_clients c
-WHERE (c.name = 'Татьяна (Гольфстрим)' OR c.director_name = 'Татьяна (Гольфстрим)')
-  AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 489)
+WHERE (
+  c.name = 'Татьяна (Гольфстрим)' 
+  OR c.director_name = 'Татьяна (Гольфстрим)'
+  OR COALESCE(c.director_name, c.name) = 'Татьяна (Гольфстрим)'
+)
+AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 489)
 LIMIT 1;
 
 INSERT INTO rental_orders (
@@ -21776,8 +24776,12 @@ SELECT
   NOW(),
   NOW()
 FROM rental_clients c
-WHERE (c.name = 'Татьяна (Гольфстрим)' OR c.director_name = 'Татьяна (Гольфстрим)')
-  AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 488)
+WHERE (
+  c.name = 'Татьяна (Гольфстрим)' 
+  OR c.director_name = 'Татьяна (Гольфстрим)'
+  OR COALESCE(c.director_name, c.name) = 'Татьяна (Гольфстрим)'
+)
+AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 488)
 LIMIT 1;
 
 INSERT INTO rental_orders (
@@ -21805,8 +24809,12 @@ SELECT
   NOW(),
   NOW()
 FROM rental_clients c
-WHERE (c.name = 'Татьяна (Гольфстрим)' OR c.director_name = 'Татьяна (Гольфстрим)')
-  AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 487)
+WHERE (
+  c.name = 'Татьяна (Гольфстрим)' 
+  OR c.director_name = 'Татьяна (Гольфстрим)'
+  OR COALESCE(c.director_name, c.name) = 'Татьяна (Гольфстрим)'
+)
+AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 487)
 LIMIT 1;
 
 INSERT INTO rental_orders (
@@ -21834,8 +24842,12 @@ SELECT
   NOW(),
   NOW()
 FROM rental_clients c
-WHERE (c.name = 'Татьяна (Гольфстрим)' OR c.director_name = 'Татьяна (Гольфстрим)')
-  AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 486)
+WHERE (
+  c.name = 'Татьяна (Гольфстрим)' 
+  OR c.director_name = 'Татьяна (Гольфстрим)'
+  OR COALESCE(c.director_name, c.name) = 'Татьяна (Гольфстрим)'
+)
+AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 486)
 LIMIT 1;
 
 INSERT INTO rental_orders (
@@ -21863,8 +24875,12 @@ SELECT
   NOW(),
   NOW()
 FROM rental_clients c
-WHERE (c.name = 'Татьяна (Гольфстрим)' OR c.director_name = 'Татьяна (Гольфстрим)')
-  AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 485)
+WHERE (
+  c.name = 'Татьяна (Гольфстрим)' 
+  OR c.director_name = 'Татьяна (Гольфстрим)'
+  OR COALESCE(c.director_name, c.name) = 'Татьяна (Гольфстрим)'
+)
+AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 485)
 LIMIT 1;
 
 INSERT INTO rental_orders (
@@ -21892,8 +24908,12 @@ SELECT
   NOW(),
   NOW()
 FROM rental_clients c
-WHERE (c.name = 'Татьяна (Гольфстрим)' OR c.director_name = 'Татьяна (Гольфстрим)')
-  AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 484)
+WHERE (
+  c.name = 'Татьяна (Гольфстрим)' 
+  OR c.director_name = 'Татьяна (Гольфстрим)'
+  OR COALESCE(c.director_name, c.name) = 'Татьяна (Гольфстрим)'
+)
+AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 484)
 LIMIT 1;
 
 INSERT INTO rental_orders (
@@ -21921,8 +24941,12 @@ SELECT
   NOW(),
   NOW()
 FROM rental_clients c
-WHERE (c.name = 'Татьяна (Гольфстрим)' OR c.director_name = 'Татьяна (Гольфстрим)')
-  AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 483)
+WHERE (
+  c.name = 'Татьяна (Гольфстрим)' 
+  OR c.director_name = 'Татьяна (Гольфстрим)'
+  OR COALESCE(c.director_name, c.name) = 'Татьяна (Гольфстрим)'
+)
+AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 483)
 LIMIT 1;
 
 INSERT INTO rental_orders (
@@ -21950,8 +24974,12 @@ SELECT
   NOW(),
   NOW()
 FROM rental_clients c
-WHERE (c.name = 'Татьяна (Гольфстрим)' OR c.director_name = 'Татьяна (Гольфстрим)')
-  AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 482)
+WHERE (
+  c.name = 'Татьяна (Гольфстрим)' 
+  OR c.director_name = 'Татьяна (Гольфстрим)'
+  OR COALESCE(c.director_name, c.name) = 'Татьяна (Гольфстрим)'
+)
+AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 482)
 LIMIT 1;
 
 INSERT INTO rental_orders (
@@ -21979,8 +25007,12 @@ SELECT
   NOW(),
   NOW()
 FROM rental_clients c
-WHERE (c.name = 'Татьяна (Гольфстрим)' OR c.director_name = 'Татьяна (Гольфстрим)')
-  AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 481)
+WHERE (
+  c.name = 'Татьяна (Гольфстрим)' 
+  OR c.director_name = 'Татьяна (Гольфстрим)'
+  OR COALESCE(c.director_name, c.name) = 'Татьяна (Гольфстрим)'
+)
+AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 481)
 LIMIT 1;
 
 INSERT INTO rental_orders (
@@ -22008,8 +25040,12 @@ SELECT
   NOW(),
   NOW()
 FROM rental_clients c
-WHERE (c.name = 'Татьяна (Гольфстрим)' OR c.director_name = 'Татьяна (Гольфстрим)')
-  AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 480)
+WHERE (
+  c.name = 'Татьяна (Гольфстрим)' 
+  OR c.director_name = 'Татьяна (Гольфстрим)'
+  OR COALESCE(c.director_name, c.name) = 'Татьяна (Гольфстрим)'
+)
+AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 480)
 LIMIT 1;
 
 INSERT INTO rental_orders (
@@ -22037,8 +25073,12 @@ SELECT
   NOW(),
   NOW()
 FROM rental_clients c
-WHERE (c.name = 'Татьяна (Гольфстрим)' OR c.director_name = 'Татьяна (Гольфстрим)')
-  AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 479)
+WHERE (
+  c.name = 'Татьяна (Гольфстрим)' 
+  OR c.director_name = 'Татьяна (Гольфстрим)'
+  OR COALESCE(c.director_name, c.name) = 'Татьяна (Гольфстрим)'
+)
+AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 479)
 LIMIT 1;
 
 INSERT INTO rental_orders (
@@ -22066,8 +25106,12 @@ SELECT
   NOW(),
   NOW()
 FROM rental_clients c
-WHERE (c.name = 'Татьяна (Гольфстрим)' OR c.director_name = 'Татьяна (Гольфстрим)')
-  AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 478)
+WHERE (
+  c.name = 'Татьяна (Гольфстрим)' 
+  OR c.director_name = 'Татьяна (Гольфстрим)'
+  OR COALESCE(c.director_name, c.name) = 'Татьяна (Гольфстрим)'
+)
+AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 478)
 LIMIT 1;
 
 INSERT INTO rental_orders (
@@ -22095,8 +25139,12 @@ SELECT
   NOW(),
   NOW()
 FROM rental_clients c
-WHERE (c.name = 'Дмитрий Попков' OR c.director_name = 'Дмитрий Попков')
-  AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 477)
+WHERE (
+  c.name = 'Дмитрий Попков' 
+  OR c.director_name = 'Дмитрий Попков'
+  OR COALESCE(c.director_name, c.name) = 'Дмитрий Попков'
+)
+AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 477)
 LIMIT 1;
 
 INSERT INTO rental_orders (
@@ -22124,8 +25172,12 @@ SELECT
   NOW(),
   NOW()
 FROM rental_clients c
-WHERE (c.name = 'Ольга' OR c.director_name = 'Ольга')
-  AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 476)
+WHERE (
+  c.name = 'Ольга' 
+  OR c.director_name = 'Ольга'
+  OR COALESCE(c.director_name, c.name) = 'Ольга'
+)
+AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 476)
 LIMIT 1;
 
 INSERT INTO rental_orders (
@@ -22153,8 +25205,12 @@ SELECT
   NOW(),
   NOW()
 FROM rental_clients c
-WHERE (c.name = 'Камила Ягудина' OR c.director_name = 'Камила Ягудина')
-  AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 475)
+WHERE (
+  c.name = 'Камила Ягудина' 
+  OR c.director_name = 'Камила Ягудина'
+  OR COALESCE(c.director_name, c.name) = 'Камила Ягудина'
+)
+AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 475)
 LIMIT 1;
 
 INSERT INTO rental_orders (
@@ -22182,8 +25238,12 @@ SELECT
   NOW(),
   NOW()
 FROM rental_clients c
-WHERE (c.name = 'Луиза' OR c.director_name = 'Луиза')
-  AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 474)
+WHERE (
+  c.name = 'Луиза' 
+  OR c.director_name = 'Луиза'
+  OR COALESCE(c.director_name, c.name) = 'Луиза'
+)
+AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 474)
 LIMIT 1;
 
 INSERT INTO rental_orders (
@@ -22211,8 +25271,12 @@ SELECT
   NOW(),
   NOW()
 FROM rental_clients c
-WHERE (c.name = 'Нина Тиханова' OR c.director_name = 'Нина Тиханова')
-  AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 473)
+WHERE (
+  c.name = 'Нина Тиханова' 
+  OR c.director_name = 'Нина Тиханова'
+  OR COALESCE(c.director_name, c.name) = 'Нина Тиханова'
+)
+AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 473)
 LIMIT 1;
 
 INSERT INTO rental_orders (
@@ -22240,8 +25304,12 @@ SELECT
   NOW(),
   NOW()
 FROM rental_clients c
-WHERE (c.name = 'Ольга Тандалова' OR c.director_name = 'Ольга Тандалова')
-  AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 472)
+WHERE (
+  c.name = 'Ольга Тандалова' 
+  OR c.director_name = 'Ольга Тандалова'
+  OR COALESCE(c.director_name, c.name) = 'Ольга Тандалова'
+)
+AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 472)
 LIMIT 1;
 
 INSERT INTO rental_orders (
@@ -22269,8 +25337,12 @@ SELECT
   NOW(),
   NOW()
 FROM rental_clients c
-WHERE (c.name = 'Татьяна Чуб' OR c.director_name = 'Татьяна Чуб')
-  AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 470)
+WHERE (
+  c.name = 'Татьяна Чуб' 
+  OR c.director_name = 'Татьяна Чуб'
+  OR COALESCE(c.director_name, c.name) = 'Татьяна Чуб'
+)
+AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 470)
 LIMIT 1;
 
 INSERT INTO rental_orders (
@@ -22298,8 +25370,12 @@ SELECT
   NOW(),
   NOW()
 FROM rental_clients c
-WHERE (c.name = 'Наталья' OR c.director_name = 'Наталья')
-  AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 469)
+WHERE (
+  c.name = 'Наталья' 
+  OR c.director_name = 'Наталья'
+  OR COALESCE(c.director_name, c.name) = 'Наталья'
+)
+AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 469)
 LIMIT 1;
 
 INSERT INTO rental_orders (
@@ -22327,8 +25403,12 @@ SELECT
   NOW(),
   NOW()
 FROM rental_clients c
-WHERE (c.name = 'Галия' OR c.director_name = 'Галия')
-  AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 468)
+WHERE (
+  c.name = 'Галия' 
+  OR c.director_name = 'Галия'
+  OR COALESCE(c.director_name, c.name) = 'Галия'
+)
+AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 468)
 LIMIT 1;
 
 INSERT INTO rental_orders (
@@ -22356,8 +25436,12 @@ SELECT
   NOW(),
   NOW()
 FROM rental_clients c
-WHERE (c.name = 'Элина (Сититур)' OR c.director_name = 'Элина (Сититур)')
-  AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 467)
+WHERE (
+  c.name = 'Элина (Сититур)' 
+  OR c.director_name = 'Элина (Сититур)'
+  OR COALESCE(c.director_name, c.name) = 'Элина (Сититур)'
+)
+AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 467)
 LIMIT 1;
 
 INSERT INTO rental_orders (
@@ -22385,8 +25469,12 @@ SELECT
   NOW(),
   NOW()
 FROM rental_clients c
-WHERE (c.name = 'Элина (Сититур)' OR c.director_name = 'Элина (Сититур)')
-  AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 466)
+WHERE (
+  c.name = 'Элина (Сититур)' 
+  OR c.director_name = 'Элина (Сититур)'
+  OR COALESCE(c.director_name, c.name) = 'Элина (Сититур)'
+)
+AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 466)
 LIMIT 1;
 
 INSERT INTO rental_orders (
@@ -22414,8 +25502,12 @@ SELECT
   NOW(),
   NOW()
 FROM rental_clients c
-WHERE (c.name = 'Аниса' OR c.director_name = 'Аниса')
-  AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 465)
+WHERE (
+  c.name = 'Аниса' 
+  OR c.director_name = 'Аниса'
+  OR COALESCE(c.director_name, c.name) = 'Аниса'
+)
+AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 465)
 LIMIT 1;
 
 INSERT INTO rental_orders (
@@ -22443,8 +25535,12 @@ SELECT
   NOW(),
   NOW()
 FROM rental_clients c
-WHERE (c.name = 'Варвара' OR c.director_name = 'Варвара')
-  AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 463)
+WHERE (
+  c.name = 'Варвара' 
+  OR c.director_name = 'Варвара'
+  OR COALESCE(c.director_name, c.name) = 'Варвара'
+)
+AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 463)
 LIMIT 1;
 
 INSERT INTO rental_orders (
@@ -22472,8 +25568,12 @@ SELECT
   NOW(),
   NOW()
 FROM rental_clients c
-WHERE (c.name = 'Екатерина' OR c.director_name = 'Екатерина')
-  AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 462)
+WHERE (
+  c.name = 'Екатерина' 
+  OR c.director_name = 'Екатерина'
+  OR COALESCE(c.director_name, c.name) = 'Екатерина'
+)
+AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 462)
 LIMIT 1;
 
 INSERT INTO rental_orders (
@@ -22501,8 +25601,12 @@ SELECT
   NOW(),
   NOW()
 FROM rental_clients c
-WHERE (c.name = 'Мира (ИП)' OR c.director_name = 'Мира (ИП)')
-  AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 461)
+WHERE (
+  c.name = 'Мира (ИП)' 
+  OR c.director_name = 'Мира (ИП)'
+  OR COALESCE(c.director_name, c.name) = 'Мира (ИП)'
+)
+AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 461)
 LIMIT 1;
 
 INSERT INTO rental_orders (
@@ -22530,8 +25634,12 @@ SELECT
   NOW(),
   NOW()
 FROM rental_clients c
-WHERE (c.name = 'Ирина Сафронова' OR c.director_name = 'Ирина Сафронова')
-  AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 460)
+WHERE (
+  c.name = 'Ирина Сафронова' 
+  OR c.director_name = 'Ирина Сафронова'
+  OR COALESCE(c.director_name, c.name) = 'Ирина Сафронова'
+)
+AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 460)
 LIMIT 1;
 
 INSERT INTO rental_orders (
@@ -22559,8 +25667,12 @@ SELECT
   NOW(),
   NOW()
 FROM rental_clients c
-WHERE (c.name = 'Юлия Воронова' OR c.director_name = 'Юлия Воронова')
-  AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 459)
+WHERE (
+  c.name = 'Юлия Воронова' 
+  OR c.director_name = 'Юлия Воронова'
+  OR COALESCE(c.director_name, c.name) = 'Юлия Воронова'
+)
+AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 459)
 LIMIT 1;
 
 INSERT INTO rental_orders (
@@ -22588,8 +25700,12 @@ SELECT
   NOW(),
   NOW()
 FROM rental_clients c
-WHERE (c.name = 'Палитра Тур' OR c.director_name = 'Палитра Тур')
-  AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 458)
+WHERE (
+  c.name = 'Палитра Тур' 
+  OR c.director_name = 'Палитра Тур'
+  OR COALESCE(c.director_name, c.name) = 'Палитра Тур'
+)
+AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 458)
 LIMIT 1;
 
 INSERT INTO rental_orders (
@@ -22617,8 +25733,12 @@ SELECT
   NOW(),
   NOW()
 FROM rental_clients c
-WHERE (c.name = 'Галия' OR c.director_name = 'Галия')
-  AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 457)
+WHERE (
+  c.name = 'Галия' 
+  OR c.director_name = 'Галия'
+  OR COALESCE(c.director_name, c.name) = 'Галия'
+)
+AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 457)
 LIMIT 1;
 
 INSERT INTO rental_orders (
@@ -22646,8 +25766,12 @@ SELECT
   NOW(),
   NOW()
 FROM rental_clients c
-WHERE (c.name = 'Юлия Воронова' OR c.director_name = 'Юлия Воронова')
-  AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 455)
+WHERE (
+  c.name = 'Юлия Воронова' 
+  OR c.director_name = 'Юлия Воронова'
+  OR COALESCE(c.director_name, c.name) = 'Юлия Воронова'
+)
+AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 455)
 LIMIT 1;
 
 INSERT INTO rental_orders (
@@ -22675,8 +25799,12 @@ SELECT
   NOW(),
   NOW()
 FROM rental_clients c
-WHERE (c.name = 'Юлия Воронова' OR c.director_name = 'Юлия Воронова')
-  AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 454)
+WHERE (
+  c.name = 'Юлия Воронова' 
+  OR c.director_name = 'Юлия Воронова'
+  OR COALESCE(c.director_name, c.name) = 'Юлия Воронова'
+)
+AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 454)
 LIMIT 1;
 
 INSERT INTO rental_orders (
@@ -22704,8 +25832,12 @@ SELECT
   NOW(),
   NOW()
 FROM rental_clients c
-WHERE (c.name = 'Мария' OR c.director_name = 'Мария')
-  AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 453)
+WHERE (
+  c.name = 'Мария' 
+  OR c.director_name = 'Мария'
+  OR COALESCE(c.director_name, c.name) = 'Мария'
+)
+AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 453)
 LIMIT 1;
 
 INSERT INTO rental_orders (
@@ -22733,8 +25865,12 @@ SELECT
   NOW(),
   NOW()
 FROM rental_clients c
-WHERE (c.name = 'Мария' OR c.director_name = 'Мария')
-  AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 452)
+WHERE (
+  c.name = 'Мария' 
+  OR c.director_name = 'Мария'
+  OR COALESCE(c.director_name, c.name) = 'Мария'
+)
+AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 452)
 LIMIT 1;
 
 INSERT INTO rental_orders (
@@ -22762,8 +25898,12 @@ SELECT
   NOW(),
   NOW()
 FROM rental_clients c
-WHERE (c.name = 'Мария' OR c.director_name = 'Мария')
-  AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 451)
+WHERE (
+  c.name = 'Мария' 
+  OR c.director_name = 'Мария'
+  OR COALESCE(c.director_name, c.name) = 'Мария'
+)
+AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 451)
 LIMIT 1;
 
 INSERT INTO rental_orders (
@@ -22791,8 +25931,12 @@ SELECT
   NOW(),
   NOW()
 FROM rental_clients c
-WHERE (c.name = 'Ирина Обыденникова' OR c.director_name = 'Ирина Обыденникова')
-  AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 450)
+WHERE (
+  c.name = 'Ирина Обыденникова' 
+  OR c.director_name = 'Ирина Обыденникова'
+  OR COALESCE(c.director_name, c.name) = 'Ирина Обыденникова'
+)
+AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 450)
 LIMIT 1;
 
 INSERT INTO rental_orders (
@@ -22820,8 +25964,12 @@ SELECT
   NOW(),
   NOW()
 FROM rental_clients c
-WHERE (c.name = 'Ирина Обыденникова' OR c.director_name = 'Ирина Обыденникова')
-  AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 449)
+WHERE (
+  c.name = 'Ирина Обыденникова' 
+  OR c.director_name = 'Ирина Обыденникова'
+  OR COALESCE(c.director_name, c.name) = 'Ирина Обыденникова'
+)
+AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 449)
 LIMIT 1;
 
 INSERT INTO rental_orders (
@@ -22849,8 +25997,12 @@ SELECT
   NOW(),
   NOW()
 FROM rental_clients c
-WHERE (c.name = 'Мария Экскурсовод' OR c.director_name = 'Мария Экскурсовод')
-  AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 445)
+WHERE (
+  c.name = 'Мария Экскурсовод' 
+  OR c.director_name = 'Мария Экскурсовод'
+  OR COALESCE(c.director_name, c.name) = 'Мария Экскурсовод'
+)
+AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 445)
 LIMIT 1;
 
 INSERT INTO rental_orders (
@@ -22878,8 +26030,12 @@ SELECT
   NOW(),
   NOW()
 FROM rental_clients c
-WHERE (c.name = 'Гульфия' OR c.director_name = 'Гульфия')
-  AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 444)
+WHERE (
+  c.name = 'Гульфия' 
+  OR c.director_name = 'Гульфия'
+  OR COALESCE(c.director_name, c.name) = 'Гульфия'
+)
+AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 444)
 LIMIT 1;
 
 INSERT INTO rental_orders (
@@ -22907,8 +26063,12 @@ SELECT
   NOW(),
   NOW()
 FROM rental_clients c
-WHERE (c.name = 'Лариса' OR c.director_name = 'Лариса')
-  AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 443)
+WHERE (
+  c.name = 'Лариса' 
+  OR c.director_name = 'Лариса'
+  OR COALESCE(c.director_name, c.name) = 'Лариса'
+)
+AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 443)
 LIMIT 1;
 
 INSERT INTO rental_orders (
@@ -22936,8 +26096,12 @@ SELECT
   NOW(),
   NOW()
 FROM rental_clients c
-WHERE (c.name = 'Татьяна (Гольфстрим)' OR c.director_name = 'Татьяна (Гольфстрим)')
-  AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 442)
+WHERE (
+  c.name = 'Татьяна (Гольфстрим)' 
+  OR c.director_name = 'Татьяна (Гольфстрим)'
+  OR COALESCE(c.director_name, c.name) = 'Татьяна (Гольфстрим)'
+)
+AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 442)
 LIMIT 1;
 
 INSERT INTO rental_orders (
@@ -22965,8 +26129,12 @@ SELECT
   NOW(),
   NOW()
 FROM rental_clients c
-WHERE (c.name = 'Ирина Пронина' OR c.director_name = 'Ирина Пронина')
-  AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 441)
+WHERE (
+  c.name = 'Ирина Пронина' 
+  OR c.director_name = 'Ирина Пронина'
+  OR COALESCE(c.director_name, c.name) = 'Ирина Пронина'
+)
+AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 441)
 LIMIT 1;
 
 INSERT INTO rental_orders (
@@ -22994,8 +26162,12 @@ SELECT
   NOW(),
   NOW()
 FROM rental_clients c
-WHERE (c.name = 'Инна Экскурсовод' OR c.director_name = 'Инна Экскурсовод')
-  AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 440)
+WHERE (
+  c.name = 'Инна Экскурсовод' 
+  OR c.director_name = 'Инна Экскурсовод'
+  OR COALESCE(c.director_name, c.name) = 'Инна Экскурсовод'
+)
+AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 440)
 LIMIT 1;
 
 INSERT INTO rental_orders (
@@ -23023,8 +26195,12 @@ SELECT
   NOW(),
   NOW()
 FROM rental_clients c
-WHERE (c.name = 'Юлианна' OR c.director_name = 'Юлианна')
-  AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 439)
+WHERE (
+  c.name = 'Юлианна' 
+  OR c.director_name = 'Юлианна'
+  OR COALESCE(c.director_name, c.name) = 'Юлианна'
+)
+AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 439)
 LIMIT 1;
 
 INSERT INTO rental_orders (
@@ -23052,8 +26228,12 @@ SELECT
   NOW(),
   NOW()
 FROM rental_clients c
-WHERE (c.name = 'Питер' OR c.director_name = 'Питер')
-  AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 438)
+WHERE (
+  c.name = 'Питер' 
+  OR c.director_name = 'Питер'
+  OR COALESCE(c.director_name, c.name) = 'Питер'
+)
+AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 438)
 LIMIT 1;
 
 INSERT INTO rental_orders (
@@ -23081,8 +26261,12 @@ SELECT
   NOW(),
   NOW()
 FROM rental_clients c
-WHERE (c.name = 'Питер' OR c.director_name = 'Питер')
-  AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 437)
+WHERE (
+  c.name = 'Питер' 
+  OR c.director_name = 'Питер'
+  OR COALESCE(c.director_name, c.name) = 'Питер'
+)
+AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 437)
 LIMIT 1;
 
 INSERT INTO rental_orders (
@@ -23110,8 +26294,12 @@ SELECT
   NOW(),
   NOW()
 FROM rental_clients c
-WHERE (c.name = 'Питер' OR c.director_name = 'Питер')
-  AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 436)
+WHERE (
+  c.name = 'Питер' 
+  OR c.director_name = 'Питер'
+  OR COALESCE(c.director_name, c.name) = 'Питер'
+)
+AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 436)
 LIMIT 1;
 
 INSERT INTO rental_orders (
@@ -23139,8 +26327,12 @@ SELECT
   NOW(),
   NOW()
 FROM rental_clients c
-WHERE (c.name = 'Питер' OR c.director_name = 'Питер')
-  AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 435)
+WHERE (
+  c.name = 'Питер' 
+  OR c.director_name = 'Питер'
+  OR COALESCE(c.director_name, c.name) = 'Питер'
+)
+AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 435)
 LIMIT 1;
 
 INSERT INTO rental_orders (
@@ -23168,8 +26360,12 @@ SELECT
   NOW(),
   NOW()
 FROM rental_clients c
-WHERE (c.name = 'Татьяна (Гольфстрим)' OR c.director_name = 'Татьяна (Гольфстрим)')
-  AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 434)
+WHERE (
+  c.name = 'Татьяна (Гольфстрим)' 
+  OR c.director_name = 'Татьяна (Гольфстрим)'
+  OR COALESCE(c.director_name, c.name) = 'Татьяна (Гольфстрим)'
+)
+AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 434)
 LIMIT 1;
 
 INSERT INTO rental_orders (
@@ -23197,8 +26393,12 @@ SELECT
   NOW(),
   NOW()
 FROM rental_clients c
-WHERE (c.name = 'Татьяна (Гольфстрим)' OR c.director_name = 'Татьяна (Гольфстрим)')
-  AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 433)
+WHERE (
+  c.name = 'Татьяна (Гольфстрим)' 
+  OR c.director_name = 'Татьяна (Гольфстрим)'
+  OR COALESCE(c.director_name, c.name) = 'Татьяна (Гольфстрим)'
+)
+AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 433)
 LIMIT 1;
 
 INSERT INTO rental_orders (
@@ -23226,8 +26426,12 @@ SELECT
   NOW(),
   NOW()
 FROM rental_clients c
-WHERE (c.name = 'Татьяна (Гольфстрим)' OR c.director_name = 'Татьяна (Гольфстрим)')
-  AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 432)
+WHERE (
+  c.name = 'Татьяна (Гольфстрим)' 
+  OR c.director_name = 'Татьяна (Гольфстрим)'
+  OR COALESCE(c.director_name, c.name) = 'Татьяна (Гольфстрим)'
+)
+AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 432)
 LIMIT 1;
 
 INSERT INTO rental_orders (
@@ -23255,8 +26459,12 @@ SELECT
   NOW(),
   NOW()
 FROM rental_clients c
-WHERE (c.name = 'Татьяна (Гольфстрим)' OR c.director_name = 'Татьяна (Гольфстрим)')
-  AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 431)
+WHERE (
+  c.name = 'Татьяна (Гольфстрим)' 
+  OR c.director_name = 'Татьяна (Гольфстрим)'
+  OR COALESCE(c.director_name, c.name) = 'Татьяна (Гольфстрим)'
+)
+AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 431)
 LIMIT 1;
 
 INSERT INTO rental_orders (
@@ -23284,8 +26492,12 @@ SELECT
   NOW(),
   NOW()
 FROM rental_clients c
-WHERE (c.name = 'Татьяна (Гольфстрим)' OR c.director_name = 'Татьяна (Гольфстрим)')
-  AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 430)
+WHERE (
+  c.name = 'Татьяна (Гольфстрим)' 
+  OR c.director_name = 'Татьяна (Гольфстрим)'
+  OR COALESCE(c.director_name, c.name) = 'Татьяна (Гольфстрим)'
+)
+AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 430)
 LIMIT 1;
 
 INSERT INTO rental_orders (
@@ -23313,8 +26525,12 @@ SELECT
   NOW(),
   NOW()
 FROM rental_clients c
-WHERE (c.name = 'Алена Волина' OR c.director_name = 'Алена Волина')
-  AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 429)
+WHERE (
+  c.name = 'Алена Волина' 
+  OR c.director_name = 'Алена Волина'
+  OR COALESCE(c.director_name, c.name) = 'Алена Волина'
+)
+AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 429)
 LIMIT 1;
 
 INSERT INTO rental_orders (
@@ -23342,8 +26558,12 @@ SELECT
   NOW(),
   NOW()
 FROM rental_clients c
-WHERE (c.name = 'Альберт (КТ)' OR c.director_name = 'Альберт (КТ)')
-  AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 428)
+WHERE (
+  c.name = 'Альберт (КТ)' 
+  OR c.director_name = 'Альберт (КТ)'
+  OR COALESCE(c.director_name, c.name) = 'Альберт (КТ)'
+)
+AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 428)
 LIMIT 1;
 
 INSERT INTO rental_orders (
@@ -23371,8 +26591,12 @@ SELECT
   NOW(),
   NOW()
 FROM rental_clients c
-WHERE (c.name = 'Юрий' OR c.director_name = 'Юрий')
-  AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 427)
+WHERE (
+  c.name = 'Юрий' 
+  OR c.director_name = 'Юрий'
+  OR COALESCE(c.director_name, c.name) = 'Юрий'
+)
+AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 427)
 LIMIT 1;
 
 INSERT INTO rental_orders (
@@ -23400,8 +26624,12 @@ SELECT
   NOW(),
   NOW()
 FROM rental_clients c
-WHERE (c.name = 'Гульнара' OR c.director_name = 'Гульнара')
-  AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 426)
+WHERE (
+  c.name = 'Гульнара' 
+  OR c.director_name = 'Гульнара'
+  OR COALESCE(c.director_name, c.name) = 'Гульнара'
+)
+AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 426)
 LIMIT 1;
 
 INSERT INTO rental_orders (
@@ -23429,8 +26657,12 @@ SELECT
   NOW(),
   NOW()
 FROM rental_clients c
-WHERE (c.name = 'Гульнара' OR c.director_name = 'Гульнара')
-  AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 425)
+WHERE (
+  c.name = 'Гульнара' 
+  OR c.director_name = 'Гульнара'
+  OR COALESCE(c.director_name, c.name) = 'Гульнара'
+)
+AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 425)
 LIMIT 1;
 
 INSERT INTO rental_orders (
@@ -23458,8 +26690,12 @@ SELECT
   NOW(),
   NOW()
 FROM rental_clients c
-WHERE (c.name = 'Анюта Родионова (Родина-тур)' OR c.director_name = 'Анюта Родионова (Родина-тур)')
-  AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 424)
+WHERE (
+  c.name = 'Анюта Родионова (Родина-тур)' 
+  OR c.director_name = 'Анюта Родионова (Родина-тур)'
+  OR COALESCE(c.director_name, c.name) = 'Анюта Родионова (Родина-тур)'
+)
+AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 424)
 LIMIT 1;
 
 INSERT INTO rental_orders (
@@ -23487,8 +26723,12 @@ SELECT
   NOW(),
   NOW()
 FROM rental_clients c
-WHERE (c.name = 'Элина (Сититур)' OR c.director_name = 'Элина (Сититур)')
-  AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 423)
+WHERE (
+  c.name = 'Элина (Сититур)' 
+  OR c.director_name = 'Элина (Сититур)'
+  OR COALESCE(c.director_name, c.name) = 'Элина (Сититур)'
+)
+AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 423)
 LIMIT 1;
 
 INSERT INTO rental_orders (
@@ -23516,8 +26756,12 @@ SELECT
   NOW(),
   NOW()
 FROM rental_clients c
-WHERE (c.name = 'Татьяна (Гольфстрим)' OR c.director_name = 'Татьяна (Гольфстрим)')
-  AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 422)
+WHERE (
+  c.name = 'Татьяна (Гольфстрим)' 
+  OR c.director_name = 'Татьяна (Гольфстрим)'
+  OR COALESCE(c.director_name, c.name) = 'Татьяна (Гольфстрим)'
+)
+AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 422)
 LIMIT 1;
 
 INSERT INTO rental_orders (
@@ -23545,8 +26789,12 @@ SELECT
   NOW(),
   NOW()
 FROM rental_clients c
-WHERE (c.name = 'Альберт (КТ)' OR c.director_name = 'Альберт (КТ)')
-  AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 421)
+WHERE (
+  c.name = 'Альберт (КТ)' 
+  OR c.director_name = 'Альберт (КТ)'
+  OR COALESCE(c.director_name, c.name) = 'Альберт (КТ)'
+)
+AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 421)
 LIMIT 1;
 
 INSERT INTO rental_orders (
@@ -23574,8 +26822,12 @@ SELECT
   NOW(),
   NOW()
 FROM rental_clients c
-WHERE (c.name = 'Мария' OR c.director_name = 'Мария')
-  AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 419)
+WHERE (
+  c.name = 'Мария' 
+  OR c.director_name = 'Мария'
+  OR COALESCE(c.director_name, c.name) = 'Мария'
+)
+AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 419)
 LIMIT 1;
 
 INSERT INTO rental_orders (
@@ -23603,8 +26855,12 @@ SELECT
   NOW(),
   NOW()
 FROM rental_clients c
-WHERE (c.name = 'Мария' OR c.director_name = 'Мария')
-  AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 418)
+WHERE (
+  c.name = 'Мария' 
+  OR c.director_name = 'Мария'
+  OR COALESCE(c.director_name, c.name) = 'Мария'
+)
+AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 418)
 LIMIT 1;
 
 INSERT INTO rental_orders (
@@ -23632,8 +26888,12 @@ SELECT
   NOW(),
   NOW()
 FROM rental_clients c
-WHERE (c.name = 'Мария Экскурсовод' OR c.director_name = 'Мария Экскурсовод')
-  AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 417)
+WHERE (
+  c.name = 'Мария Экскурсовод' 
+  OR c.director_name = 'Мария Экскурсовод'
+  OR COALESCE(c.director_name, c.name) = 'Мария Экскурсовод'
+)
+AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 417)
 LIMIT 1;
 
 INSERT INTO rental_orders (
@@ -23661,8 +26921,12 @@ SELECT
   NOW(),
   NOW()
 FROM rental_clients c
-WHERE (c.name = 'Мария Экскурсовод' OR c.director_name = 'Мария Экскурсовод')
-  AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 416)
+WHERE (
+  c.name = 'Мария Экскурсовод' 
+  OR c.director_name = 'Мария Экскурсовод'
+  OR COALESCE(c.director_name, c.name) = 'Мария Экскурсовод'
+)
+AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 416)
 LIMIT 1;
 
 INSERT INTO rental_orders (
@@ -23690,8 +26954,12 @@ SELECT
   NOW(),
   NOW()
 FROM rental_clients c
-WHERE (c.name = 'Твой Гид' OR c.director_name = 'Твой Гид')
-  AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 414)
+WHERE (
+  c.name = 'Твой Гид' 
+  OR c.director_name = 'Твой Гид'
+  OR COALESCE(c.director_name, c.name) = 'Твой Гид'
+)
+AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 414)
 LIMIT 1;
 
 INSERT INTO rental_orders (
@@ -23719,8 +26987,12 @@ SELECT
   NOW(),
   NOW()
 FROM rental_clients c
-WHERE (c.name = 'Александр Романов' OR c.director_name = 'Александр Романов')
-  AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 413)
+WHERE (
+  c.name = 'Александр Романов' 
+  OR c.director_name = 'Александр Романов'
+  OR COALESCE(c.director_name, c.name) = 'Александр Романов'
+)
+AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 413)
 LIMIT 1;
 
 INSERT INTO rental_orders (
@@ -23748,8 +27020,12 @@ SELECT
   NOW(),
   NOW()
 FROM rental_clients c
-WHERE (c.name = 'Эдик Заказы для групп' OR c.director_name = 'Эдик Заказы для групп')
-  AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 412)
+WHERE (
+  c.name = 'Эдик Заказы для групп' 
+  OR c.director_name = 'Эдик Заказы для групп'
+  OR COALESCE(c.director_name, c.name) = 'Эдик Заказы для групп'
+)
+AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 412)
 LIMIT 1;
 
 INSERT INTO rental_orders (
@@ -23777,8 +27053,12 @@ SELECT
   NOW(),
   NOW()
 FROM rental_clients c
-WHERE (c.name = 'Ольга Лукоянова' OR c.director_name = 'Ольга Лукоянова')
-  AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 411)
+WHERE (
+  c.name = 'Ольга Лукоянова' 
+  OR c.director_name = 'Ольга Лукоянова'
+  OR COALESCE(c.director_name, c.name) = 'Ольга Лукоянова'
+)
+AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 411)
 LIMIT 1;
 
 INSERT INTO rental_orders (
@@ -23806,8 +27086,12 @@ SELECT
   NOW(),
   NOW()
 FROM rental_clients c
-WHERE (c.name = 'Татьяна Чуб' OR c.director_name = 'Татьяна Чуб')
-  AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 410)
+WHERE (
+  c.name = 'Татьяна Чуб' 
+  OR c.director_name = 'Татьяна Чуб'
+  OR COALESCE(c.director_name, c.name) = 'Татьяна Чуб'
+)
+AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 410)
 LIMIT 1;
 
 INSERT INTO rental_orders (
@@ -23835,8 +27119,12 @@ SELECT
   NOW(),
   NOW()
 FROM rental_clients c
-WHERE (c.name = 'Эдик Заказы для групп' OR c.director_name = 'Эдик Заказы для групп')
-  AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 409)
+WHERE (
+  c.name = 'Эдик Заказы для групп' 
+  OR c.director_name = 'Эдик Заказы для групп'
+  OR COALESCE(c.director_name, c.name) = 'Эдик Заказы для групп'
+)
+AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 409)
 LIMIT 1;
 
 INSERT INTO rental_orders (
@@ -23864,8 +27152,12 @@ SELECT
   NOW(),
   NOW()
 FROM rental_clients c
-WHERE (c.name = 'Эдик Заказы для групп' OR c.director_name = 'Эдик Заказы для групп')
-  AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 408)
+WHERE (
+  c.name = 'Эдик Заказы для групп' 
+  OR c.director_name = 'Эдик Заказы для групп'
+  OR COALESCE(c.director_name, c.name) = 'Эдик Заказы для групп'
+)
+AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 408)
 LIMIT 1;
 
 INSERT INTO rental_orders (
@@ -23893,8 +27185,12 @@ SELECT
   NOW(),
   NOW()
 FROM rental_clients c
-WHERE (c.name = 'Мира (ИП)' OR c.director_name = 'Мира (ИП)')
-  AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 407)
+WHERE (
+  c.name = 'Мира (ИП)' 
+  OR c.director_name = 'Мира (ИП)'
+  OR COALESCE(c.director_name, c.name) = 'Мира (ИП)'
+)
+AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 407)
 LIMIT 1;
 
 INSERT INTO rental_orders (
@@ -23922,8 +27218,12 @@ SELECT
   NOW(),
   NOW()
 FROM rental_clients c
-WHERE (c.name = 'Мира (ИП)' OR c.director_name = 'Мира (ИП)')
-  AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 406)
+WHERE (
+  c.name = 'Мира (ИП)' 
+  OR c.director_name = 'Мира (ИП)'
+  OR COALESCE(c.director_name, c.name) = 'Мира (ИП)'
+)
+AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 406)
 LIMIT 1;
 
 INSERT INTO rental_orders (
@@ -23951,8 +27251,12 @@ SELECT
   NOW(),
   NOW()
 FROM rental_clients c
-WHERE (c.name = 'Екатерина' OR c.director_name = 'Екатерина')
-  AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 405)
+WHERE (
+  c.name = 'Екатерина' 
+  OR c.director_name = 'Екатерина'
+  OR COALESCE(c.director_name, c.name) = 'Екатерина'
+)
+AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 405)
 LIMIT 1;
 
 INSERT INTO rental_orders (
@@ -23980,8 +27284,12 @@ SELECT
   NOW(),
   NOW()
 FROM rental_clients c
-WHERE (c.name = 'Екатерина' OR c.director_name = 'Екатерина')
-  AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 404)
+WHERE (
+  c.name = 'Екатерина' 
+  OR c.director_name = 'Екатерина'
+  OR COALESCE(c.director_name, c.name) = 'Екатерина'
+)
+AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 404)
 LIMIT 1;
 
 INSERT INTO rental_orders (
@@ -24009,8 +27317,12 @@ SELECT
   NOW(),
   NOW()
 FROM rental_clients c
-WHERE (c.name = 'Юлия Воронова' OR c.director_name = 'Юлия Воронова')
-  AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 403)
+WHERE (
+  c.name = 'Юлия Воронова' 
+  OR c.director_name = 'Юлия Воронова'
+  OR COALESCE(c.director_name, c.name) = 'Юлия Воронова'
+)
+AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 403)
 LIMIT 1;
 
 INSERT INTO rental_orders (
@@ -24038,8 +27350,12 @@ SELECT
   NOW(),
   NOW()
 FROM rental_clients c
-WHERE (c.name = 'Галия' OR c.director_name = 'Галия')
-  AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 402)
+WHERE (
+  c.name = 'Галия' 
+  OR c.director_name = 'Галия'
+  OR COALESCE(c.director_name, c.name) = 'Галия'
+)
+AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 402)
 LIMIT 1;
 
 INSERT INTO rental_orders (
@@ -24067,8 +27383,12 @@ SELECT
   NOW(),
   NOW()
 FROM rental_clients c
-WHERE (c.name = 'Эдик Заказы для групп' OR c.director_name = 'Эдик Заказы для групп')
-  AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 401)
+WHERE (
+  c.name = 'Эдик Заказы для групп' 
+  OR c.director_name = 'Эдик Заказы для групп'
+  OR COALESCE(c.director_name, c.name) = 'Эдик Заказы для групп'
+)
+AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 401)
 LIMIT 1;
 
 INSERT INTO rental_orders (
@@ -24096,8 +27416,12 @@ SELECT
   NOW(),
   NOW()
 FROM rental_clients c
-WHERE (c.name = 'Татьяна (Гольфстрим)' OR c.director_name = 'Татьяна (Гольфстрим)')
-  AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 400)
+WHERE (
+  c.name = 'Татьяна (Гольфстрим)' 
+  OR c.director_name = 'Татьяна (Гольфстрим)'
+  OR COALESCE(c.director_name, c.name) = 'Татьяна (Гольфстрим)'
+)
+AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 400)
 LIMIT 1;
 
 INSERT INTO rental_orders (
@@ -24125,8 +27449,12 @@ SELECT
   NOW(),
   NOW()
 FROM rental_clients c
-WHERE (c.name = 'Зельфира' OR c.director_name = 'Зельфира')
-  AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 399)
+WHERE (
+  c.name = 'Зельфира' 
+  OR c.director_name = 'Зельфира'
+  OR COALESCE(c.director_name, c.name) = 'Зельфира'
+)
+AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 399)
 LIMIT 1;
 
 INSERT INTO rental_orders (
@@ -24154,8 +27482,12 @@ SELECT
   NOW(),
   NOW()
 FROM rental_clients c
-WHERE (c.name = 'Зельфира' OR c.director_name = 'Зельфира')
-  AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 398)
+WHERE (
+  c.name = 'Зельфира' 
+  OR c.director_name = 'Зельфира'
+  OR COALESCE(c.director_name, c.name) = 'Зельфира'
+)
+AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 398)
 LIMIT 1;
 
 INSERT INTO rental_orders (
@@ -24183,8 +27515,12 @@ SELECT
   NOW(),
   NOW()
 FROM rental_clients c
-WHERE (c.name = 'Эдик Заказы для групп' OR c.director_name = 'Эдик Заказы для групп')
-  AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 397)
+WHERE (
+  c.name = 'Эдик Заказы для групп' 
+  OR c.director_name = 'Эдик Заказы для групп'
+  OR COALESCE(c.director_name, c.name) = 'Эдик Заказы для групп'
+)
+AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 397)
 LIMIT 1;
 
 INSERT INTO rental_orders (
@@ -24212,8 +27548,12 @@ SELECT
   NOW(),
   NOW()
 FROM rental_clients c
-WHERE (c.name = 'Эдик Заказы для групп' OR c.director_name = 'Эдик Заказы для групп')
-  AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 396)
+WHERE (
+  c.name = 'Эдик Заказы для групп' 
+  OR c.director_name = 'Эдик Заказы для групп'
+  OR COALESCE(c.director_name, c.name) = 'Эдик Заказы для групп'
+)
+AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 396)
 LIMIT 1;
 
 INSERT INTO rental_orders (
@@ -24241,8 +27581,12 @@ SELECT
   NOW(),
   NOW()
 FROM rental_clients c
-WHERE (c.name = 'Титова Галина (Эллинлайн)' OR c.director_name = 'Титова Галина (Эллинлайн)')
-  AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 395)
+WHERE (
+  c.name = 'Титова Галина (Эллинлайн)' 
+  OR c.director_name = 'Титова Галина (Эллинлайн)'
+  OR COALESCE(c.director_name, c.name) = 'Титова Галина (Эллинлайн)'
+)
+AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 395)
 LIMIT 1;
 
 INSERT INTO rental_orders (
@@ -24270,8 +27614,12 @@ SELECT
   NOW(),
   NOW()
 FROM rental_clients c
-WHERE (c.name = 'Альберт (КТ)' OR c.director_name = 'Альберт (КТ)')
-  AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 394)
+WHERE (
+  c.name = 'Альберт (КТ)' 
+  OR c.director_name = 'Альберт (КТ)'
+  OR COALESCE(c.director_name, c.name) = 'Альберт (КТ)'
+)
+AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 394)
 LIMIT 1;
 
 INSERT INTO rental_orders (
@@ -24299,8 +27647,12 @@ SELECT
   NOW(),
   NOW()
 FROM rental_clients c
-WHERE (c.name = 'Альберт (КТ)' OR c.director_name = 'Альберт (КТ)')
-  AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 393)
+WHERE (
+  c.name = 'Альберт (КТ)' 
+  OR c.director_name = 'Альберт (КТ)'
+  OR COALESCE(c.director_name, c.name) = 'Альберт (КТ)'
+)
+AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 393)
 LIMIT 1;
 
 INSERT INTO rental_orders (
@@ -24328,8 +27680,12 @@ SELECT
   NOW(),
   NOW()
 FROM rental_clients c
-WHERE (c.name = 'Лейла' OR c.director_name = 'Лейла')
-  AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 392)
+WHERE (
+  c.name = 'Лейла' 
+  OR c.director_name = 'Лейла'
+  OR COALESCE(c.director_name, c.name) = 'Лейла'
+)
+AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 392)
 LIMIT 1;
 
 INSERT INTO rental_orders (
@@ -24357,8 +27713,12 @@ SELECT
   NOW(),
   NOW()
 FROM rental_clients c
-WHERE (c.name = 'Эдик Заказы для групп' OR c.director_name = 'Эдик Заказы для групп')
-  AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 391)
+WHERE (
+  c.name = 'Эдик Заказы для групп' 
+  OR c.director_name = 'Эдик Заказы для групп'
+  OR COALESCE(c.director_name, c.name) = 'Эдик Заказы для групп'
+)
+AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 391)
 LIMIT 1;
 
 INSERT INTO rental_orders (
@@ -24386,8 +27746,12 @@ SELECT
   NOW(),
   NOW()
 FROM rental_clients c
-WHERE (c.name = 'Искандер' OR c.director_name = 'Искандер')
-  AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 390)
+WHERE (
+  c.name = 'Искандер' 
+  OR c.director_name = 'Искандер'
+  OR COALESCE(c.director_name, c.name) = 'Искандер'
+)
+AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 390)
 LIMIT 1;
 
 INSERT INTO rental_orders (
@@ -24415,8 +27779,12 @@ SELECT
   NOW(),
   NOW()
 FROM rental_clients c
-WHERE (c.name = 'Эдик Заказы для групп' OR c.director_name = 'Эдик Заказы для групп')
-  AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 389)
+WHERE (
+  c.name = 'Эдик Заказы для групп' 
+  OR c.director_name = 'Эдик Заказы для групп'
+  OR COALESCE(c.director_name, c.name) = 'Эдик Заказы для групп'
+)
+AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 389)
 LIMIT 1;
 
 INSERT INTO rental_orders (
@@ -24444,8 +27812,12 @@ SELECT
   NOW(),
   NOW()
 FROM rental_clients c
-WHERE (c.name = 'Ирина' OR c.director_name = 'Ирина')
-  AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 388)
+WHERE (
+  c.name = 'Ирина' 
+  OR c.director_name = 'Ирина'
+  OR COALESCE(c.director_name, c.name) = 'Ирина'
+)
+AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 388)
 LIMIT 1;
 
 INSERT INTO rental_orders (
@@ -24473,8 +27845,12 @@ SELECT
   NOW(),
   NOW()
 FROM rental_clients c
-WHERE (c.name = 'Мира (ИП)' OR c.director_name = 'Мира (ИП)')
-  AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 387)
+WHERE (
+  c.name = 'Мира (ИП)' 
+  OR c.director_name = 'Мира (ИП)'
+  OR COALESCE(c.director_name, c.name) = 'Мира (ИП)'
+)
+AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 387)
 LIMIT 1;
 
 INSERT INTO rental_orders (
@@ -24502,8 +27878,12 @@ SELECT
   NOW(),
   NOW()
 FROM rental_clients c
-WHERE (c.name = 'Эдик Заказы для групп' OR c.director_name = 'Эдик Заказы для групп')
-  AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 386)
+WHERE (
+  c.name = 'Эдик Заказы для групп' 
+  OR c.director_name = 'Эдик Заказы для групп'
+  OR COALESCE(c.director_name, c.name) = 'Эдик Заказы для групп'
+)
+AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 386)
 LIMIT 1;
 
 INSERT INTO rental_orders (
@@ -24531,8 +27911,12 @@ SELECT
   NOW(),
   NOW()
 FROM rental_clients c
-WHERE (c.name = 'Эдик Заказы для групп' OR c.director_name = 'Эдик Заказы для групп')
-  AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 385)
+WHERE (
+  c.name = 'Эдик Заказы для групп' 
+  OR c.director_name = 'Эдик Заказы для групп'
+  OR COALESCE(c.director_name, c.name) = 'Эдик Заказы для групп'
+)
+AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 385)
 LIMIT 1;
 
 INSERT INTO rental_orders (
@@ -24560,8 +27944,12 @@ SELECT
   NOW(),
   NOW()
 FROM rental_clients c
-WHERE (c.name = 'Ильмира' OR c.director_name = 'Ильмира')
-  AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 384)
+WHERE (
+  c.name = 'Ильмира' 
+  OR c.director_name = 'Ильмира'
+  OR COALESCE(c.director_name, c.name) = 'Ильмира'
+)
+AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 384)
 LIMIT 1;
 
 INSERT INTO rental_orders (
@@ -24589,8 +27977,12 @@ SELECT
   NOW(),
   NOW()
 FROM rental_clients c
-WHERE (c.name = 'Ильмира' OR c.director_name = 'Ильмира')
-  AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 383)
+WHERE (
+  c.name = 'Ильмира' 
+  OR c.director_name = 'Ильмира'
+  OR COALESCE(c.director_name, c.name) = 'Ильмира'
+)
+AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 383)
 LIMIT 1;
 
 INSERT INTO rental_orders (
@@ -24618,8 +28010,12 @@ SELECT
   NOW(),
   NOW()
 FROM rental_clients c
-WHERE (c.name = 'Альберт (КТ)' OR c.director_name = 'Альберт (КТ)')
-  AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 382)
+WHERE (
+  c.name = 'Альберт (КТ)' 
+  OR c.director_name = 'Альберт (КТ)'
+  OR COALESCE(c.director_name, c.name) = 'Альберт (КТ)'
+)
+AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 382)
 LIMIT 1;
 
 INSERT INTO rental_orders (
@@ -24647,8 +28043,12 @@ SELECT
   NOW(),
   NOW()
 FROM rental_clients c
-WHERE (c.name = 'Татьяна (Гольфстрим)' OR c.director_name = 'Татьяна (Гольфстрим)')
-  AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 381)
+WHERE (
+  c.name = 'Татьяна (Гольфстрим)' 
+  OR c.director_name = 'Татьяна (Гольфстрим)'
+  OR COALESCE(c.director_name, c.name) = 'Татьяна (Гольфстрим)'
+)
+AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 381)
 LIMIT 1;
 
 INSERT INTO rental_orders (
@@ -24676,8 +28076,12 @@ SELECT
   NOW(),
   NOW()
 FROM rental_clients c
-WHERE (c.name = 'Александр' OR c.director_name = 'Александр')
-  AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 380)
+WHERE (
+  c.name = 'Александр' 
+  OR c.director_name = 'Александр'
+  OR COALESCE(c.director_name, c.name) = 'Александр'
+)
+AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 380)
 LIMIT 1;
 
 INSERT INTO rental_orders (
@@ -24705,8 +28109,12 @@ SELECT
   NOW(),
   NOW()
 FROM rental_clients c
-WHERE (c.name = 'Мария Экскурсовод' OR c.director_name = 'Мария Экскурсовод')
-  AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 379)
+WHERE (
+  c.name = 'Мария Экскурсовод' 
+  OR c.director_name = 'Мария Экскурсовод'
+  OR COALESCE(c.director_name, c.name) = 'Мария Экскурсовод'
+)
+AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 379)
 LIMIT 1;
 
 INSERT INTO rental_orders (
@@ -24734,8 +28142,12 @@ SELECT
   NOW(),
   NOW()
 FROM rental_clients c
-WHERE (c.name = 'Эдик Заказы для групп' OR c.director_name = 'Эдик Заказы для групп')
-  AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 378)
+WHERE (
+  c.name = 'Эдик Заказы для групп' 
+  OR c.director_name = 'Эдик Заказы для групп'
+  OR COALESCE(c.director_name, c.name) = 'Эдик Заказы для групп'
+)
+AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 378)
 LIMIT 1;
 
 INSERT INTO rental_orders (
@@ -24763,8 +28175,12 @@ SELECT
   NOW(),
   NOW()
 FROM rental_clients c
-WHERE (c.name = 'Сергей (Авангард)' OR c.director_name = 'Сергей (Авангард)')
-  AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 377)
+WHERE (
+  c.name = 'Сергей (Авангард)' 
+  OR c.director_name = 'Сергей (Авангард)'
+  OR COALESCE(c.director_name, c.name) = 'Сергей (Авангард)'
+)
+AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 377)
 LIMIT 1;
 
 INSERT INTO rental_orders (
@@ -24792,8 +28208,12 @@ SELECT
   NOW(),
   NOW()
 FROM rental_clients c
-WHERE (c.name = 'Элина (Сититур)' OR c.director_name = 'Элина (Сититур)')
-  AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 376)
+WHERE (
+  c.name = 'Элина (Сититур)' 
+  OR c.director_name = 'Элина (Сититур)'
+  OR COALESCE(c.director_name, c.name) = 'Элина (Сититур)'
+)
+AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 376)
 LIMIT 1;
 
 INSERT INTO rental_orders (
@@ -24821,8 +28241,12 @@ SELECT
   NOW(),
   NOW()
 FROM rental_clients c
-WHERE (c.name = 'Анюта Родионова (Родина-тур)' OR c.director_name = 'Анюта Родионова (Родина-тур)')
-  AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 375)
+WHERE (
+  c.name = 'Анюта Родионова (Родина-тур)' 
+  OR c.director_name = 'Анюта Родионова (Родина-тур)'
+  OR COALESCE(c.director_name, c.name) = 'Анюта Родионова (Родина-тур)'
+)
+AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 375)
 LIMIT 1;
 
 INSERT INTO rental_orders (
@@ -24850,8 +28274,12 @@ SELECT
   NOW(),
   NOW()
 FROM rental_clients c
-WHERE (c.name = 'Мира (ИП)' OR c.director_name = 'Мира (ИП)')
-  AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 374)
+WHERE (
+  c.name = 'Мира (ИП)' 
+  OR c.director_name = 'Мира (ИП)'
+  OR COALESCE(c.director_name, c.name) = 'Мира (ИП)'
+)
+AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 374)
 LIMIT 1;
 
 INSERT INTO rental_orders (
@@ -24879,8 +28307,12 @@ SELECT
   NOW(),
   NOW()
 FROM rental_clients c
-WHERE (c.name = 'Алексей' OR c.director_name = 'Алексей')
-  AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 373)
+WHERE (
+  c.name = 'Алексей' 
+  OR c.director_name = 'Алексей'
+  OR COALESCE(c.director_name, c.name) = 'Алексей'
+)
+AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 373)
 LIMIT 1;
 
 INSERT INTO rental_orders (
@@ -24908,8 +28340,12 @@ SELECT
   NOW(),
   NOW()
 FROM rental_clients c
-WHERE (c.name = 'Алексей' OR c.director_name = 'Алексей')
-  AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 372)
+WHERE (
+  c.name = 'Алексей' 
+  OR c.director_name = 'Алексей'
+  OR COALESCE(c.director_name, c.name) = 'Алексей'
+)
+AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 372)
 LIMIT 1;
 
 INSERT INTO rental_orders (
@@ -24937,8 +28373,12 @@ SELECT
   NOW(),
   NOW()
 FROM rental_clients c
-WHERE (c.name = 'Алексей' OR c.director_name = 'Алексей')
-  AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 371)
+WHERE (
+  c.name = 'Алексей' 
+  OR c.director_name = 'Алексей'
+  OR COALESCE(c.director_name, c.name) = 'Алексей'
+)
+AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 371)
 LIMIT 1;
 
 INSERT INTO rental_orders (
@@ -24966,8 +28406,12 @@ SELECT
   NOW(),
   NOW()
 FROM rental_clients c
-WHERE (c.name = 'Гульнара' OR c.director_name = 'Гульнара')
-  AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 370)
+WHERE (
+  c.name = 'Гульнара' 
+  OR c.director_name = 'Гульнара'
+  OR COALESCE(c.director_name, c.name) = 'Гульнара'
+)
+AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 370)
 LIMIT 1;
 
 INSERT INTO rental_orders (
@@ -24995,8 +28439,12 @@ SELECT
   NOW(),
   NOW()
 FROM rental_clients c
-WHERE (c.name = 'Искандер' OR c.director_name = 'Искандер')
-  AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 369)
+WHERE (
+  c.name = 'Искандер' 
+  OR c.director_name = 'Искандер'
+  OR COALESCE(c.director_name, c.name) = 'Искандер'
+)
+AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 369)
 LIMIT 1;
 
 INSERT INTO rental_orders (
@@ -25024,8 +28472,12 @@ SELECT
   NOW(),
   NOW()
 FROM rental_clients c
-WHERE (c.name = 'Татьяна (Гольфстрим)' OR c.director_name = 'Татьяна (Гольфстрим)')
-  AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 368)
+WHERE (
+  c.name = 'Татьяна (Гольфстрим)' 
+  OR c.director_name = 'Татьяна (Гольфстрим)'
+  OR COALESCE(c.director_name, c.name) = 'Татьяна (Гольфстрим)'
+)
+AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 368)
 LIMIT 1;
 
 INSERT INTO rental_orders (
@@ -25053,8 +28505,12 @@ SELECT
   NOW(),
   NOW()
 FROM rental_clients c
-WHERE (c.name = 'Альберт (КТ)' OR c.director_name = 'Альберт (КТ)')
-  AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 367)
+WHERE (
+  c.name = 'Альберт (КТ)' 
+  OR c.director_name = 'Альберт (КТ)'
+  OR COALESCE(c.director_name, c.name) = 'Альберт (КТ)'
+)
+AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 367)
 LIMIT 1;
 
 INSERT INTO rental_orders (
@@ -25082,8 +28538,12 @@ SELECT
   NOW(),
   NOW()
 FROM rental_clients c
-WHERE (c.name = 'Екатерина' OR c.director_name = 'Екатерина')
-  AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 366)
+WHERE (
+  c.name = 'Екатерина' 
+  OR c.director_name = 'Екатерина'
+  OR COALESCE(c.director_name, c.name) = 'Екатерина'
+)
+AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 366)
 LIMIT 1;
 
 INSERT INTO rental_orders (
@@ -25111,8 +28571,12 @@ SELECT
   NOW(),
   NOW()
 FROM rental_clients c
-WHERE (c.name = 'Татьяна (Гольфстрим)' OR c.director_name = 'Татьяна (Гольфстрим)')
-  AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 365)
+WHERE (
+  c.name = 'Татьяна (Гольфстрим)' 
+  OR c.director_name = 'Татьяна (Гольфстрим)'
+  OR COALESCE(c.director_name, c.name) = 'Татьяна (Гольфстрим)'
+)
+AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 365)
 LIMIT 1;
 
 INSERT INTO rental_orders (
@@ -25140,8 +28604,12 @@ SELECT
   NOW(),
   NOW()
 FROM rental_clients c
-WHERE (c.name = 'Наталья' OR c.director_name = 'Наталья')
-  AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 364)
+WHERE (
+  c.name = 'Наталья' 
+  OR c.director_name = 'Наталья'
+  OR COALESCE(c.director_name, c.name) = 'Наталья'
+)
+AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 364)
 LIMIT 1;
 
 INSERT INTO rental_orders (
@@ -25169,8 +28637,12 @@ SELECT
   NOW(),
   NOW()
 FROM rental_clients c
-WHERE (c.name = 'Татьяна (Гольфстрим)' OR c.director_name = 'Татьяна (Гольфстрим)')
-  AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 363)
+WHERE (
+  c.name = 'Татьяна (Гольфстрим)' 
+  OR c.director_name = 'Татьяна (Гольфстрим)'
+  OR COALESCE(c.director_name, c.name) = 'Татьяна (Гольфстрим)'
+)
+AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 363)
 LIMIT 1;
 
 INSERT INTO rental_orders (
@@ -25198,8 +28670,12 @@ SELECT
   NOW(),
   NOW()
 FROM rental_clients c
-WHERE (c.name = 'Татьяна (Гольфстрим)' OR c.director_name = 'Татьяна (Гольфстрим)')
-  AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 362)
+WHERE (
+  c.name = 'Татьяна (Гольфстрим)' 
+  OR c.director_name = 'Татьяна (Гольфстрим)'
+  OR COALESCE(c.director_name, c.name) = 'Татьяна (Гольфстрим)'
+)
+AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 362)
 LIMIT 1;
 
 INSERT INTO rental_orders (
@@ -25227,8 +28703,12 @@ SELECT
   NOW(),
   NOW()
 FROM rental_clients c
-WHERE (c.name = 'Татьяна (Гольфстрим)' OR c.director_name = 'Татьяна (Гольфстрим)')
-  AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 361)
+WHERE (
+  c.name = 'Татьяна (Гольфстрим)' 
+  OR c.director_name = 'Татьяна (Гольфстрим)'
+  OR COALESCE(c.director_name, c.name) = 'Татьяна (Гольфстрим)'
+)
+AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 361)
 LIMIT 1;
 
 INSERT INTO rental_orders (
@@ -25256,8 +28736,12 @@ SELECT
   NOW(),
   NOW()
 FROM rental_clients c
-WHERE (c.name = 'Татьяна (Гольфстрим)' OR c.director_name = 'Татьяна (Гольфстрим)')
-  AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 360)
+WHERE (
+  c.name = 'Татьяна (Гольфстрим)' 
+  OR c.director_name = 'Татьяна (Гольфстрим)'
+  OR COALESCE(c.director_name, c.name) = 'Татьяна (Гольфстрим)'
+)
+AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 360)
 LIMIT 1;
 
 INSERT INTO rental_orders (
@@ -25285,8 +28769,12 @@ SELECT
   NOW(),
   NOW()
 FROM rental_clients c
-WHERE (c.name = 'Татьяна (Гольфстрим)' OR c.director_name = 'Татьяна (Гольфстрим)')
-  AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 359)
+WHERE (
+  c.name = 'Татьяна (Гольфстрим)' 
+  OR c.director_name = 'Татьяна (Гольфстрим)'
+  OR COALESCE(c.director_name, c.name) = 'Татьяна (Гольфстрим)'
+)
+AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 359)
 LIMIT 1;
 
 INSERT INTO rental_orders (
@@ -25314,8 +28802,12 @@ SELECT
   NOW(),
   NOW()
 FROM rental_clients c
-WHERE (c.name = 'Юлия Воронова' OR c.director_name = 'Юлия Воронова')
-  AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 358)
+WHERE (
+  c.name = 'Юлия Воронова' 
+  OR c.director_name = 'Юлия Воронова'
+  OR COALESCE(c.director_name, c.name) = 'Юлия Воронова'
+)
+AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 358)
 LIMIT 1;
 
 INSERT INTO rental_orders (
@@ -25343,8 +28835,12 @@ SELECT
   NOW(),
   NOW()
 FROM rental_clients c
-WHERE (c.name = 'Юлия Воронова' OR c.director_name = 'Юлия Воронова')
-  AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 357)
+WHERE (
+  c.name = 'Юлия Воронова' 
+  OR c.director_name = 'Юлия Воронова'
+  OR COALESCE(c.director_name, c.name) = 'Юлия Воронова'
+)
+AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 357)
 LIMIT 1;
 
 INSERT INTO rental_orders (
@@ -25372,8 +28868,12 @@ SELECT
   NOW(),
   NOW()
 FROM rental_clients c
-WHERE (c.name = 'Альберт (КТ)' OR c.director_name = 'Альберт (КТ)')
-  AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 356)
+WHERE (
+  c.name = 'Альберт (КТ)' 
+  OR c.director_name = 'Альберт (КТ)'
+  OR COALESCE(c.director_name, c.name) = 'Альберт (КТ)'
+)
+AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 356)
 LIMIT 1;
 
 INSERT INTO rental_orders (
@@ -25401,8 +28901,12 @@ SELECT
   NOW(),
   NOW()
 FROM rental_clients c
-WHERE (c.name = 'Альберт (КТ)' OR c.director_name = 'Альберт (КТ)')
-  AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 355)
+WHERE (
+  c.name = 'Альберт (КТ)' 
+  OR c.director_name = 'Альберт (КТ)'
+  OR COALESCE(c.director_name, c.name) = 'Альберт (КТ)'
+)
+AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 355)
 LIMIT 1;
 
 INSERT INTO rental_orders (
@@ -25430,8 +28934,12 @@ SELECT
   NOW(),
   NOW()
 FROM rental_clients c
-WHERE (c.name = 'Альберт (КТ)' OR c.director_name = 'Альберт (КТ)')
-  AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 354)
+WHERE (
+  c.name = 'Альберт (КТ)' 
+  OR c.director_name = 'Альберт (КТ)'
+  OR COALESCE(c.director_name, c.name) = 'Альберт (КТ)'
+)
+AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 354)
 LIMIT 1;
 
 INSERT INTO rental_orders (
@@ -25459,8 +28967,12 @@ SELECT
   NOW(),
   NOW()
 FROM rental_clients c
-WHERE (c.name = 'Альберт (КТ)' OR c.director_name = 'Альберт (КТ)')
-  AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 353)
+WHERE (
+  c.name = 'Альберт (КТ)' 
+  OR c.director_name = 'Альберт (КТ)'
+  OR COALESCE(c.director_name, c.name) = 'Альберт (КТ)'
+)
+AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 353)
 LIMIT 1;
 
 INSERT INTO rental_orders (
@@ -25488,8 +29000,12 @@ SELECT
   NOW(),
   NOW()
 FROM rental_clients c
-WHERE (c.name = 'Эдик Заказы для групп' OR c.director_name = 'Эдик Заказы для групп')
-  AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 352)
+WHERE (
+  c.name = 'Эдик Заказы для групп' 
+  OR c.director_name = 'Эдик Заказы для групп'
+  OR COALESCE(c.director_name, c.name) = 'Эдик Заказы для групп'
+)
+AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 352)
 LIMIT 1;
 
 INSERT INTO rental_orders (
@@ -25517,8 +29033,12 @@ SELECT
   NOW(),
   NOW()
 FROM rental_clients c
-WHERE (c.name = 'Эдик Заказы для групп' OR c.director_name = 'Эдик Заказы для групп')
-  AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 351)
+WHERE (
+  c.name = 'Эдик Заказы для групп' 
+  OR c.director_name = 'Эдик Заказы для групп'
+  OR COALESCE(c.director_name, c.name) = 'Эдик Заказы для групп'
+)
+AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 351)
 LIMIT 1;
 
 INSERT INTO rental_orders (
@@ -25546,8 +29066,12 @@ SELECT
   NOW(),
   NOW()
 FROM rental_clients c
-WHERE (c.name = 'Мария Экскурсовод' OR c.director_name = 'Мария Экскурсовод')
-  AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 350)
+WHERE (
+  c.name = 'Мария Экскурсовод' 
+  OR c.director_name = 'Мария Экскурсовод'
+  OR COALESCE(c.director_name, c.name) = 'Мария Экскурсовод'
+)
+AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 350)
 LIMIT 1;
 
 INSERT INTO rental_orders (
@@ -25575,8 +29099,12 @@ SELECT
   NOW(),
   NOW()
 FROM rental_clients c
-WHERE (c.name = 'Альберт (КТ)' OR c.director_name = 'Альберт (КТ)')
-  AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 349)
+WHERE (
+  c.name = 'Альберт (КТ)' 
+  OR c.director_name = 'Альберт (КТ)'
+  OR COALESCE(c.director_name, c.name) = 'Альберт (КТ)'
+)
+AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 349)
 LIMIT 1;
 
 INSERT INTO rental_orders (
@@ -25604,8 +29132,12 @@ SELECT
   NOW(),
   NOW()
 FROM rental_clients c
-WHERE (c.name = 'Валентина Экскурсовод' OR c.director_name = 'Валентина Экскурсовод')
-  AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 348)
+WHERE (
+  c.name = 'Валентина Экскурсовод' 
+  OR c.director_name = 'Валентина Экскурсовод'
+  OR COALESCE(c.director_name, c.name) = 'Валентина Экскурсовод'
+)
+AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 348)
 LIMIT 1;
 
 INSERT INTO rental_orders (
@@ -25633,8 +29165,12 @@ SELECT
   NOW(),
   NOW()
 FROM rental_clients c
-WHERE (c.name = 'Елена Марковна ( черный список)' OR c.director_name = 'Елена Марковна ( черный список)')
-  AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 347)
+WHERE (
+  c.name = 'Елена Марковна ( черный список)' 
+  OR c.director_name = 'Елена Марковна ( черный список)'
+  OR COALESCE(c.director_name, c.name) = 'Елена Марковна ( черный список)'
+)
+AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 347)
 LIMIT 1;
 
 INSERT INTO rental_orders (
@@ -25662,8 +29198,12 @@ SELECT
   NOW(),
   NOW()
 FROM rental_clients c
-WHERE (c.name = 'Ксения' OR c.director_name = 'Ксения')
-  AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 346)
+WHERE (
+  c.name = 'Ксения' 
+  OR c.director_name = 'Ксения'
+  OR COALESCE(c.director_name, c.name) = 'Ксения'
+)
+AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 346)
 LIMIT 1;
 
 INSERT INTO rental_orders (
@@ -25691,8 +29231,12 @@ SELECT
   NOW(),
   NOW()
 FROM rental_clients c
-WHERE (c.name = 'Галина' OR c.director_name = 'Галина')
-  AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 345)
+WHERE (
+  c.name = 'Галина' 
+  OR c.director_name = 'Галина'
+  OR COALESCE(c.director_name, c.name) = 'Галина'
+)
+AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 345)
 LIMIT 1;
 
 INSERT INTO rental_orders (
@@ -25720,8 +29264,12 @@ SELECT
   NOW(),
   NOW()
 FROM rental_clients c
-WHERE (c.name = 'Галина' OR c.director_name = 'Галина')
-  AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 344)
+WHERE (
+  c.name = 'Галина' 
+  OR c.director_name = 'Галина'
+  OR COALESCE(c.director_name, c.name) = 'Галина'
+)
+AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 344)
 LIMIT 1;
 
 INSERT INTO rental_orders (
@@ -25749,8 +29297,12 @@ SELECT
   NOW(),
   NOW()
 FROM rental_clients c
-WHERE (c.name = 'Галина' OR c.director_name = 'Галина')
-  AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 343)
+WHERE (
+  c.name = 'Галина' 
+  OR c.director_name = 'Галина'
+  OR COALESCE(c.director_name, c.name) = 'Галина'
+)
+AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 343)
 LIMIT 1;
 
 INSERT INTO rental_orders (
@@ -25778,8 +29330,12 @@ SELECT
   NOW(),
   NOW()
 FROM rental_clients c
-WHERE (c.name = 'Лиля Экскурсовод' OR c.director_name = 'Лиля Экскурсовод')
-  AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 342)
+WHERE (
+  c.name = 'Лиля Экскурсовод' 
+  OR c.director_name = 'Лиля Экскурсовод'
+  OR COALESCE(c.director_name, c.name) = 'Лиля Экскурсовод'
+)
+AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 342)
 LIMIT 1;
 
 INSERT INTO rental_orders (
@@ -25807,8 +29363,12 @@ SELECT
   NOW(),
   NOW()
 FROM rental_clients c
-WHERE (c.name = 'Сергей (Авангард)' OR c.director_name = 'Сергей (Авангард)')
-  AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 341)
+WHERE (
+  c.name = 'Сергей (Авангард)' 
+  OR c.director_name = 'Сергей (Авангард)'
+  OR COALESCE(c.director_name, c.name) = 'Сергей (Авангард)'
+)
+AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 341)
 LIMIT 1;
 
 INSERT INTO rental_orders (
@@ -25836,8 +29396,12 @@ SELECT
   NOW(),
   NOW()
 FROM rental_clients c
-WHERE (c.name = 'Сергей (Авангард)' OR c.director_name = 'Сергей (Авангард)')
-  AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 340)
+WHERE (
+  c.name = 'Сергей (Авангард)' 
+  OR c.director_name = 'Сергей (Авангард)'
+  OR COALESCE(c.director_name, c.name) = 'Сергей (Авангард)'
+)
+AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 340)
 LIMIT 1;
 
 INSERT INTO rental_orders (
@@ -25865,8 +29429,12 @@ SELECT
   NOW(),
   NOW()
 FROM rental_clients c
-WHERE (c.name = 'Светлана Клиент' OR c.director_name = 'Светлана Клиент')
-  AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 339)
+WHERE (
+  c.name = 'Светлана Клиент' 
+  OR c.director_name = 'Светлана Клиент'
+  OR COALESCE(c.director_name, c.name) = 'Светлана Клиент'
+)
+AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 339)
 LIMIT 1;
 
 INSERT INTO rental_orders (
@@ -25894,8 +29462,12 @@ SELECT
   NOW(),
   NOW()
 FROM rental_clients c
-WHERE (c.name = 'Ольга Волковец' OR c.director_name = 'Ольга Волковец')
-  AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 338)
+WHERE (
+  c.name = 'Ольга Волковец' 
+  OR c.director_name = 'Ольга Волковец'
+  OR COALESCE(c.director_name, c.name) = 'Ольга Волковец'
+)
+AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 338)
 LIMIT 1;
 
 INSERT INTO rental_orders (
@@ -25923,8 +29495,12 @@ SELECT
   NOW(),
   NOW()
 FROM rental_clients c
-WHERE (c.name = 'Эмилия' OR c.director_name = 'Эмилия')
-  AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 337)
+WHERE (
+  c.name = 'Эмилия' 
+  OR c.director_name = 'Эмилия'
+  OR COALESCE(c.director_name, c.name) = 'Эмилия'
+)
+AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 337)
 LIMIT 1;
 
 INSERT INTO rental_orders (
@@ -25952,8 +29528,12 @@ SELECT
   NOW(),
   NOW()
 FROM rental_clients c
-WHERE (c.name = 'Зульхиза Кутлучурина' OR c.director_name = 'Зульхиза Кутлучурина')
-  AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 335)
+WHERE (
+  c.name = 'Зульхиза Кутлучурина' 
+  OR c.director_name = 'Зульхиза Кутлучурина'
+  OR COALESCE(c.director_name, c.name) = 'Зульхиза Кутлучурина'
+)
+AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 335)
 LIMIT 1;
 
 INSERT INTO rental_orders (
@@ -25981,8 +29561,12 @@ SELECT
   NOW(),
   NOW()
 FROM rental_clients c
-WHERE (c.name = 'Эдик Заказы для групп' OR c.director_name = 'Эдик Заказы для групп')
-  AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 334)
+WHERE (
+  c.name = 'Эдик Заказы для групп' 
+  OR c.director_name = 'Эдик Заказы для групп'
+  OR COALESCE(c.director_name, c.name) = 'Эдик Заказы для групп'
+)
+AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 334)
 LIMIT 1;
 
 INSERT INTO rental_orders (
@@ -26010,8 +29594,12 @@ SELECT
   NOW(),
   NOW()
 FROM rental_clients c
-WHERE (c.name = 'Камилла' OR c.director_name = 'Камилла')
-  AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 333)
+WHERE (
+  c.name = 'Камилла' 
+  OR c.director_name = 'Камилла'
+  OR COALESCE(c.director_name, c.name) = 'Камилла'
+)
+AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 333)
 LIMIT 1;
 
 INSERT INTO rental_orders (
@@ -26039,8 +29627,12 @@ SELECT
   NOW(),
   NOW()
 FROM rental_clients c
-WHERE (c.name = 'Мира (ИП)' OR c.director_name = 'Мира (ИП)')
-  AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 332)
+WHERE (
+  c.name = 'Мира (ИП)' 
+  OR c.director_name = 'Мира (ИП)'
+  OR COALESCE(c.director_name, c.name) = 'Мира (ИП)'
+)
+AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 332)
 LIMIT 1;
 
 INSERT INTO rental_orders (
@@ -26068,8 +29660,12 @@ SELECT
   NOW(),
   NOW()
 FROM rental_clients c
-WHERE (c.name = 'Артем Агафонов' OR c.director_name = 'Артем Агафонов')
-  AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 331)
+WHERE (
+  c.name = 'Артем Агафонов' 
+  OR c.director_name = 'Артем Агафонов'
+  OR COALESCE(c.director_name, c.name) = 'Артем Агафонов'
+)
+AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 331)
 LIMIT 1;
 
 INSERT INTO rental_orders (
@@ -26097,8 +29693,12 @@ SELECT
   NOW(),
   NOW()
 FROM rental_clients c
-WHERE (c.name = 'Мария Экскурсовод' OR c.director_name = 'Мария Экскурсовод')
-  AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 330)
+WHERE (
+  c.name = 'Мария Экскурсовод' 
+  OR c.director_name = 'Мария Экскурсовод'
+  OR COALESCE(c.director_name, c.name) = 'Мария Экскурсовод'
+)
+AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 330)
 LIMIT 1;
 
 INSERT INTO rental_orders (
@@ -26126,8 +29726,12 @@ SELECT
   NOW(),
   NOW()
 FROM rental_clients c
-WHERE (c.name = 'Мария Экскурсовод' OR c.director_name = 'Мария Экскурсовод')
-  AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 329)
+WHERE (
+  c.name = 'Мария Экскурсовод' 
+  OR c.director_name = 'Мария Экскурсовод'
+  OR COALESCE(c.director_name, c.name) = 'Мария Экскурсовод'
+)
+AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 329)
 LIMIT 1;
 
 INSERT INTO rental_orders (
@@ -26155,8 +29759,12 @@ SELECT
   NOW(),
   NOW()
 FROM rental_clients c
-WHERE (c.name = 'Мария Экскурсовод' OR c.director_name = 'Мария Экскурсовод')
-  AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 328)
+WHERE (
+  c.name = 'Мария Экскурсовод' 
+  OR c.director_name = 'Мария Экскурсовод'
+  OR COALESCE(c.director_name, c.name) = 'Мария Экскурсовод'
+)
+AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 328)
 LIMIT 1;
 
 INSERT INTO rental_orders (
@@ -26184,8 +29792,12 @@ SELECT
   NOW(),
   NOW()
 FROM rental_clients c
-WHERE (c.name = 'Гульнара' OR c.director_name = 'Гульнара')
-  AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 327)
+WHERE (
+  c.name = 'Гульнара' 
+  OR c.director_name = 'Гульнара'
+  OR COALESCE(c.director_name, c.name) = 'Гульнара'
+)
+AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 327)
 LIMIT 1;
 
 INSERT INTO rental_orders (
@@ -26213,8 +29825,12 @@ SELECT
   NOW(),
   NOW()
 FROM rental_clients c
-WHERE (c.name = 'Татьяна (Гольфстрим)' OR c.director_name = 'Татьяна (Гольфстрим)')
-  AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 326)
+WHERE (
+  c.name = 'Татьяна (Гольфстрим)' 
+  OR c.director_name = 'Татьяна (Гольфстрим)'
+  OR COALESCE(c.director_name, c.name) = 'Татьяна (Гольфстрим)'
+)
+AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 326)
 LIMIT 1;
 
 INSERT INTO rental_orders (
@@ -26242,8 +29858,12 @@ SELECT
   NOW(),
   NOW()
 FROM rental_clients c
-WHERE (c.name = 'Татьяна (Гольфстрим)' OR c.director_name = 'Татьяна (Гольфстрим)')
-  AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 324)
+WHERE (
+  c.name = 'Татьяна (Гольфстрим)' 
+  OR c.director_name = 'Татьяна (Гольфстрим)'
+  OR COALESCE(c.director_name, c.name) = 'Татьяна (Гольфстрим)'
+)
+AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 324)
 LIMIT 1;
 
 INSERT INTO rental_orders (
@@ -26271,8 +29891,12 @@ SELECT
   NOW(),
   NOW()
 FROM rental_clients c
-WHERE (c.name = 'Татьяна (Гольфстрим)' OR c.director_name = 'Татьяна (Гольфстрим)')
-  AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 323)
+WHERE (
+  c.name = 'Татьяна (Гольфстрим)' 
+  OR c.director_name = 'Татьяна (Гольфстрим)'
+  OR COALESCE(c.director_name, c.name) = 'Татьяна (Гольфстрим)'
+)
+AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 323)
 LIMIT 1;
 
 INSERT INTO rental_orders (
@@ -26300,8 +29924,12 @@ SELECT
   NOW(),
   NOW()
 FROM rental_clients c
-WHERE (c.name = 'Татьяна (Гольфстрим)' OR c.director_name = 'Татьяна (Гольфстрим)')
-  AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 322)
+WHERE (
+  c.name = 'Татьяна (Гольфстрим)' 
+  OR c.director_name = 'Татьяна (Гольфстрим)'
+  OR COALESCE(c.director_name, c.name) = 'Татьяна (Гольфстрим)'
+)
+AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 322)
 LIMIT 1;
 
 INSERT INTO rental_orders (
@@ -26329,8 +29957,12 @@ SELECT
   NOW(),
   NOW()
 FROM rental_clients c
-WHERE (c.name = 'Татьяна (Гольфстрим)' OR c.director_name = 'Татьяна (Гольфстрим)')
-  AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 321)
+WHERE (
+  c.name = 'Татьяна (Гольфстрим)' 
+  OR c.director_name = 'Татьяна (Гольфстрим)'
+  OR COALESCE(c.director_name, c.name) = 'Татьяна (Гольфстрим)'
+)
+AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 321)
 LIMIT 1;
 
 INSERT INTO rental_orders (
@@ -26358,8 +29990,12 @@ SELECT
   NOW(),
   NOW()
 FROM rental_clients c
-WHERE (c.name = 'Татьяна (Гольфстрим)' OR c.director_name = 'Татьяна (Гольфстрим)')
-  AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 320)
+WHERE (
+  c.name = 'Татьяна (Гольфстрим)' 
+  OR c.director_name = 'Татьяна (Гольфстрим)'
+  OR COALESCE(c.director_name, c.name) = 'Татьяна (Гольфстрим)'
+)
+AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 320)
 LIMIT 1;
 
 INSERT INTO rental_orders (
@@ -26387,8 +30023,12 @@ SELECT
   NOW(),
   NOW()
 FROM rental_clients c
-WHERE (c.name = 'Татьяна (Гольфстрим)' OR c.director_name = 'Татьяна (Гольфстрим)')
-  AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 319)
+WHERE (
+  c.name = 'Татьяна (Гольфстрим)' 
+  OR c.director_name = 'Татьяна (Гольфстрим)'
+  OR COALESCE(c.director_name, c.name) = 'Татьяна (Гольфстрим)'
+)
+AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 319)
 LIMIT 1;
 
 INSERT INTO rental_orders (
@@ -26416,8 +30056,12 @@ SELECT
   NOW(),
   NOW()
 FROM rental_clients c
-WHERE (c.name = 'Татьяна (Гольфстрим)' OR c.director_name = 'Татьяна (Гольфстрим)')
-  AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 318)
+WHERE (
+  c.name = 'Татьяна (Гольфстрим)' 
+  OR c.director_name = 'Татьяна (Гольфстрим)'
+  OR COALESCE(c.director_name, c.name) = 'Татьяна (Гольфстрим)'
+)
+AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 318)
 LIMIT 1;
 
 INSERT INTO rental_orders (
@@ -26445,8 +30089,12 @@ SELECT
   NOW(),
   NOW()
 FROM rental_clients c
-WHERE (c.name = 'Татьяна (Гольфстрим)' OR c.director_name = 'Татьяна (Гольфстрим)')
-  AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 317)
+WHERE (
+  c.name = 'Татьяна (Гольфстрим)' 
+  OR c.director_name = 'Татьяна (Гольфстрим)'
+  OR COALESCE(c.director_name, c.name) = 'Татьяна (Гольфстрим)'
+)
+AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 317)
 LIMIT 1;
 
 INSERT INTO rental_orders (
@@ -26474,8 +30122,12 @@ SELECT
   NOW(),
   NOW()
 FROM rental_clients c
-WHERE (c.name = 'Татьяна (Гольфстрим)' OR c.director_name = 'Татьяна (Гольфстрим)')
-  AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 316)
+WHERE (
+  c.name = 'Татьяна (Гольфстрим)' 
+  OR c.director_name = 'Татьяна (Гольфстрим)'
+  OR COALESCE(c.director_name, c.name) = 'Татьяна (Гольфстрим)'
+)
+AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 316)
 LIMIT 1;
 
 INSERT INTO rental_orders (
@@ -26503,8 +30155,12 @@ SELECT
   NOW(),
   NOW()
 FROM rental_clients c
-WHERE (c.name = 'Татьяна (Гольфстрим)' OR c.director_name = 'Татьяна (Гольфстрим)')
-  AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 315)
+WHERE (
+  c.name = 'Татьяна (Гольфстрим)' 
+  OR c.director_name = 'Татьяна (Гольфстрим)'
+  OR COALESCE(c.director_name, c.name) = 'Татьяна (Гольфстрим)'
+)
+AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 315)
 LIMIT 1;
 
 INSERT INTO rental_orders (
@@ -26532,8 +30188,12 @@ SELECT
   NOW(),
   NOW()
 FROM rental_clients c
-WHERE (c.name = 'Татьяна (Гольфстрим)' OR c.director_name = 'Татьяна (Гольфстрим)')
-  AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 314)
+WHERE (
+  c.name = 'Татьяна (Гольфстрим)' 
+  OR c.director_name = 'Татьяна (Гольфстрим)'
+  OR COALESCE(c.director_name, c.name) = 'Татьяна (Гольфстрим)'
+)
+AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 314)
 LIMIT 1;
 
 INSERT INTO rental_orders (
@@ -26561,8 +30221,12 @@ SELECT
   NOW(),
   NOW()
 FROM rental_clients c
-WHERE (c.name = 'Татьяна (Гольфстрим)' OR c.director_name = 'Татьяна (Гольфстрим)')
-  AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 313)
+WHERE (
+  c.name = 'Татьяна (Гольфстрим)' 
+  OR c.director_name = 'Татьяна (Гольфстрим)'
+  OR COALESCE(c.director_name, c.name) = 'Татьяна (Гольфстрим)'
+)
+AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 313)
 LIMIT 1;
 
 INSERT INTO rental_orders (
@@ -26590,8 +30254,12 @@ SELECT
   NOW(),
   NOW()
 FROM rental_clients c
-WHERE (c.name = 'Андрей (Экскурс)' OR c.director_name = 'Андрей (Экскурс)')
-  AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 310)
+WHERE (
+  c.name = 'Андрей (Экскурс)' 
+  OR c.director_name = 'Андрей (Экскурс)'
+  OR COALESCE(c.director_name, c.name) = 'Андрей (Экскурс)'
+)
+AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 310)
 LIMIT 1;
 
 INSERT INTO rental_orders (
@@ -26619,8 +30287,12 @@ SELECT
   NOW(),
   NOW()
 FROM rental_clients c
-WHERE (c.name = 'Зульхиза Кутлучурина' OR c.director_name = 'Зульхиза Кутлучурина')
-  AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 308)
+WHERE (
+  c.name = 'Зульхиза Кутлучурина' 
+  OR c.director_name = 'Зульхиза Кутлучурина'
+  OR COALESCE(c.director_name, c.name) = 'Зульхиза Кутлучурина'
+)
+AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 308)
 LIMIT 1;
 
 INSERT INTO rental_orders (
@@ -26648,8 +30320,12 @@ SELECT
   NOW(),
   NOW()
 FROM rental_clients c
-WHERE (c.name = 'Мира (ИП)' OR c.director_name = 'Мира (ИП)')
-  AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 307)
+WHERE (
+  c.name = 'Мира (ИП)' 
+  OR c.director_name = 'Мира (ИП)'
+  OR COALESCE(c.director_name, c.name) = 'Мира (ИП)'
+)
+AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 307)
 LIMIT 1;
 
 INSERT INTO rental_orders (
@@ -26677,8 +30353,12 @@ SELECT
   NOW(),
   NOW()
 FROM rental_clients c
-WHERE (c.name = 'Сергей (Авангард)' OR c.director_name = 'Сергей (Авангард)')
-  AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 306)
+WHERE (
+  c.name = 'Сергей (Авангард)' 
+  OR c.director_name = 'Сергей (Авангард)'
+  OR COALESCE(c.director_name, c.name) = 'Сергей (Авангард)'
+)
+AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 306)
 LIMIT 1;
 
 INSERT INTO rental_orders (
@@ -26706,8 +30386,12 @@ SELECT
   NOW(),
   NOW()
 FROM rental_clients c
-WHERE (c.name = 'Зельфира' OR c.director_name = 'Зельфира')
-  AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 305)
+WHERE (
+  c.name = 'Зельфира' 
+  OR c.director_name = 'Зельфира'
+  OR COALESCE(c.director_name, c.name) = 'Зельфира'
+)
+AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 305)
 LIMIT 1;
 
 INSERT INTO rental_orders (
@@ -26735,8 +30419,12 @@ SELECT
   NOW(),
   NOW()
 FROM rental_clients c
-WHERE (c.name = 'Юлия Воронова' OR c.director_name = 'Юлия Воронова')
-  AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 304)
+WHERE (
+  c.name = 'Юлия Воронова' 
+  OR c.director_name = 'Юлия Воронова'
+  OR COALESCE(c.director_name, c.name) = 'Юлия Воронова'
+)
+AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 304)
 LIMIT 1;
 
 INSERT INTO rental_orders (
@@ -26764,8 +30452,12 @@ SELECT
   NOW(),
   NOW()
 FROM rental_clients c
-WHERE (c.name = 'Морозова' OR c.director_name = 'Морозова')
-  AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 303)
+WHERE (
+  c.name = 'Морозова' 
+  OR c.director_name = 'Морозова'
+  OR COALESCE(c.director_name, c.name) = 'Морозова'
+)
+AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 303)
 LIMIT 1;
 
 INSERT INTO rental_orders (
@@ -26793,8 +30485,12 @@ SELECT
   NOW(),
   NOW()
 FROM rental_clients c
-WHERE (c.name = 'Зельфира' OR c.director_name = 'Зельфира')
-  AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 302)
+WHERE (
+  c.name = 'Зельфира' 
+  OR c.director_name = 'Зельфира'
+  OR COALESCE(c.director_name, c.name) = 'Зельфира'
+)
+AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 302)
 LIMIT 1;
 
 INSERT INTO rental_orders (
@@ -26822,8 +30518,12 @@ SELECT
   NOW(),
   NOW()
 FROM rental_clients c
-WHERE (c.name = 'Эдик Заказы для групп' OR c.director_name = 'Эдик Заказы для групп')
-  AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 301)
+WHERE (
+  c.name = 'Эдик Заказы для групп' 
+  OR c.director_name = 'Эдик Заказы для групп'
+  OR COALESCE(c.director_name, c.name) = 'Эдик Заказы для групп'
+)
+AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 301)
 LIMIT 1;
 
 INSERT INTO rental_orders (
@@ -26851,8 +30551,12 @@ SELECT
   NOW(),
   NOW()
 FROM rental_clients c
-WHERE (c.name = 'Айрат Нурмухаммадов' OR c.director_name = 'Айрат Нурмухаммадов')
-  AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 300)
+WHERE (
+  c.name = 'Айрат Нурмухаммадов' 
+  OR c.director_name = 'Айрат Нурмухаммадов'
+  OR COALESCE(c.director_name, c.name) = 'Айрат Нурмухаммадов'
+)
+AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 300)
 LIMIT 1;
 
 INSERT INTO rental_orders (
@@ -26880,8 +30584,12 @@ SELECT
   NOW(),
   NOW()
 FROM rental_clients c
-WHERE (c.name = 'Гульнара' OR c.director_name = 'Гульнара')
-  AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 299)
+WHERE (
+  c.name = 'Гульнара' 
+  OR c.director_name = 'Гульнара'
+  OR COALESCE(c.director_name, c.name) = 'Гульнара'
+)
+AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 299)
 LIMIT 1;
 
 INSERT INTO rental_orders (
@@ -26909,8 +30617,12 @@ SELECT
   NOW(),
   NOW()
 FROM rental_clients c
-WHERE (c.name = 'Татьяна (Гольфстрим)' OR c.director_name = 'Татьяна (Гольфстрим)')
-  AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 298)
+WHERE (
+  c.name = 'Татьяна (Гольфстрим)' 
+  OR c.director_name = 'Татьяна (Гольфстрим)'
+  OR COALESCE(c.director_name, c.name) = 'Татьяна (Гольфстрим)'
+)
+AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 298)
 LIMIT 1;
 
 INSERT INTO rental_orders (
@@ -26938,8 +30650,12 @@ SELECT
   NOW(),
   NOW()
 FROM rental_clients c
-WHERE (c.name = 'Альберт (КТ)' OR c.director_name = 'Альберт (КТ)')
-  AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 297)
+WHERE (
+  c.name = 'Альберт (КТ)' 
+  OR c.director_name = 'Альберт (КТ)'
+  OR COALESCE(c.director_name, c.name) = 'Альберт (КТ)'
+)
+AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 297)
 LIMIT 1;
 
 INSERT INTO rental_orders (
@@ -26967,8 +30683,12 @@ SELECT
   NOW(),
   NOW()
 FROM rental_clients c
-WHERE (c.name = 'Татьяна (Гольфстрим)' OR c.director_name = 'Татьяна (Гольфстрим)')
-  AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 296)
+WHERE (
+  c.name = 'Татьяна (Гольфстрим)' 
+  OR c.director_name = 'Татьяна (Гольфстрим)'
+  OR COALESCE(c.director_name, c.name) = 'Татьяна (Гольфстрим)'
+)
+AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 296)
 LIMIT 1;
 
 INSERT INTO rental_orders (
@@ -26996,8 +30716,12 @@ SELECT
   NOW(),
   NOW()
 FROM rental_clients c
-WHERE (c.name = 'Татьяна (Гольфстрим)' OR c.director_name = 'Татьяна (Гольфстрим)')
-  AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 295)
+WHERE (
+  c.name = 'Татьяна (Гольфстрим)' 
+  OR c.director_name = 'Татьяна (Гольфстрим)'
+  OR COALESCE(c.director_name, c.name) = 'Татьяна (Гольфстрим)'
+)
+AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 295)
 LIMIT 1;
 
 INSERT INTO rental_orders (
@@ -27025,8 +30749,12 @@ SELECT
   NOW(),
   NOW()
 FROM rental_clients c
-WHERE (c.name = 'Татьяна (Гольфстрим)' OR c.director_name = 'Татьяна (Гольфстрим)')
-  AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 294)
+WHERE (
+  c.name = 'Татьяна (Гольфстрим)' 
+  OR c.director_name = 'Татьяна (Гольфстрим)'
+  OR COALESCE(c.director_name, c.name) = 'Татьяна (Гольфстрим)'
+)
+AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 294)
 LIMIT 1;
 
 INSERT INTO rental_orders (
@@ -27054,8 +30782,12 @@ SELECT
   NOW(),
   NOW()
 FROM rental_clients c
-WHERE (c.name = 'Сергей (Авангард)' OR c.director_name = 'Сергей (Авангард)')
-  AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 293)
+WHERE (
+  c.name = 'Сергей (Авангард)' 
+  OR c.director_name = 'Сергей (Авангард)'
+  OR COALESCE(c.director_name, c.name) = 'Сергей (Авангард)'
+)
+AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 293)
 LIMIT 1;
 
 INSERT INTO rental_orders (
@@ -27083,8 +30815,12 @@ SELECT
   NOW(),
   NOW()
 FROM rental_clients c
-WHERE (c.name = 'Татьяна' OR c.director_name = 'Татьяна')
-  AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 292)
+WHERE (
+  c.name = 'Татьяна' 
+  OR c.director_name = 'Татьяна'
+  OR COALESCE(c.director_name, c.name) = 'Татьяна'
+)
+AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 292)
 LIMIT 1;
 
 INSERT INTO rental_orders (
@@ -27112,8 +30848,12 @@ SELECT
   NOW(),
   NOW()
 FROM rental_clients c
-WHERE (c.name = 'Татьяна' OR c.director_name = 'Татьяна')
-  AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 291)
+WHERE (
+  c.name = 'Татьяна' 
+  OR c.director_name = 'Татьяна'
+  OR COALESCE(c.director_name, c.name) = 'Татьяна'
+)
+AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 291)
 LIMIT 1;
 
 INSERT INTO rental_orders (
@@ -27141,8 +30881,12 @@ SELECT
   NOW(),
   NOW()
 FROM rental_clients c
-WHERE (c.name = 'Мира (ИП)' OR c.director_name = 'Мира (ИП)')
-  AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 290)
+WHERE (
+  c.name = 'Мира (ИП)' 
+  OR c.director_name = 'Мира (ИП)'
+  OR COALESCE(c.director_name, c.name) = 'Мира (ИП)'
+)
+AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 290)
 LIMIT 1;
 
 INSERT INTO rental_orders (
@@ -27170,8 +30914,12 @@ SELECT
   NOW(),
   NOW()
 FROM rental_clients c
-WHERE (c.name = 'Андрей' OR c.director_name = 'Андрей')
-  AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 289)
+WHERE (
+  c.name = 'Андрей' 
+  OR c.director_name = 'Андрей'
+  OR COALESCE(c.director_name, c.name) = 'Андрей'
+)
+AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 289)
 LIMIT 1;
 
 INSERT INTO rental_orders (
@@ -27199,8 +30947,12 @@ SELECT
   NOW(),
   NOW()
 FROM rental_clients c
-WHERE (c.name = 'Наталья' OR c.director_name = 'Наталья')
-  AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 288)
+WHERE (
+  c.name = 'Наталья' 
+  OR c.director_name = 'Наталья'
+  OR COALESCE(c.director_name, c.name) = 'Наталья'
+)
+AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 288)
 LIMIT 1;
 
 INSERT INTO rental_orders (
@@ -27228,8 +30980,12 @@ SELECT
   NOW(),
   NOW()
 FROM rental_clients c
-WHERE (c.name = 'Наталья' OR c.director_name = 'Наталья')
-  AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 287)
+WHERE (
+  c.name = 'Наталья' 
+  OR c.director_name = 'Наталья'
+  OR COALESCE(c.director_name, c.name) = 'Наталья'
+)
+AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 287)
 LIMIT 1;
 
 INSERT INTO rental_orders (
@@ -27257,8 +31013,12 @@ SELECT
   NOW(),
   NOW()
 FROM rental_clients c
-WHERE (c.name = 'Мира (ИП)' OR c.director_name = 'Мира (ИП)')
-  AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 286)
+WHERE (
+  c.name = 'Мира (ИП)' 
+  OR c.director_name = 'Мира (ИП)'
+  OR COALESCE(c.director_name, c.name) = 'Мира (ИП)'
+)
+AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 286)
 LIMIT 1;
 
 INSERT INTO rental_orders (
@@ -27286,8 +31046,12 @@ SELECT
   NOW(),
   NOW()
 FROM rental_clients c
-WHERE (c.name = 'Зульхиза Кутлучурина' OR c.director_name = 'Зульхиза Кутлучурина')
-  AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 283)
+WHERE (
+  c.name = 'Зульхиза Кутлучурина' 
+  OR c.director_name = 'Зульхиза Кутлучурина'
+  OR COALESCE(c.director_name, c.name) = 'Зульхиза Кутлучурина'
+)
+AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 283)
 LIMIT 1;
 
 INSERT INTO rental_orders (
@@ -27315,8 +31079,12 @@ SELECT
   NOW(),
   NOW()
 FROM rental_clients c
-WHERE (c.name = 'Зульхиза Кутлучурина' OR c.director_name = 'Зульхиза Кутлучурина')
-  AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 282)
+WHERE (
+  c.name = 'Зульхиза Кутлучурина' 
+  OR c.director_name = 'Зульхиза Кутлучурина'
+  OR COALESCE(c.director_name, c.name) = 'Зульхиза Кутлучурина'
+)
+AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 282)
 LIMIT 1;
 
 INSERT INTO rental_orders (
@@ -27344,8 +31112,12 @@ SELECT
   NOW(),
   NOW()
 FROM rental_clients c
-WHERE (c.name = 'Зульхиза Кутлучурина' OR c.director_name = 'Зульхиза Кутлучурина')
-  AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 281)
+WHERE (
+  c.name = 'Зульхиза Кутлучурина' 
+  OR c.director_name = 'Зульхиза Кутлучурина'
+  OR COALESCE(c.director_name, c.name) = 'Зульхиза Кутлучурина'
+)
+AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 281)
 LIMIT 1;
 
 INSERT INTO rental_orders (
@@ -27373,8 +31145,12 @@ SELECT
   NOW(),
   NOW()
 FROM rental_clients c
-WHERE (c.name = 'Гульнара' OR c.director_name = 'Гульнара')
-  AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 280)
+WHERE (
+  c.name = 'Гульнара' 
+  OR c.director_name = 'Гульнара'
+  OR COALESCE(c.director_name, c.name) = 'Гульнара'
+)
+AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 280)
 LIMIT 1;
 
 INSERT INTO rental_orders (
@@ -27402,8 +31178,12 @@ SELECT
   NOW(),
   NOW()
 FROM rental_clients c
-WHERE (c.name = 'Зульхиза Кутлучурина' OR c.director_name = 'Зульхиза Кутлучурина')
-  AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 279)
+WHERE (
+  c.name = 'Зульхиза Кутлучурина' 
+  OR c.director_name = 'Зульхиза Кутлучурина'
+  OR COALESCE(c.director_name, c.name) = 'Зульхиза Кутлучурина'
+)
+AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 279)
 LIMIT 1;
 
 INSERT INTO rental_orders (
@@ -27431,8 +31211,12 @@ SELECT
   NOW(),
   NOW()
 FROM rental_clients c
-WHERE (c.name = 'Мира (ИП)' OR c.director_name = 'Мира (ИП)')
-  AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 278)
+WHERE (
+  c.name = 'Мира (ИП)' 
+  OR c.director_name = 'Мира (ИП)'
+  OR COALESCE(c.director_name, c.name) = 'Мира (ИП)'
+)
+AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 278)
 LIMIT 1;
 
 INSERT INTO rental_orders (
@@ -27460,8 +31244,12 @@ SELECT
   NOW(),
   NOW()
 FROM rental_clients c
-WHERE (c.name = 'Татьяна (Гольфстрим)' OR c.director_name = 'Татьяна (Гольфстрим)')
-  AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 277)
+WHERE (
+  c.name = 'Татьяна (Гольфстрим)' 
+  OR c.director_name = 'Татьяна (Гольфстрим)'
+  OR COALESCE(c.director_name, c.name) = 'Татьяна (Гольфстрим)'
+)
+AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 277)
 LIMIT 1;
 
 INSERT INTO rental_orders (
@@ -27489,8 +31277,12 @@ SELECT
   NOW(),
   NOW()
 FROM rental_clients c
-WHERE (c.name = 'Татьяна (Гольфстрим)' OR c.director_name = 'Татьяна (Гольфстрим)')
-  AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 276)
+WHERE (
+  c.name = 'Татьяна (Гольфстрим)' 
+  OR c.director_name = 'Татьяна (Гольфстрим)'
+  OR COALESCE(c.director_name, c.name) = 'Татьяна (Гольфстрим)'
+)
+AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 276)
 LIMIT 1;
 
 INSERT INTO rental_orders (
@@ -27518,8 +31310,12 @@ SELECT
   NOW(),
   NOW()
 FROM rental_clients c
-WHERE (c.name = 'Зельфира' OR c.director_name = 'Зельфира')
-  AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 275)
+WHERE (
+  c.name = 'Зельфира' 
+  OR c.director_name = 'Зельфира'
+  OR COALESCE(c.director_name, c.name) = 'Зельфира'
+)
+AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 275)
 LIMIT 1;
 
 INSERT INTO rental_orders (
@@ -27547,8 +31343,12 @@ SELECT
   NOW(),
   NOW()
 FROM rental_clients c
-WHERE (c.name = 'Наталья' OR c.director_name = 'Наталья')
-  AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 274)
+WHERE (
+  c.name = 'Наталья' 
+  OR c.director_name = 'Наталья'
+  OR COALESCE(c.director_name, c.name) = 'Наталья'
+)
+AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 274)
 LIMIT 1;
 
 INSERT INTO rental_orders (
@@ -27576,8 +31376,12 @@ SELECT
   NOW(),
   NOW()
 FROM rental_clients c
-WHERE (c.name = 'Мария' OR c.director_name = 'Мария')
-  AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 272)
+WHERE (
+  c.name = 'Мария' 
+  OR c.director_name = 'Мария'
+  OR COALESCE(c.director_name, c.name) = 'Мария'
+)
+AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 272)
 LIMIT 1;
 
 INSERT INTO rental_orders (
@@ -27605,8 +31409,12 @@ SELECT
   NOW(),
   NOW()
 FROM rental_clients c
-WHERE (c.name = 'Елена' OR c.director_name = 'Елена')
-  AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 271)
+WHERE (
+  c.name = 'Елена' 
+  OR c.director_name = 'Елена'
+  OR COALESCE(c.director_name, c.name) = 'Елена'
+)
+AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 271)
 LIMIT 1;
 
 INSERT INTO rental_orders (
@@ -27634,8 +31442,12 @@ SELECT
   NOW(),
   NOW()
 FROM rental_clients c
-WHERE (c.name = 'Татьяна (Гольфстрим)' OR c.director_name = 'Татьяна (Гольфстрим)')
-  AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 270)
+WHERE (
+  c.name = 'Татьяна (Гольфстрим)' 
+  OR c.director_name = 'Татьяна (Гольфстрим)'
+  OR COALESCE(c.director_name, c.name) = 'Татьяна (Гольфстрим)'
+)
+AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 270)
 LIMIT 1;
 
 INSERT INTO rental_orders (
@@ -27663,8 +31475,12 @@ SELECT
   NOW(),
   NOW()
 FROM rental_clients c
-WHERE (c.name = 'Элина (Сититур)' OR c.director_name = 'Элина (Сититур)')
-  AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 269)
+WHERE (
+  c.name = 'Элина (Сититур)' 
+  OR c.director_name = 'Элина (Сититур)'
+  OR COALESCE(c.director_name, c.name) = 'Элина (Сититур)'
+)
+AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 269)
 LIMIT 1;
 
 INSERT INTO rental_orders (
@@ -27692,8 +31508,12 @@ SELECT
   NOW(),
   NOW()
 FROM rental_clients c
-WHERE (c.name = 'Алина Минеева' OR c.director_name = 'Алина Минеева')
-  AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 268)
+WHERE (
+  c.name = 'Алина Минеева' 
+  OR c.director_name = 'Алина Минеева'
+  OR COALESCE(c.director_name, c.name) = 'Алина Минеева'
+)
+AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 268)
 LIMIT 1;
 
 INSERT INTO rental_orders (
@@ -27721,8 +31541,12 @@ SELECT
   NOW(),
   NOW()
 FROM rental_clients c
-WHERE (c.name = 'Любовь Ким' OR c.director_name = 'Любовь Ким')
-  AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 267)
+WHERE (
+  c.name = 'Любовь Ким' 
+  OR c.director_name = 'Любовь Ким'
+  OR COALESCE(c.director_name, c.name) = 'Любовь Ким'
+)
+AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 267)
 LIMIT 1;
 
 INSERT INTO rental_orders (
@@ -27750,8 +31574,12 @@ SELECT
   NOW(),
   NOW()
 FROM rental_clients c
-WHERE (c.name = 'Наталья Жукова' OR c.director_name = 'Наталья Жукова')
-  AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 266)
+WHERE (
+  c.name = 'Наталья Жукова' 
+  OR c.director_name = 'Наталья Жукова'
+  OR COALESCE(c.director_name, c.name) = 'Наталья Жукова'
+)
+AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 266)
 LIMIT 1;
 
 INSERT INTO rental_orders (
@@ -27779,8 +31607,12 @@ SELECT
   NOW(),
   NOW()
 FROM rental_clients c
-WHERE (c.name = 'Зульхиза Кутлучурина' OR c.director_name = 'Зульхиза Кутлучурина')
-  AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 265)
+WHERE (
+  c.name = 'Зульхиза Кутлучурина' 
+  OR c.director_name = 'Зульхиза Кутлучурина'
+  OR COALESCE(c.director_name, c.name) = 'Зульхиза Кутлучурина'
+)
+AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 265)
 LIMIT 1;
 
 INSERT INTO rental_orders (
@@ -27808,8 +31640,12 @@ SELECT
   NOW(),
   NOW()
 FROM rental_clients c
-WHERE (c.name = 'Анюта Родионова (Родина-тур)' OR c.director_name = 'Анюта Родионова (Родина-тур)')
-  AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 264)
+WHERE (
+  c.name = 'Анюта Родионова (Родина-тур)' 
+  OR c.director_name = 'Анюта Родионова (Родина-тур)'
+  OR COALESCE(c.director_name, c.name) = 'Анюта Родионова (Родина-тур)'
+)
+AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 264)
 LIMIT 1;
 
 INSERT INTO rental_orders (
@@ -27837,8 +31673,12 @@ SELECT
   NOW(),
   NOW()
 FROM rental_clients c
-WHERE (c.name = 'Юлия Воронова' OR c.director_name = 'Юлия Воронова')
-  AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 263)
+WHERE (
+  c.name = 'Юлия Воронова' 
+  OR c.director_name = 'Юлия Воронова'
+  OR COALESCE(c.director_name, c.name) = 'Юлия Воронова'
+)
+AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 263)
 LIMIT 1;
 
 INSERT INTO rental_orders (
@@ -27866,8 +31706,12 @@ SELECT
   NOW(),
   NOW()
 FROM rental_clients c
-WHERE (c.name = 'Эдик Заказы для групп' OR c.director_name = 'Эдик Заказы для групп')
-  AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 262)
+WHERE (
+  c.name = 'Эдик Заказы для групп' 
+  OR c.director_name = 'Эдик Заказы для групп'
+  OR COALESCE(c.director_name, c.name) = 'Эдик Заказы для групп'
+)
+AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 262)
 LIMIT 1;
 
 INSERT INTO rental_orders (
@@ -27895,8 +31739,12 @@ SELECT
   NOW(),
   NOW()
 FROM rental_clients c
-WHERE (c.name = 'Эдик Заказы для групп' OR c.director_name = 'Эдик Заказы для групп')
-  AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 261)
+WHERE (
+  c.name = 'Эдик Заказы для групп' 
+  OR c.director_name = 'Эдик Заказы для групп'
+  OR COALESCE(c.director_name, c.name) = 'Эдик Заказы для групп'
+)
+AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 261)
 LIMIT 1;
 
 INSERT INTO rental_orders (
@@ -27924,8 +31772,12 @@ SELECT
   NOW(),
   NOW()
 FROM rental_clients c
-WHERE (c.name = 'Екатерина' OR c.director_name = 'Екатерина')
-  AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 260)
+WHERE (
+  c.name = 'Екатерина' 
+  OR c.director_name = 'Екатерина'
+  OR COALESCE(c.director_name, c.name) = 'Екатерина'
+)
+AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 260)
 LIMIT 1;
 
 INSERT INTO rental_orders (
@@ -27953,8 +31805,12 @@ SELECT
   NOW(),
   NOW()
 FROM rental_clients c
-WHERE (c.name = 'Марианна' OR c.director_name = 'Марианна')
-  AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 259)
+WHERE (
+  c.name = 'Марианна' 
+  OR c.director_name = 'Марианна'
+  OR COALESCE(c.director_name, c.name) = 'Марианна'
+)
+AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 259)
 LIMIT 1;
 
 INSERT INTO rental_orders (
@@ -27982,8 +31838,12 @@ SELECT
   NOW(),
   NOW()
 FROM rental_clients c
-WHERE (c.name = 'Наталья Жукова' OR c.director_name = 'Наталья Жукова')
-  AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 258)
+WHERE (
+  c.name = 'Наталья Жукова' 
+  OR c.director_name = 'Наталья Жукова'
+  OR COALESCE(c.director_name, c.name) = 'Наталья Жукова'
+)
+AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 258)
 LIMIT 1;
 
 INSERT INTO rental_orders (
@@ -28011,8 +31871,12 @@ SELECT
   NOW(),
   NOW()
 FROM rental_clients c
-WHERE (c.name = 'Эдик Заказы для групп' OR c.director_name = 'Эдик Заказы для групп')
-  AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 257)
+WHERE (
+  c.name = 'Эдик Заказы для групп' 
+  OR c.director_name = 'Эдик Заказы для групп'
+  OR COALESCE(c.director_name, c.name) = 'Эдик Заказы для групп'
+)
+AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 257)
 LIMIT 1;
 
 INSERT INTO rental_orders (
@@ -28040,8 +31904,12 @@ SELECT
   NOW(),
   NOW()
 FROM rental_clients c
-WHERE (c.name = 'Татьяна (Гольфстрим)' OR c.director_name = 'Татьяна (Гольфстрим)')
-  AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 256)
+WHERE (
+  c.name = 'Татьяна (Гольфстрим)' 
+  OR c.director_name = 'Татьяна (Гольфстрим)'
+  OR COALESCE(c.director_name, c.name) = 'Татьяна (Гольфстрим)'
+)
+AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 256)
 LIMIT 1;
 
 INSERT INTO rental_orders (
@@ -28069,8 +31937,12 @@ SELECT
   NOW(),
   NOW()
 FROM rental_clients c
-WHERE (c.name = 'Гульнара' OR c.director_name = 'Гульнара')
-  AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 255)
+WHERE (
+  c.name = 'Гульнара' 
+  OR c.director_name = 'Гульнара'
+  OR COALESCE(c.director_name, c.name) = 'Гульнара'
+)
+AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 255)
 LIMIT 1;
 
 INSERT INTO rental_orders (
@@ -28098,8 +31970,12 @@ SELECT
   NOW(),
   NOW()
 FROM rental_clients c
-WHERE (c.name = 'Камила Ягудина' OR c.director_name = 'Камила Ягудина')
-  AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 254)
+WHERE (
+  c.name = 'Камила Ягудина' 
+  OR c.director_name = 'Камила Ягудина'
+  OR COALESCE(c.director_name, c.name) = 'Камила Ягудина'
+)
+AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 254)
 LIMIT 1;
 
 INSERT INTO rental_orders (
@@ -28127,8 +32003,12 @@ SELECT
   NOW(),
   NOW()
 FROM rental_clients c
-WHERE (c.name = 'Игорь Воронов' OR c.director_name = 'Игорь Воронов')
-  AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 253)
+WHERE (
+  c.name = 'Игорь Воронов' 
+  OR c.director_name = 'Игорь Воронов'
+  OR COALESCE(c.director_name, c.name) = 'Игорь Воронов'
+)
+AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 253)
 LIMIT 1;
 
 INSERT INTO rental_orders (
@@ -28156,8 +32036,12 @@ SELECT
   NOW(),
   NOW()
 FROM rental_clients c
-WHERE (c.name = 'Нина Салькова' OR c.director_name = 'Нина Салькова')
-  AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 252)
+WHERE (
+  c.name = 'Нина Салькова' 
+  OR c.director_name = 'Нина Салькова'
+  OR COALESCE(c.director_name, c.name) = 'Нина Салькова'
+)
+AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 252)
 LIMIT 1;
 
 INSERT INTO rental_orders (
@@ -28185,8 +32069,12 @@ SELECT
   NOW(),
   NOW()
 FROM rental_clients c
-WHERE (c.name = 'Ирина Михайловна' OR c.director_name = 'Ирина Михайловна')
-  AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 251)
+WHERE (
+  c.name = 'Ирина Михайловна' 
+  OR c.director_name = 'Ирина Михайловна'
+  OR COALESCE(c.director_name, c.name) = 'Ирина Михайловна'
+)
+AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 251)
 LIMIT 1;
 
 INSERT INTO rental_orders (
@@ -28214,8 +32102,12 @@ SELECT
   NOW(),
   NOW()
 FROM rental_clients c
-WHERE (c.name = 'Камила Ягудина' OR c.director_name = 'Камила Ягудина')
-  AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 250)
+WHERE (
+  c.name = 'Камила Ягудина' 
+  OR c.director_name = 'Камила Ягудина'
+  OR COALESCE(c.director_name, c.name) = 'Камила Ягудина'
+)
+AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 250)
 LIMIT 1;
 
 INSERT INTO rental_orders (
@@ -28243,8 +32135,12 @@ SELECT
   NOW(),
   NOW()
 FROM rental_clients c
-WHERE (c.name = 'Игорь Воронов' OR c.director_name = 'Игорь Воронов')
-  AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 249)
+WHERE (
+  c.name = 'Игорь Воронов' 
+  OR c.director_name = 'Игорь Воронов'
+  OR COALESCE(c.director_name, c.name) = 'Игорь Воронов'
+)
+AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 249)
 LIMIT 1;
 
 INSERT INTO rental_orders (
@@ -28272,8 +32168,12 @@ SELECT
   NOW(),
   NOW()
 FROM rental_clients c
-WHERE (c.name = 'Юлианна' OR c.director_name = 'Юлианна')
-  AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 248)
+WHERE (
+  c.name = 'Юлианна' 
+  OR c.director_name = 'Юлианна'
+  OR COALESCE(c.director_name, c.name) = 'Юлианна'
+)
+AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 248)
 LIMIT 1;
 
 INSERT INTO rental_orders (
@@ -28301,8 +32201,12 @@ SELECT
   NOW(),
   NOW()
 FROM rental_clients c
-WHERE (c.name = 'Евгения Заговорина' OR c.director_name = 'Евгения Заговорина')
-  AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 247)
+WHERE (
+  c.name = 'Евгения Заговорина' 
+  OR c.director_name = 'Евгения Заговорина'
+  OR COALESCE(c.director_name, c.name) = 'Евгения Заговорина'
+)
+AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 247)
 LIMIT 1;
 
 INSERT INTO rental_orders (
@@ -28330,8 +32234,12 @@ SELECT
   NOW(),
   NOW()
 FROM rental_clients c
-WHERE (c.name = 'Мира (ИП)' OR c.director_name = 'Мира (ИП)')
-  AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 246)
+WHERE (
+  c.name = 'Мира (ИП)' 
+  OR c.director_name = 'Мира (ИП)'
+  OR COALESCE(c.director_name, c.name) = 'Мира (ИП)'
+)
+AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 246)
 LIMIT 1;
 
 INSERT INTO rental_orders (
@@ -28359,8 +32267,12 @@ SELECT
   NOW(),
   NOW()
 FROM rental_clients c
-WHERE (c.name = 'Мира (ИП)' OR c.director_name = 'Мира (ИП)')
-  AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 245)
+WHERE (
+  c.name = 'Мира (ИП)' 
+  OR c.director_name = 'Мира (ИП)'
+  OR COALESCE(c.director_name, c.name) = 'Мира (ИП)'
+)
+AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 245)
 LIMIT 1;
 
 INSERT INTO rental_orders (
@@ -28388,8 +32300,12 @@ SELECT
   NOW(),
   NOW()
 FROM rental_clients c
-WHERE (c.name = 'Мира (ИП)' OR c.director_name = 'Мира (ИП)')
-  AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 244)
+WHERE (
+  c.name = 'Мира (ИП)' 
+  OR c.director_name = 'Мира (ИП)'
+  OR COALESCE(c.director_name, c.name) = 'Мира (ИП)'
+)
+AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 244)
 LIMIT 1;
 
 INSERT INTO rental_orders (
@@ -28417,8 +32333,12 @@ SELECT
   NOW(),
   NOW()
 FROM rental_clients c
-WHERE (c.name = 'Салькова Нина' OR c.director_name = 'Салькова Нина')
-  AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 243)
+WHERE (
+  c.name = 'Салькова Нина' 
+  OR c.director_name = 'Салькова Нина'
+  OR COALESCE(c.director_name, c.name) = 'Салькова Нина'
+)
+AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 243)
 LIMIT 1;
 
 INSERT INTO rental_orders (
@@ -28446,8 +32366,12 @@ SELECT
   NOW(),
   NOW()
 FROM rental_clients c
-WHERE (c.name = 'Наталья Рыжкова' OR c.director_name = 'Наталья Рыжкова')
-  AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 242)
+WHERE (
+  c.name = 'Наталья Рыжкова' 
+  OR c.director_name = 'Наталья Рыжкова'
+  OR COALESCE(c.director_name, c.name) = 'Наталья Рыжкова'
+)
+AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 242)
 LIMIT 1;
 
 INSERT INTO rental_orders (
@@ -28475,8 +32399,12 @@ SELECT
   NOW(),
   NOW()
 FROM rental_clients c
-WHERE (c.name = 'Элина (Сититур)' OR c.director_name = 'Элина (Сититур)')
-  AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 241)
+WHERE (
+  c.name = 'Элина (Сититур)' 
+  OR c.director_name = 'Элина (Сититур)'
+  OR COALESCE(c.director_name, c.name) = 'Элина (Сититур)'
+)
+AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 241)
 LIMIT 1;
 
 INSERT INTO rental_orders (
@@ -28504,8 +32432,12 @@ SELECT
   NOW(),
   NOW()
 FROM rental_clients c
-WHERE (c.name = 'Артем Агафонов' OR c.director_name = 'Артем Агафонов')
-  AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 240)
+WHERE (
+  c.name = 'Артем Агафонов' 
+  OR c.director_name = 'Артем Агафонов'
+  OR COALESCE(c.director_name, c.name) = 'Артем Агафонов'
+)
+AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 240)
 LIMIT 1;
 
 INSERT INTO rental_orders (
@@ -28533,8 +32465,12 @@ SELECT
   NOW(),
   NOW()
 FROM rental_clients c
-WHERE (c.name = 'Гульнара' OR c.director_name = 'Гульнара')
-  AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 239)
+WHERE (
+  c.name = 'Гульнара' 
+  OR c.director_name = 'Гульнара'
+  OR COALESCE(c.director_name, c.name) = 'Гульнара'
+)
+AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 239)
 LIMIT 1;
 
 INSERT INTO rental_orders (
@@ -28562,8 +32498,12 @@ SELECT
   NOW(),
   NOW()
 FROM rental_clients c
-WHERE (c.name = 'Юлианна' OR c.director_name = 'Юлианна')
-  AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 238)
+WHERE (
+  c.name = 'Юлианна' 
+  OR c.director_name = 'Юлианна'
+  OR COALESCE(c.director_name, c.name) = 'Юлианна'
+)
+AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 238)
 LIMIT 1;
 
 INSERT INTO rental_orders (
@@ -28591,8 +32531,12 @@ SELECT
   NOW(),
   NOW()
 FROM rental_clients c
-WHERE (c.name = 'Юлианна' OR c.director_name = 'Юлианна')
-  AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 237)
+WHERE (
+  c.name = 'Юлианна' 
+  OR c.director_name = 'Юлианна'
+  OR COALESCE(c.director_name, c.name) = 'Юлианна'
+)
+AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 237)
 LIMIT 1;
 
 INSERT INTO rental_orders (
@@ -28620,8 +32564,12 @@ SELECT
   NOW(),
   NOW()
 FROM rental_clients c
-WHERE (c.name = 'Автокруиз' OR c.director_name = 'Автокруиз')
-  AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 236)
+WHERE (
+  c.name = 'Автокруиз' 
+  OR c.director_name = 'Автокруиз'
+  OR COALESCE(c.director_name, c.name) = 'Автокруиз'
+)
+AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 236)
 LIMIT 1;
 
 INSERT INTO rental_orders (
@@ -28649,8 +32597,12 @@ SELECT
   NOW(),
   NOW()
 FROM rental_clients c
-WHERE (c.name = 'Мария' OR c.director_name = 'Мария')
-  AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 235)
+WHERE (
+  c.name = 'Мария' 
+  OR c.director_name = 'Мария'
+  OR COALESCE(c.director_name, c.name) = 'Мария'
+)
+AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 235)
 LIMIT 1;
 
 INSERT INTO rental_orders (
@@ -28678,8 +32630,12 @@ SELECT
   NOW(),
   NOW()
 FROM rental_clients c
-WHERE (c.name = 'Оксана' OR c.director_name = 'Оксана')
-  AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 234)
+WHERE (
+  c.name = 'Оксана' 
+  OR c.director_name = 'Оксана'
+  OR COALESCE(c.director_name, c.name) = 'Оксана'
+)
+AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 234)
 LIMIT 1;
 
 INSERT INTO rental_orders (
@@ -28707,8 +32663,12 @@ SELECT
   NOW(),
   NOW()
 FROM rental_clients c
-WHERE (c.name = 'Эдик Заказы для групп' OR c.director_name = 'Эдик Заказы для групп')
-  AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 232)
+WHERE (
+  c.name = 'Эдик Заказы для групп' 
+  OR c.director_name = 'Эдик Заказы для групп'
+  OR COALESCE(c.director_name, c.name) = 'Эдик Заказы для групп'
+)
+AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 232)
 LIMIT 1;
 
 INSERT INTO rental_orders (
@@ -28736,8 +32696,12 @@ SELECT
   NOW(),
   NOW()
 FROM rental_clients c
-WHERE (c.name = 'Эдик Заказы для групп' OR c.director_name = 'Эдик Заказы для групп')
-  AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 231)
+WHERE (
+  c.name = 'Эдик Заказы для групп' 
+  OR c.director_name = 'Эдик Заказы для групп'
+  OR COALESCE(c.director_name, c.name) = 'Эдик Заказы для групп'
+)
+AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 231)
 LIMIT 1;
 
 INSERT INTO rental_orders (
@@ -28765,8 +32729,12 @@ SELECT
   NOW(),
   NOW()
 FROM rental_clients c
-WHERE (c.name = 'Эдик Заказы для групп' OR c.director_name = 'Эдик Заказы для групп')
-  AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 230)
+WHERE (
+  c.name = 'Эдик Заказы для групп' 
+  OR c.director_name = 'Эдик Заказы для групп'
+  OR COALESCE(c.director_name, c.name) = 'Эдик Заказы для групп'
+)
+AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 230)
 LIMIT 1;
 
 INSERT INTO rental_orders (
@@ -28794,8 +32762,12 @@ SELECT
   NOW(),
   NOW()
 FROM rental_clients c
-WHERE (c.name = 'Анюта Родионова (Родина-тур)' OR c.director_name = 'Анюта Родионова (Родина-тур)')
-  AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 229)
+WHERE (
+  c.name = 'Анюта Родионова (Родина-тур)' 
+  OR c.director_name = 'Анюта Родионова (Родина-тур)'
+  OR COALESCE(c.director_name, c.name) = 'Анюта Родионова (Родина-тур)'
+)
+AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 229)
 LIMIT 1;
 
 INSERT INTO rental_orders (
@@ -28823,8 +32795,12 @@ SELECT
   NOW(),
   NOW()
 FROM rental_clients c
-WHERE (c.name = 'Клиент' OR c.director_name = 'Клиент')
-  AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 228)
+WHERE (
+  c.name = 'Клиент' 
+  OR c.director_name = 'Клиент'
+  OR COALESCE(c.director_name, c.name) = 'Клиент'
+)
+AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 228)
 LIMIT 1;
 
 INSERT INTO rental_orders (
@@ -28852,8 +32828,12 @@ SELECT
   NOW(),
   NOW()
 FROM rental_clients c
-WHERE (c.name = 'Галия' OR c.director_name = 'Галия')
-  AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 227)
+WHERE (
+  c.name = 'Галия' 
+  OR c.director_name = 'Галия'
+  OR COALESCE(c.director_name, c.name) = 'Галия'
+)
+AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 227)
 LIMIT 1;
 
 INSERT INTO rental_orders (
@@ -28881,8 +32861,12 @@ SELECT
   NOW(),
   NOW()
 FROM rental_clients c
-WHERE (c.name = 'Андрей Вологда' OR c.director_name = 'Андрей Вологда')
-  AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 226)
+WHERE (
+  c.name = 'Андрей Вологда' 
+  OR c.director_name = 'Андрей Вологда'
+  OR COALESCE(c.director_name, c.name) = 'Андрей Вологда'
+)
+AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 226)
 LIMIT 1;
 
 INSERT INTO rental_orders (
@@ -28910,8 +32894,12 @@ SELECT
   NOW(),
   NOW()
 FROM rental_clients c
-WHERE (c.name = 'Сергей' OR c.director_name = 'Сергей')
-  AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 225)
+WHERE (
+  c.name = 'Сергей' 
+  OR c.director_name = 'Сергей'
+  OR COALESCE(c.director_name, c.name) = 'Сергей'
+)
+AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 225)
 LIMIT 1;
 
 INSERT INTO rental_orders (
@@ -28939,8 +32927,12 @@ SELECT
   NOW(),
   NOW()
 FROM rental_clients c
-WHERE (c.name = 'Мира (ИП)' OR c.director_name = 'Мира (ИП)')
-  AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 224)
+WHERE (
+  c.name = 'Мира (ИП)' 
+  OR c.director_name = 'Мира (ИП)'
+  OR COALESCE(c.director_name, c.name) = 'Мира (ИП)'
+)
+AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 224)
 LIMIT 1;
 
 INSERT INTO rental_orders (
@@ -28968,8 +32960,12 @@ SELECT
   NOW(),
   NOW()
 FROM rental_clients c
-WHERE (c.name = 'Зельфира' OR c.director_name = 'Зельфира')
-  AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 223)
+WHERE (
+  c.name = 'Зельфира' 
+  OR c.director_name = 'Зельфира'
+  OR COALESCE(c.director_name, c.name) = 'Зельфира'
+)
+AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 223)
 LIMIT 1;
 
 INSERT INTO rental_orders (
@@ -28997,8 +32993,12 @@ SELECT
   NOW(),
   NOW()
 FROM rental_clients c
-WHERE (c.name = 'Юлианна' OR c.director_name = 'Юлианна')
-  AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 222)
+WHERE (
+  c.name = 'Юлианна' 
+  OR c.director_name = 'Юлианна'
+  OR COALESCE(c.director_name, c.name) = 'Юлианна'
+)
+AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 222)
 LIMIT 1;
 
 INSERT INTO rental_orders (
@@ -29026,8 +33026,12 @@ SELECT
   NOW(),
   NOW()
 FROM rental_clients c
-WHERE (c.name = 'Камилла' OR c.director_name = 'Камилла')
-  AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 221)
+WHERE (
+  c.name = 'Камилла' 
+  OR c.director_name = 'Камилла'
+  OR COALESCE(c.director_name, c.name) = 'Камилла'
+)
+AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 221)
 LIMIT 1;
 
 INSERT INTO rental_orders (
@@ -29055,8 +33059,12 @@ SELECT
   NOW(),
   NOW()
 FROM rental_clients c
-WHERE (c.name = 'Мария Экскурсовод' OR c.director_name = 'Мария Экскурсовод')
-  AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 220)
+WHERE (
+  c.name = 'Мария Экскурсовод' 
+  OR c.director_name = 'Мария Экскурсовод'
+  OR COALESCE(c.director_name, c.name) = 'Мария Экскурсовод'
+)
+AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 220)
 LIMIT 1;
 
 INSERT INTO rental_orders (
@@ -29084,8 +33092,12 @@ SELECT
   NOW(),
   NOW()
 FROM rental_clients c
-WHERE (c.name = 'Наталья' OR c.director_name = 'Наталья')
-  AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 219)
+WHERE (
+  c.name = 'Наталья' 
+  OR c.director_name = 'Наталья'
+  OR COALESCE(c.director_name, c.name) = 'Наталья'
+)
+AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 219)
 LIMIT 1;
 
 INSERT INTO rental_orders (
@@ -29113,8 +33125,12 @@ SELECT
   NOW(),
   NOW()
 FROM rental_clients c
-WHERE (c.name = 'Гульназ' OR c.director_name = 'Гульназ')
-  AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 218)
+WHERE (
+  c.name = 'Гульназ' 
+  OR c.director_name = 'Гульназ'
+  OR COALESCE(c.director_name, c.name) = 'Гульназ'
+)
+AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 218)
 LIMIT 1;
 
 INSERT INTO rental_orders (
@@ -29142,8 +33158,12 @@ SELECT
   NOW(),
   NOW()
 FROM rental_clients c
-WHERE (c.name = 'Клиент' OR c.director_name = 'Клиент')
-  AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 217)
+WHERE (
+  c.name = 'Клиент' 
+  OR c.director_name = 'Клиент'
+  OR COALESCE(c.director_name, c.name) = 'Клиент'
+)
+AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 217)
 LIMIT 1;
 
 INSERT INTO rental_orders (
@@ -29171,8 +33191,12 @@ SELECT
   NOW(),
   NOW()
 FROM rental_clients c
-WHERE (c.name = 'Алина Минеева' OR c.director_name = 'Алина Минеева')
-  AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 216)
+WHERE (
+  c.name = 'Алина Минеева' 
+  OR c.director_name = 'Алина Минеева'
+  OR COALESCE(c.director_name, c.name) = 'Алина Минеева'
+)
+AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 216)
 LIMIT 1;
 
 INSERT INTO rental_orders (
@@ -29200,8 +33224,12 @@ SELECT
   NOW(),
   NOW()
 FROM rental_clients c
-WHERE (c.name = 'Алина Минеева' OR c.director_name = 'Алина Минеева')
-  AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 215)
+WHERE (
+  c.name = 'Алина Минеева' 
+  OR c.director_name = 'Алина Минеева'
+  OR COALESCE(c.director_name, c.name) = 'Алина Минеева'
+)
+AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 215)
 LIMIT 1;
 
 INSERT INTO rental_orders (
@@ -29229,8 +33257,12 @@ SELECT
   NOW(),
   NOW()
 FROM rental_clients c
-WHERE (c.name = 'Алина Минеева' OR c.director_name = 'Алина Минеева')
-  AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 214)
+WHERE (
+  c.name = 'Алина Минеева' 
+  OR c.director_name = 'Алина Минеева'
+  OR COALESCE(c.director_name, c.name) = 'Алина Минеева'
+)
+AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 214)
 LIMIT 1;
 
 INSERT INTO rental_orders (
@@ -29258,8 +33290,12 @@ SELECT
   NOW(),
   NOW()
 FROM rental_clients c
-WHERE (c.name = 'Юлия Воронова' OR c.director_name = 'Юлия Воронова')
-  AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 213)
+WHERE (
+  c.name = 'Юлия Воронова' 
+  OR c.director_name = 'Юлия Воронова'
+  OR COALESCE(c.director_name, c.name) = 'Юлия Воронова'
+)
+AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 213)
 LIMIT 1;
 
 INSERT INTO rental_orders (
@@ -29287,8 +33323,12 @@ SELECT
   NOW(),
   NOW()
 FROM rental_clients c
-WHERE (c.name = 'Юлия Воронова' OR c.director_name = 'Юлия Воронова')
-  AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 212)
+WHERE (
+  c.name = 'Юлия Воронова' 
+  OR c.director_name = 'Юлия Воронова'
+  OR COALESCE(c.director_name, c.name) = 'Юлия Воронова'
+)
+AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 212)
 LIMIT 1;
 
 INSERT INTO rental_orders (
@@ -29316,8 +33356,12 @@ SELECT
   NOW(),
   NOW()
 FROM rental_clients c
-WHERE (c.name = 'Екатерина Кореева' OR c.director_name = 'Екатерина Кореева')
-  AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 211)
+WHERE (
+  c.name = 'Екатерина Кореева' 
+  OR c.director_name = 'Екатерина Кореева'
+  OR COALESCE(c.director_name, c.name) = 'Екатерина Кореева'
+)
+AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 211)
 LIMIT 1;
 
 INSERT INTO rental_orders (
@@ -29345,8 +33389,12 @@ SELECT
   NOW(),
   NOW()
 FROM rental_clients c
-WHERE (c.name = 'Камила Ягудина' OR c.director_name = 'Камила Ягудина')
-  AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 210)
+WHERE (
+  c.name = 'Камила Ягудина' 
+  OR c.director_name = 'Камила Ягудина'
+  OR COALESCE(c.director_name, c.name) = 'Камила Ягудина'
+)
+AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 210)
 LIMIT 1;
 
 INSERT INTO rental_orders (
@@ -29374,8 +33422,12 @@ SELECT
   NOW(),
   NOW()
 FROM rental_clients c
-WHERE (c.name = 'Зельфира' OR c.director_name = 'Зельфира')
-  AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 208)
+WHERE (
+  c.name = 'Зельфира' 
+  OR c.director_name = 'Зельфира'
+  OR COALESCE(c.director_name, c.name) = 'Зельфира'
+)
+AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 208)
 LIMIT 1;
 
 INSERT INTO rental_orders (
@@ -29403,8 +33455,12 @@ SELECT
   NOW(),
   NOW()
 FROM rental_clients c
-WHERE (c.name = 'Юлианна' OR c.director_name = 'Юлианна')
-  AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 207)
+WHERE (
+  c.name = 'Юлианна' 
+  OR c.director_name = 'Юлианна'
+  OR COALESCE(c.director_name, c.name) = 'Юлианна'
+)
+AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 207)
 LIMIT 1;
 
 INSERT INTO rental_orders (
@@ -29432,8 +33488,12 @@ SELECT
   NOW(),
   NOW()
 FROM rental_clients c
-WHERE (c.name = 'Мария Экскурсовод' OR c.director_name = 'Мария Экскурсовод')
-  AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 206)
+WHERE (
+  c.name = 'Мария Экскурсовод' 
+  OR c.director_name = 'Мария Экскурсовод'
+  OR COALESCE(c.director_name, c.name) = 'Мария Экскурсовод'
+)
+AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 206)
 LIMIT 1;
 
 INSERT INTO rental_orders (
@@ -29461,8 +33521,12 @@ SELECT
   NOW(),
   NOW()
 FROM rental_clients c
-WHERE (c.name = 'Гульнара' OR c.director_name = 'Гульнара')
-  AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 205)
+WHERE (
+  c.name = 'Гульнара' 
+  OR c.director_name = 'Гульнара'
+  OR COALESCE(c.director_name, c.name) = 'Гульнара'
+)
+AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 205)
 LIMIT 1;
 
 INSERT INTO rental_orders (
@@ -29490,8 +33554,12 @@ SELECT
   NOW(),
   NOW()
 FROM rental_clients c
-WHERE (c.name = 'Гульнара' OR c.director_name = 'Гульнара')
-  AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 204)
+WHERE (
+  c.name = 'Гульнара' 
+  OR c.director_name = 'Гульнара'
+  OR COALESCE(c.director_name, c.name) = 'Гульнара'
+)
+AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 204)
 LIMIT 1;
 
 INSERT INTO rental_orders (
@@ -29519,8 +33587,12 @@ SELECT
   NOW(),
   NOW()
 FROM rental_clients c
-WHERE (c.name = 'Алёна Лазука' OR c.director_name = 'Алёна Лазука')
-  AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 203)
+WHERE (
+  c.name = 'Алёна Лазука' 
+  OR c.director_name = 'Алёна Лазука'
+  OR COALESCE(c.director_name, c.name) = 'Алёна Лазука'
+)
+AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 203)
 LIMIT 1;
 
 INSERT INTO rental_orders (
@@ -29548,8 +33620,12 @@ SELECT
   NOW(),
   NOW()
 FROM rental_clients c
-WHERE (c.name = 'Автокруиз' OR c.director_name = 'Автокруиз')
-  AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 202)
+WHERE (
+  c.name = 'Автокруиз' 
+  OR c.director_name = 'Автокруиз'
+  OR COALESCE(c.director_name, c.name) = 'Автокруиз'
+)
+AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 202)
 LIMIT 1;
 
 INSERT INTO rental_orders (
@@ -29577,8 +33653,12 @@ SELECT
   NOW(),
   NOW()
 FROM rental_clients c
-WHERE (c.name = 'Зельфира' OR c.director_name = 'Зельфира')
-  AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 201)
+WHERE (
+  c.name = 'Зельфира' 
+  OR c.director_name = 'Зельфира'
+  OR COALESCE(c.director_name, c.name) = 'Зельфира'
+)
+AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 201)
 LIMIT 1;
 
 INSERT INTO rental_orders (
@@ -29606,8 +33686,12 @@ SELECT
   NOW(),
   NOW()
 FROM rental_clients c
-WHERE (c.name = 'Наталья Рыжкова' OR c.director_name = 'Наталья Рыжкова')
-  AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 200)
+WHERE (
+  c.name = 'Наталья Рыжкова' 
+  OR c.director_name = 'Наталья Рыжкова'
+  OR COALESCE(c.director_name, c.name) = 'Наталья Рыжкова'
+)
+AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 200)
 LIMIT 1;
 
 INSERT INTO rental_orders (
@@ -29635,8 +33719,12 @@ SELECT
   NOW(),
   NOW()
 FROM rental_clients c
-WHERE (c.name = 'Лиля Экскурсовод' OR c.director_name = 'Лиля Экскурсовод')
-  AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 199)
+WHERE (
+  c.name = 'Лиля Экскурсовод' 
+  OR c.director_name = 'Лиля Экскурсовод'
+  OR COALESCE(c.director_name, c.name) = 'Лиля Экскурсовод'
+)
+AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 199)
 LIMIT 1;
 
 INSERT INTO rental_orders (
@@ -29664,8 +33752,12 @@ SELECT
   NOW(),
   NOW()
 FROM rental_clients c
-WHERE (c.name = 'Татьяна (Гольфстрим)' OR c.director_name = 'Татьяна (Гольфстрим)')
-  AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 198)
+WHERE (
+  c.name = 'Татьяна (Гольфстрим)' 
+  OR c.director_name = 'Татьяна (Гольфстрим)'
+  OR COALESCE(c.director_name, c.name) = 'Татьяна (Гольфстрим)'
+)
+AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 198)
 LIMIT 1;
 
 INSERT INTO rental_orders (
@@ -29693,8 +33785,12 @@ SELECT
   NOW(),
   NOW()
 FROM rental_clients c
-WHERE (c.name = 'Татьяна (Гольфстрим)' OR c.director_name = 'Татьяна (Гольфстрим)')
-  AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 197)
+WHERE (
+  c.name = 'Татьяна (Гольфстрим)' 
+  OR c.director_name = 'Татьяна (Гольфстрим)'
+  OR COALESCE(c.director_name, c.name) = 'Татьяна (Гольфстрим)'
+)
+AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 197)
 LIMIT 1;
 
 INSERT INTO rental_orders (
@@ -29722,8 +33818,12 @@ SELECT
   NOW(),
   NOW()
 FROM rental_clients c
-WHERE (c.name = 'Татьяна (Гольфстрим)' OR c.director_name = 'Татьяна (Гольфстрим)')
-  AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 196)
+WHERE (
+  c.name = 'Татьяна (Гольфстрим)' 
+  OR c.director_name = 'Татьяна (Гольфстрим)'
+  OR COALESCE(c.director_name, c.name) = 'Татьяна (Гольфстрим)'
+)
+AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 196)
 LIMIT 1;
 
 INSERT INTO rental_orders (
@@ -29751,8 +33851,12 @@ SELECT
   NOW(),
   NOW()
 FROM rental_clients c
-WHERE (c.name = 'Сергей' OR c.director_name = 'Сергей')
-  AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 195)
+WHERE (
+  c.name = 'Сергей' 
+  OR c.director_name = 'Сергей'
+  OR COALESCE(c.director_name, c.name) = 'Сергей'
+)
+AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 195)
 LIMIT 1;
 
 INSERT INTO rental_orders (
@@ -29780,8 +33884,12 @@ SELECT
   NOW(),
   NOW()
 FROM rental_clients c
-WHERE (c.name = 'Любовь Ким' OR c.director_name = 'Любовь Ким')
-  AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 194)
+WHERE (
+  c.name = 'Любовь Ким' 
+  OR c.director_name = 'Любовь Ким'
+  OR COALESCE(c.director_name, c.name) = 'Любовь Ким'
+)
+AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 194)
 LIMIT 1;
 
 INSERT INTO rental_orders (
@@ -29809,8 +33917,12 @@ SELECT
   NOW(),
   NOW()
 FROM rental_clients c
-WHERE (c.name = 'Мария Экскурсовод' OR c.director_name = 'Мария Экскурсовод')
-  AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 193)
+WHERE (
+  c.name = 'Мария Экскурсовод' 
+  OR c.director_name = 'Мария Экскурсовод'
+  OR COALESCE(c.director_name, c.name) = 'Мария Экскурсовод'
+)
+AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 193)
 LIMIT 1;
 
 INSERT INTO rental_orders (
@@ -29838,8 +33950,12 @@ SELECT
   NOW(),
   NOW()
 FROM rental_clients c
-WHERE (c.name = 'Андрей (Экскурс)' OR c.director_name = 'Андрей (Экскурс)')
-  AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 192)
+WHERE (
+  c.name = 'Андрей (Экскурс)' 
+  OR c.director_name = 'Андрей (Экскурс)'
+  OR COALESCE(c.director_name, c.name) = 'Андрей (Экскурс)'
+)
+AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 192)
 LIMIT 1;
 
 INSERT INTO rental_orders (
@@ -29867,8 +33983,12 @@ SELECT
   NOW(),
   NOW()
 FROM rental_clients c
-WHERE (c.name = 'Автокруиз' OR c.director_name = 'Автокруиз')
-  AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 191)
+WHERE (
+  c.name = 'Автокруиз' 
+  OR c.director_name = 'Автокруиз'
+  OR COALESCE(c.director_name, c.name) = 'Автокруиз'
+)
+AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 191)
 LIMIT 1;
 
 INSERT INTO rental_orders (
@@ -29896,8 +34016,12 @@ SELECT
   NOW(),
   NOW()
 FROM rental_clients c
-WHERE (c.name = 'Юлианна' OR c.director_name = 'Юлианна')
-  AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 190)
+WHERE (
+  c.name = 'Юлианна' 
+  OR c.director_name = 'Юлианна'
+  OR COALESCE(c.director_name, c.name) = 'Юлианна'
+)
+AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 190)
 LIMIT 1;
 
 INSERT INTO rental_orders (
@@ -29925,8 +34049,12 @@ SELECT
   NOW(),
   NOW()
 FROM rental_clients c
-WHERE (c.name = 'Юлианна' OR c.director_name = 'Юлианна')
-  AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 189)
+WHERE (
+  c.name = 'Юлианна' 
+  OR c.director_name = 'Юлианна'
+  OR COALESCE(c.director_name, c.name) = 'Юлианна'
+)
+AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 189)
 LIMIT 1;
 
 INSERT INTO rental_orders (
@@ -29954,8 +34082,12 @@ SELECT
   NOW(),
   NOW()
 FROM rental_clients c
-WHERE (c.name = 'Галина Тур Москва' OR c.director_name = 'Галина Тур Москва')
-  AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 188)
+WHERE (
+  c.name = 'Галина Тур Москва' 
+  OR c.director_name = 'Галина Тур Москва'
+  OR COALESCE(c.director_name, c.name) = 'Галина Тур Москва'
+)
+AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 188)
 LIMIT 1;
 
 INSERT INTO rental_orders (
@@ -29983,8 +34115,12 @@ SELECT
   NOW(),
   NOW()
 FROM rental_clients c
-WHERE (c.name = 'Зельфира' OR c.director_name = 'Зельфира')
-  AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 187)
+WHERE (
+  c.name = 'Зельфира' 
+  OR c.director_name = 'Зельфира'
+  OR COALESCE(c.director_name, c.name) = 'Зельфира'
+)
+AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 187)
 LIMIT 1;
 
 INSERT INTO rental_orders (
@@ -30012,8 +34148,12 @@ SELECT
   NOW(),
   NOW()
 FROM rental_clients c
-WHERE (c.name = 'Зельфира' OR c.director_name = 'Зельфира')
-  AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 186)
+WHERE (
+  c.name = 'Зельфира' 
+  OR c.director_name = 'Зельфира'
+  OR COALESCE(c.director_name, c.name) = 'Зельфира'
+)
+AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 186)
 LIMIT 1;
 
 INSERT INTO rental_orders (
@@ -30041,8 +34181,12 @@ SELECT
   NOW(),
   NOW()
 FROM rental_clients c
-WHERE (c.name = 'Снежана' OR c.director_name = 'Снежана')
-  AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 185)
+WHERE (
+  c.name = 'Снежана' 
+  OR c.director_name = 'Снежана'
+  OR COALESCE(c.director_name, c.name) = 'Снежана'
+)
+AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 185)
 LIMIT 1;
 
 INSERT INTO rental_orders (
@@ -30070,8 +34214,12 @@ SELECT
   NOW(),
   NOW()
 FROM rental_clients c
-WHERE (c.name = 'Автокруиз' OR c.director_name = 'Автокруиз')
-  AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 184)
+WHERE (
+  c.name = 'Автокруиз' 
+  OR c.director_name = 'Автокруиз'
+  OR COALESCE(c.director_name, c.name) = 'Автокруиз'
+)
+AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 184)
 LIMIT 1;
 
 INSERT INTO rental_orders (
@@ -30099,8 +34247,12 @@ SELECT
   NOW(),
   NOW()
 FROM rental_clients c
-WHERE (c.name = 'Лиля Экскурсовод' OR c.director_name = 'Лиля Экскурсовод')
-  AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 183)
+WHERE (
+  c.name = 'Лиля Экскурсовод' 
+  OR c.director_name = 'Лиля Экскурсовод'
+  OR COALESCE(c.director_name, c.name) = 'Лиля Экскурсовод'
+)
+AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 183)
 LIMIT 1;
 
 INSERT INTO rental_orders (
@@ -30128,8 +34280,12 @@ SELECT
   NOW(),
   NOW()
 FROM rental_clients c
-WHERE (c.name = 'Мария Экскурсовод' OR c.director_name = 'Мария Экскурсовод')
-  AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 182)
+WHERE (
+  c.name = 'Мария Экскурсовод' 
+  OR c.director_name = 'Мария Экскурсовод'
+  OR COALESCE(c.director_name, c.name) = 'Мария Экскурсовод'
+)
+AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 182)
 LIMIT 1;
 
 INSERT INTO rental_orders (
@@ -30157,8 +34313,12 @@ SELECT
   NOW(),
   NOW()
 FROM rental_clients c
-WHERE (c.name = 'Татьяна Чуб' OR c.director_name = 'Татьяна Чуб')
-  AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 181)
+WHERE (
+  c.name = 'Татьяна Чуб' 
+  OR c.director_name = 'Татьяна Чуб'
+  OR COALESCE(c.director_name, c.name) = 'Татьяна Чуб'
+)
+AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 181)
 LIMIT 1;
 
 INSERT INTO rental_orders (
@@ -30186,8 +34346,12 @@ SELECT
   NOW(),
   NOW()
 FROM rental_clients c
-WHERE (c.name = 'Андрей Вологда' OR c.director_name = 'Андрей Вологда')
-  AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 180)
+WHERE (
+  c.name = 'Андрей Вологда' 
+  OR c.director_name = 'Андрей Вологда'
+  OR COALESCE(c.director_name, c.name) = 'Андрей Вологда'
+)
+AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 180)
 LIMIT 1;
 
 INSERT INTO rental_orders (
@@ -30215,8 +34379,12 @@ SELECT
   NOW(),
   NOW()
 FROM rental_clients c
-WHERE (c.name = 'Гульнара' OR c.director_name = 'Гульнара')
-  AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 179)
+WHERE (
+  c.name = 'Гульнара' 
+  OR c.director_name = 'Гульнара'
+  OR COALESCE(c.director_name, c.name) = 'Гульнара'
+)
+AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 179)
 LIMIT 1;
 
 INSERT INTO rental_orders (
@@ -30244,8 +34412,12 @@ SELECT
   NOW(),
   NOW()
 FROM rental_clients c
-WHERE (c.name = 'Наталья' OR c.director_name = 'Наталья')
-  AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 178)
+WHERE (
+  c.name = 'Наталья' 
+  OR c.director_name = 'Наталья'
+  OR COALESCE(c.director_name, c.name) = 'Наталья'
+)
+AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 178)
 LIMIT 1;
 
 INSERT INTO rental_orders (
@@ -30273,8 +34445,12 @@ SELECT
   NOW(),
   NOW()
 FROM rental_clients c
-WHERE (c.name = 'Галия' OR c.director_name = 'Галия')
-  AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 177)
+WHERE (
+  c.name = 'Галия' 
+  OR c.director_name = 'Галия'
+  OR COALESCE(c.director_name, c.name) = 'Галия'
+)
+AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 177)
 LIMIT 1;
 
 INSERT INTO rental_orders (
@@ -30302,8 +34478,12 @@ SELECT
   NOW(),
   NOW()
 FROM rental_clients c
-WHERE (c.name = 'Анюта Родионова (Родина-тур)' OR c.director_name = 'Анюта Родионова (Родина-тур)')
-  AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 176)
+WHERE (
+  c.name = 'Анюта Родионова (Родина-тур)' 
+  OR c.director_name = 'Анюта Родионова (Родина-тур)'
+  OR COALESCE(c.director_name, c.name) = 'Анюта Родионова (Родина-тур)'
+)
+AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 176)
 LIMIT 1;
 
 INSERT INTO rental_orders (
@@ -30331,8 +34511,12 @@ SELECT
   NOW(),
   NOW()
 FROM rental_clients c
-WHERE (c.name = 'Элина (Сититур)' OR c.director_name = 'Элина (Сититур)')
-  AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 175)
+WHERE (
+  c.name = 'Элина (Сититур)' 
+  OR c.director_name = 'Элина (Сититур)'
+  OR COALESCE(c.director_name, c.name) = 'Элина (Сититур)'
+)
+AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 175)
 LIMIT 1;
 
 INSERT INTO rental_orders (
@@ -30360,8 +34544,12 @@ SELECT
   NOW(),
   NOW()
 FROM rental_clients c
-WHERE (c.name = 'Гульфия' OR c.director_name = 'Гульфия')
-  AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 174)
+WHERE (
+  c.name = 'Гульфия' 
+  OR c.director_name = 'Гульфия'
+  OR COALESCE(c.director_name, c.name) = 'Гульфия'
+)
+AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 174)
 LIMIT 1;
 
 INSERT INTO rental_orders (
@@ -30389,8 +34577,12 @@ SELECT
   NOW(),
   NOW()
 FROM rental_clients c
-WHERE (c.name = 'Юлианна' OR c.director_name = 'Юлианна')
-  AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 173)
+WHERE (
+  c.name = 'Юлианна' 
+  OR c.director_name = 'Юлианна'
+  OR COALESCE(c.director_name, c.name) = 'Юлианна'
+)
+AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 173)
 LIMIT 1;
 
 INSERT INTO rental_orders (
@@ -30418,8 +34610,12 @@ SELECT
   NOW(),
   NOW()
 FROM rental_clients c
-WHERE (c.name = 'Лиля Экскурсовод' OR c.director_name = 'Лиля Экскурсовод')
-  AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 172)
+WHERE (
+  c.name = 'Лиля Экскурсовод' 
+  OR c.director_name = 'Лиля Экскурсовод'
+  OR COALESCE(c.director_name, c.name) = 'Лиля Экскурсовод'
+)
+AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 172)
 LIMIT 1;
 
 INSERT INTO rental_orders (
@@ -30447,8 +34643,12 @@ SELECT
   NOW(),
   NOW()
 FROM rental_clients c
-WHERE (c.name = 'Татьяна (Гольфстрим)' OR c.director_name = 'Татьяна (Гольфстрим)')
-  AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 171)
+WHERE (
+  c.name = 'Татьяна (Гольфстрим)' 
+  OR c.director_name = 'Татьяна (Гольфстрим)'
+  OR COALESCE(c.director_name, c.name) = 'Татьяна (Гольфстрим)'
+)
+AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 171)
 LIMIT 1;
 
 INSERT INTO rental_orders (
@@ -30476,8 +34676,12 @@ SELECT
   NOW(),
   NOW()
 FROM rental_clients c
-WHERE (c.name = 'Татьяна (Гольфстрим)' OR c.director_name = 'Татьяна (Гольфстрим)')
-  AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 170)
+WHERE (
+  c.name = 'Татьяна (Гольфстрим)' 
+  OR c.director_name = 'Татьяна (Гольфстрим)'
+  OR COALESCE(c.director_name, c.name) = 'Татьяна (Гольфстрим)'
+)
+AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 170)
 LIMIT 1;
 
 INSERT INTO rental_orders (
@@ -30505,8 +34709,12 @@ SELECT
   NOW(),
   NOW()
 FROM rental_clients c
-WHERE (c.name = 'Мария Экскурсовод' OR c.director_name = 'Мария Экскурсовод')
-  AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 169)
+WHERE (
+  c.name = 'Мария Экскурсовод' 
+  OR c.director_name = 'Мария Экскурсовод'
+  OR COALESCE(c.director_name, c.name) = 'Мария Экскурсовод'
+)
+AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 169)
 LIMIT 1;
 
 INSERT INTO rental_orders (
@@ -30534,8 +34742,12 @@ SELECT
   NOW(),
   NOW()
 FROM rental_clients c
-WHERE (c.name = 'Гульнара' OR c.director_name = 'Гульнара')
-  AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 168)
+WHERE (
+  c.name = 'Гульнара' 
+  OR c.director_name = 'Гульнара'
+  OR COALESCE(c.director_name, c.name) = 'Гульнара'
+)
+AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 168)
 LIMIT 1;
 
 INSERT INTO rental_orders (
@@ -30563,8 +34775,12 @@ SELECT
   NOW(),
   NOW()
 FROM rental_clients c
-WHERE (c.name = 'Зельфира' OR c.director_name = 'Зельфира')
-  AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 167)
+WHERE (
+  c.name = 'Зельфира' 
+  OR c.director_name = 'Зельфира'
+  OR COALESCE(c.director_name, c.name) = 'Зельфира'
+)
+AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 167)
 LIMIT 1;
 
 INSERT INTO rental_orders (
@@ -30592,8 +34808,12 @@ SELECT
   NOW(),
   NOW()
 FROM rental_clients c
-WHERE (c.name = 'Светлана' OR c.director_name = 'Светлана')
-  AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 166)
+WHERE (
+  c.name = 'Светлана' 
+  OR c.director_name = 'Светлана'
+  OR COALESCE(c.director_name, c.name) = 'Светлана'
+)
+AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 166)
 LIMIT 1;
 
 INSERT INTO rental_orders (
@@ -30621,8 +34841,12 @@ SELECT
   NOW(),
   NOW()
 FROM rental_clients c
-WHERE (c.name = 'Яна Янова' OR c.director_name = 'Яна Янова')
-  AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 165)
+WHERE (
+  c.name = 'Яна Янова' 
+  OR c.director_name = 'Яна Янова'
+  OR COALESCE(c.director_name, c.name) = 'Яна Янова'
+)
+AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 165)
 LIMIT 1;
 
 INSERT INTO rental_orders (
@@ -30650,8 +34874,12 @@ SELECT
   NOW(),
   NOW()
 FROM rental_clients c
-WHERE (c.name = 'Мария Экскурсовод' OR c.director_name = 'Мария Экскурсовод')
-  AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 164)
+WHERE (
+  c.name = 'Мария Экскурсовод' 
+  OR c.director_name = 'Мария Экскурсовод'
+  OR COALESCE(c.director_name, c.name) = 'Мария Экскурсовод'
+)
+AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 164)
 LIMIT 1;
 
 INSERT INTO rental_orders (
@@ -30679,8 +34907,12 @@ SELECT
   NOW(),
   NOW()
 FROM rental_clients c
-WHERE (c.name = 'Гульфия' OR c.director_name = 'Гульфия')
-  AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 163)
+WHERE (
+  c.name = 'Гульфия' 
+  OR c.director_name = 'Гульфия'
+  OR COALESCE(c.director_name, c.name) = 'Гульфия'
+)
+AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 163)
 LIMIT 1;
 
 INSERT INTO rental_orders (
@@ -30708,8 +34940,12 @@ SELECT
   NOW(),
   NOW()
 FROM rental_clients c
-WHERE (c.name = 'Светлана' OR c.director_name = 'Светлана')
-  AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 162)
+WHERE (
+  c.name = 'Светлана' 
+  OR c.director_name = 'Светлана'
+  OR COALESCE(c.director_name, c.name) = 'Светлана'
+)
+AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 162)
 LIMIT 1;
 
 INSERT INTO rental_orders (
@@ -30737,8 +34973,12 @@ SELECT
   NOW(),
   NOW()
 FROM rental_clients c
-WHERE (c.name = 'Екатерина' OR c.director_name = 'Екатерина')
-  AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 161)
+WHERE (
+  c.name = 'Екатерина' 
+  OR c.director_name = 'Екатерина'
+  OR COALESCE(c.director_name, c.name) = 'Екатерина'
+)
+AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 161)
 LIMIT 1;
 
 INSERT INTO rental_orders (
@@ -30766,8 +35006,12 @@ SELECT
   NOW(),
   NOW()
 FROM rental_clients c
-WHERE (c.name = 'Рамис' OR c.director_name = 'Рамис')
-  AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 160)
+WHERE (
+  c.name = 'Рамис' 
+  OR c.director_name = 'Рамис'
+  OR COALESCE(c.director_name, c.name) = 'Рамис'
+)
+AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 160)
 LIMIT 1;
 
 INSERT INTO rental_orders (
@@ -30795,8 +35039,12 @@ SELECT
   NOW(),
   NOW()
 FROM rental_clients c
-WHERE (c.name = 'Яна Янова' OR c.director_name = 'Яна Янова')
-  AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 159)
+WHERE (
+  c.name = 'Яна Янова' 
+  OR c.director_name = 'Яна Янова'
+  OR COALESCE(c.director_name, c.name) = 'Яна Янова'
+)
+AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 159)
 LIMIT 1;
 
 INSERT INTO rental_orders (
@@ -30824,8 +35072,12 @@ SELECT
   NOW(),
   NOW()
 FROM rental_clients c
-WHERE (c.name = 'Елена Игнатьева' OR c.director_name = 'Елена Игнатьева')
-  AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 158)
+WHERE (
+  c.name = 'Елена Игнатьева' 
+  OR c.director_name = 'Елена Игнатьева'
+  OR COALESCE(c.director_name, c.name) = 'Елена Игнатьева'
+)
+AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 158)
 LIMIT 1;
 
 INSERT INTO rental_orders (
@@ -30853,8 +35105,12 @@ SELECT
   NOW(),
   NOW()
 FROM rental_clients c
-WHERE (c.name = 'Елена Экскурсовод' OR c.director_name = 'Елена Экскурсовод')
-  AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 157)
+WHERE (
+  c.name = 'Елена Экскурсовод' 
+  OR c.director_name = 'Елена Экскурсовод'
+  OR COALESCE(c.director_name, c.name) = 'Елена Экскурсовод'
+)
+AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 157)
 LIMIT 1;
 
 INSERT INTO rental_orders (
@@ -30882,8 +35138,12 @@ SELECT
   NOW(),
   NOW()
 FROM rental_clients c
-WHERE (c.name = 'Юлия Воронова' OR c.director_name = 'Юлия Воронова')
-  AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 156)
+WHERE (
+  c.name = 'Юлия Воронова' 
+  OR c.director_name = 'Юлия Воронова'
+  OR COALESCE(c.director_name, c.name) = 'Юлия Воронова'
+)
+AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 156)
 LIMIT 1;
 
 INSERT INTO rental_orders (
@@ -30911,8 +35171,12 @@ SELECT
   NOW(),
   NOW()
 FROM rental_clients c
-WHERE (c.name = 'Мира (ИП)' OR c.director_name = 'Мира (ИП)')
-  AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 155)
+WHERE (
+  c.name = 'Мира (ИП)' 
+  OR c.director_name = 'Мира (ИП)'
+  OR COALESCE(c.director_name, c.name) = 'Мира (ИП)'
+)
+AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 155)
 LIMIT 1;
 
 INSERT INTO rental_orders (
@@ -30940,8 +35204,12 @@ SELECT
   NOW(),
   NOW()
 FROM rental_clients c
-WHERE (c.name = 'Эдик Заказы для групп' OR c.director_name = 'Эдик Заказы для групп')
-  AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 154)
+WHERE (
+  c.name = 'Эдик Заказы для групп' 
+  OR c.director_name = 'Эдик Заказы для групп'
+  OR COALESCE(c.director_name, c.name) = 'Эдик Заказы для групп'
+)
+AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 154)
 LIMIT 1;
 
 INSERT INTO rental_orders (
@@ -30969,8 +35237,12 @@ SELECT
   NOW(),
   NOW()
 FROM rental_clients c
-WHERE (c.name = 'Алина Сафина' OR c.director_name = 'Алина Сафина')
-  AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 153)
+WHERE (
+  c.name = 'Алина Сафина' 
+  OR c.director_name = 'Алина Сафина'
+  OR COALESCE(c.director_name, c.name) = 'Алина Сафина'
+)
+AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 153)
 LIMIT 1;
 
 INSERT INTO rental_orders (
@@ -30998,8 +35270,12 @@ SELECT
   NOW(),
   NOW()
 FROM rental_clients c
-WHERE (c.name = 'Наргиз' OR c.director_name = 'Наргиз')
-  AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 152)
+WHERE (
+  c.name = 'Наргиз' 
+  OR c.director_name = 'Наргиз'
+  OR COALESCE(c.director_name, c.name) = 'Наргиз'
+)
+AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 152)
 LIMIT 1;
 
 INSERT INTO rental_orders (
@@ -31027,8 +35303,12 @@ SELECT
   NOW(),
   NOW()
 FROM rental_clients c
-WHERE (c.name = 'Светлана' OR c.director_name = 'Светлана')
-  AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 151)
+WHERE (
+  c.name = 'Светлана' 
+  OR c.director_name = 'Светлана'
+  OR COALESCE(c.director_name, c.name) = 'Светлана'
+)
+AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 151)
 LIMIT 1;
 
 INSERT INTO rental_orders (
@@ -31056,8 +35336,12 @@ SELECT
   NOW(),
   NOW()
 FROM rental_clients c
-WHERE (c.name = 'Татьяна (Гольфстрим)' OR c.director_name = 'Татьяна (Гольфстрим)')
-  AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 150)
+WHERE (
+  c.name = 'Татьяна (Гольфстрим)' 
+  OR c.director_name = 'Татьяна (Гольфстрим)'
+  OR COALESCE(c.director_name, c.name) = 'Татьяна (Гольфстрим)'
+)
+AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 150)
 LIMIT 1;
 
 INSERT INTO rental_orders (
@@ -31085,8 +35369,12 @@ SELECT
   NOW(),
   NOW()
 FROM rental_clients c
-WHERE (c.name = 'Андрей Вологда' OR c.director_name = 'Андрей Вологда')
-  AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 149)
+WHERE (
+  c.name = 'Андрей Вологда' 
+  OR c.director_name = 'Андрей Вологда'
+  OR COALESCE(c.director_name, c.name) = 'Андрей Вологда'
+)
+AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 149)
 LIMIT 1;
 
 INSERT INTO rental_orders (
@@ -31114,8 +35402,12 @@ SELECT
   NOW(),
   NOW()
 FROM rental_clients c
-WHERE (c.name = 'Мария Экскурсовод' OR c.director_name = 'Мария Экскурсовод')
-  AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 148)
+WHERE (
+  c.name = 'Мария Экскурсовод' 
+  OR c.director_name = 'Мария Экскурсовод'
+  OR COALESCE(c.director_name, c.name) = 'Мария Экскурсовод'
+)
+AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 148)
 LIMIT 1;
 
 INSERT INTO rental_orders (
@@ -31143,8 +35435,12 @@ SELECT
   NOW(),
   NOW()
 FROM rental_clients c
-WHERE (c.name = 'Клиент' OR c.director_name = 'Клиент')
-  AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 147)
+WHERE (
+  c.name = 'Клиент' 
+  OR c.director_name = 'Клиент'
+  OR COALESCE(c.director_name, c.name) = 'Клиент'
+)
+AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 147)
 LIMIT 1;
 
 INSERT INTO rental_orders (
@@ -31172,8 +35468,12 @@ SELECT
   NOW(),
   NOW()
 FROM rental_clients c
-WHERE (c.name = 'Ксения' OR c.director_name = 'Ксения')
-  AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 146)
+WHERE (
+  c.name = 'Ксения' 
+  OR c.director_name = 'Ксения'
+  OR COALESCE(c.director_name, c.name) = 'Ксения'
+)
+AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 146)
 LIMIT 1;
 
 INSERT INTO rental_orders (
@@ -31201,8 +35501,12 @@ SELECT
   NOW(),
   NOW()
 FROM rental_clients c
-WHERE (c.name = 'Юлианна' OR c.director_name = 'Юлианна')
-  AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 145)
+WHERE (
+  c.name = 'Юлианна' 
+  OR c.director_name = 'Юлианна'
+  OR COALESCE(c.director_name, c.name) = 'Юлианна'
+)
+AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 145)
 LIMIT 1;
 
 INSERT INTO rental_orders (
@@ -31230,8 +35534,12 @@ SELECT
   NOW(),
   NOW()
 FROM rental_clients c
-WHERE (c.name = 'София' OR c.director_name = 'София')
-  AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 144)
+WHERE (
+  c.name = 'София' 
+  OR c.director_name = 'София'
+  OR COALESCE(c.director_name, c.name) = 'София'
+)
+AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 144)
 LIMIT 1;
 
 INSERT INTO rental_orders (
@@ -31259,8 +35567,12 @@ SELECT
   NOW(),
   NOW()
 FROM rental_clients c
-WHERE (c.name = 'Сергей' OR c.director_name = 'Сергей')
-  AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 143)
+WHERE (
+  c.name = 'Сергей' 
+  OR c.director_name = 'Сергей'
+  OR COALESCE(c.director_name, c.name) = 'Сергей'
+)
+AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 143)
 LIMIT 1;
 
 INSERT INTO rental_orders (
@@ -31288,8 +35600,12 @@ SELECT
   NOW(),
   NOW()
 FROM rental_clients c
-WHERE (c.name = 'Яна Янова' OR c.director_name = 'Яна Янова')
-  AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 142)
+WHERE (
+  c.name = 'Яна Янова' 
+  OR c.director_name = 'Яна Янова'
+  OR COALESCE(c.director_name, c.name) = 'Яна Янова'
+)
+AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 142)
 LIMIT 1;
 
 INSERT INTO rental_orders (
@@ -31317,8 +35633,12 @@ SELECT
   NOW(),
   NOW()
 FROM rental_clients c
-WHERE (c.name = 'Юлия Воронова' OR c.director_name = 'Юлия Воронова')
-  AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 140)
+WHERE (
+  c.name = 'Юлия Воронова' 
+  OR c.director_name = 'Юлия Воронова'
+  OR COALESCE(c.director_name, c.name) = 'Юлия Воронова'
+)
+AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 140)
 LIMIT 1;
 
 INSERT INTO rental_orders (
@@ -31346,8 +35666,12 @@ SELECT
   NOW(),
   NOW()
 FROM rental_clients c
-WHERE (c.name = 'Яна Янова' OR c.director_name = 'Яна Янова')
-  AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 139)
+WHERE (
+  c.name = 'Яна Янова' 
+  OR c.director_name = 'Яна Янова'
+  OR COALESCE(c.director_name, c.name) = 'Яна Янова'
+)
+AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 139)
 LIMIT 1;
 
 INSERT INTO rental_orders (
@@ -31375,8 +35699,12 @@ SELECT
   NOW(),
   NOW()
 FROM rental_clients c
-WHERE (c.name = 'Татьяна (Гольфстрим)' OR c.director_name = 'Татьяна (Гольфстрим)')
-  AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 138)
+WHERE (
+  c.name = 'Татьяна (Гольфстрим)' 
+  OR c.director_name = 'Татьяна (Гольфстрим)'
+  OR COALESCE(c.director_name, c.name) = 'Татьяна (Гольфстрим)'
+)
+AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 138)
 LIMIT 1;
 
 INSERT INTO rental_orders (
@@ -31404,8 +35732,12 @@ SELECT
   NOW(),
   NOW()
 FROM rental_clients c
-WHERE (c.name = 'Наталья' OR c.director_name = 'Наталья')
-  AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 137)
+WHERE (
+  c.name = 'Наталья' 
+  OR c.director_name = 'Наталья'
+  OR COALESCE(c.director_name, c.name) = 'Наталья'
+)
+AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 137)
 LIMIT 1;
 
 INSERT INTO rental_orders (
@@ -31433,8 +35765,12 @@ SELECT
   NOW(),
   NOW()
 FROM rental_clients c
-WHERE (c.name = 'Мария Экскурсовод' OR c.director_name = 'Мария Экскурсовод')
-  AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 136)
+WHERE (
+  c.name = 'Мария Экскурсовод' 
+  OR c.director_name = 'Мария Экскурсовод'
+  OR COALESCE(c.director_name, c.name) = 'Мария Экскурсовод'
+)
+AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 136)
 LIMIT 1;
 
 INSERT INTO rental_orders (
@@ -31462,8 +35798,12 @@ SELECT
   NOW(),
   NOW()
 FROM rental_clients c
-WHERE (c.name = 'Анюта Родионова (Родина-тур)' OR c.director_name = 'Анюта Родионова (Родина-тур)')
-  AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 135)
+WHERE (
+  c.name = 'Анюта Родионова (Родина-тур)' 
+  OR c.director_name = 'Анюта Родионова (Родина-тур)'
+  OR COALESCE(c.director_name, c.name) = 'Анюта Родионова (Родина-тур)'
+)
+AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 135)
 LIMIT 1;
 
 INSERT INTO rental_orders (
@@ -31491,8 +35831,12 @@ SELECT
   NOW(),
   NOW()
 FROM rental_clients c
-WHERE (c.name = 'Андрей (Экскурс)' OR c.director_name = 'Андрей (Экскурс)')
-  AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 134)
+WHERE (
+  c.name = 'Андрей (Экскурс)' 
+  OR c.director_name = 'Андрей (Экскурс)'
+  OR COALESCE(c.director_name, c.name) = 'Андрей (Экскурс)'
+)
+AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 134)
 LIMIT 1;
 
 INSERT INTO rental_orders (
@@ -31520,8 +35864,12 @@ SELECT
   NOW(),
   NOW()
 FROM rental_clients c
-WHERE (c.name = 'Зуфар(Аграрный Университет)' OR c.director_name = 'Зуфар(Аграрный Университет)')
-  AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 133)
+WHERE (
+  c.name = 'Зуфар(Аграрный Университет)' 
+  OR c.director_name = 'Зуфар(Аграрный Университет)'
+  OR COALESCE(c.director_name, c.name) = 'Зуфар(Аграрный Университет)'
+)
+AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 133)
 LIMIT 1;
 
 INSERT INTO rental_orders (
@@ -31549,8 +35897,12 @@ SELECT
   NOW(),
   NOW()
 FROM rental_clients c
-WHERE (c.name = 'Алсу' OR c.director_name = 'Алсу')
-  AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 132)
+WHERE (
+  c.name = 'Алсу' 
+  OR c.director_name = 'Алсу'
+  OR COALESCE(c.director_name, c.name) = 'Алсу'
+)
+AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 132)
 LIMIT 1;
 
 INSERT INTO rental_orders (
@@ -31578,8 +35930,12 @@ SELECT
   NOW(),
   NOW()
 FROM rental_clients c
-WHERE (c.name = 'Алина Сафина' OR c.director_name = 'Алина Сафина')
-  AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 131)
+WHERE (
+  c.name = 'Алина Сафина' 
+  OR c.director_name = 'Алина Сафина'
+  OR COALESCE(c.director_name, c.name) = 'Алина Сафина'
+)
+AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 131)
 LIMIT 1;
 
 INSERT INTO rental_orders (
@@ -31607,8 +35963,12 @@ SELECT
   NOW(),
   NOW()
 FROM rental_clients c
-WHERE (c.name = 'Яна Янова' OR c.director_name = 'Яна Янова')
-  AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 130)
+WHERE (
+  c.name = 'Яна Янова' 
+  OR c.director_name = 'Яна Янова'
+  OR COALESCE(c.director_name, c.name) = 'Яна Янова'
+)
+AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 130)
 LIMIT 1;
 
 INSERT INTO rental_orders (
@@ -31636,8 +35996,12 @@ SELECT
   NOW(),
   NOW()
 FROM rental_clients c
-WHERE (c.name = 'Сергей (Авангард)' OR c.director_name = 'Сергей (Авангард)')
-  AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 129)
+WHERE (
+  c.name = 'Сергей (Авангард)' 
+  OR c.director_name = 'Сергей (Авангард)'
+  OR COALESCE(c.director_name, c.name) = 'Сергей (Авангард)'
+)
+AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 129)
 LIMIT 1;
 
 INSERT INTO rental_orders (
@@ -31665,8 +36029,12 @@ SELECT
   NOW(),
   NOW()
 FROM rental_clients c
-WHERE (c.name = 'Наталья' OR c.director_name = 'Наталья')
-  AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 128)
+WHERE (
+  c.name = 'Наталья' 
+  OR c.director_name = 'Наталья'
+  OR COALESCE(c.director_name, c.name) = 'Наталья'
+)
+AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 128)
 LIMIT 1;
 
 INSERT INTO rental_orders (
@@ -31694,8 +36062,12 @@ SELECT
   NOW(),
   NOW()
 FROM rental_clients c
-WHERE (c.name = 'Яна Янова' OR c.director_name = 'Яна Янова')
-  AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 127)
+WHERE (
+  c.name = 'Яна Янова' 
+  OR c.director_name = 'Яна Янова'
+  OR COALESCE(c.director_name, c.name) = 'Яна Янова'
+)
+AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 127)
 LIMIT 1;
 
 INSERT INTO rental_orders (
@@ -31723,8 +36095,12 @@ SELECT
   NOW(),
   NOW()
 FROM rental_clients c
-WHERE (c.name = 'Зельфира' OR c.director_name = 'Зельфира')
-  AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 126)
+WHERE (
+  c.name = 'Зельфира' 
+  OR c.director_name = 'Зельфира'
+  OR COALESCE(c.director_name, c.name) = 'Зельфира'
+)
+AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 126)
 LIMIT 1;
 
 INSERT INTO rental_orders (
@@ -31752,8 +36128,12 @@ SELECT
   NOW(),
   NOW()
 FROM rental_clients c
-WHERE (c.name = 'Алина Сафина' OR c.director_name = 'Алина Сафина')
-  AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 125)
+WHERE (
+  c.name = 'Алина Сафина' 
+  OR c.director_name = 'Алина Сафина'
+  OR COALESCE(c.director_name, c.name) = 'Алина Сафина'
+)
+AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 125)
 LIMIT 1;
 
 INSERT INTO rental_orders (
@@ -31781,8 +36161,12 @@ SELECT
   NOW(),
   NOW()
 FROM rental_clients c
-WHERE (c.name = 'Данил (Антей Групп)' OR c.director_name = 'Данил (Антей Групп)')
-  AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 124)
+WHERE (
+  c.name = 'Данил (Антей Групп)' 
+  OR c.director_name = 'Данил (Антей Групп)'
+  OR COALESCE(c.director_name, c.name) = 'Данил (Антей Групп)'
+)
+AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 124)
 LIMIT 1;
 
 INSERT INTO rental_orders (
@@ -31810,8 +36194,12 @@ SELECT
   NOW(),
   NOW()
 FROM rental_clients c
-WHERE (c.name = 'Марат Даутов' OR c.director_name = 'Марат Даутов')
-  AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 123)
+WHERE (
+  c.name = 'Марат Даутов' 
+  OR c.director_name = 'Марат Даутов'
+  OR COALESCE(c.director_name, c.name) = 'Марат Даутов'
+)
+AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 123)
 LIMIT 1;
 
 INSERT INTO rental_orders (
@@ -31839,8 +36227,12 @@ SELECT
   NOW(),
   NOW()
 FROM rental_clients c
-WHERE (c.name = 'Гульфия' OR c.director_name = 'Гульфия')
-  AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 122)
+WHERE (
+  c.name = 'Гульфия' 
+  OR c.director_name = 'Гульфия'
+  OR COALESCE(c.director_name, c.name) = 'Гульфия'
+)
+AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 122)
 LIMIT 1;
 
 INSERT INTO rental_orders (
@@ -31868,8 +36260,12 @@ SELECT
   NOW(),
   NOW()
 FROM rental_clients c
-WHERE (c.name = 'Рамис' OR c.director_name = 'Рамис')
-  AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 121)
+WHERE (
+  c.name = 'Рамис' 
+  OR c.director_name = 'Рамис'
+  OR COALESCE(c.director_name, c.name) = 'Рамис'
+)
+AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 121)
 LIMIT 1;
 
 INSERT INTO rental_orders (
@@ -31897,8 +36293,12 @@ SELECT
   NOW(),
   NOW()
 FROM rental_clients c
-WHERE (c.name = 'Рамис' OR c.director_name = 'Рамис')
-  AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 120)
+WHERE (
+  c.name = 'Рамис' 
+  OR c.director_name = 'Рамис'
+  OR COALESCE(c.director_name, c.name) = 'Рамис'
+)
+AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 120)
 LIMIT 1;
 
 INSERT INTO rental_orders (
@@ -31926,8 +36326,12 @@ SELECT
   NOW(),
   NOW()
 FROM rental_clients c
-WHERE (c.name = 'Мира (ИП)' OR c.director_name = 'Мира (ИП)')
-  AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 119)
+WHERE (
+  c.name = 'Мира (ИП)' 
+  OR c.director_name = 'Мира (ИП)'
+  OR COALESCE(c.director_name, c.name) = 'Мира (ИП)'
+)
+AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 119)
 LIMIT 1;
 
 INSERT INTO rental_orders (
@@ -31955,8 +36359,12 @@ SELECT
   NOW(),
   NOW()
 FROM rental_clients c
-WHERE (c.name = 'Гульнара' OR c.director_name = 'Гульнара')
-  AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 118)
+WHERE (
+  c.name = 'Гульнара' 
+  OR c.director_name = 'Гульнара'
+  OR COALESCE(c.director_name, c.name) = 'Гульнара'
+)
+AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 118)
 LIMIT 1;
 
 INSERT INTO rental_orders (
@@ -31984,8 +36392,12 @@ SELECT
   NOW(),
   NOW()
 FROM rental_clients c
-WHERE (c.name = 'Галия' OR c.director_name = 'Галия')
-  AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 117)
+WHERE (
+  c.name = 'Галия' 
+  OR c.director_name = 'Галия'
+  OR COALESCE(c.director_name, c.name) = 'Галия'
+)
+AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 117)
 LIMIT 1;
 
 INSERT INTO rental_orders (
@@ -32013,8 +36425,12 @@ SELECT
   NOW(),
   NOW()
 FROM rental_clients c
-WHERE (c.name = 'Зельфира' OR c.director_name = 'Зельфира')
-  AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 116)
+WHERE (
+  c.name = 'Зельфира' 
+  OR c.director_name = 'Зельфира'
+  OR COALESCE(c.director_name, c.name) = 'Зельфира'
+)
+AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 116)
 LIMIT 1;
 
 INSERT INTO rental_orders (
@@ -32042,8 +36458,12 @@ SELECT
   NOW(),
   NOW()
 FROM rental_clients c
-WHERE (c.name = 'Артем Агафонов' OR c.director_name = 'Артем Агафонов')
-  AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 115)
+WHERE (
+  c.name = 'Артем Агафонов' 
+  OR c.director_name = 'Артем Агафонов'
+  OR COALESCE(c.director_name, c.name) = 'Артем Агафонов'
+)
+AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 115)
 LIMIT 1;
 
 INSERT INTO rental_orders (
@@ -32071,8 +36491,12 @@ SELECT
   NOW(),
   NOW()
 FROM rental_clients c
-WHERE (c.name = 'Сергей (Авангард)' OR c.director_name = 'Сергей (Авангард)')
-  AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 114)
+WHERE (
+  c.name = 'Сергей (Авангард)' 
+  OR c.director_name = 'Сергей (Авангард)'
+  OR COALESCE(c.director_name, c.name) = 'Сергей (Авангард)'
+)
+AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 114)
 LIMIT 1;
 
 INSERT INTO rental_orders (
@@ -32100,8 +36524,12 @@ SELECT
   NOW(),
   NOW()
 FROM rental_clients c
-WHERE (c.name = 'Юлия Воронова' OR c.director_name = 'Юлия Воронова')
-  AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 113)
+WHERE (
+  c.name = 'Юлия Воронова' 
+  OR c.director_name = 'Юлия Воронова'
+  OR COALESCE(c.director_name, c.name) = 'Юлия Воронова'
+)
+AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 113)
 LIMIT 1;
 
 INSERT INTO rental_orders (
@@ -32129,8 +36557,12 @@ SELECT
   NOW(),
   NOW()
 FROM rental_clients c
-WHERE (c.name = 'Татьяна (Гольфстрим)' OR c.director_name = 'Татьяна (Гольфстрим)')
-  AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 112)
+WHERE (
+  c.name = 'Татьяна (Гольфстрим)' 
+  OR c.director_name = 'Татьяна (Гольфстрим)'
+  OR COALESCE(c.director_name, c.name) = 'Татьяна (Гольфстрим)'
+)
+AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 112)
 LIMIT 1;
 
 INSERT INTO rental_orders (
@@ -32158,8 +36590,12 @@ SELECT
   NOW(),
   NOW()
 FROM rental_clients c
-WHERE (c.name = 'Татьяна (Гольфстрим)' OR c.director_name = 'Татьяна (Гольфстрим)')
-  AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 111)
+WHERE (
+  c.name = 'Татьяна (Гольфстрим)' 
+  OR c.director_name = 'Татьяна (Гольфстрим)'
+  OR COALESCE(c.director_name, c.name) = 'Татьяна (Гольфстрим)'
+)
+AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 111)
 LIMIT 1;
 
 INSERT INTO rental_orders (
@@ -32187,8 +36623,12 @@ SELECT
   NOW(),
   NOW()
 FROM rental_clients c
-WHERE (c.name = 'Татьяна (Гольфстрим)' OR c.director_name = 'Татьяна (Гольфстрим)')
-  AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 110)
+WHERE (
+  c.name = 'Татьяна (Гольфстрим)' 
+  OR c.director_name = 'Татьяна (Гольфстрим)'
+  OR COALESCE(c.director_name, c.name) = 'Татьяна (Гольфстрим)'
+)
+AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 110)
 LIMIT 1;
 
 INSERT INTO rental_orders (
@@ -32216,8 +36656,12 @@ SELECT
   NOW(),
   NOW()
 FROM rental_clients c
-WHERE (c.name = 'Татьяна (Гольфстрим)' OR c.director_name = 'Татьяна (Гольфстрим)')
-  AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 109)
+WHERE (
+  c.name = 'Татьяна (Гольфстрим)' 
+  OR c.director_name = 'Татьяна (Гольфстрим)'
+  OR COALESCE(c.director_name, c.name) = 'Татьяна (Гольфстрим)'
+)
+AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 109)
 LIMIT 1;
 
 INSERT INTO rental_orders (
@@ -32245,8 +36689,12 @@ SELECT
   NOW(),
   NOW()
 FROM rental_clients c
-WHERE (c.name = 'Татьяна (Гольфстрим)' OR c.director_name = 'Татьяна (Гольфстрим)')
-  AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 108)
+WHERE (
+  c.name = 'Татьяна (Гольфстрим)' 
+  OR c.director_name = 'Татьяна (Гольфстрим)'
+  OR COALESCE(c.director_name, c.name) = 'Татьяна (Гольфстрим)'
+)
+AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 108)
 LIMIT 1;
 
 INSERT INTO rental_orders (
@@ -32274,8 +36722,12 @@ SELECT
   NOW(),
   NOW()
 FROM rental_clients c
-WHERE (c.name = 'Татьяна (Гольфстрим)' OR c.director_name = 'Татьяна (Гольфстрим)')
-  AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 107)
+WHERE (
+  c.name = 'Татьяна (Гольфстрим)' 
+  OR c.director_name = 'Татьяна (Гольфстрим)'
+  OR COALESCE(c.director_name, c.name) = 'Татьяна (Гольфстрим)'
+)
+AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 107)
 LIMIT 1;
 
 INSERT INTO rental_orders (
@@ -32303,8 +36755,12 @@ SELECT
   NOW(),
   NOW()
 FROM rental_clients c
-WHERE (c.name = 'Мария Экскурсовод' OR c.director_name = 'Мария Экскурсовод')
-  AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 106)
+WHERE (
+  c.name = 'Мария Экскурсовод' 
+  OR c.director_name = 'Мария Экскурсовод'
+  OR COALESCE(c.director_name, c.name) = 'Мария Экскурсовод'
+)
+AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 106)
 LIMIT 1;
 
 INSERT INTO rental_orders (
@@ -32332,8 +36788,12 @@ SELECT
   NOW(),
   NOW()
 FROM rental_clients c
-WHERE (c.name = 'Динар (ТатКабель)' OR c.director_name = 'Динар (ТатКабель)')
-  AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 105)
+WHERE (
+  c.name = 'Динар (ТатКабель)' 
+  OR c.director_name = 'Динар (ТатКабель)'
+  OR COALESCE(c.director_name, c.name) = 'Динар (ТатКабель)'
+)
+AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 105)
 LIMIT 1;
 
 INSERT INTO rental_orders (
@@ -32361,8 +36821,12 @@ SELECT
   NOW(),
   NOW()
 FROM rental_clients c
-WHERE (c.name = 'Гульфия' OR c.director_name = 'Гульфия')
-  AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 104)
+WHERE (
+  c.name = 'Гульфия' 
+  OR c.director_name = 'Гульфия'
+  OR COALESCE(c.director_name, c.name) = 'Гульфия'
+)
+AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 104)
 LIMIT 1;
 
 INSERT INTO rental_orders (
@@ -32390,8 +36854,12 @@ SELECT
   NOW(),
   NOW()
 FROM rental_clients c
-WHERE (c.name = 'Гульфия' OR c.director_name = 'Гульфия')
-  AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 103)
+WHERE (
+  c.name = 'Гульфия' 
+  OR c.director_name = 'Гульфия'
+  OR COALESCE(c.director_name, c.name) = 'Гульфия'
+)
+AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 103)
 LIMIT 1;
 
 INSERT INTO rental_orders (
@@ -32419,8 +36887,12 @@ SELECT
   NOW(),
   NOW()
 FROM rental_clients c
-WHERE (c.name = 'Андрей Вологда' OR c.director_name = 'Андрей Вологда')
-  AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 102)
+WHERE (
+  c.name = 'Андрей Вологда' 
+  OR c.director_name = 'Андрей Вологда'
+  OR COALESCE(c.director_name, c.name) = 'Андрей Вологда'
+)
+AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 102)
 LIMIT 1;
 
 INSERT INTO rental_orders (
@@ -32448,8 +36920,12 @@ SELECT
   NOW(),
   NOW()
 FROM rental_clients c
-WHERE (c.name = 'Ильмира' OR c.director_name = 'Ильмира')
-  AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 101)
+WHERE (
+  c.name = 'Ильмира' 
+  OR c.director_name = 'Ильмира'
+  OR COALESCE(c.director_name, c.name) = 'Ильмира'
+)
+AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 101)
 LIMIT 1;
 
 INSERT INTO rental_orders (
@@ -32477,8 +36953,12 @@ SELECT
   NOW(),
   NOW()
 FROM rental_clients c
-WHERE (c.name = 'Эдик Заказы для групп' OR c.director_name = 'Эдик Заказы для групп')
-  AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 100)
+WHERE (
+  c.name = 'Эдик Заказы для групп' 
+  OR c.director_name = 'Эдик Заказы для групп'
+  OR COALESCE(c.director_name, c.name) = 'Эдик Заказы для групп'
+)
+AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 100)
 LIMIT 1;
 
 INSERT INTO rental_orders (
@@ -32506,8 +36986,12 @@ SELECT
   NOW(),
   NOW()
 FROM rental_clients c
-WHERE (c.name = 'Эмилия' OR c.director_name = 'Эмилия')
-  AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 99)
+WHERE (
+  c.name = 'Эмилия' 
+  OR c.director_name = 'Эмилия'
+  OR COALESCE(c.director_name, c.name) = 'Эмилия'
+)
+AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 99)
 LIMIT 1;
 
 INSERT INTO rental_orders (
@@ -32535,8 +37019,12 @@ SELECT
   NOW(),
   NOW()
 FROM rental_clients c
-WHERE (c.name = 'Юлианна' OR c.director_name = 'Юлианна')
-  AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 98)
+WHERE (
+  c.name = 'Юлианна' 
+  OR c.director_name = 'Юлианна'
+  OR COALESCE(c.director_name, c.name) = 'Юлианна'
+)
+AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 98)
 LIMIT 1;
 
 INSERT INTO rental_orders (
@@ -32564,8 +37052,12 @@ SELECT
   NOW(),
   NOW()
 FROM rental_clients c
-WHERE (c.name = 'Сергей (Авангард)' OR c.director_name = 'Сергей (Авангард)')
-  AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 97)
+WHERE (
+  c.name = 'Сергей (Авангард)' 
+  OR c.director_name = 'Сергей (Авангард)'
+  OR COALESCE(c.director_name, c.name) = 'Сергей (Авангард)'
+)
+AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 97)
 LIMIT 1;
 
 INSERT INTO rental_orders (
@@ -32593,8 +37085,12 @@ SELECT
   NOW(),
   NOW()
 FROM rental_clients c
-WHERE (c.name = 'Ирина Обыденникова' OR c.director_name = 'Ирина Обыденникова')
-  AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 96)
+WHERE (
+  c.name = 'Ирина Обыденникова' 
+  OR c.director_name = 'Ирина Обыденникова'
+  OR COALESCE(c.director_name, c.name) = 'Ирина Обыденникова'
+)
+AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 96)
 LIMIT 1;
 
 INSERT INTO rental_orders (
@@ -32622,8 +37118,12 @@ SELECT
   NOW(),
   NOW()
 FROM rental_clients c
-WHERE (c.name = 'Елена (Магазин Путешествий)' OR c.director_name = 'Елена (Магазин Путешествий)')
-  AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 95)
+WHERE (
+  c.name = 'Елена (Магазин Путешествий)' 
+  OR c.director_name = 'Елена (Магазин Путешествий)'
+  OR COALESCE(c.director_name, c.name) = 'Елена (Магазин Путешествий)'
+)
+AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 95)
 LIMIT 1;
 
 INSERT INTO rental_orders (
@@ -32651,8 +37151,12 @@ SELECT
   NOW(),
   NOW()
 FROM rental_clients c
-WHERE (c.name = 'Татьяна (Гольфстрим)' OR c.director_name = 'Татьяна (Гольфстрим)')
-  AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 94)
+WHERE (
+  c.name = 'Татьяна (Гольфстрим)' 
+  OR c.director_name = 'Татьяна (Гольфстрим)'
+  OR COALESCE(c.director_name, c.name) = 'Татьяна (Гольфстрим)'
+)
+AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 94)
 LIMIT 1;
 
 INSERT INTO rental_orders (
@@ -32680,8 +37184,12 @@ SELECT
   NOW(),
   NOW()
 FROM rental_clients c
-WHERE (c.name = 'Татьяна (Гольфстрим)' OR c.director_name = 'Татьяна (Гольфстрим)')
-  AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 93)
+WHERE (
+  c.name = 'Татьяна (Гольфстрим)' 
+  OR c.director_name = 'Татьяна (Гольфстрим)'
+  OR COALESCE(c.director_name, c.name) = 'Татьяна (Гольфстрим)'
+)
+AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 93)
 LIMIT 1;
 
 INSERT INTO rental_orders (
@@ -32709,8 +37217,12 @@ SELECT
   NOW(),
   NOW()
 FROM rental_clients c
-WHERE (c.name = 'Татьяна (Гольфстрим)' OR c.director_name = 'Татьяна (Гольфстрим)')
-  AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 92)
+WHERE (
+  c.name = 'Татьяна (Гольфстрим)' 
+  OR c.director_name = 'Татьяна (Гольфстрим)'
+  OR COALESCE(c.director_name, c.name) = 'Татьяна (Гольфстрим)'
+)
+AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 92)
 LIMIT 1;
 
 INSERT INTO rental_orders (
@@ -32738,8 +37250,12 @@ SELECT
   NOW(),
   NOW()
 FROM rental_clients c
-WHERE (c.name = 'Татьяна (Гольфстрим)' OR c.director_name = 'Татьяна (Гольфстрим)')
-  AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 91)
+WHERE (
+  c.name = 'Татьяна (Гольфстрим)' 
+  OR c.director_name = 'Татьяна (Гольфстрим)'
+  OR COALESCE(c.director_name, c.name) = 'Татьяна (Гольфстрим)'
+)
+AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 91)
 LIMIT 1;
 
 INSERT INTO rental_orders (
@@ -32767,8 +37283,12 @@ SELECT
   NOW(),
   NOW()
 FROM rental_clients c
-WHERE (c.name = 'Татьяна (Гольфстрим)' OR c.director_name = 'Татьяна (Гольфстрим)')
-  AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 90)
+WHERE (
+  c.name = 'Татьяна (Гольфстрим)' 
+  OR c.director_name = 'Татьяна (Гольфстрим)'
+  OR COALESCE(c.director_name, c.name) = 'Татьяна (Гольфстрим)'
+)
+AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 90)
 LIMIT 1;
 
 INSERT INTO rental_orders (
@@ -32796,8 +37316,12 @@ SELECT
   NOW(),
   NOW()
 FROM rental_clients c
-WHERE (c.name = 'Татьяна (Гольфстрим)' OR c.director_name = 'Татьяна (Гольфстрим)')
-  AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 89)
+WHERE (
+  c.name = 'Татьяна (Гольфстрим)' 
+  OR c.director_name = 'Татьяна (Гольфстрим)'
+  OR COALESCE(c.director_name, c.name) = 'Татьяна (Гольфстрим)'
+)
+AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 89)
 LIMIT 1;
 
 INSERT INTO rental_orders (
@@ -32825,8 +37349,12 @@ SELECT
   NOW(),
   NOW()
 FROM rental_clients c
-WHERE (c.name = 'Ольга Лукоянова' OR c.director_name = 'Ольга Лукоянова')
-  AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 88)
+WHERE (
+  c.name = 'Ольга Лукоянова' 
+  OR c.director_name = 'Ольга Лукоянова'
+  OR COALESCE(c.director_name, c.name) = 'Ольга Лукоянова'
+)
+AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 88)
 LIMIT 1;
 
 INSERT INTO rental_orders (
@@ -32854,8 +37382,12 @@ SELECT
   NOW(),
   NOW()
 FROM rental_clients c
-WHERE (c.name = 'Мира (ИП)' OR c.director_name = 'Мира (ИП)')
-  AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 87)
+WHERE (
+  c.name = 'Мира (ИП)' 
+  OR c.director_name = 'Мира (ИП)'
+  OR COALESCE(c.director_name, c.name) = 'Мира (ИП)'
+)
+AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 87)
 LIMIT 1;
 
 INSERT INTO rental_orders (
@@ -32883,8 +37415,12 @@ SELECT
   NOW(),
   NOW()
 FROM rental_clients c
-WHERE (c.name = 'Наталья' OR c.director_name = 'Наталья')
-  AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 86)
+WHERE (
+  c.name = 'Наталья' 
+  OR c.director_name = 'Наталья'
+  OR COALESCE(c.director_name, c.name) = 'Наталья'
+)
+AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 86)
 LIMIT 1;
 
 INSERT INTO rental_orders (
@@ -32912,8 +37448,12 @@ SELECT
   NOW(),
   NOW()
 FROM rental_clients c
-WHERE (c.name = 'Инна Экскурсовод' OR c.director_name = 'Инна Экскурсовод')
-  AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 85)
+WHERE (
+  c.name = 'Инна Экскурсовод' 
+  OR c.director_name = 'Инна Экскурсовод'
+  OR COALESCE(c.director_name, c.name) = 'Инна Экскурсовод'
+)
+AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 85)
 LIMIT 1;
 
 INSERT INTO rental_orders (
@@ -32941,8 +37481,12 @@ SELECT
   NOW(),
   NOW()
 FROM rental_clients c
-WHERE (c.name = 'Татьяна (Гольфстрим)' OR c.director_name = 'Татьяна (Гольфстрим)')
-  AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 84)
+WHERE (
+  c.name = 'Татьяна (Гольфстрим)' 
+  OR c.director_name = 'Татьяна (Гольфстрим)'
+  OR COALESCE(c.director_name, c.name) = 'Татьяна (Гольфстрим)'
+)
+AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 84)
 LIMIT 1;
 
 INSERT INTO rental_orders (
@@ -32970,8 +37514,12 @@ SELECT
   NOW(),
   NOW()
 FROM rental_clients c
-WHERE (c.name = 'Гульфия' OR c.director_name = 'Гульфия')
-  AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 83)
+WHERE (
+  c.name = 'Гульфия' 
+  OR c.director_name = 'Гульфия'
+  OR COALESCE(c.director_name, c.name) = 'Гульфия'
+)
+AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 83)
 LIMIT 1;
 
 INSERT INTO rental_orders (
@@ -32999,8 +37547,12 @@ SELECT
   NOW(),
   NOW()
 FROM rental_clients c
-WHERE (c.name = 'Мира (ИП)' OR c.director_name = 'Мира (ИП)')
-  AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 82)
+WHERE (
+  c.name = 'Мира (ИП)' 
+  OR c.director_name = 'Мира (ИП)'
+  OR COALESCE(c.director_name, c.name) = 'Мира (ИП)'
+)
+AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 82)
 LIMIT 1;
 
 INSERT INTO rental_orders (
@@ -33028,8 +37580,12 @@ SELECT
   NOW(),
   NOW()
 FROM rental_clients c
-WHERE (c.name = 'Гульнара' OR c.director_name = 'Гульнара')
-  AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 81)
+WHERE (
+  c.name = 'Гульнара' 
+  OR c.director_name = 'Гульнара'
+  OR COALESCE(c.director_name, c.name) = 'Гульнара'
+)
+AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 81)
 LIMIT 1;
 
 INSERT INTO rental_orders (
@@ -33057,8 +37613,12 @@ SELECT
   NOW(),
   NOW()
 FROM rental_clients c
-WHERE (c.name = 'Ирина Обыденникова' OR c.director_name = 'Ирина Обыденникова')
-  AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 80)
+WHERE (
+  c.name = 'Ирина Обыденникова' 
+  OR c.director_name = 'Ирина Обыденникова'
+  OR COALESCE(c.director_name, c.name) = 'Ирина Обыденникова'
+)
+AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 80)
 LIMIT 1;
 
 INSERT INTO rental_orders (
@@ -33086,8 +37646,12 @@ SELECT
   NOW(),
   NOW()
 FROM rental_clients c
-WHERE (c.name = 'Алёна Лазука' OR c.director_name = 'Алёна Лазука')
-  AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 79)
+WHERE (
+  c.name = 'Алёна Лазука' 
+  OR c.director_name = 'Алёна Лазука'
+  OR COALESCE(c.director_name, c.name) = 'Алёна Лазука'
+)
+AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 79)
 LIMIT 1;
 
 INSERT INTO rental_orders (
@@ -33115,8 +37679,12 @@ SELECT
   NOW(),
   NOW()
 FROM rental_clients c
-WHERE (c.name = 'Екатерина' OR c.director_name = 'Екатерина')
-  AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 78)
+WHERE (
+  c.name = 'Екатерина' 
+  OR c.director_name = 'Екатерина'
+  OR COALESCE(c.director_name, c.name) = 'Екатерина'
+)
+AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 78)
 LIMIT 1;
 
 INSERT INTO rental_orders (
@@ -33144,8 +37712,12 @@ SELECT
   NOW(),
   NOW()
 FROM rental_clients c
-WHERE (c.name = 'Екатерина' OR c.director_name = 'Екатерина')
-  AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 77)
+WHERE (
+  c.name = 'Екатерина' 
+  OR c.director_name = 'Екатерина'
+  OR COALESCE(c.director_name, c.name) = 'Екатерина'
+)
+AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 77)
 LIMIT 1;
 
 INSERT INTO rental_orders (
@@ -33173,8 +37745,12 @@ SELECT
   NOW(),
   NOW()
 FROM rental_clients c
-WHERE (c.name = 'Екатерина Кореева' OR c.director_name = 'Екатерина Кореева')
-  AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 76)
+WHERE (
+  c.name = 'Екатерина Кореева' 
+  OR c.director_name = 'Екатерина Кореева'
+  OR COALESCE(c.director_name, c.name) = 'Екатерина Кореева'
+)
+AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 76)
 LIMIT 1;
 
 INSERT INTO rental_orders (
@@ -33202,8 +37778,12 @@ SELECT
   NOW(),
   NOW()
 FROM rental_clients c
-WHERE (c.name = 'Сергей (Авангард)' OR c.director_name = 'Сергей (Авангард)')
-  AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 75)
+WHERE (
+  c.name = 'Сергей (Авангард)' 
+  OR c.director_name = 'Сергей (Авангард)'
+  OR COALESCE(c.director_name, c.name) = 'Сергей (Авангард)'
+)
+AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 75)
 LIMIT 1;
 
 INSERT INTO rental_orders (
@@ -33231,8 +37811,12 @@ SELECT
   NOW(),
   NOW()
 FROM rental_clients c
-WHERE (c.name = 'Татьяна (Гольфстрим)' OR c.director_name = 'Татьяна (Гольфстрим)')
-  AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 74)
+WHERE (
+  c.name = 'Татьяна (Гольфстрим)' 
+  OR c.director_name = 'Татьяна (Гольфстрим)'
+  OR COALESCE(c.director_name, c.name) = 'Татьяна (Гольфстрим)'
+)
+AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 74)
 LIMIT 1;
 
 INSERT INTO rental_orders (
@@ -33260,8 +37844,12 @@ SELECT
   NOW(),
   NOW()
 FROM rental_clients c
-WHERE (c.name = 'Андрей (Экскурс)' OR c.director_name = 'Андрей (Экскурс)')
-  AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 73)
+WHERE (
+  c.name = 'Андрей (Экскурс)' 
+  OR c.director_name = 'Андрей (Экскурс)'
+  OR COALESCE(c.director_name, c.name) = 'Андрей (Экскурс)'
+)
+AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 73)
 LIMIT 1;
 
 INSERT INTO rental_orders (
@@ -33289,8 +37877,12 @@ SELECT
   NOW(),
   NOW()
 FROM rental_clients c
-WHERE (c.name = 'Елизавета Ткач' OR c.director_name = 'Елизавета Ткач')
-  AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 72)
+WHERE (
+  c.name = 'Елизавета Ткач' 
+  OR c.director_name = 'Елизавета Ткач'
+  OR COALESCE(c.director_name, c.name) = 'Елизавета Ткач'
+)
+AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 72)
 LIMIT 1;
 
 INSERT INTO rental_orders (
@@ -33318,8 +37910,12 @@ SELECT
   NOW(),
   NOW()
 FROM rental_clients c
-WHERE (c.name = 'Наталья Рыжкова' OR c.director_name = 'Наталья Рыжкова')
-  AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 71)
+WHERE (
+  c.name = 'Наталья Рыжкова' 
+  OR c.director_name = 'Наталья Рыжкова'
+  OR COALESCE(c.director_name, c.name) = 'Наталья Рыжкова'
+)
+AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 71)
 LIMIT 1;
 
 INSERT INTO rental_orders (
@@ -33347,8 +37943,12 @@ SELECT
   NOW(),
   NOW()
 FROM rental_clients c
-WHERE (c.name = 'Нечаева Тамара' OR c.director_name = 'Нечаева Тамара')
-  AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 70)
+WHERE (
+  c.name = 'Нечаева Тамара' 
+  OR c.director_name = 'Нечаева Тамара'
+  OR COALESCE(c.director_name, c.name) = 'Нечаева Тамара'
+)
+AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 70)
 LIMIT 1;
 
 INSERT INTO rental_orders (
@@ -33376,8 +37976,12 @@ SELECT
   NOW(),
   NOW()
 FROM rental_clients c
-WHERE (c.name = 'Андрей Вологда' OR c.director_name = 'Андрей Вологда')
-  AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 69)
+WHERE (
+  c.name = 'Андрей Вологда' 
+  OR c.director_name = 'Андрей Вологда'
+  OR COALESCE(c.director_name, c.name) = 'Андрей Вологда'
+)
+AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 69)
 LIMIT 1;
 
 INSERT INTO rental_orders (
@@ -33405,8 +38009,12 @@ SELECT
   NOW(),
   NOW()
 FROM rental_clients c
-WHERE (c.name = 'Зеленина' OR c.director_name = 'Зеленина')
-  AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 68)
+WHERE (
+  c.name = 'Зеленина' 
+  OR c.director_name = 'Зеленина'
+  OR COALESCE(c.director_name, c.name) = 'Зеленина'
+)
+AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 68)
 LIMIT 1;
 
 INSERT INTO rental_orders (
@@ -33434,8 +38042,12 @@ SELECT
   NOW(),
   NOW()
 FROM rental_clients c
-WHERE (c.name = 'Мария' OR c.director_name = 'Мария')
-  AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 67)
+WHERE (
+  c.name = 'Мария' 
+  OR c.director_name = 'Мария'
+  OR COALESCE(c.director_name, c.name) = 'Мария'
+)
+AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 67)
 LIMIT 1;
 
 INSERT INTO rental_orders (
@@ -33463,8 +38075,12 @@ SELECT
   NOW(),
   NOW()
 FROM rental_clients c
-WHERE (c.name = 'Мария' OR c.director_name = 'Мария')
-  AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 66)
+WHERE (
+  c.name = 'Мария' 
+  OR c.director_name = 'Мария'
+  OR COALESCE(c.director_name, c.name) = 'Мария'
+)
+AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 66)
 LIMIT 1;
 
 INSERT INTO rental_orders (
@@ -33492,8 +38108,12 @@ SELECT
   NOW(),
   NOW()
 FROM rental_clients c
-WHERE (c.name = 'Мария' OR c.director_name = 'Мария')
-  AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 65)
+WHERE (
+  c.name = 'Мария' 
+  OR c.director_name = 'Мария'
+  OR COALESCE(c.director_name, c.name) = 'Мария'
+)
+AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 65)
 LIMIT 1;
 
 INSERT INTO rental_orders (
@@ -33521,8 +38141,12 @@ SELECT
   NOW(),
   NOW()
 FROM rental_clients c
-WHERE (c.name = 'Татьяна (КБПИЭ)' OR c.director_name = 'Татьяна (КБПИЭ)')
-  AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 64)
+WHERE (
+  c.name = 'Татьяна (КБПИЭ)' 
+  OR c.director_name = 'Татьяна (КБПИЭ)'
+  OR COALESCE(c.director_name, c.name) = 'Татьяна (КБПИЭ)'
+)
+AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 64)
 LIMIT 1;
 
 INSERT INTO rental_orders (
@@ -33550,8 +38174,12 @@ SELECT
   NOW(),
   NOW()
 FROM rental_clients c
-WHERE (c.name = 'Мира (ИП)' OR c.director_name = 'Мира (ИП)')
-  AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 63)
+WHERE (
+  c.name = 'Мира (ИП)' 
+  OR c.director_name = 'Мира (ИП)'
+  OR COALESCE(c.director_name, c.name) = 'Мира (ИП)'
+)
+AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 63)
 LIMIT 1;
 
 INSERT INTO rental_orders (
@@ -33579,8 +38207,12 @@ SELECT
   NOW(),
   NOW()
 FROM rental_clients c
-WHERE (c.name = 'Мира (ИП)' OR c.director_name = 'Мира (ИП)')
-  AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 62)
+WHERE (
+  c.name = 'Мира (ИП)' 
+  OR c.director_name = 'Мира (ИП)'
+  OR COALESCE(c.director_name, c.name) = 'Мира (ИП)'
+)
+AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 62)
 LIMIT 1;
 
 INSERT INTO rental_orders (
@@ -33608,8 +38240,12 @@ SELECT
   NOW(),
   NOW()
 FROM rental_clients c
-WHERE (c.name = 'Альберт (КТ)' OR c.director_name = 'Альберт (КТ)')
-  AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 61)
+WHERE (
+  c.name = 'Альберт (КТ)' 
+  OR c.director_name = 'Альберт (КТ)'
+  OR COALESCE(c.director_name, c.name) = 'Альберт (КТ)'
+)
+AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 61)
 LIMIT 1;
 
 INSERT INTO rental_orders (
@@ -33637,8 +38273,12 @@ SELECT
   NOW(),
   NOW()
 FROM rental_clients c
-WHERE (c.name = 'Татьяна (КБПИЭ)' OR c.director_name = 'Татьяна (КБПИЭ)')
-  AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 60)
+WHERE (
+  c.name = 'Татьяна (КБПИЭ)' 
+  OR c.director_name = 'Татьяна (КБПИЭ)'
+  OR COALESCE(c.director_name, c.name) = 'Татьяна (КБПИЭ)'
+)
+AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 60)
 LIMIT 1;
 
 INSERT INTO rental_orders (
@@ -33666,8 +38306,12 @@ SELECT
   NOW(),
   NOW()
 FROM rental_clients c
-WHERE (c.name = 'Мира (ИП)' OR c.director_name = 'Мира (ИП)')
-  AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 59)
+WHERE (
+  c.name = 'Мира (ИП)' 
+  OR c.director_name = 'Мира (ИП)'
+  OR COALESCE(c.director_name, c.name) = 'Мира (ИП)'
+)
+AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 59)
 LIMIT 1;
 
 INSERT INTO rental_orders (
@@ -33695,8 +38339,12 @@ SELECT
   NOW(),
   NOW()
 FROM rental_clients c
-WHERE (c.name = 'Галина' OR c.director_name = 'Галина')
-  AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 58)
+WHERE (
+  c.name = 'Галина' 
+  OR c.director_name = 'Галина'
+  OR COALESCE(c.director_name, c.name) = 'Галина'
+)
+AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 58)
 LIMIT 1;
 
 INSERT INTO rental_orders (
@@ -33724,8 +38372,12 @@ SELECT
   NOW(),
   NOW()
 FROM rental_clients c
-WHERE (c.name = 'Галина' OR c.director_name = 'Галина')
-  AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 57)
+WHERE (
+  c.name = 'Галина' 
+  OR c.director_name = 'Галина'
+  OR COALESCE(c.director_name, c.name) = 'Галина'
+)
+AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 57)
 LIMIT 1;
 
 INSERT INTO rental_orders (
@@ -33753,8 +38405,12 @@ SELECT
   NOW(),
   NOW()
 FROM rental_clients c
-WHERE (c.name = 'Галина' OR c.director_name = 'Галина')
-  AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 56)
+WHERE (
+  c.name = 'Галина' 
+  OR c.director_name = 'Галина'
+  OR COALESCE(c.director_name, c.name) = 'Галина'
+)
+AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 56)
 LIMIT 1;
 
 INSERT INTO rental_orders (
@@ -33782,8 +38438,12 @@ SELECT
   NOW(),
   NOW()
 FROM rental_clients c
-WHERE (c.name = 'Сергей (Авангард)' OR c.director_name = 'Сергей (Авангард)')
-  AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 55)
+WHERE (
+  c.name = 'Сергей (Авангард)' 
+  OR c.director_name = 'Сергей (Авангард)'
+  OR COALESCE(c.director_name, c.name) = 'Сергей (Авангард)'
+)
+AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 55)
 LIMIT 1;
 
 INSERT INTO rental_orders (
@@ -33811,8 +38471,12 @@ SELECT
   NOW(),
   NOW()
 FROM rental_clients c
-WHERE (c.name = 'Татьяна (КБПИЭ)' OR c.director_name = 'Татьяна (КБПИЭ)')
-  AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 54)
+WHERE (
+  c.name = 'Татьяна (КБПИЭ)' 
+  OR c.director_name = 'Татьяна (КБПИЭ)'
+  OR COALESCE(c.director_name, c.name) = 'Татьяна (КБПИЭ)'
+)
+AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 54)
 LIMIT 1;
 
 INSERT INTO rental_orders (
@@ -33840,8 +38504,12 @@ SELECT
   NOW(),
   NOW()
 FROM rental_clients c
-WHERE (c.name = 'Татьяна (КБПИЭ)' OR c.director_name = 'Татьяна (КБПИЭ)')
-  AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 53)
+WHERE (
+  c.name = 'Татьяна (КБПИЭ)' 
+  OR c.director_name = 'Татьяна (КБПИЭ)'
+  OR COALESCE(c.director_name, c.name) = 'Татьяна (КБПИЭ)'
+)
+AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 53)
 LIMIT 1;
 
 INSERT INTO rental_orders (
@@ -33869,8 +38537,12 @@ SELECT
   NOW(),
   NOW()
 FROM rental_clients c
-WHERE (c.name = 'Татьяна (КБПИЭ)' OR c.director_name = 'Татьяна (КБПИЭ)')
-  AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 52)
+WHERE (
+  c.name = 'Татьяна (КБПИЭ)' 
+  OR c.director_name = 'Татьяна (КБПИЭ)'
+  OR COALESCE(c.director_name, c.name) = 'Татьяна (КБПИЭ)'
+)
+AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 52)
 LIMIT 1;
 
 INSERT INTO rental_orders (
@@ -33898,8 +38570,12 @@ SELECT
   NOW(),
   NOW()
 FROM rental_clients c
-WHERE (c.name = 'Андрей (Экскурс)' OR c.director_name = 'Андрей (Экскурс)')
-  AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 51)
+WHERE (
+  c.name = 'Андрей (Экскурс)' 
+  OR c.director_name = 'Андрей (Экскурс)'
+  OR COALESCE(c.director_name, c.name) = 'Андрей (Экскурс)'
+)
+AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 51)
 LIMIT 1;
 
 INSERT INTO rental_orders (
@@ -33927,8 +38603,12 @@ SELECT
   NOW(),
   NOW()
 FROM rental_clients c
-WHERE (c.name = 'Татьяна (КБПИЭ)' OR c.director_name = 'Татьяна (КБПИЭ)')
-  AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 50)
+WHERE (
+  c.name = 'Татьяна (КБПИЭ)' 
+  OR c.director_name = 'Татьяна (КБПИЭ)'
+  OR COALESCE(c.director_name, c.name) = 'Татьяна (КБПИЭ)'
+)
+AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 50)
 LIMIT 1;
 
 INSERT INTO rental_orders (
@@ -33956,8 +38636,12 @@ SELECT
   NOW(),
   NOW()
 FROM rental_clients c
-WHERE (c.name = 'Светлана Клиент' OR c.director_name = 'Светлана Клиент')
-  AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 49)
+WHERE (
+  c.name = 'Светлана Клиент' 
+  OR c.director_name = 'Светлана Клиент'
+  OR COALESCE(c.director_name, c.name) = 'Светлана Клиент'
+)
+AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 49)
 LIMIT 1;
 
 INSERT INTO rental_orders (
@@ -33985,8 +38669,12 @@ SELECT
   NOW(),
   NOW()
 FROM rental_clients c
-WHERE (c.name = 'Татьяна (Гольфстрим)' OR c.director_name = 'Татьяна (Гольфстрим)')
-  AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 48)
+WHERE (
+  c.name = 'Татьяна (Гольфстрим)' 
+  OR c.director_name = 'Татьяна (Гольфстрим)'
+  OR COALESCE(c.director_name, c.name) = 'Татьяна (Гольфстрим)'
+)
+AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 48)
 LIMIT 1;
 
 INSERT INTO rental_orders (
@@ -34014,8 +38702,12 @@ SELECT
   NOW(),
   NOW()
 FROM rental_clients c
-WHERE (c.name = 'Мира (ИП)' OR c.director_name = 'Мира (ИП)')
-  AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 47)
+WHERE (
+  c.name = 'Мира (ИП)' 
+  OR c.director_name = 'Мира (ИП)'
+  OR COALESCE(c.director_name, c.name) = 'Мира (ИП)'
+)
+AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 47)
 LIMIT 1;
 
 INSERT INTO rental_orders (
@@ -34043,8 +38735,12 @@ SELECT
   NOW(),
   NOW()
 FROM rental_clients c
-WHERE (c.name = 'Альберт (КТ)' OR c.director_name = 'Альберт (КТ)')
-  AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 46)
+WHERE (
+  c.name = 'Альберт (КТ)' 
+  OR c.director_name = 'Альберт (КТ)'
+  OR COALESCE(c.director_name, c.name) = 'Альберт (КТ)'
+)
+AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 46)
 LIMIT 1;
 
 INSERT INTO rental_orders (
@@ -34072,8 +38768,12 @@ SELECT
   NOW(),
   NOW()
 FROM rental_clients c
-WHERE (c.name = 'Галия' OR c.director_name = 'Галия')
-  AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 45)
+WHERE (
+  c.name = 'Галия' 
+  OR c.director_name = 'Галия'
+  OR COALESCE(c.director_name, c.name) = 'Галия'
+)
+AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 45)
 LIMIT 1;
 
 INSERT INTO rental_orders (
@@ -34101,8 +38801,12 @@ SELECT
   NOW(),
   NOW()
 FROM rental_clients c
-WHERE (c.name = 'Андрей (Экскурс)' OR c.director_name = 'Андрей (Экскурс)')
-  AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 44)
+WHERE (
+  c.name = 'Андрей (Экскурс)' 
+  OR c.director_name = 'Андрей (Экскурс)'
+  OR COALESCE(c.director_name, c.name) = 'Андрей (Экскурс)'
+)
+AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 44)
 LIMIT 1;
 
 INSERT INTO rental_orders (
@@ -34130,8 +38834,12 @@ SELECT
   NOW(),
   NOW()
 FROM rental_clients c
-WHERE (c.name = 'Галина' OR c.director_name = 'Галина')
-  AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 43)
+WHERE (
+  c.name = 'Галина' 
+  OR c.director_name = 'Галина'
+  OR COALESCE(c.director_name, c.name) = 'Галина'
+)
+AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 43)
 LIMIT 1;
 
 INSERT INTO rental_orders (
@@ -34159,8 +38867,12 @@ SELECT
   NOW(),
   NOW()
 FROM rental_clients c
-WHERE (c.name = 'Тамара' OR c.director_name = 'Тамара')
-  AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 42)
+WHERE (
+  c.name = 'Тамара' 
+  OR c.director_name = 'Тамара'
+  OR COALESCE(c.director_name, c.name) = 'Тамара'
+)
+AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 42)
 LIMIT 1;
 
 INSERT INTO rental_orders (
@@ -34188,8 +38900,12 @@ SELECT
   NOW(),
   NOW()
 FROM rental_clients c
-WHERE (c.name = 'Ольга Лукоянова' OR c.director_name = 'Ольга Лукоянова')
-  AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 41)
+WHERE (
+  c.name = 'Ольга Лукоянова' 
+  OR c.director_name = 'Ольга Лукоянова'
+  OR COALESCE(c.director_name, c.name) = 'Ольга Лукоянова'
+)
+AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 41)
 LIMIT 1;
 
 INSERT INTO rental_orders (
@@ -34217,8 +38933,12 @@ SELECT
   NOW(),
   NOW()
 FROM rental_clients c
-WHERE (c.name = 'Андрей (Экскурс)' OR c.director_name = 'Андрей (Экскурс)')
-  AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 40)
+WHERE (
+  c.name = 'Андрей (Экскурс)' 
+  OR c.director_name = 'Андрей (Экскурс)'
+  OR COALESCE(c.director_name, c.name) = 'Андрей (Экскурс)'
+)
+AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 40)
 LIMIT 1;
 
 INSERT INTO rental_orders (
@@ -34246,8 +38966,12 @@ SELECT
   NOW(),
   NOW()
 FROM rental_clients c
-WHERE (c.name = 'Татьяна (КБПИЭ)' OR c.director_name = 'Татьяна (КБПИЭ)')
-  AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 39)
+WHERE (
+  c.name = 'Татьяна (КБПИЭ)' 
+  OR c.director_name = 'Татьяна (КБПИЭ)'
+  OR COALESCE(c.director_name, c.name) = 'Татьяна (КБПИЭ)'
+)
+AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 39)
 LIMIT 1;
 
 INSERT INTO rental_orders (
@@ -34275,8 +38999,12 @@ SELECT
   NOW(),
   NOW()
 FROM rental_clients c
-WHERE (c.name = 'Татьяна (КБПИЭ)' OR c.director_name = 'Татьяна (КБПИЭ)')
-  AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 38)
+WHERE (
+  c.name = 'Татьяна (КБПИЭ)' 
+  OR c.director_name = 'Татьяна (КБПИЭ)'
+  OR COALESCE(c.director_name, c.name) = 'Татьяна (КБПИЭ)'
+)
+AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 38)
 LIMIT 1;
 
 INSERT INTO rental_orders (
@@ -34304,8 +39032,12 @@ SELECT
   NOW(),
   NOW()
 FROM rental_clients c
-WHERE (c.name = 'Татьяна (Гольфстрим)' OR c.director_name = 'Татьяна (Гольфстрим)')
-  AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 37)
+WHERE (
+  c.name = 'Татьяна (Гольфстрим)' 
+  OR c.director_name = 'Татьяна (Гольфстрим)'
+  OR COALESCE(c.director_name, c.name) = 'Татьяна (Гольфстрим)'
+)
+AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 37)
 LIMIT 1;
 
 INSERT INTO rental_orders (
@@ -34333,8 +39065,12 @@ SELECT
   NOW(),
   NOW()
 FROM rental_clients c
-WHERE (c.name = 'Татьяна (Гольфстрим)' OR c.director_name = 'Татьяна (Гольфстрим)')
-  AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 36)
+WHERE (
+  c.name = 'Татьяна (Гольфстрим)' 
+  OR c.director_name = 'Татьяна (Гольфстрим)'
+  OR COALESCE(c.director_name, c.name) = 'Татьяна (Гольфстрим)'
+)
+AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 36)
 LIMIT 1;
 
 INSERT INTO rental_orders (
@@ -34362,8 +39098,12 @@ SELECT
   NOW(),
   NOW()
 FROM rental_clients c
-WHERE (c.name = 'Татьяна (Гольфстрим)' OR c.director_name = 'Татьяна (Гольфстрим)')
-  AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 35)
+WHERE (
+  c.name = 'Татьяна (Гольфстрим)' 
+  OR c.director_name = 'Татьяна (Гольфстрим)'
+  OR COALESCE(c.director_name, c.name) = 'Татьяна (Гольфстрим)'
+)
+AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 35)
 LIMIT 1;
 
 INSERT INTO rental_orders (
@@ -34391,8 +39131,12 @@ SELECT
   NOW(),
   NOW()
 FROM rental_clients c
-WHERE (c.name = 'Татьяна (Гольфстрим)' OR c.director_name = 'Татьяна (Гольфстрим)')
-  AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 34)
+WHERE (
+  c.name = 'Татьяна (Гольфстрим)' 
+  OR c.director_name = 'Татьяна (Гольфстрим)'
+  OR COALESCE(c.director_name, c.name) = 'Татьяна (Гольфстрим)'
+)
+AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 34)
 LIMIT 1;
 
 INSERT INTO rental_orders (
@@ -34420,8 +39164,12 @@ SELECT
   NOW(),
   NOW()
 FROM rental_clients c
-WHERE (c.name = 'Татьяна (Гольфстрим)' OR c.director_name = 'Татьяна (Гольфстрим)')
-  AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 33)
+WHERE (
+  c.name = 'Татьяна (Гольфстрим)' 
+  OR c.director_name = 'Татьяна (Гольфстрим)'
+  OR COALESCE(c.director_name, c.name) = 'Татьяна (Гольфстрим)'
+)
+AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 33)
 LIMIT 1;
 
 INSERT INTO rental_orders (
@@ -34449,8 +39197,12 @@ SELECT
   NOW(),
   NOW()
 FROM rental_clients c
-WHERE (c.name = 'Татьяна (Гольфстрим)' OR c.director_name = 'Татьяна (Гольфстрим)')
-  AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 32)
+WHERE (
+  c.name = 'Татьяна (Гольфстрим)' 
+  OR c.director_name = 'Татьяна (Гольфстрим)'
+  OR COALESCE(c.director_name, c.name) = 'Татьяна (Гольфстрим)'
+)
+AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 32)
 LIMIT 1;
 
 INSERT INTO rental_orders (
@@ -34478,8 +39230,12 @@ SELECT
   NOW(),
   NOW()
 FROM rental_clients c
-WHERE (c.name = 'Татьяна (Гольфстрим)' OR c.director_name = 'Татьяна (Гольфстрим)')
-  AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 31)
+WHERE (
+  c.name = 'Татьяна (Гольфстрим)' 
+  OR c.director_name = 'Татьяна (Гольфстрим)'
+  OR COALESCE(c.director_name, c.name) = 'Татьяна (Гольфстрим)'
+)
+AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 31)
 LIMIT 1;
 
 INSERT INTO rental_orders (
@@ -34507,8 +39263,12 @@ SELECT
   NOW(),
   NOW()
 FROM rental_clients c
-WHERE (c.name = 'Татьяна (Гольфстрим)' OR c.director_name = 'Татьяна (Гольфстрим)')
-  AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 30)
+WHERE (
+  c.name = 'Татьяна (Гольфстрим)' 
+  OR c.director_name = 'Татьяна (Гольфстрим)'
+  OR COALESCE(c.director_name, c.name) = 'Татьяна (Гольфстрим)'
+)
+AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 30)
 LIMIT 1;
 
 INSERT INTO rental_orders (
@@ -34536,8 +39296,12 @@ SELECT
   NOW(),
   NOW()
 FROM rental_clients c
-WHERE (c.name = 'Татьяна (Гольфстрим)' OR c.director_name = 'Татьяна (Гольфстрим)')
-  AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 29)
+WHERE (
+  c.name = 'Татьяна (Гольфстрим)' 
+  OR c.director_name = 'Татьяна (Гольфстрим)'
+  OR COALESCE(c.director_name, c.name) = 'Татьяна (Гольфстрим)'
+)
+AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 29)
 LIMIT 1;
 
 INSERT INTO rental_orders (
@@ -34565,8 +39329,12 @@ SELECT
   NOW(),
   NOW()
 FROM rental_clients c
-WHERE (c.name = 'Татьяна (Гольфстрим)' OR c.director_name = 'Татьяна (Гольфстрим)')
-  AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 28)
+WHERE (
+  c.name = 'Татьяна (Гольфстрим)' 
+  OR c.director_name = 'Татьяна (Гольфстрим)'
+  OR COALESCE(c.director_name, c.name) = 'Татьяна (Гольфстрим)'
+)
+AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 28)
 LIMIT 1;
 
 INSERT INTO rental_orders (
@@ -34594,8 +39362,12 @@ SELECT
   NOW(),
   NOW()
 FROM rental_clients c
-WHERE (c.name = 'Татьяна (Гольфстрим)' OR c.director_name = 'Татьяна (Гольфстрим)')
-  AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 27)
+WHERE (
+  c.name = 'Татьяна (Гольфстрим)' 
+  OR c.director_name = 'Татьяна (Гольфстрим)'
+  OR COALESCE(c.director_name, c.name) = 'Татьяна (Гольфстрим)'
+)
+AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 27)
 LIMIT 1;
 
 INSERT INTO rental_orders (
@@ -34623,8 +39395,12 @@ SELECT
   NOW(),
   NOW()
 FROM rental_clients c
-WHERE (c.name = 'Татьяна (Гольфстрим)' OR c.director_name = 'Татьяна (Гольфстрим)')
-  AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 26)
+WHERE (
+  c.name = 'Татьяна (Гольфстрим)' 
+  OR c.director_name = 'Татьяна (Гольфстрим)'
+  OR COALESCE(c.director_name, c.name) = 'Татьяна (Гольфстрим)'
+)
+AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 26)
 LIMIT 1;
 
 INSERT INTO rental_orders (
@@ -34652,8 +39428,12 @@ SELECT
   NOW(),
   NOW()
 FROM rental_clients c
-WHERE (c.name = 'Татьяна (Гольфстрим)' OR c.director_name = 'Татьяна (Гольфстрим)')
-  AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 25)
+WHERE (
+  c.name = 'Татьяна (Гольфстрим)' 
+  OR c.director_name = 'Татьяна (Гольфстрим)'
+  OR COALESCE(c.director_name, c.name) = 'Татьяна (Гольфстрим)'
+)
+AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 25)
 LIMIT 1;
 
 INSERT INTO rental_orders (
@@ -34681,8 +39461,12 @@ SELECT
   NOW(),
   NOW()
 FROM rental_clients c
-WHERE (c.name = 'Татьяна (Гольфстрим)' OR c.director_name = 'Татьяна (Гольфстрим)')
-  AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 24)
+WHERE (
+  c.name = 'Татьяна (Гольфстрим)' 
+  OR c.director_name = 'Татьяна (Гольфстрим)'
+  OR COALESCE(c.director_name, c.name) = 'Татьяна (Гольфстрим)'
+)
+AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 24)
 LIMIT 1;
 
 INSERT INTO rental_orders (
@@ -34710,8 +39494,12 @@ SELECT
   NOW(),
   NOW()
 FROM rental_clients c
-WHERE (c.name = 'Татьяна (Гольфстрим)' OR c.director_name = 'Татьяна (Гольфстрим)')
-  AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 23)
+WHERE (
+  c.name = 'Татьяна (Гольфстрим)' 
+  OR c.director_name = 'Татьяна (Гольфстрим)'
+  OR COALESCE(c.director_name, c.name) = 'Татьяна (Гольфстрим)'
+)
+AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 23)
 LIMIT 1;
 
 INSERT INTO rental_orders (
@@ -34739,8 +39527,12 @@ SELECT
   NOW(),
   NOW()
 FROM rental_clients c
-WHERE (c.name = 'Элина (Сититур)' OR c.director_name = 'Элина (Сититур)')
-  AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 22)
+WHERE (
+  c.name = 'Элина (Сититур)' 
+  OR c.director_name = 'Элина (Сититур)'
+  OR COALESCE(c.director_name, c.name) = 'Элина (Сититур)'
+)
+AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 22)
 LIMIT 1;
 
 INSERT INTO rental_orders (
@@ -34768,8 +39560,12 @@ SELECT
   NOW(),
   NOW()
 FROM rental_clients c
-WHERE (c.name = 'Татьяна (Гольфстрим)' OR c.director_name = 'Татьяна (Гольфстрим)')
-  AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 19)
+WHERE (
+  c.name = 'Татьяна (Гольфстрим)' 
+  OR c.director_name = 'Татьяна (Гольфстрим)'
+  OR COALESCE(c.director_name, c.name) = 'Татьяна (Гольфстрим)'
+)
+AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 19)
 LIMIT 1;
 
 INSERT INTO rental_orders (
@@ -34797,8 +39593,12 @@ SELECT
   NOW(),
   NOW()
 FROM rental_clients c
-WHERE (c.name = 'Юлия Воронова' OR c.director_name = 'Юлия Воронова')
-  AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 18)
+WHERE (
+  c.name = 'Юлия Воронова' 
+  OR c.director_name = 'Юлия Воронова'
+  OR COALESCE(c.director_name, c.name) = 'Юлия Воронова'
+)
+AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 18)
 LIMIT 1;
 
 INSERT INTO rental_orders (
@@ -34826,8 +39626,12 @@ SELECT
   NOW(),
   NOW()
 FROM rental_clients c
-WHERE (c.name = 'Елена Игнатьева' OR c.director_name = 'Елена Игнатьева')
-  AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 17)
+WHERE (
+  c.name = 'Елена Игнатьева' 
+  OR c.director_name = 'Елена Игнатьева'
+  OR COALESCE(c.director_name, c.name) = 'Елена Игнатьева'
+)
+AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 17)
 LIMIT 1;
 
 INSERT INTO rental_orders (
@@ -34855,8 +39659,12 @@ SELECT
   NOW(),
   NOW()
 FROM rental_clients c
-WHERE (c.name = 'Татьяна Чуб' OR c.director_name = 'Татьяна Чуб')
-  AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 16)
+WHERE (
+  c.name = 'Татьяна Чуб' 
+  OR c.director_name = 'Татьяна Чуб'
+  OR COALESCE(c.director_name, c.name) = 'Татьяна Чуб'
+)
+AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 16)
 LIMIT 1;
 
 INSERT INTO rental_orders (
@@ -34884,8 +39692,12 @@ SELECT
   NOW(),
   NOW()
 FROM rental_clients c
-WHERE (c.name = 'Мария Батяева' OR c.director_name = 'Мария Батяева')
-  AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 15)
+WHERE (
+  c.name = 'Мария Батяева' 
+  OR c.director_name = 'Мария Батяева'
+  OR COALESCE(c.director_name, c.name) = 'Мария Батяева'
+)
+AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 15)
 LIMIT 1;
 
 INSERT INTO rental_orders (
@@ -34913,8 +39725,12 @@ SELECT
   NOW(),
   NOW()
 FROM rental_clients c
-WHERE (c.name = 'Алина Сафина' OR c.director_name = 'Алина Сафина')
-  AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 14)
+WHERE (
+  c.name = 'Алина Сафина' 
+  OR c.director_name = 'Алина Сафина'
+  OR COALESCE(c.director_name, c.name) = 'Алина Сафина'
+)
+AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 14)
 LIMIT 1;
 
 INSERT INTO rental_orders (
@@ -34942,8 +39758,12 @@ SELECT
   NOW(),
   NOW()
 FROM rental_clients c
-WHERE (c.name = 'Татьяна (Гольфстрим)' OR c.director_name = 'Татьяна (Гольфстрим)')
-  AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 13)
+WHERE (
+  c.name = 'Татьяна (Гольфстрим)' 
+  OR c.director_name = 'Татьяна (Гольфстрим)'
+  OR COALESCE(c.director_name, c.name) = 'Татьяна (Гольфстрим)'
+)
+AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 13)
 LIMIT 1;
 
 INSERT INTO rental_orders (
@@ -34971,8 +39791,12 @@ SELECT
   NOW(),
   NOW()
 FROM rental_clients c
-WHERE (c.name = 'Галина' OR c.director_name = 'Галина')
-  AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 12)
+WHERE (
+  c.name = 'Галина' 
+  OR c.director_name = 'Галина'
+  OR COALESCE(c.director_name, c.name) = 'Галина'
+)
+AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 12)
 LIMIT 1;
 
 INSERT INTO rental_orders (
@@ -35000,8 +39824,12 @@ SELECT
   NOW(),
   NOW()
 FROM rental_clients c
-WHERE (c.name = 'Наталья Рыжкова' OR c.director_name = 'Наталья Рыжкова')
-  AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 11)
+WHERE (
+  c.name = 'Наталья Рыжкова' 
+  OR c.director_name = 'Наталья Рыжкова'
+  OR COALESCE(c.director_name, c.name) = 'Наталья Рыжкова'
+)
+AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 11)
 LIMIT 1;
 
 INSERT INTO rental_orders (
@@ -35029,8 +39857,12 @@ SELECT
   NOW(),
   NOW()
 FROM rental_clients c
-WHERE (c.name = 'Татьяна (Гольфстрим)' OR c.director_name = 'Татьяна (Гольфстрим)')
-  AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 9)
+WHERE (
+  c.name = 'Татьяна (Гольфстрим)' 
+  OR c.director_name = 'Татьяна (Гольфстрим)'
+  OR COALESCE(c.director_name, c.name) = 'Татьяна (Гольфстрим)'
+)
+AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 9)
 LIMIT 1;
 
 INSERT INTO rental_orders (
@@ -35058,8 +39890,12 @@ SELECT
   NOW(),
   NOW()
 FROM rental_clients c
-WHERE (c.name = 'Татьяна (Гольфстрим)' OR c.director_name = 'Татьяна (Гольфстрим)')
-  AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 8)
+WHERE (
+  c.name = 'Татьяна (Гольфстрим)' 
+  OR c.director_name = 'Татьяна (Гольфстрим)'
+  OR COALESCE(c.director_name, c.name) = 'Татьяна (Гольфстрим)'
+)
+AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 8)
 LIMIT 1;
 
 INSERT INTO rental_orders (
@@ -35087,8 +39923,12 @@ SELECT
   NOW(),
   NOW()
 FROM rental_clients c
-WHERE (c.name = 'Татьяна (Гольфстрим)' OR c.director_name = 'Татьяна (Гольфстрим)')
-  AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 7)
+WHERE (
+  c.name = 'Татьяна (Гольфстрим)' 
+  OR c.director_name = 'Татьяна (Гольфстрим)'
+  OR COALESCE(c.director_name, c.name) = 'Татьяна (Гольфстрим)'
+)
+AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 7)
 LIMIT 1;
 
 INSERT INTO rental_orders (
@@ -35116,8 +39956,12 @@ SELECT
   NOW(),
   NOW()
 FROM rental_clients c
-WHERE (c.name = 'Татьяна (Гольфстрим)' OR c.director_name = 'Татьяна (Гольфстрим)')
-  AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 6)
+WHERE (
+  c.name = 'Татьяна (Гольфстрим)' 
+  OR c.director_name = 'Татьяна (Гольфстрим)'
+  OR COALESCE(c.director_name, c.name) = 'Татьяна (Гольфстрим)'
+)
+AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 6)
 LIMIT 1;
 
 INSERT INTO rental_orders (
@@ -35145,8 +39989,12 @@ SELECT
   NOW(),
   NOW()
 FROM rental_clients c
-WHERE (c.name = 'Наталья' OR c.director_name = 'Наталья')
-  AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 5)
+WHERE (
+  c.name = 'Наталья' 
+  OR c.director_name = 'Наталья'
+  OR COALESCE(c.director_name, c.name) = 'Наталья'
+)
+AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 5)
 LIMIT 1;
 
 INSERT INTO rental_orders (
@@ -35174,8 +40022,12 @@ SELECT
   NOW(),
   NOW()
 FROM rental_clients c
-WHERE (c.name = 'Галия' OR c.director_name = 'Галия')
-  AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 4)
+WHERE (
+  c.name = 'Галия' 
+  OR c.director_name = 'Галия'
+  OR COALESCE(c.director_name, c.name) = 'Галия'
+)
+AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 4)
 LIMIT 1;
 
 INSERT INTO rental_orders (
@@ -35203,6 +40055,10 @@ SELECT
   NOW(),
   NOW()
 FROM rental_clients c
-WHERE (c.name = 'Альберт (КТ)' OR c.director_name = 'Альберт (КТ)')
-  AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 3)
+WHERE (
+  c.name = 'Альберт (КТ)' 
+  OR c.director_name = 'Альберт (КТ)'
+  OR COALESCE(c.director_name, c.name) = 'Альберт (КТ)'
+)
+AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 3)
 LIMIT 1;
