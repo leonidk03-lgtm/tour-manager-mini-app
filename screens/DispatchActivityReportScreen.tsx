@@ -584,6 +584,12 @@ export default function DispatchActivityReportScreen() {
                       <ThemedText style={styles.cardSubtitle}>
                         {result.excursionName || "Без названия"} - {formatDate(result.excursionDate)}
                       </ThemedText>
+                      <View style={styles.actionTimeRow}>
+                        <Icon name="clock" size={14} color={theme.textSecondary} />
+                        <ThemedText style={[styles.actionTimeText, { color: theme.textSecondary }]}>
+                          Действие: {new Date(result.createdAt).toLocaleString("ru-RU", { day: "numeric", month: "short", year: "numeric", hour: "2-digit", minute: "2-digit" })}
+                        </ThemedText>
+                      </View>
                       <View style={styles.searchResultFooter}>
                         <View style={styles.managerInfo}>
                           <Icon name="user" size={14} color={theme.textSecondary} />
@@ -876,6 +882,15 @@ const styles = StyleSheet.create({
   phoneText: {
     fontSize: 15,
     fontWeight: "600",
+  },
+  actionTimeRow: {
+    flexDirection: "row",
+    alignItems: "center",
+    gap: Spacing.xs,
+    marginTop: Spacing.xs,
+  },
+  actionTimeText: {
+    fontSize: 12,
   },
   searchResultFooter: {
     flexDirection: "row",
