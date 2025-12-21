@@ -69,6 +69,9 @@ export default function RentalOrdersScreen() {
     if (activeFilter === "срок") {
       result = result.filter(o => o.status === "new");
       result.sort((a, b) => new Date(a.endDate).getTime() - new Date(b.endDate).getTime());
+    } else if (activeFilter === "issued") {
+      result = result.filter(o => o.status === "issued");
+      result.sort((a, b) => new Date(a.endDate).getTime() - new Date(b.endDate).getTime());
     } else if (activeFilter !== "all") {
       result = result.filter(o => o.status === activeFilter);
     }
