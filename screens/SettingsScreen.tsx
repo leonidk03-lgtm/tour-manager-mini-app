@@ -204,6 +204,7 @@ export default function SettingsScreen() {
         <View style={styles.section}>
           <SectionTitle title="Общее" />
           <View style={styles.iconGrid}>
+            <AppIcon icon="layout" label="Дашборд" color="#5856D6" onPress={() => navigation.navigate("DashboardConfig")} />
             <AppIcon icon="bell" label="Уведомления" color="#FF3B30" onPress={() => navigation.navigate("Notifications")} />
             <AppIcon icon="trash-2" label="Удалённые" color="#8E8E93" onPress={() => navigation.navigate("DeletedData")} />
           </View>
