@@ -468,15 +468,21 @@ export default function DashboardScreen() {
 
   const radioGuidesStats = useMemo(() => {
     const activeAssignments = radioGuideAssignments.filter(a => !a.returnedAt);
-    const onExcursions = activeAssignments.filter(a => a.excursionId).length;
+    const onExcursions = activeAssignments.reduce((sum, a) => sum + a.receiversIssued, 0);
     
-    const onRentals = rentalOrders.filter(order => 
-      order.status === 'issued' && order.bagNumber
-    ).length;
+    const activeRentals = rentalOrders.filter(order => order.status === 'issued');
+    const onRentals = activeRentals.reduce((sum, order) => {
+      return sum + order.kitCount + order.spareReceiverCount;
+    }, 0);
     
     const totalInUse = onExcursions + onRentals;
     
-    const lostCount = equipmentLosses.filter(loss => loss.status === 'lost').reduce((sum, loss) => sum + loss.missingCount, 0);
+    const { startDate: todayStart, endDate: todayEnd } = getDateRangeForPeriod("day", new Date());
+    const todayLosses = equipmentLosses.filter(loss => {
+      const lossDate = loss.createdAt.split('T')[0];
+      return lossDate >= todayStart && lossDate <= todayEnd;
+    });
+    const lostCount = todayLosses.reduce((sum, loss) => sum + loss.missingCount, 0);
     
     return { onExcursions, onRentals, totalInUse, lostCount };
   }, [radioGuideAssignments, rentalOrders, equipmentLosses]);
