@@ -1,5 +1,8 @@
--- Import rental orders with phone matching
--- Run after import_clients.sql
+-- Import rental orders - simplified without manager matching
+-- Manager can be assigned later
+
+-- First, ensure manager_id allows NULL:
+ALTER TABLE rental_orders ALTER COLUMN manager_id DROP NOT NULL;
 
 INSERT INTO rental_orders (
   order_number, client_id, status, start_date, end_date, days_count,
@@ -21,7 +24,7 @@ SELECT
   4000,
   0,
   'В кристалл Катя Ильина Ваучер Кремль и свияжск',
-  (SELECT id FROM profiles WHERE display_name = 'Леонид' LIMIT 1),
+  NULL,
   'Леонид',
   NOW(),
   NOW()
@@ -53,7 +56,7 @@ SELECT
   3440,
   0,
   '43 радиогида в 9:30 от отеля Рамада. И один ваучер на Кремль . Гид Катя Ильина',
-  (SELECT id FROM profiles WHERE display_name = 'Леонид' LIMIT 1),
+  NULL,
   'Леонид',
   NOW(),
   NOW()
@@ -85,7 +88,7 @@ SELECT
   12900,
   0,
   'Заберет сама',
-  (SELECT id FROM profiles WHERE display_name = 'Стас' LIMIT 1),
+  NULL,
   'Стас',
   NOW(),
   NOW()
@@ -118,7 +121,7 @@ SELECT
   3500,
   0,
   'Из АйТи парка в АйТи парк',
-  (SELECT id FROM profiles WHERE display_name = 'Стас' LIMIT 1),
+  NULL,
   'Стас',
   NOW(),
   NOW()
@@ -151,7 +154,7 @@ SELECT
   3000,
   0,
   'Из Сафара в Релиту',
-  (SELECT id FROM profiles WHERE display_name = 'Стас' LIMIT 1),
+  NULL,
   'Стас',
   NOW(),
   NOW()
@@ -184,7 +187,7 @@ SELECT
   4100,
   0,
   'Из Сафара в Релиту',
-  (SELECT id FROM profiles WHERE display_name = 'Стас' LIMIT 1),
+  NULL,
   'Стас',
   NOW(),
   NOW()
@@ -217,7 +220,7 @@ SELECT
   3900,
   0,
   'Из АйТи парка в АйТи парк',
-  (SELECT id FROM profiles WHERE display_name = 'Стас' LIMIT 1),
+  NULL,
   'Стас',
   NOW(),
   NOW()
@@ -250,7 +253,7 @@ SELECT
   4400,
   0,
   'Из Сафара в Релиту',
-  (SELECT id FROM profiles WHERE display_name = 'Стас' LIMIT 1),
+  NULL,
   'Стас',
   NOW(),
   NOW()
@@ -283,7 +286,7 @@ SELECT
   2300,
   0,
   'Уточнить',
-  (SELECT id FROM profiles WHERE display_name = 'Стас' LIMIT 1),
+  NULL,
   'Стас',
   NOW(),
   NOW()
@@ -316,7 +319,7 @@ SELECT
   3800,
   0,
   'Из АйТи парка в АйТи парк',
-  (SELECT id FROM profiles WHERE display_name = 'Стас' LIMIT 1),
+  NULL,
   'Стас',
   NOW(),
   NOW()
@@ -349,7 +352,7 @@ SELECT
   4400,
   0,
   'Из Сафара в Релиту',
-  (SELECT id FROM profiles WHERE display_name = 'Стас' LIMIT 1),
+  NULL,
   'Стас',
   NOW(),
   NOW()
@@ -382,7 +385,7 @@ SELECT
   4400,
   0,
   'Из Сафара в Релиту',
-  (SELECT id FROM profiles WHERE display_name = 'Стас' LIMIT 1),
+  NULL,
   'Стас',
   NOW(),
   NOW()
@@ -415,7 +418,7 @@ SELECT
   4500,
   0,
   'Уточнить откуда, вернут в Стерлядку',
-  (SELECT id FROM profiles WHERE display_name = 'Стас' LIMIT 1),
+  NULL,
   'Стас',
   NOW(),
   NOW()
@@ -448,7 +451,7 @@ SELECT
   2240,
   0,
   'Из Сафара в Релиту',
-  (SELECT id FROM profiles WHERE display_name = 'Стас' LIMIT 1),
+  NULL,
   'Стас',
   NOW(),
   NOW()
@@ -481,7 +484,7 @@ SELECT
   2480,
   0,
   'Из АйТи парка в АйТи парк',
-  (SELECT id FROM profiles WHERE display_name = 'Стас' LIMIT 1),
+  NULL,
   'Стас',
   NOW(),
   NOW()
@@ -514,7 +517,7 @@ SELECT
   12000,
   0,
   'Уточнить',
-  (SELECT id FROM profiles WHERE display_name = 'Стас' LIMIT 1),
+  NULL,
   'Стас',
   NOW(),
   NOW()
@@ -547,7 +550,7 @@ SELECT
   4500,
   0,
   'Уточнить',
-  (SELECT id FROM profiles WHERE display_name = 'Стас' LIMIT 1),
+  NULL,
   'Стас',
   NOW(),
   NOW()
@@ -580,7 +583,7 @@ SELECT
   13500,
   0,
   'Уточнить',
-  (SELECT id FROM profiles WHERE display_name = 'Стас' LIMIT 1),
+  NULL,
   'Стас',
   NOW(),
   NOW()
@@ -613,7 +616,7 @@ SELECT
   3500,
   0,
   'Уточнить',
-  (SELECT id FROM profiles WHERE display_name = 'Стас' LIMIT 1),
+  NULL,
   'Стас',
   NOW(),
   NOW()
@@ -646,7 +649,7 @@ SELECT
   10500,
   0,
   'Уточнить',
-  (SELECT id FROM profiles WHERE display_name = 'Стас' LIMIT 1),
+  NULL,
   'Стас',
   NOW(),
   NOW()
@@ -679,7 +682,7 @@ SELECT
   14400,
   0,
   'Уточнить',
-  (SELECT id FROM profiles WHERE display_name = 'Стас' LIMIT 1),
+  NULL,
   'Стас',
   NOW(),
   NOW()
@@ -712,7 +715,7 @@ SELECT
   12600,
   0,
   'Уточнить',
-  (SELECT id FROM profiles WHERE display_name = 'Стас' LIMIT 1),
+  NULL,
   'Стас',
   NOW(),
   NOW()
@@ -745,7 +748,7 @@ SELECT
   14400,
   0,
   'Уточнить',
-  (SELECT id FROM profiles WHERE display_name = 'Стас' LIMIT 1),
+  NULL,
   'Стас',
   NOW(),
   NOW()
@@ -778,7 +781,7 @@ SELECT
   4500,
   0,
   'Завезти в Кристал',
-  (SELECT id FROM profiles WHERE display_name = 'Леонид' LIMIT 1),
+  NULL,
   'Леонид',
   NOW(),
   NOW()
@@ -811,7 +814,7 @@ SELECT
   4500,
   0,
   '-',
-  (SELECT id FROM profiles WHERE display_name = 'Леонид' LIMIT 1),
+  NULL,
   'Леонид',
   NOW(),
   NOW()
@@ -844,7 +847,7 @@ SELECT
   7200,
   0,
   'В офис Вернут в Азимут после 20:00',
-  (SELECT id FROM profiles WHERE display_name = 'Стас' LIMIT 1),
+  NULL,
   'Стас',
   NOW(),
   NOW()
@@ -877,7 +880,7 @@ SELECT
   7920,
   0,
   'В офис с 14 до 17',
-  (SELECT id FROM profiles WHERE display_name = 'Стас' LIMIT 1),
+  NULL,
   'Стас',
   NOW(),
   NOW()
@@ -910,7 +913,7 @@ SELECT
   4000,
   0,
   'Заберут в 10 с Баумана',
-  (SELECT id FROM profiles WHERE display_name = 'Леонид' LIMIT 1),
+  NULL,
   'Леонид',
   NOW(),
   NOW()
@@ -943,7 +946,7 @@ SELECT
   2400,
   0,
   'Вернут в офис вечером, гид Эльвира, м Полина',
-  (SELECT id FROM profiles WHERE display_name = 'Стас' LIMIT 1),
+  NULL,
   'Стас',
   NOW(),
   NOW()
@@ -976,7 +979,7 @@ SELECT
   8000,
   0,
   '-',
-  (SELECT id FROM profiles WHERE display_name = 'Леонид' LIMIT 1),
+  NULL,
   'Леонид',
   NOW(),
   NOW()
@@ -1009,7 +1012,7 @@ SELECT
   8000,
   0,
   '-',
-  (SELECT id FROM profiles WHERE display_name = 'Леонид' LIMIT 1),
+  NULL,
   'Леонид',
   NOW(),
   NOW()
@@ -1042,7 +1045,7 @@ SELECT
   8000,
   0,
   '-',
-  (SELECT id FROM profiles WHERE display_name = 'Леонид' LIMIT 1),
+  NULL,
   'Леонид',
   NOW(),
   NOW()
@@ -1075,7 +1078,7 @@ SELECT
   1600,
   0,
   'Из Сафара в релиту',
-  (SELECT id FROM profiles WHERE display_name = 'Стас' LIMIT 1),
+  NULL,
   'Стас',
   NOW(),
   NOW()
@@ -1108,7 +1111,7 @@ SELECT
   1200,
   0,
   'В Марриот до 9:30 Оставят в Каспийске после 16;00',
-  (SELECT id FROM profiles WHERE display_name = 'Стас' LIMIT 1),
+  NULL,
   'Стас',
   NOW(),
   NOW()
@@ -1141,7 +1144,7 @@ SELECT
   4320,
   0,
   '07.12 с 8:30 до 11:00 заберут от Свита Холла •Рузиля 54шт / оставит после 15:00 в фургончике (+7 965 603-40-01)',
-  (SELECT id FROM profiles WHERE display_name = 'Леонид' LIMIT 1),
+  NULL,
   'Леонид',
   NOW(),
   NOW()
@@ -1174,7 +1177,7 @@ SELECT
   3680,
   0,
   '07.12 с 8:30 до 11:00 заберут от Свита Холла •Снежанна 26шт + 20 доп наушников / оставит 08.12 у свита Холла (+7 927 414-91-01)',
-  (SELECT id FROM profiles WHERE display_name = 'Леонид' LIMIT 1),
+  NULL,
   'Леонид',
   NOW(),
   NOW()
@@ -1207,7 +1210,7 @@ SELECT
   2400,
   0,
   'Карина К 18:00 заберут из фургончика, закончат в 22:00 сообщат куда оставят',
-  (SELECT id FROM profiles WHERE display_name = 'Леонид' LIMIT 1),
+  NULL,
   'Леонид',
   NOW(),
   NOW()
@@ -1240,7 +1243,7 @@ SELECT
   5840,
   0,
   '07.12 с 8:30 до 11:00 заберут от Свита Холла •Елена 47шт + 26 доп наушников / оставит 08.12 у свита Холла (+7 927 401-58-22)',
-  (SELECT id FROM profiles WHERE display_name = 'Леонид' LIMIT 1),
+  NULL,
   'Леонид',
   NOW(),
   NOW()
@@ -1273,7 +1276,7 @@ SELECT
   10160,
   0,
   '07.12 с 8:30 до 11:00 заберут от Свита Холла •Эльмира 49шт + 78 доп наушников / оставит 08.12 в Кристалле (+7 917 878-83-60)',
-  (SELECT id FROM profiles WHERE display_name = 'Леонид' LIMIT 1),
+  NULL,
   'Леонид',
   NOW(),
   NOW()
@@ -1306,7 +1309,7 @@ SELECT
   4000,
   0,
   '06.12 вечером в Кристалл •Ирина 30шт + 20 доп наушников / оставит 08.12 у Свита Холла (+7 917 293-48-70)',
-  (SELECT id FROM profiles WHERE display_name = 'Леонид' LIMIT 1),
+  NULL,
   'Леонид',
   NOW(),
   NOW()
@@ -1339,7 +1342,7 @@ SELECT
   6560,
   0,
   '06.12 вечером в Амакс Сафар •Ольга 43 + 39 доп наушников / оставит 08.12 в Кристалл (+7 950 314-03-61)',
-  (SELECT id FROM profiles WHERE display_name = 'Леонид' LIMIT 1),
+  NULL,
   'Леонид',
   NOW(),
   NOW()
@@ -1372,7 +1375,7 @@ SELECT
   2800,
   0,
   '35 радиогидов . И один ваучер на свияжск и один на Кремль . Завтра 9:00 отель Азимут ул.Право-Булачная д.43/1. Гид Нина Максимова',
-  (SELECT id FROM profiles WHERE display_name = 'Леонид' LIMIT 1),
+  NULL,
   'Леонид',
   NOW(),
   NOW()
@@ -1404,7 +1407,7 @@ SELECT
   2160,
   0,
   '04.12 вечером или 05.12 до 11:00 в Кристалл! Гульназ 27шт / оставит в Амакс после 14:30 (+7 939 390-26-10)',
-  (SELECT id FROM profiles WHERE display_name = 'Леонид' LIMIT 1),
+  NULL,
   'Леонид',
   NOW(),
   NOW()
@@ -1437,7 +1440,7 @@ SELECT
   2400,
   0,
   '04.12 вечером или 05.12 до 11:00 в Кристалл! Светлана 30шт / оставит в Амакс после 14:30 (+7 967 780-00-66)',
-  (SELECT id FROM profiles WHERE display_name = 'Леонид' LIMIT 1),
+  NULL,
   'Леонид',
   NOW(),
   NOW()
@@ -1470,7 +1473,7 @@ SELECT
   3680,
   0,
   '04.12 вечером или 05.12 до 11:00 в Кристалл! •Татьяна 46шт / оставит в Амакс после 14:00 (+7 987 282-71-66)',
-  (SELECT id FROM profiles WHERE display_name = 'Леонид' LIMIT 1),
+  NULL,
   'Леонид',
   NOW(),
   NOW()
@@ -1503,7 +1506,7 @@ SELECT
   5440,
   0,
   '04.12 в офис Казань 360, в районе 12:00 Эльмира 36+32 доп наушника / оставит в Амакс после 20:30 (+7 917 878-83-60)',
-  (SELECT id FROM profiles WHERE display_name = 'Леонид' LIMIT 1),
+  NULL,
   'Леонид',
   NOW(),
   NOW()
@@ -1536,7 +1539,7 @@ SELECT
   6560,
   0,
   '04.12 В офис Казань 360, в районе 12:00 Снежанна 54 +28 доп наушников / оставит в Амакс после 20:30 ( +7 927 414-91-01)',
-  (SELECT id FROM profiles WHERE display_name = 'Леонид' LIMIT 1),
+  NULL,
   'Леонид',
   NOW(),
   NOW()
@@ -1569,7 +1572,7 @@ SELECT
   3680,
   0,
   '04.12 в офис Казань 360 в районе 12:00 Ольга 46шт / оставит в фургончике после 15:00 (+7 950 314-03-61)',
-  (SELECT id FROM profiles WHERE display_name = 'Леонид' LIMIT 1),
+  NULL,
   'Леонид',
   NOW(),
   NOW()
@@ -1602,7 +1605,7 @@ SELECT
   3760,
   0,
   '04.12 в офис Казань 360 в районе 12:00 Алик 47шт / оставит в Амакс после 15:00 (+7 987 221-02-84)',
-  (SELECT id FROM profiles WHERE display_name = 'Леонид' LIMIT 1),
+  NULL,
   'Леонид',
   NOW(),
   NOW()
@@ -1635,7 +1638,7 @@ SELECT
   3000,
   0,
   'Дауна 8:30',
-  (SELECT id FROM profiles WHERE display_name = 'Леонид' LIMIT 1),
+  NULL,
   'Леонид',
   NOW(),
   NOW()
@@ -1668,7 +1671,7 @@ SELECT
   5100,
   0,
   'Баумана в 8:30',
-  (SELECT id FROM profiles WHERE display_name = 'Леонид' LIMIT 1),
+  NULL,
   'Леонид',
   NOW(),
   NOW()
@@ -1701,7 +1704,7 @@ SELECT
   2400,
   0,
   'Оставить в фургончике до 15:00, вечером оставит в Шаляпине',
-  (SELECT id FROM profiles WHERE display_name = 'Леонид' LIMIT 1),
+  NULL,
   'Леонид',
   NOW(),
   NOW()
@@ -1734,7 +1737,7 @@ SELECT
   800,
   0,
   'Ольга ткач',
-  (SELECT id FROM profiles WHERE display_name = 'Леонид' LIMIT 1),
+  NULL,
   'Леонид',
   NOW(),
   NOW()
@@ -1767,7 +1770,7 @@ SELECT
   10000,
   0,
   'Уточнить',
-  (SELECT id FROM profiles WHERE display_name = 'Леонид' LIMIT 1),
+  NULL,
   'Леонид',
   NOW(),
   NOW()
@@ -1800,7 +1803,7 @@ SELECT
   5000,
   0,
   '-',
-  (SELECT id FROM profiles WHERE display_name = 'Леонид' LIMIT 1),
+  NULL,
   'Леонид',
   NOW(),
   NOW()
@@ -1833,7 +1836,7 @@ SELECT
   4000,
   0,
   'Баумана в 8:15 Алена Лазуко',
-  (SELECT id FROM profiles WHERE display_name = 'Леонид' LIMIT 1),
+  NULL,
   'Леонид',
   NOW(),
   NOW()
@@ -1866,7 +1869,7 @@ SELECT
   5400,
   0,
   'заберет из фургончика',
-  (SELECT id FROM profiles WHERE display_name = 'Леонид' LIMIT 1),
+  NULL,
   'Леонид',
   NOW(),
   NOW()
@@ -1899,7 +1902,7 @@ SELECT
   4960,
   0,
   'Авиатор. Игорь',
-  (SELECT id FROM profiles WHERE display_name = 'Леонид' LIMIT 1),
+  NULL,
   'Леонид',
   NOW(),
   NOW()
@@ -1932,7 +1935,7 @@ SELECT
   8000,
   0,
   '19.10 в районе 10 заберет ! 4 сумки по 26шт',
-  (SELECT id FROM profiles WHERE display_name = 'Стас' LIMIT 1),
+  NULL,
   'Стас',
   NOW(),
   NOW()
@@ -1965,7 +1968,7 @@ SELECT
   1900,
   0,
   'Заберет в 11:00 из фургончика',
-  (SELECT id FROM profiles WHERE display_name = 'Леонид' LIMIT 1),
+  NULL,
   'Леонид',
   NOW(),
   NOW()
@@ -1998,7 +2001,7 @@ SELECT
   5000,
   0,
   'Ростов',
-  (SELECT id FROM profiles WHERE display_name = 'Стас' LIMIT 1),
+  NULL,
   'Стас',
   NOW(),
   NOW()
@@ -2031,7 +2034,7 @@ SELECT
   10500,
   0,
   'Подольск Передать 5 вечером',
-  (SELECT id FROM profiles WHERE display_name = 'Стас' LIMIT 1),
+  NULL,
   'Стас',
   NOW(),
   NOW()
@@ -2064,7 +2067,7 @@ SELECT
   10500,
   0,
   'Карабулак',
-  (SELECT id FROM profiles WHERE display_name = 'Стас' LIMIT 1),
+  NULL,
   'Стас',
   NOW(),
   NOW()
@@ -2097,7 +2100,7 @@ SELECT
   10500,
   0,
   'ЕКБ 3',
-  (SELECT id FROM profiles WHERE display_name = 'Стас' LIMIT 1),
+  NULL,
   'Стас',
   NOW(),
   NOW()
@@ -2130,7 +2133,7 @@ SELECT
   10500,
   0,
   'ЕКБ 2',
-  (SELECT id FROM profiles WHERE display_name = 'Стас' LIMIT 1),
+  NULL,
   'Стас',
   NOW(),
   NOW()
@@ -2163,7 +2166,7 @@ SELECT
   10500,
   0,
   'ЕКБ 1',
-  (SELECT id FROM profiles WHERE display_name = 'Стас' LIMIT 1),
+  NULL,
   'Стас',
   NOW(),
   NOW()
@@ -2196,7 +2199,7 @@ SELECT
   9000,
   0,
   'Гатчина К 11:30 в дом чая , Катя Кореева',
-  (SELECT id FROM profiles WHERE display_name = 'Стас' LIMIT 1),
+  NULL,
   'Стас',
   NOW(),
   NOW()
@@ -2229,7 +2232,7 @@ SELECT
   2320,
   0,
   'в 9:00 старт от деревни универсиады. Подъедет к часам. Нужно ей отдать сумку, ваучер на свияжск, и зп. 9600₽',
-  (SELECT id FROM profiles WHERE display_name = 'Леонид' LIMIT 1),
+  NULL,
   'Леонид',
   NOW(),
   NOW()
@@ -2261,7 +2264,7 @@ SELECT
   3000,
   0,
   'Карат до 11:00. Оставят в спринтере у Оксаны',
-  (SELECT id FROM profiles WHERE display_name = 'Леонид' LIMIT 1),
+  NULL,
   'Леонид',
   NOW(),
   NOW()
@@ -2294,7 +2297,7 @@ SELECT
   2240,
   0,
   '14.11 в офис , оригинал счёта и акта',
-  (SELECT id FROM profiles WHERE display_name = 'Стас' LIMIT 1),
+  NULL,
   'Стас',
   NOW(),
   NOW()
@@ -2327,7 +2330,7 @@ SELECT
   1440,
   0,
   'От Сафара в Релиту',
-  (SELECT id FROM profiles WHERE display_name = 'Стас' LIMIT 1),
+  NULL,
   'Стас',
   NOW(),
   NOW()
@@ -2360,7 +2363,7 @@ SELECT
   2560,
   0,
   'На завтра 32 Радиогида. В 16:00 от отеля Волга. Гид Ольга Ткач. Ваучер Кремль',
-  (SELECT id FROM profiles WHERE display_name = 'Леонид' LIMIT 1),
+  NULL,
   'Леонид',
   NOW(),
   NOW()
@@ -2392,7 +2395,7 @@ SELECT
   6000,
   0,
   '22.11. Не работают. в отеле Рамада Казань на Чернышевского. Для булата валиуллина и Антона зенкова если что',
-  (SELECT id FROM profiles WHERE display_name = 'Леонид' LIMIT 1),
+  NULL,
   'Леонид',
   NOW(),
   NOW()
@@ -2425,7 +2428,7 @@ SELECT
   12400,
   0,
   '11-15 ноября , 31 радиогид. И ваучер на кремль, свияжск, булгар. гид Катя Ильина. Кристал 12:00',
-  (SELECT id FROM profiles WHERE display_name = 'Леонид' LIMIT 1),
+  NULL,
   'Леонид',
   NOW(),
   NOW()
@@ -2457,7 +2460,7 @@ SELECT
   10500,
   0,
   'В Азу до 12:00',
-  (SELECT id FROM profiles WHERE display_name = 'Леонид' LIMIT 1),
+  NULL,
   'Леонид',
   NOW(),
   NOW()
@@ -2490,7 +2493,7 @@ SELECT
   10500,
   0,
   'Щелково, 8:15 дом чая, оставят в кристалле после 21:00',
-  (SELECT id FROM profiles WHERE display_name = 'Стас' LIMIT 1),
+  NULL,
   'Стас',
   NOW(),
   NOW()
@@ -2523,7 +2526,7 @@ SELECT
   8200,
   0,
   '8 ноября к 11:30-12:00 в кафе «Азу» на Петербургской 52',
-  (SELECT id FROM profiles WHERE display_name = 'Леонид' LIMIT 1),
+  NULL,
   'Леонид',
   NOW(),
   NOW()
@@ -2556,7 +2559,7 @@ SELECT
   9200,
   0,
   'Заберет Владимир Нежданов. Из фургончика в 13:00',
-  (SELECT id FROM profiles WHERE display_name = 'Леонид' LIMIT 1),
+  NULL,
   'Леонид',
   NOW(),
   NOW()
@@ -2589,7 +2592,7 @@ SELECT
   1520,
   0,
   ', 7.11 к 9.20 а Дон Кихот радио гиды на19 человек гид Аида. Вернут после 20 в Донецке Кихот. +7 903 344-08-99 Аида',
-  (SELECT id FROM profiles WHERE display_name = 'Леонид' LIMIT 1),
+  NULL,
   'Леонид',
   NOW(),
   NOW()
@@ -2622,7 +2625,7 @@ SELECT
   9120,
   0,
   'Уточнить ОТМЕНА',
-  (SELECT id FROM profiles WHERE display_name = 'Стас' LIMIT 1),
+  NULL,
   'Стас',
   NOW(),
   NOW()
@@ -2655,7 +2658,7 @@ SELECT
   4160,
   0,
   'Гид Эльвира, Полина, в офис',
-  (SELECT id FROM profiles WHERE display_name = 'Стас' LIMIT 1),
+  NULL,
   'Стас',
   NOW(),
   NOW()
@@ -2688,7 +2691,7 @@ SELECT
   1360,
   0,
   'В офис до 13',
-  (SELECT id FROM profiles WHERE display_name = 'Стас' LIMIT 1),
+  NULL,
   'Стас',
   NOW(),
   NOW()
@@ -2721,7 +2724,7 @@ SELECT
   3900,
   0,
   '3 ноября на 1 день нужны радиогиды, 39 человек +гид Ирина т.+7 927 421-36-82 Группа приедет на ЦЖД в 12:30',
-  (SELECT id FROM profiles WHERE display_name = 'Леонид' LIMIT 1),
+  NULL,
   'Леонид',
   NOW(),
   NOW()
@@ -2754,7 +2757,7 @@ SELECT
   2560,
   0,
   'на завтра 32 радтогида в 11:00 от спасской башни кремля. И один ваучер на кремль. гид Гузель Габдрахманова . +7 917 283-86-75',
-  (SELECT id FROM profiles WHERE display_name = 'Леонид' LIMIT 1),
+  NULL,
   'Леонид',
   NOW(),
   NOW()
@@ -2786,7 +2789,7 @@ SELECT
   5920,
   0,
   'В офис 03 днем , вернут 4 после обеда Гид Диана, мен Полина',
-  (SELECT id FROM profiles WHERE display_name = 'Стас' LIMIT 1),
+  NULL,
   'Стас',
   NOW(),
   NOW()
@@ -2819,7 +2822,7 @@ SELECT
   2000,
   0,
   'Из Сафара в релиту',
-  (SELECT id FROM profiles WHERE display_name = 'Стас' LIMIT 1),
+  NULL,
   'Стас',
   NOW(),
   NOW()
@@ -2852,7 +2855,7 @@ SELECT
   1840,
   0,
   'Из биляра в Биляр',
-  (SELECT id FROM profiles WHERE display_name = 'Стас' LIMIT 1),
+  NULL,
   'Стас',
   NOW(),
   NOW()
@@ -2885,7 +2888,7 @@ SELECT
   2880,
   0,
   'В 10:30 заберут',
-  (SELECT id FROM profiles WHERE display_name = 'Стас' LIMIT 1),
+  NULL,
   'Стас',
   NOW(),
   NOW()
@@ -2918,7 +2921,7 @@ SELECT
   1500,
   0,
   'Заберет сама в 8:45',
-  (SELECT id FROM profiles WHERE display_name = 'Стас' LIMIT 1),
+  NULL,
   'Стас',
   NOW(),
   NOW()
@@ -2951,7 +2954,7 @@ SELECT
   1200,
   0,
   'В кафе Медину на спартаковской до 13',
-  (SELECT id FROM profiles WHERE display_name = 'Стас' LIMIT 1),
+  NULL,
   'Стас',
   NOW(),
   NOW()
@@ -2984,7 +2987,7 @@ SELECT
   4300,
   0,
   'На 6 ноября оставьте для нас радиомикрофоны в кол- ве 43 шт) Отель Волга. С 15:00 - До 20 ч там же и оставим',
-  (SELECT id FROM profiles WHERE display_name = 'Леонид' LIMIT 1),
+  NULL,
   'Леонид',
   NOW(),
   NOW()
@@ -3017,7 +3020,7 @@ SELECT
   1680,
   0,
   'в офис до 15:00',
-  (SELECT id FROM profiles WHERE display_name = 'Леонид' LIMIT 1),
+  NULL,
   'Леонид',
   NOW(),
   NOW()
@@ -3050,7 +3053,7 @@ SELECT
   4880,
   0,
   'Две сумки на 37 и 26шт Гид Резида и Людмила , Полина',
-  (SELECT id FROM profiles WHERE display_name = 'Стас' LIMIT 1),
+  NULL,
   'Стас',
   NOW(),
   NOW()
@@ -3083,7 +3086,7 @@ SELECT
   5100,
   0,
   'заберет из бусика ВЕРНЕТ В КРИССТАЛ ПОСЛЕ 22:00',
-  (SELECT id FROM profiles WHERE display_name = 'Леонид' LIMIT 1),
+  NULL,
   'Леонид',
   NOW(),
   NOW()
@@ -3116,7 +3119,7 @@ SELECT
   5040,
   0,
   'Заявка на 28 и 29 октября 36 человек +гид Лиля т.+7 965 602-05-28 28.10 приезжают в 12:30 на ЦЖД. ВЕРНУТ В РИВЬЕРУ',
-  (SELECT id FROM profiles WHERE display_name = 'Леонид' LIMIT 1),
+  NULL,
   'Леонид',
   NOW(),
   NOW()
@@ -3149,7 +3152,7 @@ SELECT
   2000,
   0,
   '-',
-  (SELECT id FROM profiles WHERE display_name = 'Леонид' LIMIT 1),
+  NULL,
   'Леонид',
   NOW(),
   NOW()
@@ -3182,7 +3185,7 @@ SELECT
   4620,
   0,
   'Гостиница Булгар 2* , улица Вишневского 21 33+ гид Владимир т 89178858409 На 27 и 28 октября',
-  (SELECT id FROM profiles WHERE display_name = 'Леонид' LIMIT 1),
+  NULL,
   'Леонид',
   NOW(),
   NOW()
@@ -3215,7 +3218,7 @@ SELECT
   1760,
   0,
   '29.10 22 чел. Карат к 8.20 вернут по созвону в 16.00 гид Диляра Рафкатовна 89179275489. СУМОЧКА В КАРАТЕ',
-  (SELECT id FROM profiles WHERE display_name = 'Леонид' LIMIT 1),
+  NULL,
   'Леонид',
   NOW(),
   NOW()
@@ -3248,7 +3251,7 @@ SELECT
   3920,
   0,
   '28.10 49 чел. к 9.30 в хостел Крылья вернут по созвону после 16. гид Николай 89172349414. ВЕРНУТ В ОФИС',
-  (SELECT id FROM profiles WHERE display_name = 'Леонид' LIMIT 1),
+  NULL,
   'Леонид',
   NOW(),
   NOW()
@@ -3281,7 +3284,7 @@ SELECT
   9600,
   0,
   '28-30.10 40 чел. 28 в Кристалл к 10.30 вернут в Кристалл 30.10 после 23.00 гид Гульсина Закиевна 89178975685',
-  (SELECT id FROM profiles WHERE display_name = 'Леонид' LIMIT 1),
+  NULL,
   'Леонид',
   NOW(),
   NOW()
@@ -3314,7 +3317,7 @@ SELECT
   7200,
   0,
   '27-28.10 40 чел. 27 в Кристалл в 12 вернут 28 в Кристалл в 17.гид Лилия 89872975449',
-  (SELECT id FROM profiles WHERE display_name = 'Леонид' LIMIT 1),
+  NULL,
   'Леонид',
   NOW(),
   NOW()
@@ -3347,7 +3350,7 @@ SELECT
   6400,
   0,
   '27-28.10 40чел. 27 в Кристалл в 12 вернут в Кристалл 28 в 17 гид Диана 8927445452527',
-  (SELECT id FROM profiles WHERE display_name = 'Леонид' LIMIT 1),
+  NULL,
   'Леонид',
   NOW(),
   NOW()
@@ -3380,7 +3383,7 @@ SELECT
   12240,
   0,
   'Гид Яна, доставкой, добавить в счёт 238₽ , Любовь',
-  (SELECT id FROM profiles WHERE display_name = 'Стас' LIMIT 1),
+  NULL,
   'Стас',
   NOW(),
   NOW()
@@ -3413,7 +3416,7 @@ SELECT
   1920,
   0,
   '26.10 24чел. Кристалл 9.30 вернут после 20.00 в Кристалл гид Ирина 89046620732 Вернут в 09:00 в кристалл 27.10',
-  (SELECT id FROM profiles WHERE display_name = 'Леонид' LIMIT 1),
+  NULL,
   'Леонид',
   NOW(),
   NOW()
@@ -3446,7 +3449,7 @@ SELECT
   6600,
   0,
   'В дом чая до 13. Оставят в кристалл после 22:30',
-  (SELECT id FROM profiles WHERE display_name = 'Стас' LIMIT 1),
+  NULL,
   'Стас',
   NOW(),
   NOW()
@@ -3479,7 +3482,7 @@ SELECT
   2500,
   0,
   'кафе азу до 14;30. Вернут в 19:00 к свито холлу',
-  (SELECT id FROM profiles WHERE display_name = 'Леонид' LIMIT 1),
+  NULL,
   'Леонид',
   NOW(),
   NOW()
@@ -3512,7 +3515,7 @@ SELECT
   3520,
   0,
   '25.10 22 чел. хостел Крылья в 6.00 сдадут 26.10 после 16. по созвону. гид Татьяна 89600344289 Вернули в крылья',
-  (SELECT id FROM profiles WHERE display_name = 'Леонид' LIMIT 1),
+  NULL,
   'Леонид',
   NOW(),
   NOW()
@@ -3545,7 +3548,7 @@ SELECT
   1600,
   0,
   '25.10 20 чел. Кристалл в 10 вернут по созвону. гида Марина 89172526993',
-  (SELECT id FROM profiles WHERE display_name = 'Леонид' LIMIT 1),
+  NULL,
   'Леонид',
   NOW(),
   NOW()
@@ -3578,7 +3581,7 @@ SELECT
   4320,
   0,
   'В офис до 12, Римма',
-  (SELECT id FROM profiles WHERE display_name = 'Стас' LIMIT 1),
+  NULL,
   'Стас',
   NOW(),
   NOW()
@@ -3611,7 +3614,7 @@ SELECT
   4500,
   0,
   'Эверест в 17:00 в мано',
-  (SELECT id FROM profiles WHERE display_name = 'Леонид' LIMIT 1),
+  NULL,
   'Леонид',
   NOW(),
   NOW()
@@ -3644,7 +3647,7 @@ SELECT
   5440,
   0,
   'Кристал вернули туда же. 1 потеряли',
-  (SELECT id FROM profiles WHERE display_name = 'Леонид' LIMIT 1),
+  NULL,
   'Леонид',
   NOW(),
   NOW()
@@ -3677,7 +3680,7 @@ SELECT
   11641,
   0,
   'Группа #1 Начало в Свияжске в 9 утра 42 человека + гид Аида т. +79033440899 Группа #2 Начало в 10:00 на ЦЖД 45 человек + гид Татьяна т.89063271840 Группа #3 Начало в 10:00 на ЦЖД 29 человек + гид Ирина т.89274213682 Группа #4 Начало в 10:00 на ЦЖД 37 человек + гид Владимир т.89178858409 Все группы заканчивают в 20:10-20:30 на ЦЖД 43,46,30,38',
-  (SELECT id FROM profiles WHERE display_name = 'Леонид' LIMIT 1),
+  NULL,
   'Леонид',
   NOW(),
   NOW()
@@ -3710,7 +3713,7 @@ SELECT
   15200,
   0,
   'две сумки по 40',
-  (SELECT id FROM profiles WHERE display_name = 'Леонид' LIMIT 1),
+  NULL,
   'Леонид',
   NOW(),
   NOW()
@@ -3743,7 +3746,7 @@ SELECT
   6000,
   0,
   '2 сумки по 31. Кристал. Ирина софронова и Ирина совельева ВЕЧЕРОМ',
-  (SELECT id FROM profiles WHERE display_name = 'Леонид' LIMIT 1),
+  NULL,
   'Леонид',
   NOW(),
   NOW()
@@ -3776,7 +3779,7 @@ SELECT
   2000,
   0,
   'К 15:00 заберут из фургончика Двойной комплект наушников',
-  (SELECT id FROM profiles WHERE display_name = 'Стас' LIMIT 1),
+  NULL,
   'Стас',
   NOW(),
   NOW()
@@ -3809,7 +3812,7 @@ SELECT
   8400,
   0,
   'Волга начало в 12:30. Елена.',
-  (SELECT id FROM profiles WHERE display_name = 'Леонид' LIMIT 1),
+  NULL,
   'Леонид',
   NOW(),
   NOW()
@@ -3842,7 +3845,7 @@ SELECT
   5680,
   0,
   'Сумки указаны в программе',
-  (SELECT id FROM profiles WHERE display_name = 'Леонид' LIMIT 1),
+  NULL,
   'Леонид',
   NOW(),
   NOW()
@@ -3874,7 +3877,7 @@ SELECT
   4160,
   0,
   'Накануне, гид Надежда, римма',
-  (SELECT id FROM profiles WHERE display_name = 'Стас' LIMIT 1),
+  NULL,
   'Стас',
   NOW(),
   NOW()
@@ -3907,7 +3910,7 @@ SELECT
   6960,
   0,
   '2 сумки на 43 и 44шт утром, Римма',
-  (SELECT id FROM profiles WHERE display_name = 'Стас' LIMIT 1),
+  NULL,
   'Стас',
   NOW(),
   NOW()
@@ -3940,7 +3943,7 @@ SELECT
   1600,
   0,
   '1 ноября . 20 радиогидов . в 10:00 от отеля Арон + ваучер на свияжск. Лариса',
-  (SELECT id FROM profiles WHERE display_name = 'Леонид' LIMIT 1),
+  NULL,
   'Леонид',
   NOW(),
   NOW()
@@ -3972,7 +3975,7 @@ SELECT
   2640,
   0,
   '26 октября 33 радиогида + ваучер на кремль 9:30 от у ТЦ "Аида" Остановка Лаврентьева . Гид Ольга Ткач',
-  (SELECT id FROM profiles WHERE display_name = 'Леонид' LIMIT 1),
+  NULL,
   'Леонид',
   NOW(),
   NOW()
@@ -4004,7 +4007,7 @@ SELECT
   4000,
   0,
   '19 октября 40 радиогидов. Утром в 9.30 забираю группу в Гранд отеле.',
-  (SELECT id FROM profiles WHERE display_name = 'Леонид' LIMIT 1),
+  NULL,
   'Леонид',
   NOW(),
   NOW()
@@ -4037,7 +4040,7 @@ SELECT
   40000,
   0,
   'В 9:30 Маяковского 24А',
-  (SELECT id FROM profiles WHERE display_name = 'Стас' LIMIT 1),
+  NULL,
   'Стас',
   NOW(),
   NOW()
@@ -4070,7 +4073,7 @@ SELECT
   4240,
   0,
   'В офис утром Римма',
-  (SELECT id FROM profiles WHERE display_name = 'Стас' LIMIT 1),
+  NULL,
   'Стас',
   NOW(),
   NOW()
@@ -4103,7 +4106,7 @@ SELECT
   9600,
   0,
   'Кристал. Гулистан Закиевна. +79178975685',
-  (SELECT id FROM profiles WHERE display_name = 'Леонид' LIMIT 1),
+  NULL,
   'Леонид',
   NOW(),
   NOW()
@@ -4136,7 +4139,7 @@ SELECT
   4100,
   0,
   'Фатима. Сумка в Кристалле',
-  (SELECT id FROM profiles WHERE display_name = 'Леонид' LIMIT 1),
+  NULL,
   'Леонид',
   NOW(),
   NOW()
@@ -4169,7 +4172,7 @@ SELECT
   1500,
   0,
   'заберет в 11:40',
-  (SELECT id FROM profiles WHERE display_name = 'Леонид' LIMIT 1),
+  NULL,
   'Леонид',
   NOW(),
   NOW()
@@ -4202,7 +4205,7 @@ SELECT
   20200,
   0,
   'Поезд в 9:05 Казань пасс 1) 52+1 гид Наталья Жукова +7 (927) 243-43-67 2) 54+1 гид Валерий Матросов +7 (905) 319-54-86 3) 52+1 гид Зельфира +7 (987) 275-03-95 4) 22+1 гид на 2 дня Снежана +7 (927) 414-91-01 (5:02) поезд Заканчивают в 21:30 на жд',
-  (SELECT id FROM profiles WHERE display_name = 'Стас' LIMIT 1),
+  NULL,
   'Стас',
   NOW(),
   NOW()
@@ -4235,7 +4238,7 @@ SELECT
   7840,
   0,
   'В офис, гид Лилия, Полина',
-  (SELECT id FROM profiles WHERE display_name = 'Стас' LIMIT 1),
+  NULL,
   'Стас',
   NOW(),
   NOW()
@@ -4268,7 +4271,7 @@ SELECT
   1520,
   0,
   'Кристалл',
-  (SELECT id FROM profiles WHERE display_name = 'Стас' LIMIT 1),
+  NULL,
   'Стас',
   NOW(),
   NOW()
@@ -4301,7 +4304,7 @@ SELECT
   2240,
   0,
   'Марина Трэвел Юлия (2гр) В кристалл В офис Инициативы принесут 01.11',
-  (SELECT id FROM profiles WHERE display_name = 'Стас' LIMIT 1),
+  NULL,
   'Стас',
   NOW(),
   NOW()
@@ -4334,7 +4337,7 @@ SELECT
   12300,
   0,
   'Экскурсовод Марина 8917 288-90-13 Дома чая до 15:30',
-  (SELECT id FROM profiles WHERE display_name = 'Стас' LIMIT 1),
+  NULL,
   'Стас',
   NOW(),
   NOW()
@@ -4367,7 +4370,7 @@ SELECT
   15200,
   0,
   'Дом чая до 15:30',
-  (SELECT id FROM profiles WHERE display_name = 'Стас' LIMIT 1),
+  NULL,
   'Стас',
   NOW(),
   NOW()
@@ -4400,7 +4403,7 @@ SELECT
   10200,
   0,
   'К 14:30 дома Чая, Катя Кореева ВЕРНЕТ В КРИСТАЛЛ ПОСЛЕ 20:00',
-  (SELECT id FROM profiles WHERE display_name = 'Стас' LIMIT 1),
+  NULL,
   'Стас',
   NOW(),
   NOW()
@@ -4433,7 +4436,7 @@ SELECT
   13200,
   0,
   'Гид Диляра Ахмерова +7 950 327-62-72 Поезд прибывает 27 октября 377 в 12:29 . Кристал. ВЕРНУЛИ В ШАЛЯПИН',
-  (SELECT id FROM profiles WHERE display_name = 'Леонид' LIMIT 1),
+  NULL,
   'Леонид',
   NOW(),
   NOW()
@@ -4466,7 +4469,7 @@ SELECT
   4000,
   0,
   '-',
-  (SELECT id FROM profiles WHERE display_name = 'Леонид' LIMIT 1),
+  NULL,
   'Леонид',
   NOW(),
   NOW()
@@ -4499,7 +4502,7 @@ SELECT
   7840,
   0,
   '-',
-  (SELECT id FROM profiles WHERE display_name = 'Стас' LIMIT 1),
+  NULL,
   'Стас',
   NOW(),
   NOW()
@@ -4532,7 +4535,7 @@ SELECT
   10560,
   0,
   'Отмена!',
-  (SELECT id FROM profiles WHERE display_name = 'Стас' LIMIT 1),
+  NULL,
   'Стас',
   NOW(),
   NOW()
@@ -4565,7 +4568,7 @@ SELECT
   5500,
   0,
   'Сопровождающая группы Ирина +7 951 908-31-31. Будем ждать вас в Туган Авылым 11.10 в 12:30. окончание экскурсии в 18:00.',
-  (SELECT id FROM profiles WHERE display_name = 'Стас' LIMIT 1),
+  NULL,
   'Стас',
   NOW(),
   NOW()
@@ -4598,7 +4601,7 @@ SELECT
   10000,
   0,
   'Сами заберут и вернут После обеда',
-  (SELECT id FROM profiles WHERE display_name = 'Стас' LIMIT 1),
+  NULL,
   'Стас',
   NOW(),
   NOW()
@@ -4631,7 +4634,7 @@ SELECT
   1440,
   0,
   'От Сафара в Сулейман',
-  (SELECT id FROM profiles WHERE display_name = 'Стас' LIMIT 1),
+  NULL,
   'Стас',
   NOW(),
   NOW()
@@ -4664,7 +4667,7 @@ SELECT
   6200,
   0,
   'Заберет в +/- 12:00. 12 числа',
-  (SELECT id FROM profiles WHERE display_name = 'Леонид' LIMIT 1),
+  NULL,
   'Леонид',
   NOW(),
   NOW()
@@ -4697,7 +4700,7 @@ SELECT
   10600,
   0,
   'Ф Крис стал',
-  (SELECT id FROM profiles WHERE display_name = 'Стас' LIMIT 1),
+  NULL,
   'Стас',
   NOW(),
   NOW()
@@ -4730,7 +4733,7 @@ SELECT
   4600,
   0,
   'Сумка в Волге',
-  (SELECT id FROM profiles WHERE display_name = 'Леонид' LIMIT 1),
+  NULL,
   'Леонид',
   NOW(),
   NOW()
@@ -4763,7 +4766,7 @@ SELECT
   12960,
   0,
   'В гфис любовь',
-  (SELECT id FROM profiles WHERE display_name = 'Стас' LIMIT 1),
+  NULL,
   'Стас',
   NOW(),
   NOW()
@@ -4796,7 +4799,7 @@ SELECT
   1600,
   0,
   'Заберут до 14:00',
-  (SELECT id FROM profiles WHERE display_name = 'Стас' LIMIT 1),
+  NULL,
   'Стас',
   NOW(),
   NOW()
@@ -4829,7 +4832,7 @@ SELECT
   3760,
   0,
   '2 сумки на 27шт и 20шт, во второй половине дня',
-  (SELECT id FROM profiles WHERE display_name = 'Стас' LIMIT 1),
+  NULL,
   'Стас',
   NOW(),
   NOW()
@@ -4862,7 +4865,7 @@ SELECT
   3840,
   0,
   'В офис 16.10 Забрать 21 в обед оригинал акт и счёт',
-  (SELECT id FROM profiles WHERE display_name = 'Стас' LIMIT 1),
+  NULL,
   'Стас',
   NOW(),
   NOW()
@@ -4895,7 +4898,7 @@ SELECT
   3200,
   0,
   'Гид Аида, Римма',
-  (SELECT id FROM profiles WHERE display_name = 'Стас' LIMIT 1),
+  NULL,
   'Стас',
   NOW(),
   NOW()
@@ -4928,7 +4931,7 @@ SELECT
   3600,
   0,
   'В офис, Римма',
-  (SELECT id FROM profiles WHERE display_name = 'Стас' LIMIT 1),
+  NULL,
   'Стас',
   NOW(),
   NOW()
@@ -4961,7 +4964,7 @@ SELECT
   6080,
   0,
   'Гид Николай, мне Римма, в офис Тиц 7.10',
-  (SELECT id FROM profiles WHERE display_name = 'Стас' LIMIT 1),
+  NULL,
   'Стас',
   NOW(),
   NOW()
@@ -4994,7 +4997,7 @@ SELECT
   2800,
   0,
   '30 октября .35 штук . 11:00 от жд вокзала центрального. Нина Максимова, ваучер Кремль',
-  (SELECT id FROM profiles WHERE display_name = 'Леонид' LIMIT 1),
+  NULL,
   'Леонид',
   NOW(),
   NOW()
@@ -5026,7 +5029,7 @@ SELECT
   3280,
   0,
   '24 октября , 41 штука. в 8:30 Хотел 13 ул.Московская д.13а. Светлана Чиж, ваучер на кремль',
-  (SELECT id FROM profiles WHERE display_name = 'Леонид' LIMIT 1),
+  NULL,
   'Леонид',
   NOW(),
   NOW()
@@ -5058,7 +5061,7 @@ SELECT
   5600,
   0,
   '28-29 октября . 35 штук . гид Нина Максимова 28 октября в 11:00 от центрального жд',
-  (SELECT id FROM profiles WHERE display_name = 'Леонид' LIMIT 1),
+  NULL,
   'Леонид',
   NOW(),
   NOW()
@@ -5090,7 +5093,7 @@ SELECT
   2080,
   0,
   'на завтра 26 радиогидов иваучер на свияжск . в 9:00 от площади тукая . Гид Лариса Семенова ( ей на вечерке сегодня все можно передать)',
-  (SELECT id FROM profiles WHERE display_name = 'Леонид' LIMIT 1),
+  NULL,
   'Леонид',
   NOW(),
   NOW()
@@ -5122,7 +5125,7 @@ SELECT
   3600,
   0,
   'Амакс Сафар. Вернула в офис',
-  (SELECT id FROM profiles WHERE display_name = 'Леонид' LIMIT 1),
+  NULL,
   'Леонид',
   NOW(),
   NOW()
@@ -5155,7 +5158,7 @@ SELECT
   11760,
   0,
   'Доставкой сами вызовут Любовь',
-  (SELECT id FROM profiles WHERE display_name = 'Стас' LIMIT 1),
+  NULL,
   'Стас',
   NOW(),
   NOW()
@@ -5188,7 +5191,7 @@ SELECT
   4320,
   0,
   'Оставить в парк отеле',
-  (SELECT id FROM profiles WHERE display_name = 'Стас' LIMIT 1),
+  NULL,
   'Стас',
   NOW(),
   NOW()
@@ -5221,7 +5224,7 @@ SELECT
   1920,
   0,
   'Вернут в офис Тиц к 19:00 Мен Анна',
-  (SELECT id FROM profiles WHERE display_name = 'Стас' LIMIT 1),
+  NULL,
   'Стас',
   NOW(),
   NOW()
@@ -5254,7 +5257,7 @@ SELECT
   3000,
   0,
   'Эллинлайн Инн --7807028247--12.10 , туристов --30 , едут из Иошкар Олы, тел гида из Казани, 89033428060--Светлана Сумка в кристале',
-  (SELECT id FROM profiles WHERE display_name = 'Леонид' LIMIT 1),
+  NULL,
   'Леонид',
   NOW(),
   NOW()
@@ -5287,7 +5290,7 @@ SELECT
   2080,
   0,
   'заберет Игорь в 9:10. +79274055070. Вернул в фургончик',
-  (SELECT id FROM profiles WHERE display_name = 'Леонид' LIMIT 1),
+  NULL,
   'Леонид',
   NOW(),
   NOW()
@@ -5320,7 +5323,7 @@ SELECT
   4080,
   0,
   '28 октября с 9:00 до 13:30 экскурсовод елена +79053162973 В релиту Оставят в Азу у АйТи парка в 12:30',
-  (SELECT id FROM profiles WHERE display_name = 'Стас' LIMIT 1),
+  NULL,
   'Стас',
   NOW(),
   NOW()
@@ -5353,7 +5356,7 @@ SELECT
   4080,
   0,
   '26 октября с 11 :00 до 18:00 Экскурсовод снежана+79274149101 В Азу на Петербургской до 12 Оставят в Релите в 18',
-  (SELECT id FROM profiles WHERE display_name = 'Стас' LIMIT 1),
+  NULL,
   'Стас',
   NOW(),
   NOW()
@@ -5386,7 +5389,7 @@ SELECT
   2320,
   0,
   'Сулейман . Аида. Вернут вечером в Кристал',
-  (SELECT id FROM profiles WHERE display_name = 'Леонид' LIMIT 1),
+  NULL,
   'Леонид',
   NOW(),
   NOW()
@@ -5419,7 +5422,7 @@ SELECT
   7800,
   0,
   'Бирку не делал. Сумка без номера. Пломба 2482',
-  (SELECT id FROM profiles WHERE display_name = 'Леонид' LIMIT 1),
+  NULL,
   'Леонид',
   NOW(),
   NOW()
@@ -5452,7 +5455,7 @@ SELECT
   4000,
   0,
   'завтра 50 штук оборудование. В 9:00 от Бутлерова 44. гид Настя Семенова , ей надо передать ваучер на булгар и документы для клиента. документы я смогу передать тебе после 14:00',
-  (SELECT id FROM profiles WHERE display_name = 'Леонид' LIMIT 1),
+  NULL,
   'Леонид',
   NOW(),
   NOW()
@@ -5484,7 +5487,7 @@ SELECT
   5600,
   0,
   'Вернут в офис Инициативы, в пн забрать с деньгами',
-  (SELECT id FROM profiles WHERE display_name = 'Стас' LIMIT 1),
+  NULL,
   'Стас',
   NOW(),
   NOW()
@@ -5517,7 +5520,7 @@ SELECT
   4640,
   0,
   'Оставят 6 утром в парк отеле',
-  (SELECT id FROM profiles WHERE display_name = 'Стас' LIMIT 1),
+  NULL,
   'Стас',
   NOW(),
   NOW()
@@ -5550,7 +5553,7 @@ SELECT
   5520,
   0,
   '3-5 октября , группа 23 человека . Нужны радиогиды +ваучер на кремль и свияжск . Гид Нина Максимова . завтра в 7:50 от центрального жд. Сумка в фургончике',
-  (SELECT id FROM profiles WHERE display_name = 'Леонид' LIMIT 1),
+  NULL,
   'Леонид',
   NOW(),
   NOW()
@@ -5582,7 +5585,7 @@ SELECT
   2500,
   0,
   'Волга',
-  (SELECT id FROM profiles WHERE display_name = 'Леонид' LIMIT 1),
+  NULL,
   'Леонид',
   NOW(),
   NOW()
@@ -5615,7 +5618,7 @@ SELECT
   4700,
   0,
   'Волга. Начало в 14:30',
-  (SELECT id FROM profiles WHERE display_name = 'Леонид' LIMIT 1),
+  NULL,
   'Леонид',
   NOW(),
   NOW()
@@ -5648,7 +5651,7 @@ SELECT
   4800,
   0,
   'Заберет в 8:30',
-  (SELECT id FROM profiles WHERE display_name = 'Стас' LIMIT 1),
+  NULL,
   'Стас',
   NOW(),
   NOW()
@@ -5681,7 +5684,7 @@ SELECT
   2500,
   0,
   '6 октября 15:00-18:00 25 радиогдиов на имя гида Татьяна Сулеймманова, отель Мариотт Казань',
-  (SELECT id FROM profiles WHERE display_name = 'Леонид' LIMIT 1),
+  NULL,
   'Леонид',
   NOW(),
   NOW()
@@ -5714,7 +5717,7 @@ SELECT
   6000,
   0,
   'Вернет в пн утром',
-  (SELECT id FROM profiles WHERE display_name = 'Леонид' LIMIT 1),
+  NULL,
   'Леонид',
   NOW(),
   NOW()
@@ -5747,7 +5750,7 @@ SELECT
   1520,
   0,
   '-',
-  (SELECT id FROM profiles WHERE display_name = 'Леонид' LIMIT 1),
+  NULL,
   'Леонид',
   NOW(),
   NOW()
@@ -5780,7 +5783,7 @@ SELECT
   8400,
   0,
   'В Марриот 3 сумки по 36шт Гиды: Наталия +7 987 238-41-05 София +7 905 038-37-23 Элина +7 917 236-98-27 В 14 вернут туда же, уточнить',
-  (SELECT id FROM profiles WHERE display_name = 'Стас' LIMIT 1),
+  NULL,
   'Стас',
   NOW(),
   NOW()
@@ -5813,7 +5816,7 @@ SELECT
   16000,
   0,
   'Отказ',
-  (SELECT id FROM profiles WHERE display_name = 'Стас' LIMIT 1),
+  NULL,
   'Стас',
   NOW(),
   NOW()
@@ -5846,7 +5849,7 @@ SELECT
   7200,
   0,
   'В кристалл оставит к 22',
-  (SELECT id FROM profiles WHERE display_name = 'Стас' LIMIT 1),
+  NULL,
   'Стас',
   NOW(),
   NOW()
@@ -5879,7 +5882,7 @@ SELECT
   10000,
   0,
   'В Ривьеру до 16:00, вернут в 19:30 туда же',
-  (SELECT id FROM profiles WHERE display_name = 'Стас' LIMIT 1),
+  NULL,
   'Стас',
   NOW(),
   NOW()
@@ -5912,7 +5915,7 @@ SELECT
   1040,
   0,
   'Нужен набор на 13+1 3.10 16:00-20:30 забрать и отнести можем сами на Баумана вам.',
-  (SELECT id FROM profiles WHERE display_name = 'Стас' LIMIT 1),
+  NULL,
   'Стас',
   NOW(),
   NOW()
@@ -5945,7 +5948,7 @@ SELECT
   2240,
   0,
   'в офис',
-  (SELECT id FROM profiles WHERE display_name = 'Леонид' LIMIT 1),
+  NULL,
   'Леонид',
   NOW(),
   NOW()
@@ -5978,7 +5981,7 @@ SELECT
   3920,
   0,
   'В офис тиц до 11, гид Юрий',
-  (SELECT id FROM profiles WHERE display_name = 'Стас' LIMIT 1),
+  NULL,
   'Стас',
   NOW(),
   NOW()
@@ -6011,7 +6014,7 @@ SELECT
   1200,
   0,
   'Заберет из бусика',
-  (SELECT id FROM profiles WHERE display_name = 'Леонид' LIMIT 1),
+  NULL,
   'Леонид',
   NOW(),
   NOW()
@@ -6044,7 +6047,7 @@ SELECT
   2160,
   0,
   'От Корстон в Корстон',
-  (SELECT id FROM profiles WHERE display_name = 'Стас' LIMIT 1),
+  NULL,
   'Стас',
   NOW(),
   NOW()
@@ -6077,7 +6080,7 @@ SELECT
   1920,
   0,
   'От Сафара, до Корстона',
-  (SELECT id FROM profiles WHERE display_name = 'Стас' LIMIT 1),
+  NULL,
   'Стас',
   NOW(),
   NOW()
@@ -6110,7 +6113,7 @@ SELECT
   5680,
   0,
   '-',
-  (SELECT id FROM profiles WHERE display_name = 'Леонид' LIMIT 1),
+  NULL,
   'Леонид',
   NOW(),
   NOW()
@@ -6143,7 +6146,7 @@ SELECT
   2400,
   0,
   'Заберет сама в районе в 8:15',
-  (SELECT id FROM profiles WHERE display_name = 'Леонид' LIMIT 1),
+  NULL,
   'Леонид',
   NOW(),
   NOW()
@@ -6176,7 +6179,7 @@ SELECT
   11840,
   0,
   'В пн вернут',
-  (SELECT id FROM profiles WHERE display_name = 'Леонид' LIMIT 1),
+  NULL,
   'Леонид',
   NOW(),
   NOW()
@@ -6209,7 +6212,7 @@ SELECT
   5600,
   0,
   '1-2.11 35 чел. 1.11 в Кристалл к 12 вернут 2.11 по созвону гид Владимир Николаевич 89178858409. ВЕРНУЛ В КРИСТАЛ',
-  (SELECT id FROM profiles WHERE display_name = 'Леонид' LIMIT 1),
+  NULL,
   'Леонид',
   NOW(),
   NOW()
@@ -6242,7 +6245,7 @@ SELECT
   11280,
   0,
   '-',
-  (SELECT id FROM profiles WHERE display_name = 'Леонид' LIMIT 1),
+  NULL,
   'Леонид',
   NOW(),
   NOW()
@@ -6275,7 +6278,7 @@ SELECT
   3760,
   0,
   'Кристал',
-  (SELECT id FROM profiles WHERE display_name = 'Леонид' LIMIT 1),
+  NULL,
   'Леонид',
   NOW(),
   NOW()
@@ -6308,7 +6311,7 @@ SELECT
   3500,
   0,
   '-',
-  (SELECT id FROM profiles WHERE display_name = 'Леонид' LIMIT 1),
+  NULL,
   'Леонид',
   NOW(),
   NOW()
@@ -6341,7 +6344,7 @@ SELECT
   4400,
   0,
   'Оставил в Шаляпин',
-  (SELECT id FROM profiles WHERE display_name = 'Леонид' LIMIT 1),
+  NULL,
   'Леонид',
   NOW(),
   NOW()
@@ -6374,7 +6377,7 @@ SELECT
   2080,
   0,
   'Кристал, вернут туда же',
-  (SELECT id FROM profiles WHERE display_name = 'Леонид' LIMIT 1),
+  NULL,
   'Леонид',
   NOW(),
   NOW()
@@ -6407,7 +6410,7 @@ SELECT
   8000,
   0,
   'Сергей и Резеда Оставят в 317',
-  (SELECT id FROM profiles WHERE display_name = 'Леонид' LIMIT 1),
+  NULL,
   'Леонид',
   NOW(),
   NOW()
@@ -6439,7 +6442,7 @@ SELECT
   13760,
   0,
   '27-30.10 43 чел. 27 в Кристалле в 11 вернут 30 в Кристалл после 23.00гид Игорь 89274055070 ВЕЧЕРОМ ВЕРНЕТ К 12 в фургончик',
-  (SELECT id FROM profiles WHERE display_name = 'Леонид' LIMIT 1),
+  NULL,
   'Леонид',
   NOW(),
   NOW()
@@ -6472,7 +6475,7 @@ SELECT
   7200,
   0,
   '27.10-29.10 45 чел. 27 в Кристалле в 7.30 вернут 29 в Кристалл в 17.30 гид Аида 89033440899 ВЕЧЕРОМ. ОСТАВИЛИ ХОСТЕЛ СЛИП СПЕЙС. ЧИСТОПОЛЬСКАЯ 19А, 3 этаж, офис 36',
-  (SELECT id FROM profiles WHERE display_name = 'Леонид' LIMIT 1),
+  NULL,
   'Леонид',
   NOW(),
   NOW()
@@ -6505,7 +6508,7 @@ SELECT
   8880,
   0,
   '26-29.10 *без28 октября* 37 чел. в Кристалл к 11 сдадут 29.10 в кристалл после 19.30 гид Дания 89172904415 живут в Кварте.',
-  (SELECT id FROM profiles WHERE display_name = 'Леонид' LIMIT 1),
+  NULL,
   'Леонид',
   NOW(),
   NOW()
@@ -6538,7 +6541,7 @@ SELECT
   7200,
   0,
   '26-28.10 30 чел. Кристалл в 7.30 сдадут 28.10 после 17 в Кристалл ВЕЧЕРОМ гид Ольга 89503140361',
-  (SELECT id FROM profiles WHERE display_name = 'Леонид' LIMIT 1),
+  NULL,
   'Леонид',
   NOW(),
   NOW()
@@ -6571,7 +6574,7 @@ SELECT
   11520,
   0,
   'Кристал. Игорь. +79274055070',
-  (SELECT id FROM profiles WHERE display_name = 'Леонид' LIMIT 1),
+  NULL,
   'Леонид',
   NOW(),
   NOW()
@@ -6604,7 +6607,7 @@ SELECT
   3360,
   0,
   'Оставить в фургончике до 13:00',
-  (SELECT id FROM profiles WHERE display_name = 'Леонид' LIMIT 1),
+  NULL,
   'Леонид',
   NOW(),
   NOW()
@@ -6637,7 +6640,7 @@ SELECT
   1600,
   0,
   'Кристалл для Веры Валерьевны',
-  (SELECT id FROM profiles WHERE display_name = 'Стас' LIMIT 1),
+  NULL,
   'Стас',
   NOW(),
   NOW()
@@ -6670,7 +6673,7 @@ SELECT
   2160,
   0,
   'Оставить в бусике до 16:00, вернут в 18:40',
-  (SELECT id FROM profiles WHERE display_name = 'Стас' LIMIT 1),
+  NULL,
   'Стас',
   NOW(),
   NOW()
@@ -6703,7 +6706,7 @@ SELECT
   9360,
   0,
   'Сумка в офисе',
-  (SELECT id FROM profiles WHERE display_name = 'Стас' LIMIT 1),
+  NULL,
   'Стас',
   NOW(),
   NOW()
@@ -6736,7 +6739,7 @@ SELECT
   3040,
   0,
   'Светлана Чиж, ваучер на Кремль , Московская 48',
-  (SELECT id FROM profiles WHERE display_name = 'Леонид' LIMIT 1),
+  NULL,
   'Леонид',
   NOW(),
   NOW()
@@ -6768,7 +6771,7 @@ SELECT
   800,
   0,
   '-',
-  (SELECT id FROM profiles WHERE display_name = 'Стас' LIMIT 1),
+  NULL,
   'Стас',
   NOW(),
   NOW()
@@ -6801,7 +6804,7 @@ SELECT
   7200,
   0,
   'В офис 25, гид Николай и Татьяна, мен Римма',
-  (SELECT id FROM profiles WHERE display_name = 'Стас' LIMIT 1),
+  NULL,
   'Стас',
   NOW(),
   NOW()
@@ -6834,7 +6837,7 @@ SELECT
   1360,
   0,
   'От Сафара до Сулеймана',
-  (SELECT id FROM profiles WHERE display_name = 'Стас' LIMIT 1),
+  NULL,
   'Стас',
   NOW(),
   NOW()
@@ -6867,7 +6870,7 @@ SELECT
   10880,
   0,
   '25-28 нужно 34 радиогида гид Владимир Николаевич 89178858409 привезти надо в отель Давыдов на К! Маркса к 9.30 , а сдаст сам к Вам в офис после обеда 28.09 или по созвону.',
-  (SELECT id FROM profiles WHERE display_name = 'Леонид' LIMIT 1),
+  NULL,
   'Леонид',
   NOW(),
   NOW()
@@ -6900,7 +6903,7 @@ SELECT
   4320,
   0,
   'Заберет сама и вернет сама. 28.09 оставят в кафе азу после 13:00',
-  (SELECT id FROM profiles WHERE display_name = 'Леонид' LIMIT 1),
+  NULL,
   'Леонид',
   NOW(),
   NOW()
@@ -6933,7 +6936,7 @@ SELECT
   1200,
   0,
   'заберет сам',
-  (SELECT id FROM profiles WHERE display_name = 'Леонид' LIMIT 1),
+  NULL,
   'Леонид',
   NOW(),
   NOW()
@@ -6966,7 +6969,7 @@ SELECT
   2720,
   0,
   'Вернут либо в воскресенье вечером либо в понедельник',
-  (SELECT id FROM profiles WHERE display_name = 'Леонид' LIMIT 1),
+  NULL,
   'Леонид',
   NOW(),
   NOW()
@@ -6999,7 +7002,7 @@ SELECT
   2960,
   0,
   'Заберет утром +7 927 240-82-50 Лариса',
-  (SELECT id FROM profiles WHERE display_name = 'Леонид' LIMIT 1),
+  NULL,
   'Леонид',
   NOW(),
   NOW()
@@ -7032,7 +7035,7 @@ SELECT
   6080,
   0,
   'Кристалл',
-  (SELECT id FROM profiles WHERE display_name = 'Леонид' LIMIT 1),
+  NULL,
   'Леонид',
   NOW(),
   NOW()
@@ -7065,7 +7068,7 @@ SELECT
   0,
   0,
   '2 сумки по 35',
-  (SELECT id FROM profiles WHERE display_name = 'Леонид' LIMIT 1),
+  NULL,
   'Леонид',
   NOW(),
   NOW()
@@ -7098,7 +7101,7 @@ SELECT
   2320,
   0,
   'Ольга ткач. Ваучер Кремль, заберет утром',
-  (SELECT id FROM profiles WHERE display_name = 'Леонид' LIMIT 1),
+  NULL,
   'Леонид',
   NOW(),
   NOW()
@@ -7130,7 +7133,7 @@ SELECT
   2400,
   0,
   'Утром заберет, вернут 24.09 к 18:00 Гид Алексей, мен Камилла',
-  (SELECT id FROM profiles WHERE display_name = 'Стас' LIMIT 1),
+  NULL,
   'Стас',
   NOW(),
   NOW()
@@ -7163,7 +7166,7 @@ SELECT
   6080,
   0,
   'Оставят в кристалле',
-  (SELECT id FROM profiles WHERE display_name = 'Стас' LIMIT 1),
+  NULL,
   'Стас',
   NOW(),
   NOW()
@@ -7196,7 +7199,7 @@ SELECT
   6400,
   0,
   'Ривьера. Валерий',
-  (SELECT id FROM profiles WHERE display_name = 'Леонид' LIMIT 1),
+  NULL,
   'Леонид',
   NOW(),
   NOW()
@@ -7229,7 +7232,7 @@ SELECT
   2000,
   0,
   'грант отель. Валерий',
-  (SELECT id FROM profiles WHERE display_name = 'Леонид' LIMIT 1),
+  NULL,
   'Леонид',
   NOW(),
   NOW()
@@ -7262,7 +7265,7 @@ SELECT
   8400,
   0,
   'Азимут',
-  (SELECT id FROM profiles WHERE display_name = 'Стас' LIMIT 1),
+  NULL,
   'Стас',
   NOW(),
   NOW()
@@ -7295,7 +7298,7 @@ SELECT
   2240,
   0,
   '22.09 утром привезут',
-  (SELECT id FROM profiles WHERE display_name = 'Стас' LIMIT 1),
+  NULL,
   'Стас',
   NOW(),
   NOW()
@@ -7328,7 +7331,7 @@ SELECT
   4000,
   0,
   'В 7:45 от свита Холла',
-  (SELECT id FROM profiles WHERE display_name = 'Стас' LIMIT 1),
+  NULL,
   'Стас',
   NOW(),
   NOW()
@@ -7361,7 +7364,7 @@ SELECT
   2800,
   0,
   'Волга',
-  (SELECT id FROM profiles WHERE display_name = 'Леонид' LIMIT 1),
+  NULL,
   'Леонид',
   NOW(),
   NOW()
@@ -7394,7 +7397,7 @@ SELECT
   5600,
   0,
   'Гид Катя Кореева, из бусика',
-  (SELECT id FROM profiles WHERE display_name = 'Стас' LIMIT 1),
+  NULL,
   'Стас',
   NOW(),
   NOW()
@@ -7427,7 +7430,7 @@ SELECT
   4000,
   0,
   'в 12:00 от цирка, Элина, ваучер на кремль',
-  (SELECT id FROM profiles WHERE display_name = 'Леонид' LIMIT 1),
+  NULL,
   'Леонид',
   NOW(),
   NOW()
@@ -7459,7 +7462,7 @@ SELECT
   2800,
   0,
   'в Давыдов на Карла Маркса',
-  (SELECT id FROM profiles WHERE display_name = 'Стас' LIMIT 1),
+  NULL,
   'Стас',
   NOW(),
   NOW()
@@ -7492,7 +7495,7 @@ SELECT
   3200,
   0,
   '-',
-  (SELECT id FROM profiles WHERE display_name = 'Леонид' LIMIT 1),
+  NULL,
   'Леонид',
   NOW(),
   NOW()
@@ -7525,7 +7528,7 @@ SELECT
   3440,
   0,
   'Вернула в офис',
-  (SELECT id FROM profiles WHERE display_name = 'Леонид' LIMIT 1),
+  NULL,
   'Леонид',
   NOW(),
   NOW()
@@ -7558,7 +7561,7 @@ SELECT
   3760,
   0,
   'Кристал',
-  (SELECT id FROM profiles WHERE display_name = 'Леонид' LIMIT 1),
+  NULL,
   'Леонид',
   NOW(),
   NOW()
@@ -7591,7 +7594,7 @@ SELECT
   25000,
   0,
   '6 групп по 50, привезти в деревню универсиады к 14:00 Забрать от Кремля в 16:30',
-  (SELECT id FROM profiles WHERE display_name = 'Стас' LIMIT 1),
+  NULL,
   'Стас',
   NOW(),
   NOW()
@@ -7624,7 +7627,7 @@ SELECT
   1680,
   0,
   'Заберет утром от свита холла Гид оставит сумку 20 сентября к 16:00 в офисе ТИЦ на Баумана, 49. Гид Серов Алексей +7 917 255-38-26',
-  (SELECT id FROM profiles WHERE display_name = 'Стас' LIMIT 1),
+  NULL,
   'Стас',
   NOW(),
   NOW()
@@ -7657,7 +7660,7 @@ SELECT
   6600,
   0,
   'Оставили в кристалл',
-  (SELECT id FROM profiles WHERE display_name = 'Стас' LIMIT 1),
+  NULL,
   'Стас',
   NOW(),
   NOW()
@@ -7690,7 +7693,7 @@ SELECT
   5600,
   0,
   'Отказ,',
-  (SELECT id FROM profiles WHERE display_name = 'Стас' LIMIT 1),
+  NULL,
   'Стас',
   NOW(),
   NOW()
@@ -7723,7 +7726,7 @@ SELECT
   0,
   0,
   '-',
-  (SELECT id FROM profiles WHERE display_name = 'Леонид' LIMIT 1),
+  NULL,
   'Леонид',
   NOW(),
   NOW()
@@ -7756,7 +7759,7 @@ SELECT
   0,
   0,
   '-',
-  (SELECT id FROM profiles WHERE display_name = 'Леонид' LIMIT 1),
+  NULL,
   'Леонид',
   NOW(),
   NOW()
@@ -7789,7 +7792,7 @@ SELECT
   6240,
   0,
   '46 приемников и 88 наушников',
-  (SELECT id FROM profiles WHERE display_name = 'Леонид' LIMIT 1),
+  NULL,
   'Леонид',
   NOW(),
   NOW()
@@ -7822,7 +7825,7 @@ SELECT
   2000,
   0,
   'От Сафара в Корстон',
-  (SELECT id FROM profiles WHERE display_name = 'Стас' LIMIT 1),
+  NULL,
   'Стас',
   NOW(),
   NOW()
@@ -7855,7 +7858,7 @@ SELECT
   2960,
   0,
   'От корстона в Корстон',
-  (SELECT id FROM profiles WHERE display_name = 'Стас' LIMIT 1),
+  NULL,
   'Стас',
   NOW(),
   NOW()
@@ -7888,7 +7891,7 @@ SELECT
   6720,
   0,
   'В офис к 10, забрать 18 до 19:00 Ответственным лицом будет представитель Госкомитета РТ - Анастасия Софьина +7 904 765-52-93 Мен Камилла',
-  (SELECT id FROM profiles WHERE display_name = 'Стас' LIMIT 1),
+  NULL,
   'Стас',
   NOW(),
   NOW()
@@ -7921,7 +7924,7 @@ SELECT
   1670,
   0,
   '-',
-  (SELECT id FROM profiles WHERE display_name = 'Леонид' LIMIT 1),
+  NULL,
   'Леонид',
   NOW(),
   NOW()
@@ -7954,7 +7957,7 @@ SELECT
   4800,
   0,
   'Заберет в 9.30',
-  (SELECT id FROM profiles WHERE display_name = 'Стас' LIMIT 1),
+  NULL,
   'Стас',
   NOW(),
   NOW()
@@ -7987,7 +7990,7 @@ SELECT
   2720,
   0,
   'В офис Гид любовь, мен полина',
-  (SELECT id FROM profiles WHERE display_name = 'Стас' LIMIT 1),
+  NULL,
   'Стас',
   NOW(),
   NOW()
@@ -8020,7 +8023,7 @@ SELECT
   3280,
   0,
   'Заберут 19 числа вечером.',
-  (SELECT id FROM profiles WHERE display_name = 'Леонид' LIMIT 1),
+  NULL,
   'Леонид',
   NOW(),
   NOW()
@@ -8053,7 +8056,7 @@ SELECT
   4000,
   0,
   'Биляр. Игорь. 89274055070 Вернут в Кристал',
-  (SELECT id FROM profiles WHERE display_name = 'Леонид' LIMIT 1),
+  NULL,
   'Леонид',
   NOW(),
   NOW()
@@ -8086,7 +8089,7 @@ SELECT
   4320,
   0,
   'Игорь. 89274055070',
-  (SELECT id FROM profiles WHERE display_name = 'Леонид' LIMIT 1),
+  NULL,
   'Леонид',
   NOW(),
   NOW()
@@ -8119,7 +8122,7 @@ SELECT
   9600,
   0,
   '-',
-  (SELECT id FROM profiles WHERE display_name = 'Леонид' LIMIT 1),
+  NULL,
   'Леонид',
   NOW(),
   NOW()
@@ -8152,7 +8155,7 @@ SELECT
   3600,
   0,
   'В Раймонд Аида +7 903 344-08-99',
-  (SELECT id FROM profiles WHERE display_name = 'Стас' LIMIT 1),
+  NULL,
   'Стас',
   NOW(),
   NOW()
@@ -8185,7 +8188,7 @@ SELECT
   6560,
   0,
   'Сами заберут',
-  (SELECT id FROM profiles WHERE display_name = 'Стас' LIMIT 1),
+  NULL,
   'Стас',
   NOW(),
   NOW()
@@ -8218,7 +8221,7 @@ SELECT
   8640,
   0,
   'Светлана +79677800066 В кафе Азу на Чернышевского до 15:30 Вернет в Азимут (ибис) 21 утром',
-  (SELECT id FROM profiles WHERE display_name = 'Стас' LIMIT 1),
+  NULL,
   'Стас',
   NOW(),
   NOW()
@@ -8251,7 +8254,7 @@ SELECT
   11280,
   0,
   'Кристал',
-  (SELECT id FROM profiles WHERE display_name = 'Леонид' LIMIT 1),
+  NULL,
   'Леонид',
   NOW(),
   NOW()
@@ -8284,7 +8287,7 @@ SELECT
   3360,
   0,
   'Азу. Петербургская 52',
-  (SELECT id FROM profiles WHERE display_name = 'Леонид' LIMIT 1),
+  NULL,
   'Леонид',
   NOW(),
   NOW()
@@ -8317,7 +8320,7 @@ SELECT
   17600,
   0,
   '55шт двойной комплект наушников',
-  (SELECT id FROM profiles WHERE display_name = 'Стас' LIMIT 1),
+  NULL,
   'Стас',
   NOW(),
   NOW()
@@ -8350,7 +8353,7 @@ SELECT
   2400,
   0,
   'В АйТи парк на спартаковской 12.09 в',
-  (SELECT id FROM profiles WHERE display_name = 'Стас' LIMIT 1),
+  NULL,
   'Стас',
   NOW(),
   NOW()
@@ -8383,7 +8386,7 @@ SELECT
   3200,
   0,
   'Кристал, Диана',
-  (SELECT id FROM profiles WHERE display_name = 'Леонид' LIMIT 1),
+  NULL,
   'Леонид',
   NOW(),
   NOW()
@@ -8416,7 +8419,7 @@ SELECT
   8640,
   0,
   '-',
-  (SELECT id FROM profiles WHERE display_name = 'Леонид' LIMIT 1),
+  NULL,
   'Леонид',
   NOW(),
   NOW()
@@ -8449,7 +8452,7 @@ SELECT
   4000,
   0,
   'Ольга Ткач',
-  (SELECT id FROM profiles WHERE display_name = 'Леонид' LIMIT 1),
+  NULL,
   'Леонид',
   NOW(),
   NOW()
@@ -8481,7 +8484,7 @@ SELECT
   8160,
   0,
   'Кристал. Разина',
-  (SELECT id FROM profiles WHERE display_name = 'Леонид' LIMIT 1),
+  NULL,
   'Леонид',
   NOW(),
   NOW()
@@ -8514,7 +8517,7 @@ SELECT
   4200,
   0,
   'В отель Давыдов на назарбаева, вечером 11.09, забрать можно 12 вечером',
-  (SELECT id FROM profiles WHERE display_name = 'Стас' LIMIT 1),
+  NULL,
   'Стас',
   NOW(),
   NOW()
@@ -8547,7 +8550,7 @@ SELECT
   7200,
   0,
   'Кристал',
-  (SELECT id FROM profiles WHERE display_name = 'Леонид' LIMIT 1),
+  NULL,
   'Леонид',
   NOW(),
   NOW()
@@ -8580,7 +8583,7 @@ SELECT
   14400,
   0,
   '180шт + доп наушники, 3 сумки по 60шт 11.09 заберут от часов в 13:30 13.09 вернут',
-  (SELECT id FROM profiles WHERE display_name = 'Стас' LIMIT 1),
+  NULL,
   'Стас',
   NOW(),
   NOW()
@@ -8613,7 +8616,7 @@ SELECT
   8000,
   0,
   'В офис тиц к вечеру 10.09 Вернут 11.09 к вечеру , две сумки по 50',
-  (SELECT id FROM profiles WHERE display_name = 'Стас' LIMIT 1),
+  NULL,
   'Стас',
   NOW(),
   NOW()
@@ -8646,7 +8649,7 @@ SELECT
   8880,
   0,
   'Начало от Релиты, 12 сентября радиогиды должны там быть к 12.30. А вернут их в Стерлядку 14 сентября к 16.00.',
-  (SELECT id FROM profiles WHERE display_name = 'Стас' LIMIT 1),
+  NULL,
   'Стас',
   NOW(),
   NOW()
@@ -8679,7 +8682,7 @@ SELECT
   1840,
   0,
   'К 10 в офис, гид Алексей, вернут к 19',
-  (SELECT id FROM profiles WHERE display_name = 'Стас' LIMIT 1),
+  NULL,
   'Стас',
   NOW(),
   NOW()
@@ -8712,7 +8715,7 @@ SELECT
   3520,
   0,
   'В офис тиц к 10:00, забрать до 19:00 Гид Алиса Мен Камилла',
-  (SELECT id FROM profiles WHERE display_name = 'Стас' LIMIT 1),
+  NULL,
   'Стас',
   NOW(),
   NOW()
@@ -8745,7 +8748,7 @@ SELECT
   2400,
   0,
   'Из фургончика заберет 18:00. Наушников положить 33 шт',
-  (SELECT id FROM profiles WHERE display_name = 'Леонид' LIMIT 1),
+  NULL,
   'Леонид',
   NOW(),
   NOW()
@@ -8778,7 +8781,7 @@ SELECT
   14400,
   0,
   'Реч.порт. 14:00',
-  (SELECT id FROM profiles WHERE display_name = 'Леонид' LIMIT 1),
+  NULL,
   'Леонид',
   NOW(),
   NOW()
@@ -8810,7 +8813,7 @@ SELECT
   7200,
   0,
   'Кристал до 12:00, Владлена',
-  (SELECT id FROM profiles WHERE display_name = 'Леонид' LIMIT 1),
+  NULL,
   'Леонид',
   NOW(),
   NOW()
@@ -8843,7 +8846,7 @@ SELECT
   3500,
   0,
   'Зебурт 5 вечером',
-  (SELECT id FROM profiles WHERE display_name = 'Леонид' LIMIT 1),
+  NULL,
   'Леонид',
   NOW(),
   NOW()
@@ -8876,7 +8879,7 @@ SELECT
   4240,
   0,
   'Заберет утром',
-  (SELECT id FROM profiles WHERE display_name = 'Леонид' LIMIT 1),
+  NULL,
   'Леонид',
   NOW(),
   NOW()
@@ -8909,7 +8912,7 @@ SELECT
   880,
   0,
   'Заберет',
-  (SELECT id FROM profiles WHERE display_name = 'Леонид' LIMIT 1),
+  NULL,
   'Леонид',
   NOW(),
   NOW()
@@ -8942,7 +8945,7 @@ SELECT
   1760,
   0,
   'В кристалл для Фирузы',
-  (SELECT id FROM profiles WHERE display_name = 'Стас' LIMIT 1),
+  NULL,
   'Стас',
   NOW(),
   NOW()
@@ -8975,7 +8978,7 @@ SELECT
   4480,
   0,
   'Две сумки на 28шт В рамаду, забрать там же',
-  (SELECT id FROM profiles WHERE display_name = 'Стас' LIMIT 1),
+  NULL,
   'Стас',
   NOW(),
   NOW()
@@ -9008,7 +9011,7 @@ SELECT
   5760,
   0,
   'Сами заберу.т Двойной комплект наушников, днем группа 38 человек, вечером 35',
-  (SELECT id FROM profiles WHERE display_name = 'Стас' LIMIT 1),
+  NULL,
   'Стас',
   NOW(),
   NOW()
@@ -9041,7 +9044,7 @@ SELECT
   3840,
   0,
   '-',
-  (SELECT id FROM profiles WHERE display_name = 'Леонид' LIMIT 1),
+  NULL,
   'Леонид',
   NOW(),
   NOW()
@@ -9074,7 +9077,7 @@ SELECT
   7520,
   0,
   'Сумки на 33, 28, 33шт Заберут сами около 10',
-  (SELECT id FROM profiles WHERE display_name = 'Стас' LIMIT 1),
+  NULL,
   'Стас',
   NOW(),
   NOW()
@@ -9107,7 +9110,7 @@ SELECT
   4000,
   0,
   'Корстон. Номер 1807',
-  (SELECT id FROM profiles WHERE display_name = 'Леонид' LIMIT 1),
+  NULL,
   'Леонид',
   NOW(),
   NOW()
@@ -9140,7 +9143,7 @@ SELECT
   7360,
   0,
   '29-30 августа надо 46 радиогидов в кристалл к 7.30 гид Аида 89520385698',
-  (SELECT id FROM profiles WHERE display_name = 'Леонид' LIMIT 1),
+  NULL,
   'Леонид',
   NOW(),
   NOW()
@@ -9173,7 +9176,7 @@ SELECT
   3500,
   0,
   'Отправить утром в Новинку',
-  (SELECT id FROM profiles WHERE display_name = 'Леонид' LIMIT 1),
+  NULL,
   'Леонид',
   NOW(),
   NOW()
@@ -9206,7 +9209,7 @@ SELECT
   24000,
   0,
   '6 сумок по 51. Старт от Лучано с Островского в 13:30 передать',
-  (SELECT id FROM profiles WHERE display_name = 'Леонид' LIMIT 1),
+  NULL,
   'Леонид',
   NOW(),
   NOW()
@@ -9239,7 +9242,7 @@ SELECT
   2380,
   0,
   'Уточнить',
-  (SELECT id FROM profiles WHERE display_name = 'Стас' LIMIT 1),
+  NULL,
   'Стас',
   NOW(),
   NOW()
@@ -9272,7 +9275,7 @@ SELECT
   1200,
   0,
   'Оставить в офисе Вернет в Шаляпин',
-  (SELECT id FROM profiles WHERE display_name = 'Стас' LIMIT 1),
+  NULL,
   'Стас',
   NOW(),
   NOW()
@@ -9305,7 +9308,7 @@ SELECT
   7800,
   0,
   'Краснодар 4 До 14, кафе мед Оставили в кристалле!',
-  (SELECT id FROM profiles WHERE display_name = 'Стас' LIMIT 1),
+  NULL,
   'Стас',
   NOW(),
   NOW()
@@ -9338,7 +9341,7 @@ SELECT
   6240,
   0,
   'Марина Трэвел Юлия НАЛ ВЕРНУТ В ОФИС ИНИЦ 28.10 в 10:00',
-  (SELECT id FROM profiles WHERE display_name = 'Стас' LIMIT 1),
+  NULL,
   'Стас',
   NOW(),
   NOW()
@@ -9371,7 +9374,7 @@ SELECT
   10120,
   0,
   'Арапова В кристалл до 11:00 нал ВЕРНУТ В КРИСТАЛЛ ПОСЛЕ 22:30',
-  (SELECT id FROM profiles WHERE display_name = 'Стас' LIMIT 1),
+  NULL,
   'Стас',
   NOW(),
   NOW()
@@ -9404,7 +9407,7 @@ SELECT
   8480,
   0,
   'Марина Трэвел Олеся В кристалл, нал',
-  (SELECT id FROM profiles WHERE display_name = 'Стас' LIMIT 1),
+  NULL,
   'Стас',
   NOW(),
   NOW()
@@ -9437,7 +9440,7 @@ SELECT
   11500,
   0,
   'ЮВА 3 В кристалл до 11:00, нал ВЕРНУТ в КРИСТАЛЛ ПОСЛЕ 22:30',
-  (SELECT id FROM profiles WHERE display_name = 'Стас' LIMIT 1),
+  NULL,
   'Стас',
   NOW(),
   NOW()
@@ -9470,7 +9473,7 @@ SELECT
   11500,
   0,
   'ЮВА 2 ВЕРНУТ В кристалл ПОСЛЕ 22:00',
-  (SELECT id FROM profiles WHERE display_name = 'Стас' LIMIT 1),
+  NULL,
   'Стас',
   NOW(),
   NOW()
@@ -9503,7 +9506,7 @@ SELECT
   16270,
   0,
   'ЮВА 1 ВЕРНУТ В крисстал ПОСЛЕ 22:30',
-  (SELECT id FROM profiles WHERE display_name = 'Стас' LIMIT 1),
+  NULL,
   'Стас',
   NOW(),
   NOW()
@@ -9536,7 +9539,7 @@ SELECT
   8510,
   0,
   'Краснодар 3 До 14, кафе мед',
-  (SELECT id FROM profiles WHERE display_name = 'Стас' LIMIT 1),
+  NULL,
   'Стас',
   NOW(),
   NOW()
@@ -9569,7 +9572,7 @@ SELECT
   15170,
   0,
   'Краснодар 2 До 14, кафе мед',
-  (SELECT id FROM profiles WHERE display_name = 'Стас' LIMIT 1),
+  NULL,
   'Стас',
   NOW(),
   NOW()
@@ -9602,7 +9605,7 @@ SELECT
   17390,
   0,
   'Краснодар 1 До 14, кафе мед',
-  (SELECT id FROM profiles WHERE display_name = 'Стас' LIMIT 1),
+  NULL,
   'Стас',
   NOW(),
   NOW()
@@ -9635,7 +9638,7 @@ SELECT
   15910,
   0,
   'Краснодар 0 НАЛ ВНРНУТ В КРИСТАЛЛ ПОСЛЕ 13:00',
-  (SELECT id FROM profiles WHERE display_name = 'Стас' LIMIT 1),
+  NULL,
   'Стас',
   NOW(),
   NOW()
@@ -9668,7 +9671,7 @@ SELECT
   1600,
   0,
   'От Сафара в Корстон',
-  (SELECT id FROM profiles WHERE display_name = 'Стас' LIMIT 1),
+  NULL,
   'Стас',
   NOW(),
   NOW()
@@ -9701,7 +9704,7 @@ SELECT
   2480,
   0,
   'От релиты до релиты',
-  (SELECT id FROM profiles WHERE display_name = 'Стас' LIMIT 1),
+  NULL,
   'Стас',
   NOW(),
   NOW()
@@ -9734,7 +9737,7 @@ SELECT
   8700,
   0,
   'В офисе Инициативы',
-  (SELECT id FROM profiles WHERE display_name = 'Стас' LIMIT 1),
+  NULL,
   'Стас',
   NOW(),
   NOW()
@@ -9767,7 +9770,7 @@ SELECT
   3680,
   0,
   'В офисе',
-  (SELECT id FROM profiles WHERE display_name = 'Стас' LIMIT 1),
+  NULL,
   'Стас',
   NOW(),
   NOW()
@@ -9800,7 +9803,7 @@ SELECT
   10560,
   0,
   'Заберет 28.08 в 19:30 4 комплекта наушников',
-  (SELECT id FROM profiles WHERE display_name = 'Стас' LIMIT 1),
+  NULL,
   'Стас',
   NOW(),
   NOW()
@@ -9833,7 +9836,7 @@ SELECT
   2080,
   0,
   '-',
-  (SELECT id FROM profiles WHERE display_name = 'Леонид' LIMIT 1),
+  NULL,
   'Леонид',
   NOW(),
   NOW()
@@ -9866,7 +9869,7 @@ SELECT
   4960,
   0,
   'Заберет утром в 10:30',
-  (SELECT id FROM profiles WHERE display_name = 'Стас' LIMIT 1),
+  NULL,
   'Стас',
   NOW(),
   NOW()
@@ -9899,7 +9902,7 @@ SELECT
   800,
   0,
   'Заберут в 17:30 примерно',
-  (SELECT id FROM profiles WHERE display_name = 'Леонид' LIMIT 1),
+  NULL,
   'Леонид',
   NOW(),
   NOW()
@@ -9932,7 +9935,7 @@ SELECT
   4000,
   0,
   'В офис тиц 27.08, вернут 29.08',
-  (SELECT id FROM profiles WHERE display_name = 'Стас' LIMIT 1),
+  NULL,
   'Стас',
   NOW(),
   NOW()
@@ -9965,7 +9968,7 @@ SELECT
   12000,
   0,
   'В офис 26.08, вернут 28.08 Три сумки по 50',
-  (SELECT id FROM profiles WHERE display_name = 'Стас' LIMIT 1),
+  NULL,
   'Стас',
   NOW(),
   NOW()
@@ -9998,7 +10001,7 @@ SELECT
   3120,
   0,
   'Кристал',
-  (SELECT id FROM profiles WHERE display_name = 'Леонид' LIMIT 1),
+  NULL,
   'Леонид',
   NOW(),
   NOW()
@@ -10031,7 +10034,7 @@ SELECT
   3760,
   0,
   'В АйТи парке',
-  (SELECT id FROM profiles WHERE display_name = 'Стас' LIMIT 1),
+  NULL,
   'Стас',
   NOW(),
   NOW()
@@ -10064,7 +10067,7 @@ SELECT
   5760,
   0,
   'В Кристалле',
-  (SELECT id FROM profiles WHERE display_name = 'Стас' LIMIT 1),
+  NULL,
   'Стас',
   NOW(),
   NOW()
@@ -10097,7 +10100,7 @@ SELECT
   12000,
   0,
   'Утром заберут',
-  (SELECT id FROM profiles WHERE display_name = 'Леонид' LIMIT 1),
+  NULL,
   'Леонид',
   NOW(),
   NOW()
@@ -10130,7 +10133,7 @@ SELECT
   2720,
   0,
   '-',
-  (SELECT id FROM profiles WHERE display_name = 'Леонид' LIMIT 1),
+  NULL,
   'Леонид',
   NOW(),
   NOW()
@@ -10163,7 +10166,7 @@ SELECT
   6240,
   0,
   'Заберет утром Владимир 89178858409',
-  (SELECT id FROM profiles WHERE display_name = 'Леонид' LIMIT 1),
+  NULL,
   'Леонид',
   NOW(),
   NOW()
@@ -10196,7 +10199,7 @@ SELECT
   800,
   0,
   '-',
-  (SELECT id FROM profiles WHERE display_name = 'Леонид' LIMIT 1),
+  NULL,
   'Леонид',
   NOW(),
   NOW()
@@ -10229,7 +10232,7 @@ SELECT
   6480,
   0,
   'Сулейман до 15:00',
-  (SELECT id FROM profiles WHERE display_name = 'Леонид' LIMIT 1),
+  NULL,
   'Леонид',
   NOW(),
   NOW()
@@ -10262,7 +10265,7 @@ SELECT
   11200,
   0,
   '-',
-  (SELECT id FROM profiles WHERE display_name = 'Леонид' LIMIT 1),
+  NULL,
   'Леонид',
   NOW(),
   NOW()
@@ -10295,7 +10298,7 @@ SELECT
   8400,
   0,
   'В кристалe',
-  (SELECT id FROM profiles WHERE display_name = 'Стас' LIMIT 1),
+  NULL,
   'Стас',
   NOW(),
   NOW()
@@ -10328,7 +10331,7 @@ SELECT
   4320,
   0,
   '18+ человек в Кристалл к 10 ч. На 3 или 4 дня. Гид Ирина 89046620732 Вернули в парк отель',
-  (SELECT id FROM profiles WHERE display_name = 'Леонид' LIMIT 1),
+  NULL,
   'Леонид',
   NOW(),
   NOW()
@@ -10361,7 +10364,7 @@ SELECT
   2960,
   0,
   'В стерлядке',
-  (SELECT id FROM profiles WHERE display_name = 'Стас' LIMIT 1),
+  NULL,
   'Стас',
   NOW(),
   NOW()
@@ -10394,7 +10397,7 @@ SELECT
   11760,
   0,
   'В Кристалле',
-  (SELECT id FROM profiles WHERE display_name = 'Стас' LIMIT 1),
+  NULL,
   'Стас',
   NOW(),
   NOW()
@@ -10427,7 +10430,7 @@ SELECT
   1040,
   0,
   'Заберут',
-  (SELECT id FROM profiles WHERE display_name = 'Леонид' LIMIT 1),
+  NULL,
   'Леонид',
   NOW(),
   NOW()
@@ -10460,7 +10463,7 @@ SELECT
   4800,
   0,
   '-',
-  (SELECT id FROM profiles WHERE display_name = 'Леонид' LIMIT 1),
+  NULL,
   'Леонид',
   NOW(),
   NOW()
@@ -10493,7 +10496,7 @@ SELECT
   6020,
   0,
   'Утром отправить в добрую столовую',
-  (SELECT id FROM profiles WHERE display_name = 'Леонид' LIMIT 1),
+  NULL,
   'Леонид',
   NOW(),
   NOW()
@@ -10526,7 +10529,7 @@ SELECT
   11760,
   0,
   '25-27 августа , гид Катя Ильина . 25 августа в 14:20 на жд Восстания',
-  (SELECT id FROM profiles WHERE display_name = 'Леонид' LIMIT 1),
+  NULL,
   'Леонид',
   NOW(),
   NOW()
@@ -10558,7 +10561,7 @@ SELECT
   32000,
   0,
   '-',
-  (SELECT id FROM profiles WHERE display_name = 'Леонид' LIMIT 1),
+  NULL,
   'Леонид',
   NOW(),
   NOW()
@@ -10591,7 +10594,7 @@ SELECT
   4400,
   0,
   'Заберут вечером 21.08',
-  (SELECT id FROM profiles WHERE display_name = 'Стас' LIMIT 1),
+  NULL,
   'Стас',
   NOW(),
   NOW()
@@ -10624,7 +10627,7 @@ SELECT
   1920,
   0,
   '2 сумки по 12шт, в офис 18.08 к 10:00, Вернут вечером до 19:00',
-  (SELECT id FROM profiles WHERE display_name = 'Стас' LIMIT 1),
+  NULL,
   'Стас',
   NOW(),
   NOW()
@@ -10657,7 +10660,7 @@ SELECT
   7200,
   0,
   'В офис к 10:00, 15.08, двойной комплект наушников, Вернут 17.08 до 12:00',
-  (SELECT id FROM profiles WHERE display_name = 'Стас' LIMIT 1),
+  NULL,
   'Стас',
   NOW(),
   NOW()
@@ -10690,7 +10693,7 @@ SELECT
   4000,
   0,
   'Смак Сафар, Резеда, ваучер на кремль',
-  (SELECT id FROM profiles WHERE display_name = 'Леонид' LIMIT 1),
+  NULL,
   'Леонид',
   NOW(),
   NOW()
@@ -10722,7 +10725,7 @@ SELECT
   4960,
   0,
   'Заберут утром',
-  (SELECT id FROM profiles WHERE display_name = 'Леонид' LIMIT 1),
+  NULL,
   'Леонид',
   NOW(),
   NOW()
@@ -10755,7 +10758,7 @@ SELECT
   800,
   0,
   'Вернут в Кристал после 20:30',
-  (SELECT id FROM profiles WHERE display_name = 'Леонид' LIMIT 1),
+  NULL,
   'Леонид',
   NOW(),
   NOW()
@@ -10788,7 +10791,7 @@ SELECT
   7360,
   0,
   'В Кристал',
-  (SELECT id FROM profiles WHERE display_name = 'Леонид' LIMIT 1),
+  NULL,
   'Леонид',
   NOW(),
   NOW()
@@ -10821,7 +10824,7 @@ SELECT
   8160,
   0,
   'В Волгe',
-  (SELECT id FROM profiles WHERE display_name = 'Леонид' LIMIT 1),
+  NULL,
   'Леонид',
   NOW(),
   NOW()
@@ -10854,7 +10857,7 @@ SELECT
   11760,
   0,
   'В кристалл Оставила в кристалле',
-  (SELECT id FROM profiles WHERE display_name = 'Стас' LIMIT 1),
+  NULL,
   'Стас',
   NOW(),
   NOW()
@@ -10887,7 +10890,7 @@ SELECT
   1200,
   0,
   'В Сулейман, вернут туда же',
-  (SELECT id FROM profiles WHERE display_name = 'Стас' LIMIT 1),
+  NULL,
   'Стас',
   NOW(),
   NOW()
@@ -10920,7 +10923,7 @@ SELECT
   4800,
   0,
   'От амакса в Корстон около 20:00',
-  (SELECT id FROM profiles WHERE display_name = 'Стас' LIMIT 1),
+  NULL,
   'Стас',
   NOW(),
   NOW()
@@ -10953,7 +10956,7 @@ SELECT
   3680,
   0,
   '-',
-  (SELECT id FROM profiles WHERE display_name = 'Леонид' LIMIT 1),
+  NULL,
   'Леонид',
   NOW(),
   NOW()
@@ -10986,7 +10989,7 @@ SELECT
   3120,
   0,
   ', будет забирать +7 927 240-82-50 Лариса',
-  (SELECT id FROM profiles WHERE display_name = 'Леонид' LIMIT 1),
+  NULL,
   'Леонид',
   NOW(),
   NOW()
@@ -11019,7 +11022,7 @@ SELECT
   8800,
   0,
   'Пушкина 8. В 8:00',
-  (SELECT id FROM profiles WHERE display_name = 'Леонид' LIMIT 1),
+  NULL,
   'Леонид',
   NOW(),
   NOW()
@@ -11052,7 +11055,7 @@ SELECT
   6720,
   0,
   'Акварель хостел',
-  (SELECT id FROM profiles WHERE display_name = 'Леонид' LIMIT 1),
+  NULL,
   'Леонид',
   NOW(),
   NOW()
@@ -11085,7 +11088,7 @@ SELECT
   2960,
   0,
   'Утром в 8 у Часов Вернут в реч порт, Эдику',
-  (SELECT id FROM profiles WHERE display_name = 'Стас' LIMIT 1),
+  NULL,
   'Стас',
   NOW(),
   NOW()
@@ -11118,7 +11121,7 @@ SELECT
   7360,
   0,
   'В офис 13.08 к 10, вернут 15.08 до 12:00 Гид Диана',
-  (SELECT id FROM profiles WHERE display_name = 'Стас' LIMIT 1),
+  NULL,
   'Стас',
   NOW(),
   NOW()
@@ -11151,7 +11154,7 @@ SELECT
   3840,
   0,
   'В офис тиц 12.08 в 10:15',
-  (SELECT id FROM profiles WHERE display_name = 'Стас' LIMIT 1),
+  NULL,
   'Стас',
   NOW(),
   NOW()
@@ -11184,7 +11187,7 @@ SELECT
   11280,
   0,
   'Заберет утром Оставила в бусике',
-  (SELECT id FROM profiles WHERE display_name = 'Стас' LIMIT 1),
+  NULL,
   'Стас',
   NOW(),
   NOW()
@@ -11217,7 +11220,7 @@ SELECT
   7040,
   0,
   'Заберет утром',
-  (SELECT id FROM profiles WHERE display_name = 'Стас' LIMIT 1),
+  NULL,
   'Стас',
   NOW(),
   NOW()
@@ -11250,7 +11253,7 @@ SELECT
   640,
   0,
   'В офис тиц в 10:30',
-  (SELECT id FROM profiles WHERE display_name = 'Стас' LIMIT 1),
+  NULL,
   'Стас',
   NOW(),
   NOW()
@@ -11283,7 +11286,7 @@ SELECT
   6240,
   0,
   '-',
-  (SELECT id FROM profiles WHERE display_name = 'Леонид' LIMIT 1),
+  NULL,
   'Леонид',
   NOW(),
   NOW()
@@ -11316,7 +11319,7 @@ SELECT
   5040,
   0,
   '1 на 36 Ильмира; 2 на 27 Алсу, занеси накануне',
-  (SELECT id FROM profiles WHERE display_name = 'Стас' LIMIT 1),
+  NULL,
   'Стас',
   NOW(),
   NOW()
@@ -11349,7 +11352,7 @@ SELECT
   1520,
   0,
   'Сама заберет и вернет Экскурсия с 10:30 до 15:30',
-  (SELECT id FROM profiles WHERE display_name = 'Стас' LIMIT 1),
+  NULL,
   'Стас',
   NOW(),
   NOW()
@@ -11382,7 +11385,7 @@ SELECT
   6720,
   0,
   'В кристалл',
-  (SELECT id FROM profiles WHERE display_name = 'Стас' LIMIT 1),
+  NULL,
   'Стас',
   NOW(),
   NOW()
@@ -11415,7 +11418,7 @@ SELECT
   3520,
   0,
   'В кристалл, Мария Вернула в кристалл',
-  (SELECT id FROM profiles WHERE display_name = 'Стас' LIMIT 1),
+  NULL,
   'Стас',
   NOW(),
   NOW()
@@ -11448,7 +11451,7 @@ SELECT
   11280,
   0,
   'В кристалл, сопровождающий Ирина',
-  (SELECT id FROM profiles WHERE display_name = 'Стас' LIMIT 1),
+  NULL,
   'Стас',
   NOW(),
   NOW()
@@ -11481,7 +11484,7 @@ SELECT
   3840,
   0,
   'В кристалл',
-  (SELECT id FROM profiles WHERE display_name = 'Стас' LIMIT 1),
+  NULL,
   'Стас',
   NOW(),
   NOW()
@@ -11514,7 +11517,7 @@ SELECT
   7920,
   0,
   '-',
-  (SELECT id FROM profiles WHERE display_name = 'Леонид' LIMIT 1),
+  NULL,
   'Леонид',
   NOW(),
   NOW()
@@ -11547,7 +11550,7 @@ SELECT
   980,
   0,
   '-',
-  (SELECT id FROM profiles WHERE display_name = 'Леонид' LIMIT 1),
+  NULL,
   'Леонид',
   NOW(),
   NOW()
@@ -11580,7 +11583,7 @@ SELECT
   2590,
   0,
   'В волгу Оставила в бусике',
-  (SELECT id FROM profiles WHERE display_name = 'Стас' LIMIT 1),
+  NULL,
   'Стас',
   NOW(),
   NOW()
@@ -11613,7 +11616,7 @@ SELECT
   2560,
   0,
   'От Сафара до корстона',
-  (SELECT id FROM profiles WHERE display_name = 'Стас' LIMIT 1),
+  NULL,
   'Стас',
   NOW(),
   NOW()
@@ -11646,7 +11649,7 @@ SELECT
   3120,
   0,
   'От релиты до релиты',
-  (SELECT id FROM profiles WHERE display_name = 'Стас' LIMIT 1),
+  NULL,
   'Стас',
   NOW(),
   NOW()
@@ -11679,7 +11682,7 @@ SELECT
   2720,
   0,
   'В 12:00 в трапезную',
-  (SELECT id FROM profiles WHERE display_name = 'Леонид' LIMIT 1),
+  NULL,
   'Леонид',
   NOW(),
   NOW()
@@ -11712,7 +11715,7 @@ SELECT
   4000,
   0,
   'Созвониться',
-  (SELECT id FROM profiles WHERE display_name = 'Леонид' LIMIT 1),
+  NULL,
   'Леонид',
   NOW(),
   NOW()
@@ -11745,7 +11748,7 @@ SELECT
   3520,
   0,
   'Волга',
-  (SELECT id FROM profiles WHERE display_name = 'Леонид' LIMIT 1),
+  NULL,
   'Леонид',
   NOW(),
   NOW()
@@ -11778,7 +11781,7 @@ SELECT
   10800,
   0,
   '2 сумки по 50, Нурия и Светлана 1 сумка на 35, Диляра В офис тиц 10. 08 до вечера',
-  (SELECT id FROM profiles WHERE display_name = 'Стас' LIMIT 1),
+  NULL,
   'Стас',
   NOW(),
   NOW()
@@ -11811,7 +11814,7 @@ SELECT
   10800,
   0,
   'Сами заберут 11.08 Гид Катя Кореева Вернут в отель Европа',
-  (SELECT id FROM profiles WHERE display_name = 'Стас' LIMIT 1),
+  NULL,
   'Стас',
   NOW(),
   NOW()
@@ -11844,7 +11847,7 @@ SELECT
   3600,
   0,
   'В офис 6 Гид Светлана +79677800066',
-  (SELECT id FROM profiles WHERE display_name = 'Стас' LIMIT 1),
+  NULL,
   'Стас',
   NOW(),
   NOW()
@@ -11877,7 +11880,7 @@ SELECT
   1520,
   0,
   'Заберут после 11:00',
-  (SELECT id FROM profiles WHERE display_name = 'Леонид' LIMIT 1),
+  NULL,
   'Леонид',
   NOW(),
   NOW()
@@ -11910,7 +11913,7 @@ SELECT
   3040,
   0,
   'Заберут утром у часов, вернут в порт кому-нибудь',
-  (SELECT id FROM profiles WHERE display_name = 'Стас' LIMIT 1),
+  NULL,
   'Стас',
   NOW(),
   NOW()
@@ -11943,7 +11946,7 @@ SELECT
   10320,
   0,
   'В кристал',
-  (SELECT id FROM profiles WHERE display_name = 'Стас' LIMIT 1),
+  NULL,
   'Стас',
   NOW(),
   NOW()
@@ -11976,7 +11979,7 @@ SELECT
   3200,
   0,
   '-',
-  (SELECT id FROM profiles WHERE display_name = 'Леонид' LIMIT 1),
+  NULL,
   'Леонид',
   NOW(),
   NOW()
@@ -12009,7 +12012,7 @@ SELECT
   6240,
   0,
   '-',
-  (SELECT id FROM profiles WHERE display_name = 'Леонид' LIMIT 1),
+  NULL,
   'Леонид',
   NOW(),
   NOW()
@@ -12042,7 +12045,7 @@ SELECT
   3760,
   0,
   'Вечером перед вечер кой заберет Ирина Савельева',
-  (SELECT id FROM profiles WHERE display_name = 'Леонид' LIMIT 1),
+  NULL,
   'Леонид',
   NOW(),
   NOW()
@@ -12075,7 +12078,7 @@ SELECT
   10080,
   0,
   'В мвияжск передать',
-  (SELECT id FROM profiles WHERE display_name = 'Леонид' LIMIT 1),
+  NULL,
   'Леонид',
   NOW(),
   NOW()
@@ -12108,7 +12111,7 @@ SELECT
   12000,
   0,
   'Сама заберет утром',
-  (SELECT id FROM profiles WHERE display_name = 'Стас' LIMIT 1),
+  NULL,
   'Стас',
   NOW(),
   NOW()
@@ -12141,7 +12144,7 @@ SELECT
   7360,
   0,
   'Сама заберет в 10:30',
-  (SELECT id FROM profiles WHERE display_name = 'Стас' LIMIT 1),
+  NULL,
   'Стас',
   NOW(),
   NOW()
@@ -12174,7 +12177,7 @@ SELECT
   6480,
   0,
   'Группа 21 на 3 дня и группа 9 на 2 дня В кристалл 11.08 вечером',
-  (SELECT id FROM profiles WHERE display_name = 'Стас' LIMIT 1),
+  NULL,
   'Стас',
   NOW(),
   NOW()
@@ -12207,7 +12210,7 @@ SELECT
   3200,
   0,
   'От Релита до Ногая',
-  (SELECT id FROM profiles WHERE display_name = 'Стас' LIMIT 1),
+  NULL,
   'Стас',
   NOW(),
   NOW()
@@ -12240,7 +12243,7 @@ SELECT
   16480,
   0,
   '4 сумки по 49+1 1 сумка по 10+1 (Наталья) В офис тиц до 10:30, вернут 29.07 до 12:00 Ильмира, Яна, Инна, (Надия кристалл ) до 13:00',
-  (SELECT id FROM profiles WHERE display_name = 'Стас' LIMIT 1),
+  NULL,
   'Стас',
   NOW(),
   NOW()
@@ -12273,7 +12276,7 @@ SELECT
   4320,
   0,
   'Заберет гид Ольга вечером или утром',
-  (SELECT id FROM profiles WHERE display_name = 'Стас' LIMIT 1),
+  NULL,
   'Стас',
   NOW(),
   NOW()
@@ -12306,7 +12309,7 @@ SELECT
   4800,
   0,
   'Гид Лариса на Баумана 49, 26.07 до 17:00 на 50шт Гид Гульнара на Баумана 49, 26.07 до 17:00 на 10шт Вернут 27.07 до 19:00',
-  (SELECT id FROM profiles WHERE display_name = 'Стас' LIMIT 1),
+  NULL,
   'Стас',
   NOW(),
   NOW()
@@ -12339,7 +12342,7 @@ SELECT
   16000,
   0,
   'Гид Ванда в кристалл 26.07 до 20:00 на 50шт +2!!! Запасных(так как 2 дня) +двойной комплект наушников Гид Вероника в кристалл 26.07 до 20:00 на 50шт +2!!! Запасных(так как 2 дня) +двойной комплект наушников Вернут 29.07 до 12:00',
-  (SELECT id FROM profiles WHERE display_name = 'Стас' LIMIT 1),
+  NULL,
   'Стас',
   NOW(),
   NOW()
@@ -12372,7 +12375,7 @@ SELECT
   12000,
   0,
   'Гид Алексей на Баумана 49, 26.07 до 17:00, 50 радиогидов Гид Елена в Кристалл, 26.07 вечером, 50 радиогидов Гид Ирина на Баумана 49, 26.07 до 17:00, 50 радиогидов Вернут 27.07 до 19:00 в офис ТИЦ',
-  (SELECT id FROM profiles WHERE display_name = 'Стас' LIMIT 1),
+  NULL,
   'Стас',
   NOW(),
   NOW()
@@ -12405,7 +12408,7 @@ SELECT
   2880,
   0,
   'Регину на университетской к 8',
-  (SELECT id FROM profiles WHERE display_name = 'Стас' LIMIT 1),
+  NULL,
   'Стас',
   NOW(),
   NOW()
@@ -12438,7 +12441,7 @@ SELECT
   3600,
   0,
   'Кристал',
-  (SELECT id FROM profiles WHERE display_name = 'Леонид' LIMIT 1),
+  NULL,
   'Леонид',
   NOW(),
   NOW()
@@ -12471,7 +12474,7 @@ SELECT
   2880,
   0,
   'Кристал',
-  (SELECT id FROM profiles WHERE display_name = 'Леонид' LIMIT 1),
+  NULL,
   'Леонид',
   NOW(),
   NOW()
@@ -12504,7 +12507,7 @@ SELECT
   4800,
   0,
   '-',
-  (SELECT id FROM profiles WHERE display_name = 'Леонид' LIMIT 1),
+  NULL,
   'Леонид',
   NOW(),
   NOW()
@@ -12536,7 +12539,7 @@ SELECT
   2400,
   0,
   'Гузель. Корстон, до 14:00. Ваучер Кремль',
-  (SELECT id FROM profiles WHERE display_name = 'Леонид' LIMIT 1),
+  NULL,
   'Леонид',
   NOW(),
   NOW()
@@ -12568,7 +12571,7 @@ SELECT
   5040,
   0,
   'Заберет утром',
-  (SELECT id FROM profiles WHERE display_name = 'Леонид' LIMIT 1),
+  NULL,
   'Леонид',
   NOW(),
   NOW()
@@ -12601,7 +12604,7 @@ SELECT
   2800,
   0,
   'Владимир',
-  (SELECT id FROM profiles WHERE display_name = 'Леонид' LIMIT 1),
+  NULL,
   'Леонид',
   NOW(),
   NOW()
@@ -12634,7 +12637,7 @@ SELECT
   1120,
   0,
   'Корстон',
-  (SELECT id FROM profiles WHERE display_name = 'Леонид' LIMIT 1),
+  NULL,
   'Леонид',
   NOW(),
   NOW()
@@ -12667,7 +12670,7 @@ SELECT
   2800,
   0,
   'Заберут вечером 25 числа',
-  (SELECT id FROM profiles WHERE display_name = 'Леонид' LIMIT 1),
+  NULL,
   'Леонид',
   NOW(),
   NOW()
@@ -12700,7 +12703,7 @@ SELECT
   4160,
   0,
   'В азалию',
-  (SELECT id FROM profiles WHERE display_name = 'Леонид' LIMIT 1),
+  NULL,
   'Леонид',
   NOW(),
   NOW()
@@ -12733,7 +12736,7 @@ SELECT
   6560,
   0,
   '-',
-  (SELECT id FROM profiles WHERE display_name = 'Леонид' LIMIT 1),
+  NULL,
   'Леонид',
   NOW(),
   NOW()
@@ -12766,7 +12769,7 @@ SELECT
   20800,
   0,
   '5 сумок по 50, гид Елена, Алексей, Инна, Яна, Ванда 1 сумка на 10 Диляра В офис тиц к 10:30 Вернут до 19:00',
-  (SELECT id FROM profiles WHERE display_name = 'Стас' LIMIT 1),
+  NULL,
   'Стас',
   NOW(),
   NOW()
@@ -12799,7 +12802,7 @@ SELECT
   3680,
   0,
   'Кристал Два микрофона и передатчика',
-  (SELECT id FROM profiles WHERE display_name = 'Стас' LIMIT 1),
+  NULL,
   'Стас',
   NOW(),
   NOW()
@@ -12832,7 +12835,7 @@ SELECT
   1840,
   0,
   'От Сафара в Сулейман',
-  (SELECT id FROM profiles WHERE display_name = 'Стас' LIMIT 1),
+  NULL,
   'Стас',
   NOW(),
   NOW()
@@ -12865,7 +12868,7 @@ SELECT
   4960,
   0,
   'От Сафара в релиту в районе 20:00',
-  (SELECT id FROM profiles WHERE display_name = 'Стас' LIMIT 1),
+  NULL,
   'Стас',
   NOW(),
   NOW()
@@ -12898,7 +12901,7 @@ SELECT
   10400,
   0,
   '4 сумки по 22 и 2 по 21',
-  (SELECT id FROM profiles WHERE display_name = 'Стас' LIMIT 1),
+  NULL,
   'Стас',
   NOW(),
   NOW()
@@ -12931,7 +12934,7 @@ SELECT
   3280,
   0,
   'Ольга ткач. Ваучер на свияжск',
-  (SELECT id FROM profiles WHERE display_name = 'Леонид' LIMIT 1),
+  NULL,
   'Леонид',
   NOW(),
   NOW()
@@ -12963,7 +12966,7 @@ SELECT
   11280,
   0,
   'В Кристал',
-  (SELECT id FROM profiles WHERE display_name = 'Стас' LIMIT 1),
+  NULL,
   'Стас',
   NOW(),
   NOW()
@@ -12996,7 +12999,7 @@ SELECT
   960,
   0,
   'Хилтон. На имя Татьяна',
-  (SELECT id FROM profiles WHERE display_name = 'Леонид' LIMIT 1),
+  NULL,
   'Леонид',
   NOW(),
   NOW()
@@ -13029,7 +13032,7 @@ SELECT
   5000,
   0,
   '27 заберут вечером Две сумки по 25шт',
-  (SELECT id FROM profiles WHERE display_name = 'Стас' LIMIT 1),
+  NULL,
   'Стас',
   NOW(),
   NOW()
@@ -13062,7 +13065,7 @@ SELECT
   3360,
   0,
   'В Татарстан к 8 Вернут туда же в 15:00',
-  (SELECT id FROM profiles WHERE display_name = 'Стас' LIMIT 1),
+  NULL,
   'Стас',
   NOW(),
   NOW()
@@ -13095,7 +13098,7 @@ SELECT
   3600,
   0,
   'В Фатиму',
-  (SELECT id FROM profiles WHERE display_name = 'Леонид' LIMIT 1),
+  NULL,
   'Леонид',
   NOW(),
   NOW()
@@ -13128,7 +13131,7 @@ SELECT
   10880,
   0,
   'Сумки на 32 и 36 В Релиту на имя Эльзы +7 904 717-59-99',
-  (SELECT id FROM profiles WHERE display_name = 'Стас' LIMIT 1),
+  NULL,
   'Стас',
   NOW(),
   NOW()
@@ -13161,7 +13164,7 @@ SELECT
   12000,
   0,
   'В марриот 21.07',
-  (SELECT id FROM profiles WHERE display_name = 'Стас' LIMIT 1),
+  NULL,
   'Стас',
   NOW(),
   NOW()
@@ -13194,7 +13197,7 @@ SELECT
   1400,
   0,
   'В офис',
-  (SELECT id FROM profiles WHERE display_name = 'Стас' LIMIT 1),
+  NULL,
   'Стас',
   NOW(),
   NOW()
@@ -13227,7 +13230,7 @@ SELECT
   3520,
   0,
   'Группа Марии',
-  (SELECT id FROM profiles WHERE display_name = 'Стас' LIMIT 1),
+  NULL,
   'Стас',
   NOW(),
   NOW()
@@ -13260,7 +13263,7 @@ SELECT
   7680,
   0,
   'Группа Ирины Вернули в кристалл',
-  (SELECT id FROM profiles WHERE display_name = 'Стас' LIMIT 1),
+  NULL,
   'Стас',
   NOW(),
   NOW()
@@ -13293,7 +13296,7 @@ SELECT
   10080,
   0,
   'Группа Кати Вернули в кристалл',
-  (SELECT id FROM profiles WHERE display_name = 'Стас' LIMIT 1),
+  NULL,
   'Стас',
   NOW(),
   NOW()
@@ -13326,7 +13329,7 @@ SELECT
   3440,
   0,
   'Кристал, Лейла',
-  (SELECT id FROM profiles WHERE display_name = 'Леонид' LIMIT 1),
+  NULL,
   'Леонид',
   NOW(),
   NOW()
@@ -13359,7 +13362,7 @@ SELECT
   7040,
   0,
   'Две сумки по 44шт В Тиц 17.07 до 17:00 Вернут 18.07 до 19:00 1) Гид Серов Алексей +7 917 255-38-26 2) Гид Елена Яхъяева +7 927 401-58-22',
-  (SELECT id FROM profiles WHERE display_name = 'Стас' LIMIT 1),
+  NULL,
   'Стас',
   NOW(),
   NOW()
@@ -13392,7 +13395,7 @@ SELECT
   3440,
   0,
   'В Сафар, вернут в корстон',
-  (SELECT id FROM profiles WHERE display_name = 'Стас' LIMIT 1),
+  NULL,
   'Стас',
   NOW(),
   NOW()
@@ -13425,7 +13428,7 @@ SELECT
   4900,
   0,
   'Заберут 17',
-  (SELECT id FROM profiles WHERE display_name = 'Леонид' LIMIT 1),
+  NULL,
   'Леонид',
   NOW(),
   NOW()
@@ -13458,7 +13461,7 @@ SELECT
   3440,
   0,
   'От релита вернут в релиту',
-  (SELECT id FROM profiles WHERE display_name = 'Стас' LIMIT 1),
+  NULL,
   'Стас',
   NOW(),
   NOW()
@@ -13491,7 +13494,7 @@ SELECT
   2160,
   0,
   'В здание присутсвеныхх мест 16.07 до 20:00',
-  (SELECT id FROM profiles WHERE display_name = 'Стас' LIMIT 1),
+  NULL,
   'Стас',
   NOW(),
   NOW()
@@ -13524,7 +13527,7 @@ SELECT
   6600,
   0,
   'В татарскую усадьбу не ресепшен',
-  (SELECT id FROM profiles WHERE display_name = 'Стас' LIMIT 1),
+  NULL,
   'Стас',
   NOW(),
   NOW()
@@ -13557,7 +13560,7 @@ SELECT
   9450,
   0,
   'Доставка',
-  (SELECT id FROM profiles WHERE display_name = 'Леонид' LIMIT 1),
+  NULL,
   'Леонид',
   NOW(),
   NOW()
@@ -13590,7 +13593,7 @@ SELECT
   7200,
   0,
   'Сама заберет утром в 10:30',
-  (SELECT id FROM profiles WHERE display_name = 'Стас' LIMIT 1),
+  NULL,
   'Стас',
   NOW(),
   NOW()
@@ -13623,7 +13626,7 @@ SELECT
   5920,
   0,
   'Заберет утром',
-  (SELECT id FROM profiles WHERE display_name = 'Леонид' LIMIT 1),
+  NULL,
   'Леонид',
   NOW(),
   NOW()
@@ -13656,7 +13659,7 @@ SELECT
   800,
   0,
   '-',
-  (SELECT id FROM profiles WHERE display_name = 'Леонид' LIMIT 1),
+  NULL,
   'Леонид',
   NOW(),
   NOW()
@@ -13689,7 +13692,7 @@ SELECT
   2560,
   0,
   'В тасиго нео. На имя Валерия Матросова',
-  (SELECT id FROM profiles WHERE display_name = 'Леонид' LIMIT 1),
+  NULL,
   'Леонид',
   NOW(),
   NOW()
@@ -13722,7 +13725,7 @@ SELECT
   2240,
   0,
   'Добрый вечер, Леонид. На 11 июля надо на 28 чел. Радио гиды к 9.45 До вечера. Гид Ирина Палей +7 904 662-07-32. в А матти М. Джалиля1 Оставила в кристалле!',
-  (SELECT id FROM profiles WHERE display_name = 'Леонид' LIMIT 1),
+  NULL,
   'Леонид',
   NOW(),
   NOW()
@@ -13755,7 +13758,7 @@ SELECT
   8000,
   0,
   'Уточнить',
-  (SELECT id FROM profiles WHERE display_name = 'Леонид' LIMIT 1),
+  NULL,
   'Леонид',
   NOW(),
   NOW()
@@ -13788,7 +13791,7 @@ SELECT
   1200,
   0,
   'Заберет',
-  (SELECT id FROM profiles WHERE display_name = 'Леонид' LIMIT 1),
+  NULL,
   'Леонид',
   NOW(),
   NOW()
@@ -13821,7 +13824,7 @@ SELECT
   2720,
   0,
   'В амакс Сафар, вернут в корстон',
-  (SELECT id FROM profiles WHERE display_name = 'Стас' LIMIT 1),
+  NULL,
   'Стас',
   NOW(),
   NOW()
@@ -13854,7 +13857,7 @@ SELECT
   3520,
   0,
   'Крсталл С группой наш сотрудник Елена 89277678701',
-  (SELECT id FROM profiles WHERE display_name = 'Стас' LIMIT 1),
+  NULL,
   'Стас',
   NOW(),
   NOW()
@@ -13887,7 +13890,7 @@ SELECT
   3200,
   0,
   'Уточнить',
-  (SELECT id FROM profiles WHERE display_name = 'Леонид' LIMIT 1),
+  NULL,
   'Леонид',
   NOW(),
   NOW()
@@ -13920,7 +13923,7 @@ SELECT
   3600,
   0,
   'Сумка в Мано',
-  (SELECT id FROM profiles WHERE display_name = 'Леонид' LIMIT 1),
+  NULL,
   'Леонид',
   NOW(),
   NOW()
@@ -13953,7 +13956,7 @@ SELECT
   4160,
   0,
   'Заберут',
-  (SELECT id FROM profiles WHERE display_name = 'Леонид' LIMIT 1),
+  NULL,
   'Леонид',
   NOW(),
   NOW()
@@ -13986,7 +13989,7 @@ SELECT
   9120,
   0,
   'Заберут 10 в течение дня',
-  (SELECT id FROM profiles WHERE display_name = 'Леонид' LIMIT 1),
+  NULL,
   'Леонид',
   NOW(),
   NOW()
@@ -14019,7 +14022,7 @@ SELECT
   11280,
   0,
   'Кристалл',
-  (SELECT id FROM profiles WHERE display_name = 'Стас' LIMIT 1),
+  NULL,
   'Стас',
   NOW(),
   NOW()
@@ -14052,7 +14055,7 @@ SELECT
   1840,
   0,
   'В релиту, вернут в кристалл',
-  (SELECT id FROM profiles WHERE display_name = 'Стас' LIMIT 1),
+  NULL,
   'Стас',
   NOW(),
   NOW()
@@ -14085,7 +14088,7 @@ SELECT
   4160,
   0,
   '18.07 в офис, забрать 20.07 Гид: Алексей Серов +7 917 255-38-26',
-  (SELECT id FROM profiles WHERE display_name = 'Стас' LIMIT 1),
+  NULL,
   'Стас',
   NOW(),
   NOW()
@@ -14118,7 +14121,7 @@ SELECT
   2480,
   0,
   '-',
-  (SELECT id FROM profiles WHERE display_name = 'Леонид' LIMIT 1),
+  NULL,
   'Леонид',
   NOW(),
   NOW()
@@ -14151,7 +14154,7 @@ SELECT
   1680,
   0,
   'В Тиц до 10:30 Вернут до 19:00 в Тиц Мен Камилла Гид Эльвира +7 917 228-93-99',
-  (SELECT id FROM profiles WHERE display_name = 'Стас' LIMIT 1),
+  NULL,
   'Стас',
   NOW(),
   NOW()
@@ -14184,7 +14187,7 @@ SELECT
   5440,
   0,
   '-',
-  (SELECT id FROM profiles WHERE display_name = 'Леонид' LIMIT 1),
+  NULL,
   'Леонид',
   NOW(),
   NOW()
@@ -14217,7 +14220,7 @@ SELECT
   4800,
   0,
   'Петербуржская 52',
-  (SELECT id FROM profiles WHERE display_name = 'Леонид' LIMIT 1),
+  NULL,
   'Леонид',
   NOW(),
   NOW()
@@ -14250,7 +14253,7 @@ SELECT
   6240,
   0,
   '4-5 июня 39 человек. Нужны радиогидв. Гид Ирина 89046620732',
-  (SELECT id FROM profiles WHERE display_name = 'Леонид' LIMIT 1),
+  NULL,
   'Леонид',
   NOW(),
   NOW()
@@ -14283,7 +14286,7 @@ SELECT
   10560,
   0,
   'В кристалл',
-  (SELECT id FROM profiles WHERE display_name = 'Стас' LIMIT 1),
+  NULL,
   'Стас',
   NOW(),
   NOW()
@@ -14316,7 +14319,7 @@ SELECT
   4080,
   0,
   'в офис 07.07 с 9:00 до 12:30?',
-  (SELECT id FROM profiles WHERE display_name = 'Стас' LIMIT 1),
+  NULL,
   'Стас',
   NOW(),
   NOW()
@@ -14349,7 +14352,7 @@ SELECT
   10600,
   0,
   'В 8 утра в алтын куль Гид Марина 8917 288-90-13',
-  (SELECT id FROM profiles WHERE display_name = 'Стас' LIMIT 1),
+  NULL,
   'Стас',
   NOW(),
   NOW()
@@ -14382,7 +14385,7 @@ SELECT
   12000,
   0,
   'Кристал',
-  (SELECT id FROM profiles WHERE display_name = 'Леонид' LIMIT 1),
+  NULL,
   'Леонид',
   NOW(),
   NOW()
@@ -14415,7 +14418,7 @@ SELECT
   2800,
   0,
   'В Татарстан',
-  (SELECT id FROM profiles WHERE display_name = 'Стас' LIMIT 1),
+  NULL,
   'Стас',
   NOW(),
   NOW()
@@ -14448,7 +14451,7 @@ SELECT
   3360,
   0,
   'Сумка на 20 и 5',
-  (SELECT id FROM profiles WHERE display_name = 'Леонид' LIMIT 1),
+  NULL,
   'Леонид',
   NOW(),
   NOW()
@@ -14481,7 +14484,7 @@ SELECT
   2240,
   0,
   'Срочный заказ в Кремль',
-  (SELECT id FROM profiles WHERE display_name = 'Леонид' LIMIT 1),
+  NULL,
   'Леонид',
   NOW(),
   NOW()
@@ -14513,7 +14516,7 @@ SELECT
   6080,
   0,
   'Заберет примерно в 10:30',
-  (SELECT id FROM profiles WHERE display_name = 'Стас' LIMIT 1),
+  NULL,
   'Стас',
   NOW(),
   NOW()
@@ -14546,7 +14549,7 @@ SELECT
   4480,
   0,
   '29 июня к 7.30 в Кристалл надо радиогиды на 28 человек.сдадут в Кристалл 30 июня после 17.00 гид Ирина 89046620732',
-  (SELECT id FROM profiles WHERE display_name = 'Леонид' LIMIT 1),
+  NULL,
   'Леонид',
   NOW(),
   NOW()
@@ -14579,7 +14582,7 @@ SELECT
   7520,
   0,
   '27 июня надо на 47 чел. Радиогиды в Кристалл к 7.00. Сдадут в Кристал вечером 28. Гид Ванда 89655868806',
-  (SELECT id FROM profiles WHERE display_name = 'Леонид' LIMIT 1),
+  NULL,
   'Леонид',
   NOW(),
   NOW()
@@ -14612,7 +14615,7 @@ SELECT
   2880,
   0,
   'В 15:00 от Кремля',
-  (SELECT id FROM profiles WHERE display_name = 'Леонид' LIMIT 1),
+  NULL,
   'Леонид',
   NOW(),
   NOW()
@@ -14644,7 +14647,7 @@ SELECT
   1600,
   0,
   'Заберет сама',
-  (SELECT id FROM profiles WHERE display_name = 'Стас' LIMIT 1),
+  NULL,
   'Стас',
   NOW(),
   NOW()
@@ -14677,7 +14680,7 @@ SELECT
   1190,
   0,
   'Заберут',
-  (SELECT id FROM profiles WHERE display_name = 'Леонид' LIMIT 1),
+  NULL,
   'Леонид',
   NOW(),
   NOW()
@@ -14710,7 +14713,7 @@ SELECT
   4000,
   0,
   'Уточнить',
-  (SELECT id FROM profiles WHERE display_name = 'Леонид' LIMIT 1),
+  NULL,
   'Леонид',
   NOW(),
   NOW()
@@ -14743,7 +14746,7 @@ SELECT
   3200,
   0,
   'Заберут. 28 утром',
-  (SELECT id FROM profiles WHERE display_name = 'Леонид' LIMIT 1),
+  NULL,
   'Леонид',
   NOW(),
   NOW()
@@ -14776,7 +14779,7 @@ SELECT
   1400,
   0,
   'Карат',
-  (SELECT id FROM profiles WHERE display_name = 'Леонид' LIMIT 1),
+  NULL,
   'Леонид',
   NOW(),
   NOW()
@@ -14809,7 +14812,7 @@ SELECT
   3010,
   0,
   'Завтрак в Марджани 8. В 8:00',
-  (SELECT id FROM profiles WHERE display_name = 'Леонид' LIMIT 1),
+  NULL,
   'Леонид',
   NOW(),
   NOW()
@@ -14842,7 +14845,7 @@ SELECT
   3640,
   0,
   'Кристал. Ирина. 1 лежит отдельно, не работает',
-  (SELECT id FROM profiles WHERE display_name = 'Леонид' LIMIT 1),
+  NULL,
   'Леонид',
   NOW(),
   NOW()
@@ -14875,7 +14878,7 @@ SELECT
   3640,
   0,
   'Кристал. Владимир',
-  (SELECT id FROM profiles WHERE display_name = 'Леонид' LIMIT 1),
+  NULL,
   'Леонид',
   NOW(),
   NOW()
@@ -14908,7 +14911,7 @@ SELECT
   9600,
   0,
   '3 сумки по 40 в Ривьеру к 14:30, забрать в 18:20 из туган авылым 89377044790 Анастасия ответственная',
-  (SELECT id FROM profiles WHERE display_name = 'Стас' LIMIT 1),
+  NULL,
   'Стас',
   NOW(),
   NOW()
@@ -14941,7 +14944,7 @@ SELECT
   2000,
   0,
   'В офис к 10:30, забрать с отеля мираж после 20:00 +7 903 388-89-29 Гид Ильмира',
-  (SELECT id FROM profiles WHERE display_name = 'Стас' LIMIT 1),
+  NULL,
   'Стас',
   NOW(),
   NOW()
@@ -14974,7 +14977,7 @@ SELECT
   3440,
   0,
   'В релиту, вернут в релиту',
-  (SELECT id FROM profiles WHERE display_name = 'Стас' LIMIT 1),
+  NULL,
   'Стас',
   NOW(),
   NOW()
@@ -15007,7 +15010,7 @@ SELECT
   1760,
   0,
   'В Сафар, вернут в Корстон',
-  (SELECT id FROM profiles WHERE display_name = 'Стас' LIMIT 1),
+  NULL,
   'Стас',
   NOW(),
   NOW()
@@ -15040,7 +15043,7 @@ SELECT
   2960,
   0,
   'В Кристал',
-  (SELECT id FROM profiles WHERE display_name = 'Стас' LIMIT 1),
+  NULL,
   'Стас',
   NOW(),
   NOW()
@@ -15073,7 +15076,7 @@ SELECT
   1920,
   0,
   'Заберет',
-  (SELECT id FROM profiles WHERE display_name = 'Леонид' LIMIT 1),
+  NULL,
   'Леонид',
   NOW(),
   NOW()
@@ -15106,7 +15109,7 @@ SELECT
   2880,
   0,
   'НЕО тасига',
-  (SELECT id FROM profiles WHERE display_name = 'Леонид' LIMIT 1),
+  NULL,
   'Леонид',
   NOW(),
   NOW()
@@ -15139,7 +15142,7 @@ SELECT
   20000,
   0,
   '3 сумки по 52шт в офис Тиц Забрать 27',
-  (SELECT id FROM profiles WHERE display_name = 'Стас' LIMIT 1),
+  NULL,
   'Стас',
   NOW(),
   NOW()
@@ -15172,7 +15175,7 @@ SELECT
   7200,
   0,
   'В офис две сумки по 45',
-  (SELECT id FROM profiles WHERE display_name = 'Стас' LIMIT 1),
+  NULL,
   'Стас',
   NOW(),
   NOW()
@@ -15205,7 +15208,7 @@ SELECT
   1600,
   0,
   'В Нео Гид Эльзара для компании Пфайзер',
-  (SELECT id FROM profiles WHERE display_name = 'Стас' LIMIT 1),
+  NULL,
   'Стас',
   NOW(),
   NOW()
@@ -15238,7 +15241,7 @@ SELECT
   4480,
   0,
   '23.06 и 24.06* Группа 32 чел+ гид Владимир т. +7 917 885-84-09, гид Владимир',
-  (SELECT id FROM profiles WHERE display_name = 'Леонид' LIMIT 1),
+  NULL,
   'Леонид',
   NOW(),
   NOW()
@@ -15271,7 +15274,7 @@ SELECT
   3200,
   0,
   'и на завтра нужно 40 штук в 11:30 от ул Толстого д.14 . Гид Нурия',
-  (SELECT id FROM profiles WHERE display_name = 'Леонид' LIMIT 1),
+  NULL,
   'Леонид',
   NOW(),
   NOW()
@@ -15303,7 +15306,7 @@ SELECT
   2960,
   0,
   'Заберет утром Елена Козлова',
-  (SELECT id FROM profiles WHERE display_name = 'Леонид' LIMIT 1),
+  NULL,
   'Леонид',
   NOW(),
   NOW()
@@ -15336,7 +15339,7 @@ SELECT
   7360,
   0,
   '-',
-  (SELECT id FROM profiles WHERE display_name = 'Стас' LIMIT 1),
+  NULL,
   'Стас',
   NOW(),
   NOW()
@@ -15369,7 +15372,7 @@ SELECT
   13120,
   0,
   '-',
-  (SELECT id FROM profiles WHERE display_name = 'Стас' LIMIT 1),
+  NULL,
   'Стас',
   NOW(),
   NOW()
@@ -15402,7 +15405,7 @@ SELECT
   2100,
   0,
   'Забрать из Сулеймана Ирина',
-  (SELECT id FROM profiles WHERE display_name = 'Леонид' LIMIT 1),
+  NULL,
   'Леонид',
   NOW(),
   NOW()
@@ -15435,7 +15438,7 @@ SELECT
   7680,
   0,
   'Кристал Ольга',
-  (SELECT id FROM profiles WHERE display_name = 'Леонид' LIMIT 1),
+  NULL,
   'Леонид',
   NOW(),
   NOW()
@@ -15468,7 +15471,7 @@ SELECT
   2560,
   0,
   'Раймонд. Для Татьяны',
-  (SELECT id FROM profiles WHERE display_name = 'Леонид' LIMIT 1),
+  NULL,
   'Леонид',
   NOW(),
   NOW()
@@ -15501,7 +15504,7 @@ SELECT
   2960,
   0,
   'В релиту, вернут туда же',
-  (SELECT id FROM profiles WHERE display_name = 'Стас' LIMIT 1),
+  NULL,
   'Стас',
   NOW(),
   NOW()
@@ -15534,7 +15537,7 @@ SELECT
   2240,
   0,
   'В Сафар, вернут в Сулейман',
-  (SELECT id FROM profiles WHERE display_name = 'Стас' LIMIT 1),
+  NULL,
   'Стас',
   NOW(),
   NOW()
@@ -15567,7 +15570,7 @@ SELECT
   2400,
   0,
   'В кристал',
-  (SELECT id FROM profiles WHERE display_name = 'Стас' LIMIT 1),
+  NULL,
   'Стас',
   NOW(),
   NOW()
@@ -15600,7 +15603,7 @@ SELECT
   7200,
   0,
   'В Европу , оставят в АйТи парке',
-  (SELECT id FROM profiles WHERE display_name = 'Стас' LIMIT 1),
+  NULL,
   'Стас',
   NOW(),
   NOW()
@@ -15633,7 +15636,7 @@ SELECT
   3760,
   0,
   'В нео Тасиго с 9 до 18',
-  (SELECT id FROM profiles WHERE display_name = 'Стас' LIMIT 1),
+  NULL,
   'Стас',
   NOW(),
   NOW()
@@ -15666,7 +15669,7 @@ SELECT
   2400,
   0,
   'Да, пусть оставят на ресепшене на мой номер (1617 Стрелкова Анастасия) корстон',
-  (SELECT id FROM profiles WHERE display_name = 'Леонид' LIMIT 1),
+  NULL,
   'Леонид',
   NOW(),
   NOW()
@@ -15699,7 +15702,7 @@ SELECT
   12000,
   0,
   'Элина',
-  (SELECT id FROM profiles WHERE display_name = 'Леонид' LIMIT 1),
+  NULL,
   'Леонид',
   NOW(),
   NOW()
@@ -15731,7 +15734,7 @@ SELECT
   6720,
   0,
   'Заберет утром в 10:30',
-  (SELECT id FROM profiles WHERE display_name = 'Стас' LIMIT 1),
+  NULL,
   'Стас',
   NOW(),
   NOW()
@@ -15764,7 +15767,7 @@ SELECT
   5280,
   0,
   'Кристал',
-  (SELECT id FROM profiles WHERE display_name = 'Леонид' LIMIT 1),
+  NULL,
   'Леонид',
   NOW(),
   NOW()
@@ -15797,7 +15800,7 @@ SELECT
   2480,
   0,
   'Амстердам',
-  (SELECT id FROM profiles WHERE display_name = 'Леонид' LIMIT 1),
+  NULL,
   'Леонид',
   NOW(),
   NOW()
@@ -15830,7 +15833,7 @@ SELECT
   5000,
   0,
   'Оставила в бусинке',
-  (SELECT id FROM profiles WHERE display_name = 'Стас' LIMIT 1),
+  NULL,
   'Стас',
   NOW(),
   NOW()
@@ -15863,7 +15866,7 @@ SELECT
   12160,
   0,
   'В офис Тиц',
-  (SELECT id FROM profiles WHERE display_name = 'Стас' LIMIT 1),
+  NULL,
   'Стас',
   NOW(),
   NOW()
@@ -15896,7 +15899,7 @@ SELECT
   11840,
   0,
   'В офис тиц',
-  (SELECT id FROM profiles WHERE display_name = 'Стас' LIMIT 1),
+  NULL,
   'Стас',
   NOW(),
   NOW()
@@ -15929,7 +15932,7 @@ SELECT
   3440,
   0,
   'Позвонит экскурсовод. Утром созвониться Сдали в татарскую усадьбу',
-  (SELECT id FROM profiles WHERE display_name = 'Леонид' LIMIT 1),
+  NULL,
   'Леонид',
   NOW(),
   NOW()
@@ -15962,7 +15965,7 @@ SELECT
   3200,
   0,
   'Заберет 27 вечером часов в 18:00',
-  (SELECT id FROM profiles WHERE display_name = 'Леонид' LIMIT 1),
+  NULL,
   'Леонид',
   NOW(),
   NOW()
@@ -15995,7 +15998,7 @@ SELECT
   4000,
   0,
   'В мано до 12, вернут после 19 в Татарстан',
-  (SELECT id FROM profiles WHERE display_name = 'Стас' LIMIT 1),
+  NULL,
   'Стас',
   NOW(),
   NOW()
@@ -16028,7 +16031,7 @@ SELECT
   1520,
   0,
   'Сулейман к 10, вернут туда же +7 937 575-03-93 гид резеда',
-  (SELECT id FROM profiles WHERE display_name = 'Стас' LIMIT 1),
+  NULL,
   'Стас',
   NOW(),
   NOW()
@@ -16061,7 +16064,7 @@ SELECT
   10320,
   0,
   'Оставила в Кристалл',
-  (SELECT id FROM profiles WHERE display_name = 'Стас' LIMIT 1),
+  NULL,
   'Стас',
   NOW(),
   NOW()
@@ -16094,7 +16097,7 @@ SELECT
   3360,
   0,
   'В кристалл, оставят там же в 17;00',
-  (SELECT id FROM profiles WHERE display_name = 'Стас' LIMIT 1),
+  NULL,
   'Стас',
   NOW(),
   NOW()
@@ -16127,7 +16130,7 @@ SELECT
   6400,
   0,
   'В космос, вернут туда же после 20:00',
-  (SELECT id FROM profiles WHERE display_name = 'Стас' LIMIT 1),
+  NULL,
   'Стас',
   NOW(),
   NOW()
@@ -16160,7 +16163,7 @@ SELECT
   2880,
   0,
   '18 штук на 11 и 12 июня. с 9.00 с апарт Отеля Пушкина 26',
-  (SELECT id FROM profiles WHERE display_name = 'Леонид' LIMIT 1),
+  NULL,
   'Леонид',
   NOW(),
   NOW()
@@ -16193,7 +16196,7 @@ SELECT
   7680,
   0,
   '10 июня надо 32 радиогида (гид Аида 89033440899) Можно,если успеете в 7.30 в Кристалл, или в 08:30 – 09:30 Завтрак Кафе «Овсянки» ул.Бутлерова 34а 89046660417',
-  (SELECT id FROM profiles WHERE display_name = 'Леонид' LIMIT 1),
+  NULL,
   'Леонид',
   NOW(),
   NOW()
@@ -16226,7 +16229,7 @@ SELECT
   2960,
   0,
   'В Сафар, вернут в Сулейман',
-  (SELECT id FROM profiles WHERE display_name = 'Стас' LIMIT 1),
+  NULL,
   'Стас',
   NOW(),
   NOW()
@@ -16259,7 +16262,7 @@ SELECT
   3200,
   0,
   'В Сафар Вернут в релиту',
-  (SELECT id FROM profiles WHERE display_name = 'Стас' LIMIT 1),
+  NULL,
   'Стас',
   NOW(),
   NOW()
@@ -16292,7 +16295,7 @@ SELECT
   4080,
   0,
   'Утром заберет в 08:00',
-  (SELECT id FROM profiles WHERE display_name = 'Стас' LIMIT 1),
+  NULL,
   'Стас',
   NOW(),
   NOW()
@@ -16325,7 +16328,7 @@ SELECT
   8400,
   0,
   'Радиогиды на все дни 40 человек 12-15 июня Отель Мираж Гид Ирина Баталова т +7 927 421-36-82 Приедут на жд в 10:50',
-  (SELECT id FROM profiles WHERE display_name = 'Леонид' LIMIT 1),
+  NULL,
   'Леонид',
   NOW(),
   NOW()
@@ -16358,7 +16361,7 @@ SELECT
   2800,
   0,
   '-',
-  (SELECT id FROM profiles WHERE display_name = 'Леонид' LIMIT 1),
+  NULL,
   'Леонид',
   NOW(),
   NOW()
@@ -16391,7 +16394,7 @@ SELECT
   2000,
   0,
   'В Татарстан Вернут туда же после 19',
-  (SELECT id FROM profiles WHERE display_name = 'Стас' LIMIT 1),
+  NULL,
   'Стас',
   NOW(),
   NOW()
@@ -16424,7 +16427,7 @@ SELECT
   9120,
   0,
   'Ирина Пронина. Кристал',
-  (SELECT id FROM profiles WHERE display_name = 'Леонид' LIMIT 1),
+  NULL,
   'Леонид',
   NOW(),
   NOW()
@@ -16457,7 +16460,7 @@ SELECT
   3200,
   0,
   'Фатима',
-  (SELECT id FROM profiles WHERE display_name = 'Леонид' LIMIT 1),
+  NULL,
   'Леонид',
   NOW(),
   NOW()
@@ -16490,7 +16493,7 @@ SELECT
   7040,
   0,
   '. 7.июня в 10 в Кристалл , радиогиды. 44 человека Гид Владимир Николаевич 89178858409 сдадут вечером 8 июня в Кристалл',
-  (SELECT id FROM profiles WHERE display_name = 'Леонид' LIMIT 1),
+  NULL,
   'Леонид',
   NOW(),
   NOW()
@@ -16523,7 +16526,7 @@ SELECT
   8160,
   0,
   'В 12 в Татарстан',
-  (SELECT id FROM profiles WHERE display_name = 'Леонид' LIMIT 1),
+  NULL,
   'Леонид',
   NOW(),
   NOW()
@@ -16556,7 +16559,7 @@ SELECT
   2870,
   0,
   'ВЕрнула в кристалл',
-  (SELECT id FROM profiles WHERE display_name = 'Стас' LIMIT 1),
+  NULL,
   'Стас',
   NOW(),
   NOW()
@@ -16589,7 +16592,7 @@ SELECT
   7520,
   0,
   'Будем в пятницу в кафе «Азу» в 15:00, возле айти',
-  (SELECT id FROM profiles WHERE display_name = 'Леонид' LIMIT 1),
+  NULL,
   'Леонид',
   NOW(),
   NOW()
@@ -16622,7 +16625,7 @@ SELECT
   12240,
   0,
   'В кристалл Гид Эльмира +7 917 878-83-60 Оставила в кристалле',
-  (SELECT id FROM profiles WHERE display_name = 'Стас' LIMIT 1),
+  NULL,
   'Стас',
   NOW(),
   NOW()
@@ -16655,7 +16658,7 @@ SELECT
   1200,
   0,
   '08:30 утра отель Венера московская г. Казань, ул. Московская, д. 35. валерий матросов гид +7 905 319-54-86',
-  (SELECT id FROM profiles WHERE display_name = 'Леонид' LIMIT 1),
+  NULL,
   'Леонид',
   NOW(),
   NOW()
@@ -16688,7 +16691,7 @@ SELECT
   6440,
   0,
   'Максим горький',
-  (SELECT id FROM profiles WHERE display_name = 'Стас' LIMIT 1),
+  NULL,
   'Стас',
   NOW(),
   NOW()
@@ -16721,7 +16724,7 @@ SELECT
   6300,
   0,
   'Оставила в волге',
-  (SELECT id FROM profiles WHERE display_name = 'Стас' LIMIT 1),
+  NULL,
   'Стас',
   NOW(),
   NOW()
@@ -16754,7 +16757,7 @@ SELECT
   2160,
   0,
   '27 штук , 5 июня в 06:00 забрать с жд вокзала Наталья. Ваучер на кремль',
-  (SELECT id FROM profiles WHERE display_name = 'Леонид' LIMIT 1),
+  NULL,
   'Леонид',
   NOW(),
   NOW()
@@ -16786,7 +16789,7 @@ SELECT
   2960,
   0,
   'Заберут. Ольга',
-  (SELECT id FROM profiles WHERE display_name = 'Леонид' LIMIT 1),
+  NULL,
   'Леонид',
   NOW(),
   NOW()
@@ -16819,7 +16822,7 @@ SELECT
   7200,
   0,
   'Кристал. Лариса',
-  (SELECT id FROM profiles WHERE display_name = 'Леонид' LIMIT 1),
+  NULL,
   'Леонид',
   NOW(),
   NOW()
@@ -16852,7 +16855,7 @@ SELECT
   4000,
   0,
   'Отель Дион Гид Юстасия, вернут утром к 10 на Баумана',
-  (SELECT id FROM profiles WHERE display_name = 'Стас' LIMIT 1),
+  NULL,
   'Стас',
   NOW(),
   NOW()
@@ -16885,7 +16888,7 @@ SELECT
   2400,
   0,
   'В кристалл Вернет в фургончик',
-  (SELECT id FROM profiles WHERE display_name = 'Стас' LIMIT 1),
+  NULL,
   'Стас',
   NOW(),
   NOW()
@@ -16918,7 +16921,7 @@ SELECT
   2400,
   0,
   'Заберет после обеда, на связи',
-  (SELECT id FROM profiles WHERE display_name = 'Леонид' LIMIT 1),
+  NULL,
   'Леонид',
   NOW(),
   NOW()
@@ -16951,7 +16954,7 @@ SELECT
   8160,
   0,
   '3-5 июня надо будет 34 радиогида в Кристалл к 10 . 30 сдадут вечером в Кристалл 5 июня гид Диана. +7 927 445-45-25',
-  (SELECT id FROM profiles WHERE display_name = 'Леонид' LIMIT 1),
+  NULL,
   'Леонид',
   NOW(),
   NOW()
@@ -16984,7 +16987,7 @@ SELECT
   3440,
   0,
   'В Сафар Вернут в Релиту в 23:30',
-  (SELECT id FROM profiles WHERE display_name = 'Стас' LIMIT 1),
+  NULL,
   'Стас',
   NOW(),
   NOW()
@@ -17017,7 +17020,7 @@ SELECT
   10080,
   0,
   'В кристалл Вернут в кристал 06 после 21:00 Гид Ванда 1 утерян',
-  (SELECT id FROM profiles WHERE display_name = 'Стас' LIMIT 1),
+  NULL,
   'Стас',
   NOW(),
   NOW()
@@ -17050,7 +17053,7 @@ SELECT
   7200,
   0,
   'Ирина пронина',
-  (SELECT id FROM profiles WHERE display_name = 'Леонид' LIMIT 1),
+  NULL,
   'Леонид',
   NOW(),
   NOW()
@@ -17083,7 +17086,7 @@ SELECT
   6400,
   0,
   'Рамада ~Антон Зенков +7 919 695‑73‑73',
-  (SELECT id FROM profiles WHERE display_name = 'Леонид' LIMIT 1),
+  NULL,
   'Леонид',
   NOW(),
   NOW()
@@ -17116,7 +17119,7 @@ SELECT
   2800,
   0,
   '3 до 19 Забрать 5',
-  (SELECT id FROM profiles WHERE display_name = 'Стас' LIMIT 1),
+  NULL,
   'Стас',
   NOW(),
   NOW()
@@ -17149,7 +17152,7 @@ SELECT
   11040,
   0,
   'Кристал, Яна',
-  (SELECT id FROM profiles WHERE display_name = 'Леонид' LIMIT 1),
+  NULL,
   'Леонид',
   NOW(),
   NOW()
@@ -17182,7 +17185,7 @@ SELECT
   9600,
   0,
   'Кристал. Яна',
-  (SELECT id FROM profiles WHERE display_name = 'Леонид' LIMIT 1),
+  NULL,
   'Леонид',
   NOW(),
   NOW()
@@ -17215,7 +17218,7 @@ SELECT
   9600,
   0,
   'Кристал. Яна',
-  (SELECT id FROM profiles WHERE display_name = 'Леонид' LIMIT 1),
+  NULL,
   'Леонид',
   NOW(),
   NOW()
@@ -17248,7 +17251,7 @@ SELECT
   9840,
   0,
   'Кристал. Яна',
-  (SELECT id FROM profiles WHERE display_name = 'Леонид' LIMIT 1),
+  NULL,
   'Леонид',
   NOW(),
   NOW()
@@ -17281,7 +17284,7 @@ SELECT
   8320,
   0,
   'Сумка в отели Раймонд',
-  (SELECT id FROM profiles WHERE display_name = 'Леонид' LIMIT 1),
+  NULL,
   'Леонид',
   NOW(),
   NOW()
@@ -17314,7 +17317,7 @@ SELECT
   9840,
   0,
   'Кристал. Яна',
-  (SELECT id FROM profiles WHERE display_name = 'Леонид' LIMIT 1),
+  NULL,
   'Леонид',
   NOW(),
   NOW()
@@ -17347,7 +17350,7 @@ SELECT
   5280,
   0,
   '22 штуки 27,28,29,30 июня . гид Наталья Никифорова . 27 июня в 15:00 от жд восстания',
-  (SELECT id FROM profiles WHERE display_name = 'Леонид' LIMIT 1),
+  NULL,
   'Леонид',
   NOW(),
   NOW()
@@ -17379,7 +17382,7 @@ SELECT
   12480,
   0,
   '52 штуки 9,10,11 июня . гид Катя Ильина . 7:50 от центрального жд',
-  (SELECT id FROM profiles WHERE display_name = 'Леонид' LIMIT 1),
+  NULL,
   'Леонид',
   NOW(),
   NOW()
@@ -17411,7 +17414,7 @@ SELECT
   2400,
   0,
   '30 штук 28 июня 11:00 у отеля Шаляпин',
-  (SELECT id FROM profiles WHERE display_name = 'Леонид' LIMIT 1),
+  NULL,
   'Леонид',
   NOW(),
   NOW()
@@ -17443,7 +17446,7 @@ SELECT
   3200,
   0,
   '40 штук 22 июня в 10:00 отель Дион ул.Алексея Козина д.3',
-  (SELECT id FROM profiles WHERE display_name = 'Леонид' LIMIT 1),
+  NULL,
   'Леонид',
   NOW(),
   NOW()
@@ -17475,7 +17478,7 @@ SELECT
   7200,
   0,
   '45 штук 21 июня в 9:00 от Казанского Цирка',
-  (SELECT id FROM profiles WHERE display_name = 'Леонид' LIMIT 1),
+  NULL,
   'Леонид',
   NOW(),
   NOW()
@@ -17507,7 +17510,7 @@ SELECT
   1680,
   0,
   '21 штука 14 июня в 06:00 ул.Галиаскара Камала 18',
-  (SELECT id FROM profiles WHERE display_name = 'Леонид' LIMIT 1),
+  NULL,
   'Леонид',
   NOW(),
   NOW()
@@ -17539,7 +17542,7 @@ SELECT
   5440,
   0,
   '34 штуки. 13 июня -09:00- встреча Деревня Универсиады КПП 14 - 14 июня в 9:00',
-  (SELECT id FROM profiles WHERE display_name = 'Леонид' LIMIT 1),
+  NULL,
   'Леонид',
   NOW(),
   NOW()
@@ -17571,7 +17574,7 @@ SELECT
   4080,
   0,
   '51 штука . 12 июня 10:30 у глав.входа цирка. Нурия . Ваучер на Кремль',
-  (SELECT id FROM profiles WHERE display_name = 'Леонид' LIMIT 1),
+  NULL,
   'Леонид',
   NOW(),
   NOW()
@@ -17603,7 +17606,7 @@ SELECT
   3440,
   0,
   '3 июня нужно 43 штуки , в 9:00 ул.чернышевского 17. Гид Наталья Никифорова',
-  (SELECT id FROM profiles WHERE display_name = 'Леонид' LIMIT 1),
+  NULL,
   'Леонид',
   NOW(),
   NOW()
@@ -17635,7 +17638,7 @@ SELECT
   5360,
   0,
   '67 штук в 10:00 . 2 гида . и 2 ваучера на кремль. Можно Диме передать вечером , он их будет отправлять',
-  (SELECT id FROM profiles WHERE display_name = 'Леонид' LIMIT 1),
+  NULL,
   'Леонид',
   NOW(),
   NOW()
@@ -17667,7 +17670,7 @@ SELECT
   1200,
   0,
   'Заберет из бусика',
-  (SELECT id FROM profiles WHERE display_name = 'Стас' LIMIT 1),
+  NULL,
   'Стас',
   NOW(),
   NOW()
@@ -17700,7 +17703,7 @@ SELECT
   7920,
   0,
   'В Волгу Оставили в бусике',
-  (SELECT id FROM profiles WHERE display_name = 'Стас' LIMIT 1),
+  NULL,
   'Стас',
   NOW(),
   NOW()
@@ -17733,7 +17736,7 @@ SELECT
   4000,
   0,
   'Вернет 31 в обед',
-  (SELECT id FROM profiles WHERE display_name = 'Стас' LIMIT 1),
+  NULL,
   'Стас',
   NOW(),
   NOW()
@@ -17766,7 +17769,7 @@ SELECT
   2960,
   0,
   'В офис тиц Вернут вечером',
-  (SELECT id FROM profiles WHERE display_name = 'Стас' LIMIT 1),
+  NULL,
   'Стас',
   NOW(),
   NOW()
@@ -17799,7 +17802,7 @@ SELECT
   4960,
   0,
   'Заберет в обед Завезет в кристал',
-  (SELECT id FROM profiles WHERE display_name = 'Леонид' LIMIT 1),
+  NULL,
   'Леонид',
   NOW(),
   NOW()
@@ -17832,7 +17835,7 @@ SELECT
   4800,
   0,
   'Две сумки по 30шт Привезти к новому театру Камала в 14:30',
-  (SELECT id FROM profiles WHERE display_name = 'Стас' LIMIT 1),
+  NULL,
   'Стас',
   NOW(),
   NOW()
@@ -17865,7 +17868,7 @@ SELECT
   3280,
   0,
   'В Регину на Петербургской Вернут в районе 20:30 в Регину',
-  (SELECT id FROM profiles WHERE display_name = 'Стас' LIMIT 1),
+  NULL,
   'Стас',
   NOW(),
   NOW()
@@ -17898,7 +17901,7 @@ SELECT
   1520,
   0,
   '-',
-  (SELECT id FROM profiles WHERE display_name = 'Стас' LIMIT 1),
+  NULL,
   'Стас',
   NOW(),
   NOW()
@@ -17931,7 +17934,7 @@ SELECT
   3840,
   0,
   'В Булак. Оставили в кристале',
-  (SELECT id FROM profiles WHERE display_name = 'Леонид' LIMIT 1),
+  NULL,
   'Леонид',
   NOW(),
   NOW()
@@ -17964,7 +17967,7 @@ SELECT
   2320,
   0,
   'Заберет 30.05. В 17:15',
-  (SELECT id FROM profiles WHERE display_name = 'Леонид' LIMIT 1),
+  NULL,
   'Леонид',
   NOW(),
   NOW()
@@ -17997,7 +18000,7 @@ SELECT
   4000,
   0,
   'Лейла. Оставят в кристале',
-  (SELECT id FROM profiles WHERE display_name = 'Леонид' LIMIT 1),
+  NULL,
   'Леонид',
   NOW(),
   NOW()
@@ -18030,7 +18033,7 @@ SELECT
   2240,
   0,
   '29.05 до 16:00 в отель 13 на московской 13А',
-  (SELECT id FROM profiles WHERE display_name = 'Стас' LIMIT 1),
+  NULL,
   'Стас',
   NOW(),
   NOW()
@@ -18063,7 +18066,7 @@ SELECT
   1360,
   0,
   '23.30 Корстон оставят',
-  (SELECT id FROM profiles WHERE display_name = 'Стас' LIMIT 1),
+  NULL,
   'Стас',
   NOW(),
   NOW()
@@ -18096,7 +18099,7 @@ SELECT
   4800,
   0,
   'Раймонд',
-  (SELECT id FROM profiles WHERE display_name = 'Леонид' LIMIT 1),
+  NULL,
   'Леонид',
   NOW(),
   NOW()
@@ -18129,7 +18132,7 @@ SELECT
   6400,
   0,
   'Утром в 8:30 заберет',
-  (SELECT id FROM profiles WHERE display_name = 'Леонид' LIMIT 1),
+  NULL,
   'Леонид',
   NOW(),
   NOW()
@@ -18162,7 +18165,7 @@ SELECT
   8800,
   0,
   '+7 950 314-03-61 Ольга Оставит в кристалле',
-  (SELECT id FROM profiles WHERE display_name = 'Стас' LIMIT 1),
+  NULL,
   'Стас',
   NOW(),
   NOW()
@@ -18195,7 +18198,7 @@ SELECT
   2960,
   0,
   'Гранд отель Вернули туда же',
-  (SELECT id FROM profiles WHERE display_name = 'Стас' LIMIT 1),
+  NULL,
   'Стас',
   NOW(),
   NOW()
@@ -18228,7 +18231,7 @@ SELECT
   2640,
   0,
   'В Регину на университетской Вернули туда же',
-  (SELECT id FROM profiles WHERE display_name = 'Стас' LIMIT 1),
+  NULL,
   'Стас',
   NOW(),
   NOW()
@@ -18261,7 +18264,7 @@ SELECT
   8160,
   0,
   '30.05 В гостиницу Татарстан до 20:30, Оставит в бусике',
-  (SELECT id FROM profiles WHERE display_name = 'Стас' LIMIT 1),
+  NULL,
   'Стас',
   NOW(),
   NOW()
@@ -18294,7 +18297,7 @@ SELECT
   3600,
   0,
   '27 принести 29 забрать',
-  (SELECT id FROM profiles WHERE display_name = 'Стас' LIMIT 1),
+  NULL,
   'Стас',
   NOW(),
   NOW()
@@ -18327,7 +18330,7 @@ SELECT
   4480,
   0,
   '30 до 19:00 в мобильный трак Забрать можно 02.06 до 19:00',
-  (SELECT id FROM profiles WHERE display_name = 'Стас' LIMIT 1),
+  NULL,
   'Стас',
   NOW(),
   NOW()
@@ -18360,7 +18363,7 @@ SELECT
   5320,
   0,
   'Группа 38 чел+ гид Ирина т.+7 927 421-36-82 Нужны радиогиды *на завтра, на 26,27,мая* Завтра в 12:30 приезжают на ЖД центр, можно оставить в Кристалле. Забрать в Булаке',
-  (SELECT id FROM profiles WHERE display_name = 'Леонид' LIMIT 1),
+  NULL,
   'Леонид',
   NOW(),
   NOW()
@@ -18393,7 +18396,7 @@ SELECT
   2880,
   0,
   '25.05 надо 36 радиогидов завести в 9-10 на Каюма Насыри 1/5б 2 этаж музей Бик тэмле, бик матур. с ними будет работать гид Марина 89172526993',
-  (SELECT id FROM profiles WHERE display_name = 'Леонид' LIMIT 1),
+  NULL,
   'Леонид',
   NOW(),
   NOW()
@@ -18426,7 +18429,7 @@ SELECT
   7680,
   0,
   '26 мая в 9:30 ул.Лядова 16 Шк.№112 96 штук. 2 группы',
-  (SELECT id FROM profiles WHERE display_name = 'Леонид' LIMIT 1),
+  NULL,
   'Леонид',
   NOW(),
   NOW()
@@ -18458,7 +18461,7 @@ SELECT
   5200,
   0,
   '25 мая в 10:30 гост.Татарстан . 65 штук. 2 группы',
-  (SELECT id FROM profiles WHERE display_name = 'Леонид' LIMIT 1),
+  NULL,
   'Леонид',
   NOW(),
   NOW()
@@ -18490,7 +18493,7 @@ SELECT
   2400,
   0,
   'Кристал',
-  (SELECT id FROM profiles WHERE display_name = 'Леонид' LIMIT 1),
+  NULL,
   'Леонид',
   NOW(),
   NOW()
@@ -18523,7 +18526,7 @@ SELECT
   7360,
   0,
   'Заберет в 10:00',
-  (SELECT id FROM profiles WHERE display_name = 'Леонид' LIMIT 1),
+  NULL,
   'Леонид',
   NOW(),
   NOW()
@@ -18556,7 +18559,7 @@ SELECT
   3840,
   0,
   'Сумка в Азалии',
-  (SELECT id FROM profiles WHERE display_name = 'Леонид' LIMIT 1),
+  NULL,
   'Леонид',
   NOW(),
   NOW()
@@ -18588,7 +18591,7 @@ SELECT
   8640,
   0,
   '24-26 мая гид Ольга 89503140361 36 человек 24- в Кристалл до 10.30 сдаст 26- в Кристалл после 17.00',
-  (SELECT id FROM profiles WHERE display_name = 'Леонид' LIMIT 1),
+  NULL,
   'Леонид',
   NOW(),
   NOW()
@@ -18621,7 +18624,7 @@ SELECT
   5760,
   0,
   'гид Ирина Палей 89046620732 сдаст 30- в отеле Давыдов на Назарбаева после 19.00',
-  (SELECT id FROM profiles WHERE display_name = 'Леонид' LIMIT 1),
+  NULL,
   'Леонид',
   NOW(),
   NOW()
@@ -18654,7 +18657,7 @@ SELECT
   2800,
   0,
   '24 в Кристалл к 15.00 привести радиогиды на 35 человек для Ирины Палей 89046620732 для работы на 25 мая,т.к. она уедет 25.05 в Йошкар-Олу с ними в 5.30 утра. сдаст 25 мая после 18.00 по созвону.',
-  (SELECT id FROM profiles WHERE display_name = 'Леонид' LIMIT 1),
+  NULL,
   'Леонид',
   NOW(),
   NOW()
@@ -18687,7 +18690,7 @@ SELECT
   5280,
   0,
   '24-25 мая гид Владимир Николаевич 89178858409 заберет 24- в Кристалле в 7.30 на 33 человека.сдаст 25- на Баумана после 16.00',
-  (SELECT id FROM profiles WHERE display_name = 'Леонид' LIMIT 1),
+  NULL,
   'Леонид',
   NOW(),
   NOW()
@@ -18720,7 +18723,7 @@ SELECT
   1200,
   0,
   'Офис тиц',
-  (SELECT id FROM profiles WHERE display_name = 'Стас' LIMIT 1),
+  NULL,
   'Стас',
   NOW(),
   NOW()
@@ -18753,7 +18756,7 @@ SELECT
   1920,
   0,
   'От отеля Мираж в 16:30',
-  (SELECT id FROM profiles WHERE display_name = 'Стас' LIMIT 1),
+  NULL,
   'Стас',
   NOW(),
   NOW()
@@ -18786,7 +18789,7 @@ SELECT
   11200,
   0,
   'Около 10 заберет утром Сумки на 48,48, 47 Вернет на следующий день к обеду',
-  (SELECT id FROM profiles WHERE display_name = 'Стас' LIMIT 1),
+  NULL,
   'Стас',
   NOW(),
   NOW()
@@ -18819,7 +18822,7 @@ SELECT
   3200,
   0,
   'Офис тиц Забрать утром 24',
-  (SELECT id FROM profiles WHERE display_name = 'Стас' LIMIT 1),
+  NULL,
   'Стас',
   NOW(),
   NOW()
@@ -18852,7 +18855,7 @@ SELECT
   5440,
   0,
   'Две сумки по 34шт забрать утром 24',
-  (SELECT id FROM profiles WHERE display_name = 'Стас' LIMIT 1),
+  NULL,
   'Стас',
   NOW(),
   NOW()
@@ -18885,7 +18888,7 @@ SELECT
   36000,
   0,
   '-',
-  (SELECT id FROM profiles WHERE display_name = 'Леонид' LIMIT 1),
+  NULL,
   'Леонид',
   NOW(),
   NOW()
@@ -18918,7 +18921,7 @@ SELECT
   12240,
   0,
   '24.05 в тиц офис до 17 Забрать можно 27.05 после 21:00 в кристалле +7 965 586-88-06 Гид Ванда',
-  (SELECT id FROM profiles WHERE display_name = 'Стас' LIMIT 1),
+  NULL,
   'Стас',
   NOW(),
   NOW()
@@ -18951,7 +18954,7 @@ SELECT
   4400,
   0,
   '23 оставить вечером в Азимут Сдадут 24 в азимут в районе 18 Оставила в Космосе',
-  (SELECT id FROM profiles WHERE display_name = 'Стас' LIMIT 1),
+  NULL,
   'Стас',
   NOW(),
   NOW()
@@ -18984,7 +18987,7 @@ SELECT
   4800,
   0,
   'оставить в Серфе на Подлужной и Сдала в бусик',
-  (SELECT id FROM profiles WHERE display_name = 'Стас' LIMIT 1),
+  NULL,
   'Стас',
   NOW(),
   NOW()
@@ -19017,7 +19020,7 @@ SELECT
   2160,
   0,
   'Уточнить',
-  (SELECT id FROM profiles WHERE display_name = 'Леонид' LIMIT 1),
+  NULL,
   'Леонид',
   NOW(),
   NOW()
@@ -19050,7 +19053,7 @@ SELECT
   8800,
   0,
   'Две сумки по 55, в Корстон к 12',
-  (SELECT id FROM profiles WHERE display_name = 'Стас' LIMIT 1),
+  NULL,
   'Стас',
   NOW(),
   NOW()
@@ -19083,7 +19086,7 @@ SELECT
   1040,
   0,
   'Заберет сама 23 вечером Вернула в бусик',
-  (SELECT id FROM profiles WHERE display_name = 'Стас' LIMIT 1),
+  NULL,
   'Стас',
   NOW(),
   NOW()
@@ -19116,7 +19119,7 @@ SELECT
   4800,
   0,
   'Заказ Аудигид: 30шт на 20.05,21.05 гостиница Фатима Карла Маркса 2',
-  (SELECT id FROM profiles WHERE display_name = 'Леонид' LIMIT 1),
+  NULL,
   'Леонид',
   NOW(),
   NOW()
@@ -19149,7 +19152,7 @@ SELECT
   5280,
   0,
   'Елена. +7 987 296‑95‑42. Сумка в кристале',
-  (SELECT id FROM profiles WHERE display_name = 'Леонид' LIMIT 1),
+  NULL,
   'Леонид',
   NOW(),
   NOW()
@@ -19182,7 +19185,7 @@ SELECT
   2960,
   0,
   'Заберет в кристалле, Оставила в офисе',
-  (SELECT id FROM profiles WHERE display_name = 'Стас' LIMIT 1),
+  NULL,
   'Стас',
   NOW(),
   NOW()
@@ -19215,7 +19218,7 @@ SELECT
   4080,
   0,
   'Закончат к 12',
-  (SELECT id FROM profiles WHERE display_name = 'Стас' LIMIT 1),
+  NULL,
   'Стас',
   NOW(),
   NOW()
@@ -19248,7 +19251,7 @@ SELECT
   2800,
   0,
   'Завезти в Булгар отель',
-  (SELECT id FROM profiles WHERE display_name = 'Леонид' LIMIT 1),
+  NULL,
   'Леонид',
   NOW(),
   NOW()
@@ -19281,7 +19284,7 @@ SELECT
   7200,
   0,
   'Две сумки на 45 на один день',
-  (SELECT id FROM profiles WHERE display_name = 'Стас' LIMIT 1),
+  NULL,
   'Стас',
   NOW(),
   NOW()
@@ -19314,7 +19317,7 @@ SELECT
   14400,
   0,
   'Две сумки по 45 на два дня',
-  (SELECT id FROM profiles WHERE display_name = 'Стас' LIMIT 1),
+  NULL,
   'Стас',
   NOW(),
   NOW()
@@ -19347,7 +19350,7 @@ SELECT
   4960,
   0,
   '15 и 16 июня. На 31 человека. Забрать придется 14 июня, тк программа обслуживания начинается 15 июня в 05:00 утра.',
-  (SELECT id FROM profiles WHERE display_name = 'Леонид' LIMIT 1),
+  NULL,
   'Леонид',
   NOW(),
   NOW()
@@ -19380,7 +19383,7 @@ SELECT
   5600,
   0,
   'Уточнить',
-  (SELECT id FROM profiles WHERE display_name = 'Леонид' LIMIT 1),
+  NULL,
   'Леонид',
   NOW(),
   NOW()
@@ -19413,7 +19416,7 @@ SELECT
   1600,
   0,
   '5 переводчиков и 5 микрофонов',
-  (SELECT id FROM profiles WHERE display_name = 'Стас' LIMIT 1),
+  NULL,
   'Стас',
   NOW(),
   NOW()
@@ -19446,7 +19449,7 @@ SELECT
   5600,
   0,
   '(Чайка Ю) Катя Кореева В дом чая к 15:30 Вернет в кристал',
-  (SELECT id FROM profiles WHERE display_name = 'Стас' LIMIT 1),
+  NULL,
   'Стас',
   NOW(),
   NOW()
@@ -19479,7 +19482,7 @@ SELECT
   3200,
   0,
   'Заберут 16 мая',
-  (SELECT id FROM profiles WHERE display_name = 'Леонид' LIMIT 1),
+  NULL,
   'Леонид',
   NOW(),
   NOW()
@@ -19512,7 +19515,7 @@ SELECT
   8700,
   0,
   'Воронеж Гид Екатерина Геннадьевна 89275662530 Оставила в Шаляпине',
-  (SELECT id FROM profiles WHERE display_name = 'Стас' LIMIT 1),
+  NULL,
   'Стас',
   NOW(),
   NOW()
@@ -19545,7 +19548,7 @@ SELECT
   8640,
   0,
   'Кристал. Гид Элина',
-  (SELECT id FROM profiles WHERE display_name = 'Леонид' LIMIT 1),
+  NULL,
   'Леонид',
   NOW(),
   NOW()
@@ -19578,7 +19581,7 @@ SELECT
   2100,
   0,
   '16 мая, будет 30 человек + гид Владимир т. +7 917 885-84-09 Начало 16 мая в 8:00 от ЦЖД,(можно оставить в Кристалле) на 1 день, заканчивают в 17 ч в отеле 55 ( ул. Островского 55)',
-  (SELECT id FROM profiles WHERE display_name = 'Леонид' LIMIT 1),
+  NULL,
   'Леонид',
   NOW(),
   NOW()
@@ -19611,7 +19614,7 @@ SELECT
   6200,
   0,
   'М- Поет-2 Экскурсовод Марина Николаевна +7 927 429-91-77 Вернет в 22 в Кристал',
-  (SELECT id FROM profiles WHERE display_name = 'Стас' LIMIT 1),
+  NULL,
   'Стас',
   NOW(),
   NOW()
@@ -19644,7 +19647,7 @@ SELECT
   1920,
   0,
   'Заберут. Начало в 12:00',
-  (SELECT id FROM profiles WHERE display_name = 'Леонид' LIMIT 1),
+  NULL,
   'Леонид',
   NOW(),
   NOW()
@@ -19677,7 +19680,7 @@ SELECT
   3440,
   0,
   'В Сафар Заканчивают в 23:30 в Корстон',
-  (SELECT id FROM profiles WHERE display_name = 'Стас' LIMIT 1),
+  NULL,
   'Стас',
   NOW(),
   NOW()
@@ -19710,7 +19713,7 @@ SELECT
   3760,
   0,
   'Сама заберет 29 утром занесет',
-  (SELECT id FROM profiles WHERE display_name = 'Стас' LIMIT 1),
+  NULL,
   'Стас',
   NOW(),
   NOW()
@@ -19743,7 +19746,7 @@ SELECT
   5000,
   0,
   'На ресепшен отеля Максим Горький Вернула в Кристалл',
-  (SELECT id FROM profiles WHERE display_name = 'Стас' LIMIT 1),
+  NULL,
   'Стас',
   NOW(),
   NOW()
@@ -19776,7 +19779,7 @@ SELECT
   3600,
   0,
   '-',
-  (SELECT id FROM profiles WHERE display_name = 'Леонид' LIMIT 1),
+  NULL,
   'Леонид',
   NOW(),
   NOW()
@@ -19809,7 +19812,7 @@ SELECT
   3120,
   0,
   'Заберет в 8:20-8:30',
-  (SELECT id FROM profiles WHERE display_name = 'Леонид' LIMIT 1),
+  NULL,
   'Леонид',
   NOW(),
   NOW()
@@ -19842,7 +19845,7 @@ SELECT
   2880,
   0,
   'В стс. Чуб. Ваучер на кремль',
-  (SELECT id FROM profiles WHERE display_name = 'Леонид' LIMIT 1),
+  NULL,
   'Леонид',
   NOW(),
   NOW()
@@ -19874,7 +19877,7 @@ SELECT
   10080,
   0,
   'радиогиды на 11,12,13 мая, будет 48 человек + гид Ирина т. +7 927 421-36-82 Отель Булгар ( Ул Вишневского 21) Можно оставить накануне в отеле Кристалл, группа приезжает 11 мая в 7:50 утра на ЦЖД',
-  (SELECT id FROM profiles WHERE display_name = 'Леонид' LIMIT 1),
+  NULL,
   'Леонид',
   NOW(),
   NOW()
@@ -19907,7 +19910,7 @@ SELECT
   3040,
   0,
   'Заберет в 10:45',
-  (SELECT id FROM profiles WHERE display_name = 'Леонид' LIMIT 1),
+  NULL,
   'Леонид',
   NOW(),
   NOW()
@@ -19940,7 +19943,7 @@ SELECT
   6880,
   0,
   'Хилтон в обед',
-  (SELECT id FROM profiles WHERE display_name = 'Леонид' LIMIT 1),
+  NULL,
   'Леонид',
   NOW(),
   NOW()
@@ -19973,7 +19976,7 @@ SELECT
   960,
   0,
   '-',
-  (SELECT id FROM profiles WHERE display_name = 'Леонид' LIMIT 1),
+  NULL,
   'Леонид',
   NOW(),
   NOW()
@@ -20006,7 +20009,7 @@ SELECT
   4800,
   0,
   '-',
-  (SELECT id FROM profiles WHERE display_name = 'Стас' LIMIT 1),
+  NULL,
   'Стас',
   NOW(),
   NOW()
@@ -20039,7 +20042,7 @@ SELECT
   2800,
   0,
   'на 15 мая, 35 штук, прошу принести сумку 14 мая в первой половине дня, чтобы гид успел у нас её забрать. Сумку принесите в наш мобильный трак на петербургской. Забрать сумку можно будет 16 мая в течение дня до 19.00',
-  (SELECT id FROM profiles WHERE display_name = 'Стас' LIMIT 1),
+  NULL,
   'Стас',
   NOW(),
   NOW()
@@ -20072,7 +20075,7 @@ SELECT
   4640,
   0,
   'Группа №3(Екатеринбург) 29 человек, на 3 дня(09-11 мая) можно оставить в Кристалле до 11:30',
-  (SELECT id FROM profiles WHERE display_name = 'Стас' LIMIT 1),
+  NULL,
   'Стас',
   NOW(),
   NOW()
@@ -20105,7 +20108,7 @@ SELECT
   10560,
   0,
   'Группа №2 (Ногинск) 44 человека,на 3 дня (08-10 мая) привезти накануне, т.к. встречают в 7 утра',
-  (SELECT id FROM profiles WHERE display_name = 'Стас' LIMIT 1),
+  NULL,
   'Стас',
   NOW(),
   NOW()
@@ -20138,7 +20141,7 @@ SELECT
   7200,
   0,
   'Группа №1(Обнинск) 46 человек, на 2 дня (08-09 мая) привезти накануне в офис, т.к. встречают в 7 утра Вернули в кристалл',
-  (SELECT id FROM profiles WHERE display_name = 'Стас' LIMIT 1),
+  NULL,
   'Стас',
   NOW(),
   NOW()
@@ -20171,7 +20174,7 @@ SELECT
   4240,
   0,
   'Баскет холл, к 8',
-  (SELECT id FROM profiles WHERE display_name = 'Стас' LIMIT 1),
+  NULL,
   'Стас',
   NOW(),
   NOW()
@@ -20204,7 +20207,7 @@ SELECT
   3520,
   0,
   '30,31 мая - 22 штуки. Гид Элина Гортэ. 30 мая в 10:50 от центрального жд',
-  (SELECT id FROM profiles WHERE display_name = 'Леонид' LIMIT 1),
+  NULL,
   'Леонид',
   NOW(),
   NOW()
@@ -20236,7 +20239,7 @@ SELECT
   8000,
   0,
   '29,30,31 мая , 1 июня - 25 штук . Гид Наталья Никифорова . 29 мая в 10:50 от центрального жд. ваучер на Кремль и 220 600 рублей',
-  (SELECT id FROM profiles WHERE display_name = 'Леонид' LIMIT 1),
+  NULL,
   'Леонид',
   NOW(),
   NOW()
@@ -20268,7 +20271,7 @@ SELECT
   4800,
   0,
   '24,25 мая - 30 штук . Гид Наталья Никифорова . 24 мая в 7:50 от центрального жд',
-  (SELECT id FROM profiles WHERE display_name = 'Леонид' LIMIT 1),
+  NULL,
   'Леонид',
   NOW(),
   NOW()
@@ -20300,7 +20303,7 @@ SELECT
   4160,
   0,
   '18 мая- 52 штуки . гид Виктория Павлова . в 10:00 ул.Гвардейская 35',
-  (SELECT id FROM profiles WHERE display_name = 'Леонид' LIMIT 1),
+  NULL,
   'Леонид',
   NOW(),
   NOW()
@@ -20332,7 +20335,7 @@ SELECT
   4160,
   0,
   '17 мая -52 штуки . 9:30 от центрального жд Гульнара 2 передатчика',
-  (SELECT id FROM profiles WHERE display_name = 'Леонид' LIMIT 1),
+  NULL,
   'Леонид',
   NOW(),
   NOW()
@@ -20364,7 +20367,7 @@ SELECT
   2160,
   0,
   '16 мая -27 шт. гид Виктория Павлова в 8:30 от жд центрального Ваучер уремль',
-  (SELECT id FROM profiles WHERE display_name = 'Леонид' LIMIT 1),
+  NULL,
   'Леонид',
   NOW(),
   NOW()
@@ -20396,7 +20399,7 @@ SELECT
   15360,
   0,
   '16,17,18,19 мая - 48 человек. гид Настя Семенова . 16 мая в 14:20 от жд Восстания',
-  (SELECT id FROM profiles WHERE display_name = 'Леонид' LIMIT 1),
+  NULL,
   'Леонид',
   NOW(),
   NOW()
@@ -20428,7 +20431,7 @@ SELECT
   3200,
   0,
   '16,17 мая - 20 штук . гид Наталья Никифорова 16 мая в 8:00от центрального жд Ваучер Кремль и суияжск',
-  (SELECT id FROM profiles WHERE display_name = 'Леонид' LIMIT 1),
+  NULL,
   'Леонид',
   NOW(),
   NOW()
@@ -20460,7 +20463,7 @@ SELECT
   9600,
   0,
   '12,13,14,15 мая- 30 штук . Гид Катя Ильина 12 мая в 14:20 на жд Восстания начало. Положить ваучеры Кремль, свияжск, болгар',
-  (SELECT id FROM profiles WHERE display_name = 'Леонид' LIMIT 1),
+  NULL,
   'Леонид',
   NOW(),
   NOW()
@@ -20492,7 +20495,7 @@ SELECT
   3760,
   0,
   '11 мая - 47 шт. гид Лариса Семенова в 9:30 от кремля',
-  (SELECT id FROM profiles WHERE display_name = 'Леонид' LIMIT 1),
+  NULL,
   'Леонид',
   NOW(),
   NOW()
@@ -20524,7 +20527,7 @@ SELECT
   4720,
   0,
   '7 мая -59 штук . Гид Резеда . в 9:00 Деревня Универсиады КПП 14',
-  (SELECT id FROM profiles WHERE display_name = 'Леонид' LIMIT 1),
+  NULL,
   'Леонид',
   NOW(),
   NOW()
@@ -20556,7 +20559,7 @@ SELECT
   10400,
   0,
   '6 мая - 65 штук ( 2 группы) в 10:00 ул.Одностороняя Гривка д.1 7 мая они же поедут в свияжск , тоже в 10:00 Сумка на 20 и сумка на 50',
-  (SELECT id FROM profiles WHERE display_name = 'Леонид' LIMIT 1),
+  NULL,
   'Леонид',
   NOW(),
   NOW()
@@ -20588,7 +20591,7 @@ SELECT
   2960,
   0,
   'Кафе Хоррият до 11:00( петерьургая 57) Вернут после 20:00 в Татарстан',
-  (SELECT id FROM profiles WHERE display_name = 'Стас' LIMIT 1),
+  NULL,
   'Стас',
   NOW(),
   NOW()
@@ -20621,7 +20624,7 @@ SELECT
   7200,
   0,
   'Амансафар. Вернут в корстон',
-  (SELECT id FROM profiles WHERE display_name = 'Леонид' LIMIT 1),
+  NULL,
   'Леонид',
   NOW(),
   NOW()
@@ -20654,7 +20657,7 @@ SELECT
   7040,
   0,
   'Гид Диана +7 927 445-45-25 05 в тиц до 15 Вернут в тиц 06 с 18:00',
-  (SELECT id FROM profiles WHERE display_name = 'Стас' LIMIT 1),
+  NULL,
   'Стас',
   NOW(),
   NOW()
@@ -20687,7 +20690,7 @@ SELECT
   4000,
   0,
   '9.05 гид Виктория 89196236810 25шт. 9.30 отель Давыдов на Павлюхина , сдаст 10.05 после 21.30 по созвону. ВЕРНУЛА В КРИСТАЛ',
-  (SELECT id FROM profiles WHERE display_name = 'Леонид' LIMIT 1),
+  NULL,
   'Леонид',
   NOW(),
   NOW()
@@ -20720,7 +20723,7 @@ SELECT
   7040,
   0,
   '9.05 гид Марина 89172526993 44 шт. в 9.30 отель Аматти сдаст 10.05 после 21.30 по созвону',
-  (SELECT id FROM profiles WHERE display_name = 'Леонид' LIMIT 1),
+  NULL,
   'Леонид',
   NOW(),
   NOW()
@@ -20753,7 +20756,7 @@ SELECT
   7040,
   0,
   '8.05 гид Владимир 89178858409 44 шт. в 9.00 Алан аш на Бутлерова 43 сдаст 9.05 после 16 по созвону',
-  (SELECT id FROM profiles WHERE display_name = 'Леонид' LIMIT 1),
+  NULL,
   'Леонид',
   NOW(),
   NOW()
@@ -20786,7 +20789,7 @@ SELECT
   4320,
   0,
   '5.05 гид Владимир 89178858409 27шт. в 8.00 кафе Овсянки сдаст 6.05 после 19.00 по созвону.',
-  (SELECT id FROM profiles WHERE display_name = 'Леонид' LIMIT 1),
+  NULL,
   'Леонид',
   NOW(),
   NOW()
@@ -20819,7 +20822,7 @@ SELECT
   4000,
   0,
   '-',
-  (SELECT id FROM profiles WHERE display_name = 'Леонид' LIMIT 1),
+  NULL,
   'Леонид',
   NOW(),
   NOW()
@@ -20852,7 +20855,7 @@ SELECT
   2800,
   0,
   '10 мая с 08.00 до 23.30 от Сафара в Релиту',
-  (SELECT id FROM profiles WHERE display_name = 'Стас' LIMIT 1),
+  NULL,
   'Стас',
   NOW(),
   NOW()
@@ -20885,7 +20888,7 @@ SELECT
   2000,
   0,
   'с 08.00 до 23.30 от Сафара в Сулейман',
-  (SELECT id FROM profiles WHERE display_name = 'Стас' LIMIT 1),
+  NULL,
   'Стас',
   NOW(),
   NOW()
@@ -20918,7 +20921,7 @@ SELECT
   4000,
   0,
   'Утром Принесет на вечерку',
-  (SELECT id FROM profiles WHERE display_name = 'Леонид' LIMIT 1),
+  NULL,
   'Леонид',
   NOW(),
   NOW()
@@ -20951,7 +20954,7 @@ SELECT
   5280,
   0,
   '3.05 гид Владимир 89178858409 33 шт. в Кристалл к 7.30 сдаст 4.05 после 13. по созвону на Баумана',
-  (SELECT id FROM profiles WHERE display_name = 'Леонид' LIMIT 1),
+  NULL,
   'Леонид',
   NOW(),
   NOW()
@@ -20984,7 +20987,7 @@ SELECT
   8400,
   0,
   '2.05 гид Диана 89274454525 35 штук отель Кристалл к 7.30 сдадут 4.05 после 13.30 в кристалл',
-  (SELECT id FROM profiles WHERE display_name = 'Леонид' LIMIT 1),
+  NULL,
   'Леонид',
   NOW(),
   NOW()
@@ -21017,7 +21020,7 @@ SELECT
   7770,
   0,
   '1 группа* На *1 и 2 мая* 37 человек + гид Владимир т.+7 917 885-84-09 отель Булгар ( ул Вишневского 21) 2 группа * На *2 мая* 37 человек + гид Ирина т. +7 927 421-36-82 Отель Биляр Палас ( ул Островского 61) Нужно положить два комплекта наушников. Оставили в биляр!!',
-  (SELECT id FROM profiles WHERE display_name = 'Леонид' LIMIT 1),
+  NULL,
   'Леонид',
   NOW(),
   NOW()
@@ -21050,7 +21053,7 @@ SELECT
   9120,
   0,
   '01.05 занести в офис Тиц',
-  (SELECT id FROM profiles WHERE display_name = 'Стас' LIMIT 1),
+  NULL,
   'Стас',
   NOW(),
   NOW()
@@ -21083,7 +21086,7 @@ SELECT
   12300,
   0,
   'Тула завезти ВЕРНУЛИ В КРИСТАЛЛ',
-  (SELECT id FROM profiles WHERE display_name = 'Стас' LIMIT 1),
+  NULL,
   'Стас',
   NOW(),
   NOW()
@@ -21116,7 +21119,7 @@ SELECT
   12900,
   0,
   'ЕКБ-2 завезти ВЕРНУЛИ В КРИСТАЛ',
-  (SELECT id FROM profiles WHERE display_name = 'Стас' LIMIT 1),
+  NULL,
   'Стас',
   NOW(),
   NOW()
@@ -21149,7 +21152,7 @@ SELECT
   7200,
   0,
   '30.04 занести в офис Тиц на Баумана Вернут 03.05 в офис Тиц вечером',
-  (SELECT id FROM profiles WHERE display_name = 'Стас' LIMIT 1),
+  NULL,
   'Стас',
   NOW(),
   NOW()
@@ -21182,7 +21185,7 @@ SELECT
   3440,
   0,
   'Оставить в Сафаре Забрать в Сулейман утром 04.05',
-  (SELECT id FROM profiles WHERE display_name = 'Стас' LIMIT 1),
+  NULL,
   'Стас',
   NOW(),
   NOW()
@@ -21215,7 +21218,7 @@ SELECT
   2880,
   0,
   'Оставить в Сулейман до 08:30 и забрать в Сулейман Утром',
-  (SELECT id FROM profiles WHERE display_name = 'Стас' LIMIT 1),
+  NULL,
   'Стас',
   NOW(),
   NOW()
@@ -21248,7 +21251,7 @@ SELECT
   2080,
   0,
   'Оставить в Амакс Оставят в Релите в 23:30',
-  (SELECT id FROM profiles WHERE display_name = 'Стас' LIMIT 1),
+  NULL,
   'Стас',
   NOW(),
   NOW()
@@ -21281,7 +21284,7 @@ SELECT
   4320,
   0,
   'Крисстал вернет гид Анна +7 987 290-73-09 Они в 18:00 заканчивают в Рамаде',
-  (SELECT id FROM profiles WHERE display_name = 'Стас' LIMIT 1),
+  NULL,
   'Стас',
   NOW(),
   NOW()
@@ -21314,7 +21317,7 @@ SELECT
   3440,
   0,
   'Татарстан Алевтина Александровна 89033881755 Вернут туда же после 18:00',
-  (SELECT id FROM profiles WHERE display_name = 'Стас' LIMIT 1),
+  NULL,
   'Стас',
   NOW(),
   NOW()
@@ -21347,7 +21350,7 @@ SELECT
   12200,
   0,
   'Уточнить 63 гида Оставили в крисстал',
-  (SELECT id FROM profiles WHERE display_name = 'Стас' LIMIT 1),
+  NULL,
   'Стас',
   NOW(),
   NOW()
@@ -21380,7 +21383,7 @@ SELECT
   7000,
   0,
   'Завезу по пути в кристал Оставили в кристал',
-  (SELECT id FROM profiles WHERE display_name = 'Стас' LIMIT 1),
+  NULL,
   'Стас',
   NOW(),
   NOW()
@@ -21413,7 +21416,7 @@ SELECT
   10800,
   0,
   'Завезти в офис инициативы Вернут в кристал в 22:00',
-  (SELECT id FROM profiles WHERE display_name = 'Стас' LIMIT 1),
+  NULL,
   'Стас',
   NOW(),
   NOW()
@@ -21446,7 +21449,7 @@ SELECT
   2640,
   0,
   'Завезти в офис инициативы Вернут в Амстердам в 23:00',
-  (SELECT id FROM profiles WHERE display_name = 'Стас' LIMIT 1),
+  NULL,
   'Стас',
   NOW(),
   NOW()
@@ -21479,7 +21482,7 @@ SELECT
   5400,
   0,
   'Сами заберут Оставят в кристалле в 22:00',
-  (SELECT id FROM profiles WHERE display_name = 'Стас' LIMIT 1),
+  NULL,
   'Стас',
   NOW(),
   NOW()
@@ -21512,7 +21515,7 @@ SELECT
   6200,
   0,
   'Сами заберут',
-  (SELECT id FROM profiles WHERE display_name = 'Стас' LIMIT 1),
+  NULL,
   'Стас',
   NOW(),
   NOW()
@@ -21545,7 +21548,7 @@ SELECT
   9900,
   0,
   'Сами заберут',
-  (SELECT id FROM profiles WHERE display_name = 'Стас' LIMIT 1),
+  NULL,
   'Стас',
   NOW(),
   NOW()
@@ -21578,7 +21581,7 @@ SELECT
   8160,
   0,
   'Заберут и оставят в Кристалле',
-  (SELECT id FROM profiles WHERE display_name = 'Леонид' LIMIT 1),
+  NULL,
   'Леонид',
   NOW(),
   NOW()
@@ -21611,7 +21614,7 @@ SELECT
   4480,
   0,
   '29.04 1 группа 32 человека + гид Лариса тел. +7 927 240-82-50 2 группа 32 человека + гид Ольга тел. +7 927 401-81-84 Экскурсия будет от Амакс Сафар с 15 до 18 ч и заканчивается в Амакс',
-  (SELECT id FROM profiles WHERE display_name = 'Леонид' LIMIT 1),
+  NULL,
   'Леонид',
   NOW(),
   NOW()
@@ -21644,7 +21647,7 @@ SELECT
   3680,
   0,
   'На 02.05 в Крисстал, группа 46+1 запас+1 гид Сопровождающая Мария +7 901 282-25-77 Гид Алексей Вернут в фургончик в 15:30',
-  (SELECT id FROM profiles WHERE display_name = 'Стас' LIMIT 1),
+  NULL,
   'Стас',
   NOW(),
   NOW()
@@ -21677,7 +21680,7 @@ SELECT
   11040,
   0,
   'Кристалл Вернут в кристалл в районе 19',
-  (SELECT id FROM profiles WHERE display_name = 'Стас' LIMIT 1),
+  NULL,
   'Стас',
   NOW(),
   NOW()
@@ -21710,7 +21713,7 @@ SELECT
   6080,
   0,
   'Утром заберет',
-  (SELECT id FROM profiles WHERE display_name = 'Леонид' LIMIT 1),
+  NULL,
   'Леонид',
   NOW(),
   NOW()
@@ -21743,7 +21746,7 @@ SELECT
   3280,
   0,
   'Заберут Вечером вернет',
-  (SELECT id FROM profiles WHERE display_name = 'Леонид' LIMIT 1),
+  NULL,
   'Леонид',
   NOW(),
   NOW()
@@ -21776,7 +21779,7 @@ SELECT
   2240,
   0,
   '. на 30.04. в Карат к 9.30 гид Диана 89274454525 сдаст 30.04 после 17.30 по созвону.',
-  (SELECT id FROM profiles WHERE display_name = 'Леонид' LIMIT 1),
+  NULL,
   'Леонид',
   NOW(),
   NOW()
@@ -21809,7 +21812,7 @@ SELECT
   4480,
   0,
   'на 29 апреля 28 чел. гид Ирина Палей 89046620732 Биляр к 9.30 сдадут 30.04 после 19 в Кристалл',
-  (SELECT id FROM profiles WHERE display_name = 'Леонид' LIMIT 1),
+  NULL,
   'Леонид',
   NOW(),
   NOW()
@@ -21842,7 +21845,7 @@ SELECT
   5600,
   0,
   '35 шт гид Гульнара 89600389286в Сулейман к 8.30 сдаст гид Ванда 89655868806 29 апреля по созвону после 17.00',
-  (SELECT id FROM profiles WHERE display_name = 'Леонид' LIMIT 1),
+  NULL,
   'Леонид',
   NOW(),
   NOW()
@@ -21875,7 +21878,7 @@ SELECT
   2560,
   0,
   '32 шт. гид Зифа 89053162643 в Давыдов на Павлюхина , сдадут в этот же день после 19.00 в Давыдов',
-  (SELECT id FROM profiles WHERE display_name = 'Леонид' LIMIT 1),
+  NULL,
   'Леонид',
   NOW(),
   NOW()
@@ -21908,7 +21911,7 @@ SELECT
   8640,
   0,
   '36 шт. гид Марина 89172526993 в Кристалл в 10.30 отдадут 30.04 по созвону после 20.00',
-  (SELECT id FROM profiles WHERE display_name = 'Леонид' LIMIT 1),
+  NULL,
   'Леонид',
   NOW(),
   NOW()
@@ -21941,7 +21944,7 @@ SELECT
   2320,
   0,
   'на завтра 29 штук , поедет в иннополис в 11:30 Копылова д.11. С ними будет айдар садыков Он едет на вечерку ему надо отдать сумку и два передатчика',
-  (SELECT id FROM profiles WHERE display_name = 'Леонид' LIMIT 1),
+  NULL,
   'Леонид',
   NOW(),
   NOW()
@@ -21973,7 +21976,7 @@ SELECT
   1920,
   0,
   'Заберут сами рано утром',
-  (SELECT id FROM profiles WHERE display_name = 'Леонид' LIMIT 1),
+  NULL,
   'Леонид',
   NOW(),
   NOW()
@@ -22006,7 +22009,7 @@ SELECT
   2590,
   0,
   'Заберет в 12:45',
-  (SELECT id FROM profiles WHERE display_name = 'Леонид' LIMIT 1),
+  NULL,
   'Леонид',
   NOW(),
   NOW()
@@ -22039,7 +22042,7 @@ SELECT
   1920,
   0,
   '-',
-  (SELECT id FROM profiles WHERE display_name = 'Леонид' LIMIT 1),
+  NULL,
   'Леонид',
   NOW(),
   NOW()
@@ -22072,7 +22075,7 @@ SELECT
   5600,
   0,
   'Заявка на завтра 26 и 27 апреля Группа 40 человек + гид Ирина тел. +7 927 421-36-82 Завтра приезжают на ЖД в 12 часов дня, можно оставить в отеле Кристалл. Сумка в отели Гвардейский',
-  (SELECT id FROM profiles WHERE display_name = 'Леонид' LIMIT 1),
+  NULL,
   'Леонид',
   NOW(),
   NOW()
@@ -22105,7 +22108,7 @@ SELECT
   3920,
   0,
   'Заберет в 8:30',
-  (SELECT id FROM profiles WHERE display_name = 'Леонид' LIMIT 1),
+  NULL,
   'Леонид',
   NOW(),
   NOW()
@@ -22138,7 +22141,7 @@ SELECT
   3360,
   0,
   '29 апреля Регина на Петербургской 42 шт для Татьяны',
-  (SELECT id FROM profiles WHERE display_name = 'Леонид' LIMIT 1),
+  NULL,
   'Леонид',
   NOW(),
   NOW()
@@ -22171,7 +22174,7 @@ SELECT
   5840,
   0,
   '28 го Региеа на Петербургской 73/2 для Айгуль и Александра. На 36 и 37.',
-  (SELECT id FROM profiles WHERE display_name = 'Леонид' LIMIT 1),
+  NULL,
   'Леонид',
   NOW(),
   NOW()
@@ -22204,7 +22207,7 @@ SELECT
   2800,
   0,
   '28 го в Регину на Петербург для Ольги 35 штук',
-  (SELECT id FROM profiles WHERE display_name = 'Леонид' LIMIT 1),
+  NULL,
   'Леонид',
   NOW(),
   NOW()
@@ -22237,7 +22240,7 @@ SELECT
   12000,
   0,
   '26 го в кристалле на имя Айгуль 44 шт На имя Эльвира 35 человек На имя Лиза 37 человек На имя Влада 36 Вернут в Регину после 16:00 на петербуржскую',
-  (SELECT id FROM profiles WHERE display_name = 'Леонид' LIMIT 1),
+  NULL,
   'Леонид',
   NOW(),
   NOW()
@@ -22270,7 +22273,7 @@ SELECT
   3680,
   0,
   'Оставят в Волге,',
-  (SELECT id FROM profiles WHERE display_name = 'Леонид' LIMIT 1),
+  NULL,
   'Леонид',
   NOW(),
   NOW()
@@ -22303,7 +22306,7 @@ SELECT
   10320,
   0,
   'Заберут с Баумана в 16:30 Вернут в 20:30 в Регину на Баумана',
-  (SELECT id FROM profiles WHERE display_name = 'Леонид' LIMIT 1),
+  NULL,
   'Леонид',
   NOW(),
   NOW()
@@ -22336,7 +22339,7 @@ SELECT
   1520,
   0,
   '28 апреля - 19 шт. Гид Гульнара. в 12:00 отель М.Горький Вернет туда же после 18',
-  (SELECT id FROM profiles WHERE display_name = 'Леонид' LIMIT 1),
+  NULL,
   'Леонид',
   NOW(),
   NOW()
@@ -22368,7 +22371,7 @@ SELECT
   3680,
   0,
   '26,27 апреля - 23 шт . Гид Наталья Никифорова 26 апреля в 8:00 от центрального жд. Надо вечеро дать сумку, ваучер( обзорка, свияжск) деньги',
-  (SELECT id FROM profiles WHERE display_name = 'Леонид' LIMIT 1),
+  NULL,
   'Леонид',
   NOW(),
   NOW()
@@ -22400,7 +22403,7 @@ SELECT
   2800,
   0,
   '-',
-  (SELECT id FROM profiles WHERE display_name = 'Стас' LIMIT 1),
+  NULL,
   'Стас',
   NOW(),
   NOW()
@@ -22433,7 +22436,7 @@ SELECT
   1840,
   0,
   'Ольга ткач. Кристал. Вернет сама завтра к свияжску',
-  (SELECT id FROM profiles WHERE display_name = 'Леонид' LIMIT 1),
+  NULL,
   'Леонид',
   NOW(),
   NOW()
@@ -22465,7 +22468,7 @@ SELECT
   19920,
   0,
   'Кристал. Информация будет в 19:00',
-  (SELECT id FROM profiles WHERE display_name = 'Леонид' LIMIT 1),
+  NULL,
   'Леонид',
   NOW(),
   NOW()
@@ -22498,7 +22501,7 @@ SELECT
   11680,
   0,
   '2 мая 73/2 в кристалле Для Людмилы и Татьяны Вернули в Релиту',
-  (SELECT id FROM profiles WHERE display_name = 'Леонид' LIMIT 1),
+  NULL,
   'Леонид',
   NOW(),
   NOW()
@@ -22531,7 +22534,7 @@ SELECT
   9840,
   0,
   'Кристал',
-  (SELECT id FROM profiles WHERE display_name = 'Леонид' LIMIT 1),
+  NULL,
   'Леонид',
   NOW(),
   NOW()
@@ -22564,7 +22567,7 @@ SELECT
   4960,
   0,
   'Она в Кристалле оборудование на 62 чел возьмёт,а отдаст в Татарской слободе на Марджани в 12.00 группа там будет. Самгина Ольг +7 953 717‑05‑28. Привезет Ильдар 051',
-  (SELECT id FROM profiles WHERE display_name = 'Леонид' LIMIT 1),
+  NULL,
   'Леонид',
   NOW(),
   NOW()
@@ -22597,7 +22600,7 @@ SELECT
   6000,
   0,
   'Одна сумка один передатчик. Марафон. Доставка',
-  (SELECT id FROM profiles WHERE display_name = 'Леонид' LIMIT 1),
+  NULL,
   'Леонид',
   NOW(),
   NOW()
@@ -22630,7 +22633,7 @@ SELECT
   5250,
   0,
   'Уточнить в переписке',
-  (SELECT id FROM profiles WHERE display_name = 'Леонид' LIMIT 1),
+  NULL,
   'Леонид',
   NOW(),
   NOW()
@@ -22663,7 +22666,7 @@ SELECT
   3850,
   0,
   'Уточнить в переписке Наталья Релита',
-  (SELECT id FROM profiles WHERE display_name = 'Леонид' LIMIT 1),
+  NULL,
   'Леонид',
   NOW(),
   NOW()
@@ -22696,7 +22699,7 @@ SELECT
   7200,
   0,
   'Заберут утром',
-  (SELECT id FROM profiles WHERE display_name = 'Леонид' LIMIT 1),
+  NULL,
   'Леонид',
   NOW(),
   NOW()
@@ -22729,7 +22732,7 @@ SELECT
   1280,
   0,
   'Добрый день! На 24.04 ГРАНД ОТЕЛЬ КАЗАНЬ Нужны аудиогиды) 16 для группы+ запосной+ для гида',
-  (SELECT id FROM profiles WHERE display_name = 'Леонид' LIMIT 1),
+  NULL,
   'Леонид',
   NOW(),
   NOW()
@@ -22762,7 +22765,7 @@ SELECT
   1520,
   0,
   'Забрать 23. У Кремля в 12:15',
-  (SELECT id FROM profiles WHERE display_name = 'Леонид' LIMIT 1),
+  NULL,
   'Леонид',
   NOW(),
   NOW()
@@ -22795,7 +22798,7 @@ SELECT
   6720,
   0,
   'Завтра в 12:00 от шаляпина гид Наталья Никифорова . Нужно 28 радиогидов.',
-  (SELECT id FROM profiles WHERE display_name = 'Леонид' LIMIT 1),
+  NULL,
   'Леонид',
   NOW(),
   NOW()
@@ -22827,7 +22830,7 @@ SELECT
   3680,
   0,
   'Кристалл, Наталия',
-  (SELECT id FROM profiles WHERE display_name = 'Леонид' LIMIT 1),
+  NULL,
   'Леонид',
   NOW(),
   NOW()
@@ -22859,7 +22862,7 @@ SELECT
   10800,
   0,
   'На 18-20 апреля нужно 45 шт. радиогидов в Кристалл к 7.00 .Вернут туда же после 20 часов Гид Владимир Николаевич 89178858409',
-  (SELECT id FROM profiles WHERE display_name = 'Леонид' LIMIT 1),
+  NULL,
   'Леонид',
   NOW(),
   NOW()
@@ -22892,7 +22895,7 @@ SELECT
   6240,
   0,
   '17 апреля надо 39 штук на 2 дня радио гидов в Хостел (Петербургская, 40Б) к 14.30 для гида Шуравиной Ольги89503140361 вернут 18.04 по созвону после 17 часов.',
-  (SELECT id FROM profiles WHERE display_name = 'Леонид' LIMIT 1),
+  NULL,
   'Леонид',
   NOW(),
   NOW()
@@ -22925,7 +22928,7 @@ SELECT
   4560,
   0,
   'Гузель. Она едет сегодня на вечерку. Ей сумку дать и ваучер на Кремль',
-  (SELECT id FROM profiles WHERE display_name = 'Леонид' LIMIT 1),
+  NULL,
   'Леонид',
   NOW(),
   NOW()
@@ -22957,7 +22960,7 @@ SELECT
   3010,
   0,
   '-',
-  (SELECT id FROM profiles WHERE display_name = 'Леонид' LIMIT 1),
+  NULL,
   'Леонид',
   NOW(),
   NOW()
@@ -22990,7 +22993,7 @@ SELECT
   1600,
   0,
   'В отель Карат Гид+7 950 949-04-94 Беркут хан ( Радик) сдаст по созвону вечером',
-  (SELECT id FROM profiles WHERE display_name = 'Леонид' LIMIT 1),
+  NULL,
   'Леонид',
   NOW(),
   NOW()
@@ -23023,7 +23026,7 @@ SELECT
   9760,
   0,
   '3. В 12:00 у Кремля Даты: 3 июНя с 11 до 18 5 июНя с 9 до 20',
-  (SELECT id FROM profiles WHERE display_name = 'Леонид' LIMIT 1),
+  NULL,
   'Леонид',
   NOW(),
   NOW()
@@ -23056,7 +23059,7 @@ SELECT
   2080,
   0,
   '26 радиогидов в иннополис в 9:00 от Отель Raymond ул.Большая Красная д.50 . С ними гид гузель будет. 2 передатчика Вернула в офис',
-  (SELECT id FROM profiles WHERE display_name = 'Леонид' LIMIT 1),
+  NULL,
   'Леонид',
   NOW(),
   NOW()
@@ -23088,7 +23091,7 @@ SELECT
   3850,
   0,
   'Релита. Сумка в Шаляпин',
-  (SELECT id FROM profiles WHERE display_name = 'Леонид' LIMIT 1),
+  NULL,
   'Леонид',
   NOW(),
   NOW()
@@ -23121,7 +23124,7 @@ SELECT
   4320,
   0,
   '54 чел. От жд центрального. Гид. +7 927 419-65-79 резеда',
-  (SELECT id FROM profiles WHERE display_name = 'Леонид' LIMIT 1),
+  NULL,
   'Леонид',
   NOW(),
   NOW()
@@ -23153,7 +23156,7 @@ SELECT
   6020,
   0,
   'Оставила в Волге',
-  (SELECT id FROM profiles WHERE display_name = 'Стас' LIMIT 1),
+  NULL,
   'Стас',
   NOW(),
   NOW()
@@ -23186,7 +23189,7 @@ SELECT
   6560,
   0,
   '. Нужны радиогиды 41 шт. 11 - 12 апреля . гид Настя Семенова 11 апреля в 6:00 на жд Восстания',
-  (SELECT id FROM profiles WHERE display_name = 'Леонид' LIMIT 1),
+  NULL,
   'Леонид',
   NOW(),
   NOW()
@@ -23218,7 +23221,7 @@ SELECT
   1920,
   0,
   '-',
-  (SELECT id FROM profiles WHERE display_name = 'Леонид' LIMIT 1),
+  NULL,
   'Леонид',
   NOW(),
   NOW()
@@ -23251,7 +23254,7 @@ SELECT
   3040,
   0,
   '+79297259743 Утром сама заберет В кристалле',
-  (SELECT id FROM profiles WHERE display_name = 'Леонид' LIMIT 1),
+  NULL,
   'Леонид',
   NOW(),
   NOW()
@@ -23284,7 +23287,7 @@ SELECT
   8000,
   0,
   'На субботу 12 апреля нужно 100 примерно радиогидов и 2 передатчика. Поможете?',
-  (SELECT id FROM profiles WHERE display_name = 'Леонид' LIMIT 1),
+  NULL,
   'Леонид',
   NOW(),
   NOW()
@@ -23317,7 +23320,7 @@ SELECT
   1600,
   0,
   '13.04 гид Палей Ирина 89046620732 20 чел. Сулейман к 11.30 сдаст в 20.30 в Кристалл ГИДА НЕ ПРЕДУПРЕДИЛИ! СУМКА ОСТАЛАСЬ В СУЛЕЙМАН!',
-  (SELECT id FROM profiles WHERE display_name = 'Леонид' LIMIT 1),
+  NULL,
   'Леонид',
   NOW(),
   NOW()
@@ -23350,7 +23353,7 @@ SELECT
   2240,
   0,
   '10.04 гид Дания 89172904415 28чел. в обед позвонит на Баумана. чтобы использовать 11.04. сдаст 11.04 поздно или по звонку потом',
-  (SELECT id FROM profiles WHERE display_name = 'Леонид' LIMIT 1),
+  NULL,
   'Леонид',
   NOW(),
   NOW()
@@ -23383,7 +23386,7 @@ SELECT
   4160,
   0,
   'Полносью мой, сдадут в кристалл 10.04 в 20:00. Гольфстрим',
-  (SELECT id FROM profiles WHERE display_name = 'Леонид' LIMIT 1),
+  NULL,
   'Леонид',
   NOW(),
   NOW()
@@ -23416,7 +23419,7 @@ SELECT
   5600,
   0,
   '9 и 10 апреля на группу 40 человек + гид Ирина Софронова тел.+7 917 293-48-70 Отель Ногай',
-  (SELECT id FROM profiles WHERE display_name = 'Леонид' LIMIT 1),
+  NULL,
   'Леонид',
   NOW(),
   NOW()
@@ -23449,7 +23452,7 @@ SELECT
   5880,
   0,
   '8 и 9 апреля на группу 42 человека + гид Владимир тел.+7 917 885-84-09 Отель Татарская усадьба ( Марджани 8). Сдал в офис',
-  (SELECT id FROM profiles WHERE display_name = 'Леонид' LIMIT 1),
+  NULL,
   'Леонид',
   NOW(),
   NOW()
@@ -23482,7 +23485,7 @@ SELECT
   3780,
   0,
   '8 и 9 апреля на группу 27 человек + гид Ирина Баталова тел.+7 927 421-36-82 Отель кристал 09.04 в 20:00 сумки в кристалле не было Сумку оставили в IT park',
-  (SELECT id FROM profiles WHERE display_name = 'Леонид' LIMIT 1),
+  NULL,
   'Леонид',
   NOW(),
   NOW()
@@ -23515,7 +23518,7 @@ SELECT
   10800,
   0,
   '8 апреля 45 чел.гид Аида 89033440899 в 7 утра уезжает в Йошкар-Олу для встречи группы там на вокзале. ( наверное опять доставка)…. Сдадут 10 апреля в Кристалл в 19.15',
-  (SELECT id FROM profiles WHERE display_name = 'Леонид' LIMIT 1),
+  NULL,
   'Леонид',
   NOW(),
   NOW()
@@ -23548,7 +23551,7 @@ SELECT
   8880,
   0,
   '7 апреля 37чел.гид Светлана. +79172969340 прибывают в 5 утра на Восстание сдадут 9 апреля в Кристалл после 17',
-  (SELECT id FROM profiles WHERE display_name = 'Леонид' LIMIT 1),
+  NULL,
   'Леонид',
   NOW(),
   NOW()
@@ -23581,7 +23584,7 @@ SELECT
   2870,
   0,
   'Лилия 13 Наталья 14 Роман 14 В Кремль в 10:30',
-  (SELECT id FROM profiles WHERE display_name = 'Леонид' LIMIT 1),
+  NULL,
   'Леонид',
   NOW(),
   NOW()
@@ -23614,7 +23617,7 @@ SELECT
   2560,
   0,
   'Заберут в 8:45. Забрать в кристале',
-  (SELECT id FROM profiles WHERE display_name = 'Леонид' LIMIT 1),
+  NULL,
   'Леонид',
   NOW(),
   NOW()
@@ -23647,7 +23650,7 @@ SELECT
   6720,
   0,
   'Нужно радио гиды 28 штук . 6-8 апреля. С группой гид Элина Гортэ . 6 апреля в 7:50 встреча на центральном жд 09.04 в 20:00 сумки в кристалле нет',
-  (SELECT id FROM profiles WHERE display_name = 'Леонид' LIMIT 1),
+  NULL,
   'Леонид',
   NOW(),
   NOW()
@@ -23679,7 +23682,7 @@ SELECT
   4000,
   0,
   '6 апреля гид Гульназ 89393902610 25шт.Прибытие, Казань-2 (Восстание-Пасс.) в 05:25 возвращение так же 7 апреля на Восстание в 19. Попробует оставить в гостинице Карат',
-  (SELECT id FROM profiles WHERE display_name = 'Леонид' LIMIT 1),
+  NULL,
   'Леонид',
   NOW(),
   NOW()
@@ -23712,7 +23715,7 @@ SELECT
   3200,
   0,
   '7 оставить в Татарстан 8 оставит в кристалле',
-  (SELECT id FROM profiles WHERE display_name = 'Стас' LIMIT 1),
+  NULL,
   'Стас',
   NOW(),
   NOW()
@@ -23745,7 +23748,7 @@ SELECT
   2560,
   0,
   'Кристал',
-  (SELECT id FROM profiles WHERE display_name = 'Леонид' LIMIT 1),
+  NULL,
   'Леонид',
   NOW(),
   NOW()
@@ -23778,7 +23781,7 @@ SELECT
   10320,
   0,
   '5 апреля 43 чел. гид Нелли Рифовна 89063237048 отель кристалл в 7.30 сдадут 7 апреля Кристалл после 17.00',
-  (SELECT id FROM profiles WHERE display_name = 'Леонид' LIMIT 1),
+  NULL,
   'Леонид',
   NOW(),
   NOW()
@@ -23811,7 +23814,7 @@ SELECT
   6080,
   0,
   '5 апреля Гид Ольга 89503140361 Кристалл в 7.00! 38 чел. сдадут в Кисталл 6 апреля после 17.00',
-  (SELECT id FROM profiles WHERE display_name = 'Леонид' LIMIT 1),
+  NULL,
   'Леонид',
   NOW(),
   NOW()
@@ -23844,7 +23847,7 @@ SELECT
   4480,
   0,
   '5 апреля 28 чел. Отель Берисон Камала 3* в 9.30 Гид Диляра Рафаровна 89179275489 сдадут 6 апреля отель Кристалл после 15.00',
-  (SELECT id FROM profiles WHERE display_name = 'Леонид' LIMIT 1),
+  NULL,
   'Леонид',
   NOW(),
   NOW()
@@ -23877,7 +23880,7 @@ SELECT
   6240,
   0,
   '4 апреля гид Ирина Палей 89046620732 39 чел. (созвон, прибытие Восстание в 5 утра) сдадут (созвон 5 апреля возвращение в Казань в 19 на Восстание) Завтрак в Овсянке Оставит в отеле Крисстал, 07.04 в 12:00',
-  (SELECT id FROM profiles WHERE display_name = 'Леонид' LIMIT 1),
+  NULL,
   'Леонид',
   NOW(),
   NOW()
@@ -23910,7 +23913,7 @@ SELECT
   10080,
   0,
   'Елена Кристал',
-  (SELECT id FROM profiles WHERE display_name = 'Леонид' LIMIT 1),
+  NULL,
   'Леонид',
   NOW(),
   NOW()
@@ -23943,7 +23946,7 @@ SELECT
   4000,
   0,
   'Заберет в 8:30',
-  (SELECT id FROM profiles WHERE display_name = 'Леонид' LIMIT 1),
+  NULL,
   'Леонид',
   NOW(),
   NOW()
@@ -23976,7 +23979,7 @@ SELECT
   1840,
   0,
   'У замка сладостей в 8:45. В кристалле',
-  (SELECT id FROM profiles WHERE display_name = 'Леонид' LIMIT 1),
+  NULL,
   'Леонид',
   NOW(),
   NOW()
@@ -24009,7 +24012,7 @@ SELECT
   2800,
   0,
   'Заберет 1 апреля в 14:00',
-  (SELECT id FROM profiles WHERE display_name = 'Леонид' LIMIT 1),
+  NULL,
   'Леонид',
   NOW(),
   NOW()
@@ -24042,7 +24045,7 @@ SELECT
   6400,
   0,
   'Кристал',
-  (SELECT id FROM profiles WHERE display_name = 'Леонид' LIMIT 1),
+  NULL,
   'Леонид',
   NOW(),
   NOW()
@@ -24075,7 +24078,7 @@ SELECT
   3780,
   0,
   'Кристал В 20:00, 09.04 сумки в кристалле не было. Вернули в Шаляпин',
-  (SELECT id FROM profiles WHERE display_name = 'Леонид' LIMIT 1),
+  NULL,
   'Леонид',
   NOW(),
   NOW()
@@ -24108,7 +24111,7 @@ SELECT
   4200,
   0,
   'Оставить в Кристале. Забрать в Доме Муллина в СТС',
-  (SELECT id FROM profiles WHERE display_name = 'Леонид' LIMIT 1),
+  NULL,
   'Леонид',
   NOW(),
   NOW()
@@ -24141,7 +24144,7 @@ SELECT
   4800,
   0,
   'Рамада',
-  (SELECT id FROM profiles WHERE display_name = 'Леонид' LIMIT 1),
+  NULL,
   'Леонид',
   NOW(),
   NOW()
@@ -24174,7 +24177,7 @@ SELECT
   2560,
   0,
   '8:30 у часов Вернут в Кристал',
-  (SELECT id FROM profiles WHERE display_name = 'Леонид' LIMIT 1),
+  NULL,
   'Леонид',
   NOW(),
   NOW()
@@ -24207,7 +24210,7 @@ SELECT
   8400,
   0,
   'Карат',
-  (SELECT id FROM profiles WHERE display_name = 'Стас' LIMIT 1),
+  NULL,
   'Стас',
   NOW(),
   NOW()
@@ -24240,7 +24243,7 @@ SELECT
   2560,
   0,
   'В обед заберут. 14:00 у Свито Холла',
-  (SELECT id FROM profiles WHERE display_name = 'Леонид' LIMIT 1),
+  NULL,
   'Леонид',
   NOW(),
   NOW()
@@ -24273,7 +24276,7 @@ SELECT
   11280,
   0,
   'Берисон худикова',
-  (SELECT id FROM profiles WHERE display_name = 'Леонид' LIMIT 1),
+  NULL,
   'Леонид',
   NOW(),
   NOW()
@@ -24306,7 +24309,7 @@ SELECT
   4480,
   0,
   'Кристал Лариса',
-  (SELECT id FROM profiles WHERE display_name = 'Леонид' LIMIT 1),
+  NULL,
   'Леонид',
   NOW(),
   NOW()
@@ -24339,7 +24342,7 @@ SELECT
   4080,
   0,
   'Кристал Гузель',
-  (SELECT id FROM profiles WHERE display_name = 'Леонид' LIMIT 1),
+  NULL,
   'Леонид',
   NOW(),
   NOW()
@@ -24371,7 +24374,7 @@ SELECT
   2000,
   0,
   'завтра 15:30 Гостиница Колибри ул.К.Фукса',
-  (SELECT id FROM profiles WHERE display_name = 'Леонид' LIMIT 1),
+  NULL,
   'Леонид',
   NOW(),
   NOW()
@@ -24403,7 +24406,7 @@ SELECT
   3360,
   0,
   'Настя Семенова Кристал',
-  (SELECT id FROM profiles WHERE display_name = 'Леонид' LIMIT 1),
+  NULL,
   'Леонид',
   NOW(),
   NOW()
@@ -24435,7 +24438,7 @@ SELECT
   12480,
   0,
   'Ольга ткач 2 передатчика. 14:55 восстание',
-  (SELECT id FROM profiles WHERE display_name = 'Леонид' LIMIT 1),
+  NULL,
   'Леонид',
   NOW(),
   NOW()
@@ -24467,7 +24470,7 @@ SELECT
   3760,
   0,
   'Крисстал Заканчивает в 19:00 в Давыдов назарбаева',
-  (SELECT id FROM profiles WHERE display_name = 'Стас' LIMIT 1),
+  NULL,
   'Стас',
   NOW(),
   NOW()
@@ -24500,7 +24503,7 @@ SELECT
   4160,
   0,
   '-',
-  (SELECT id FROM profiles WHERE display_name = 'Стас' LIMIT 1),
+  NULL,
   'Стас',
   NOW(),
   NOW()
@@ -24533,7 +24536,7 @@ SELECT
   2100,
   0,
   'Кристал Лариса',
-  (SELECT id FROM profiles WHERE display_name = 'Леонид' LIMIT 1),
+  NULL,
   'Леонид',
   NOW(),
   NOW()
@@ -24566,7 +24569,7 @@ SELECT
   4240,
   0,
   'Катя Ильина',
-  (SELECT id FROM profiles WHERE display_name = 'Леонид' LIMIT 1),
+  NULL,
   'Леонид',
   NOW(),
   NOW()
@@ -24598,7 +24601,7 @@ SELECT
   1920,
   0,
   '23 марта 24шт.гид Лилия 89872975449 отель Кристалл в 12.00 отдадут после 19 в отель Волга',
-  (SELECT id FROM profiles WHERE display_name = 'Леонид' LIMIT 1),
+  NULL,
   'Леонид',
   NOW(),
   NOW()
@@ -24631,7 +24634,7 @@ SELECT
   11280,
   0,
   'Кристал Диляра',
-  (SELECT id FROM profiles WHERE display_name = 'Леонид' LIMIT 1),
+  NULL,
   'Леонид',
   NOW(),
   NOW()
@@ -24664,7 +24667,7 @@ SELECT
   9120,
   0,
   'Доставить экскурсоводу вечером Яндекс доставкой на Фучика. Аида. +7 903 344-08-99 Напомню адрес. Фучика 58 б кв 49 чтоб не было ошибк Оставит в Мано в районе 17 часов',
-  (SELECT id FROM profiles WHERE display_name = 'Леонид' LIMIT 1),
+  NULL,
   'Леонид',
   NOW(),
   NOW()
@@ -24697,7 +24700,7 @@ SELECT
   10800,
   0,
   '26 марта 45 шт отель Кристалл к 11.30 гид Аида89033440899. сдадут 28 в Мано',
-  (SELECT id FROM profiles WHERE display_name = 'Леонид' LIMIT 1),
+  NULL,
   'Леонид',
   NOW(),
   NOW()
@@ -24730,7 +24733,7 @@ SELECT
   12240,
   0,
   '26-28 марта- 51 шт.гид Светлана 89172969340 отель Регата 8.30 вернут 28 марта из Иннополиса возвращаются на ж.д.Восстание в 19.00 Решите, пожалуйста с гидом как лучше. Сдали в Татарстан!',
-  (SELECT id FROM profiles WHERE display_name = 'Леонид' LIMIT 1),
+  NULL,
   'Леонид',
   NOW(),
   NOW()
@@ -24763,7 +24766,7 @@ SELECT
   6560,
   0,
   '26-27 гид Виктория 89196236810 41шт. отель Берисон на Худякова 9.30 Вернула в офис!',
-  (SELECT id FROM profiles WHERE display_name = 'Леонид' LIMIT 1),
+  NULL,
   'Леонид',
   NOW(),
   NOW()
@@ -24796,7 +24799,7 @@ SELECT
   9120,
   0,
   '25-27 марта 38шт. гид Гульназ 89393902610 Кристалл к 11.30 сдадут 27 в кристалл в 22.00',
-  (SELECT id FROM profiles WHERE display_name = 'Леонид' LIMIT 1),
+  NULL,
   'Леонид',
   NOW(),
   NOW()
@@ -24829,7 +24832,7 @@ SELECT
   10080,
   0,
   '25-27 марта 42шт. отель Ямле в 9.30 гид Эльвира 89172639101 сдадут в Кисталл 27.03 в 13.30',
-  (SELECT id FROM profiles WHERE display_name = 'Леонид' LIMIT 1),
+  NULL,
   'Леонид',
   NOW(),
   NOW()
@@ -24862,7 +24865,7 @@ SELECT
   8160,
   0,
   '24 марта 34шт. гид Гульнара 89600389286 15:45-16:30 Обед в Ресторане «ТАТАР»ул. Шигабутдина Марджани 4 . сдадут 26 марта 14:00-15:00 Обед в кафе города. Татарская усадьба Алан Аш ул.Шигабутдина Марджани,8',
-  (SELECT id FROM profiles WHERE display_name = 'Леонид' LIMIT 1),
+  NULL,
   'Леонид',
   NOW(),
   NOW()
@@ -24895,7 +24898,7 @@ SELECT
   7200,
   0,
   '24 марта 30 шт. гид Альбина 89503160154 в Сулейман в 8.40 отдадут 26 марта в Сулейман в 20.30',
-  (SELECT id FROM profiles WHERE display_name = 'Леонид' LIMIT 1),
+  NULL,
   'Леонид',
   NOW(),
   NOW()
@@ -24928,7 +24931,7 @@ SELECT
   3920,
   0,
   '24 марта 49шт. в Сулейман к 9.30 сдадут в этот же день 13:00 – 14:00 Обед в кафе города Ресторанный двор ул.Астрономическая 7. гид Ирина 89046620732. Вернули в Офис',
-  (SELECT id FROM profiles WHERE display_name = 'Леонид' LIMIT 1),
+  NULL,
   'Леонид',
   NOW(),
   NOW()
@@ -24961,7 +24964,7 @@ SELECT
   10880,
   0,
   '23 марта 34шт.Гид Ольга 89503140361 15:00 – 16:00 Обед Кафе «Овсянки» ул.Бутлерова 34а отдадут 26 марта 12:00 – 13:30 Обед Ресторанный двор ул.Астрономическая,7',
-  (SELECT id FROM profiles WHERE display_name = 'Леонид' LIMIT 1),
+  NULL,
   'Леонид',
   NOW(),
   NOW()
@@ -24994,7 +24997,7 @@ SELECT
   5760,
   0,
   'на 22.03 24шт. 8905323704822-гид Нелли Рифовна 09:00 - 10:00 Завтрак Кафе «Овсянки» ул.Бутлерова 34а сдаст 24 марта 19:00 Ужин Кафе Медина ул.Татарстан,7',
-  (SELECT id FROM profiles WHERE display_name = 'Леонид' LIMIT 1),
+  NULL,
   'Леонид',
   NOW(),
   NOW()
@@ -25027,7 +25030,7 @@ SELECT
   8880,
   0,
   'на 22.03 37 шт гид Аида 89033440899в 13.30 ресторан ТАТАР в кремле,отдаст 24.03 в отель Кристалл после 21',
-  (SELECT id FROM profiles WHERE display_name = 'Леонид' LIMIT 1),
+  NULL,
   'Леонид',
   NOW(),
   NOW()
@@ -25060,7 +25063,7 @@ SELECT
   7680,
   0,
   'Сулейман начало в 09:00. Забрать в Джузеппе',
-  (SELECT id FROM profiles WHERE display_name = 'Леонид' LIMIT 1),
+  NULL,
   'Леонид',
   NOW(),
   NOW()
@@ -25093,7 +25096,7 @@ SELECT
   8000,
   0,
   'В 9:00 завтрак',
-  (SELECT id FROM profiles WHERE display_name = 'Леонид' LIMIT 1),
+  NULL,
   'Леонид',
   NOW(),
   NOW()
@@ -25126,7 +25129,7 @@ SELECT
   960,
   0,
   'С 13:30',
-  (SELECT id FROM profiles WHERE display_name = 'Леонид' LIMIT 1),
+  NULL,
   'Леонид',
   NOW(),
   NOW()
@@ -25159,7 +25162,7 @@ SELECT
   3520,
   0,
   'В 09:00 заберет сама Две сумки по 22 Оставила в офисе',
-  (SELECT id FROM profiles WHERE display_name = 'Стас' LIMIT 1),
+  NULL,
   'Стас',
   NOW(),
   NOW()
@@ -25192,7 +25195,7 @@ SELECT
   1600,
   0,
   'Заберет из офиса',
-  (SELECT id FROM profiles WHERE display_name = 'Леонид' LIMIT 1),
+  NULL,
   'Леонид',
   NOW(),
   NOW()
@@ -25225,7 +25228,7 @@ SELECT
   3520,
   0,
   'Валерий Кристал',
-  (SELECT id FROM profiles WHERE display_name = 'Леонид' LIMIT 1),
+  NULL,
   'Леонид',
   NOW(),
   NOW()
@@ -25258,7 +25261,7 @@ SELECT
   7920,
   0,
   'Кристал.',
-  (SELECT id FROM profiles WHERE display_name = 'Леонид' LIMIT 1),
+  NULL,
   'Леонид',
   NOW(),
   NOW()
@@ -25291,7 +25294,7 @@ SELECT
   8000,
   0,
   '8 мая с 20 до 22 9 мая с 14 до 18 Порядка 50 человек. Отель Европа.',
-  (SELECT id FROM profiles WHERE display_name = 'Леонид' LIMIT 1),
+  NULL,
   'Леонид',
   NOW(),
   NOW()
@@ -25324,7 +25327,7 @@ SELECT
   2240,
   0,
   'В Кристал',
-  (SELECT id FROM profiles WHERE display_name = 'Леонид' LIMIT 1),
+  NULL,
   'Леонид',
   NOW(),
   NOW()
@@ -25357,7 +25360,7 @@ SELECT
   4000,
   0,
   '5 апреля в 14:00 заберет. Забрать в новинки',
-  (SELECT id FROM profiles WHERE display_name = 'Леонид' LIMIT 1),
+  NULL,
   'Леонид',
   NOW(),
   NOW()
@@ -25390,7 +25393,7 @@ SELECT
   6400,
   0,
   '-',
-  (SELECT id FROM profiles WHERE display_name = 'Леонид' LIMIT 1),
+  NULL,
   'Леонид',
   NOW(),
   NOW()
@@ -25423,7 +25426,7 @@ SELECT
   7680,
   0,
   'Гид Елена +79376267304',
-  (SELECT id FROM profiles WHERE display_name = 'Стас' LIMIT 1),
+  NULL,
   'Стас',
   NOW(),
   NOW()
@@ -25456,7 +25459,7 @@ SELECT
   2880,
   0,
   'Гостиница пилигрим. Оставить 8 числа. Забрать 9 числа.',
-  (SELECT id FROM profiles WHERE display_name = 'Стас' LIMIT 1),
+  NULL,
   'Стас',
   NOW(),
   NOW()
@@ -25489,7 +25492,7 @@ SELECT
   1360,
   0,
   'Отель Рамада На имя Валерий',
-  (SELECT id FROM profiles WHERE display_name = 'Стас' LIMIT 1),
+  NULL,
   'Стас',
   NOW(),
   NOW()
@@ -25522,7 +25525,7 @@ SELECT
   3500,
   0,
   'Старт в 15:00 от старого ИТ парка',
-  (SELECT id FROM profiles WHERE display_name = 'Стас' LIMIT 1),
+  NULL,
   'Стас',
   NOW(),
   NOW()
@@ -25555,7 +25558,7 @@ SELECT
   7770,
   0,
   'Кристалл, Казанские Традиции',
-  (SELECT id FROM profiles WHERE display_name = 'Стас' LIMIT 1),
+  NULL,
   'Стас',
   NOW(),
   NOW()
@@ -25588,7 +25591,7 @@ SELECT
   3840,
   0,
   '-',
-  (SELECT id FROM profiles WHERE display_name = 'Стас' LIMIT 1),
+  NULL,
   'Стас',
   NOW(),
   NOW()
@@ -25621,7 +25624,7 @@ SELECT
   3520,
   0,
   'В 11:00-11:30 они приедут в Татарстан и встретятся там с экскурсоводом, Живут в Волге , +7 960 039-47-90 гид на 10 февраля Инна, они встречаются с группой в 11:00 возле гостиницы Татарстан',
-  (SELECT id FROM profiles WHERE display_name = 'Стас' LIMIT 1),
+  NULL,
   'Стас',
   NOW(),
   NOW()
@@ -25654,7 +25657,7 @@ SELECT
   1040,
   0,
   '-',
-  (SELECT id FROM profiles WHERE display_name = 'Леонид' LIMIT 1),
+  NULL,
   'Леонид',
   NOW(),
   NOW()
@@ -25687,7 +25690,7 @@ SELECT
   9840,
   0,
   'Делать группу так же как 12 февраля',
-  (SELECT id FROM profiles WHERE display_name = 'Стас' LIMIT 1),
+  NULL,
   'Стас',
   NOW(),
   NOW()
@@ -25720,7 +25723,7 @@ SELECT
   4000,
   0,
   '-',
-  (SELECT id FROM profiles WHERE display_name = 'Стас' LIMIT 1),
+  NULL,
   'Стас',
   NOW(),
   NOW()
@@ -25753,7 +25756,7 @@ SELECT
   4960,
   0,
   'В школу в 12',
-  (SELECT id FROM profiles WHERE display_name = 'Леонид' LIMIT 1),
+  NULL,
   'Леонид',
   NOW(),
   NOW()
@@ -25786,7 +25789,7 @@ SELECT
   3360,
   0,
   'Можно так же до 13.00 на Оренбургский тракт 4а. Светлана - +79954723715, для связи. +7 917 878-34-06. Сергей Слободенюк',
-  (SELECT id FROM profiles WHERE display_name = 'Леонид' LIMIT 1),
+  NULL,
   'Леонид',
   NOW(),
   NOW()
@@ -25819,7 +25822,7 @@ SELECT
   7360,
   0,
   'В 12:00',
-  (SELECT id FROM profiles WHERE display_name = 'Леонид' LIMIT 1),
+  NULL,
   'Леонид',
   NOW(),
   NOW()
@@ -25852,7 +25855,7 @@ SELECT
   11840,
   0,
   'Ривьера',
-  (SELECT id FROM profiles WHERE display_name = 'Леонид' LIMIT 1),
+  NULL,
   'Леонид',
   NOW(),
   NOW()
@@ -25885,7 +25888,7 @@ SELECT
   7200,
   0,
   'Татарстан Мастерская впечатлений',
-  (SELECT id FROM profiles WHERE display_name = 'Стас' LIMIT 1),
+  NULL,
   'Стас',
   NOW(),
   NOW()
@@ -25918,7 +25921,7 @@ SELECT
   6960,
   0,
   'Кристал. Вернули в кристал. Привезет Ильдар 051',
-  (SELECT id FROM profiles WHERE display_name = 'Леонид' LIMIT 1),
+  NULL,
   'Леонид',
   NOW(),
   NOW()
@@ -25951,7 +25954,7 @@ SELECT
   880,
   0,
   '-',
-  (SELECT id FROM profiles WHERE display_name = 'Стас' LIMIT 1),
+  NULL,
   'Стас',
   NOW(),
   NOW()
@@ -25984,7 +25987,7 @@ SELECT
   4080,
   0,
   '-',
-  (SELECT id FROM profiles WHERE display_name = 'Стас' LIMIT 1),
+  NULL,
   'Стас',
   NOW(),
   NOW()
@@ -26017,7 +26020,7 @@ SELECT
   8320,
   0,
   'Сулейман Владимир Николаевич',
-  (SELECT id FROM profiles WHERE display_name = 'Стас' LIMIT 1),
+  NULL,
   'Стас',
   NOW(),
   NOW()
@@ -26050,7 +26053,7 @@ SELECT
   2560,
   0,
   'Созвониться 11.01 до обеда',
-  (SELECT id FROM profiles WHERE display_name = 'Стас' LIMIT 1),
+  NULL,
   'Стас',
   NOW(),
   NOW()
@@ -26083,7 +26086,7 @@ SELECT
   1440,
   0,
   'Свита холл',
-  (SELECT id FROM profiles WHERE display_name = 'Стас' LIMIT 1),
+  NULL,
   'Стас',
   NOW(),
   NOW()
@@ -26116,7 +26119,7 @@ SELECT
   3220,
   0,
   'Волга',
-  (SELECT id FROM profiles WHERE display_name = 'Стас' LIMIT 1),
+  NULL,
   'Стас',
   NOW(),
   NOW()
@@ -26149,7 +26152,7 @@ SELECT
   5265,
   0,
   'Тиц , Баумана',
-  (SELECT id FROM profiles WHERE display_name = 'Стас' LIMIT 1),
+  NULL,
   'Стас',
   NOW(),
   NOW()
@@ -26182,7 +26185,7 @@ SELECT
   2535,
   0,
   'Юнион амакс Сафар',
-  (SELECT id FROM profiles WHERE display_name = 'Стас' LIMIT 1),
+  NULL,
   'Стас',
   NOW(),
   NOW()
@@ -26215,7 +26218,7 @@ SELECT
   2535,
   0,
   'Юнион релита',
-  (SELECT id FROM profiles WHERE display_name = 'Стас' LIMIT 1),
+  NULL,
   'Стас',
   NOW(),
   NOW()
@@ -26248,7 +26251,7 @@ SELECT
   2795,
   0,
   'Юнион, амакс сафар',
-  (SELECT id FROM profiles WHERE display_name = 'Стас' LIMIT 1),
+  NULL,
   'Стас',
   NOW(),
   NOW()
@@ -26281,7 +26284,7 @@ SELECT
   7360,
   0,
   '6-7.01 гид Марина Рукавишникова +79172526993 6.01 в Сулейман к 9.00 вернут 7.01 после 22.00 в Кристалл',
-  (SELECT id FROM profiles WHERE display_name = 'Леонид' LIMIT 1),
+  NULL,
   'Леонид',
   NOW(),
   NOW()
@@ -26314,7 +26317,7 @@ SELECT
   6240,
   0,
   '5-7 января Гид Владимир Николаевич +7917885840 5,01 в отель Сулейман к 8,30 вернут 7,01 после 18 по созвону, вернул в Сулейман',
-  (SELECT id FROM profiles WHERE display_name = 'Леонид' LIMIT 1),
+  NULL,
   'Леонид',
   NOW(),
   NOW()
@@ -26347,7 +26350,7 @@ SELECT
   3680,
   0,
   '3,4 января.гид Аида +79033440899 3.01 в 14:00 - 14:45 Обед в кафе города Кафе Медина ул.Татарстан,7 вернут 4.01 вернут после 15 в Кристалл',
-  (SELECT id FROM profiles WHERE display_name = 'Леонид' LIMIT 1),
+  NULL,
   'Леонид',
   NOW(),
   NOW()
@@ -26380,7 +26383,7 @@ SELECT
   6400,
   0,
   '4,5 января. Гид Виолетта +79053171049 4.01 в Отель Кристалл 3*к 8.30 вернут 5.01 после 22.00 в Кристалл',
-  (SELECT id FROM profiles WHERE display_name = 'Леонид' LIMIT 1),
+  NULL,
   'Леонид',
   NOW(),
   NOW()
@@ -26413,7 +26416,7 @@ SELECT
   7360,
   0,
   '3.4 января гид Шуравина Ольга +79503140361 3-привезти в ресторан Ферма.ул.Бурхана Шахиди,11 вернут 4.января в отель Сулейман. Обед 12-13',
-  (SELECT id FROM profiles WHERE display_name = 'Леонид' LIMIT 1),
+  NULL,
   'Леонид',
   NOW(),
   NOW()
@@ -26446,7 +26449,7 @@ SELECT
   3600,
   0,
   'Колобок на Гафури',
-  (SELECT id FROM profiles WHERE display_name = 'Леонид' LIMIT 1),
+  NULL,
   'Леонид',
   NOW(),
   NOW()
@@ -26479,7 +26482,7 @@ SELECT
   9380,
   0,
   'Кристал 1 группа 30 человека + гид Ирина 2 группа 37 человек + гид Владимир',
-  (SELECT id FROM profiles WHERE display_name = 'Леонид' LIMIT 1),
+  NULL,
   'Леонид',
   NOW(),
   NOW()
@@ -26512,7 +26515,7 @@ SELECT
   12000,
   0,
   'Волга Гид Наталья',
-  (SELECT id FROM profiles WHERE display_name = 'Леонид' LIMIT 1),
+  NULL,
   'Леонид',
   NOW(),
   NOW()
@@ -26545,7 +26548,7 @@ SELECT
   9600,
   0,
   'Заберет сама вечером',
-  (SELECT id FROM profiles WHERE display_name = 'Леонид' LIMIT 1),
+  NULL,
   'Леонид',
   NOW(),
   NOW()
@@ -26578,7 +26581,7 @@ SELECT
   10800,
   0,
   'Заберет сама вечером',
-  (SELECT id FROM profiles WHERE display_name = 'Леонид' LIMIT 1),
+  NULL,
   'Леонид',
   NOW(),
   NOW()
@@ -26611,7 +26614,7 @@ SELECT
   11520,
   0,
   'Хаял кушают в 9:00',
-  (SELECT id FROM profiles WHERE display_name = 'Леонид' LIMIT 1),
+  NULL,
   'Леонид',
   NOW(),
   NOW()
@@ -26644,7 +26647,7 @@ SELECT
   3680,
   0,
   'вернут в мано',
-  (SELECT id FROM profiles WHERE display_name = 'Леонид' LIMIT 1),
+  NULL,
   'Леонид',
   NOW(),
   NOW()
@@ -26677,7 +26680,7 @@ SELECT
   4480,
   0,
   'Кристал Владимир Николаевич',
-  (SELECT id FROM profiles WHERE display_name = 'Леонид' LIMIT 1),
+  NULL,
   'Леонид',
   NOW(),
   NOW()
@@ -26710,7 +26713,7 @@ SELECT
   1750,
   0,
   'На завтра 21.12 на 1 день Нужны гиды для группы 25 человек + гид Владимир т. 89178858409 Оставить для Владимира Кристал',
-  (SELECT id FROM profiles WHERE display_name = 'Леонид' LIMIT 1),
+  NULL,
   'Леонид',
   NOW(),
   NOW()
@@ -26743,7 +26746,7 @@ SELECT
   3120,
   0,
   '-',
-  (SELECT id FROM profiles WHERE display_name = 'Леонид' LIMIT 1),
+  NULL,
   'Леонид',
   NOW(),
   NOW()
@@ -26776,7 +26779,7 @@ SELECT
   3680,
   0,
   '-',
-  (SELECT id FROM profiles WHERE display_name = 'Леонид' LIMIT 1),
+  NULL,
   'Леонид',
   NOW(),
   NOW()
@@ -26809,7 +26812,7 @@ SELECT
   1840,
   0,
   'Экскурсовод Инна',
-  (SELECT id FROM profiles WHERE display_name = 'Леонид' LIMIT 1),
+  NULL,
   'Леонид',
   NOW(),
   NOW()
@@ -26842,7 +26845,7 @@ SELECT
   6960,
   0,
   '5 января начало в 16.00 от хостела Пушкин, (Пушкина 1/55)',
-  (SELECT id FROM profiles WHERE display_name = 'Леонид' LIMIT 1),
+  NULL,
   'Леонид',
   NOW(),
   NOW()
@@ -26875,7 +26878,7 @@ SELECT
   5920,
   0,
   '-',
-  (SELECT id FROM profiles WHERE display_name = 'Леонид' LIMIT 1),
+  NULL,
   'Леонид',
   NOW(),
   NOW()
@@ -26907,7 +26910,7 @@ SELECT
   3040,
   0,
   'Карат',
-  (SELECT id FROM profiles WHERE display_name = 'Леонид' LIMIT 1),
+  NULL,
   'Леонид',
   NOW(),
   NOW()
@@ -26940,7 +26943,7 @@ SELECT
   2640,
   0,
   'Кристал Катя Ильина 2 передатчика',
-  (SELECT id FROM profiles WHERE display_name = 'Леонид' LIMIT 1),
+  NULL,
   'Леонид',
   NOW(),
   NOW()
@@ -26972,7 +26975,7 @@ SELECT
   2400,
   0,
   'Кристал',
-  (SELECT id FROM profiles WHERE display_name = 'Леонид' LIMIT 1),
+  NULL,
   'Леонид',
   NOW(),
   NOW()
@@ -27005,7 +27008,7 @@ SELECT
   5920,
   0,
   'Гвардейская',
-  (SELECT id FROM profiles WHERE display_name = 'Леонид' LIMIT 1),
+  NULL,
   'Леонид',
   NOW(),
   NOW()
@@ -27038,7 +27041,7 @@ SELECT
   2560,
   0,
   'В 11:00. От Шаляпина Катя Ильина',
-  (SELECT id FROM profiles WHERE display_name = 'Леонид' LIMIT 1),
+  NULL,
   'Леонид',
   NOW(),
   NOW()
@@ -27070,7 +27073,7 @@ SELECT
   2000,
   0,
   'Кристал. Элина',
-  (SELECT id FROM profiles WHERE display_name = 'Леонид' LIMIT 1),
+  NULL,
   'Леонид',
   NOW(),
   NOW()
@@ -27102,7 +27105,7 @@ SELECT
   3150,
   0,
   'Шаляпин',
-  (SELECT id FROM profiles WHERE display_name = 'Леонид' LIMIT 1),
+  NULL,
   'Леонид',
   NOW(),
   NOW()
@@ -27135,7 +27138,7 @@ SELECT
   1330,
   0,
   '-',
-  (SELECT id FROM profiles WHERE display_name = 'Леонид' LIMIT 1),
+  NULL,
   'Леонид',
   NOW(),
   NOW()
@@ -27168,7 +27171,7 @@ SELECT
   1200,
   0,
   '-',
-  (SELECT id FROM profiles WHERE display_name = 'Стас' LIMIT 1),
+  NULL,
   'Стас',
   NOW(),
   NOW()
@@ -27201,7 +27204,7 @@ SELECT
   1200,
   0,
   '-',
-  (SELECT id FROM profiles WHERE display_name = 'Стас' LIMIT 1),
+  NULL,
   'Стас',
   NOW(),
   NOW()
@@ -27234,7 +27237,7 @@ SELECT
   8640,
   0,
   'Приедет 13:30 к Шаляпину',
-  (SELECT id FROM profiles WHERE display_name = 'Леонид' LIMIT 1),
+  NULL,
   'Леонид',
   NOW(),
   NOW()
@@ -27267,7 +27270,7 @@ SELECT
   1200,
   0,
   '9:50. У иконы. забрать в кристале',
-  (SELECT id FROM profiles WHERE display_name = 'Леонид' LIMIT 1),
+  NULL,
   'Леонид',
   NOW(),
   NOW()
@@ -27300,7 +27303,7 @@ SELECT
   3920,
   0,
   'Завтра в 13:00 отель Мано на Чистопольской 47А. Нужно 49 радиогидов. С ними будет Гульнара.',
-  (SELECT id FROM profiles WHERE display_name = 'Леонид' LIMIT 1),
+  NULL,
   'Леонид',
   NOW(),
   NOW()
@@ -27332,7 +27335,7 @@ SELECT
   3840,
   0,
   '+7 917 252-69-93. Марина Рукавишникова 48 шт. В 9.30-19.00',
-  (SELECT id FROM profiles WHERE display_name = 'Леонид' LIMIT 1),
+  NULL,
   'Леонид',
   NOW(),
   NOW()
@@ -27365,7 +27368,7 @@ SELECT
   12480,
   0,
   'Оставила в офисе',
-  (SELECT id FROM profiles WHERE display_name = 'Стас' LIMIT 1),
+  NULL,
   'Стас',
   NOW(),
   NOW()
@@ -27398,7 +27401,7 @@ SELECT
   4160,
   0,
   '-',
-  (SELECT id FROM profiles WHERE display_name = 'Стас' LIMIT 1),
+  NULL,
   'Стас',
   NOW(),
   NOW()
@@ -27431,7 +27434,7 @@ SELECT
   2000,
   0,
   'Наталья',
-  (SELECT id FROM profiles WHERE display_name = 'Леонид' LIMIT 1),
+  NULL,
   'Леонид',
   NOW(),
   NOW()
@@ -27463,7 +27466,7 @@ SELECT
   4720,
   0,
   'Элина',
-  (SELECT id FROM profiles WHERE display_name = 'Леонид' LIMIT 1),
+  NULL,
   'Леонид',
   NOW(),
   NOW()
@@ -27495,7 +27498,7 @@ SELECT
   5120,
   0,
   'Прошу Вас выставить счёт на группу 32+1 гид. 30.11-1.12,, завтрак Биляр Палас, гид 89030624411 Елена Анатольевна.',
-  (SELECT id FROM profiles WHERE display_name = 'Леонид' LIMIT 1),
+  NULL,
   'Леонид',
   NOW(),
   NOW()
@@ -27528,7 +27531,7 @@ SELECT
   8190,
   0,
   'Группа Хостел Пушкин, ул.Пушкина 1/55 а на 18-20 ноября 39 человек + гид Лариса т. 89272408250',
-  (SELECT id FROM profiles WHERE display_name = 'Леонид' LIMIT 1),
+  NULL,
   'Леонид',
   NOW(),
   NOW()
@@ -27561,7 +27564,7 @@ SELECT
   5040,
   0,
   'Группа Хостел Nice, ул. Петербургская 40 б на 18 и 19 ноября 36 человек + гид Татьяна т.89063271840',
-  (SELECT id FROM profiles WHERE display_name = 'Леонид' LIMIT 1),
+  NULL,
   'Леонид',
   NOW(),
   NOW()
@@ -27594,7 +27597,7 @@ SELECT
   3200,
   0,
   'Кристал',
-  (SELECT id FROM profiles WHERE display_name = 'Леонид' LIMIT 1),
+  NULL,
   'Леонид',
   NOW(),
   NOW()
@@ -27627,7 +27630,7 @@ SELECT
   1200,
   0,
   'Лариса. Сумка 14',
-  (SELECT id FROM profiles WHERE display_name = 'Леонид' LIMIT 1),
+  NULL,
   'Леонид',
   NOW(),
   NOW()
@@ -27659,7 +27662,7 @@ SELECT
   3300,
   0,
   '-',
-  (SELECT id FROM profiles WHERE display_name = 'Леонид' LIMIT 1),
+  NULL,
   'Леонид',
   NOW(),
   NOW()
@@ -27692,7 +27695,7 @@ SELECT
   10560,
   0,
   'Кристал, Настя',
-  (SELECT id FROM profiles WHERE display_name = 'Леонид' LIMIT 1),
+  NULL,
   'Леонид',
   NOW(),
   NOW()
@@ -27724,7 +27727,7 @@ SELECT
   2560,
   0,
   'Добрый вечер. Заказ на 15.11 в 9 утра , ГОСТ. Кристалл, 32 чел. На имя Элли',
-  (SELECT id FROM profiles WHERE display_name = 'Леонид' LIMIT 1),
+  NULL,
   'Леонид',
   NOW(),
   NOW()
@@ -27757,7 +27760,7 @@ SELECT
   2100,
   0,
   'Ривьера',
-  (SELECT id FROM profiles WHERE display_name = 'Леонид' LIMIT 1),
+  NULL,
   'Леонид',
   NOW(),
   NOW()
@@ -27790,7 +27793,7 @@ SELECT
   4000,
   0,
   'и завтра в 10:00 отель Регата 50 человек радиогиды , с ними Лариса Семенова',
-  (SELECT id FROM profiles WHERE display_name = 'Леонид' LIMIT 1),
+  NULL,
   'Леонид',
   NOW(),
   NOW()
@@ -27822,7 +27825,7 @@ SELECT
   2800,
   0,
   'на завтра в 10:00 от Сафар отеля нужно 35 радиогидов. с группой будет Катя Ильина',
-  (SELECT id FROM profiles WHERE display_name = 'Леонид' LIMIT 1),
+  NULL,
   'Леонид',
   NOW(),
   NOW()
@@ -27854,7 +27857,7 @@ SELECT
   2160,
   0,
   '26 шт. радиогидов на 1 день (беру 07.11.(чт) в 14.00)',
-  (SELECT id FROM profiles WHERE display_name = 'Леонид' LIMIT 1),
+  NULL,
   'Леонид',
   NOW(),
   NOW()
@@ -27887,7 +27890,7 @@ SELECT
   2320,
   0,
   'Фиолетовые',
-  (SELECT id FROM profiles WHERE display_name = 'Леонид' LIMIT 1),
+  NULL,
   'Леонид',
   NOW(),
   NOW()
@@ -27920,7 +27923,7 @@ SELECT
   1680,
   0,
   'Кристал. Лилия. Мариотт',
-  (SELECT id FROM profiles WHERE display_name = 'Леонид' LIMIT 1),
+  NULL,
   'Леонид',
   NOW(),
   NOW()
@@ -27953,7 +27956,7 @@ SELECT
   7040,
   0,
   'на 6,7 ноября. Гид Игорь. +7 927 405-50-70 44 шт. В Давыдов на Назарбаева к 10.30. Сдадут7 ноября в Кристалл после 17.',
-  (SELECT id FROM profiles WHERE display_name = 'Леонид' LIMIT 1),
+  NULL,
   'Леонид',
   NOW(),
   NOW()
@@ -27986,7 +27989,7 @@ SELECT
   10560,
   0,
   'Инна +79869297050 Кристал',
-  (SELECT id FROM profiles WHERE display_name = 'Леонид' LIMIT 1),
+  NULL,
   'Леонид',
   NOW(),
   NOW()
@@ -28019,7 +28022,7 @@ SELECT
   3360,
   0,
   'Баумана в 9:50. забрать в Мариотте',
-  (SELECT id FROM profiles WHERE display_name = 'Леонид' LIMIT 1),
+  NULL,
   'Леонид',
   NOW(),
   NOW()
@@ -28052,7 +28055,7 @@ SELECT
   4000,
   0,
   'Ольга ткач',
-  (SELECT id FROM profiles WHERE display_name = 'Леонид' LIMIT 1),
+  NULL,
   'Леонид',
   NOW(),
   NOW()
@@ -28084,7 +28087,7 @@ SELECT
   3500,
   0,
   '5.11 в 10.30 Казань 1 прибытие - 6.11 в 17.00 привозим на Казань 1 - Гид: +79872969542 Елена - 140 руб. * 25 наушников = 3 500 руб. - гид оплатит на месте',
-  (SELECT id FROM profiles WHERE display_name = 'Леонид' LIMIT 1),
+  NULL,
   'Леонид',
   NOW(),
   NOW()
@@ -28117,7 +28120,7 @@ SELECT
   800,
   0,
   'Сулейман начало в 15:00',
-  (SELECT id FROM profiles WHERE display_name = 'Леонид' LIMIT 1),
+  NULL,
   'Леонид',
   NOW(),
   NOW()
@@ -28150,7 +28153,7 @@ SELECT
   6880,
   0,
   'Карат на Сары садыковой',
-  (SELECT id FROM profiles WHERE display_name = 'Леонид' LIMIT 1),
+  NULL,
   'Леонид',
   NOW(),
   NOW()
@@ -28183,7 +28186,7 @@ SELECT
   2310,
   0,
   'Сафар',
-  (SELECT id FROM profiles WHERE display_name = 'Леонид' LIMIT 1),
+  NULL,
   'Леонид',
   NOW(),
   NOW()
@@ -28216,7 +28219,7 @@ SELECT
   8160,
   0,
   'Гид Елена',
-  (SELECT id FROM profiles WHERE display_name = 'Леонид' LIMIT 1),
+  NULL,
   'Леонид',
   NOW(),
   NOW()
@@ -28249,7 +28252,7 @@ SELECT
   8000,
   0,
   '-',
-  (SELECT id FROM profiles WHERE display_name = 'Леонид' LIMIT 1),
+  NULL,
   'Леонид',
   NOW(),
   NOW()
@@ -28282,7 +28285,7 @@ SELECT
   8000,
   0,
   'Гид Елена Волга 12:30',
-  (SELECT id FROM profiles WHERE display_name = 'Леонид' LIMIT 1),
+  NULL,
   'Леонид',
   NOW(),
   NOW()
@@ -28315,7 +28318,7 @@ SELECT
   6720,
   0,
   'И нужно будет 3- 4.11 От меня Данил наберёт и заберёт.Он будет вести нашу группу',
-  (SELECT id FROM profiles WHERE display_name = 'Леонид' LIMIT 1),
+  NULL,
   'Леонид',
   NOW(),
   NOW()
@@ -28348,7 +28351,7 @@ SELECT
   1650,
   0,
   'В офис 14:00',
-  (SELECT id FROM profiles WHERE display_name = 'Леонид' LIMIT 1),
+  NULL,
   'Леонид',
   NOW(),
   NOW()
@@ -28381,7 +28384,7 @@ SELECT
   6720,
   0,
   'Добрый вечер. На 31 надо в АМАКС сафар отель 42 шт на 31-1. Гид Игорь +7 927 405-50-70. По поводу возврата созвонитесь, пожалуйста',
-  (SELECT id FROM profiles WHERE display_name = 'Леонид' LIMIT 1),
+  NULL,
   'Леонид',
   NOW(),
   NOW()
@@ -28414,7 +28417,7 @@ SELECT
   2940,
   0,
   'Добрый вечер, Леонид! Группа 21 человек +гид Лиля т. +7 965 602-05-28 На 2 дня 30 октября и 31 октября Проживают в отеле Булгар, Вишневского 21 Будет возможность?',
-  (SELECT id FROM profiles WHERE display_name = 'Леонид' LIMIT 1),
+  NULL,
   'Леонид',
   NOW(),
   NOW()
@@ -28447,7 +28450,7 @@ SELECT
   7200,
   0,
   'Кристал',
-  (SELECT id FROM profiles WHERE display_name = 'Леонид' LIMIT 1),
+  NULL,
   'Леонид',
   NOW(),
   NOW()
@@ -28480,7 +28483,7 @@ SELECT
   3360,
   0,
   'На 28 и 30 нужны 21 радиогиды в 13,30 у них сегодня обед в Ресторанном дворе( стерлядке) гид Диляра +7 917 927-54-89',
-  (SELECT id FROM profiles WHERE display_name = 'Леонид' LIMIT 1),
+  NULL,
   'Леонид',
   NOW(),
   NOW()
@@ -28513,7 +28516,7 @@ SELECT
   1680,
   0,
   'Ольга +79872965880',
-  (SELECT id FROM profiles WHERE display_name = 'Леонид' LIMIT 1),
+  NULL,
   'Леонид',
   NOW(),
   NOW()
@@ -28546,7 +28549,7 @@ SELECT
   8640,
   0,
   '29-31 36шт. 29-в Кристалл к 9.30 сдадут 1 ноября после 16.00 в Кристалл гид Марина +79053130120',
-  (SELECT id FROM profiles WHERE display_name = 'Леонид' LIMIT 1),
+  NULL,
   'Леонид',
   NOW(),
   NOW()
@@ -28579,7 +28582,7 @@ SELECT
   8160,
   0,
   '28-30 34шт. 28-Кристалл в 11.00 гид Игорь +79274055070, сдадут 30-после 16. 12:00 донкихот',
-  (SELECT id FROM profiles WHERE display_name = 'Леонид' LIMIT 1),
+  NULL,
   'Леонид',
   NOW(),
   NOW()
@@ -28612,7 +28615,7 @@ SELECT
   8880,
   0,
   '28-30 37 шт. 28-Кристалл к 12, сдадут 30 по созвону после 15 гид Диана +79274454525',
-  (SELECT id FROM profiles WHERE display_name = 'Леонид' LIMIT 1),
+  NULL,
   'Леонид',
   NOW(),
   NOW()
@@ -28645,7 +28648,7 @@ SELECT
   8160,
   0,
   '27-29 34 шт.27-Сулейман к 8.00 29-сдаст в офис после 15.00 гид Марина +79172526993',
-  (SELECT id FROM profiles WHERE display_name = 'Леонид' LIMIT 1),
+  NULL,
   'Леонид',
   NOW(),
   NOW()
@@ -28678,7 +28681,7 @@ SELECT
   10880,
   0,
   '27-30 34 шт. 27- отель Волга 8.40 завтрак сдадут 30-Кристалл после 21 гид Ольга +79503140361',
-  (SELECT id FROM profiles WHERE display_name = 'Леонид' LIMIT 1),
+  NULL,
   'Леонид',
   NOW(),
   NOW()
@@ -28711,7 +28714,7 @@ SELECT
   2480,
   0,
   '-',
-  (SELECT id FROM profiles WHERE display_name = 'Леонид' LIMIT 1),
+  NULL,
   'Леонид',
   NOW(),
   NOW()
@@ -28744,7 +28747,7 @@ SELECT
   3280,
   0,
   '-',
-  (SELECT id FROM profiles WHERE display_name = 'Леонид' LIMIT 1),
+  NULL,
   'Леонид',
   NOW(),
   NOW()
@@ -28777,7 +28780,7 @@ SELECT
   3220,
   0,
   'Группа 23 чел+гид Татьяна т.89063271840- 2 дня Оставить 30 октября в отеле Кристал. 1.11. отель болгар',
-  (SELECT id FROM profiles WHERE display_name = 'Леонид' LIMIT 1),
+  NULL,
   'Леонид',
   NOW(),
   NOW()
@@ -28810,7 +28813,7 @@ SELECT
   1190,
   0,
   'Группа 17 чел+гид Булат т.89376173315 - 1 день Оставить 28 октября в отеле Булгар 2,ул.Вишневского 21*',
-  (SELECT id FROM profiles WHERE display_name = 'Леонид' LIMIT 1),
+  NULL,
   'Леонид',
   NOW(),
   NOW()
@@ -28843,7 +28846,7 @@ SELECT
   6020,
   0,
   '4) Группа 43 чел+гид Ирина т.89274213682 - 2 дня с 28-29 окт, Оставить 27 октября в хостоле "Дом 64", ул Большая Красная 64',
-  (SELECT id FROM profiles WHERE display_name = 'Леонид' LIMIT 1),
+  NULL,
   'Леонид',
   NOW(),
   NOW()
@@ -28876,7 +28879,7 @@ SELECT
   8610,
   0,
   '3) Группа 41 чел+гид Маргарита т.89063263820 -на *3 ДНЯ* с 26-28 окт, на 3й день возращает гид Татьяна т.89063271840 Оставить сегодня в отеле Булгар 2,ул.Вишневского 21*сумка в Шаляпин',
-  (SELECT id FROM profiles WHERE display_name = 'Леонид' LIMIT 1),
+  NULL,
   'Леонид',
   NOW(),
   NOW()
@@ -28909,7 +28912,7 @@ SELECT
   8640,
   0,
   'Настя Автобус 981',
-  (SELECT id FROM profiles WHERE display_name = 'Леонид' LIMIT 1),
+  NULL,
   'Леонид',
   NOW(),
   NOW()
@@ -28941,7 +28944,7 @@ SELECT
   2240,
   0,
   'Уточнить у Кати',
-  (SELECT id FROM profiles WHERE display_name = 'Леонид' LIMIT 1),
+  NULL,
   'Леонид',
   NOW(),
   NOW()
@@ -28973,7 +28976,7 @@ SELECT
   3840,
   0,
   'Кристал',
-  (SELECT id FROM profiles WHERE display_name = 'Леонид' LIMIT 1),
+  NULL,
   'Леонид',
   NOW(),
   NOW()
@@ -29006,7 +29009,7 @@ SELECT
   7560,
   0,
   '-',
-  (SELECT id FROM profiles WHERE display_name = 'Леонид' LIMIT 1),
+  NULL,
   'Леонид',
   NOW(),
   NOW()
@@ -29039,7 +29042,7 @@ SELECT
   4240,
   0,
   'Волга',
-  (SELECT id FROM profiles WHERE display_name = 'Леонид' LIMIT 1),
+  NULL,
   'Леонид',
   NOW(),
   NOW()
@@ -29072,7 +29075,7 @@ SELECT
   7840,
   0,
   'Гранд отель к 12',
-  (SELECT id FROM profiles WHERE display_name = 'Леонид' LIMIT 1),
+  NULL,
   'Леонид',
   NOW(),
   NOW()
@@ -29105,7 +29108,7 @@ SELECT
   6720,
   0,
   '2 группы',
-  (SELECT id FROM profiles WHERE display_name = 'Леонид' LIMIT 1),
+  NULL,
   'Леонид',
   NOW(),
   NOW()
@@ -29138,7 +29141,7 @@ SELECT
   9660,
   0,
   'Лейла +79172488804',
-  (SELECT id FROM profiles WHERE display_name = 'Леонид' LIMIT 1),
+  NULL,
   'Леонид',
   NOW(),
   NOW()
@@ -29171,7 +29174,7 @@ SELECT
   8610,
   0,
   'Диляра +79179275489',
-  (SELECT id FROM profiles WHERE display_name = 'Леонид' LIMIT 1),
+  NULL,
   'Леонид',
   NOW(),
   NOW()
@@ -29204,7 +29207,7 @@ SELECT
   10290,
   0,
   'Ангелина +79872050601. Татарская усадьба',
-  (SELECT id FROM profiles WHERE display_name = 'Леонид' LIMIT 1),
+  NULL,
   'Леонид',
   NOW(),
   NOW()
@@ -29237,7 +29240,7 @@ SELECT
   800,
   0,
   'в 12 заберет',
-  (SELECT id FROM profiles WHERE display_name = 'Леонид' LIMIT 1),
+  NULL,
   'Леонид',
   NOW(),
   NOW()
@@ -29270,7 +29273,7 @@ SELECT
   4620,
   0,
   '28.10 в 10.30 Казань 1 прибытие - 29.10 в 17.00 привозим на Казань 1 - Гид: +7 905 316-29-73 Елена - 140 руб. * 33 наушников = 4 620 руб. - гид оплатит на месте',
-  (SELECT id FROM profiles WHERE display_name = 'Леонид' LIMIT 1),
+  NULL,
   'Леонид',
   NOW(),
   NOW()
@@ -29303,7 +29306,7 @@ SELECT
   6160,
   0,
   '25.10 в 7.30 Казань 1 прибытие - 26.10 в 18.30 привозим на Казань 1 - Гид: +7 905 316-29-73 Елена - 140 руб. * 44 наушников = 6 160 руб. - гид оплатит на месте',
-  (SELECT id FROM profiles WHERE display_name = 'Леонид' LIMIT 1),
+  NULL,
   'Леонид',
   NOW(),
   NOW()
@@ -29336,7 +29339,7 @@ SELECT
   7680,
   0,
   'Жд 11:00 вернут 27.10 в 15:00 Дурсун. +7 919 699-29-68',
-  (SELECT id FROM profiles WHERE display_name = 'Леонид' LIMIT 1),
+  NULL,
   'Леонид',
   NOW(),
   NOW()
@@ -29369,7 +29372,7 @@ SELECT
   4080,
   0,
   '-',
-  (SELECT id FROM profiles WHERE display_name = 'Леонид' LIMIT 1),
+  NULL,
   'Леонид',
   NOW(),
   NOW()
@@ -29402,7 +29405,7 @@ SELECT
   3600,
   0,
   '26.10 в 9 утра поезд, оставить в кристалл',
-  (SELECT id FROM profiles WHERE display_name = 'Стас' LIMIT 1),
+  NULL,
   'Стас',
   NOW(),
   NOW()
@@ -29435,7 +29438,7 @@ SELECT
   6480,
   0,
   '-',
-  (SELECT id FROM profiles WHERE display_name = 'Леонид' LIMIT 1),
+  NULL,
   'Леонид',
   NOW(),
   NOW()
@@ -29468,7 +29471,7 @@ SELECT
   2000,
   0,
   'Кристал',
-  (SELECT id FROM profiles WHERE display_name = 'Леонид' LIMIT 1),
+  NULL,
   'Леонид',
   NOW(),
   NOW()
@@ -29500,7 +29503,7 @@ SELECT
   6400,
   0,
   '-',
-  (SELECT id FROM profiles WHERE display_name = 'Леонид' LIMIT 1),
+  NULL,
   'Леонид',
   NOW(),
   NOW()
@@ -29533,7 +29536,7 @@ SELECT
   6510,
   0,
   '-',
-  (SELECT id FROM profiles WHERE display_name = 'Леонид' LIMIT 1),
+  NULL,
   'Леонид',
   NOW(),
   NOW()
@@ -29566,7 +29569,7 @@ SELECT
   3760,
   0,
   'Группа приезжает 26 октября в 13:00 и будет ночевать в Фатиме. 27 октября отправится на экскурсию в 08:00 И закончит в 14:00-14:30 у театра кукол',
-  (SELECT id FROM profiles WHERE display_name = 'Леонид' LIMIT 1),
+  NULL,
   'Леонид',
   NOW(),
   NOW()
@@ -29599,7 +29602,7 @@ SELECT
   4160,
   0,
   '14:00 туган авылым',
-  (SELECT id FROM profiles WHERE display_name = 'Леонид' LIMIT 1),
+  NULL,
   'Леонид',
   NOW(),
   NOW()
@@ -29632,7 +29635,7 @@ SELECT
   8400,
   0,
   '13:30 дом чая Забрать в крыльях',
-  (SELECT id FROM profiles WHERE display_name = 'Леонид' LIMIT 1),
+  NULL,
   'Леонид',
   NOW(),
   NOW()
@@ -29665,7 +29668,7 @@ SELECT
   3840,
   0,
   'Волга',
-  (SELECT id FROM profiles WHERE display_name = 'Леонид' LIMIT 1),
+  NULL,
   'Леонид',
   NOW(),
   NOW()
@@ -29698,7 +29701,7 @@ SELECT
   7680,
   0,
   '-',
-  (SELECT id FROM profiles WHERE display_name = 'Леонид' LIMIT 1),
+  NULL,
   'Леонид',
   NOW(),
   NOW()
@@ -29731,7 +29734,7 @@ SELECT
   3680,
   0,
   '30-46 шт. в Давыдов на Назарбаева к 10, сдадут в Кристалл в 21 гид Марина +79053130120',
-  (SELECT id FROM profiles WHERE display_name = 'Леонид' LIMIT 1),
+  NULL,
   'Леонид',
   NOW(),
   NOW()
@@ -29764,7 +29767,7 @@ SELECT
   11520,
   0,
   '30-1.11 48 шт. 30-в 11.30 завтрак в Алан аш на Ш.Марджани,8 сдадут 1 ноября в 21.00 в Кристалл гид Нелли Рифовна +79063237048',
-  (SELECT id FROM profiles WHERE display_name = 'Леонид' LIMIT 1),
+  NULL,
   'Леонид',
   NOW(),
   NOW()
@@ -29797,7 +29800,7 @@ SELECT
   8640,
   0,
   '29-31 36шт. 29-Кристалл к 8.30 , сдадут 31-в Кристалл в 18.00 гид Аида +79033440899',
-  (SELECT id FROM profiles WHERE display_name = 'Леонид' LIMIT 1),
+  NULL,
   'Леонид',
   NOW(),
   NOW()
@@ -29830,7 +29833,7 @@ SELECT
   7920,
   0,
   '29-31 (без30) 33 шт. 29- завтрак в Волге в 7.30 гид Игорь +79274055070 сдадут 31 после 17 в Кристалл гид Виолетта +79053171049',
-  (SELECT id FROM profiles WHERE display_name = 'Леонид' LIMIT 1),
+  NULL,
   'Леонид',
   NOW(),
   NOW()
@@ -29863,7 +29866,7 @@ SELECT
   6720,
   0,
   '28-30 28 шт. 28-Кристаллв 13.00 гид Гузель +79033142074 сдадут 30- в 20.00 Кристалл гид Гульназ +79393902610',
-  (SELECT id FROM profiles WHERE display_name = 'Леонид' LIMIT 1),
+  NULL,
   'Леонид',
   NOW(),
   NOW()
@@ -29896,7 +29899,7 @@ SELECT
   8400,
   0,
   '27-30 без 28 октября 35шт.27-кафе Медина на Спартаковской к 8.30 возврат по созвону30 -после 16.00 гид Виолетта +79053171049. Забрать в офисе',
-  (SELECT id FROM profiles WHERE display_name = 'Леонид' LIMIT 1),
+  NULL,
   'Леонид',
   NOW(),
   NOW()
@@ -29929,7 +29932,7 @@ SELECT
   7360,
   0,
   '46 шт. 27-в Кристалл к 11.30 гид Юля +79178863309. сдадут 28- по созвону после 14.00',
-  (SELECT id FROM profiles WHERE display_name = 'Леонид' LIMIT 1),
+  NULL,
   'Леонид',
   NOW(),
   NOW()
@@ -29962,7 +29965,7 @@ SELECT
   8160,
   0,
   'оставят в Кристалле 28.10. Гид Дания +79172904415 после 22.00',
-  (SELECT id FROM profiles WHERE display_name = 'Леонид' LIMIT 1),
+  NULL,
   'Леонид',
   NOW(),
   NOW()
@@ -29995,7 +29998,7 @@ SELECT
   2320,
   0,
   '29 шт. отель Ямле к 9.00 сдадут по договоренности после 14.30 гид Гульназ +79393902610',
-  (SELECT id FROM profiles WHERE display_name = 'Леонид' LIMIT 1),
+  NULL,
   'Леонид',
   NOW(),
   NOW()
@@ -30028,7 +30031,7 @@ SELECT
   4320,
   0,
   '26-27- 27 шт. В Кристалл к 7.30 , сдадут в Кристалл 27.10 после20. 30 26-27 последняя моя запись гид Лилия. +79872975449',
-  (SELECT id FROM profiles WHERE display_name = 'Леонид' LIMIT 1),
+  NULL,
   'Леонид',
   NOW(),
   NOW()
@@ -30061,7 +30064,7 @@ SELECT
   2480,
   0,
   '26 октября к 9.40 в Давыдов на Назарбаева 31 шт на один день сдадут туда же после 17,30 гид Ирина 89274213682',
-  (SELECT id FROM profiles WHERE display_name = 'Леонид' LIMIT 1),
+  NULL,
   'Леонид',
   NOW(),
   NOW()
@@ -30094,7 +30097,7 @@ SELECT
   7200,
   0,
   '25-27 октября в Кристалл к 7,30 сдадут в 17,30 - в Кристалл 30 шт. Гид Диляра Рафаровна +79179275489',
-  (SELECT id FROM profiles WHERE display_name = 'Леонид' LIMIT 1),
+  NULL,
   'Леонид',
   NOW(),
   NOW()
@@ -30127,7 +30130,7 @@ SELECT
   2000,
   0,
   '25 шт. В Кристалл к 11.30 сдадут на Баумана в офис16. 30 гид Виолетта +79053171049',
-  (SELECT id FROM profiles WHERE display_name = 'Леонид' LIMIT 1),
+  NULL,
   'Леонид',
   NOW(),
   NOW()
@@ -30160,7 +30163,7 @@ SELECT
   7680,
   0,
   '-',
-  (SELECT id FROM profiles WHERE display_name = 'Леонид' LIMIT 1),
+  NULL,
   'Леонид',
   NOW(),
   NOW()
@@ -30193,7 +30196,7 @@ SELECT
   8400,
   0,
   '-',
-  (SELECT id FROM profiles WHERE display_name = 'Леонид' LIMIT 1),
+  NULL,
   'Леонид',
   NOW(),
   NOW()
@@ -30226,7 +30229,7 @@ SELECT
   7700,
   0,
   '-',
-  (SELECT id FROM profiles WHERE display_name = 'Леонид' LIMIT 1),
+  NULL,
   'Леонид',
   NOW(),
   NOW()
@@ -30259,7 +30262,7 @@ SELECT
   5460,
   0,
   '6.10 в 10.30 Казань 1 прибытие - 8.10 в 17.00 привозим на Казань 1 - Гид: +79872969542 Елена - 210 руб. * 26 наушников = 5 460 руб. - гид оплатит на месте',
-  (SELECT id FROM profiles WHERE display_name = 'Леонид' LIMIT 1),
+  NULL,
   'Леонид',
   NOW(),
   NOW()
@@ -30292,7 +30295,7 @@ SELECT
   3920,
   0,
   '-',
-  (SELECT id FROM profiles WHERE display_name = 'Стас' LIMIT 1),
+  NULL,
   'Стас',
   NOW(),
   NOW()
@@ -30325,7 +30328,7 @@ SELECT
   4000,
   0,
   '-',
-  (SELECT id FROM profiles WHERE display_name = 'Леонид' LIMIT 1),
+  NULL,
   'Леонид',
   NOW(),
   NOW()
@@ -30358,7 +30361,7 @@ SELECT
   4320,
   0,
   'Света',
-  (SELECT id FROM profiles WHERE display_name = 'Леонид' LIMIT 1),
+  NULL,
   'Леонид',
   NOW(),
   NOW()
@@ -30391,7 +30394,7 @@ SELECT
   4160,
   0,
   '-',
-  (SELECT id FROM profiles WHERE display_name = 'Стас' LIMIT 1),
+  NULL,
   'Стас',
   NOW(),
   NOW()
@@ -30424,7 +30427,7 @@ SELECT
   3920,
   0,
   'Кристал, Катя',
-  (SELECT id FROM profiles WHERE display_name = 'Стас' LIMIT 1),
+  NULL,
   'Стас',
   NOW(),
   NOW()
@@ -30456,7 +30459,7 @@ SELECT
   3920,
   0,
   '-',
-  (SELECT id FROM profiles WHERE display_name = 'Леонид' LIMIT 1),
+  NULL,
   'Леонид',
   NOW(),
   NOW()
@@ -30489,7 +30492,7 @@ SELECT
   7840,
   0,
   '-',
-  (SELECT id FROM profiles WHERE display_name = 'Леонид' LIMIT 1),
+  NULL,
   'Леонид',
   NOW(),
   NOW()
@@ -30522,7 +30525,7 @@ SELECT
   16640,
   0,
   '30 . 09 надо 52 радиогида в Кристалле в 7.30 отдадут 3.10 в Кристалл после 15.00 гид Диляра Рафаровна 89179275489',
-  (SELECT id FROM profiles WHERE display_name = 'Леонид' LIMIT 1),
+  NULL,
   'Леонид',
   NOW(),
   NOW()
@@ -30555,7 +30558,7 @@ SELECT
   3360,
   0,
   '46 человек +1 гид Встреча возле ЦУМа ожидается прибытие в 14:00,в 20:30 ужинают в отеле Хаял, и едут на заселение в Биляр Инн, краснокошайская 187 Гид Екатерина +7 927 430-72-44',
-  (SELECT id FROM profiles WHERE display_name = 'Леонид' LIMIT 1),
+  NULL,
   'Леонид',
   NOW(),
   NOW()
@@ -30588,7 +30591,7 @@ SELECT
   10560,
   0,
   '27-29 44 шт. Кристалл 11.30-вернут в Авиатор в 19.00 гид Баталова Ирина 89274213682',
-  (SELECT id FROM profiles WHERE display_name = 'Леонид' LIMIT 1),
+  NULL,
   'Леонид',
   NOW(),
   NOW()
@@ -30621,7 +30624,7 @@ SELECT
   6240,
   0,
   '27-29 26 шт. Кристалл в 10.30, вернут Кристалл в 20.00 гид Шуравина Ольга 89503140361',
-  (SELECT id FROM profiles WHERE display_name = 'Леонид' LIMIT 1),
+  NULL,
   'Леонид',
   NOW(),
   NOW()
@@ -30654,7 +30657,7 @@ SELECT
   4480,
   0,
   '27-28 - 28 шт. Кристалл в 9.00 вернут Кристалл в 14. гид Диляра Рафаровна 89179275489',
-  (SELECT id FROM profiles WHERE display_name = 'Леонид' LIMIT 1),
+  NULL,
   'Леонид',
   NOW(),
   NOW()
@@ -30687,7 +30690,7 @@ SELECT
   4620,
   0,
   'Кристал Гид: Елена +79872969542',
-  (SELECT id FROM profiles WHERE display_name = 'Леонид' LIMIT 1),
+  NULL,
   'Леонид',
   NOW(),
   NOW()
@@ -30720,7 +30723,7 @@ SELECT
   3600,
   0,
   '-',
-  (SELECT id FROM profiles WHERE display_name = 'Леонид' LIMIT 1),
+  NULL,
   'Леонид',
   NOW(),
   NOW()
@@ -30753,7 +30756,7 @@ SELECT
   2560,
   0,
   'Кристал',
-  (SELECT id FROM profiles WHERE display_name = 'Леонид' LIMIT 1),
+  NULL,
   'Леонид',
   NOW(),
   NOW()
@@ -30786,7 +30789,7 @@ SELECT
   3080,
   0,
   'Кристал',
-  (SELECT id FROM profiles WHERE display_name = 'Леонид' LIMIT 1),
+  NULL,
   'Леонид',
   NOW(),
   NOW()
@@ -30819,7 +30822,7 @@ SELECT
   16000,
   0,
   '-',
-  (SELECT id FROM profiles WHERE display_name = 'Стас' LIMIT 1),
+  NULL,
   'Стас',
   NOW(),
   NOW()
@@ -30852,7 +30855,7 @@ SELECT
   3920,
   0,
   'Кристал',
-  (SELECT id FROM profiles WHERE display_name = 'Леонид' LIMIT 1),
+  NULL,
   'Леонид',
   NOW(),
   NOW()
@@ -30885,7 +30888,7 @@ SELECT
   2640,
   0,
   '-',
-  (SELECT id FROM profiles WHERE display_name = 'Леонид' LIMIT 1),
+  NULL,
   'Леонид',
   NOW(),
   NOW()
@@ -30918,7 +30921,7 @@ SELECT
   3500,
   0,
   '-',
-  (SELECT id FROM profiles WHERE display_name = 'Леонид' LIMIT 1),
+  NULL,
   'Леонид',
   NOW(),
   NOW()
@@ -30951,7 +30954,7 @@ SELECT
   7200,
   0,
   '-',
-  (SELECT id FROM profiles WHERE display_name = 'Леонид' LIMIT 1),
+  NULL,
   'Леонид',
   NOW(),
   NOW()
@@ -30984,7 +30987,7 @@ SELECT
   5920,
   0,
   '-',
-  (SELECT id FROM profiles WHERE display_name = 'Леонид' LIMIT 1),
+  NULL,
   'Леонид',
   NOW(),
   NOW()
@@ -31017,7 +31020,7 @@ SELECT
   11760,
   0,
   '-',
-  (SELECT id FROM profiles WHERE display_name = 'Леонид' LIMIT 1),
+  NULL,
   'Леонид',
   NOW(),
   NOW()
@@ -31050,7 +31053,7 @@ SELECT
   3040,
   0,
   '-',
-  (SELECT id FROM profiles WHERE display_name = 'Леонид' LIMIT 1),
+  NULL,
   'Леонид',
   NOW(),
   NOW()
@@ -31083,7 +31086,7 @@ SELECT
   11520,
   0,
   'Забрать в свияжске',
-  (SELECT id FROM profiles WHERE display_name = 'Леонид' LIMIT 1),
+  NULL,
   'Леонид',
   NOW(),
   NOW()
@@ -31116,7 +31119,7 @@ SELECT
   2100,
   0,
   'Кристал. Сумка 1',
-  (SELECT id FROM profiles WHERE display_name = 'Леонид' LIMIT 1),
+  NULL,
   'Леонид',
   NOW(),
   NOW()
@@ -31149,7 +31152,7 @@ SELECT
   7920,
   0,
   'В хаял. Вернут в офис. Сумка 2',
-  (SELECT id FROM profiles WHERE display_name = 'Леонид' LIMIT 1),
+  NULL,
   'Леонид',
   NOW(),
   NOW()
@@ -31182,7 +31185,7 @@ SELECT
   4800,
   0,
   'В хаял. Вернут в кристал. Сумка 10',
-  (SELECT id FROM profiles WHERE display_name = 'Леонид' LIMIT 1),
+  NULL,
   'Леонид',
   NOW(),
   NOW()
@@ -31215,7 +31218,7 @@ SELECT
   2720,
   0,
   '-',
-  (SELECT id FROM profiles WHERE display_name = 'Стас' LIMIT 1),
+  NULL,
   'Стас',
   NOW(),
   NOW()
@@ -31248,7 +31251,7 @@ SELECT
   6000,
   0,
   'Отель Парисон',
-  (SELECT id FROM profiles WHERE display_name = 'Стас' LIMIT 1),
+  NULL,
   'Стас',
   NOW(),
   NOW()
@@ -31281,7 +31284,7 @@ SELECT
   0,
   0,
   '-',
-  (SELECT id FROM profiles WHERE display_name = 'Леонид' LIMIT 1),
+  NULL,
   'Леонид',
   NOW(),
   NOW()
@@ -31314,7 +31317,7 @@ SELECT
   3680,
   0,
   '-',
-  (SELECT id FROM profiles WHERE display_name = 'Леонид' LIMIT 1),
+  NULL,
   'Леонид',
   NOW(),
   NOW()
@@ -31347,7 +31350,7 @@ SELECT
   7680,
   0,
   '-',
-  (SELECT id FROM profiles WHERE display_name = 'Леонид' LIMIT 1),
+  NULL,
   'Леонид',
   NOW(),
   NOW()
@@ -31380,7 +31383,7 @@ SELECT
   2240,
   0,
   '-',
-  (SELECT id FROM profiles WHERE display_name = 'Леонид' LIMIT 1),
+  NULL,
   'Леонид',
   NOW(),
   NOW()
@@ -31413,7 +31416,7 @@ SELECT
   6320,
   0,
   '-',
-  (SELECT id FROM profiles WHERE display_name = 'Леонид' LIMIT 1),
+  NULL,
   'Леонид',
   NOW(),
   NOW()
@@ -31446,7 +31449,7 @@ SELECT
   2160,
   0,
   '-',
-  (SELECT id FROM profiles WHERE display_name = 'Леонид' LIMIT 1),
+  NULL,
   'Леонид',
   NOW(),
   NOW()
@@ -31479,7 +31482,7 @@ SELECT
   2400,
   0,
   '-',
-  (SELECT id FROM profiles WHERE display_name = 'Леонид' LIMIT 1),
+  NULL,
   'Леонид',
   NOW(),
   NOW()
@@ -31512,7 +31515,7 @@ SELECT
   5760,
   0,
   '-',
-  (SELECT id FROM profiles WHERE display_name = 'Леонид' LIMIT 1),
+  NULL,
   'Леонид',
   NOW(),
   NOW()
@@ -31545,7 +31548,7 @@ SELECT
   7350,
   0,
   '-',
-  (SELECT id FROM profiles WHERE display_name = 'Леонид' LIMIT 1),
+  NULL,
   'Леонид',
   NOW(),
   NOW()
@@ -31578,7 +31581,7 @@ SELECT
   6400,
   0,
   '-',
-  (SELECT id FROM profiles WHERE display_name = 'Леонид' LIMIT 1),
+  NULL,
   'Леонид',
   NOW(),
   NOW()
@@ -31611,7 +31614,7 @@ SELECT
   2320,
   0,
   '-',
-  (SELECT id FROM profiles WHERE display_name = 'Леонид' LIMIT 1),
+  NULL,
   'Леонид',
   NOW(),
   NOW()
@@ -31643,7 +31646,7 @@ SELECT
   2800,
   0,
   '-',
-  (SELECT id FROM profiles WHERE display_name = 'Леонид' LIMIT 1),
+  NULL,
   'Леонид',
   NOW(),
   NOW()
@@ -31675,7 +31678,7 @@ SELECT
   3760,
   0,
   '-',
-  (SELECT id FROM profiles WHERE display_name = 'Стас' LIMIT 1),
+  NULL,
   'Стас',
   NOW(),
   NOW()
@@ -31708,7 +31711,7 @@ SELECT
   2800,
   0,
   '-',
-  (SELECT id FROM profiles WHERE display_name = 'Леонид' LIMIT 1),
+  NULL,
   'Леонид',
   NOW(),
   NOW()
@@ -31741,7 +31744,7 @@ SELECT
   3520,
   0,
   'Двойной комплект наушников',
-  (SELECT id FROM profiles WHERE display_name = 'Леонид' LIMIT 1),
+  NULL,
   'Леонид',
   NOW(),
   NOW()
@@ -31774,7 +31777,7 @@ SELECT
   4320,
   0,
   'Кристал, Элина',
-  (SELECT id FROM profiles WHERE display_name = 'Леонид' LIMIT 1),
+  NULL,
   'Леонид',
   NOW(),
   NOW()
@@ -31806,7 +31809,7 @@ SELECT
   3040,
   0,
   'Кристалл к 10.30 38 шт. Гид Диана 89274454525. Вернуть этот день день. Отель Сулейман в 18.00',
-  (SELECT id FROM profiles WHERE display_name = 'Леонид' LIMIT 1),
+  NULL,
   'Леонид',
   NOW(),
   NOW()
@@ -31839,7 +31842,7 @@ SELECT
   7680,
   0,
   '-',
-  (SELECT id FROM profiles WHERE display_name = 'Леонид' LIMIT 1),
+  NULL,
   'Леонид',
   NOW(),
   NOW()
@@ -31872,7 +31875,7 @@ SELECT
   880,
   0,
   '6.09 нужно 11 аудиогидов🙏🏻с 13 до 19',
-  (SELECT id FROM profiles WHERE display_name = 'Леонид' LIMIT 1),
+  NULL,
   'Леонид',
   NOW(),
   NOW()
@@ -31905,7 +31908,7 @@ SELECT
   3120,
   0,
   '-',
-  (SELECT id FROM profiles WHERE display_name = 'Леонид' LIMIT 1),
+  NULL,
   'Леонид',
   NOW(),
   NOW()
@@ -31938,7 +31941,7 @@ SELECT
   16000,
   0,
   '-',
-  (SELECT id FROM profiles WHERE display_name = 'Леонид' LIMIT 1),
+  NULL,
   'Леонид',
   NOW(),
   NOW()
@@ -31971,7 +31974,7 @@ SELECT
   5280,
   0,
   '-',
-  (SELECT id FROM profiles WHERE display_name = 'Леонид' LIMIT 1),
+  NULL,
   'Леонид',
   NOW(),
   NOW()
@@ -32004,7 +32007,7 @@ SELECT
   800,
   0,
   'Заберут 10:00 вернут 13:30',
-  (SELECT id FROM profiles WHERE display_name = 'Леонид' LIMIT 1),
+  NULL,
   'Леонид',
   NOW(),
   NOW()
@@ -32037,7 +32040,7 @@ SELECT
   3120,
   0,
   '-',
-  (SELECT id FROM profiles WHERE display_name = 'Леонид' LIMIT 1),
+  NULL,
   'Леонид',
   NOW(),
   NOW()
@@ -32070,7 +32073,7 @@ SELECT
   6580,
   0,
   '-',
-  (SELECT id FROM profiles WHERE display_name = 'Стас' LIMIT 1),
+  NULL,
   'Стас',
   NOW(),
   NOW()
@@ -32103,7 +32106,7 @@ SELECT
   22400,
   0,
   '-',
-  (SELECT id FROM profiles WHERE display_name = 'Леонид' LIMIT 1),
+  NULL,
   'Леонид',
   NOW(),
   NOW()
@@ -32136,7 +32139,7 @@ SELECT
   2800,
   0,
   '-',
-  (SELECT id FROM profiles WHERE display_name = 'Леонид' LIMIT 1),
+  NULL,
   'Леонид',
   NOW(),
   NOW()
@@ -32169,7 +32172,7 @@ SELECT
   6090,
   0,
   '-',
-  (SELECT id FROM profiles WHERE display_name = 'Леонид' LIMIT 1),
+  NULL,
   'Леонид',
   NOW(),
   NOW()
@@ -32202,7 +32205,7 @@ SELECT
   2100,
   0,
   '-',
-  (SELECT id FROM profiles WHERE display_name = 'Леонид' LIMIT 1),
+  NULL,
   'Леонид',
   NOW(),
   NOW()
@@ -32235,7 +32238,7 @@ SELECT
   0,
   0,
   '-',
-  (SELECT id FROM profiles WHERE display_name = 'Леонид' LIMIT 1),
+  NULL,
   'Леонид',
   NOW(),
   NOW()
@@ -32267,7 +32270,7 @@ SELECT
   4640,
   0,
   'Лейла',
-  (SELECT id FROM profiles WHERE display_name = 'Леонид' LIMIT 1),
+  NULL,
   'Леонид',
   NOW(),
   NOW()
@@ -32300,7 +32303,7 @@ SELECT
   3680,
   0,
   '-',
-  (SELECT id FROM profiles WHERE display_name = 'Леонид' LIMIT 1),
+  NULL,
   'Леонид',
   NOW(),
   NOW()
@@ -32333,7 +32336,7 @@ SELECT
   2960,
   0,
   '-',
-  (SELECT id FROM profiles WHERE display_name = 'Леонид' LIMIT 1),
+  NULL,
   'Леонид',
   NOW(),
   NOW()
@@ -32366,7 +32369,7 @@ SELECT
   2640,
   0,
   '-',
-  (SELECT id FROM profiles WHERE display_name = 'Леонид' LIMIT 1),
+  NULL,
   'Леонид',
   NOW(),
   NOW()
@@ -32399,7 +32402,7 @@ SELECT
   3080,
   0,
   '-',
-  (SELECT id FROM profiles WHERE display_name = 'Стас' LIMIT 1),
+  NULL,
   'Стас',
   NOW(),
   NOW()
@@ -32432,7 +32435,7 @@ SELECT
   15750,
   0,
   '-',
-  (SELECT id FROM profiles WHERE display_name = 'Стас' LIMIT 1),
+  NULL,
   'Стас',
   NOW(),
   NOW()
@@ -32465,7 +32468,7 @@ SELECT
   2720,
   0,
   '-',
-  (SELECT id FROM profiles WHERE display_name = 'Стас' LIMIT 1),
+  NULL,
   'Стас',
   NOW(),
   NOW()
@@ -32498,7 +32501,7 @@ SELECT
   6720,
   0,
   '-',
-  (SELECT id FROM profiles WHERE display_name = 'Леонид' LIMIT 1),
+  NULL,
   'Леонид',
   NOW(),
   NOW()
@@ -32531,7 +32534,7 @@ SELECT
   880,
   0,
   '-',
-  (SELECT id FROM profiles WHERE display_name = 'Леонид' LIMIT 1),
+  NULL,
   'Леонид',
   NOW(),
   NOW()
@@ -32564,7 +32567,7 @@ SELECT
   4640,
   0,
   '-',
-  (SELECT id FROM profiles WHERE display_name = 'Леонид' LIMIT 1),
+  NULL,
   'Леонид',
   NOW(),
   NOW()
@@ -32596,7 +32599,7 @@ SELECT
   4640,
   0,
   '-',
-  (SELECT id FROM profiles WHERE display_name = 'Леонид' LIMIT 1),
+  NULL,
   'Леонид',
   NOW(),
   NOW()
@@ -32628,7 +32631,7 @@ SELECT
   8640,
   0,
   '-',
-  (SELECT id FROM profiles WHERE display_name = 'Леонид' LIMIT 1),
+  NULL,
   'Леонид',
   NOW(),
   NOW()
@@ -32660,7 +32663,7 @@ SELECT
   3520,
   0,
   '-',
-  (SELECT id FROM profiles WHERE display_name = 'Леонид' LIMIT 1),
+  NULL,
   'Леонид',
   NOW(),
   NOW()
@@ -32693,7 +32696,7 @@ SELECT
   9840,
   0,
   'У Натальи',
-  (SELECT id FROM profiles WHERE display_name = 'Леонид' LIMIT 1),
+  NULL,
   'Леонид',
   NOW(),
   NOW()
@@ -32726,7 +32729,7 @@ SELECT
   0,
   0,
   '-',
-  (SELECT id FROM profiles WHERE display_name = 'Леонид' LIMIT 1),
+  NULL,
   'Леонид',
   NOW(),
   NOW()
@@ -32759,7 +32762,7 @@ SELECT
   6720,
   0,
   '-',
-  (SELECT id FROM profiles WHERE display_name = 'Леонид' LIMIT 1),
+  NULL,
   'Леонид',
   NOW(),
   NOW()
@@ -32792,7 +32795,7 @@ SELECT
   3200,
   0,
   '-',
-  (SELECT id FROM profiles WHERE display_name = 'Леонид' LIMIT 1),
+  NULL,
   'Леонид',
   NOW(),
   NOW()
@@ -32825,7 +32828,7 @@ SELECT
   1470,
   0,
   '-',
-  (SELECT id FROM profiles WHERE display_name = 'Леонид' LIMIT 1),
+  NULL,
   'Леонид',
   NOW(),
   NOW()
@@ -32858,7 +32861,7 @@ SELECT
   5920,
   0,
   '-',
-  (SELECT id FROM profiles WHERE display_name = 'Стас' LIMIT 1),
+  NULL,
   'Стас',
   NOW(),
   NOW()
@@ -32891,7 +32894,7 @@ SELECT
   6860,
   0,
   '-',
-  (SELECT id FROM profiles WHERE display_name = 'Стас' LIMIT 1),
+  NULL,
   'Стас',
   NOW(),
   NOW()
@@ -32924,7 +32927,7 @@ SELECT
   3040,
   0,
   '-',
-  (SELECT id FROM profiles WHERE display_name = 'Леонид' LIMIT 1),
+  NULL,
   'Леонид',
   NOW(),
   NOW()
@@ -32957,7 +32960,7 @@ SELECT
   6880,
   0,
   '-',
-  (SELECT id FROM profiles WHERE display_name = 'Леонид' LIMIT 1),
+  NULL,
   'Леонид',
   NOW(),
   NOW()
@@ -32990,7 +32993,7 @@ SELECT
   2960,
   0,
   'В 11:30 в туган авылым',
-  (SELECT id FROM profiles WHERE display_name = 'Леонид' LIMIT 1),
+  NULL,
   'Леонид',
   NOW(),
   NOW()
@@ -33023,7 +33026,7 @@ SELECT
   1680,
   0,
   'Болгар отель',
-  (SELECT id FROM profiles WHERE display_name = 'Леонид' LIMIT 1),
+  NULL,
   'Леонид',
   NOW(),
   NOW()
@@ -33056,7 +33059,7 @@ SELECT
   3200,
   0,
   'Дата: 06.09.2024 Время: 13:00 Место начала экскурсии: Казань, ул. Толстого д. 14 Место окончания экскурсии: Казань, ул. Вишневского д. 21 Время окончания экскурсии: 17:00 Количество участников: ориентировочно 40 человек',
-  (SELECT id FROM profiles WHERE display_name = 'Леонид' LIMIT 1),
+  NULL,
   'Леонид',
   NOW(),
   NOW()
@@ -33088,7 +33091,7 @@ SELECT
   3840,
   0,
   '-',
-  (SELECT id FROM profiles WHERE display_name = 'Леонид' LIMIT 1),
+  NULL,
   'Леонид',
   NOW(),
   NOW()
@@ -33121,7 +33124,7 @@ SELECT
   4000,
   0,
   'Альбина Николаевна +79503160154',
-  (SELECT id FROM profiles WHERE display_name = 'Леонид' LIMIT 1),
+  NULL,
   'Леонид',
   NOW(),
   NOW()
@@ -33154,7 +33157,7 @@ SELECT
   4480,
   0,
   'Ирина Совельва',
-  (SELECT id FROM profiles WHERE display_name = 'Леонид' LIMIT 1),
+  NULL,
   'Леонид',
   NOW(),
   NOW()
@@ -33187,7 +33190,7 @@ SELECT
   8160,
   0,
   '-',
-  (SELECT id FROM profiles WHERE display_name = 'Леонид' LIMIT 1),
+  NULL,
   'Леонид',
   NOW(),
   NOW()
@@ -33220,7 +33223,7 @@ SELECT
   7680,
   0,
   '-',
-  (SELECT id FROM profiles WHERE display_name = 'Леонид' LIMIT 1),
+  NULL,
   'Леонид',
   NOW(),
   NOW()
@@ -33253,7 +33256,7 @@ SELECT
   19200,
   0,
   '-',
-  (SELECT id FROM profiles WHERE display_name = 'Леонид' LIMIT 1),
+  NULL,
   'Леонид',
   NOW(),
   NOW()
@@ -33286,7 +33289,7 @@ SELECT
   800,
   0,
   '-',
-  (SELECT id FROM profiles WHERE display_name = 'Леонид' LIMIT 1),
+  NULL,
   'Леонид',
   NOW(),
   NOW()
@@ -33319,7 +33322,7 @@ SELECT
   4800,
   0,
   '-',
-  (SELECT id FROM profiles WHERE display_name = 'Стас' LIMIT 1),
+  NULL,
   'Стас',
   NOW(),
   NOW()
@@ -33352,7 +33355,7 @@ SELECT
   6580,
   0,
   '-',
-  (SELECT id FROM profiles WHERE display_name = 'Стас' LIMIT 1),
+  NULL,
   'Стас',
   NOW(),
   NOW()
@@ -33385,7 +33388,7 @@ SELECT
   5440,
   0,
   '-',
-  (SELECT id FROM profiles WHERE display_name = 'Леонид' LIMIT 1),
+  NULL,
   'Леонид',
   NOW(),
   NOW()
@@ -33418,7 +33421,7 @@ SELECT
   7680,
   0,
   '-',
-  (SELECT id FROM profiles WHERE display_name = 'Леонид' LIMIT 1),
+  NULL,
   'Леонид',
   NOW(),
   NOW()
@@ -33451,7 +33454,7 @@ SELECT
   10800,
   0,
   '-',
-  (SELECT id FROM profiles WHERE display_name = 'Леонид' LIMIT 1),
+  NULL,
   'Леонид',
   NOW(),
   NOW()
@@ -33484,7 +33487,7 @@ SELECT
   1280,
   0,
   '-',
-  (SELECT id FROM profiles WHERE display_name = 'Леонид' LIMIT 1),
+  NULL,
   'Леонид',
   NOW(),
   NOW()
@@ -33517,7 +33520,7 @@ SELECT
   880,
   0,
   'С 9 до 13 Количество скажут впритык',
-  (SELECT id FROM profiles WHERE display_name = 'Стас' LIMIT 1),
+  NULL,
   'Стас',
   NOW(),
   NOW()
@@ -33550,7 +33553,7 @@ SELECT
   1040,
   0,
   'Заберет сама в районе 15:00',
-  (SELECT id FROM profiles WHERE display_name = 'Стас' LIMIT 1),
+  NULL,
   'Стас',
   NOW(),
   NOW()
@@ -33583,7 +33586,7 @@ SELECT
   3440,
   0,
   '-',
-  (SELECT id FROM profiles WHERE display_name = 'Леонид' LIMIT 1),
+  NULL,
   'Леонид',
   NOW(),
   NOW()
@@ -33616,7 +33619,7 @@ SELECT
   1760,
   0,
   '-',
-  (SELECT id FROM profiles WHERE display_name = 'Леонид' LIMIT 1),
+  NULL,
   'Леонид',
   NOW(),
   NOW()
@@ -33649,7 +33652,7 @@ SELECT
   7360,
   0,
   '-',
-  (SELECT id FROM profiles WHERE display_name = 'Леонид' LIMIT 1),
+  NULL,
   'Леонид',
   NOW(),
   NOW()
@@ -33682,7 +33685,7 @@ SELECT
   4480,
   0,
   '-',
-  (SELECT id FROM profiles WHERE display_name = 'Леонид' LIMIT 1),
+  NULL,
   'Леонид',
   NOW(),
   NOW()
@@ -33715,7 +33718,7 @@ SELECT
   6560,
   0,
   'Карат',
-  (SELECT id FROM profiles WHERE display_name = 'Леонид' LIMIT 1),
+  NULL,
   'Леонид',
   NOW(),
   NOW()
@@ -33748,7 +33751,7 @@ SELECT
   4960,
   0,
   'Азалия',
-  (SELECT id FROM profiles WHERE display_name = 'Леонид' LIMIT 1),
+  NULL,
   'Леонид',
   NOW(),
   NOW()
@@ -33781,7 +33784,7 @@ SELECT
   2400,
   0,
   '-',
-  (SELECT id FROM profiles WHERE display_name = 'Леонид' LIMIT 1),
+  NULL,
   'Леонид',
   NOW(),
   NOW()
@@ -33814,7 +33817,7 @@ SELECT
   2880,
   0,
   'Кристал',
-  (SELECT id FROM profiles WHERE display_name = 'Леонид' LIMIT 1),
+  NULL,
   'Леонид',
   NOW(),
   NOW()
@@ -33847,7 +33850,7 @@ SELECT
   3040,
   0,
   'Гранд отель',
-  (SELECT id FROM profiles WHERE display_name = 'Леонид' LIMIT 1),
+  NULL,
   'Леонид',
   NOW(),
   NOW()
@@ -33880,7 +33883,7 @@ SELECT
   3680,
   0,
   '-',
-  (SELECT id FROM profiles WHERE display_name = 'Стас' LIMIT 1),
+  NULL,
   'Стас',
   NOW(),
   NOW()
@@ -33913,7 +33916,7 @@ SELECT
   6440,
   0,
   'Живут в Волге',
-  (SELECT id FROM profiles WHERE display_name = 'Стас' LIMIT 1),
+  NULL,
   'Стас',
   NOW(),
   NOW()
@@ -33946,7 +33949,7 @@ SELECT
   8680,
   0,
   'Давыдов ИНН',
-  (SELECT id FROM profiles WHERE display_name = 'Стас' LIMIT 1),
+  NULL,
   'Стас',
   NOW(),
   NOW()
@@ -33979,7 +33982,7 @@ SELECT
   6400,
   0,
   'Используют 9 и 11 оплата по счёту,',
-  (SELECT id FROM profiles WHERE display_name = 'Стас' LIMIT 1),
+  NULL,
   'Стас',
   NOW(),
   NOW()
@@ -34012,7 +34015,7 @@ SELECT
   8880,
   0,
   '-',
-  (SELECT id FROM profiles WHERE display_name = 'Стас' LIMIT 1),
+  NULL,
   'Стас',
   NOW(),
   NOW()
@@ -34045,7 +34048,7 @@ SELECT
   4960,
   0,
   '-',
-  (SELECT id FROM profiles WHERE display_name = 'Стас' LIMIT 1),
+  NULL,
   'Стас',
   NOW(),
   NOW()
@@ -34078,7 +34081,7 @@ SELECT
   3200,
   0,
   '-',
-  (SELECT id FROM profiles WHERE display_name = 'Стас' LIMIT 1),
+  NULL,
   'Стас',
   NOW(),
   NOW()
@@ -34111,7 +34114,7 @@ SELECT
   4320,
   0,
   '-',
-  (SELECT id FROM profiles WHERE display_name = 'Стас' LIMIT 1),
+  NULL,
   'Стас',
   NOW(),
   NOW()
@@ -34144,7 +34147,7 @@ SELECT
   800,
   0,
   '-',
-  (SELECT id FROM profiles WHERE display_name = 'Леонид' LIMIT 1),
+  NULL,
   'Леонид',
   NOW(),
   NOW()
@@ -34177,7 +34180,7 @@ SELECT
   2880,
   0,
   'Кристал',
-  (SELECT id FROM profiles WHERE display_name = 'Леонид' LIMIT 1),
+  NULL,
   'Леонид',
   NOW(),
   NOW()
@@ -34210,7 +34213,7 @@ SELECT
   2240,
   0,
   '-',
-  (SELECT id FROM profiles WHERE display_name = 'Леонид' LIMIT 1),
+  NULL,
   'Леонид',
   NOW(),
   NOW()
@@ -34243,7 +34246,7 @@ SELECT
   6720,
   0,
   '-',
-  (SELECT id FROM profiles WHERE display_name = 'Леонид' LIMIT 1),
+  NULL,
   'Леонид',
   NOW(),
   NOW()
@@ -34276,7 +34279,7 @@ SELECT
   13300,
   0,
   '-',
-  (SELECT id FROM profiles WHERE display_name = 'Леонид' LIMIT 1),
+  NULL,
   'Леонид',
   NOW(),
   NOW()
@@ -34309,7 +34312,7 @@ SELECT
   3600,
   0,
   'Туган авылым',
-  (SELECT id FROM profiles WHERE display_name = 'Леонид' LIMIT 1),
+  NULL,
   'Леонид',
   NOW(),
   NOW()
@@ -34342,7 +34345,7 @@ SELECT
   3200,
   0,
   '-',
-  (SELECT id FROM profiles WHERE display_name = 'Леонид' LIMIT 1),
+  NULL,
   'Леонид',
   NOW(),
   NOW()
@@ -34375,7 +34378,7 @@ SELECT
   6720,
   0,
   'Отель Гагарин',
-  (SELECT id FROM profiles WHERE display_name = 'Леонид' LIMIT 1),
+  NULL,
   'Леонид',
   NOW(),
   NOW()
@@ -34408,7 +34411,7 @@ SELECT
   11760,
   0,
   '-',
-  (SELECT id FROM profiles WHERE display_name = 'Леонид' LIMIT 1),
+  NULL,
   'Леонид',
   NOW(),
   NOW()
@@ -34441,7 +34444,7 @@ SELECT
   11040,
   0,
   '-',
-  (SELECT id FROM profiles WHERE display_name = 'Леонид' LIMIT 1),
+  NULL,
   'Леонид',
   NOW(),
   NOW()
@@ -34474,7 +34477,7 @@ SELECT
   5320,
   0,
   'Волга',
-  (SELECT id FROM profiles WHERE display_name = 'Стас' LIMIT 1),
+  NULL,
   'Стас',
   NOW(),
   NOW()
@@ -34507,7 +34510,7 @@ SELECT
   800,
   0,
   'Без сумки',
-  (SELECT id FROM profiles WHERE display_name = 'Леонид' LIMIT 1),
+  NULL,
   'Леонид',
   NOW(),
   NOW()
@@ -34540,7 +34543,7 @@ SELECT
   14080,
   0,
   'Леонид нам надо будет на 24-27 июня 44 радиогида гид. Владимир Николаевич 89178858409 в отель Давыдов на Назарбаева к 9.30 Записка "для В.Н."',
-  (SELECT id FROM profiles WHERE display_name = 'Леонид' LIMIT 1),
+  NULL,
   'Леонид',
   NOW(),
   NOW()
@@ -34573,7 +34576,7 @@ SELECT
   9600,
   0,
   '-',
-  (SELECT id FROM profiles WHERE display_name = 'Леонид' LIMIT 1),
+  NULL,
   'Леонид',
   NOW(),
   NOW()
@@ -34606,7 +34609,7 @@ SELECT
   6240,
   0,
   '-',
-  (SELECT id FROM profiles WHERE display_name = 'Леонид' LIMIT 1),
+  NULL,
   'Леонид',
   NOW(),
   NOW()
@@ -34639,7 +34642,7 @@ SELECT
   10560,
   0,
   '-',
-  (SELECT id FROM profiles WHERE display_name = 'Леонид' LIMIT 1),
+  NULL,
   'Леонид',
   NOW(),
   NOW()
@@ -34672,7 +34675,7 @@ SELECT
   7520,
   0,
   'Регина на Баумана',
-  (SELECT id FROM profiles WHERE display_name = 'Стас' LIMIT 1),
+  NULL,
   'Стас',
   NOW(),
   NOW()
@@ -34705,7 +34708,7 @@ SELECT
   24000,
   0,
   '-',
-  (SELECT id FROM profiles WHERE display_name = 'Леонид' LIMIT 1),
+  NULL,
   'Леонид',
   NOW(),
   NOW()
@@ -34738,7 +34741,7 @@ SELECT
   0,
   0,
   '-',
-  (SELECT id FROM profiles WHERE display_name = 'Леонид' LIMIT 1),
+  NULL,
   'Леонид',
   NOW(),
   NOW()
@@ -34771,7 +34774,7 @@ SELECT
   2720,
   0,
   'Кристал',
-  (SELECT id FROM profiles WHERE display_name = 'Леонид' LIMIT 1),
+  NULL,
   'Леонид',
   NOW(),
   NOW()
@@ -34804,7 +34807,7 @@ SELECT
   7200,
   0,
   '-',
-  (SELECT id FROM profiles WHERE display_name = 'Леонид' LIMIT 1),
+  NULL,
   'Леонид',
   NOW(),
   NOW()
@@ -34837,7 +34840,7 @@ SELECT
   24000,
   0,
   '-',
-  (SELECT id FROM profiles WHERE display_name = 'Леонид' LIMIT 1),
+  NULL,
   'Леонид',
   NOW(),
   NOW()
@@ -34870,7 +34873,7 @@ SELECT
   4160,
   0,
   '-',
-  (SELECT id FROM profiles WHERE display_name = 'Стас' LIMIT 1),
+  NULL,
   'Стас',
   NOW(),
   NOW()
@@ -34903,7 +34906,7 @@ SELECT
   160,
   0,
   '-',
-  (SELECT id FROM profiles WHERE display_name = 'Леонид' LIMIT 1),
+  NULL,
   'Леонид',
   NOW(),
   NOW()
@@ -34936,7 +34939,7 @@ SELECT
   1712,
   0,
   '-',
-  (SELECT id FROM profiles WHERE display_name = 'Леонид' LIMIT 1),
+  NULL,
   'Леонид',
   NOW(),
   NOW()
@@ -34969,7 +34972,7 @@ SELECT
   5920,
   0,
   '-',
-  (SELECT id FROM profiles WHERE display_name = 'Леонид' LIMIT 1),
+  NULL,
   'Леонид',
   NOW(),
   NOW()
@@ -35002,7 +35005,7 @@ SELECT
   800,
   0,
   '-',
-  (SELECT id FROM profiles WHERE display_name = 'Леонид' LIMIT 1),
+  NULL,
   'Леонид',
   NOW(),
   NOW()
@@ -35035,7 +35038,7 @@ SELECT
   1200,
   0,
   '-',
-  (SELECT id FROM profiles WHERE display_name = 'Леонид' LIMIT 1),
+  NULL,
   'Леонид',
   NOW(),
   NOW()
@@ -35068,7 +35071,7 @@ SELECT
   9870,
   0,
   '-',
-  (SELECT id FROM profiles WHERE display_name = 'Леонид' LIMIT 1),
+  NULL,
   'Леонид',
   NOW(),
   NOW()
@@ -35101,7 +35104,7 @@ SELECT
   15680,
   0,
   'Настя будет',
-  (SELECT id FROM profiles WHERE display_name = 'Леонид' LIMIT 1),
+  NULL,
   'Леонид',
   NOW(),
   NOW()
@@ -35133,7 +35136,7 @@ SELECT
   3200,
   0,
   'Улица Баумана, 15. Хостел на Баумана',
-  (SELECT id FROM profiles WHERE display_name = 'Леонид' LIMIT 1),
+  NULL,
   'Леонид',
   NOW(),
   NOW()
@@ -35166,7 +35169,7 @@ SELECT
   6400,
   0,
   'Кристал',
-  (SELECT id FROM profiles WHERE display_name = 'Стас' LIMIT 1),
+  NULL,
   'Стас',
   NOW(),
   NOW()
@@ -35199,7 +35202,7 @@ SELECT
   24000,
   0,
   'Ит парк Рамеева. 14:30..14:40 примерно',
-  (SELECT id FROM profiles WHERE display_name = 'Леонид' LIMIT 1),
+  NULL,
   'Леонид',
   NOW(),
   NOW()
@@ -35232,7 +35235,7 @@ SELECT
   13200,
   0,
   'Давыдов на Назарбаева к 8.30. На 3 дня. Сдадут 8.07 с 14-15 в Ресторанном дворе. Гид Диана. 89274454525',
-  (SELECT id FROM profiles WHERE display_name = 'Леонид' LIMIT 1),
+  NULL,
   'Леонид',
   NOW(),
   NOW()
@@ -35265,7 +35268,7 @@ SELECT
   6240,
   0,
   '-',
-  (SELECT id FROM profiles WHERE display_name = 'Леонид' LIMIT 1),
+  NULL,
   'Леонид',
   NOW(),
   NOW()
@@ -35298,7 +35301,7 @@ SELECT
   5600,
   0,
   'Кристал',
-  (SELECT id FROM profiles WHERE display_name = 'Леонид' LIMIT 1),
+  NULL,
   'Леонид',
   NOW(),
   NOW()
@@ -35331,7 +35334,7 @@ SELECT
   7700,
   0,
   'Позвонить 19.07',
-  (SELECT id FROM profiles WHERE display_name = 'Леонид' LIMIT 1),
+  NULL,
   'Леонид',
   NOW(),
   NOW()
@@ -35364,7 +35367,7 @@ SELECT
   4240,
   0,
   'Релита',
-  (SELECT id FROM profiles WHERE display_name = 'Леонид' LIMIT 1),
+  NULL,
   'Леонид',
   NOW(),
   NOW()
@@ -35397,7 +35400,7 @@ SELECT
   6160,
   0,
   'В Волгу 04, вечером',
-  (SELECT id FROM profiles WHERE display_name = 'Стас' LIMIT 1),
+  NULL,
   'Стас',
   NOW(),
   NOW()
@@ -35430,7 +35433,7 @@ SELECT
   3040,
   0,
   '-',
-  (SELECT id FROM profiles WHERE display_name = 'Стас' LIMIT 1),
+  NULL,
   'Стас',
   NOW(),
   NOW()
@@ -35463,7 +35466,7 @@ SELECT
   2400,
   0,
   'Азалия',
-  (SELECT id FROM profiles WHERE display_name = 'Леонид' LIMIT 1),
+  NULL,
   'Леонид',
   NOW(),
   NOW()
@@ -35496,7 +35499,7 @@ SELECT
   20640,
   0,
   '-',
-  (SELECT id FROM profiles WHERE display_name = 'Леонид' LIMIT 1),
+  NULL,
   'Леонид',
   NOW(),
   NOW()
@@ -35529,7 +35532,7 @@ SELECT
   5760,
   0,
   '-',
-  (SELECT id FROM profiles WHERE display_name = 'Леонид' LIMIT 1),
+  NULL,
   'Леонид',
   NOW(),
   NOW()
@@ -35562,7 +35565,7 @@ SELECT
   2400,
   0,
   '-',
-  (SELECT id FROM profiles WHERE display_name = 'Леонид' LIMIT 1),
+  NULL,
   'Леонид',
   NOW(),
   NOW()
@@ -35595,7 +35598,7 @@ SELECT
   9600,
   0,
   'Завтра к 8.30 в Лимончелло 40 шт. На 3 дня. Оставят в Кристалле. Гид Яна +7 952 034-45-43',
-  (SELECT id FROM profiles WHERE display_name = 'Леонид' LIMIT 1),
+  NULL,
   'Леонид',
   NOW(),
   NOW()
@@ -35628,7 +35631,7 @@ SELECT
   3840,
   0,
   '-',
-  (SELECT id FROM profiles WHERE display_name = 'Леонид' LIMIT 1),
+  NULL,
   'Леонид',
   NOW(),
   NOW()
@@ -35661,7 +35664,7 @@ SELECT
   7040,
   0,
   'Кристал',
-  (SELECT id FROM profiles WHERE display_name = 'Леонид' LIMIT 1),
+  NULL,
   'Леонид',
   NOW(),
   NOW()
@@ -35694,7 +35697,7 @@ SELECT
   1680,
   0,
   'Новинка',
-  (SELECT id FROM profiles WHERE display_name = 'Стас' LIMIT 1),
+  NULL,
   'Стас',
   NOW(),
   NOW()
@@ -35727,7 +35730,7 @@ SELECT
   1200,
   0,
   '-',
-  (SELECT id FROM profiles WHERE display_name = 'Леонид' LIMIT 1),
+  NULL,
   'Леонид',
   NOW(),
   NOW()
@@ -35760,7 +35763,7 @@ SELECT
   8000,
   0,
   '-',
-  (SELECT id FROM profiles WHERE display_name = 'Леонид' LIMIT 1),
+  NULL,
   'Леонид',
   NOW(),
   NOW()
@@ -35793,7 +35796,7 @@ SELECT
   3840,
   0,
   '-',
-  (SELECT id FROM profiles WHERE display_name = 'Леонид' LIMIT 1),
+  NULL,
   'Леонид',
   NOW(),
   NOW()
@@ -35826,7 +35829,7 @@ SELECT
   2720,
   0,
   '-',
-  (SELECT id FROM profiles WHERE display_name = 'Леонид' LIMIT 1),
+  NULL,
   'Леонид',
   NOW(),
   NOW()
@@ -35859,7 +35862,7 @@ SELECT
   1209,
   0,
   '15',
-  (SELECT id FROM profiles WHERE display_name = 'Леонид' LIMIT 1),
+  NULL,
   'Леонид',
   NOW(),
   NOW()
@@ -35892,7 +35895,7 @@ SELECT
   3360,
   0,
   '29.06 в 10.00 Аэропорт и вернут 30.06 в 19.30 Аэропорт - 24 наушника - +7 960 036-25-22 алсу',
-  (SELECT id FROM profiles WHERE display_name = 'Леонид' LIMIT 1),
+  NULL,
   'Леонид',
   NOW(),
   NOW()
@@ -35925,7 +35928,7 @@ SELECT
   3600,
   0,
   'Отель Европа завезти 27 вечером. Забрать там же',
-  (SELECT id FROM profiles WHERE display_name = 'Леонид' LIMIT 1),
+  NULL,
   'Леонид',
   NOW(),
   NOW()
@@ -35958,7 +35961,7 @@ SELECT
   1200,
   0,
   '-',
-  (SELECT id FROM profiles WHERE display_name = 'Леонид' LIMIT 1),
+  NULL,
   'Леонид',
   NOW(),
   NOW()
@@ -35991,7 +35994,7 @@ SELECT
   3360,
   0,
   '-',
-  (SELECT id FROM profiles WHERE display_name = 'Стас' LIMIT 1),
+  NULL,
   'Стас',
   NOW(),
   NOW()
@@ -36024,7 +36027,7 @@ SELECT
   4000,
   0,
   '-',
-  (SELECT id FROM profiles WHERE display_name = 'Леонид' LIMIT 1),
+  NULL,
   'Леонид',
   NOW(),
   NOW()
@@ -36057,7 +36060,7 @@ SELECT
   7200,
   0,
   'Двойной комплект наушников',
-  (SELECT id FROM profiles WHERE display_name = 'Леонид' LIMIT 1),
+  NULL,
   'Леонид',
   NOW(),
   NOW()
@@ -36090,7 +36093,7 @@ SELECT
   4480,
   0,
   'Заберет 21.06, вернет 23.06',
-  (SELECT id FROM profiles WHERE display_name = 'Стас' LIMIT 1),
+  NULL,
   'Стас',
   NOW(),
   NOW()
@@ -36123,7 +36126,7 @@ SELECT
   5760,
   0,
   '-',
-  (SELECT id FROM profiles WHERE display_name = 'Леонид' LIMIT 1),
+  NULL,
   'Леонид',
   NOW(),
   NOW()
@@ -36156,7 +36159,7 @@ SELECT
   14400,
   0,
   '-',
-  (SELECT id FROM profiles WHERE display_name = 'Леонид' LIMIT 1),
+  NULL,
   'Леонид',
   NOW(),
   NOW()
@@ -36189,7 +36192,7 @@ SELECT
   10880,
   0,
   '-',
-  (SELECT id FROM profiles WHERE display_name = 'Леонид' LIMIT 1),
+  NULL,
   'Леонид',
   NOW(),
   NOW()
@@ -36222,7 +36225,7 @@ SELECT
   3360,
   0,
   'Шаляпина',
-  (SELECT id FROM profiles WHERE display_name = 'Леонид' LIMIT 1),
+  NULL,
   'Леонид',
   NOW(),
   NOW()
@@ -36255,7 +36258,7 @@ SELECT
   8160,
   0,
   '-',
-  (SELECT id FROM profiles WHERE display_name = 'Леонид' LIMIT 1),
+  NULL,
   'Леонид',
   NOW(),
   NOW()
@@ -36288,7 +36291,7 @@ SELECT
   3200,
   0,
   '-',
-  (SELECT id FROM profiles WHERE display_name = 'Леонид' LIMIT 1),
+  NULL,
   'Леонид',
   NOW(),
   NOW()
@@ -36321,7 +36324,7 @@ SELECT
   5120,
   0,
   '-',
-  (SELECT id FROM profiles WHERE display_name = 'Стас' LIMIT 1),
+  NULL,
   'Стас',
   NOW(),
   NOW()
@@ -36354,7 +36357,7 @@ SELECT
   2800,
   0,
   '29 июня с 12:00 (привезти к театру Кукол) до 23:00 (оставим в гостинице Татарстан на ваше имя и телефон)',
-  (SELECT id FROM profiles WHERE display_name = 'Леонид' LIMIT 1),
+  NULL,
   'Леонид',
   NOW(),
   NOW()
@@ -36387,7 +36390,7 @@ SELECT
   7700,
   0,
   '29.06 в 10.30 Казань - 1 и вернут 30.06 в 17.00 казань 1 - Гид: +7 987 296-95-42. 29 шт. Елена + +7 927 243-37-92 Ангелина - 26 шт.',
-  (SELECT id FROM profiles WHERE display_name = 'Леонид' LIMIT 1),
+  NULL,
   'Леонид',
   NOW(),
   NOW()
@@ -36420,7 +36423,7 @@ SELECT
   2640,
   0,
   'В фургончике забрать',
-  (SELECT id FROM profiles WHERE display_name = 'Леонид' LIMIT 1),
+  NULL,
   'Леонид',
   NOW(),
   NOW()
@@ -36453,7 +36456,7 @@ SELECT
   12480,
   0,
   '-',
-  (SELECT id FROM profiles WHERE display_name = 'Леонид' LIMIT 1),
+  NULL,
   'Леонид',
   NOW(),
   NOW()
@@ -36486,7 +36489,7 @@ SELECT
   11280,
   0,
   '-',
-  (SELECT id FROM profiles WHERE display_name = 'Леонид' LIMIT 1),
+  NULL,
   'Леонид',
   NOW(),
   NOW()
@@ -36519,7 +36522,7 @@ SELECT
   7520,
   0,
   '-',
-  (SELECT id FROM profiles WHERE display_name = 'Леонид' LIMIT 1),
+  NULL,
   'Леонид',
   NOW(),
   NOW()
@@ -36552,7 +36555,7 @@ SELECT
   15360,
   0,
   '-',
-  (SELECT id FROM profiles WHERE display_name = 'Леонид' LIMIT 1),
+  NULL,
   'Леонид',
   NOW(),
   NOW()
@@ -36585,7 +36588,7 @@ SELECT
   5360,
   0,
   '-',
-  (SELECT id FROM profiles WHERE display_name = 'Леонид' LIMIT 1),
+  NULL,
   'Леонид',
   NOW(),
   NOW()
@@ -36618,7 +36621,7 @@ SELECT
   12240,
   0,
   '-',
-  (SELECT id FROM profiles WHERE display_name = 'Леонид' LIMIT 1),
+  NULL,
   'Леонид',
   NOW(),
   NOW()
@@ -36651,7 +36654,7 @@ SELECT
   7040,
   0,
   'Забрать в кристалле',
-  (SELECT id FROM profiles WHERE display_name = 'Леонид' LIMIT 1),
+  NULL,
   'Леонид',
   NOW(),
   NOW()
@@ -36684,7 +36687,7 @@ SELECT
   3200,
   0,
   '-',
-  (SELECT id FROM profiles WHERE display_name = 'Леонид' LIMIT 1),
+  NULL,
   'Леонид',
   NOW(),
   NOW()
@@ -36717,7 +36720,7 @@ SELECT
   7200,
   0,
   '-',
-  (SELECT id FROM profiles WHERE display_name = 'Леонид' LIMIT 1),
+  NULL,
   'Леонид',
   NOW(),
   NOW()
@@ -36750,7 +36753,7 @@ SELECT
   3840,
   0,
   '-',
-  (SELECT id FROM profiles WHERE display_name = 'Леонид' LIMIT 1),
+  NULL,
   'Леонид',
   NOW(),
   NOW()
@@ -36783,7 +36786,7 @@ SELECT
   5280,
   0,
   'На 14-16.06 (3 дня) нужны радиогиды на 22 чел. Подвезти нужно 14.06 к 8.30 Давыдов ИНН (К.Маркса, 42).',
-  (SELECT id FROM profiles WHERE display_name = 'Леонид' LIMIT 1),
+  NULL,
   'Леонид',
   NOW(),
   NOW()
@@ -36816,7 +36819,7 @@ SELECT
   960,
   0,
   '-',
-  (SELECT id FROM profiles WHERE display_name = 'Леонид' LIMIT 1),
+  NULL,
   'Леонид',
   NOW(),
   NOW()
@@ -36849,7 +36852,7 @@ SELECT
   0,
   0,
   'Живут в корстане. Гид Настя',
-  (SELECT id FROM profiles WHERE display_name = 'Леонид' LIMIT 1),
+  NULL,
   'Леонид',
   NOW(),
   NOW()
@@ -36881,7 +36884,7 @@ SELECT
   11520,
   0,
   'Уточнить',
-  (SELECT id FROM profiles WHERE display_name = 'Стас' LIMIT 1),
+  NULL,
   'Стас',
   NOW(),
   NOW()
@@ -36914,7 +36917,7 @@ SELECT
   3220,
   0,
   'Самовывоз',
-  (SELECT id FROM profiles WHERE display_name = 'Стас' LIMIT 1),
+  NULL,
   'Стас',
   NOW(),
   NOW()
@@ -36947,7 +36950,7 @@ SELECT
   4340,
   0,
   '8.06 в 5.27 прибывают Казань 2 и 9.06 в 17.00 привозим группу Казань 1 - Гид: +7 905 316-29-73 Елена - 31 радиогид - деньги передаст на месте',
-  (SELECT id FROM profiles WHERE display_name = 'Леонид' LIMIT 1),
+  NULL,
   'Леонид',
   NOW(),
   NOW()
@@ -36980,7 +36983,7 @@ SELECT
   9100,
   0,
   'Ривьера',
-  (SELECT id FROM profiles WHERE display_name = 'Леонид' LIMIT 1),
+  NULL,
   'Леонид',
   NOW(),
   NOW()
@@ -37013,7 +37016,7 @@ SELECT
   11520,
   0,
   'Оставить 6 в отеле Давыдов, там же забрать',
-  (SELECT id FROM profiles WHERE display_name = 'Стас' LIMIT 1),
+  NULL,
   'Стас',
   NOW(),
   NOW()
@@ -37046,7 +37049,7 @@ SELECT
   6720,
   0,
   '22.06 гид Владимир+7 917 885-84-09 оставить ему в Медине, Татарстан, 7 в 14.00 42 радиогила. Вернёт он же в 16.00 на рецепшн в Кристалл',
-  (SELECT id FROM profiles WHERE display_name = 'Леонид' LIMIT 1),
+  NULL,
   'Леонид',
   NOW(),
   NOW()
@@ -37079,7 +37082,7 @@ SELECT
   4160,
   0,
   '-',
-  (SELECT id FROM profiles WHERE display_name = 'Леонид' LIMIT 1),
+  NULL,
   'Леонид',
   NOW(),
   NOW()
@@ -37112,7 +37115,7 @@ SELECT
   4160,
   0,
   'На 15-16 надо 26 радио гидов. Заберёт Марсель +7 904 762-46-40 лимончелло к 9.00. Сдаст 16 июня Никита в 19.00 в рфис. Оставили в кристале',
-  (SELECT id FROM profiles WHERE display_name = 'Леонид' LIMIT 1),
+  NULL,
   'Леонид',
   NOW(),
   NOW()
@@ -37145,7 +37148,7 @@ SELECT
   5760,
   0,
   '11-13 июня 24 шт. возьмет Диана 89274454525 в 15.30 в нац музее..сдаст Ирина 89046620732 в Туган Авлым с 18-19часов.',
-  (SELECT id FROM profiles WHERE display_name = 'Леонид' LIMIT 1),
+  NULL,
   'Леонид',
   NOW(),
   NOW()
@@ -37178,7 +37181,7 @@ SELECT
   5600,
   0,
   '11-12 июня 35 радиогидов.Наш гид Ольга 89503140361 оставить в кафе Лимончелло в 9.00 сдаст на Баумана Вам в офис примерно в 17.30-18.',
-  (SELECT id FROM profiles WHERE display_name = 'Леонид' LIMIT 1),
+  NULL,
   'Леонид',
   NOW(),
   NOW()
@@ -37211,7 +37214,7 @@ SELECT
   4960,
   0,
   'Завезти в отель Венера. Вернут в Кристал. Марина. +7 917 252-69-93',
-  (SELECT id FROM profiles WHERE display_name = 'Леонид' LIMIT 1),
+  NULL,
   'Леонид',
   NOW(),
   NOW()
@@ -37244,7 +37247,7 @@ SELECT
   1440,
   0,
   'Калинина 60',
-  (SELECT id FROM profiles WHERE display_name = 'Леонид' LIMIT 1),
+  NULL,
   'Леонид',
   NOW(),
   NOW()
@@ -37277,7 +37280,7 @@ SELECT
   3850,
   0,
   'Регина на Питербуржской',
-  (SELECT id FROM profiles WHERE display_name = 'Леонид' LIMIT 1),
+  NULL,
   'Леонид',
   NOW(),
   NOW()
@@ -37310,7 +37313,7 @@ SELECT
   3200,
   0,
   'Азалия. На имя Наталья',
-  (SELECT id FROM profiles WHERE display_name = 'Леонид' LIMIT 1),
+  NULL,
   'Леонид',
   NOW(),
   NOW()
@@ -37343,7 +37346,7 @@ SELECT
   3440,
   0,
   'На 7.06 43 шт Либо я вечером 6-го заберу, либо нужно привезти 7 июня на Северный вокзал к 7.48',
-  (SELECT id FROM profiles WHERE display_name = 'Леонид' LIMIT 1),
+  NULL,
   'Леонид',
   NOW(),
   NOW()
@@ -37376,7 +37379,7 @@ SELECT
   4320,
   0,
   '+7 917 270-83-69. гид Татьяна Александровна Давыдов Инн на Карла Маркса. На 2 дня 27 человек. Вернут в хаял в 15.00',
-  (SELECT id FROM profiles WHERE display_name = 'Леонид' LIMIT 1),
+  NULL,
   'Леонид',
   NOW(),
   NOW()
@@ -37409,7 +37412,7 @@ SELECT
   2000,
   0,
   'Заберет в 8:30',
-  (SELECT id FROM profiles WHERE display_name = 'Леонид' LIMIT 1),
+  NULL,
   'Леонид',
   NOW(),
   NOW()
@@ -37442,7 +37445,7 @@ SELECT
   3150,
   0,
   '-',
-  (SELECT id FROM profiles WHERE display_name = 'Леонид' LIMIT 1),
+  NULL,
   'Леонид',
   NOW(),
   NOW()
@@ -37475,7 +37478,7 @@ SELECT
   7360,
   0,
   'Оставить в Арон',
-  (SELECT id FROM profiles WHERE display_name = 'Леонид' LIMIT 1),
+  NULL,
   'Леонид',
   NOW(),
   NOW()
@@ -37508,7 +37511,7 @@ SELECT
   3680,
   0,
   'Утром в 8:00 у Кремля',
-  (SELECT id FROM profiles WHERE display_name = 'Леонид' LIMIT 1),
+  NULL,
   'Леонид',
   NOW(),
   NOW()
@@ -37541,7 +37544,7 @@ SELECT
   8160,
   0,
   'После 14:00 позвонить Алене, в нагай',
-  (SELECT id FROM profiles WHERE display_name = 'Леонид' LIMIT 1),
+  NULL,
   'Леонид',
   NOW(),
   NOW()
@@ -37574,7 +37577,7 @@ SELECT
   7600,
   0,
   'Забрать из Шаляпина',
-  (SELECT id FROM profiles WHERE display_name = 'Леонид' LIMIT 1),
+  NULL,
   'Леонид',
   NOW(),
   NOW()
@@ -37607,7 +37610,7 @@ SELECT
   880,
   0,
   'Заберет сама',
-  (SELECT id FROM profiles WHERE display_name = 'Леонид' LIMIT 1),
+  NULL,
   'Леонид',
   NOW(),
   NOW()
@@ -37640,7 +37643,7 @@ SELECT
   880,
   0,
   'В обед 13:00 у аптеки',
-  (SELECT id FROM profiles WHERE display_name = 'Леонид' LIMIT 1),
+  NULL,
   'Леонид',
   NOW(),
   NOW()
@@ -37673,7 +37676,7 @@ SELECT
   5460,
   0,
   '1.06 в 5.27 прибывают Казань 2 и 2.06 в 17.00 привозим группу Казань 1 - Гид: +7 927 243-37-92 Ангелина - деньги передаст на месте',
-  (SELECT id FROM profiles WHERE display_name = 'Леонид' LIMIT 1),
+  NULL,
   'Леонид',
   NOW(),
   NOW()
@@ -37706,7 +37709,7 @@ SELECT
   3520,
   0,
   '22 чел к 14 в Ресторанный двор гид Марина +7 917 252-69-93. На 28 и 30. Сдаст в Кристалл.',
-  (SELECT id FROM profiles WHERE display_name = 'Леонид' LIMIT 1),
+  NULL,
   'Леонид',
   NOW(),
   NOW()
@@ -37739,7 +37742,7 @@ SELECT
   1880,
   0,
   'Лазука',
-  (SELECT id FROM profiles WHERE display_name = 'Леонид' LIMIT 1),
+  NULL,
   'Леонид',
   NOW(),
   NOW()
@@ -37772,7 +37775,7 @@ SELECT
   4000,
   0,
   'Сама заберет',
-  (SELECT id FROM profiles WHERE display_name = 'Леонид' LIMIT 1),
+  NULL,
   'Леонид',
   NOW(),
   NOW()
@@ -37805,7 +37808,7 @@ SELECT
   5120,
   0,
   '-',
-  (SELECT id FROM profiles WHERE display_name = 'Леонид' LIMIT 1),
+  NULL,
   'Леонид',
   NOW(),
   NOW()
@@ -37838,7 +37841,7 @@ SELECT
   11280,
   0,
   'Живут в Волге. Группа из донецка',
-  (SELECT id FROM profiles WHERE display_name = 'Леонид' LIMIT 1),
+  NULL,
   'Леонид',
   NOW(),
   NOW()
@@ -37871,7 +37874,7 @@ SELECT
   0,
   0,
   'Уточнить по количеству',
-  (SELECT id FROM profiles WHERE display_name = 'Леонид' LIMIT 1),
+  NULL,
   'Леонид',
   NOW(),
   NOW()
@@ -37904,7 +37907,7 @@ SELECT
   10080,
   0,
   'Татарстан вечером 28 числа',
-  (SELECT id FROM profiles WHERE display_name = 'Леонид' LIMIT 1),
+  NULL,
   'Леонид',
   NOW(),
   NOW()
@@ -37937,7 +37940,7 @@ SELECT
   5600,
   0,
   '-',
-  (SELECT id FROM profiles WHERE display_name = 'Леонид' LIMIT 1),
+  NULL,
   'Леонид',
   NOW(),
   NOW()
@@ -37970,7 +37973,7 @@ SELECT
   8000,
   0,
   '-',
-  (SELECT id FROM profiles WHERE display_name = 'Леонид' LIMIT 1),
+  NULL,
   'Леонид',
   NOW(),
   NOW()
@@ -38003,7 +38006,7 @@ SELECT
   8000,
   0,
   '-',
-  (SELECT id FROM profiles WHERE display_name = 'Леонид' LIMIT 1),
+  NULL,
   'Леонид',
   NOW(),
   NOW()
@@ -38036,7 +38039,7 @@ SELECT
   7200,
   0,
   '-',
-  (SELECT id FROM profiles WHERE display_name = 'Леонид' LIMIT 1),
+  NULL,
   'Леонид',
   NOW(),
   NOW()
@@ -38069,7 +38072,7 @@ SELECT
   2450,
   0,
   '-',
-  (SELECT id FROM profiles WHERE display_name = 'Леонид' LIMIT 1),
+  NULL,
   'Леонид',
   NOW(),
   NOW()
@@ -38102,7 +38105,7 @@ SELECT
   2100,
   0,
   '-',
-  (SELECT id FROM profiles WHERE display_name = 'Леонид' LIMIT 1),
+  NULL,
   'Леонид',
   NOW(),
   NOW()
@@ -38135,7 +38138,7 @@ SELECT
   10290,
   0,
   '-',
-  (SELECT id FROM profiles WHERE display_name = 'Леонид' LIMIT 1),
+  NULL,
   'Леонид',
   NOW(),
   NOW()
@@ -38168,7 +38171,7 @@ SELECT
   7040,
   0,
   '-',
-  (SELECT id FROM profiles WHERE display_name = 'Леонид' LIMIT 1),
+  NULL,
   'Леонид',
   NOW(),
   NOW()
@@ -38201,7 +38204,7 @@ SELECT
   2100,
   0,
   '-',
-  (SELECT id FROM profiles WHERE display_name = 'Леонид' LIMIT 1),
+  NULL,
   'Леонид',
   NOW(),
   NOW()
@@ -38234,7 +38237,7 @@ SELECT
   7560,
   0,
   '-',
-  (SELECT id FROM profiles WHERE display_name = 'Леонид' LIMIT 1),
+  NULL,
   'Леонид',
   NOW(),
   NOW()
@@ -38267,7 +38270,7 @@ SELECT
   7560,
   0,
   '-',
-  (SELECT id FROM profiles WHERE display_name = 'Леонид' LIMIT 1),
+  NULL,
   'Леонид',
   NOW(),
   NOW()
@@ -38300,7 +38303,7 @@ SELECT
   7770,
   0,
   '-',
-  (SELECT id FROM profiles WHERE display_name = 'Леонид' LIMIT 1),
+  NULL,
   'Леонид',
   NOW(),
   NOW()
@@ -38333,7 +38336,7 @@ SELECT
   7980,
   0,
   '-',
-  (SELECT id FROM profiles WHERE display_name = 'Леонид' LIMIT 1),
+  NULL,
   'Леонид',
   NOW(),
   NOW()
@@ -38366,7 +38369,7 @@ SELECT
   1600,
   0,
   '-',
-  (SELECT id FROM profiles WHERE display_name = 'Леонид' LIMIT 1),
+  NULL,
   'Леонид',
   NOW(),
   NOW()
@@ -38399,7 +38402,7 @@ SELECT
   5600,
   0,
   '-',
-  (SELECT id FROM profiles WHERE display_name = 'Леонид' LIMIT 1),
+  NULL,
   'Леонид',
   NOW(),
   NOW()
@@ -38432,7 +38435,7 @@ SELECT
   8000,
   0,
   '-',
-  (SELECT id FROM profiles WHERE display_name = 'Леонид' LIMIT 1),
+  NULL,
   'Леонид',
   NOW(),
   NOW()
@@ -38465,7 +38468,7 @@ SELECT
   2560,
   0,
   '-',
-  (SELECT id FROM profiles WHERE display_name = 'Леонид' LIMIT 1),
+  NULL,
   'Леонид',
   NOW(),
   NOW()
@@ -38498,7 +38501,7 @@ SELECT
   1600,
   0,
   '-',
-  (SELECT id FROM profiles WHERE display_name = 'Леонид' LIMIT 1),
+  NULL,
   'Леонид',
   NOW(),
   NOW()
@@ -38531,7 +38534,7 @@ SELECT
   5000,
   0,
   'Легче мы приезжаем 26 мая в11 часов нас 29 + Гид ты сказал за5000 сделаешь буду благодарна выезд 28 мая. Экскурсовод Дина +7 919 699-29-68',
-  (SELECT id FROM profiles WHERE display_name = 'Леонид' LIMIT 1),
+  NULL,
   'Леонид',
   NOW(),
   NOW()
@@ -38564,7 +38567,7 @@ SELECT
   2080,
   0,
   '26 мая отель Давыдов Инн на К. Маркса 9.45 до 17 ч. Гид Дания. +7 917 290-44-15 надо26 шт. Забирать там же в этот же день',
-  (SELECT id FROM profiles WHERE display_name = 'Леонид' LIMIT 1),
+  NULL,
   'Леонид',
   NOW(),
   NOW()
@@ -38597,7 +38600,7 @@ SELECT
   2800,
   0,
   'Начало в 16:00. Улица Карла Маркса, 11а. Кarl House',
-  (SELECT id FROM profiles WHERE display_name = 'Леонид' LIMIT 1),
+  NULL,
   'Леонид',
   NOW(),
   NOW()
@@ -38630,7 +38633,7 @@ SELECT
   3640,
   0,
   'Завтракают в Волге . Для Екатерины +7 927 430‑72‑44. Забрать Гостиница Болгар',
-  (SELECT id FROM profiles WHERE display_name = 'Леонид' LIMIT 1),
+  NULL,
   'Леонид',
   NOW(),
   NOW()
@@ -38663,7 +38666,7 @@ SELECT
   7520,
   0,
   '-',
-  (SELECT id FROM profiles WHERE display_name = 'Леонид' LIMIT 1),
+  NULL,
   'Леонид',
   NOW(),
   NOW()
@@ -38696,7 +38699,7 @@ SELECT
   4640,
   0,
   'В Сулейман',
-  (SELECT id FROM profiles WHERE display_name = 'Леонид' LIMIT 1),
+  NULL,
   'Леонид',
   NOW(),
   NOW()
@@ -38729,7 +38732,7 @@ SELECT
   9600,
   0,
   '-',
-  (SELECT id FROM profiles WHERE display_name = 'Леонид' LIMIT 1),
+  NULL,
   'Леонид',
   NOW(),
   NOW()
@@ -38762,7 +38765,7 @@ SELECT
   3680,
   0,
   'Добрый день, Леонид, заказ на 27 июля на 46 человек,группа из Пензы. Экскурсовод Татьяна т.89063271840 и 89503287480.',
-  (SELECT id FROM profiles WHERE display_name = 'Леонид' LIMIT 1),
+  NULL,
   'Леонид',
   NOW(),
   NOW()
@@ -38795,7 +38798,7 @@ SELECT
   4800,
   0,
   'Забрать в Татаринн на Марджани',
-  (SELECT id FROM profiles WHERE display_name = 'Леонид' LIMIT 1),
+  NULL,
   'Леонид',
   NOW(),
   NOW()
@@ -38828,7 +38831,7 @@ SELECT
   2000,
   0,
   'До 11:00 КНИИТУ (К.Маркса, 68) Просим передать Ирине Дубровской: +7 927 403 99 95. Забрать из офиса Экскурс в обед',
-  (SELECT id FROM profiles WHERE display_name = 'Леонид' LIMIT 1),
+  NULL,
   'Леонид',
   NOW(),
   NOW()
@@ -38861,7 +38864,7 @@ SELECT
   5920,
   0,
   'Забрать в Мано',
-  (SELECT id FROM profiles WHERE display_name = 'Леонид' LIMIT 1),
+  NULL,
   'Леонид',
   NOW(),
   NOW()
@@ -38894,7 +38897,7 @@ SELECT
   1760,
   0,
   '26 мая 22 чел в 11.30 Оставить в кристалле. Для Екатерины. Забрать в татарской усадьбе',
-  (SELECT id FROM profiles WHERE display_name = 'Леонид' LIMIT 1),
+  NULL,
   'Леонид',
   NOW(),
   NOW()
@@ -38927,7 +38930,7 @@ SELECT
   6560,
   0,
   '-',
-  (SELECT id FROM profiles WHERE display_name = 'Леонид' LIMIT 1),
+  NULL,
   'Леонид',
   NOW(),
   NOW()
@@ -38960,7 +38963,7 @@ SELECT
   3280,
   0,
   '-',
-  (SELECT id FROM profiles WHERE display_name = 'Леонид' LIMIT 1),
+  NULL,
   'Леонид',
   NOW(),
   NOW()
@@ -38993,7 +38996,7 @@ SELECT
   4480,
   0,
   '-',
-  (SELECT id FROM profiles WHERE display_name = 'Леонид' LIMIT 1),
+  NULL,
   'Леонид',
   NOW(),
   NOW()
@@ -39026,7 +39029,7 @@ SELECT
   5280,
   0,
   '-',
-  (SELECT id FROM profiles WHERE display_name = 'Леонид' LIMIT 1),
+  NULL,
   'Леонид',
   NOW(),
   NOW()
@@ -39059,7 +39062,7 @@ SELECT
   2160,
   0,
   '-',
-  (SELECT id FROM profiles WHERE display_name = 'Леонид' LIMIT 1),
+  NULL,
   'Леонид',
   NOW(),
   NOW()
@@ -39092,7 +39095,7 @@ SELECT
   1840,
   0,
   '-',
-  (SELECT id FROM profiles WHERE display_name = 'Леонид' LIMIT 1),
+  NULL,
   'Леонид',
   NOW(),
   NOW()
@@ -39125,7 +39128,7 @@ SELECT
   3520,
   0,
   '-',
-  (SELECT id FROM profiles WHERE display_name = 'Леонид' LIMIT 1),
+  NULL,
   'Леонид',
   NOW(),
   NOW()
@@ -39158,7 +39161,7 @@ SELECT
   3680,
   0,
   '-',
-  (SELECT id FROM profiles WHERE display_name = 'Леонид' LIMIT 1),
+  NULL,
   'Леонид',
   NOW(),
   NOW()
@@ -39191,7 +39194,7 @@ SELECT
   1200,
   0,
   '-',
-  (SELECT id FROM profiles WHERE display_name = 'Леонид' LIMIT 1),
+  NULL,
   'Леонид',
   NOW(),
   NOW()
@@ -39224,7 +39227,7 @@ SELECT
   3760,
   0,
   '-',
-  (SELECT id FROM profiles WHERE display_name = 'Леонид' LIMIT 1),
+  NULL,
   'Леонид',
   NOW(),
   NOW()
@@ -39257,7 +39260,7 @@ SELECT
   7360,
   0,
   '-',
-  (SELECT id FROM profiles WHERE display_name = 'Леонид' LIMIT 1),
+  NULL,
   'Леонид',
   NOW(),
   NOW()
@@ -39290,7 +39293,7 @@ SELECT
   2480,
   0,
   '-',
-  (SELECT id FROM profiles WHERE display_name = 'Леонид' LIMIT 1),
+  NULL,
   'Леонид',
   NOW(),
   NOW()
@@ -39323,7 +39326,7 @@ SELECT
   11280,
   0,
   '-',
-  (SELECT id FROM profiles WHERE display_name = 'Леонид' LIMIT 1),
+  NULL,
   'Леонид',
   NOW(),
   NOW()
@@ -39356,7 +39359,7 @@ SELECT
   8880,
   0,
   '-',
-  (SELECT id FROM profiles WHERE display_name = 'Леонид' LIMIT 1),
+  NULL,
   'Леонид',
   NOW(),
   NOW()
@@ -39389,7 +39392,7 @@ SELECT
   5920,
   0,
   '-',
-  (SELECT id FROM profiles WHERE display_name = 'Леонид' LIMIT 1),
+  NULL,
   'Леонид',
   NOW(),
   NOW()
@@ -39422,7 +39425,7 @@ SELECT
   4800,
   0,
   'Группа 60 чел в свияжск делиться на 2 группы. Положить 2 передатчика. Отправить видео по настройке',
-  (SELECT id FROM profiles WHERE display_name = 'Леонид' LIMIT 1),
+  NULL,
   'Леонид',
   NOW(),
   NOW()
@@ -39455,7 +39458,7 @@ SELECT
   10320,
   0,
   '-',
-  (SELECT id FROM profiles WHERE display_name = 'Стас' LIMIT 1),
+  NULL,
   'Стас',
   NOW(),
   NOW()
@@ -39488,7 +39491,7 @@ SELECT
   14080,
   0,
   'Сами',
-  (SELECT id FROM profiles WHERE display_name = 'Леонид' LIMIT 1),
+  NULL,
   'Леонид',
   NOW(),
   NOW()
@@ -39521,7 +39524,7 @@ SELECT
   6240,
   0,
   'Кристал. Забрать дом чая 30 числа в 15:30',
-  (SELECT id FROM profiles WHERE display_name = 'Леонид' LIMIT 1),
+  NULL,
   'Леонид',
   NOW(),
   NOW()
@@ -39554,7 +39557,7 @@ SELECT
   6880,
   0,
   'Оставили в кристале',
-  (SELECT id FROM profiles WHERE display_name = 'Леонид' LIMIT 1),
+  NULL,
   'Леонид',
   NOW(),
   NOW()
@@ -39587,7 +39590,7 @@ SELECT
   11040,
   0,
   '8:30 гостиница Татарстан. +7 960 036‑74‑49',
-  (SELECT id FROM profiles WHERE display_name = 'Леонид' LIMIT 1),
+  NULL,
   'Леонид',
   NOW(),
   NOW()
@@ -39620,7 +39623,7 @@ SELECT
   3280,
   0,
   'в 11:40 отель Наган',
-  (SELECT id FROM profiles WHERE display_name = 'Леонид' LIMIT 1),
+  NULL,
   'Леонид',
   NOW(),
   NOW()
@@ -39653,7 +39656,7 @@ SELECT
   2560,
   0,
   '31 мая отель Легенда к 8.00 до 17.00 оставят там же . 32 шт гид Ирина +7 904 662-07-32',
-  (SELECT id FROM profiles WHERE display_name = 'Леонид' LIMIT 1),
+  NULL,
   'Леонид',
   NOW(),
   NOW()
@@ -39686,7 +39689,7 @@ SELECT
   12480,
   0,
   'Передать вечером Татьяне. Положить запасные наушники',
-  (SELECT id FROM profiles WHERE display_name = 'Леонид' LIMIT 1),
+  NULL,
   'Леонид',
   NOW(),
   NOW()
@@ -39719,7 +39722,7 @@ SELECT
   11280,
   0,
   'Передать Лейле. В Кристал',
-  (SELECT id FROM profiles WHERE display_name = 'Леонид' LIMIT 1),
+  NULL,
   'Леонид',
   NOW(),
   NOW()
@@ -39752,7 +39755,7 @@ SELECT
   4160,
   0,
   '25 мая к 8.15 отель Давыдов Инн на К. Маркса 26 шт. Вернут 27 мая в 17 отель Кристалл! Им надо на 25 и 27. Гид Палей Ирина +7 904 662-07-32',
-  (SELECT id FROM profiles WHERE display_name = 'Леонид' LIMIT 1),
+  NULL,
   'Леонид',
   NOW(),
   NOW()
@@ -39785,7 +39788,7 @@ SELECT
   4160,
   0,
   '26 шт. В Биляр к 8.00 гид Диана +7 927 242-10-38. Отдаст их гид Марина 25 мая в20. 00 в Кристалле',
-  (SELECT id FROM profiles WHERE display_name = 'Леонид' LIMIT 1),
+  NULL,
   'Леонид',
   NOW(),
   NOW()
@@ -39818,7 +39821,7 @@ SELECT
   4800,
   0,
   'На завтра 24 мая 30 шт в Сулейман до 9.45 гид Баталова Ирина. +7 927 421-36-82, вернет25 мая в 20.00 в Сулейман',
-  (SELECT id FROM profiles WHERE display_name = 'Леонид' LIMIT 1),
+  NULL,
   'Леонид',
   NOW(),
   NOW()
@@ -39851,7 +39854,7 @@ SELECT
   3520,
   0,
   'Оставить и забрать из кристалла , Гид Гульназ +7 939 390-26-10',
-  (SELECT id FROM profiles WHERE display_name = 'Леонид' LIMIT 1),
+  NULL,
   'Леонид',
   NOW(),
   NOW()
@@ -39884,7 +39887,7 @@ SELECT
   2800,
   0,
   '-',
-  (SELECT id FROM profiles WHERE display_name = 'Леонид' LIMIT 1),
+  NULL,
   'Леонид',
   NOW(),
   NOW()
@@ -39917,7 +39920,7 @@ SELECT
   1440,
   0,
   '-',
-  (SELECT id FROM profiles WHERE display_name = 'Леонид' LIMIT 1),
+  NULL,
   'Леонид',
   NOW(),
   NOW()
@@ -39950,7 +39953,7 @@ SELECT
   4200,
   0,
   'ЖД1 в 13:30 гид Татьяна +79063271840',
-  (SELECT id FROM profiles WHERE display_name = 'Леонид' LIMIT 1),
+  NULL,
   'Леонид',
   NOW(),
   NOW()
@@ -39962,3 +39965,7 @@ WHERE (
 )
 AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 3)
 LIMIT 1;
+
+
+-- Check imported count:
+SELECT COUNT(*) as imported_orders FROM rental_orders;
