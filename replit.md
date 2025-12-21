@@ -20,7 +20,8 @@ Supabase handles user authentication with username/password. Users are assigned 
 
 ### Screen Structure
 Key screens include:
-- **DashboardScreen**: Financial overview and recent excursions.
+- **DashboardScreen**: Financial overview and recent excursions with customizable widget visibility and ordering via DashboardConfigScreen.
+- **DashboardConfigScreen**: Configure which dashboard widgets are visible and their display order.
 - **ExcursionsListScreen**: Searchable list of excursions.
 - **ExcursionDetailScreen**: Detailed excursion view.
 - **FinancesScreen**: Income/expense transaction management.
@@ -80,6 +81,7 @@ Automatic commission calculation when orders are marked as paid:
 - Execute `sql/rental_commissions_setup.sql` in Supabase SQL Editor to create the commissions table and add commission fields to profiles.
 - Execute `sql/equipment_losses_rental_update.sql` to add rental_order_id column to equipment_losses table for tracking losses from rental orders.
 - Execute `sql/rental_permissions_setup.sql` to migrate existing rental permissions to granular sub-permissions.
+- Execute `sql/dashboard_config_setup.sql` to add dashboard_config column for customizable dashboard widgets.
 
 ### Granular Rental Permissions
 The rental module uses granular permissions for fine-grained access control:
