@@ -77,6 +77,9 @@ export default function RentalOrderDetailScreen() {
   const [selectedLossItem, setSelectedLossItem] = useState<EquipmentItem | null>(null);
   const [lossCount, setLossCount] = useState("");
   const [lossReason, setLossReason] = useState("");
+  
+  // Loading state for status change
+  const [isChangingStatus, setIsChangingStatus] = useState(false);
 
   // Get equipment items that can be tracked for loss based on order contents
   // For rentals: receivers = kitCount, transmitters = microphoneCount
@@ -121,7 +124,8 @@ export default function RentalOrderDetailScreen() {
   };
 
   const handleStatusChange = async (status: RentalOrderStatus) => {
-    if (!order) return;
+    if (!order || isChangingStatus) return;
+    setIsChangingStatus(true);
     hapticFeedback.selection();
     try {
       await updateOrderStatus(order.id, status);
@@ -129,6 +133,8 @@ export default function RentalOrderDetailScreen() {
       hapticFeedback.success();
     } catch (error) {
       Alert.alert("Ошибка", "Не удалось изменить статус");
+    } finally {
+      setIsChangingStatus(false);
     }
   };
 
@@ -681,9 +687,13 @@ export default function RentalOrderDetailScreen() {
                 <Pressable
                   key={status}
                   onPress={() => handleStatusChange(status)}
+                  disabled={isChangingStatus}
                   style={[
                     styles.statusOption,
-                    { backgroundColor: isActive ? config.color + "20" : "transparent" },
+                    { 
+                      backgroundColor: isActive ? config.color + "20" : "transparent",
+                      opacity: isChangingStatus ? 0.5 : 1,
+                    },
                   ]}
                 >
                   <Icon name={config.icon as "clock"} size={20} color={config.color} />
