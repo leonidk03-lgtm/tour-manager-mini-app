@@ -1,4 +1,4 @@
--- Часть 7 из 7
+-- Часть 7 (исправленная)
 DO $$
 DECLARE
   leonid_id UUID;
@@ -64,9 +64,5 @@ BEGIN
   SELECT id INTO client_id FROM rental_clients WHERE name ILIKE '%Альберт (КТ)%' LIMIT 1;
   IF client_id IS NOT NULL THEN
     INSERT INTO rental_orders (order_number, client_id, status, start_date, end_date, days_count, kit_count, spare_receiver_count, transmitter_count, microphone_count, bag_number, is_charged, price_per_unit, total_price, prepayment, receiver_notes, manager_id, manager_name, owner_manager_id, owner_manager_name, created_at, updated_at) VALUES (3, client_id, 'completed', '2024-05-19', '2024-05-20', 2, 32, 0, 0, 0, NULL, true, 0, 4200.0, 4200.0, 'ЖД1 в 13:30 гид Татьяна +79063271840', leonid_id, leonid_name, leonid_id, leonid_name, NOW(), NOW());
-  END IF;
-  SELECT id INTO client_id FROM rental_clients WHERE name ILIKE '%%' LIMIT 1;
-  IF client_id IS NOT NULL THEN
-    INSERT INTO rental_orders (order_number, client_id, status, start_date, end_date, days_count, kit_count, spare_receiver_count, transmitter_count, microphone_count, bag_number, is_charged, price_per_unit, total_price, prepayment, receiver_notes, manager_id, manager_name, owner_manager_id, owner_manager_name, created_at, updated_at) VALUES (265, client_id, 'new', NULL, NULL, 1, 0, 0, 0, 0, NULL, false, 0, 0, 0, NULL, NULL, NULL, NULL, NULL, NOW(), NOW());
   END IF;
 END $$;
