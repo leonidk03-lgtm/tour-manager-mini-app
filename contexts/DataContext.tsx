@@ -344,6 +344,7 @@ interface DataContextType {
   deleteEquipmentItem: (id: string) => Promise<void>;
   addEquipmentMovement: (movement: Omit<EquipmentMovement, 'id' | 'createdAt' | 'managerId' | 'managerName'>) => Promise<void>;
   processAutoWriteoff: (date?: Date) => Promise<{ processed: number; items: Array<{ name: string; quantity: number }> }>;
+  autoWriteoffOnIssue: (receiversCount: number, note: string) => Promise<void>;
 }
 
 const DataContext = createContext<DataContextType | undefined>(undefined);
@@ -2319,6 +2320,8 @@ export function DataProvider({ children }: { children: ReactNode }) {
         console.error('Error creating radio_issued activity:', activityError);
       }
 
+      await autoWriteoffOnIssue(data.receiversIssued, `Автосписание: сумка ${kit?.bagNumber || '?'}, гид ${data.guideName}`);
+
       await Promise.all([fetchRadioGuideKits(), fetchRadioGuideAssignments(), fetchActivities()]);
     } catch (err) {
       console.error('Error issuing radio guide:', err);
@@ -2718,6 +2721,51 @@ export function DataProvider({ children }: { children: ReactNode }) {
     }
   };
 
+  const autoWriteoffOnIssue = async (receiversCount: number, note: string): Promise<void> => {
+    if (!currentUser) return;
+    if (receiversCount <= 0) return;
+
+    const headphonesCount = receiversCount + 5;
+    const autoWriteoffCategories = equipmentCategories.filter(c => c.autoWriteoff && c.autoWriteoffSourceId);
+
+    for (const category of autoWriteoffCategories) {
+      const itemsInCategory = equipmentItems.filter(i => i.categoryId === category.id);
+      
+      for (const item of itemsInCategory) {
+        if (item.quantity <= 0) continue;
+
+        const quantityToWriteoff = Math.min(headphonesCount, item.quantity);
+
+        try {
+          const { error } = await supabase.from('equipment_movements').insert({
+            item_id: item.id,
+            type: 'writeoff',
+            quantity: quantityToWriteoff,
+            note: `${note} (${headphonesCount} шт.)`,
+            manager_id: currentUser.id,
+            manager_name: currentUser.name,
+          });
+
+          if (error) throw error;
+
+          await supabase
+            .from('equipment_items')
+            .update({ 
+              quantity: item.quantity - quantityToWriteoff,
+              written_off: item.writtenOff + quantityToWriteoff,
+              updated_at: new Date().toISOString() 
+            })
+            .eq('id', item.id);
+        } catch (err) {
+          console.error(`Error auto-writeoff for ${item.name}:`, err);
+        }
+      }
+    }
+
+    await fetchEquipmentItems();
+    await fetchEquipmentMovements();
+  };
+
   const processAutoWriteoff = async (date?: Date): Promise<{ processed: number; items: Array<{ name: string; quantity: number }> }> => {
     if (!currentUser) throw new Error('No user');
 
@@ -2858,6 +2906,7 @@ export function DataProvider({ children }: { children: ReactNode }) {
         deleteEquipmentItem,
         addEquipmentMovement,
         processAutoWriteoff,
+        autoWriteoffOnIssue,
       }}
     >
       {children}

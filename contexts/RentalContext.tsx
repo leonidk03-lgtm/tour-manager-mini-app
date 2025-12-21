@@ -1,6 +1,7 @@
 import React, { createContext, useContext, useState, useEffect, ReactNode, useCallback } from "react";
 import { supabase } from "@/lib/supabase";
 import { useAuth } from "./AuthContext";
+import { useData } from "./DataContext";
 
 export type RentalClientType = 'individual' | 'company';
 
@@ -162,6 +163,7 @@ const RentalContext = createContext<RentalContextType | undefined>(undefined);
 
 export function RentalProvider({ children }: { children: ReactNode }) {
   const { user, profile } = useAuth();
+  const { autoWriteoffOnIssue } = useData();
   
   const [rentalClients, setRentalClients] = useState<RentalClient[]>([]);
   const [rentalOrders, setRentalOrders] = useState<RentalOrder[]>([]);
@@ -696,6 +698,16 @@ export function RentalProvider({ children }: { children: ReactNode }) {
 
     if (error) throw error;
     await addOrderHistory(id, `Статус изменён на "${statusLabels[status]}"`);
+    
+    if (status === 'issued') {
+      const order = rentalOrders.find(o => o.id === id);
+      if (order) {
+        const totalReceivers = order.kitCount + order.spareReceiverCount;
+        const client = rentalClients.find(c => c.id === order.clientId);
+        await autoWriteoffOnIssue(totalReceivers, `Автосписание аренда: ${client?.name || 'клиент'}, сумка ${order.bagNumber || '?'}`);
+      }
+    }
+    
     await fetchRentalOrders();
   };
 
