@@ -387,26 +387,21 @@ export default function DashboardScreen() {
   const rentalStats = useMemo(() => {
     const tomorrow = new Date(referenceDate);
     tomorrow.setDate(tomorrow.getDate() + 1);
-    const { startDate: tomorrowStart, endDate: tomorrowEnd } = getDateRangeForPeriod("day", tomorrow);
-    const tomorrowStartObj = new Date(tomorrowStart);
-    const tomorrowEndObj = new Date(tomorrowEnd);
+    const { startDate: tomorrowDateStr } = getDateRangeForPeriod("day", tomorrow);
     
     const tomorrowOrders = rentalOrders.filter(order => {
-      const orderDate = new Date(order.startDate);
-      return orderDate >= tomorrowStartObj && orderDate <= tomorrowEndObj;
+      return order.startDate === tomorrowDateStr;
     });
     
     const activeCount = rentalOrders.filter(order => 
       order.status === 'new' || order.status === 'issued'
     ).length;
 
-    const { startDate: todayStart, endDate: todayEnd } = getDateRangeForPeriod("day", referenceDate);
-    const todayStartObj = new Date(todayStart);
-    const todayEndObj = new Date(todayEnd);
+    const { startDate: todayDateStr } = getDateRangeForPeriod("day", referenceDate);
     
     const todayPayments = rentalPayments.filter(payment => {
-      const paymentDate = new Date(payment.createdAt);
-      return paymentDate >= todayStartObj && paymentDate <= todayEndObj;
+      const paymentDateStr = payment.createdAt.split('T')[0];
+      return paymentDateStr === todayDateStr;
     });
     
     const todayPaymentsTotal = todayPayments.reduce((sum, payment) => sum + payment.amount, 0);
