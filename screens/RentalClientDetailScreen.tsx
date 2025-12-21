@@ -56,6 +56,7 @@ export default function RentalClientDetailScreen() {
   const [editType, setEditType] = useState<"individual" | "company">(client?.type || "individual");
   const [editDirectorName, setEditDirectorName] = useState(client?.directorName || "");
   const [editCeoName, setEditCeoName] = useState(client?.ceoName || "");
+  const [editCompanyName, setEditCompanyName] = useState(client?.companyName || "");
   const [editLegalAddress, setEditLegalAddress] = useState(client?.legalAddress || "");
   const [editInn, setEditInn] = useState(client?.inn || "");
   const [editKpp, setEditKpp] = useState(client?.kpp || "");
@@ -111,6 +112,7 @@ export default function RentalClientDetailScreen() {
         type: editType,
         directorName: editDirectorName.trim() || null,
         ceoName: editCeoName.trim() || null,
+        companyName: editCompanyName.trim() || null,
         legalAddress: editLegalAddress.trim() || null,
         inn: editInn.trim() || null,
         kpp: editKpp.trim() || null,
@@ -278,12 +280,18 @@ export default function RentalClientDetailScreen() {
             </View>
           ) : null}
 
-          {client.type === "company" && (client.directorName || client.ceoName || client.legalAddress || client.inn) ? (
+          {client.type === "company" && (client.directorName || client.ceoName || client.companyName || client.legalAddress || client.inn) ? (
             <View style={[styles.requisitesBox, { backgroundColor: theme.backgroundTertiary }]}>
               {client.directorName ? (
                 <View style={styles.requisiteRow}>
                   <ThemedText style={[styles.requisiteLabel, { color: theme.textSecondary }]}>Контактное лицо:</ThemedText>
                   <ThemedText style={styles.requisiteValue}>{client.directorName}</ThemedText>
+                </View>
+              ) : null}
+              {client.companyName ? (
+                <View style={styles.requisiteRow}>
+                  <ThemedText style={[styles.requisiteLabel, { color: theme.textSecondary }]}>Компания:</ThemedText>
+                  <ThemedText style={[styles.requisiteValue, { flex: 1 }]} numberOfLines={2}>{client.companyName}</ThemedText>
                 </View>
               ) : null}
               {client.ceoName ? (
@@ -511,6 +519,15 @@ export default function RentalClientDetailScreen() {
                     value={editDirectorName}
                     onChangeText={setEditDirectorName}
                     placeholder="ФИО контактного лица"
+                    placeholderTextColor={theme.textSecondary}
+                  />
+
+                  <ThemedText style={[styles.inputLabel, { color: theme.textSecondary, marginTop: Spacing.md }]}>Название компании</ThemedText>
+                  <TextInput
+                    style={[styles.input, { backgroundColor: theme.backgroundSecondary, color: theme.text }]}
+                    value={editCompanyName}
+                    onChangeText={setEditCompanyName}
+                    placeholder="Полное название организации"
                     placeholderTextColor={theme.textSecondary}
                   />
 

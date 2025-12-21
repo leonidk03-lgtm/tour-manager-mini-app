@@ -42,6 +42,7 @@ export default function RentalClientsScreen() {
   const [formPhone, setFormPhone] = useState("");
   const [formEmail, setFormEmail] = useState("");
   const [formDirectorName, setFormDirectorName] = useState("");
+  const [formCompanyName, setFormCompanyName] = useState("");
   const [formLegalAddress, setFormLegalAddress] = useState("");
   const [formInn, setFormInn] = useState("");
   const [formKpp, setFormKpp] = useState("");
@@ -55,6 +56,7 @@ export default function RentalClientsScreen() {
     setFormPhone("");
     setFormEmail("");
     setFormDirectorName("");
+    setFormCompanyName("");
     setFormLegalAddress("");
     setFormInn("");
     setFormKpp("");
@@ -99,6 +101,7 @@ export default function RentalClientsScreen() {
       setFormPhone(client.phone || "");
       setFormEmail(client.email || "");
       setFormDirectorName(client.directorName || "");
+      setFormCompanyName(client.companyName || "");
       setFormLegalAddress(client.legalAddress || "");
       setFormInn(client.inn || "");
       setFormKpp(client.kpp || "");
@@ -130,6 +133,7 @@ export default function RentalClientsScreen() {
         phone: formPhone.trim() || null,
         email: formEmail.trim() || null,
         directorName: formType === "company" ? formDirectorName.trim() || null : null,
+        companyName: formType === "company" ? formCompanyName.trim() || null : null,
         legalAddress: formType === "company" ? formLegalAddress.trim() || null : null,
         inn: formType === "company" ? formInn.trim() || null : null,
         kpp: formType === "company" ? formKpp.trim() || null : null,
