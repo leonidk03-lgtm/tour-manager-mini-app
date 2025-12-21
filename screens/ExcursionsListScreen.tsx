@@ -293,33 +293,35 @@ export default function ExcursionsListScreen() {
           </Pressable>
         ) : null}
       </View>
-      <View style={styles.kitsList}>
-        {filteredAvailableKits.map(kit => (
-          <Pressable
-            key={kit.id}
-            onPress={() => setSelectedKit(kit)}
-            style={[
-              styles.kitOption,
-              {
-                backgroundColor: selectedKit?.id === kit.id ? theme.primary + "20" : theme.backgroundSecondary,
-                borderColor: selectedKit?.id === kit.id ? theme.primary : theme.border,
-              },
-            ]}
-          >
-            <Icon
-              name={selectedKit?.id === kit.id ? "check-circle" : "minus-circle"}
-              size={20}
-              color={selectedKit?.id === kit.id ? theme.primary : theme.textSecondary}
-            />
-            <ThemedText style={styles.kitOptionText}>Сумка #{kit.bagNumber}</ThemedText>
-          </Pressable>
-        ))}
-        {filteredAvailableKits.length === 0 ? (
-          <ThemedText style={{ color: theme.textSecondary, textAlign: "center", padding: Spacing.lg }}>
-            {bagSearchQuery ? "Сумка не найдена" : "Нет доступных сумок"}
-          </ThemedText>
-        ) : null}
-      </View>
+      <ScrollView style={styles.kitsListScroll} nestedScrollEnabled showsVerticalScrollIndicator>
+        <View style={styles.kitsList}>
+          {filteredAvailableKits.map(kit => (
+            <Pressable
+              key={kit.id}
+              onPress={() => setSelectedKit(kit)}
+              style={[
+                styles.kitOption,
+                {
+                  backgroundColor: selectedKit?.id === kit.id ? theme.primary + "20" : theme.backgroundSecondary,
+                  borderColor: selectedKit?.id === kit.id ? theme.primary : theme.border,
+                },
+              ]}
+            >
+              <Icon
+                name={selectedKit?.id === kit.id ? "check-circle" : "minus-circle"}
+                size={20}
+                color={selectedKit?.id === kit.id ? theme.primary : theme.textSecondary}
+              />
+              <ThemedText style={styles.kitOptionText}>Сумка #{kit.bagNumber}</ThemedText>
+            </Pressable>
+          ))}
+          {filteredAvailableKits.length === 0 ? (
+            <ThemedText style={{ color: theme.textSecondary, textAlign: "center", padding: Spacing.lg }}>
+              {bagSearchQuery ? "Сумка не найдена" : "Нет доступных сумок"}
+            </ThemedText>
+          ) : null}
+        </View>
+      </ScrollView>
       
       <View style={styles.radioGuideInputGroup}>
         <ThemedText style={[styles.radioGuideLabel, { color: theme.textSecondary }]}>
@@ -1004,9 +1006,11 @@ const styles = StyleSheet.create({
     marginBottom: Spacing.xs,
     marginTop: Spacing.md,
   },
+  kitsListScroll: {
+    maxHeight: 200,
+  },
   kitsList: {
     gap: Spacing.xs,
-    maxHeight: 200,
   },
   bagSearchContainer: {
     flexDirection: "row",
