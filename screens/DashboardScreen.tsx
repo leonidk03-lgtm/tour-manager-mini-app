@@ -467,32 +467,25 @@ export default function DashboardScreen() {
   }, [rentalOrders, radioGuideKits, equipmentItems, theme, hasAnyRentalAccess]);
 
   const radioGuidesStats = useMemo(() => {
-    const { startDate, endDate } = getDateRangeForPeriod("day", referenceDate);
+    const activeAssignments = radioGuideAssignments.filter(a => !a.returnedAt);
+    const onExcursions = activeAssignments.reduce((sum, a) => sum + a.receiversIssued, 0);
     
-    const dateAssignments = radioGuideAssignments.filter(a => {
-      const assignDate = a.issuedAt.split('T')[0];
-      return assignDate >= startDate && assignDate <= endDate;
-    });
-    const onExcursions = dateAssignments.filter(a => !a.returnedAt).reduce((sum, a) => sum + a.receiversIssued, 0);
-    
-    const dateRentals = rentalOrders.filter(order => {
-      const orderDate = order.startDate.split('T')[0];
-      return orderDate >= startDate && orderDate <= endDate && order.status === 'issued';
-    });
-    const onRentals = dateRentals.reduce((sum, order) => {
+    const activeRentals = rentalOrders.filter(order => order.status === 'issued');
+    const onRentals = activeRentals.reduce((sum, order) => {
       return sum + order.kitCount + order.spareReceiverCount;
     }, 0);
     
     const totalInUse = onExcursions + onRentals;
     
-    const dateLosses = equipmentLosses.filter(loss => {
+    const { startDate: todayStart, endDate: todayEnd } = getDateRangeForPeriod("day", new Date());
+    const todayLosses = equipmentLosses.filter(loss => {
       const lossDate = loss.createdAt.split('T')[0];
-      return lossDate >= startDate && lossDate <= endDate;
+      return lossDate >= todayStart && lossDate <= todayEnd;
     });
-    const lostCount = dateLosses.reduce((sum, loss) => sum + loss.missingCount, 0);
+    const lostCount = todayLosses.reduce((sum, loss) => sum + loss.missingCount, 0);
     
     return { onExcursions, onRentals, totalInUse, lostCount };
-  }, [radioGuideAssignments, rentalOrders, equipmentLosses, referenceDate]);
+  }, [radioGuideAssignments, rentalOrders, equipmentLosses]);
 
   const getTourName = (tourTypeId: string) => {
     const tour = tourTypes.find(t => t.id === tourTypeId);
