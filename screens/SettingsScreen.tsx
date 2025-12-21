@@ -12,56 +12,43 @@ import { useAuth } from "@/contexts/AuthContext";
 import { useData } from "@/contexts/DataContext";
 import { hapticFeedback } from "@/utils/haptics";
 
-type SettingItemProps = {
+type AppIconProps = {
   icon: string;
   label: string;
+  color: string;
   onPress: () => void;
-  value?: string;
-  showChevron?: boolean;
+  badge?: string;
 };
 
-function SettingItem({ icon, label, onPress, value, showChevron = true }: SettingItemProps) {
+function AppIcon({ icon, label, color, onPress, badge }: AppIconProps) {
   const { theme } = useTheme();
   return (
     <Pressable
-      onPress={() => { hapticFeedback.selection(); onPress(); }}
-      style={({ pressed }) => ({ opacity: pressed ? 0.7 : 1 })}
+      onPress={() => { hapticFeedback.light(); onPress(); }}
+      style={({ pressed }) => [styles.appIconContainer, { opacity: pressed ? 0.7 : 1 }]}
     >
-      <View style={styles.settingItem}>
-        <View style={styles.settingLeft}>
-          <Icon name={icon as any} size={20} color={theme.textSecondary} />
-          <ThemedText style={styles.settingText}>{label}</ThemedText>
-        </View>
-        {value ? (
-          <ThemedText style={{ color: theme.primary, fontWeight: "600" }}>{value}</ThemedText>
-        ) : showChevron ? (
-          <Icon name="chevron-right" size={20} color={theme.textSecondary} />
+      <View style={[styles.appIconSquare, { backgroundColor: color }]}>
+        <Icon name={icon as any} size={28} color="#fff" />
+        {badge ? (
+          <View style={[styles.badge, { backgroundColor: theme.error }]}>
+            <ThemedText style={styles.badgeText}>{badge}</ThemedText>
+          </View>
         ) : null}
       </View>
+      <ThemedText style={[styles.appIconLabel, { color: theme.text }]} numberOfLines={2}>
+        {label}
+      </ThemedText>
     </Pressable>
   );
 }
 
-function SettingsCard({ title, children }: { title: string; children: React.ReactNode }) {
+function SectionTitle({ title }: { title: string }) {
   const { theme } = useTheme();
   return (
-    <View style={styles.section}>
-      <ThemedText style={[styles.sectionTitle, { color: theme.textSecondary }]}>{title}</ThemedText>
-      <ThemedView
-        style={[
-          styles.settingsGroup,
-          { borderColor: theme.border, borderRadius: BorderRadius.sm },
-        ]}
-      >
-        {children}
-      </ThemedView>
-    </View>
+    <ThemedText style={[styles.sectionTitle, { color: theme.textSecondary }]}>
+      {title}
+    </ThemedText>
   );
-}
-
-function Divider() {
-  const { theme } = useTheme();
-  return <View style={[styles.divider, { backgroundColor: theme.border }]} />;
 }
 
 export default function SettingsScreen() {
@@ -115,13 +102,7 @@ export default function SettingsScreen() {
   const handleLogout = () => {
     Alert.alert("Выйти из аккаунта?", "Вы уверены, что хотите выйти?", [
       { text: "Отмена", style: "cancel" },
-      {
-        text: "Выйти",
-        style: "destructive",
-        onPress: async () => {
-          await signOut();
-        },
-      },
+      { text: "Выйти", style: "destructive", onPress: async () => { await signOut(); } },
     ]);
   };
 
@@ -131,146 +112,104 @@ export default function SettingsScreen() {
   return (
     <ScreenScrollView>
       <View style={styles.container}>
-        <ThemedView
-          style={[
-            styles.profileCard,
-            { borderColor: theme.border, borderRadius: BorderRadius.sm },
-          ]}
+        <Pressable
+          onPress={() => { hapticFeedback.light(); navigation.navigate("EditProfile"); }}
+          style={({ pressed }) => ({ opacity: pressed ? 0.8 : 1 })}
         >
-          <View style={styles.avatarContainer}>
-            <View style={[styles.avatar, { backgroundColor: theme.primary }]}>
+          <ThemedView style={[styles.profileCard, { borderColor: theme.border, borderRadius: BorderRadius.md }]}>
+            <View style={[styles.profileAvatar, { backgroundColor: theme.primary }]}>
               <ThemedText style={[styles.avatarText, { color: theme.buttonText }]}>
                 {profile?.display_name?.charAt(0).toUpperCase() || "U"}
               </ThemedText>
             </View>
             <View style={styles.profileInfo}>
               <ThemedText style={styles.profileName}>{profile?.display_name || "Пользователь"}</ThemedText>
-              <ThemedView style={[styles.roleBadge, { backgroundColor: theme.primary }]}>
-                <ThemedText style={[styles.roleText, { color: theme.buttonText }]}>
-                  {isAdmin ? "Администратор" : isRadioDispatcher ? "Диспетчер" : "Менеджер"}
-                </ThemedText>
-              </ThemedView>
+              <ThemedText style={[styles.profileRole, { color: theme.textSecondary }]}>
+                {isAdmin ? "Администратор" : isRadioDispatcher ? "Диспетчер" : "Менеджер"}
+              </ThemedText>
             </View>
-          </View>
-          <Pressable
-            style={({ pressed }) => [
-              styles.editProfileButton,
-              { backgroundColor: theme.primary, opacity: pressed ? 0.7 : 1 },
-            ]}
-            onPress={() => {
-              hapticFeedback.light();
-              navigation.navigate("EditProfile");
-            }}
-          >
-            <Icon name="edit-2" size={16} color={theme.buttonText} />
-            <ThemedText style={[styles.editProfileText, { color: theme.buttonText }]}>
-              Редактировать профиль
-            </ThemedText>
-          </Pressable>
-        </ThemedView>
+            <Icon name="chevron-right" size={20} color={theme.textSecondary} />
+          </ThemedView>
+        </Pressable>
 
         {isAdmin ? (
-          <SettingsCard title="Администрирование">
-            <SettingItem icon="users" label="Панель администратора" onPress={() => navigation.navigate("AdminPanel")} />
-            <Divider />
-            <SettingItem icon="bar-chart-2" label="Отчёты" onPress={() => navigation.navigate("Reports")} />
-            <Divider />
-            <SettingItem icon="file-text" label="Цены на билеты" onPress={() => navigation.navigate("TicketPrices")} />
-            <Divider />
-            <SettingItem icon="folder" label="База данных" onPress={() => navigation.navigate("DatabaseSettings")} />
-            <Divider />
-            <SettingItem
-              icon="radio"
-              label="Стоимость радиогида"
-              value={`${radioGuidePrice}₽`}
-              showChevron={false}
-              onPress={() => {
-                setPriceInput(String(radioGuidePrice));
-                setShowPriceModal(true);
-              }}
-            />
-            <Divider />
-            <SettingItem
-              icon="package"
-              label="Себестоимость приёмника"
-              value={`${rentalCostPerReceiver}₽`}
-              showChevron={false}
-              onPress={() => {
-                setCostInput(String(rentalCostPerReceiver));
-                setShowCostModal(true);
-              }}
-            />
-          </SettingsCard>
+          <View style={styles.section}>
+            <SectionTitle title="Администрирование" />
+            <View style={styles.iconGrid}>
+              <AppIcon icon="users" label="Менеджеры" color="#5856D6" onPress={() => navigation.navigate("AdminPanel")} />
+              <AppIcon icon="bar-chart-2" label="Отчёты" color="#FF9500" onPress={() => navigation.navigate("Reports")} />
+              <AppIcon icon="file-text" label="Цены" color="#34C759" onPress={() => navigation.navigate("TicketPrices")} />
+              <AppIcon icon="database" label="База данных" color="#007AFF" onPress={() => navigation.navigate("DatabaseSettings")} />
+              <AppIcon
+                icon="radio"
+                label="Радиогид"
+                color="#FF3B30"
+                badge={`${radioGuidePrice}₽`}
+                onPress={() => { setPriceInput(String(radioGuidePrice)); setShowPriceModal(true); }}
+              />
+              <AppIcon
+                icon="cpu"
+                label="Себестоим."
+                color="#AF52DE"
+                badge={`${rentalCostPerReceiver}₽`}
+                onPress={() => { setCostInput(String(rentalCostPerReceiver)); setShowCostModal(true); }}
+              />
+            </View>
+          </View>
         ) : null}
 
-        <SettingsCard title="Оборудование">
-          <SettingItem icon="radio" label="Радиогиды" onPress={() => navigation.navigate("RadioGuides")} />
-          <Divider />
-          <SettingItem icon="alert-triangle" label="Утери оборудования" onPress={() => navigation.navigate("EquipmentLosses")} />
-          {canAccessWarehouse ? (
-            <>
-              <Divider />
-              <SettingItem icon="package" label="Склад" onPress={() => navigation.navigate("Warehouse")} />
-            </>
-          ) : null}
-        </SettingsCard>
+        <View style={styles.section}>
+          <SectionTitle title="Оборудование" />
+          <View style={styles.iconGrid}>
+            <AppIcon icon="radio" label="Радиогиды" color="#FF9500" onPress={() => navigation.navigate("RadioGuides")} />
+            <AppIcon icon="alert-triangle" label="Утери" color="#FF3B30" onPress={() => navigation.navigate("EquipmentLosses")} />
+            {canAccessWarehouse ? (
+              <AppIcon icon="package" label="Склад" color="#8E8E93" onPress={() => navigation.navigate("Warehouse")} />
+            ) : null}
+          </View>
+        </View>
 
         {canAccessRental ? (
-          <SettingsCard title="Аренда">
-            <SettingItem icon="users" label="Клиенты" onPress={() => navigation.navigate("RentalClients")} />
-            <Divider />
-            <SettingItem icon="file-text" label="Заказы" onPress={() => navigation.navigate("RentalOrders")} />
-            <Divider />
-            <SettingItem icon="credit-card" label="Платежи" onPress={() => navigation.navigate("RentalPayments")} />
-            <Divider />
-            <SettingItem icon="dollar-sign" label="Комиссии" onPress={() => navigation.navigate("RentalCommissions")} />
-            <Divider />
-            <SettingItem icon="calendar" label="Календарь загрузки" onPress={() => navigation.navigate("RentalCalendar")} />
-            {isAdmin ? (
-              <>
-                <Divider />
-                <SettingItem icon="gift" label="Услуги аренды" onPress={() => navigation.navigate("RentalServices")} />
-              </>
-            ) : null}
-          </SettingsCard>
+          <View style={styles.section}>
+            <SectionTitle title="Аренда" />
+            <View style={styles.iconGrid}>
+              <AppIcon icon="users" label="Клиенты" color="#007AFF" onPress={() => navigation.navigate("RentalClients")} />
+              <AppIcon icon="file-text" label="Заказы" color="#5856D6" onPress={() => navigation.navigate("RentalOrders")} />
+              <AppIcon icon="credit-card" label="Платежи" color="#34C759" onPress={() => navigation.navigate("RentalPayments")} />
+              <AppIcon icon="dollar-sign" label="Комиссии" color="#FF9500" onPress={() => navigation.navigate("RentalCommissions")} />
+              <AppIcon icon="calendar" label="Календарь" color="#FF2D55" onPress={() => navigation.navigate("RentalCalendar")} />
+              {isAdmin ? (
+                <AppIcon icon="gift" label="Услуги" color="#AF52DE" onPress={() => navigation.navigate("RentalServices")} />
+              ) : null}
+            </View>
+          </View>
         ) : null}
 
-        <SettingsCard title="Общее">
-          <SettingItem icon="mail" label="Уведомления" onPress={() => navigation.navigate("Notifications")} />
-          <Divider />
-          <SettingItem icon="trash" label="Удалённые данные" onPress={() => navigation.navigate("DeletedData")} />
-        </SettingsCard>
-
-        <SettingsCard title="О приложении">
-          <View style={styles.settingItem}>
-            <ThemedText style={[styles.settingText, { color: theme.textSecondary }]}>Версия</ThemedText>
-            <ThemedText style={styles.settingText}>1.0.0</ThemedText>
+        <View style={styles.section}>
+          <SectionTitle title="Общее" />
+          <View style={styles.iconGrid}>
+            <AppIcon icon="bell" label="Уведомления" color="#FF3B30" onPress={() => navigation.navigate("Notifications")} />
+            <AppIcon icon="trash-2" label="Удалённые" color="#8E8E93" onPress={() => navigation.navigate("DeletedData")} />
           </View>
-        </SettingsCard>
+        </View>
 
-        <Pressable
-          onPress={handleLogout}
-          style={({ pressed }) => [
-            styles.logoutButton,
-            { backgroundColor: theme.error, opacity: pressed ? 0.7 : 1 },
-          ]}
-        >
-          <Icon name="log-out" size={20} color={theme.buttonText} />
-          <ThemedText style={[styles.logoutText, { color: theme.buttonText }]}>Выйти</ThemedText>
-        </Pressable>
+        <View style={styles.footer}>
+          <ThemedText style={[styles.versionText, { color: theme.textSecondary }]}>
+            Версия 1.0.0
+          </ThemedText>
+          <Pressable
+            onPress={handleLogout}
+            style={({ pressed }) => [styles.logoutButton, { opacity: pressed ? 0.7 : 1 }]}
+          >
+            <Icon name="log-out" size={18} color={theme.error} />
+            <ThemedText style={[styles.logoutText, { color: theme.error }]}>Выйти</ThemedText>
+          </Pressable>
+        </View>
       </View>
 
-      <Modal
-        visible={showPriceModal}
-        transparent
-        animationType="fade"
-        onRequestClose={() => setShowPriceModal(false)}
-      >
+      <Modal visible={showPriceModal} transparent animationType="fade" onRequestClose={() => setShowPriceModal(false)}>
         <Pressable style={styles.modalOverlay} onPress={() => setShowPriceModal(false)}>
-          <Pressable
-            style={[styles.modalContent, { backgroundColor: theme.backgroundSecondary }]}
-            onPress={(e) => e.stopPropagation()}
-          >
+          <Pressable style={[styles.modalContent, { backgroundColor: theme.backgroundSecondary }]} onPress={(e) => e.stopPropagation()}>
             <ThemedText style={styles.modalTitle}>Стоимость аренды радиогида</ThemedText>
             <ThemedText style={[styles.modalSubtitle, { color: theme.textSecondary }]}>
               Цена за одного участника для расчёта в отчётах
@@ -284,37 +223,20 @@ export default function SettingsScreen() {
               placeholderTextColor={theme.textSecondary}
             />
             <View style={styles.modalButtons}>
-              <Pressable
-                style={[styles.modalButton, { backgroundColor: theme.backgroundRoot }]}
-                onPress={() => setShowPriceModal(false)}
-              >
+              <Pressable style={[styles.modalButton, { backgroundColor: theme.backgroundRoot }]} onPress={() => setShowPriceModal(false)}>
                 <ThemedText>Отмена</ThemedText>
               </Pressable>
-              <Pressable
-                style={[styles.modalButton, { backgroundColor: theme.primary }]}
-                onPress={handleSavePrice}
-                disabled={saving}
-              >
-                <ThemedText style={{ color: theme.buttonText }}>
-                  {saving ? "Сохранение..." : "Сохранить"}
-                </ThemedText>
+              <Pressable style={[styles.modalButton, { backgroundColor: theme.primary }]} onPress={handleSavePrice} disabled={saving}>
+                <ThemedText style={{ color: theme.buttonText }}>{saving ? "Сохранение..." : "Сохранить"}</ThemedText>
               </Pressable>
             </View>
           </Pressable>
         </Pressable>
       </Modal>
 
-      <Modal
-        visible={showCostModal}
-        transparent
-        animationType="fade"
-        onRequestClose={() => setShowCostModal(false)}
-      >
+      <Modal visible={showCostModal} transparent animationType="fade" onRequestClose={() => setShowCostModal(false)}>
         <Pressable style={styles.modalOverlay} onPress={() => setShowCostModal(false)}>
-          <Pressable
-            style={[styles.modalContent, { backgroundColor: theme.backgroundSecondary }]}
-            onPress={(e) => e.stopPropagation()}
-          >
+          <Pressable style={[styles.modalContent, { backgroundColor: theme.backgroundSecondary }]} onPress={(e) => e.stopPropagation()}>
             <ThemedText style={styles.modalTitle}>Себестоимость приёмника</ThemedText>
             <ThemedText style={[styles.modalSubtitle, { color: theme.textSecondary }]}>
               Стоимость 1 приёмника для расчёта прибыли и комиссий
@@ -328,20 +250,11 @@ export default function SettingsScreen() {
               placeholderTextColor={theme.textSecondary}
             />
             <View style={styles.modalButtons}>
-              <Pressable
-                style={[styles.modalButton, { backgroundColor: theme.backgroundRoot }]}
-                onPress={() => setShowCostModal(false)}
-              >
+              <Pressable style={[styles.modalButton, { backgroundColor: theme.backgroundRoot }]} onPress={() => setShowCostModal(false)}>
                 <ThemedText>Отмена</ThemedText>
               </Pressable>
-              <Pressable
-                style={[styles.modalButton, { backgroundColor: theme.primary }]}
-                onPress={handleSaveCost}
-                disabled={saving}
-              >
-                <ThemedText style={{ color: theme.buttonText }}>
-                  {saving ? "Сохранение..." : "Сохранить"}
-                </ThemedText>
+              <Pressable style={[styles.modalButton, { backgroundColor: theme.primary }]} onPress={handleSaveCost} disabled={saving}>
+                <ThemedText style={{ color: theme.buttonText }}>{saving ? "Сохранение..." : "Сохранить"}</ThemedText>
               </Pressable>
             </View>
           </Pressable>
@@ -356,60 +269,36 @@ const styles = StyleSheet.create({
     gap: Spacing.xl,
   },
   profileCard: {
-    padding: Spacing.xl,
-    borderWidth: 1,
-  },
-  avatarContainer: {
     flexDirection: "row",
     alignItems: "center",
-    gap: Spacing.lg,
+    padding: Spacing.lg,
+    borderWidth: 1,
+    gap: Spacing.md,
   },
-  avatar: {
-    width: 64,
-    height: 64,
-    borderRadius: 32,
+  profileAvatar: {
+    width: 56,
+    height: 56,
+    borderRadius: 28,
     alignItems: "center",
     justifyContent: "center",
   },
   avatarText: {
-    fontSize: 28,
+    fontSize: 24,
     fontWeight: "700",
-    lineHeight: 32,
-    textAlign: "center",
   },
   profileInfo: {
     flex: 1,
-    gap: Spacing.sm,
+    gap: 2,
   },
   profileName: {
-    fontSize: 20,
+    fontSize: 18,
     fontWeight: "600",
   },
-  roleBadge: {
-    alignSelf: "flex-start",
-    paddingHorizontal: Spacing.sm,
-    paddingVertical: Spacing.xs,
-    borderRadius: BorderRadius.xs,
-  },
-  roleText: {
-    fontSize: 12,
-    fontWeight: "500",
-  },
-  editProfileButton: {
-    flexDirection: "row",
-    alignItems: "center",
-    justifyContent: "center",
-    gap: Spacing.sm,
-    marginTop: Spacing.lg,
-    paddingVertical: Spacing.md,
-    borderRadius: BorderRadius.sm,
-  },
-  editProfileText: {
-    fontWeight: "600",
+  profileRole: {
     fontSize: 14,
   },
   section: {
-    gap: Spacing.sm,
+    gap: Spacing.md,
   },
   sectionTitle: {
     fontSize: 13,
@@ -418,41 +307,62 @@ const styles = StyleSheet.create({
     letterSpacing: 0.5,
     marginLeft: Spacing.xs,
   },
-  settingsGroup: {
-    borderWidth: 1,
-    overflow: "hidden",
-  },
-  settingItem: {
+  iconGrid: {
     flexDirection: "row",
+    flexWrap: "wrap",
+    gap: Spacing.sm,
+  },
+  appIconContainer: {
+    width: "23%",
     alignItems: "center",
-    justifyContent: "space-between",
-    paddingVertical: Spacing.lg,
-    paddingHorizontal: Spacing.lg,
+    gap: Spacing.xs,
   },
-  settingLeft: {
-    flexDirection: "row",
+  appIconSquare: {
+    width: 60,
+    height: 60,
+    borderRadius: 14,
+    alignItems: "center",
+    justifyContent: "center",
+  },
+  appIconLabel: {
+    fontSize: 11,
+    textAlign: "center",
+    lineHeight: 13,
+  },
+  badge: {
+    position: "absolute",
+    top: -4,
+    right: -4,
+    minWidth: 20,
+    height: 18,
+    borderRadius: 9,
+    alignItems: "center",
+    justifyContent: "center",
+    paddingHorizontal: 4,
+  },
+  badgeText: {
+    color: "#fff",
+    fontSize: 10,
+    fontWeight: "700",
+  },
+  footer: {
     alignItems: "center",
     gap: Spacing.md,
-    flex: 1,
+    paddingTop: Spacing.md,
   },
-  settingText: {
-    fontSize: 16,
-  },
-  divider: {
-    height: StyleSheet.hairlineWidth,
-    marginLeft: Spacing.xl + Spacing.lg + Spacing.md,
+  versionText: {
+    fontSize: 13,
   },
   logoutButton: {
     flexDirection: "row",
     alignItems: "center",
-    justifyContent: "center",
-    gap: Spacing.sm,
-    padding: Spacing.lg,
-    borderRadius: BorderRadius.sm,
+    gap: Spacing.xs,
+    paddingVertical: Spacing.sm,
+    paddingHorizontal: Spacing.lg,
   },
   logoutText: {
-    fontWeight: "600",
     fontSize: 16,
+    fontWeight: "500",
   },
   modalOverlay: {
     flex: 1,
