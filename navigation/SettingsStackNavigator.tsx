@@ -12,6 +12,8 @@ import ReportsScreen from "@/screens/ReportsScreen";
 import FinancialReportScreen from "@/screens/FinancialReportScreen";
 import ExcursionsReportScreen from "@/screens/ExcursionsReportScreen";
 import RadioGuidesReportScreen from "@/screens/RadioGuidesReportScreen";
+import WarehouseReportScreen from "@/screens/WarehouseReportScreen";
+import RentalReportScreen from "@/screens/RentalReportScreen";
 import ExportDataScreen from "@/screens/ExportDataScreen";
 import DailyReportScreen from "@/screens/DailyReportScreen";
 import NotificationsScreen from "@/screens/NotificationsScreen";
@@ -45,6 +47,8 @@ export type SettingsStackParamList = {
   FinancialReport: undefined;
   ExcursionsReport: undefined;
   RadioGuidesReport: undefined;
+  WarehouseReport: undefined;
+  RentalReport: undefined;
   ExportData: undefined;
   DailyReport: undefined;
   Notifications: undefined;
@@ -131,6 +135,16 @@ export default function SettingsStackNavigator() {
         name="RadioGuidesReport"
         component={RadioGuidesReportScreen}
         options={{ title: "Отчёт по радиогидам" }}
+      />
+      <Stack.Screen
+        name="WarehouseReport"
+        component={WarehouseReportScreen}
+        options={{ title: "Отчёт по складу" }}
+      />
+      <Stack.Screen
+        name="RentalReport"
+        component={RentalReportScreen}
+        options={{ title: "Отчёт по аренде" }}
       />
       <Stack.Screen
         name="ExportData"

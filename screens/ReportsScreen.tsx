@@ -47,6 +47,20 @@ const reportItems: ReportItem[] = [
     screen: "RadioGuidesReport",
   },
   {
+    id: "warehouse",
+    title: "Отчёт по складу",
+    description: "Остатки, движения и утери оборудования",
+    icon: "package",
+    screen: "WarehouseReport",
+  },
+  {
+    id: "rental",
+    title: "Отчёт по аренде",
+    description: "Заказы, выручка и комиссии",
+    icon: "briefcase",
+    screen: "RentalReport",
+  },
+  {
     id: "export",
     title: "Экспорт данных",
     description: "Скачать отчёт в файл",
