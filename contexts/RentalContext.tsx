@@ -12,6 +12,7 @@ export interface RentalClient {
   phone: string | null;
   email: string | null;
   directorName: string | null;
+  ceoName: string | null;
   legalAddress: string | null;
   inn: string | null;
   kpp: string | null;
@@ -192,6 +193,7 @@ export function RentalProvider({ children }: { children: ReactNode }) {
         phone: c.phone,
         email: c.email,
         directorName: c.director_name,
+        ceoName: c.ceo_name,
         legalAddress: c.legal_address,
         inn: c.inn,
         kpp: c.kpp,
@@ -460,6 +462,7 @@ export function RentalProvider({ children }: { children: ReactNode }) {
         phone: client.phone,
         email: client.email,
         director_name: client.directorName,
+        ceo_name: client.ceoName,
         legal_address: client.legalAddress,
         inn: client.inn,
         kpp: client.kpp,
@@ -483,6 +486,7 @@ export function RentalProvider({ children }: { children: ReactNode }) {
     if (client.phone !== undefined) updateData.phone = client.phone;
     if (client.email !== undefined) updateData.email = client.email;
     if (client.directorName !== undefined) updateData.director_name = client.directorName;
+    if (client.ceoName !== undefined) updateData.ceo_name = client.ceoName;
     if (client.legalAddress !== undefined) updateData.legal_address = client.legalAddress;
     if (client.inn !== undefined) updateData.inn = client.inn;
     if (client.kpp !== undefined) updateData.kpp = client.kpp;
