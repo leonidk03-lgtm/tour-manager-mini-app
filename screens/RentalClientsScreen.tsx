@@ -243,7 +243,7 @@ export default function RentalClientsScreen() {
               ) : null}
             </View>
             <ThemedText style={[styles.clientType, { color: theme.textSecondary }]} numberOfLines={1}>
-              {item.type === "company" ? (item.directorName ? item.name : "Компания") : "Физ. лицо"}
+              {item.type === "company" ? (item.companyName || "Компания") : item.name}
               {ordersCount > 0 ? ` • ${ordersCount} заказов` : ""}
             </ThemedText>
           </View>
