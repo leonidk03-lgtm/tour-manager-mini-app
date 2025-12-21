@@ -412,7 +412,7 @@ export default function DashboardScreen() {
   }, [rentalOrders, rentalPayments, referenceDate]);
 
   const alerts = useMemo(() => {
-    const alertsList: { icon: string; title: string; description: string; color: string; key: string }[] = [];
+    const alertsList: { icon: string; title: string; description: string; color: string; key: string; route: string }[] = [];
     
     if (hasAnyRentalAccess) {
       const overdueReturns = rentalOrders.filter(order => {
@@ -430,6 +430,7 @@ export default function DashboardScreen() {
           title: `Просрочено: ${overdueReturns.length}`,
           description: 'Заказов аренды не возвращено вовремя',
           color: theme.error,
+          route: 'RentalOrders',
         });
       }
     }
@@ -442,6 +443,7 @@ export default function DashboardScreen() {
         title: `Низкий заряд: ${lowBatteryKits.length}`,
         description: 'Комплектов радиогидов требуют зарядки',
         color: theme.warning,
+        route: 'RadioGuides',
       });
     }
     
@@ -453,6 +455,7 @@ export default function DashboardScreen() {
         title: `Низкий запас: ${lowStockItems.length}`,
         description: 'Позиций на складе требуют пополнения',
         color: theme.warning,
+        route: 'Warehouse',
       });
     }
     
@@ -618,6 +621,7 @@ export default function DashboardScreen() {
                       title={alert.title}
                       description={alert.description}
                       color={alert.color}
+                      onPress={() => navigation.navigate('SettingsTab' as never, { screen: alert.route } as never)}
                     />
                   ))}
                 </View>
