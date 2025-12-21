@@ -349,7 +349,7 @@ export default function RentalCalendarScreen() {
                         <View style={styles.orderDetail}>
                           <Icon name="package" size={14} color={theme.textSecondary} />
                           <ThemedText style={{ color: theme.textSecondary, fontSize: 12 }}>
-                            {order.kitCount} комп.
+                            {order.kitCount + (order.spareReceiverCount || 0)} прм.
                           </ThemedText>
                         </View>
                         <View style={styles.orderDetail}>
