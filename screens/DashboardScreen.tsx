@@ -400,7 +400,7 @@ export default function DashboardScreen() {
     });
     
     const activeCount = rentalOrders.filter(order => 
-      order.status === 'new' || order.status === 'issued'
+      order.status === 'issued'
     ).length;
 
     const { startDate: todayDateStr } = getDateRangeForPeriod("day", referenceDate);
