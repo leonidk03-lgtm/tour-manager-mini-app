@@ -93,7 +93,6 @@ export default function WarehouseScreen() {
     updateEquipmentItem,
     deleteEquipmentItem,
     addEquipmentMovement,
-    processAutoWriteoff,
   } = useData();
 
   const [activeTab, setActiveTab] = useState<TabType>("inventory");
@@ -124,9 +123,6 @@ export default function WarehouseScreen() {
   const [filterDate, setFilterDate] = useState<Date | null>(null);
   const [showDatePicker, setShowDatePicker] = useState(false);
   const [searchQuery, setSearchQuery] = useState("");
-  const [isProcessingWriteoff, setIsProcessingWriteoff] = useState(false);
-  const [showAutoWriteoffDatePicker, setShowAutoWriteoffDatePicker] = useState(false);
-  const [autoWriteoffDate, setAutoWriteoffDate] = useState(new Date());
 
   const getCategoryById = (id: string) => equipmentCategories.find(c => c.id === id);
 
@@ -363,62 +359,6 @@ export default function WarehouseScreen() {
     } catch (err) {
       Alert.alert("Ошибка", "Не удалось сохранить движение");
     }
-  };
-
-  const handleAutoWriteoff = () => {
-    const autoWriteoffCategories = equipmentCategories.filter(c => c.autoWriteoff);
-    if (autoWriteoffCategories.length === 0) {
-      Alert.alert("Нет настроек", "Нет категорий с включённым автосписанием. Создайте категорию типа 'Расходник' и включите автосписание.");
-      return;
-    }
-    setAutoWriteoffDate(new Date());
-    setShowAutoWriteoffDatePicker(true);
-  };
-
-  const handleAutoWriteoffDateChange = (event: any, selectedDate?: Date) => {
-    if (Platform.OS === "android") {
-      setShowAutoWriteoffDatePicker(false);
-    }
-    if (selectedDate) {
-      setAutoWriteoffDate(selectedDate);
-      if (Platform.OS === "android") {
-        confirmAutoWriteoff(selectedDate);
-      }
-    }
-  };
-
-  const confirmAutoWriteoff = (date: Date) => {
-    setShowAutoWriteoffDatePicker(false);
-    const dateStr = date.toLocaleDateString("ru-RU", { day: "numeric", month: "long", year: "numeric" });
-    
-    Alert.alert(
-      "Провести автосписание?",
-      `Расходники будут списаны по количеству выданных приёмников за ${dateStr}.`,
-      [
-        { text: "Отмена", style: "cancel" },
-        {
-          text: "Провести",
-          onPress: async () => {
-            setIsProcessingWriteoff(true);
-            try {
-              const result = await processAutoWriteoff(date);
-              if (result.processed === 0) {
-                Alert.alert("Нет данных", `За ${dateStr} не было выдач приёмников.`);
-              } else if (result.items.length === 0) {
-                Alert.alert("Нет расходников", "Нет расходников для списания или они уже закончились.");
-              } else {
-                const itemsList = result.items.map(i => `${i.name}: ${i.quantity} шт.`).join("\n");
-                Alert.alert("Готово", `Списано по ${result.processed} выданным приёмникам за ${dateStr}:\n\n${itemsList}`);
-              }
-            } catch (err) {
-              Alert.alert("Ошибка", "Не удалось провести автосписание");
-            } finally {
-              setIsProcessingWriteoff(false);
-            }
-          },
-        },
-      ]
-    );
   };
 
   const openEditCategory = (category: EquipmentCategory) => {
@@ -777,17 +717,6 @@ export default function WarehouseScreen() {
       borderRadius: BorderRadius.md,
       backgroundColor: theme.backgroundSecondary,
     },
-    autoWriteoffButton: {
-      flexDirection: "row",
-      alignItems: "center",
-      gap: Spacing.xs,
-      paddingHorizontal: Spacing.sm,
-      paddingVertical: Spacing.xs,
-      borderRadius: BorderRadius.md,
-      backgroundColor: theme.warning + "20",
-      borderWidth: 1,
-      borderColor: theme.warning + "40",
-    },
     iosDatePickerContainer: {
       backgroundColor: theme.backgroundSecondary,
       borderRadius: BorderRadius.md,
@@ -1077,19 +1006,6 @@ export default function WarehouseScreen() {
             <Icon name="x" size={18} color={theme.textSecondary} />
           </Pressable>
         )}
-        <View style={{ flex: 1 }} />
-        {isAdmin && (
-          <Pressable
-            style={[styles.autoWriteoffButton, isProcessingWriteoff && { opacity: 0.5 }]}
-            onPress={handleAutoWriteoff}
-            disabled={isProcessingWriteoff}
-          >
-            <Icon name="zap" size={14} color={theme.warning} />
-            <ThemedText style={{ color: theme.warning, fontSize: 12 }}>
-              Автосписание
-            </ThemedText>
-          </Pressable>
-        )}
       </View>
 
       {showDatePicker && (
@@ -1099,34 +1015,6 @@ export default function WarehouseScreen() {
           display={Platform.OS === "ios" ? "spinner" : "default"}
           onChange={handleDateChange}
         />
-      )}
-
-      {showAutoWriteoffDatePicker && Platform.OS === "android" && (
-        <DateTimePicker
-          value={autoWriteoffDate}
-          mode="date"
-          display="default"
-          maximumDate={new Date()}
-          onChange={handleAutoWriteoffDateChange}
-        />
-      )}
-
-      {showAutoWriteoffDatePicker && Platform.OS !== "android" && (
-        <View style={styles.iosDatePickerContainer}>
-          <View style={styles.iosDatePickerHeader}>
-            <ThemedText style={styles.iosDatePickerTitle}>Выберите дату списания</ThemedText>
-            <Pressable onPress={() => confirmAutoWriteoff(autoWriteoffDate)}>
-              <ThemedText style={{ color: theme.primary, fontWeight: "600" }}>Готово</ThemedText>
-            </Pressable>
-          </View>
-          <DateTimePicker
-            value={autoWriteoffDate}
-            mode="date"
-            display="spinner"
-            maximumDate={new Date()}
-            onChange={handleAutoWriteoffDateChange}
-          />
-        </View>
       )}
 
       {filteredMovements.length === 0 ? (
