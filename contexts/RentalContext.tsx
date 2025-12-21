@@ -163,7 +163,7 @@ const RentalContext = createContext<RentalContextType | undefined>(undefined);
 
 export function RentalProvider({ children }: { children: ReactNode }) {
   const { user, profile } = useAuth();
-  const { autoWriteoffOnIssue } = useData();
+  const { autoWriteoffOnIssue, refreshData: refreshDataContext } = useData();
   
   const [rentalClients, setRentalClients] = useState<RentalClient[]>([]);
   const [rentalOrders, setRentalOrders] = useState<RentalOrder[]>([]);
@@ -712,6 +712,8 @@ export function RentalProvider({ children }: { children: ReactNode }) {
         const bagNumber = orderData.bag_number || '?';
         try {
           await autoWriteoffOnIssue(totalReceivers, `Автосписание аренда: ${clientName}, сумка ${bagNumber}`);
+          // Force refresh equipment data for mobile sync
+          await refreshDataContext();
         } catch (err) {
           console.error('Error auto-writeoff for rental:', err);
         }
