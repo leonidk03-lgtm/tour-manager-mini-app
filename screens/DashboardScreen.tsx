@@ -6,33 +6,101 @@ import { ThemedText } from "@/components/ThemedText";
 import { ThemedView } from "@/components/ThemedView";
 import { ScreenScrollView } from "@/components/ScreenScrollView";
 import { StatCard } from "@/components/StatCard";
-import { PeriodSelector } from "@/components/PeriodSelector";
 import { NetworkErrorBanner } from "@/components/NetworkErrorBanner";
 import { Spacing, BorderRadius } from "@/constants/theme";
 import { useTheme } from "@/hooks/useTheme";
 import { useData } from "@/contexts/DataContext";
+import { useRental } from "@/contexts/RentalContext";
+import { useAuth } from "@/contexts/AuthContext";
 import {
   getDateRangeForPeriod,
   filterExcursionsByDateRange,
   calculateTotalRevenue,
   calculateTotalExpenses,
-  calculateExcursionRevenue,
-  calculateExcursionExpenses,
-  calculateExcursionProfit,
   calculateAdditionalTransactionsTotal,
   formatCurrency,
 } from "@/utils/calculations";
 import { useNavigation, NavigationProp } from "@react-navigation/native";
 import { MainTabParamList } from "@/navigation/MainTabNavigator";
 
+interface PeriodStats {
+  revenue: number;
+  excursionExpenses: number;
+  additionalIncome: number;
+  additionalExpenses: number;
+  profit: number;
+  excursions: number;
+  participants: number;
+}
+
+interface RentalPeriodStats {
+  orders: number;
+  revenue: number;
+  activeOrders: number;
+}
+
+function PeriodWidget({ 
+  title, 
+  iconColor,
+  stats,
+}: { 
+  title: string; 
+  iconColor: string;
+  stats: PeriodStats;
+}) {
+  const { theme } = useTheme();
+  
+  return (
+    <ThemedView style={[styles.periodWidget, { backgroundColor: theme.backgroundSecondary }]}>
+      <View style={styles.periodHeader}>
+        <View style={[styles.periodIconBg, { backgroundColor: iconColor + '20' }]}>
+          <Icon name="calendar" size={16} color={iconColor} />
+        </View>
+        <ThemedText style={styles.periodTitle}>{title}</ThemedText>
+      </View>
+      
+      <View style={styles.periodStatsRow}>
+        <View style={styles.periodStatMain}>
+          <ThemedText style={[styles.periodStatValue, { color: stats.profit >= 0 ? theme.success : theme.error }]}>
+            {formatCurrency(stats.profit)}
+          </ThemedText>
+          <ThemedText style={[styles.periodStatLabel, { color: theme.textSecondary }]}>Прибыль</ThemedText>
+        </View>
+        
+        <View style={styles.periodStatsDivider} />
+        
+        <View style={styles.periodStatSecondary}>
+          <View style={styles.periodStatItem}>
+            <ThemedText style={[styles.periodStatSmallValue, { color: theme.text }]}>{stats.excursions}</ThemedText>
+            <ThemedText style={[styles.periodStatSmallLabel, { color: theme.textSecondary }]}>Экскурсий</ThemedText>
+          </View>
+          <View style={styles.periodStatItem}>
+            <ThemedText style={[styles.periodStatSmallValue, { color: theme.text }]}>{stats.participants}</ThemedText>
+            <ThemedText style={[styles.periodStatSmallLabel, { color: theme.textSecondary }]}>Человек</ThemedText>
+          </View>
+        </View>
+      </View>
+    </ThemedView>
+  );
+}
+
 export default function DashboardScreen() {
   const { theme } = useTheme();
   const navigation = useNavigation<NavigationProp<MainTabParamList>>();
-  const { excursions, tourTypes, additionalServices, transactions, activities } = useData();
-  const [selectedPeriod, setSelectedPeriod] = useState<"day" | "week" | "month">("day");
+  const { excursions, tourTypes, additionalServices, transactions } = useData();
+  const { rentalOrders } = useRental();
+  const { isAdmin, hasPermission } = useAuth();
   const [referenceDate, setReferenceDate] = useState(new Date());
   const [refreshing, setRefreshing] = useState(false);
   const [showDatePicker, setShowDatePicker] = useState(false);
+  
+  const hasAnyRentalAccess = isAdmin || 
+    hasPermission('rental') || 
+    hasPermission('rental_clients') ||
+    hasPermission('rental_orders') || 
+    hasPermission('rental_payments') || 
+    hasPermission('rental_commissions') ||
+    hasPermission('rental_calendar');
   
   const handleDateChange = (event: any, date?: Date) => {
     if (Platform.OS === "android") {
@@ -56,43 +124,63 @@ export default function DashboardScreen() {
     setTimeout(() => setRefreshing(false), 1000);
   };
 
-  const { startDate, endDate } = useMemo(
-    () => getDateRangeForPeriod(selectedPeriod, referenceDate),
-    [selectedPeriod, referenceDate]
-  );
-  
-  const filteredExcursions = useMemo(
-    () => filterExcursionsByDateRange(excursions, startDate, endDate),
-    [excursions, startDate, endDate]
-  );
-
-  const filteredTransactions = useMemo(
-    () => transactions.filter((t) => t.date >= startDate && t.date <= endDate),
-    [transactions, startDate, endDate]
-  );
-
-  const { totalRevenue, totalExpenses, additionalIncome, additionalExpenses, netProfit, totalParticipants } = useMemo(() => {
-    const revenue = calculateTotalRevenue(filteredExcursions, tourTypes, additionalServices);
-    const expenses = calculateTotalExpenses(filteredExcursions);
-    const income = calculateAdditionalTransactionsTotal(filteredTransactions, "income");
-    const expensesTx = calculateAdditionalTransactionsTotal(filteredTransactions, "expense");
-    const profit = revenue - expenses + income - expensesTx;
-    const participants = filteredExcursions.reduce((sum, exc) => {
+  const calculatePeriodStats = useCallback((period: "day" | "week" | "month"): PeriodStats => {
+    const { startDate, endDate } = getDateRangeForPeriod(period, referenceDate);
+    const filtered = filterExcursionsByDateRange(excursions, startDate, endDate);
+    const filteredTx = transactions.filter((t) => t.date >= startDate && t.date <= endDate);
+    
+    const revenue = calculateTotalRevenue(filtered, tourTypes, additionalServices);
+    const excursionExpenses = calculateTotalExpenses(filtered);
+    const additionalIncome = calculateAdditionalTransactionsTotal(filteredTx, "income");
+    const additionalExpenses = calculateAdditionalTransactionsTotal(filteredTx, "expense");
+    
+    const profit = revenue - excursionExpenses + additionalIncome - additionalExpenses;
+    
+    const participants = filtered.reduce((sum, exc) => {
       return sum + exc.fullPriceCount + exc.discountedCount + exc.freeCount + 
         exc.byTourCount + exc.paidCount;
     }, 0);
     
     return {
-      totalRevenue: revenue,
-      totalExpenses: expenses,
-      additionalIncome: income,
-      additionalExpenses: expensesTx,
-      netProfit: profit,
-      totalParticipants: participants,
+      revenue,
+      excursionExpenses,
+      additionalIncome,
+      additionalExpenses,
+      profit,
+      excursions: filtered.length,
+      participants,
     };
-  }, [filteredExcursions, tourTypes, additionalServices, filteredTransactions]);
+  }, [excursions, transactions, tourTypes, additionalServices, referenceDate]);
 
-  const recentActivities = useMemo(() => activities.slice(0, 10), [activities]);
+  const calculateRentalStats = useCallback((period: "day" | "week" | "month"): RentalPeriodStats => {
+    const { startDate, endDate } = getDateRangeForPeriod(period, referenceDate);
+    const startDateObj = new Date(startDate);
+    const endDateObj = new Date(endDate);
+    
+    const filteredOrders = rentalOrders.filter(order => {
+      const orderDate = new Date(order.startDate);
+      return orderDate >= startDateObj && orderDate <= endDateObj;
+    });
+    
+    const revenue = filteredOrders.reduce((sum, order) => sum + (order.totalPrice || 0), 0);
+    const activeOrders = rentalOrders.filter(order => 
+      order.status === 'new' || order.status === 'issued'
+    ).length;
+    
+    return {
+      orders: filteredOrders.length,
+      revenue,
+      activeOrders,
+    };
+  }, [rentalOrders, referenceDate]);
+
+  const todayStats = useMemo(() => calculatePeriodStats("day"), [calculatePeriodStats]);
+  const weekStats = useMemo(() => calculatePeriodStats("week"), [calculatePeriodStats]);
+  const monthStats = useMemo(() => calculatePeriodStats("month"), [calculatePeriodStats]);
+  
+  const todayRental = useMemo(() => calculateRentalStats("day"), [calculateRentalStats]);
+  const weekRental = useMemo(() => calculateRentalStats("week"), [calculateRentalStats]);
+  const monthRental = useMemo(() => calculateRentalStats("month"), [calculateRentalStats]);
 
   return (
     <ScreenScrollView
@@ -101,7 +189,6 @@ export default function DashboardScreen() {
       <NetworkErrorBanner />
       <View style={styles.container}>
         <View style={styles.section}>
-          <PeriodSelector selectedPeriod={selectedPeriod} onPeriodChange={setSelectedPeriod} />
           <View style={styles.dateRow}>
             <Pressable
               onPress={() => setShowDatePicker(true)}
@@ -173,24 +260,22 @@ export default function DashboardScreen() {
         </View>
 
         <View style={styles.section}>
+          <ThemedText style={styles.sectionTitle}>Сегодня</ThemedText>
           <View style={styles.statsGrid}>
-            <StatCard title="Доход" value={formatCurrency(totalRevenue)} color="default" />
-            <StatCard title="Расходы" value={formatCurrency(totalExpenses)} color="default" />
+            <StatCard title="Доход" value={formatCurrency(todayStats.revenue)} color="default" />
+            <StatCard title="Расходы" value={formatCurrency(todayStats.excursionExpenses + todayStats.additionalExpenses)} color="default" />
           </View>
           <StatCard
             title="Чистая прибыль"
-            value={formatCurrency(netProfit)}
-            color={netProfit >= 0 ? "success" : "error"}
+            value={formatCurrency(todayStats.profit)}
+            color={todayStats.profit >= 0 ? "success" : "error"}
           />
-        </View>
-
-        <View style={styles.section}>
           <View style={styles.quickStats}>
             <ThemedView style={[styles.quickStatItem, { borderColor: theme.border }]}>
               <Icon name="users" size={20} color={theme.primary} />
               <View style={styles.quickStatText}>
                 <ThemedText style={[styles.quickStatValue, { color: theme.text }]}>
-                  {totalParticipants}
+                  {todayStats.participants}
                 </ThemedText>
                 <ThemedText style={[styles.quickStatLabel, { color: theme.textSecondary }]}>
                   Человек
@@ -201,7 +286,7 @@ export default function DashboardScreen() {
               <Icon name="list" size={20} color={theme.primary} />
               <View style={styles.quickStatText}>
                 <ThemedText style={[styles.quickStatValue, { color: theme.text }]}>
-                  {filteredExcursions.length}
+                  {todayStats.excursions}
                 </ThemedText>
                 <ThemedText style={[styles.quickStatLabel, { color: theme.textSecondary }]}>
                   Экскурсий
@@ -212,81 +297,72 @@ export default function DashboardScreen() {
         </View>
 
         <View style={styles.section}>
-          <View style={styles.sectionHeader}>
-            <ThemedText style={styles.sectionTitle}>Действия менеджеров</ThemedText>
-          </View>
-          {recentActivities.length > 0 ? (
-            <View style={styles.activitiesList}>
-              {recentActivities.map((activity) => (
-                <ThemedView
-                  key={activity.id}
-                  style={[
-                    styles.activityCard,
-                    {
-                      backgroundColor: theme.backgroundSecondary,
-                      borderRadius: BorderRadius.sm,
-                    },
-                  ]}
-                >
-                  <View style={styles.activityIcon}>
-                    <Icon
-                      name={
-                        activity.type === "excursion_added"
-                          ? "plus-circle"
-                          : activity.type === "excursion_deleted"
-                          ? "minus-circle"
-                          : activity.type === "transaction_added"
-                          ? "dollar-sign"
-                          : activity.type === "transaction_deleted"
-                          ? "x-circle"
-                          : activity.type === "radio_issued"
-                          ? "radio"
-                          : activity.type === "radio_returned"
-                          ? "check-circle"
-                          : "activity"
-                      }
-                      size={20}
-                      color={
-                        activity.type.includes("added") || activity.type === "radio_returned"
-                          ? theme.success
-                          : activity.type === "radio_issued"
-                          ? theme.primary
-                          : theme.error
-                      }
-                    />
-                  </View>
-                  <View style={styles.activityContent}>
-                    <ThemedText style={styles.activityText}>
-                      <ThemedText style={[styles.activityManager, { color: theme.primary }]}>
-                        {activity.managerName}
-                      </ThemedText>
-                      {" "}
-                      {activity.description}
-                    </ThemedText>
-                    <ThemedText style={[styles.activityDate, { color: theme.textSecondary }]}>
-                      {new Date(activity.timestamp).toLocaleString("ru-RU", {
-                        day: "2-digit",
-                        month: "2-digit",
-                        year: "numeric",
-                        hour: "2-digit",
-                        minute: "2-digit",
-                      })}
-                    </ThemedText>
-                  </View>
-                </ThemedView>
-              ))}
-            </View>
-          ) : (
-            <ThemedView
-              style={[styles.emptyState, { borderColor: theme.border, backgroundColor: theme.backgroundSecondary }]}
-            >
-              <Icon name="activity" size={48} color={theme.textSecondary} />
-              <ThemedText style={[styles.emptyText, { color: theme.textSecondary }]}>
-                Нет действий
+          <ThemedText style={styles.sectionTitle}>Период</ThemedText>
+          <PeriodWidget title="Неделя" iconColor={theme.primary} stats={weekStats} />
+          <PeriodWidget title="Месяц" iconColor={theme.warning} stats={monthStats} />
+        </View>
+
+        {hasAnyRentalAccess ? (
+          <View style={styles.section}>
+            <ThemedText style={styles.sectionTitle}>Аренда</ThemedText>
+            
+            <ThemedView style={[styles.rentalActiveCard, { backgroundColor: theme.backgroundSecondary }]}>
+              <View style={styles.rentalActiveHeader}>
+                <Icon name="radio" size={20} color={theme.warning} />
+                <ThemedText style={styles.rentalActiveLabel}>Активные заказы</ThemedText>
+              </View>
+              <ThemedText style={[styles.rentalActiveValue, { color: theme.primary }]}>
+                {todayRental.activeOrders}
               </ThemedText>
             </ThemedView>
-          )}
-        </View>
+            
+            <ThemedView style={[styles.rentalStatsCard, { backgroundColor: theme.backgroundSecondary }]}>
+              <View style={styles.rentalStatsHeader}>
+                <Icon name="file-text" size={18} color={theme.primary} />
+                <ThemedText style={styles.rentalStatsTitle}>Заказов</ThemedText>
+              </View>
+              <View style={styles.rentalStatsPeriods}>
+                <View style={styles.rentalStatsPeriod}>
+                  <ThemedText style={[styles.rentalStatsPeriodValue, { color: theme.text }]}>{todayRental.orders}</ThemedText>
+                  <ThemedText style={[styles.rentalStatsPeriodLabel, { color: theme.textSecondary }]}>День</ThemedText>
+                </View>
+                <View style={[styles.rentalStatsDivider, { backgroundColor: theme.border }]} />
+                <View style={styles.rentalStatsPeriod}>
+                  <ThemedText style={[styles.rentalStatsPeriodValue, { color: theme.text }]}>{weekRental.orders}</ThemedText>
+                  <ThemedText style={[styles.rentalStatsPeriodLabel, { color: theme.textSecondary }]}>Неделя</ThemedText>
+                </View>
+                <View style={[styles.rentalStatsDivider, { backgroundColor: theme.border }]} />
+                <View style={styles.rentalStatsPeriod}>
+                  <ThemedText style={[styles.rentalStatsPeriodValue, { color: theme.text }]}>{monthRental.orders}</ThemedText>
+                  <ThemedText style={[styles.rentalStatsPeriodLabel, { color: theme.textSecondary }]}>Месяц</ThemedText>
+                </View>
+              </View>
+            </ThemedView>
+            
+            <ThemedView style={[styles.rentalStatsCard, { backgroundColor: theme.backgroundSecondary }]}>
+              <View style={styles.rentalStatsHeader}>
+                <Icon name="dollar-sign" size={18} color={theme.success} />
+                <ThemedText style={styles.rentalStatsTitle}>Доход</ThemedText>
+              </View>
+              <View style={styles.rentalStatsPeriods}>
+                <View style={styles.rentalStatsPeriod}>
+                  <ThemedText style={[styles.rentalStatsPeriodValue, { color: theme.success }]}>{formatCurrency(todayRental.revenue)}</ThemedText>
+                  <ThemedText style={[styles.rentalStatsPeriodLabel, { color: theme.textSecondary }]}>День</ThemedText>
+                </View>
+                <View style={[styles.rentalStatsDivider, { backgroundColor: theme.border }]} />
+                <View style={styles.rentalStatsPeriod}>
+                  <ThemedText style={[styles.rentalStatsPeriodValue, { color: theme.success }]}>{formatCurrency(weekRental.revenue)}</ThemedText>
+                  <ThemedText style={[styles.rentalStatsPeriodLabel, { color: theme.textSecondary }]}>Неделя</ThemedText>
+                </View>
+                <View style={[styles.rentalStatsDivider, { backgroundColor: theme.border }]} />
+                <View style={styles.rentalStatsPeriod}>
+                  <ThemedText style={[styles.rentalStatsPeriodValue, { color: theme.success }]}>{formatCurrency(monthRental.revenue)}</ThemedText>
+                  <ThemedText style={[styles.rentalStatsPeriodLabel, { color: theme.textSecondary }]}>Месяц</ThemedText>
+                </View>
+              </View>
+            </ThemedView>
+          </View>
+        ) : null}
       </View>
     </ScreenScrollView>
   );
@@ -298,6 +374,10 @@ const styles = StyleSheet.create({
   },
   section: {
     gap: Spacing.md,
+  },
+  sectionTitle: {
+    fontSize: 20,
+    fontWeight: "600",
   },
   statsGrid: {
     flexDirection: "row",
@@ -313,7 +393,7 @@ const styles = StyleSheet.create({
     alignItems: "center",
     padding: Spacing.lg,
     borderWidth: 1,
-    borderRadius: 12,
+    borderRadius: BorderRadius.sm,
     gap: Spacing.md,
   },
   quickStatText: {
@@ -326,51 +406,115 @@ const styles = StyleSheet.create({
   quickStatLabel: {
     fontSize: 12,
   },
-  sectionHeader: {
+  periodWidget: {
+    padding: Spacing.lg,
+    borderRadius: BorderRadius.sm,
+    gap: Spacing.md,
+  },
+  periodHeader: {
+    flexDirection: "row",
+    alignItems: "center",
+    gap: Spacing.sm,
+  },
+  periodIconBg: {
+    width: 28,
+    height: 28,
+    borderRadius: 6,
+    alignItems: "center",
+    justifyContent: "center",
+  },
+  periodTitle: {
+    fontSize: 16,
+    fontWeight: "600",
+  },
+  periodStatsRow: {
+    flexDirection: "row",
+    alignItems: "center",
+  },
+  periodStatMain: {
+    flex: 1,
+    gap: Spacing.xs,
+  },
+  periodStatValue: {
+    fontSize: 24,
+    fontWeight: "700",
+  },
+  periodStatLabel: {
+    fontSize: 12,
+  },
+  periodStatsDivider: {
+    width: 1,
+    height: 40,
+    backgroundColor: "rgba(128,128,128,0.3)",
+    marginHorizontal: Spacing.lg,
+  },
+  periodStatSecondary: {
+    flexDirection: "row",
+    gap: Spacing.xl,
+  },
+  periodStatItem: {
+    alignItems: "center",
+    gap: Spacing.xs,
+  },
+  periodStatSmallValue: {
+    fontSize: 18,
+    fontWeight: "600",
+  },
+  periodStatSmallLabel: {
+    fontSize: 11,
+  },
+  rentalActiveCard: {
+    padding: Spacing.lg,
+    borderRadius: BorderRadius.sm,
+    gap: Spacing.sm,
+  },
+  rentalActiveHeader: {
+    flexDirection: "row",
+    alignItems: "center",
+    gap: Spacing.sm,
+  },
+  rentalActiveLabel: {
+    fontSize: 14,
+    fontWeight: "500",
+  },
+  rentalActiveValue: {
+    fontSize: 36,
+    fontWeight: "700",
+  },
+  rentalStatsCard: {
+    padding: Spacing.lg,
+    borderRadius: BorderRadius.sm,
+    gap: Spacing.md,
+  },
+  rentalStatsHeader: {
+    flexDirection: "row",
+    alignItems: "center",
+    gap: Spacing.sm,
+  },
+  rentalStatsTitle: {
+    fontSize: 14,
+    fontWeight: "500",
+  },
+  rentalStatsPeriods: {
     flexDirection: "row",
     justifyContent: "space-between",
     alignItems: "center",
   },
-  sectionTitle: {
-    fontSize: 20,
-    fontWeight: "600",
-  },
-  activitiesList: {
-    gap: Spacing.sm,
-  },
-  activityCard: {
-    flexDirection: "row",
-    padding: Spacing.lg,
-    gap: Spacing.md,
-    alignItems: "flex-start",
-  },
-  activityIcon: {
-    marginTop: Spacing.xs,
-  },
-  activityContent: {
+  rentalStatsPeriod: {
     flex: 1,
+    alignItems: "center",
     gap: Spacing.xs,
   },
-  activityText: {
-    fontSize: 15,
-    lineHeight: 20,
-  },
-  activityManager: {
+  rentalStatsPeriodValue: {
+    fontSize: 16,
     fontWeight: "600",
   },
-  activityDate: {
-    fontSize: 13,
+  rentalStatsPeriodLabel: {
+    fontSize: 11,
   },
-  emptyState: {
-    padding: Spacing["3xl"],
-    alignItems: "center",
-    gap: Spacing.lg,
-    borderWidth: 1,
-    borderRadius: 12,
-  },
-  emptyText: {
-    fontSize: 16,
-    textAlign: "center",
+  rentalStatsDivider: {
+    width: 1,
+    height: 30,
   },
   dateRow: {
     flexDirection: "row",
