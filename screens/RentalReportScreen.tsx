@@ -100,17 +100,22 @@ export default function RentalReportScreen() {
       .filter(p => p.type === "refund")
       .reduce((sum, p) => sum + p.amount, 0);
 
-    const totalExpenses = filteredPayments
+    const serviceExpenses = filteredPayments
       .filter(p => p.type === "service_expense")
       .reduce((sum, p) => sum + p.amount, 0);
+
+    const paidCommissionsAmount = filteredCommissions.filter(c => c.status === "paid").reduce((sum, c) => sum + c.amount, 0);
+    const pendingCommissionsAmount = filteredCommissions.filter(c => c.status === "pending").reduce((sum, c) => sum + c.amount, 0);
+
+    const totalExpenses = serviceExpenses + paidCommissionsAmount;
 
     const netRevenue = totalRevenue - totalRefunds - totalExpenses;
 
     const totalReceivers = filteredOrders.reduce((sum, o) => sum + (o.kitCount || 0) + (o.spareReceiverCount || 0), 0);
     const totalTransmitters = filteredOrders.reduce((sum, o) => sum + (o.transmitterCount || 0), 0);
 
-    const pendingCommissions = filteredCommissions.filter(c => c.status === "pending").reduce((sum, c) => sum + c.amount, 0);
-    const paidCommissions = filteredCommissions.filter(c => c.status === "paid").reduce((sum, c) => sum + c.amount, 0);
+    const pendingCommissions = pendingCommissionsAmount;
+    const paidCommissions = paidCommissionsAmount;
 
     const lostCount = filteredLosses.filter(l => l.status === "lost").reduce((sum, l) => sum + l.missingCount, 0);
     const foundCount = filteredLosses.filter(l => l.status === "found").reduce((sum, l) => sum + l.missingCount, 0);
