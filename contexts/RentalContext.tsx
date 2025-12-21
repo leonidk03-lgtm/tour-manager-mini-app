@@ -112,6 +112,7 @@ export interface RentalService {
   price: number;
   commissionPercent: number;
   isActive: boolean;
+  writeoffItemId: string | null;
   createdAt: string;
   updatedAt: string;
 }
@@ -163,7 +164,7 @@ const RentalContext = createContext<RentalContextType | undefined>(undefined);
 
 export function RentalProvider({ children }: { children: ReactNode }) {
   const { user, profile } = useAuth();
-  const { autoWriteoffOnIssue } = useData();
+  const { autoWriteoffOnIssue, autoWriteoffForService } = useData();
   
   const [rentalClients, setRentalClients] = useState<RentalClient[]>([]);
   const [rentalOrders, setRentalOrders] = useState<RentalOrder[]>([]);
@@ -354,6 +355,7 @@ export function RentalProvider({ children }: { children: ReactNode }) {
         price: s.price,
         commissionPercent: s.commission_percent ?? 10,
         isActive: s.is_active,
+        writeoffItemId: s.writeoff_item_id || null,
         createdAt: s.created_at,
         updatedAt: s.updated_at,
       })));
@@ -521,7 +523,17 @@ export function RentalProvider({ children }: { children: ReactNode }) {
     await fetchRentalOrderHistory();
   };
 
-  const saveOrderServices = async (orderId: string, services: { serviceId: string; quantity: number }[]) => {
+  const saveOrderServices = async (orderId: string, services: { serviceId: string; quantity: number }[], isNewOrder: boolean = false) => {
+    const { data: existingData } = await supabase
+      .from('rental_order_services')
+      .select('*')
+      .eq('order_id', orderId);
+    
+    const existingServices = (existingData || []).map(os => ({
+      serviceId: os.service_id,
+      quantity: os.quantity,
+    }));
+    
     await supabase
       .from('rental_order_services')
       .delete()
@@ -546,6 +558,27 @@ export function RentalProvider({ children }: { children: ReactNode }) {
 
       if (error) {
         console.error('Error saving order services:', error);
+      }
+
+      for (const s of services) {
+        const service = rentalServices.find(rs => rs.id === s.serviceId);
+        if (service?.writeoffItemId && s.quantity > 0) {
+          const existingService = existingServices.find(es => es.serviceId === s.serviceId);
+          const previousQty = existingService?.quantity || 0;
+          const newQty = isNewOrder ? s.quantity : (s.quantity - previousQty);
+          
+          if (newQty > 0) {
+            try {
+              await autoWriteoffForService(
+                service.writeoffItemId, 
+                newQty, 
+                `Продажа услуги "${service.name}" (заказ)`
+              );
+            } catch (err) {
+              console.error('Error auto-writeoff for service:', err);
+            }
+          }
+        }
       }
     }
     await fetchRentalOrderServices();
@@ -584,7 +617,7 @@ export function RentalProvider({ children }: { children: ReactNode }) {
     if (error) throw error;
 
     if (services && services.length > 0) {
-      await saveOrderServices(data.id, services);
+      await saveOrderServices(data.id, services, true);
     }
 
     await addOrderHistory(data.id, 'Заказ создан');
@@ -635,7 +668,7 @@ export function RentalProvider({ children }: { children: ReactNode }) {
     if (error) throw error;
 
     if (services !== undefined) {
-      await saveOrderServices(id, services);
+      await saveOrderServices(id, services, false);
     }
 
     const currentOrder = rentalOrders.find(o => o.id === id);
@@ -997,6 +1030,7 @@ export function RentalProvider({ children }: { children: ReactNode }) {
         price: service.price,
         commission_percent: service.commissionPercent ?? 10,
         is_active: service.isActive,
+        writeoff_item_id: service.writeoffItemId,
       })
       .select()
       .single();
@@ -1012,6 +1046,7 @@ export function RentalProvider({ children }: { children: ReactNode }) {
     if (service.price !== undefined) updateData.price = service.price;
     if (service.commissionPercent !== undefined) updateData.commission_percent = service.commissionPercent;
     if (service.isActive !== undefined) updateData.is_active = service.isActive;
+    if (service.writeoffItemId !== undefined) updateData.writeoff_item_id = service.writeoffItemId;
     updateData.updated_at = new Date().toISOString();
 
     const { error } = await supabase

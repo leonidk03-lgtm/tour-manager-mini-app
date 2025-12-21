@@ -38,7 +38,6 @@ export interface AdditionalService {
   name: string;
   price: number;
   isEnabled: boolean;
-  writeoffItemId: string | null;
 }
 
 export interface Expense {
@@ -411,6 +410,7 @@ interface DataContextType {
   addEquipmentMovement: (movement: Omit<EquipmentMovement, 'id' | 'createdAt' | 'managerId' | 'managerName'>) => Promise<void>;
   processAutoWriteoff: (date?: Date) => Promise<{ processed: number; items: Array<{ name: string; quantity: number }> }>;
   autoWriteoffOnIssue: (receiversCount: number, note: string) => Promise<void>;
+  autoWriteoffForService: (itemId: string, quantity: number, note: string) => Promise<void>;
   dispatchMarkEvents: DispatchMarkEvent[];
   addDispatchMarkEvents: (events: Omit<DispatchMarkEvent, 'id' | 'createdAt' | 'managerId' | 'managerName'>[]) => Promise<void>;
   getDispatchStats: (startDate: string, endDate: string, managerId?: string) => Promise<DispatchStats[]>;
@@ -597,7 +597,6 @@ export function DataProvider({ children }: { children: ReactNode }) {
       name: s.name,
       price: Number(s.price),
       isEnabled: s.is_enabled,
-      writeoffItemId: s.writeoff_item_id || null,
     })));
   }, []);
 
@@ -1924,7 +1923,6 @@ export function DataProvider({ children }: { children: ReactNode }) {
           name: service.name,
           price: service.price,
           is_enabled: service.isEnabled,
-          writeoff_item_id: service.writeoffItemId,
         });
 
       if (error) throw error;
@@ -1941,7 +1939,6 @@ export function DataProvider({ children }: { children: ReactNode }) {
       if (service.name !== undefined) updateData.name = service.name;
       if (service.price !== undefined) updateData.price = service.price;
       if (service.isEnabled !== undefined) updateData.is_enabled = service.isEnabled;
-      if (service.writeoffItemId !== undefined) updateData.writeoff_item_id = service.writeoffItemId;
       
       const { error } = await supabase
         .from('additional_services')
@@ -2875,6 +2872,60 @@ export function DataProvider({ children }: { children: ReactNode }) {
     await fetchEquipmentMovements();
   };
 
+  const autoWriteoffForService = async (itemId: string, quantity: number, note: string): Promise<void> => {
+    if (!currentUser) return;
+    if (quantity <= 0) return;
+
+    const { data: itemData } = await supabase
+      .from('equipment_items')
+      .select('*')
+      .eq('id', itemId)
+      .single();
+
+    if (!itemData) {
+      console.error('Item not found for auto-writeoff:', itemId);
+      return;
+    }
+
+    const item = {
+      id: itemData.id,
+      quantity: itemData.quantity || 0,
+      writtenOff: itemData.written_off || 0,
+      name: itemData.name,
+    };
+
+    if (item.quantity <= 0) return;
+
+    const quantityToWriteoff = Math.min(quantity, item.quantity);
+
+    try {
+      const { error } = await supabase.from('equipment_movements').insert({
+        item_id: item.id,
+        type: 'writeoff',
+        quantity: quantityToWriteoff,
+        note: `${note} (${quantityToWriteoff} шт.)`,
+        manager_id: currentUser.id,
+        manager_name: currentUser.name,
+      });
+
+      if (error) throw error;
+
+      await supabase
+        .from('equipment_items')
+        .update({ 
+          quantity: item.quantity - quantityToWriteoff,
+          written_off: item.writtenOff + quantityToWriteoff,
+          updated_at: new Date().toISOString() 
+        })
+        .eq('id', item.id);
+    } catch (err) {
+      console.error(`Error auto-writeoff for service:`, err);
+    }
+
+    await fetchEquipmentItems();
+    await fetchEquipmentMovements();
+  };
+
   const processAutoWriteoff = async (date?: Date): Promise<{ processed: number; items: Array<{ name: string; quantity: number }> }> => {
     if (!currentUser) throw new Error('No user');
 
@@ -3184,6 +3235,7 @@ export function DataProvider({ children }: { children: ReactNode }) {
         addEquipmentMovement,
         processAutoWriteoff,
         autoWriteoffOnIssue,
+        autoWriteoffForService,
         dispatchMarkEvents,
         addDispatchMarkEvents,
         getDispatchStats,

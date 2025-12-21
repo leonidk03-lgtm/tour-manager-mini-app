@@ -1,5 +1,5 @@
 import { useState, useCallback } from "react";
-import { View, StyleSheet, Pressable, Alert, Switch, RefreshControl, TextInput } from "react-native";
+import { View, StyleSheet, Pressable, Alert, Switch, RefreshControl, TextInput, ScrollView } from "react-native";
 import { Icon } from "@/components/Icon";
 import { ThemedText } from "@/components/ThemedText";
 import { ThemedView } from "@/components/ThemedView";
@@ -7,6 +7,7 @@ import { ScreenScrollView } from "@/components/ScreenScrollView";
 import { Spacing, BorderRadius } from "@/constants/theme";
 import { useTheme } from "@/hooks/useTheme";
 import { useRental, RentalService } from "@/contexts/RentalContext";
+import { useData } from "@/contexts/DataContext";
 import { Modal, Platform, KeyboardAvoidingView } from "react-native";
 
 export default function RentalServicesScreen() {
@@ -18,6 +19,7 @@ export default function RentalServicesScreen() {
     deleteRentalService,
     refreshData,
   } = useRental();
+  const { equipmentItems, equipmentCategories } = useData();
 
   const [refreshing, setRefreshing] = useState(false);
   const [modalVisible, setModalVisible] = useState(false);
@@ -25,6 +27,18 @@ export default function RentalServicesScreen() {
   const [serviceName, setServiceName] = useState("");
   const [servicePrice, setServicePrice] = useState("");
   const [serviceCommission, setServiceCommission] = useState("10");
+  const [writeoffItemId, setWriteoffItemId] = useState<string | null>(null);
+  const [itemPickerVisible, setItemPickerVisible] = useState(false);
+
+  const consumableItems = equipmentItems.filter(item => {
+    const category = equipmentCategories.find(c => c.id === item.categoryId);
+    return category?.type === 'consumables';
+  });
+
+  const getItemName = (itemId: string | null) => {
+    if (!itemId) return null;
+    return equipmentItems.find(i => i.id === itemId)?.name || null;
+  };
 
   const onRefresh = useCallback(async () => {
     setRefreshing(true);
@@ -37,6 +51,7 @@ export default function RentalServicesScreen() {
     setServiceName("");
     setServicePrice("");
     setServiceCommission("10");
+    setWriteoffItemId(null);
     setModalVisible(true);
   };
 
@@ -45,6 +60,7 @@ export default function RentalServicesScreen() {
     setServiceName(service.name);
     setServicePrice(service.price.toString());
     setServiceCommission(service.commissionPercent.toString());
+    setWriteoffItemId(service.writeoffItemId);
     setModalVisible(true);
   };
 
@@ -70,10 +86,10 @@ export default function RentalServicesScreen() {
 
     try {
       if (editingService) {
-        await updateRentalService(editingService.id, { name, price, commissionPercent });
+        await updateRentalService(editingService.id, { name, price, commissionPercent, writeoffItemId });
         Alert.alert("Сохранено", "Услуга успешно обновлена");
       } else {
-        await addRentalService({ name, price, commissionPercent, isActive: true });
+        await addRentalService({ name, price, commissionPercent, isActive: true, writeoffItemId });
         Alert.alert("Успешно", "Услуга добавлена");
       }
       setModalVisible(false);
@@ -175,6 +191,14 @@ export default function RentalServicesScreen() {
                         {service.commissionPercent}%
                       </ThemedText>
                     </View>
+                    {service.writeoffItemId ? (
+                      <View style={[styles.writeoffBadge, { backgroundColor: theme.warning + "20" }]}>
+                        <Icon name="package" size={12} color={theme.warning} />
+                        <ThemedText style={[styles.writeoffText, { color: theme.warning }]}>
+                          Списание: {getItemName(service.writeoffItemId)}
+                        </ThemedText>
+                      </View>
+                    ) : null}
                   </View>
                   <Switch
                     value={service.isActive}
@@ -298,6 +322,30 @@ export default function RentalServicesScreen() {
                   keyboardType="numeric"
                 />
               </View>
+
+              <View style={styles.inputGroup}>
+                <ThemedText style={[styles.inputLabel, { color: theme.textSecondary }]}>
+                  Списание со склада
+                </ThemedText>
+                <Pressable
+                  onPress={() => setItemPickerVisible(true)}
+                  style={[
+                    styles.pickerButton,
+                    {
+                      backgroundColor: theme.backgroundSecondary,
+                      borderColor: theme.border,
+                    },
+                  ]}
+                >
+                  <ThemedText style={{ color: writeoffItemId ? theme.text : theme.textTertiary }}>
+                    {writeoffItemId ? getItemName(writeoffItemId) : "Не выбрано"}
+                  </ThemedText>
+                  <Icon name="chevron-down" size={20} color={theme.textSecondary} />
+                </Pressable>
+                <ThemedText style={[styles.inputHint, { color: theme.textTertiary }]}>
+                  При продаже услуги товар автоматически спишется со склада
+                </ThemedText>
+              </View>
             </View>
 
             <View style={styles.modalActions}>
@@ -322,6 +370,71 @@ export default function RentalServicesScreen() {
             </View>
           </View>
         </KeyboardAvoidingView>
+      </Modal>
+
+      <Modal
+        visible={itemPickerVisible}
+        transparent
+        animationType="slide"
+        onRequestClose={() => setItemPickerVisible(false)}
+      >
+        <View style={styles.pickerOverlay}>
+          <View style={[styles.pickerContent, { backgroundColor: theme.backgroundDefault }]}>
+            <View style={styles.pickerHeader}>
+              <ThemedText style={styles.pickerTitle}>Выберите товар</ThemedText>
+              <Pressable onPress={() => setItemPickerVisible(false)}>
+                <Icon name="x" size={24} color={theme.text} />
+              </Pressable>
+            </View>
+            <ScrollView style={styles.pickerList}>
+              <Pressable
+                onPress={() => {
+                  setWriteoffItemId(null);
+                  setItemPickerVisible(false);
+                }}
+                style={[
+                  styles.pickerItem,
+                  {
+                    backgroundColor: !writeoffItemId ? theme.primary + "20" : "transparent",
+                  },
+                ]}
+              >
+                <ThemedText style={{ color: theme.textSecondary }}>Не списывать</ThemedText>
+                {!writeoffItemId ? <Icon name="check" size={20} color={theme.primary} /> : null}
+              </Pressable>
+              {consumableItems.map((item) => (
+                <Pressable
+                  key={item.id}
+                  onPress={() => {
+                    setWriteoffItemId(item.id);
+                    setItemPickerVisible(false);
+                  }}
+                  style={[
+                    styles.pickerItem,
+                    {
+                      backgroundColor: writeoffItemId === item.id ? theme.primary + "20" : "transparent",
+                    },
+                  ]}
+                >
+                  <View>
+                    <ThemedText>{item.name}</ThemedText>
+                    <ThemedText style={[styles.itemQuantity, { color: theme.textSecondary }]}>
+                      На складе: {item.quantity} шт.
+                    </ThemedText>
+                  </View>
+                  {writeoffItemId === item.id ? <Icon name="check" size={20} color={theme.primary} /> : null}
+                </Pressable>
+              ))}
+              {consumableItems.length === 0 ? (
+                <View style={styles.emptyPicker}>
+                  <ThemedText style={{ color: theme.textSecondary, textAlign: "center" }}>
+                    Нет расходных материалов на складе.{"\n"}Добавьте их в разделе "Склад"
+                  </ThemedText>
+                </View>
+              ) : null}
+            </ScrollView>
+          </View>
+        </View>
       </Modal>
     </ScreenScrollView>
   );
@@ -368,7 +481,7 @@ const styles = StyleSheet.create({
   },
   cardHeader: {
     flexDirection: "row",
-    alignItems: "center",
+    alignItems: "flex-start",
     gap: Spacing.md,
   },
   cardTitle: {
@@ -384,6 +497,20 @@ const styles = StyleSheet.create({
     fontSize: 14,
     fontWeight: "500",
   },
+  writeoffBadge: {
+    flexDirection: "row",
+    alignItems: "center",
+    gap: 4,
+    marginTop: Spacing.xs,
+    paddingHorizontal: Spacing.sm,
+    paddingVertical: 2,
+    borderRadius: BorderRadius.xs,
+    alignSelf: "flex-start",
+  },
+  writeoffText: {
+    fontSize: 12,
+    fontWeight: "500",
+  },
   cardActions: {
     flexDirection: "row",
     gap: Spacing.sm,
@@ -395,10 +522,10 @@ const styles = StyleSheet.create({
   actionButton: {
     flexDirection: "row",
     alignItems: "center",
-    gap: Spacing.xs,
-    paddingVertical: Spacing.sm,
     paddingHorizontal: Spacing.md,
-    borderRadius: BorderRadius.xs,
+    paddingVertical: Spacing.sm,
+    borderRadius: BorderRadius.sm,
+    gap: Spacing.xs,
   },
   actionText: {
     fontSize: 14,
@@ -406,8 +533,8 @@ const styles = StyleSheet.create({
   },
   emptyCard: {
     borderWidth: 1,
-    borderRadius: BorderRadius.sm,
     borderStyle: "dashed",
+    borderRadius: BorderRadius.sm,
     padding: Spacing.xl,
     alignItems: "center",
     justifyContent: "center",
@@ -419,32 +546,31 @@ const styles = StyleSheet.create({
   emptyHint: {
     fontSize: 14,
     marginTop: Spacing.xs,
-    textAlign: "center",
   },
   modalOverlay: {
     flex: 1,
     backgroundColor: "rgba(0,0,0,0.5)",
     justifyContent: "center",
-    alignItems: "center",
     padding: Spacing.lg,
   },
   modalContent: {
-    width: "100%",
-    maxWidth: 400,
     borderRadius: BorderRadius.md,
-    padding: Spacing.lg,
+    maxHeight: "90%",
   },
   modalHeader: {
     flexDirection: "row",
     justifyContent: "space-between",
     alignItems: "center",
-    marginBottom: Spacing.lg,
+    padding: Spacing.md,
+    borderBottomWidth: StyleSheet.hairlineWidth,
+    borderBottomColor: "rgba(255,255,255,0.1)",
   },
   modalTitle: {
     fontSize: 18,
     fontWeight: "600",
   },
   modalBody: {
+    padding: Spacing.md,
     gap: Spacing.md,
   },
   inputGroup: {
@@ -460,15 +586,69 @@ const styles = StyleSheet.create({
     padding: Spacing.md,
     fontSize: 16,
   },
+  inputHint: {
+    fontSize: 12,
+    marginTop: 2,
+  },
+  pickerButton: {
+    flexDirection: "row",
+    justifyContent: "space-between",
+    alignItems: "center",
+    borderWidth: 1,
+    borderRadius: BorderRadius.sm,
+    padding: Spacing.md,
+  },
   modalActions: {
     flexDirection: "row",
     gap: Spacing.md,
-    marginTop: Spacing.lg,
+    padding: Spacing.md,
+    borderTopWidth: StyleSheet.hairlineWidth,
+    borderTopColor: "rgba(255,255,255,0.1)",
   },
   modalButton: {
     flex: 1,
-    alignItems: "center",
     paddingVertical: Spacing.md,
     borderRadius: BorderRadius.sm,
+    alignItems: "center",
+  },
+  pickerOverlay: {
+    flex: 1,
+    backgroundColor: "rgba(0,0,0,0.5)",
+    justifyContent: "flex-end",
+  },
+  pickerContent: {
+    borderTopLeftRadius: BorderRadius.lg,
+    borderTopRightRadius: BorderRadius.lg,
+    maxHeight: "70%",
+  },
+  pickerHeader: {
+    flexDirection: "row",
+    justifyContent: "space-between",
+    alignItems: "center",
+    padding: Spacing.md,
+    borderBottomWidth: StyleSheet.hairlineWidth,
+    borderBottomColor: "rgba(255,255,255,0.1)",
+  },
+  pickerTitle: {
+    fontSize: 18,
+    fontWeight: "600",
+  },
+  pickerList: {
+    padding: Spacing.md,
+  },
+  pickerItem: {
+    flexDirection: "row",
+    justifyContent: "space-between",
+    alignItems: "center",
+    padding: Spacing.md,
+    borderRadius: BorderRadius.sm,
+    marginBottom: Spacing.xs,
+  },
+  itemQuantity: {
+    fontSize: 12,
+    marginTop: 2,
+  },
+  emptyPicker: {
+    padding: Spacing.xl,
   },
 });
