@@ -15,6 +15,7 @@ import { Spacing, BorderRadius } from "@/constants/theme";
 import { useTheme } from "@/hooks/useTheme";
 import { useData, EquipmentLoss } from "@/contexts/DataContext";
 import { useAuth } from "@/contexts/AuthContext";
+import { useRental } from "@/contexts/RentalContext";
 
 type FilterType = "all" | "lost" | "found";
 
@@ -28,6 +29,13 @@ export default function EquipmentLossesScreen() {
     markLossAsFound,
     deleteEquipmentLoss,
   } = useData();
+  const { rentalOrders } = useRental();
+  
+  const getOrderNumber = (orderId: string | null | undefined): string | null => {
+    if (!orderId) return null;
+    const order = rentalOrders.find(o => o.id === orderId);
+    return order ? `#${order.orderNumber}` : null;
+  };
   
   const getEquipmentName = (itemId: string | null | undefined): string => {
     if (!itemId) return "Оборудование";
@@ -159,7 +167,9 @@ export default function EquipmentLossesScreen() {
               ]}
             >
               <ThemedText style={[styles.bagNumber, { color: theme.buttonText }]}>
-                {loss.rentalOrderId ? "Аренда" : `Сумка ${loss.bagNumber || "?"}`}
+                {loss.rentalOrderId 
+                  ? `Аренда ${getOrderNumber(loss.rentalOrderId) || ""}` 
+                  : `Сумка ${loss.bagNumber || "?"}`}
               </ThemedText>
             </View>
             <View
