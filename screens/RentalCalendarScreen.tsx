@@ -415,6 +415,7 @@ const styles = StyleSheet.create({
   statValue: {
     fontSize: 24,
     fontWeight: "700",
+    lineHeight: 32,
   },
   statLabel: {
     fontSize: 11,
