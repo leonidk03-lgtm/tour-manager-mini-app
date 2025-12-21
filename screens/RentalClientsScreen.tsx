@@ -112,7 +112,11 @@ export default function RentalClientsScreen() {
 
   const handleSave = async () => {
     if (!formName.trim()) {
-      Alert.alert("Ошибка", "Введите имя клиента");
+      Alert.alert("Ошибка", formType === "company" ? "Введите название компании" : "Введите имя клиента");
+      return;
+    }
+    if (formType === "company" && !formDirectorName.trim()) {
+      Alert.alert("Ошибка", "Введите контактное лицо");
       return;
     }
 
@@ -408,16 +412,44 @@ export default function RentalClientsScreen() {
                 </Pressable>
               </View>
 
-              <ThemedText style={[styles.inputLabel, { color: theme.textSecondary }]}>
-                {formType === "company" ? "Название компании *" : "Имя *"}
-              </ThemedText>
-              <TextInput
-                style={[styles.input, { backgroundColor: theme.backgroundSecondary, color: theme.text }]}
-                value={formName}
-                onChangeText={setFormName}
-                placeholder={formType === "company" ? "ООО Рога и Копыта" : "Иван Иванов"}
-                placeholderTextColor={theme.textSecondary}
-              />
+              {formType === "company" ? (
+                <>
+                  <ThemedText style={[styles.inputLabel, { color: theme.textSecondary }]}>
+                    Контактное лицо *
+                  </ThemedText>
+                  <TextInput
+                    style={[styles.input, { backgroundColor: theme.backgroundSecondary, color: theme.text }]}
+                    value={formDirectorName}
+                    onChangeText={setFormDirectorName}
+                    placeholder="Иван Иванов"
+                    placeholderTextColor={theme.textSecondary}
+                  />
+
+                  <ThemedText style={[styles.inputLabel, { color: theme.textSecondary }]}>
+                    Название компании *
+                  </ThemedText>
+                  <TextInput
+                    style={[styles.input, { backgroundColor: theme.backgroundSecondary, color: theme.text }]}
+                    value={formName}
+                    onChangeText={setFormName}
+                    placeholder="ООО Рога и Копыта"
+                    placeholderTextColor={theme.textSecondary}
+                  />
+                </>
+              ) : (
+                <>
+                  <ThemedText style={[styles.inputLabel, { color: theme.textSecondary }]}>
+                    Имя *
+                  </ThemedText>
+                  <TextInput
+                    style={[styles.input, { backgroundColor: theme.backgroundSecondary, color: theme.text }]}
+                    value={formName}
+                    onChangeText={setFormName}
+                    placeholder="Иван Иванов"
+                    placeholderTextColor={theme.textSecondary}
+                  />
+                </>
+              )}
 
               <ThemedText style={[styles.inputLabel, { color: theme.textSecondary }]}>
                 Телефон
@@ -446,16 +478,6 @@ export default function RentalClientsScreen() {
 
               {formType === "company" ? (
                 <>
-                  <ThemedText style={[styles.inputLabel, { color: theme.textSecondary }]}>
-                    ФИО Директора
-                  </ThemedText>
-                  <TextInput
-                    style={[styles.input, { backgroundColor: theme.backgroundSecondary, color: theme.text }]}
-                    value={formDirectorName}
-                    onChangeText={setFormDirectorName}
-                    placeholder="Иванов Иван Иванович"
-                    placeholderTextColor={theme.textSecondary}
-                  />
 
                   <ThemedText style={[styles.inputLabel, { color: theme.textSecondary }]}>
                     Юридический адрес
