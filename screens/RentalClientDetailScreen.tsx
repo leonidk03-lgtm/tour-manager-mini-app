@@ -53,6 +53,7 @@ export default function RentalClientDetailScreen() {
     rentalClients, 
     rentalOrders, 
     rentalOrderServices,
+    rentalPayments,
     updateRentalClient, 
     deleteRentalClient,
     getClientUnpaidOrders,
@@ -123,12 +124,19 @@ export default function RentalClientDetailScreen() {
 
   const stats = useMemo(() => {
     const totalOrders = clientOrders.length;
-    const totalRevenue = clientOrders
-      .filter(o => o.status !== "cancelled")
+    
+    const clientOrderIds = new Set(clientOrders.map(o => o.id));
+    const paidRevenue = rentalPayments
+      .filter(p => clientOrderIds.has(p.orderId) && p.type !== "refund" && p.type !== "service_expense")
+      .reduce((sum, p) => sum + p.amount, 0);
+    
+    const upcomingRevenue = clientOrders
+      .filter(o => o.status === "new")
       .reduce((sum, o) => sum + o.totalPrice, 0);
+    
     const activeOrders = clientOrders.filter(o => o.status === "issued").length;
-    return { totalOrders, totalRevenue, activeOrders };
-  }, [clientOrders]);
+    return { totalOrders, paidRevenue, upcomingRevenue, activeOrders };
+  }, [clientOrders, rentalPayments]);
 
   const selectedOrdersTotal = useMemo(() => {
     return selectedOrderIds.reduce((sum, orderId) => {
@@ -552,10 +560,10 @@ export default function RentalClientDetailScreen() {
             <View style={[styles.statDivider, { backgroundColor: theme.border }]} />
             <View style={styles.statItem}>
               <ThemedText style={[styles.statValue, { color: theme.success }]}>
-                {stats.totalRevenue.toLocaleString("ru-RU")}₽
+                {stats.paidRevenue.toLocaleString("ru-RU")}₽
               </ThemedText>
               <ThemedText style={[styles.statLabel, { color: theme.textSecondary }]}>
-                Выручка
+                Оплачено
               </ThemedText>
             </View>
             <View style={[styles.statDivider, { backgroundColor: theme.border }]} />
@@ -568,6 +576,15 @@ export default function RentalClientDetailScreen() {
               </ThemedText>
             </View>
           </View>
+          
+          {stats.upcomingRevenue > 0 ? (
+            <View style={[styles.upcomingRow, { backgroundColor: theme.backgroundTertiary }]}>
+              <ThemedText style={{ color: theme.textSecondary }}>Предстоящие заказы:</ThemedText>
+              <ThemedText style={[styles.upcomingValue, { color: "#2196F3" }]}>
+                {stats.upcomingRevenue.toLocaleString("ru-RU")}₽
+              </ThemedText>
+            </View>
+          ) : null}
           <View style={[styles.priceRow, { backgroundColor: theme.backgroundTertiary }]}>
             <ThemedText style={{ color: theme.textSecondary }}>Цена по умолчанию:</ThemedText>
             <ThemedText style={[styles.defaultPrice, { color: theme.primary }]}>
@@ -1368,6 +1385,18 @@ const styles = StyleSheet.create({
     padding: Spacing.sm,
     borderRadius: BorderRadius.md,
     marginTop: Spacing.md,
+  },
+  upcomingRow: {
+    flexDirection: "row",
+    justifyContent: "space-between",
+    alignItems: "center",
+    padding: Spacing.sm,
+    borderRadius: BorderRadius.md,
+    marginTop: Spacing.md,
+  },
+  upcomingValue: {
+    fontSize: 16,
+    fontWeight: "600",
   },
   defaultPrice: {
     fontSize: 18,
