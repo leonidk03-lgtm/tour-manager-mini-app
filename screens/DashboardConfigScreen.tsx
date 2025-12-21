@@ -31,6 +31,7 @@ export default function DashboardConfigScreen() {
         key: def.key,
         label: def.label,
         description: def.description,
+        icon: def.icon,
         visible: existing?.visible ?? true,
         order: existing?.order ?? index,
       };
@@ -114,6 +115,7 @@ export default function DashboardConfigScreen() {
                 key: def.key,
                 label: def.label,
                 description: def.description,
+                icon: def.icon,
                 visible: true,
                 order: index,
               }))
@@ -167,6 +169,10 @@ export default function DashboardConfigScreen() {
                     >
                       <Icon name="chevron-down" size={16} color={theme.textSecondary} />
                     </Pressable>
+                  </View>
+
+                  <View style={[styles.widgetIcon, { backgroundColor: theme.primary + '20' }]}>
+                    <Icon name={widget.icon} size={20} color={available ? theme.primary : theme.textSecondary} />
                   </View>
 
                   <View style={styles.widgetInfo}>
@@ -259,6 +265,13 @@ const styles = StyleSheet.create({
   },
   orderButton: {
     padding: 4,
+  },
+  widgetIcon: {
+    width: 40,
+    height: 40,
+    borderRadius: 10,
+    alignItems: "center",
+    justifyContent: "center",
   },
   widgetInfo: {
     flex: 1,

@@ -183,13 +183,13 @@ export type DashboardWidgetKey =
   | 'today_excursions'
   | 'rental_section';
 
-export const DASHBOARD_WIDGET_DEFINITIONS: { key: DashboardWidgetKey; label: string; description: string }[] = [
-  { key: 'kpi_cards', label: 'KPI карточки', description: 'Прибыль, доход, расходы, участники' },
-  { key: 'period_summary', label: 'Сводка по периодам', description: 'Неделя и месяц' },
-  { key: 'alerts', label: 'Оповещения', description: 'Низкий заряд, запас, просроченные' },
-  { key: 'radio_guides_stats', label: 'Радиогиды', description: 'В работе и утеряно' },
-  { key: 'today_excursions', label: 'Экскурсии на сегодня', description: 'Список экскурсий' },
-  { key: 'rental_section', label: 'Аренда', description: 'Активные заказы аренды' },
+export const DASHBOARD_WIDGET_DEFINITIONS: { key: DashboardWidgetKey; label: string; description: string; icon: string }[] = [
+  { key: 'kpi_cards', label: 'KPI карточки', description: 'Прибыль, доход, расходы, участники', icon: 'bar-chart-2' },
+  { key: 'period_summary', label: 'Сводка по периодам', description: 'Неделя и месяц', icon: 'calendar' },
+  { key: 'alerts', label: 'Оповещения', description: 'Низкий заряд, запас, просроченные', icon: 'alert-triangle' },
+  { key: 'radio_guides_stats', label: 'Радиогиды', description: 'В работе и утеряно', icon: 'radio' },
+  { key: 'today_excursions', label: 'Экскурсии на сегодня', description: 'Список экскурсий', icon: 'map' },
+  { key: 'rental_section', label: 'Аренда', description: 'Активные заказы аренды', icon: 'package' },
 ];
 
 export interface DashboardConfig {

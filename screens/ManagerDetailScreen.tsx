@@ -618,7 +618,15 @@ export default function ManagerDetailScreen() {
               {formatCurrency(stats.totalRevenue)}
             </ThemedText>
             <ThemedText style={[styles.statLabel, { color: theme.textSecondary }]}>
-              Выручка
+              Доход
+            </ThemedText>
+          </ThemedView>
+          <ThemedView style={[styles.statCard, { backgroundColor: theme.backgroundSecondary }]}>
+            <ThemedText style={[styles.statValue, { color: theme.error }]}>
+              {formatCurrency(stats.totalExpenses)}
+            </ThemedText>
+            <ThemedText style={[styles.statLabel, { color: theme.textSecondary }]}>
+              Расход
             </ThemedText>
           </ThemedView>
           <ThemedView style={[styles.statCard, { backgroundColor: theme.backgroundSecondary }]}>
