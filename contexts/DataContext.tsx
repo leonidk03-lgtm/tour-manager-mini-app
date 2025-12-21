@@ -38,6 +38,7 @@ export interface AdditionalService {
   name: string;
   price: number;
   isEnabled: boolean;
+  writeoffItemId: string | null;
 }
 
 export interface Expense {
@@ -596,6 +597,7 @@ export function DataProvider({ children }: { children: ReactNode }) {
       name: s.name,
       price: Number(s.price),
       isEnabled: s.is_enabled,
+      writeoffItemId: s.writeoff_item_id || null,
     })));
   }, []);
 
@@ -1922,6 +1924,7 @@ export function DataProvider({ children }: { children: ReactNode }) {
           name: service.name,
           price: service.price,
           is_enabled: service.isEnabled,
+          writeoff_item_id: service.writeoffItemId,
         });
 
       if (error) throw error;
@@ -1938,6 +1941,7 @@ export function DataProvider({ children }: { children: ReactNode }) {
       if (service.name !== undefined) updateData.name = service.name;
       if (service.price !== undefined) updateData.price = service.price;
       if (service.isEnabled !== undefined) updateData.is_enabled = service.isEnabled;
+      if (service.writeoffItemId !== undefined) updateData.writeoff_item_id = service.writeoffItemId;
       
       const { error } = await supabase
         .from('additional_services')
