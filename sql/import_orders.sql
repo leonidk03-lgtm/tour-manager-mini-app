@@ -1,7 +1,7 @@
--- Import rental orders - simplified without manager matching
--- Manager can be assigned later
+-- Import rental orders - phone matching only
+-- For orders without phone: partial name match with ILIKE
 
--- First, ensure manager_id allows NULL:
+-- Ensure manager_id allows NULL:
 ALTER TABLE rental_orders ALTER COLUMN manager_id DROP NOT NULL;
 
 INSERT INTO rental_orders (
@@ -29,10 +29,7 @@ SELECT
   NOW(),
   NOW()
 FROM rental_clients c
-WHERE (
-  c.name = 'Эдик Заказы для групп'
-  OR c.director_name = 'Эдик Заказы для групп'
-)
+WHERE (c.name ILIKE '%Эдик%' OR c.director_name ILIKE '%Эдик%')
 AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 1273)
 LIMIT 1;
 
@@ -61,10 +58,7 @@ SELECT
   NOW(),
   NOW()
 FROM rental_clients c
-WHERE (
-  c.name = 'Эдик Заказы для групп'
-  OR c.director_name = 'Эдик Заказы для групп'
-)
+WHERE (c.name ILIKE '%Эдик%' OR c.director_name ILIKE '%Эдик%')
 AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 1272)
 LIMIT 1;
 
@@ -93,11 +87,7 @@ SELECT
   NOW(),
   NOW()
 FROM rental_clients c
-WHERE (
-  REPLACE(REPLACE(REPLACE(REPLACE(c.phone, ' ', ''), '-', ''), '(', ''), ')', '') = '+79274111993'
-  OR c.name = 'София'
-  OR c.director_name = 'София'
-)
+WHERE REPLACE(REPLACE(REPLACE(REPLACE(c.phone, ' ', ''), '-', ''), '(', ''), ')', '') = '+79274111993'
 AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 1271)
 LIMIT 1;
 
@@ -126,11 +116,7 @@ SELECT
   NOW(),
   NOW()
 FROM rental_clients c
-WHERE (
-  REPLACE(REPLACE(REPLACE(REPLACE(c.phone, ' ', ''), '-', ''), '(', ''), ')', '') = '+79152964580'
-  OR c.name = 'Арсен (Юнион)'
-  OR c.director_name = 'Арсен (Юнион)'
-)
+WHERE REPLACE(REPLACE(REPLACE(REPLACE(c.phone, ' ', ''), '-', ''), '(', ''), ')', '') = '+79152964580'
 AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 1270)
 LIMIT 1;
 
@@ -159,11 +145,7 @@ SELECT
   NOW(),
   NOW()
 FROM rental_clients c
-WHERE (
-  REPLACE(REPLACE(REPLACE(REPLACE(c.phone, ' ', ''), '-', ''), '(', ''), ')', '') = '+79152964580'
-  OR c.name = 'Арсен (Юнион)'
-  OR c.director_name = 'Арсен (Юнион)'
-)
+WHERE REPLACE(REPLACE(REPLACE(REPLACE(c.phone, ' ', ''), '-', ''), '(', ''), ')', '') = '+79152964580'
 AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 1269)
 LIMIT 1;
 
@@ -192,11 +174,7 @@ SELECT
   NOW(),
   NOW()
 FROM rental_clients c
-WHERE (
-  REPLACE(REPLACE(REPLACE(REPLACE(c.phone, ' ', ''), '-', ''), '(', ''), ')', '') = '+79152964580'
-  OR c.name = 'Арсен (Юнион)'
-  OR c.director_name = 'Арсен (Юнион)'
-)
+WHERE REPLACE(REPLACE(REPLACE(REPLACE(c.phone, ' ', ''), '-', ''), '(', ''), ')', '') = '+79152964580'
 AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 1268)
 LIMIT 1;
 
@@ -225,11 +203,7 @@ SELECT
   NOW(),
   NOW()
 FROM rental_clients c
-WHERE (
-  REPLACE(REPLACE(REPLACE(REPLACE(c.phone, ' ', ''), '-', ''), '(', ''), ')', '') = '+79152964580'
-  OR c.name = 'Арсен (Юнион)'
-  OR c.director_name = 'Арсен (Юнион)'
-)
+WHERE REPLACE(REPLACE(REPLACE(REPLACE(c.phone, ' ', ''), '-', ''), '(', ''), ')', '') = '+79152964580'
 AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 1267)
 LIMIT 1;
 
@@ -258,11 +232,7 @@ SELECT
   NOW(),
   NOW()
 FROM rental_clients c
-WHERE (
-  REPLACE(REPLACE(REPLACE(REPLACE(c.phone, ' ', ''), '-', ''), '(', ''), ')', '') = '+79152964580'
-  OR c.name = 'Арсен (Юнион)'
-  OR c.director_name = 'Арсен (Юнион)'
-)
+WHERE REPLACE(REPLACE(REPLACE(REPLACE(c.phone, ' ', ''), '-', ''), '(', ''), ')', '') = '+79152964580'
 AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 1266)
 LIMIT 1;
 
@@ -291,11 +261,7 @@ SELECT
   NOW(),
   NOW()
 FROM rental_clients c
-WHERE (
-  REPLACE(REPLACE(REPLACE(REPLACE(c.phone, ' ', ''), '-', ''), '(', ''), ')', '') = '+79152964580'
-  OR c.name = 'Арсен (Юнион)'
-  OR c.director_name = 'Арсен (Юнион)'
-)
+WHERE REPLACE(REPLACE(REPLACE(REPLACE(c.phone, ' ', ''), '-', ''), '(', ''), ')', '') = '+79152964580'
 AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 1265)
 LIMIT 1;
 
@@ -324,11 +290,7 @@ SELECT
   NOW(),
   NOW()
 FROM rental_clients c
-WHERE (
-  REPLACE(REPLACE(REPLACE(REPLACE(c.phone, ' ', ''), '-', ''), '(', ''), ')', '') = '+79152964580'
-  OR c.name = 'Арсен (Юнион)'
-  OR c.director_name = 'Арсен (Юнион)'
-)
+WHERE REPLACE(REPLACE(REPLACE(REPLACE(c.phone, ' ', ''), '-', ''), '(', ''), ')', '') = '+79152964580'
 AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 1264)
 LIMIT 1;
 
@@ -357,11 +319,7 @@ SELECT
   NOW(),
   NOW()
 FROM rental_clients c
-WHERE (
-  REPLACE(REPLACE(REPLACE(REPLACE(c.phone, ' ', ''), '-', ''), '(', ''), ')', '') = '+79152964580'
-  OR c.name = 'Арсен (Юнион)'
-  OR c.director_name = 'Арсен (Юнион)'
-)
+WHERE REPLACE(REPLACE(REPLACE(REPLACE(c.phone, ' ', ''), '-', ''), '(', ''), ')', '') = '+79152964580'
 AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 1263)
 LIMIT 1;
 
@@ -390,11 +348,7 @@ SELECT
   NOW(),
   NOW()
 FROM rental_clients c
-WHERE (
-  REPLACE(REPLACE(REPLACE(REPLACE(c.phone, ' ', ''), '-', ''), '(', ''), ')', '') = '+79152964580'
-  OR c.name = 'Арсен (Юнион)'
-  OR c.director_name = 'Арсен (Юнион)'
-)
+WHERE REPLACE(REPLACE(REPLACE(REPLACE(c.phone, ' ', ''), '-', ''), '(', ''), ')', '') = '+79152964580'
 AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 1262)
 LIMIT 1;
 
@@ -423,11 +377,7 @@ SELECT
   NOW(),
   NOW()
 FROM rental_clients c
-WHERE (
-  REPLACE(REPLACE(REPLACE(REPLACE(c.phone, ' ', ''), '-', ''), '(', ''), ')', '') = '+79152964580'
-  OR c.name = 'Арсен (Юнион)'
-  OR c.director_name = 'Арсен (Юнион)'
-)
+WHERE REPLACE(REPLACE(REPLACE(REPLACE(c.phone, ' ', ''), '-', ''), '(', ''), ')', '') = '+79152964580'
 AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 1261)
 LIMIT 1;
 
@@ -456,11 +406,7 @@ SELECT
   NOW(),
   NOW()
 FROM rental_clients c
-WHERE (
-  REPLACE(REPLACE(REPLACE(REPLACE(c.phone, ' ', ''), '-', ''), '(', ''), ')', '') = '+79152964580'
-  OR c.name = 'Арсен (Юнион)'
-  OR c.director_name = 'Арсен (Юнион)'
-)
+WHERE REPLACE(REPLACE(REPLACE(REPLACE(c.phone, ' ', ''), '-', ''), '(', ''), ')', '') = '+79152964580'
 AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 1260)
 LIMIT 1;
 
@@ -489,11 +435,7 @@ SELECT
   NOW(),
   NOW()
 FROM rental_clients c
-WHERE (
-  REPLACE(REPLACE(REPLACE(REPLACE(c.phone, ' ', ''), '-', ''), '(', ''), ')', '') = '+79152964580'
-  OR c.name = 'Арсен (Юнион)'
-  OR c.director_name = 'Арсен (Юнион)'
-)
+WHERE REPLACE(REPLACE(REPLACE(REPLACE(c.phone, ' ', ''), '-', ''), '(', ''), ')', '') = '+79152964580'
 AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 1259)
 LIMIT 1;
 
@@ -522,11 +464,7 @@ SELECT
   NOW(),
   NOW()
 FROM rental_clients c
-WHERE (
-  REPLACE(REPLACE(REPLACE(REPLACE(c.phone, ' ', ''), '-', ''), '(', ''), ')', '') = '+79872750395'
-  OR c.name = 'Зельфира'
-  OR c.director_name = 'Зельфира'
-)
+WHERE REPLACE(REPLACE(REPLACE(REPLACE(c.phone, ' ', ''), '-', ''), '(', ''), ')', '') = '+79872750395'
 AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 1258)
 LIMIT 1;
 
@@ -555,11 +493,7 @@ SELECT
   NOW(),
   NOW()
 FROM rental_clients c
-WHERE (
-  REPLACE(REPLACE(REPLACE(REPLACE(c.phone, ' ', ''), '-', ''), '(', ''), ')', '') = '+79872750395'
-  OR c.name = 'Зельфира'
-  OR c.director_name = 'Зельфира'
-)
+WHERE REPLACE(REPLACE(REPLACE(REPLACE(c.phone, ' ', ''), '-', ''), '(', ''), ')', '') = '+79872750395'
 AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 1257)
 LIMIT 1;
 
@@ -588,11 +522,7 @@ SELECT
   NOW(),
   NOW()
 FROM rental_clients c
-WHERE (
-  REPLACE(REPLACE(REPLACE(REPLACE(c.phone, ' ', ''), '-', ''), '(', ''), ')', '') = '+79872750395'
-  OR c.name = 'Зельфира'
-  OR c.director_name = 'Зельфира'
-)
+WHERE REPLACE(REPLACE(REPLACE(REPLACE(c.phone, ' ', ''), '-', ''), '(', ''), ')', '') = '+79872750395'
 AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 1256)
 LIMIT 1;
 
@@ -621,11 +551,7 @@ SELECT
   NOW(),
   NOW()
 FROM rental_clients c
-WHERE (
-  REPLACE(REPLACE(REPLACE(REPLACE(c.phone, ' ', ''), '-', ''), '(', ''), ')', '') = '+79600523400'
-  OR c.name = 'Эвелина (Инициатива)'
-  OR c.director_name = 'Эвелина (Инициатива)'
-)
+WHERE REPLACE(REPLACE(REPLACE(REPLACE(c.phone, ' ', ''), '-', ''), '(', ''), ')', '') = '+79600523400'
 AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 1255)
 LIMIT 1;
 
@@ -654,11 +580,7 @@ SELECT
   NOW(),
   NOW()
 FROM rental_clients c
-WHERE (
-  REPLACE(REPLACE(REPLACE(REPLACE(c.phone, ' ', ''), '-', ''), '(', ''), ')', '') = '+79600523400'
-  OR c.name = 'Эвелина (Инициатива)'
-  OR c.director_name = 'Эвелина (Инициатива)'
-)
+WHERE REPLACE(REPLACE(REPLACE(REPLACE(c.phone, ' ', ''), '-', ''), '(', ''), ')', '') = '+79600523400'
 AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 1254)
 LIMIT 1;
 
@@ -687,11 +609,7 @@ SELECT
   NOW(),
   NOW()
 FROM rental_clients c
-WHERE (
-  REPLACE(REPLACE(REPLACE(REPLACE(c.phone, ' ', ''), '-', ''), '(', ''), ')', '') = '+79600523400'
-  OR c.name = 'Эвелина (Инициатива)'
-  OR c.director_name = 'Эвелина (Инициатива)'
-)
+WHERE REPLACE(REPLACE(REPLACE(REPLACE(c.phone, ' ', ''), '-', ''), '(', ''), ')', '') = '+79600523400'
 AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 1253)
 LIMIT 1;
 
@@ -720,11 +638,7 @@ SELECT
   NOW(),
   NOW()
 FROM rental_clients c
-WHERE (
-  REPLACE(REPLACE(REPLACE(REPLACE(c.phone, ' ', ''), '-', ''), '(', ''), ')', '') = '+79600523400'
-  OR c.name = 'Эвелина (Инициатива)'
-  OR c.director_name = 'Эвелина (Инициатива)'
-)
+WHERE REPLACE(REPLACE(REPLACE(REPLACE(c.phone, ' ', ''), '-', ''), '(', ''), ')', '') = '+79600523400'
 AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 1252)
 LIMIT 1;
 
@@ -753,11 +667,7 @@ SELECT
   NOW(),
   NOW()
 FROM rental_clients c
-WHERE (
-  REPLACE(REPLACE(REPLACE(REPLACE(c.phone, ' ', ''), '-', ''), '(', ''), ')', '') = '+79600523400'
-  OR c.name = 'Эвелина (Инициатива)'
-  OR c.director_name = 'Эвелина (Инициатива)'
-)
+WHERE REPLACE(REPLACE(REPLACE(REPLACE(c.phone, ' ', ''), '-', ''), '(', ''), ')', '') = '+79600523400'
 AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 1251)
 LIMIT 1;
 
@@ -786,11 +696,7 @@ SELECT
   NOW(),
   NOW()
 FROM rental_clients c
-WHERE (
-  REPLACE(REPLACE(REPLACE(REPLACE(c.phone, ' ', ''), '-', ''), '(', ''), ')', '') = '+79274900014'
-  OR c.name = 'Мария Экскурсовод'
-  OR c.director_name = 'Мария Экскурсовод'
-)
+WHERE REPLACE(REPLACE(REPLACE(REPLACE(c.phone, ' ', ''), '-', ''), '(', ''), ')', '') = '+79274900014'
 AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 1250)
 LIMIT 1;
 
@@ -819,11 +725,7 @@ SELECT
   NOW(),
   NOW()
 FROM rental_clients c
-WHERE (
-  REPLACE(REPLACE(REPLACE(REPLACE(c.phone, ' ', ''), '-', ''), '(', ''), ')', '') = '+79033443111'
-  OR c.name = 'Элина (Сититур)'
-  OR c.director_name = 'Элина (Сититур)'
-)
+WHERE REPLACE(REPLACE(REPLACE(REPLACE(c.phone, ' ', ''), '-', ''), '(', ''), ')', '') = '+79033443111'
 AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 1249)
 LIMIT 1;
 
@@ -852,11 +754,7 @@ SELECT
   NOW(),
   NOW()
 FROM rental_clients c
-WHERE (
-  REPLACE(REPLACE(REPLACE(REPLACE(c.phone, ' ', ''), '-', ''), '(', ''), ')', '') = '+79179062560'
-  OR c.name = 'Ляйсан (Казань 360)'
-  OR c.director_name = 'Ляйсан (Казань 360)'
-)
+WHERE REPLACE(REPLACE(REPLACE(REPLACE(c.phone, ' ', ''), '-', ''), '(', ''), ')', '') = '+79179062560'
 AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 1248)
 LIMIT 1;
 
@@ -885,11 +783,7 @@ SELECT
   NOW(),
   NOW()
 FROM rental_clients c
-WHERE (
-  REPLACE(REPLACE(REPLACE(REPLACE(c.phone, ' ', ''), '-', ''), '(', ''), ')', '') = '+79179062560'
-  OR c.name = 'Ляйсан (Казань 360)'
-  OR c.director_name = 'Ляйсан (Казань 360)'
-)
+WHERE REPLACE(REPLACE(REPLACE(REPLACE(c.phone, ' ', ''), '-', ''), '(', ''), ')', '') = '+79179062560'
 AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 1247)
 LIMIT 1;
 
@@ -918,11 +812,7 @@ SELECT
   NOW(),
   NOW()
 FROM rental_clients c
-WHERE (
-  REPLACE(REPLACE(REPLACE(REPLACE(c.phone, ' ', ''), '-', ''), '(', ''), ')', '') = '+79662409276'
-  OR c.name = 'Мира (ИП)'
-  OR c.director_name = 'Мира (ИП)'
-)
+WHERE REPLACE(REPLACE(REPLACE(REPLACE(c.phone, ' ', ''), '-', ''), '(', ''), ')', '') = '+79662409276'
 AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 1246)
 LIMIT 1;
 
@@ -951,11 +841,7 @@ SELECT
   NOW(),
   NOW()
 FROM rental_clients c
-WHERE (
-  REPLACE(REPLACE(REPLACE(REPLACE(c.phone, ' ', ''), '-', ''), '(', ''), ')', '') = '+79503118747'
-  OR c.name = 'Любовь (ТИЦ)'
-  OR c.director_name = 'Любовь (ТИЦ)'
-)
+WHERE REPLACE(REPLACE(REPLACE(REPLACE(c.phone, ' ', ''), '-', ''), '(', ''), ')', '') = '+79503118747'
 AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 1245)
 LIMIT 1;
 
@@ -984,11 +870,7 @@ SELECT
   NOW(),
   NOW()
 FROM rental_clients c
-WHERE (
-  REPLACE(REPLACE(REPLACE(REPLACE(c.phone, ' ', ''), '-', ''), '(', ''), ')', '') = '+79274900014'
-  OR c.name = 'Мария Экскурсовод'
-  OR c.director_name = 'Мария Экскурсовод'
-)
+WHERE REPLACE(REPLACE(REPLACE(REPLACE(c.phone, ' ', ''), '-', ''), '(', ''), ')', '') = '+79274900014'
 AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 1244)
 LIMIT 1;
 
@@ -1017,11 +899,7 @@ SELECT
   NOW(),
   NOW()
 FROM rental_clients c
-WHERE (
-  REPLACE(REPLACE(REPLACE(REPLACE(c.phone, ' ', ''), '-', ''), '(', ''), ')', '') = '+79274900014'
-  OR c.name = 'Мария Экскурсовод'
-  OR c.director_name = 'Мария Экскурсовод'
-)
+WHERE REPLACE(REPLACE(REPLACE(REPLACE(c.phone, ' ', ''), '-', ''), '(', ''), ')', '') = '+79274900014'
 AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 1243)
 LIMIT 1;
 
@@ -1050,11 +928,7 @@ SELECT
   NOW(),
   NOW()
 FROM rental_clients c
-WHERE (
-  REPLACE(REPLACE(REPLACE(REPLACE(c.phone, ' ', ''), '-', ''), '(', ''), ')', '') = '+79274900014'
-  OR c.name = 'Мария Экскурсовод'
-  OR c.director_name = 'Мария Экскурсовод'
-)
+WHERE REPLACE(REPLACE(REPLACE(REPLACE(c.phone, ' ', ''), '-', ''), '(', ''), ')', '') = '+79274900014'
 AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 1242)
 LIMIT 1;
 
@@ -1083,11 +957,7 @@ SELECT
   NOW(),
   NOW()
 FROM rental_clients c
-WHERE (
-  REPLACE(REPLACE(REPLACE(REPLACE(c.phone, ' ', ''), '-', ''), '(', ''), ')', '') = '+79152964580'
-  OR c.name = 'Арсен (Юнион)'
-  OR c.director_name = 'Арсен (Юнион)'
-)
+WHERE REPLACE(REPLACE(REPLACE(REPLACE(c.phone, ' ', ''), '-', ''), '(', ''), ')', '') = '+79152964580'
 AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 1241)
 LIMIT 1;
 
@@ -1116,11 +986,7 @@ SELECT
   NOW(),
   NOW()
 FROM rental_clients c
-WHERE (
-  REPLACE(REPLACE(REPLACE(REPLACE(c.phone, ' ', ''), '-', ''), '(', ''), ')', '') = '+79172914815'
-  OR c.name = 'Елена (Конгресс Авиа)'
-  OR c.director_name = 'Елена (Конгресс Авиа)'
-)
+WHERE REPLACE(REPLACE(REPLACE(REPLACE(c.phone, ' ', ''), '-', ''), '(', ''), ')', '') = '+79172914815'
 AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 1240)
 LIMIT 1;
 
@@ -1149,11 +1015,7 @@ SELECT
   NOW(),
   NOW()
 FROM rental_clients c
-WHERE (
-  REPLACE(REPLACE(REPLACE(REPLACE(c.phone, ' ', ''), '-', ''), '(', ''), ')', '') = '+79179062560'
-  OR c.name = 'Ляйсан (Казань 360)'
-  OR c.director_name = 'Ляйсан (Казань 360)'
-)
+WHERE REPLACE(REPLACE(REPLACE(REPLACE(c.phone, ' ', ''), '-', ''), '(', ''), ')', '') = '+79179062560'
 AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 1239)
 LIMIT 1;
 
@@ -1182,11 +1044,7 @@ SELECT
   NOW(),
   NOW()
 FROM rental_clients c
-WHERE (
-  REPLACE(REPLACE(REPLACE(REPLACE(c.phone, ' ', ''), '-', ''), '(', ''), ')', '') = '+79179062560'
-  OR c.name = 'Ляйсан (Казань 360)'
-  OR c.director_name = 'Ляйсан (Казань 360)'
-)
+WHERE REPLACE(REPLACE(REPLACE(REPLACE(c.phone, ' ', ''), '-', ''), '(', ''), ')', '') = '+79179062560'
 AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 1238)
 LIMIT 1;
 
@@ -1215,11 +1073,7 @@ SELECT
   NOW(),
   NOW()
 FROM rental_clients c
-WHERE (
-  REPLACE(REPLACE(REPLACE(REPLACE(c.phone, ' ', ''), '-', ''), '(', ''), ')', '') = '+79179221193'
-  OR c.name = 'Карина (технологии путешествий)'
-  OR c.director_name = 'Карина (технологии путешествий)'
-)
+WHERE REPLACE(REPLACE(REPLACE(REPLACE(c.phone, ' ', ''), '-', ''), '(', ''), ')', '') = '+79179221193'
 AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 1237)
 LIMIT 1;
 
@@ -1248,11 +1102,7 @@ SELECT
   NOW(),
   NOW()
 FROM rental_clients c
-WHERE (
-  REPLACE(REPLACE(REPLACE(REPLACE(c.phone, ' ', ''), '-', ''), '(', ''), ')', '') = '+79179062560'
-  OR c.name = 'Ляйсан (Казань 360)'
-  OR c.director_name = 'Ляйсан (Казань 360)'
-)
+WHERE REPLACE(REPLACE(REPLACE(REPLACE(c.phone, ' ', ''), '-', ''), '(', ''), ')', '') = '+79179062560'
 AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 1236)
 LIMIT 1;
 
@@ -1281,11 +1131,7 @@ SELECT
   NOW(),
   NOW()
 FROM rental_clients c
-WHERE (
-  REPLACE(REPLACE(REPLACE(REPLACE(c.phone, ' ', ''), '-', ''), '(', ''), ')', '') = '+79179062560'
-  OR c.name = 'Ляйсан (Казань 360)'
-  OR c.director_name = 'Ляйсан (Казань 360)'
-)
+WHERE REPLACE(REPLACE(REPLACE(REPLACE(c.phone, ' ', ''), '-', ''), '(', ''), ')', '') = '+79179062560'
 AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 1235)
 LIMIT 1;
 
@@ -1314,11 +1160,7 @@ SELECT
   NOW(),
   NOW()
 FROM rental_clients c
-WHERE (
-  REPLACE(REPLACE(REPLACE(REPLACE(c.phone, ' ', ''), '-', ''), '(', ''), ')', '') = '+79179062560'
-  OR c.name = 'Ляйсан (Казань 360)'
-  OR c.director_name = 'Ляйсан (Казань 360)'
-)
+WHERE REPLACE(REPLACE(REPLACE(REPLACE(c.phone, ' ', ''), '-', ''), '(', ''), ')', '') = '+79179062560'
 AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 1234)
 LIMIT 1;
 
@@ -1347,11 +1189,7 @@ SELECT
   NOW(),
   NOW()
 FROM rental_clients c
-WHERE (
-  REPLACE(REPLACE(REPLACE(REPLACE(c.phone, ' ', ''), '-', ''), '(', ''), ')', '') = '+79179062560'
-  OR c.name = 'Ляйсан (Казань 360)'
-  OR c.director_name = 'Ляйсан (Казань 360)'
-)
+WHERE REPLACE(REPLACE(REPLACE(REPLACE(c.phone, ' ', ''), '-', ''), '(', ''), ')', '') = '+79179062560'
 AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 1233)
 LIMIT 1;
 
@@ -1380,10 +1218,7 @@ SELECT
   NOW(),
   NOW()
 FROM rental_clients c
-WHERE (
-  c.name = 'Эдик Заказы для групп'
-  OR c.director_name = 'Эдик Заказы для групп'
-)
+WHERE (c.name ILIKE '%Эдик%' OR c.director_name ILIKE '%Эдик%')
 AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 1232)
 LIMIT 1;
 
@@ -1412,11 +1247,7 @@ SELECT
   NOW(),
   NOW()
 FROM rental_clients c
-WHERE (
-  REPLACE(REPLACE(REPLACE(REPLACE(c.phone, ' ', ''), '-', ''), '(', ''), ')', '') = '+79179062560'
-  OR c.name = 'Ляйсан (Казань 360)'
-  OR c.director_name = 'Ляйсан (Казань 360)'
-)
+WHERE REPLACE(REPLACE(REPLACE(REPLACE(c.phone, ' ', ''), '-', ''), '(', ''), ')', '') = '+79179062560'
 AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 1231)
 LIMIT 1;
 
@@ -1445,11 +1276,7 @@ SELECT
   NOW(),
   NOW()
 FROM rental_clients c
-WHERE (
-  REPLACE(REPLACE(REPLACE(REPLACE(c.phone, ' ', ''), '-', ''), '(', ''), ')', '') = '+79179062560'
-  OR c.name = 'Ляйсан (Казань 360)'
-  OR c.director_name = 'Ляйсан (Казань 360)'
-)
+WHERE REPLACE(REPLACE(REPLACE(REPLACE(c.phone, ' ', ''), '-', ''), '(', ''), ')', '') = '+79179062560'
 AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 1230)
 LIMIT 1;
 
@@ -1478,11 +1305,7 @@ SELECT
   NOW(),
   NOW()
 FROM rental_clients c
-WHERE (
-  REPLACE(REPLACE(REPLACE(REPLACE(c.phone, ' ', ''), '-', ''), '(', ''), ')', '') = '+79179062560'
-  OR c.name = 'Ляйсан (Казань 360)'
-  OR c.director_name = 'Ляйсан (Казань 360)'
-)
+WHERE REPLACE(REPLACE(REPLACE(REPLACE(c.phone, ' ', ''), '-', ''), '(', ''), ')', '') = '+79179062560'
 AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 1229)
 LIMIT 1;
 
@@ -1511,11 +1334,7 @@ SELECT
   NOW(),
   NOW()
 FROM rental_clients c
-WHERE (
-  REPLACE(REPLACE(REPLACE(REPLACE(c.phone, ' ', ''), '-', ''), '(', ''), ')', '') = '+79179062560'
-  OR c.name = 'Ляйсан (Казань 360)'
-  OR c.director_name = 'Ляйсан (Казань 360)'
-)
+WHERE REPLACE(REPLACE(REPLACE(REPLACE(c.phone, ' ', ''), '-', ''), '(', ''), ')', '') = '+79179062560'
 AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 1228)
 LIMIT 1;
 
@@ -1544,11 +1363,7 @@ SELECT
   NOW(),
   NOW()
 FROM rental_clients c
-WHERE (
-  REPLACE(REPLACE(REPLACE(REPLACE(c.phone, ' ', ''), '-', ''), '(', ''), ')', '') = '+79179062560'
-  OR c.name = 'Ляйсан (Казань 360)'
-  OR c.director_name = 'Ляйсан (Казань 360)'
-)
+WHERE REPLACE(REPLACE(REPLACE(REPLACE(c.phone, ' ', ''), '-', ''), '(', ''), ')', '') = '+79179062560'
 AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 1227)
 LIMIT 1;
 
@@ -1577,11 +1392,7 @@ SELECT
   NOW(),
   NOW()
 FROM rental_clients c
-WHERE (
-  REPLACE(REPLACE(REPLACE(REPLACE(c.phone, ' ', ''), '-', ''), '(', ''), ')', '') = '+79179062560'
-  OR c.name = 'Ляйсан (Казань 360)'
-  OR c.director_name = 'Ляйсан (Казань 360)'
-)
+WHERE REPLACE(REPLACE(REPLACE(REPLACE(c.phone, ' ', ''), '-', ''), '(', ''), ')', '') = '+79179062560'
 AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 1226)
 LIMIT 1;
 
@@ -1610,11 +1421,7 @@ SELECT
   NOW(),
   NOW()
 FROM rental_clients c
-WHERE (
-  REPLACE(REPLACE(REPLACE(REPLACE(c.phone, ' ', ''), '-', ''), '(', ''), ')', '') = '+79179062560'
-  OR c.name = 'Ляйсан (Казань 360)'
-  OR c.director_name = 'Ляйсан (Казань 360)'
-)
+WHERE REPLACE(REPLACE(REPLACE(REPLACE(c.phone, ' ', ''), '-', ''), '(', ''), ')', '') = '+79179062560'
 AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 1225)
 LIMIT 1;
 
@@ -1643,11 +1450,7 @@ SELECT
   NOW(),
   NOW()
 FROM rental_clients c
-WHERE (
-  REPLACE(REPLACE(REPLACE(REPLACE(c.phone, ' ', ''), '-', ''), '(', ''), ')', '') = '+79393309448'
-  OR c.name = 'Андрей (Экскурс)'
-  OR c.director_name = 'Андрей (Экскурс)'
-)
+WHERE REPLACE(REPLACE(REPLACE(REPLACE(c.phone, ' ', ''), '-', ''), '(', ''), ')', '') = '+79393309448'
 AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 1224)
 LIMIT 1;
 
@@ -1676,11 +1479,7 @@ SELECT
   NOW(),
   NOW()
 FROM rental_clients c
-WHERE (
-  REPLACE(REPLACE(REPLACE(REPLACE(c.phone, ' ', ''), '-', ''), '(', ''), ')', '') = '+79393309448'
-  OR c.name = 'Андрей (Экскурс)'
-  OR c.director_name = 'Андрей (Экскурс)'
-)
+WHERE REPLACE(REPLACE(REPLACE(REPLACE(c.phone, ' ', ''), '-', ''), '(', ''), ')', '') = '+79393309448'
 AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 1223)
 LIMIT 1;
 
@@ -1709,11 +1508,7 @@ SELECT
   NOW(),
   NOW()
 FROM rental_clients c
-WHERE (
-  REPLACE(REPLACE(REPLACE(REPLACE(c.phone, ' ', ''), '-', ''), '(', ''), ')', '') = '+79046623179'
-  OR c.name = 'Екатерина Кореева'
-  OR c.director_name = 'Екатерина Кореева'
-)
+WHERE REPLACE(REPLACE(REPLACE(REPLACE(c.phone, ' ', ''), '-', ''), '(', ''), ')', '') = '+79046623179'
 AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 1222)
 LIMIT 1;
 
@@ -1742,11 +1537,7 @@ SELECT
   NOW(),
   NOW()
 FROM rental_clients c
-WHERE (
-  REPLACE(REPLACE(REPLACE(REPLACE(c.phone, ' ', ''), '-', ''), '(', ''), ')', '') = '+79033449007'
-  OR c.name = 'Искандер'
-  OR c.director_name = 'Искандер'
-)
+WHERE REPLACE(REPLACE(REPLACE(REPLACE(c.phone, ' ', ''), '-', ''), '(', ''), ')', '') = '+79033449007'
 AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 1221)
 LIMIT 1;
 
@@ -1775,11 +1566,7 @@ SELECT
   NOW(),
   NOW()
 FROM rental_clients c
-WHERE (
-  REPLACE(REPLACE(REPLACE(REPLACE(c.phone, ' ', ''), '-', ''), '(', ''), ')', '') = '+79006000057'
-  OR c.name = 'Ольга'
-  OR c.director_name = 'Ольга'
-)
+WHERE REPLACE(REPLACE(REPLACE(REPLACE(c.phone, ' ', ''), '-', ''), '(', ''), ')', '') = '+79006000057'
 AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 1220)
 LIMIT 1;
 
@@ -1808,11 +1595,7 @@ SELECT
   NOW(),
   NOW()
 FROM rental_clients c
-WHERE (
-  REPLACE(REPLACE(REPLACE(REPLACE(c.phone, ' ', ''), '-', ''), '(', ''), ')', '') = '+79600336033'
-  OR c.name = 'Галия'
-  OR c.director_name = 'Галия'
-)
+WHERE REPLACE(REPLACE(REPLACE(REPLACE(c.phone, ' ', ''), '-', ''), '(', ''), ')', '') = '+79600336033'
 AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 1219)
 LIMIT 1;
 
@@ -1841,11 +1624,7 @@ SELECT
   NOW(),
   NOW()
 FROM rental_clients c
-WHERE (
-  REPLACE(REPLACE(REPLACE(REPLACE(c.phone, ' ', ''), '-', ''), '(', ''), ')', '') = '+79393309448'
-  OR c.name = 'Андрей (Экскурс)'
-  OR c.director_name = 'Андрей (Экскурс)'
-)
+WHERE REPLACE(REPLACE(REPLACE(REPLACE(c.phone, ' ', ''), '-', ''), '(', ''), ')', '') = '+79393309448'
 AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 1218)
 LIMIT 1;
 
@@ -1874,11 +1653,7 @@ SELECT
   NOW(),
   NOW()
 FROM rental_clients c
-WHERE (
-  REPLACE(REPLACE(REPLACE(REPLACE(c.phone, ' ', ''), '-', ''), '(', ''), ')', '') = '+79872961933'
-  OR c.name = 'Айгуль Файзуллина'
-  OR c.director_name = 'Айгуль Файзуллина'
-)
+WHERE REPLACE(REPLACE(REPLACE(REPLACE(c.phone, ' ', ''), '-', ''), '(', ''), ')', '') = '+79872961933'
 AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 1217)
 LIMIT 1;
 
@@ -1907,11 +1682,7 @@ SELECT
   NOW(),
   NOW()
 FROM rental_clients c
-WHERE (
-  REPLACE(REPLACE(REPLACE(REPLACE(c.phone, ' ', ''), '-', ''), '(', ''), ')', '') = '+79179142756'
-  OR c.name = 'Татьяна (Гольфстрим)'
-  OR c.director_name = 'Татьяна (Гольфстрим)'
-)
+WHERE REPLACE(REPLACE(REPLACE(REPLACE(c.phone, ' ', ''), '-', ''), '(', ''), ')', '') = '+79179142756'
 AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 1216)
 LIMIT 1;
 
@@ -1940,11 +1711,7 @@ SELECT
   NOW(),
   NOW()
 FROM rental_clients c
-WHERE (
-  REPLACE(REPLACE(REPLACE(REPLACE(c.phone, ' ', ''), '-', ''), '(', ''), ')', '') = '+79376252850'
-  OR c.name = 'Ленар (ИП Ножкин)'
-  OR c.director_name = 'Ленар (ИП Ножкин)'
-)
+WHERE REPLACE(REPLACE(REPLACE(REPLACE(c.phone, ' ', ''), '-', ''), '(', ''), ')', '') = '+79376252850'
 AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 1215)
 LIMIT 1;
 
@@ -1973,11 +1740,7 @@ SELECT
   NOW(),
   NOW()
 FROM rental_clients c
-WHERE (
-  REPLACE(REPLACE(REPLACE(REPLACE(c.phone, ' ', ''), '-', ''), '(', ''), ')', '') = '+79600336033'
-  OR c.name = 'Галия'
-  OR c.director_name = 'Галия'
-)
+WHERE REPLACE(REPLACE(REPLACE(REPLACE(c.phone, ' ', ''), '-', ''), '(', ''), ')', '') = '+79600336033'
 AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 1214)
 LIMIT 1;
 
@@ -2006,11 +1769,7 @@ SELECT
   NOW(),
   NOW()
 FROM rental_clients c
-WHERE (
-  REPLACE(REPLACE(REPLACE(REPLACE(c.phone, ' ', ''), '-', ''), '(', ''), ')', '') = '+79872904401'
-  OR c.name = 'Галина (Тур Урал)'
-  OR c.director_name = 'Галина (Тур Урал)'
-)
+WHERE REPLACE(REPLACE(REPLACE(REPLACE(c.phone, ' ', ''), '-', ''), '(', ''), ')', '') = '+79872904401'
 AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 1212)
 LIMIT 1;
 
@@ -2039,11 +1798,7 @@ SELECT
   NOW(),
   NOW()
 FROM rental_clients c
-WHERE (
-  REPLACE(REPLACE(REPLACE(REPLACE(c.phone, ' ', ''), '-', ''), '(', ''), ')', '') = '+79872904401'
-  OR c.name = 'Галина (Тур Урал)'
-  OR c.director_name = 'Галина (Тур Урал)'
-)
+WHERE REPLACE(REPLACE(REPLACE(REPLACE(c.phone, ' ', ''), '-', ''), '(', ''), ')', '') = '+79872904401'
 AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 1211)
 LIMIT 1;
 
@@ -2072,11 +1827,7 @@ SELECT
   NOW(),
   NOW()
 FROM rental_clients c
-WHERE (
-  REPLACE(REPLACE(REPLACE(REPLACE(c.phone, ' ', ''), '-', ''), '(', ''), ')', '') = '+79872904401'
-  OR c.name = 'Галина (Тур Урал)'
-  OR c.director_name = 'Галина (Тур Урал)'
-)
+WHERE REPLACE(REPLACE(REPLACE(REPLACE(c.phone, ' ', ''), '-', ''), '(', ''), ')', '') = '+79872904401'
 AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 1210)
 LIMIT 1;
 
@@ -2105,11 +1856,7 @@ SELECT
   NOW(),
   NOW()
 FROM rental_clients c
-WHERE (
-  REPLACE(REPLACE(REPLACE(REPLACE(c.phone, ' ', ''), '-', ''), '(', ''), ')', '') = '+79872904401'
-  OR c.name = 'Галина (Тур Урал)'
-  OR c.director_name = 'Галина (Тур Урал)'
-)
+WHERE REPLACE(REPLACE(REPLACE(REPLACE(c.phone, ' ', ''), '-', ''), '(', ''), ')', '') = '+79872904401'
 AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 1209)
 LIMIT 1;
 
@@ -2138,11 +1885,7 @@ SELECT
   NOW(),
   NOW()
 FROM rental_clients c
-WHERE (
-  REPLACE(REPLACE(REPLACE(REPLACE(c.phone, ' ', ''), '-', ''), '(', ''), ')', '') = '+79872904401'
-  OR c.name = 'Галина (Тур Урал)'
-  OR c.director_name = 'Галина (Тур Урал)'
-)
+WHERE REPLACE(REPLACE(REPLACE(REPLACE(c.phone, ' ', ''), '-', ''), '(', ''), ')', '') = '+79872904401'
 AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 1208)
 LIMIT 1;
 
@@ -2171,11 +1914,7 @@ SELECT
   NOW(),
   NOW()
 FROM rental_clients c
-WHERE (
-  REPLACE(REPLACE(REPLACE(REPLACE(c.phone, ' ', ''), '-', ''), '(', ''), ')', '') = '+79872904401'
-  OR c.name = 'Галина (Тур Урал)'
-  OR c.director_name = 'Галина (Тур Урал)'
-)
+WHERE REPLACE(REPLACE(REPLACE(REPLACE(c.phone, ' ', ''), '-', ''), '(', ''), ')', '') = '+79872904401'
 AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 1207)
 LIMIT 1;
 
@@ -2204,11 +1943,7 @@ SELECT
   NOW(),
   NOW()
 FROM rental_clients c
-WHERE (
-  REPLACE(REPLACE(REPLACE(REPLACE(c.phone, ' ', ''), '-', ''), '(', ''), ')', '') = '+79872904401'
-  OR c.name = 'Галина (Тур Урал)'
-  OR c.director_name = 'Галина (Тур Урал)'
-)
+WHERE REPLACE(REPLACE(REPLACE(REPLACE(c.phone, ' ', ''), '-', ''), '(', ''), ')', '') = '+79872904401'
 AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 1206)
 LIMIT 1;
 
@@ -2237,10 +1972,7 @@ SELECT
   NOW(),
   NOW()
 FROM rental_clients c
-WHERE (
-  c.name = 'Эдик Заказы для групп'
-  OR c.director_name = 'Эдик Заказы для групп'
-)
+WHERE (c.name ILIKE '%Эдик%' OR c.director_name ILIKE '%Эдик%')
 AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 1205)
 LIMIT 1;
 
@@ -2269,11 +2001,7 @@ SELECT
   NOW(),
   NOW()
 FROM rental_clients c
-WHERE (
-  REPLACE(REPLACE(REPLACE(REPLACE(c.phone, ' ', ''), '-', ''), '(', ''), ')', '') = '+79112872606'
-  OR c.name = 'Александр Романов'
-  OR c.director_name = 'Александр Романов'
-)
+WHERE REPLACE(REPLACE(REPLACE(REPLACE(c.phone, ' ', ''), '-', ''), '(', ''), ')', '') = '+79112872606'
 AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 1204)
 LIMIT 1;
 
@@ -2302,11 +2030,7 @@ SELECT
   NOW(),
   NOW()
 FROM rental_clients c
-WHERE (
-  REPLACE(REPLACE(REPLACE(REPLACE(c.phone, ' ', ''), '-', ''), '(', ''), ')', '') = '+79179062560'
-  OR c.name = 'Ляйсан (Казань 360)'
-  OR c.director_name = 'Ляйсан (Казань 360)'
-)
+WHERE REPLACE(REPLACE(REPLACE(REPLACE(c.phone, ' ', ''), '-', ''), '(', ''), ')', '') = '+79179062560'
 AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 1203)
 LIMIT 1;
 
@@ -2335,11 +2059,7 @@ SELECT
   NOW(),
   NOW()
 FROM rental_clients c
-WHERE (
-  REPLACE(REPLACE(REPLACE(REPLACE(c.phone, ' ', ''), '-', ''), '(', ''), ')', '') = '+79152964580'
-  OR c.name = 'Арсен (Юнион)'
-  OR c.director_name = 'Арсен (Юнион)'
-)
+WHERE REPLACE(REPLACE(REPLACE(REPLACE(c.phone, ' ', ''), '-', ''), '(', ''), ')', '') = '+79152964580'
 AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 1202)
 LIMIT 1;
 
@@ -2368,10 +2088,7 @@ SELECT
   NOW(),
   NOW()
 FROM rental_clients c
-WHERE (
-  c.name = 'Эдик Заказы для групп'
-  OR c.director_name = 'Эдик Заказы для групп'
-)
+WHERE (c.name ILIKE '%Эдик%' OR c.director_name ILIKE '%Эдик%')
 AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 1201)
 LIMIT 1;
 
@@ -2400,11 +2117,7 @@ SELECT
   NOW(),
   NOW()
 FROM rental_clients c
-WHERE (
-  REPLACE(REPLACE(REPLACE(REPLACE(c.phone, ' ', ''), '-', ''), '(', ''), ')', '') = '+79950953373'
-  OR c.name = 'Екатерина'
-  OR c.director_name = 'Екатерина'
-)
+WHERE REPLACE(REPLACE(REPLACE(REPLACE(c.phone, ' ', ''), '-', ''), '(', ''), ')', '') = '+79950953373'
 AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 1200)
 LIMIT 1;
 
@@ -2433,10 +2146,7 @@ SELECT
   NOW(),
   NOW()
 FROM rental_clients c
-WHERE (
-  c.name = 'Эдик Заказы для групп'
-  OR c.director_name = 'Эдик Заказы для групп'
-)
+WHERE (c.name ILIKE '%Эдик%' OR c.director_name ILIKE '%Эдик%')
 AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 1199)
 LIMIT 1;
 
@@ -2465,11 +2175,7 @@ SELECT
   NOW(),
   NOW()
 FROM rental_clients c
-WHERE (
-  REPLACE(REPLACE(REPLACE(REPLACE(c.phone, ' ', ''), '-', ''), '(', ''), ')', '') = '+79659400307'
-  OR c.name = 'Зульхиза Кутлучурина'
-  OR c.director_name = 'Зульхиза Кутлучурина'
-)
+WHERE REPLACE(REPLACE(REPLACE(REPLACE(c.phone, ' ', ''), '-', ''), '(', ''), ')', '') = '+79659400307'
 AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 1198)
 LIMIT 1;
 
@@ -2498,11 +2204,7 @@ SELECT
   NOW(),
   NOW()
 FROM rental_clients c
-WHERE (
-  REPLACE(REPLACE(REPLACE(REPLACE(c.phone, ' ', ''), '-', ''), '(', ''), ')', '') = '+79872904401'
-  OR c.name = 'Галина (Тур Урал)'
-  OR c.director_name = 'Галина (Тур Урал)'
-)
+WHERE REPLACE(REPLACE(REPLACE(REPLACE(c.phone, ' ', ''), '-', ''), '(', ''), ')', '') = '+79872904401'
 AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 1197)
 LIMIT 1;
 
@@ -2531,11 +2233,7 @@ SELECT
   NOW(),
   NOW()
 FROM rental_clients c
-WHERE (
-  REPLACE(REPLACE(REPLACE(REPLACE(c.phone, ' ', ''), '-', ''), '(', ''), ')', '') = '+79659400307'
-  OR c.name = 'Зульхиза Кутлучурина'
-  OR c.director_name = 'Зульхиза Кутлучурина'
-)
+WHERE REPLACE(REPLACE(REPLACE(REPLACE(c.phone, ' ', ''), '-', ''), '(', ''), ')', '') = '+79659400307'
 AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 1196)
 LIMIT 1;
 
@@ -2564,11 +2262,7 @@ SELECT
   NOW(),
   NOW()
 FROM rental_clients c
-WHERE (
-  REPLACE(REPLACE(REPLACE(REPLACE(c.phone, ' ', ''), '-', ''), '(', ''), ')', '') = '+79068185524'
-  OR c.name = 'Артем Агафонов'
-  OR c.director_name = 'Артем Агафонов'
-)
+WHERE REPLACE(REPLACE(REPLACE(REPLACE(c.phone, ' ', ''), '-', ''), '(', ''), ')', '') = '+79068185524'
 AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 1195)
 LIMIT 1;
 
@@ -2597,11 +2291,7 @@ SELECT
   NOW(),
   NOW()
 FROM rental_clients c
-WHERE (
-  REPLACE(REPLACE(REPLACE(REPLACE(c.phone, ' ', ''), '-', ''), '(', ''), ')', '') = '+79179142756'
-  OR c.name = 'Татьяна (Гольфстрим)'
-  OR c.director_name = 'Татьяна (Гольфстрим)'
-)
+WHERE REPLACE(REPLACE(REPLACE(REPLACE(c.phone, ' ', ''), '-', ''), '(', ''), ')', '') = '+79179142756'
 AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 1194)
 LIMIT 1;
 
@@ -2630,11 +2320,7 @@ SELECT
   NOW(),
   NOW()
 FROM rental_clients c
-WHERE (
-  REPLACE(REPLACE(REPLACE(REPLACE(c.phone, ' ', ''), '-', ''), '(', ''), ')', '') = '+79179062560'
-  OR c.name = 'Ляйсан (Казань 360)'
-  OR c.director_name = 'Ляйсан (Казань 360)'
-)
+WHERE REPLACE(REPLACE(REPLACE(REPLACE(c.phone, ' ', ''), '-', ''), '(', ''), ')', '') = '+79179062560'
 AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 1193)
 LIMIT 1;
 
@@ -2663,11 +2349,7 @@ SELECT
   NOW(),
   NOW()
 FROM rental_clients c
-WHERE (
-  REPLACE(REPLACE(REPLACE(REPLACE(c.phone, ' ', ''), '-', ''), '(', ''), ')', '') = '+79503118747'
-  OR c.name = 'Любовь (ТИЦ)'
-  OR c.director_name = 'Любовь (ТИЦ)'
-)
+WHERE REPLACE(REPLACE(REPLACE(REPLACE(c.phone, ' ', ''), '-', ''), '(', ''), ')', '') = '+79503118747'
 AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 1192)
 LIMIT 1;
 
@@ -2696,11 +2378,7 @@ SELECT
   NOW(),
   NOW()
 FROM rental_clients c
-WHERE (
-  REPLACE(REPLACE(REPLACE(REPLACE(c.phone, ' ', ''), '-', ''), '(', ''), ')', '') = '+79503118747'
-  OR c.name = 'Любовь (ТИЦ)'
-  OR c.director_name = 'Любовь (ТИЦ)'
-)
+WHERE REPLACE(REPLACE(REPLACE(REPLACE(c.phone, ' ', ''), '-', ''), '(', ''), ')', '') = '+79503118747'
 AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 1191)
 LIMIT 1;
 
@@ -2729,11 +2407,7 @@ SELECT
   NOW(),
   NOW()
 FROM rental_clients c
-WHERE (
-  REPLACE(REPLACE(REPLACE(REPLACE(c.phone, ' ', ''), '-', ''), '(', ''), ')', '') = '+79046699399'
-  OR c.name = 'Альберт (КТ)'
-  OR c.director_name = 'Альберт (КТ)'
-)
+WHERE REPLACE(REPLACE(REPLACE(REPLACE(c.phone, ' ', ''), '-', ''), '(', ''), ')', '') = '+79046699399'
 AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 1190)
 LIMIT 1;
 
@@ -2762,10 +2436,7 @@ SELECT
   NOW(),
   NOW()
 FROM rental_clients c
-WHERE (
-  c.name = 'Эдик Заказы для групп'
-  OR c.director_name = 'Эдик Заказы для групп'
-)
+WHERE (c.name ILIKE '%Эдик%' OR c.director_name ILIKE '%Эдик%')
 AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 1189)
 LIMIT 1;
 
@@ -2794,11 +2465,7 @@ SELECT
   NOW(),
   NOW()
 FROM rental_clients c
-WHERE (
-  REPLACE(REPLACE(REPLACE(REPLACE(c.phone, ' ', ''), '-', ''), '(', ''), ')', '') = '+79503118747'
-  OR c.name = 'Любовь (ТИЦ)'
-  OR c.director_name = 'Любовь (ТИЦ)'
-)
+WHERE REPLACE(REPLACE(REPLACE(REPLACE(c.phone, ' ', ''), '-', ''), '(', ''), ')', '') = '+79503118747'
 AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 1188)
 LIMIT 1;
 
@@ -2827,11 +2494,7 @@ SELECT
   NOW(),
   NOW()
 FROM rental_clients c
-WHERE (
-  REPLACE(REPLACE(REPLACE(REPLACE(c.phone, ' ', ''), '-', ''), '(', ''), ')', '') = '+79152964580'
-  OR c.name = 'Арсен (Юнион)'
-  OR c.director_name = 'Арсен (Юнион)'
-)
+WHERE REPLACE(REPLACE(REPLACE(REPLACE(c.phone, ' ', ''), '-', ''), '(', ''), ')', '') = '+79152964580'
 AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 1187)
 LIMIT 1;
 
@@ -2860,11 +2523,7 @@ SELECT
   NOW(),
   NOW()
 FROM rental_clients c
-WHERE (
-  REPLACE(REPLACE(REPLACE(REPLACE(c.phone, ' ', ''), '-', ''), '(', ''), ')', '') = '+79152964580'
-  OR c.name = 'Арсен (Юнион)'
-  OR c.director_name = 'Арсен (Юнион)'
-)
+WHERE REPLACE(REPLACE(REPLACE(REPLACE(c.phone, ' ', ''), '-', ''), '(', ''), ')', '') = '+79152964580'
 AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 1186)
 LIMIT 1;
 
@@ -2893,11 +2552,7 @@ SELECT
   NOW(),
   NOW()
 FROM rental_clients c
-WHERE (
-  REPLACE(REPLACE(REPLACE(REPLACE(c.phone, ' ', ''), '-', ''), '(', ''), ')', '') = '+79050249197'
-  OR c.name = 'Ирина (Иль Мио Тур)'
-  OR c.director_name = 'Ирина (Иль Мио Тур)'
-)
+WHERE REPLACE(REPLACE(REPLACE(REPLACE(c.phone, ' ', ''), '-', ''), '(', ''), ')', '') = '+79050249197'
 AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 1185)
 LIMIT 1;
 
@@ -2926,11 +2581,7 @@ SELECT
   NOW(),
   NOW()
 FROM rental_clients c
-WHERE (
-  REPLACE(REPLACE(REPLACE(REPLACE(c.phone, ' ', ''), '-', ''), '(', ''), ')', '') = '+79872750395'
-  OR c.name = 'Зельфира'
-  OR c.director_name = 'Зельфира'
-)
+WHERE REPLACE(REPLACE(REPLACE(REPLACE(c.phone, ' ', ''), '-', ''), '(', ''), ')', '') = '+79872750395'
 AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 1184)
 LIMIT 1;
 
@@ -2959,11 +2610,7 @@ SELECT
   NOW(),
   NOW()
 FROM rental_clients c
-WHERE (
-  REPLACE(REPLACE(REPLACE(REPLACE(c.phone, ' ', ''), '-', ''), '(', ''), ')', '') = '+79872750395'
-  OR c.name = 'Зельфира'
-  OR c.director_name = 'Зельфира'
-)
+WHERE REPLACE(REPLACE(REPLACE(REPLACE(c.phone, ' ', ''), '-', ''), '(', ''), ')', '') = '+79872750395'
 AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 1183)
 LIMIT 1;
 
@@ -2992,11 +2639,7 @@ SELECT
   NOW(),
   NOW()
 FROM rental_clients c
-WHERE (
-  REPLACE(REPLACE(REPLACE(REPLACE(c.phone, ' ', ''), '-', ''), '(', ''), ')', '') = '+79277213758'
-  OR c.name = 'Любовь Ким'
-  OR c.director_name = 'Любовь Ким'
-)
+WHERE REPLACE(REPLACE(REPLACE(REPLACE(c.phone, ' ', ''), '-', ''), '(', ''), ')', '') = '+79277213758'
 AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 1182)
 LIMIT 1;
 
@@ -3025,11 +2668,7 @@ SELECT
   NOW(),
   NOW()
 FROM rental_clients c
-WHERE (
-  REPLACE(REPLACE(REPLACE(REPLACE(c.phone, ' ', ''), '-', ''), '(', ''), ')', '') = '+79033449007'
-  OR c.name = 'Искандер'
-  OR c.director_name = 'Искандер'
-)
+WHERE REPLACE(REPLACE(REPLACE(REPLACE(c.phone, ' ', ''), '-', ''), '(', ''), ')', '') = '+79033449007'
 AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 1181)
 LIMIT 1;
 
@@ -3058,11 +2697,7 @@ SELECT
   NOW(),
   NOW()
 FROM rental_clients c
-WHERE (
-  REPLACE(REPLACE(REPLACE(REPLACE(c.phone, ' ', ''), '-', ''), '(', ''), ')', '') = '+79503118747'
-  OR c.name = 'Любовь (ТИЦ)'
-  OR c.director_name = 'Любовь (ТИЦ)'
-)
+WHERE REPLACE(REPLACE(REPLACE(REPLACE(c.phone, ' ', ''), '-', ''), '(', ''), ')', '') = '+79503118747'
 AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 1180)
 LIMIT 1;
 
@@ -3091,11 +2726,7 @@ SELECT
   NOW(),
   NOW()
 FROM rental_clients c
-WHERE (
-  REPLACE(REPLACE(REPLACE(REPLACE(c.phone, ' ', ''), '-', ''), '(', ''), ')', '') = '+79274900014'
-  OR c.name = 'Мария Экскурсовод'
-  OR c.director_name = 'Мария Экскурсовод'
-)
+WHERE REPLACE(REPLACE(REPLACE(REPLACE(c.phone, ' ', ''), '-', ''), '(', ''), ')', '') = '+79274900014'
 AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 1179)
 LIMIT 1;
 
@@ -3124,11 +2755,7 @@ SELECT
   NOW(),
   NOW()
 FROM rental_clients c
-WHERE (
-  REPLACE(REPLACE(REPLACE(REPLACE(c.phone, ' ', ''), '-', ''), '(', ''), ')', '') = '+79046699399'
-  OR c.name = 'Альберт (КТ)'
-  OR c.director_name = 'Альберт (КТ)'
-)
+WHERE REPLACE(REPLACE(REPLACE(REPLACE(c.phone, ' ', ''), '-', ''), '(', ''), ')', '') = '+79046699399'
 AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 1178)
 LIMIT 1;
 
@@ -3157,11 +2784,7 @@ SELECT
   NOW(),
   NOW()
 FROM rental_clients c
-WHERE (
-  REPLACE(REPLACE(REPLACE(REPLACE(c.phone, ' ', ''), '-', ''), '(', ''), ')', '') = '+79170779471'
-  OR c.name = 'Ольга Лотова'
-  OR c.director_name = 'Ольга Лотова'
-)
+WHERE REPLACE(REPLACE(REPLACE(REPLACE(c.phone, ' ', ''), '-', ''), '(', ''), ')', '') = '+79170779471'
 AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 1177)
 LIMIT 1;
 
@@ -3190,11 +2813,7 @@ SELECT
   NOW(),
   NOW()
 FROM rental_clients c
-WHERE (
-  REPLACE(REPLACE(REPLACE(REPLACE(c.phone, ' ', ''), '-', ''), '(', ''), ')', '') = '+79046699399'
-  OR c.name = 'Альберт (КТ)'
-  OR c.director_name = 'Альберт (КТ)'
-)
+WHERE REPLACE(REPLACE(REPLACE(REPLACE(c.phone, ' ', ''), '-', ''), '(', ''), ')', '') = '+79046699399'
 AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 1176)
 LIMIT 1;
 
@@ -3223,11 +2842,7 @@ SELECT
   NOW(),
   NOW()
 FROM rental_clients c
-WHERE (
-  REPLACE(REPLACE(REPLACE(REPLACE(c.phone, ' ', ''), '-', ''), '(', ''), ')', '') = '+79179142756'
-  OR c.name = 'Татьяна (Гольфстрим)'
-  OR c.director_name = 'Татьяна (Гольфстрим)'
-)
+WHERE REPLACE(REPLACE(REPLACE(REPLACE(c.phone, ' ', ''), '-', ''), '(', ''), ')', '') = '+79179142756'
 AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 1175)
 LIMIT 1;
 
@@ -3256,11 +2871,7 @@ SELECT
   NOW(),
   NOW()
 FROM rental_clients c
-WHERE (
-  REPLACE(REPLACE(REPLACE(REPLACE(c.phone, ' ', ''), '-', ''), '(', ''), ')', '') = '+79179142756'
-  OR c.name = 'Татьяна (Гольфстрим)'
-  OR c.director_name = 'Татьяна (Гольфстрим)'
-)
+WHERE REPLACE(REPLACE(REPLACE(REPLACE(c.phone, ' ', ''), '-', ''), '(', ''), ')', '') = '+79179142756'
 AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 1174)
 LIMIT 1;
 
@@ -3289,11 +2900,7 @@ SELECT
   NOW(),
   NOW()
 FROM rental_clients c
-WHERE (
-  REPLACE(REPLACE(REPLACE(REPLACE(c.phone, ' ', ''), '-', ''), '(', ''), ')', '') = '+79179142756'
-  OR c.name = 'Татьяна (Гольфстрим)'
-  OR c.director_name = 'Татьяна (Гольфстрим)'
-)
+WHERE REPLACE(REPLACE(REPLACE(REPLACE(c.phone, ' ', ''), '-', ''), '(', ''), ')', '') = '+79179142756'
 AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 1173)
 LIMIT 1;
 
@@ -3322,11 +2929,7 @@ SELECT
   NOW(),
   NOW()
 FROM rental_clients c
-WHERE (
-  REPLACE(REPLACE(REPLACE(REPLACE(c.phone, ' ', ''), '-', ''), '(', ''), ')', '') = '+79179142756'
-  OR c.name = 'Татьяна (Гольфстрим)'
-  OR c.director_name = 'Татьяна (Гольфстрим)'
-)
+WHERE REPLACE(REPLACE(REPLACE(REPLACE(c.phone, ' ', ''), '-', ''), '(', ''), ')', '') = '+79179142756'
 AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 1172)
 LIMIT 1;
 
@@ -3355,11 +2958,7 @@ SELECT
   NOW(),
   NOW()
 FROM rental_clients c
-WHERE (
-  REPLACE(REPLACE(REPLACE(REPLACE(c.phone, ' ', ''), '-', ''), '(', ''), ')', '') = '+79179142756'
-  OR c.name = 'Татьяна (Гольфстрим)'
-  OR c.director_name = 'Татьяна (Гольфстрим)'
-)
+WHERE REPLACE(REPLACE(REPLACE(REPLACE(c.phone, ' ', ''), '-', ''), '(', ''), ')', '') = '+79179142756'
 AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 1171)
 LIMIT 1;
 
@@ -3388,11 +2987,7 @@ SELECT
   NOW(),
   NOW()
 FROM rental_clients c
-WHERE (
-  REPLACE(REPLACE(REPLACE(REPLACE(c.phone, ' ', ''), '-', ''), '(', ''), ')', '') = '+79503118747'
-  OR c.name = 'Любовь (ТИЦ)'
-  OR c.director_name = 'Любовь (ТИЦ)'
-)
+WHERE REPLACE(REPLACE(REPLACE(REPLACE(c.phone, ' ', ''), '-', ''), '(', ''), ')', '') = '+79503118747'
 AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 1170)
 LIMIT 1;
 
@@ -3421,11 +3016,7 @@ SELECT
   NOW(),
   NOW()
 FROM rental_clients c
-WHERE (
-  REPLACE(REPLACE(REPLACE(REPLACE(c.phone, ' ', ''), '-', ''), '(', ''), ')', '') = '+79179142756'
-  OR c.name = 'Татьяна (Гольфстрим)'
-  OR c.director_name = 'Татьяна (Гольфстрим)'
-)
+WHERE REPLACE(REPLACE(REPLACE(REPLACE(c.phone, ' ', ''), '-', ''), '(', ''), ')', '') = '+79179142756'
 AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 1169)
 LIMIT 1;
 
@@ -3454,11 +3045,7 @@ SELECT
   NOW(),
   NOW()
 FROM rental_clients c
-WHERE (
-  REPLACE(REPLACE(REPLACE(REPLACE(c.phone, ' ', ''), '-', ''), '(', ''), ')', '') = '+79872904401'
-  OR c.name = 'Галина (Тур Урал)'
-  OR c.director_name = 'Галина (Тур Урал)'
-)
+WHERE REPLACE(REPLACE(REPLACE(REPLACE(c.phone, ' ', ''), '-', ''), '(', ''), ')', '') = '+79872904401'
 AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 1168)
 LIMIT 1;
 
@@ -3487,11 +3074,7 @@ SELECT
   NOW(),
   NOW()
 FROM rental_clients c
-WHERE (
-  REPLACE(REPLACE(REPLACE(REPLACE(c.phone, ' ', ''), '-', ''), '(', ''), ')', '') = '+79659400307'
-  OR c.name = 'Зульхиза Кутлучурина'
-  OR c.director_name = 'Зульхиза Кутлучурина'
-)
+WHERE REPLACE(REPLACE(REPLACE(REPLACE(c.phone, ' ', ''), '-', ''), '(', ''), ')', '') = '+79659400307'
 AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 1167)
 LIMIT 1;
 
@@ -3520,11 +3103,7 @@ SELECT
   NOW(),
   NOW()
 FROM rental_clients c
-WHERE (
-  REPLACE(REPLACE(REPLACE(REPLACE(c.phone, ' ', ''), '-', ''), '(', ''), ')', '') = '+79179142756'
-  OR c.name = 'Татьяна (Гольфстрим)'
-  OR c.director_name = 'Татьяна (Гольфстрим)'
-)
+WHERE REPLACE(REPLACE(REPLACE(REPLACE(c.phone, ' ', ''), '-', ''), '(', ''), ')', '') = '+79179142756'
 AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 1166)
 LIMIT 1;
 
@@ -3553,11 +3132,7 @@ SELECT
   NOW(),
   NOW()
 FROM rental_clients c
-WHERE (
-  REPLACE(REPLACE(REPLACE(REPLACE(c.phone, ' ', ''), '-', ''), '(', ''), ')', '') = '+79179142756'
-  OR c.name = 'Татьяна (Гольфстрим)'
-  OR c.director_name = 'Татьяна (Гольфстрим)'
-)
+WHERE REPLACE(REPLACE(REPLACE(REPLACE(c.phone, ' ', ''), '-', ''), '(', ''), ')', '') = '+79179142756'
 AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 1165)
 LIMIT 1;
 
@@ -3586,11 +3161,7 @@ SELECT
   NOW(),
   NOW()
 FROM rental_clients c
-WHERE (
-  REPLACE(REPLACE(REPLACE(REPLACE(c.phone, ' ', ''), '-', ''), '(', ''), ')', '') = '+79503118747'
-  OR c.name = 'Любовь (ТИЦ)'
-  OR c.director_name = 'Любовь (ТИЦ)'
-)
+WHERE REPLACE(REPLACE(REPLACE(REPLACE(c.phone, ' ', ''), '-', ''), '(', ''), ')', '') = '+79503118747'
 AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 1164)
 LIMIT 1;
 
@@ -3619,11 +3190,7 @@ SELECT
   NOW(),
   NOW()
 FROM rental_clients c
-WHERE (
-  REPLACE(REPLACE(REPLACE(REPLACE(c.phone, ' ', ''), '-', ''), '(', ''), ')', '') = '+79033443111'
-  OR c.name = 'Элина (Сититур)'
-  OR c.director_name = 'Элина (Сититур)'
-)
+WHERE REPLACE(REPLACE(REPLACE(REPLACE(c.phone, ' ', ''), '-', ''), '(', ''), ')', '') = '+79033443111'
 AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 1163)
 LIMIT 1;
 
@@ -3652,11 +3219,7 @@ SELECT
   NOW(),
   NOW()
 FROM rental_clients c
-WHERE (
-  REPLACE(REPLACE(REPLACE(REPLACE(c.phone, ' ', ''), '-', ''), '(', ''), ')', '') = '+79393309448'
-  OR c.name = 'Андрей (Экскурс)'
-  OR c.director_name = 'Андрей (Экскурс)'
-)
+WHERE REPLACE(REPLACE(REPLACE(REPLACE(c.phone, ' ', ''), '-', ''), '(', ''), ')', '') = '+79393309448'
 AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 1162)
 LIMIT 1;
 
@@ -3685,11 +3248,7 @@ SELECT
   NOW(),
   NOW()
 FROM rental_clients c
-WHERE (
-  REPLACE(REPLACE(REPLACE(REPLACE(c.phone, ' ', ''), '-', ''), '(', ''), ')', '') = '+79046699399'
-  OR c.name = 'Альберт (КТ)'
-  OR c.director_name = 'Альберт (КТ)'
-)
+WHERE REPLACE(REPLACE(REPLACE(REPLACE(c.phone, ' ', ''), '-', ''), '(', ''), ')', '') = '+79046699399'
 AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 1161)
 LIMIT 1;
 
@@ -3718,11 +3277,7 @@ SELECT
   NOW(),
   NOW()
 FROM rental_clients c
-WHERE (
-  REPLACE(REPLACE(REPLACE(REPLACE(c.phone, ' ', ''), '-', ''), '(', ''), ')', '') = '+79274900014'
-  OR c.name = 'Мария Экскурсовод'
-  OR c.director_name = 'Мария Экскурсовод'
-)
+WHERE REPLACE(REPLACE(REPLACE(REPLACE(c.phone, ' ', ''), '-', ''), '(', ''), ')', '') = '+79274900014'
 AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 1160)
 LIMIT 1;
 
@@ -3751,11 +3306,7 @@ SELECT
   NOW(),
   NOW()
 FROM rental_clients c
-WHERE (
-  REPLACE(REPLACE(REPLACE(REPLACE(c.phone, ' ', ''), '-', ''), '(', ''), ')', '') = '+79038307370'
-  OR c.name = 'Наталья Флот'
-  OR c.director_name = 'Наталья Флот'
-)
+WHERE REPLACE(REPLACE(REPLACE(REPLACE(c.phone, ' ', ''), '-', ''), '(', ''), ')', '') = '+79038307370'
 AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 1159)
 LIMIT 1;
 
@@ -3784,11 +3335,7 @@ SELECT
   NOW(),
   NOW()
 FROM rental_clients c
-WHERE (
-  REPLACE(REPLACE(REPLACE(REPLACE(c.phone, ' ', ''), '-', ''), '(', ''), ')', '') = '+79179221193'
-  OR c.name = 'Карина (технологии путешествий)'
-  OR c.director_name = 'Карина (технологии путешествий)'
-)
+WHERE REPLACE(REPLACE(REPLACE(REPLACE(c.phone, ' ', ''), '-', ''), '(', ''), ')', '') = '+79179221193'
 AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 1158)
 LIMIT 1;
 
@@ -3817,11 +3364,7 @@ SELECT
   NOW(),
   NOW()
 FROM rental_clients c
-WHERE (
-  REPLACE(REPLACE(REPLACE(REPLACE(c.phone, ' ', ''), '-', ''), '(', ''), ')', '') = '+79225115900'
-  OR c.name = 'Алексей'
-  OR c.director_name = 'Алексей'
-)
+WHERE REPLACE(REPLACE(REPLACE(REPLACE(c.phone, ' ', ''), '-', ''), '(', ''), ')', '') = '+79225115900'
 AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 1157)
 LIMIT 1;
 
@@ -3850,10 +3393,7 @@ SELECT
   NOW(),
   NOW()
 FROM rental_clients c
-WHERE (
-  c.name = 'Эдик Заказы для групп'
-  OR c.director_name = 'Эдик Заказы для групп'
-)
+WHERE (c.name ILIKE '%Эдик%' OR c.director_name ILIKE '%Эдик%')
 AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 1156)
 LIMIT 1;
 
@@ -3882,11 +3422,7 @@ SELECT
   NOW(),
   NOW()
 FROM rental_clients c
-WHERE (
-  REPLACE(REPLACE(REPLACE(REPLACE(c.phone, ' ', ''), '-', ''), '(', ''), ')', '') = '+79503118747'
-  OR c.name = 'Любовь (ТИЦ)'
-  OR c.director_name = 'Любовь (ТИЦ)'
-)
+WHERE REPLACE(REPLACE(REPLACE(REPLACE(c.phone, ' ', ''), '-', ''), '(', ''), ')', '') = '+79503118747'
 AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 1155)
 LIMIT 1;
 
@@ -3915,11 +3451,7 @@ SELECT
   NOW(),
   NOW()
 FROM rental_clients c
-WHERE (
-  REPLACE(REPLACE(REPLACE(REPLACE(c.phone, ' ', ''), '-', ''), '(', ''), ')', '') = '+79503118747'
-  OR c.name = 'Любовь (ТИЦ)'
-  OR c.director_name = 'Любовь (ТИЦ)'
-)
+WHERE REPLACE(REPLACE(REPLACE(REPLACE(c.phone, ' ', ''), '-', ''), '(', ''), ')', '') = '+79503118747'
 AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 1154)
 LIMIT 1;
 
@@ -3948,10 +3480,7 @@ SELECT
   NOW(),
   NOW()
 FROM rental_clients c
-WHERE (
-  c.name = 'Эдик Заказы для групп'
-  OR c.director_name = 'Эдик Заказы для групп'
-)
+WHERE (c.name ILIKE '%Эдик%' OR c.director_name ILIKE '%Эдик%')
 AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 1153)
 LIMIT 1;
 
@@ -3980,10 +3509,7 @@ SELECT
   NOW(),
   NOW()
 FROM rental_clients c
-WHERE (
-  c.name = 'Эдик Заказы для групп'
-  OR c.director_name = 'Эдик Заказы для групп'
-)
+WHERE (c.name ILIKE '%Эдик%' OR c.director_name ILIKE '%Эдик%')
 AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 1152)
 LIMIT 1;
 
@@ -4012,11 +3538,7 @@ SELECT
   NOW(),
   NOW()
 FROM rental_clients c
-WHERE (
-  REPLACE(REPLACE(REPLACE(REPLACE(c.phone, ' ', ''), '-', ''), '(', ''), ')', '') = '+79872969542'
-  OR c.name = 'Елена'
-  OR c.director_name = 'Елена'
-)
+WHERE REPLACE(REPLACE(REPLACE(REPLACE(c.phone, ' ', ''), '-', ''), '(', ''), ')', '') = '+79872969542'
 AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 1151)
 LIMIT 1;
 
@@ -4045,11 +3567,7 @@ SELECT
   NOW(),
   NOW()
 FROM rental_clients c
-WHERE (
-  REPLACE(REPLACE(REPLACE(REPLACE(c.phone, ' ', ''), '-', ''), '(', ''), ')', '') = '+79503118747'
-  OR c.name = 'Любовь (ТИЦ)'
-  OR c.director_name = 'Любовь (ТИЦ)'
-)
+WHERE REPLACE(REPLACE(REPLACE(REPLACE(c.phone, ' ', ''), '-', ''), '(', ''), ')', '') = '+79503118747'
 AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 1150)
 LIMIT 1;
 
@@ -4078,11 +3596,7 @@ SELECT
   NOW(),
   NOW()
 FROM rental_clients c
-WHERE (
-  REPLACE(REPLACE(REPLACE(REPLACE(c.phone, ' ', ''), '-', ''), '(', ''), ')', '') = '+79503118747'
-  OR c.name = 'Любовь (ТИЦ)'
-  OR c.director_name = 'Любовь (ТИЦ)'
-)
+WHERE REPLACE(REPLACE(REPLACE(REPLACE(c.phone, ' ', ''), '-', ''), '(', ''), ')', '') = '+79503118747'
 AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 1149)
 LIMIT 1;
 
@@ -4111,11 +3625,7 @@ SELECT
   NOW(),
   NOW()
 FROM rental_clients c
-WHERE (
-  REPLACE(REPLACE(REPLACE(REPLACE(c.phone, ' ', ''), '-', ''), '(', ''), ')', '') = '+79179142756'
-  OR c.name = 'Татьяна (Гольфстрим)'
-  OR c.director_name = 'Татьяна (Гольфстрим)'
-)
+WHERE REPLACE(REPLACE(REPLACE(REPLACE(c.phone, ' ', ''), '-', ''), '(', ''), ')', '') = '+79179142756'
 AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 1148)
 LIMIT 1;
 
@@ -4144,11 +3654,7 @@ SELECT
   NOW(),
   NOW()
 FROM rental_clients c
-WHERE (
-  REPLACE(REPLACE(REPLACE(REPLACE(c.phone, ' ', ''), '-', ''), '(', ''), ')', '') = '+79274900014'
-  OR c.name = 'Мария Экскурсовод'
-  OR c.director_name = 'Мария Экскурсовод'
-)
+WHERE REPLACE(REPLACE(REPLACE(REPLACE(c.phone, ' ', ''), '-', ''), '(', ''), ')', '') = '+79274900014'
 AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 1147)
 LIMIT 1;
 
@@ -4177,11 +3683,7 @@ SELECT
   NOW(),
   NOW()
 FROM rental_clients c
-WHERE (
-  REPLACE(REPLACE(REPLACE(REPLACE(c.phone, ' ', ''), '-', ''), '(', ''), ')', '') = '+79510610028'
-  OR c.name = 'Гузелия'
-  OR c.director_name = 'Гузелия'
-)
+WHERE REPLACE(REPLACE(REPLACE(REPLACE(c.phone, ' ', ''), '-', ''), '(', ''), ')', '') = '+79510610028'
 AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 1146)
 LIMIT 1;
 
@@ -4210,11 +3712,7 @@ SELECT
   NOW(),
   NOW()
 FROM rental_clients c
-WHERE (
-  REPLACE(REPLACE(REPLACE(REPLACE(c.phone, ' ', ''), '-', ''), '(', ''), ')', '') = '+79372883686'
-  OR c.name = 'Юлия Супрунова (от Миры)'
-  OR c.director_name = 'Юлия Супрунова (от Миры)'
-)
+WHERE REPLACE(REPLACE(REPLACE(REPLACE(c.phone, ' ', ''), '-', ''), '(', ''), ')', '') = '+79372883686'
 AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 1145)
 LIMIT 1;
 
@@ -4243,11 +3741,7 @@ SELECT
   NOW(),
   NOW()
 FROM rental_clients c
-WHERE (
-  REPLACE(REPLACE(REPLACE(REPLACE(c.phone, ' ', ''), '-', ''), '(', ''), ')', '') = '+79503118747'
-  OR c.name = 'Любовь (ТИЦ)'
-  OR c.director_name = 'Любовь (ТИЦ)'
-)
+WHERE REPLACE(REPLACE(REPLACE(REPLACE(c.phone, ' ', ''), '-', ''), '(', ''), ')', '') = '+79503118747'
 AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 1144)
 LIMIT 1;
 
@@ -4276,11 +3770,7 @@ SELECT
   NOW(),
   NOW()
 FROM rental_clients c
-WHERE (
-  REPLACE(REPLACE(REPLACE(REPLACE(c.phone, ' ', ''), '-', ''), '(', ''), ')', '') = '+79108272699'
-  OR c.name = 'Ольга (Сиалия)'
-  OR c.director_name = 'Ольга (Сиалия)'
-)
+WHERE REPLACE(REPLACE(REPLACE(REPLACE(c.phone, ' ', ''), '-', ''), '(', ''), ')', '') = '+79108272699'
 AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 1143)
 LIMIT 1;
 
@@ -4309,11 +3799,7 @@ SELECT
   NOW(),
   NOW()
 FROM rental_clients c
-WHERE (
-  REPLACE(REPLACE(REPLACE(REPLACE(c.phone, ' ', ''), '-', ''), '(', ''), ')', '') = '+79600523400'
-  OR c.name = 'Эвелина (Инициатива)'
-  OR c.director_name = 'Эвелина (Инициатива)'
-)
+WHERE REPLACE(REPLACE(REPLACE(REPLACE(c.phone, ' ', ''), '-', ''), '(', ''), ')', '') = '+79600523400'
 AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 1142)
 LIMIT 1;
 
@@ -4342,11 +3828,7 @@ SELECT
   NOW(),
   NOW()
 FROM rental_clients c
-WHERE (
-  REPLACE(REPLACE(REPLACE(REPLACE(c.phone, ' ', ''), '-', ''), '(', ''), ')', '') = '+79872904401'
-  OR c.name = 'Галина (Тур Урал)'
-  OR c.director_name = 'Галина (Тур Урал)'
-)
+WHERE REPLACE(REPLACE(REPLACE(REPLACE(c.phone, ' ', ''), '-', ''), '(', ''), ')', '') = '+79872904401'
 AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 1141)
 LIMIT 1;
 
@@ -4375,11 +3857,7 @@ SELECT
   NOW(),
   NOW()
 FROM rental_clients c
-WHERE (
-  REPLACE(REPLACE(REPLACE(REPLACE(c.phone, ' ', ''), '-', ''), '(', ''), ')', '') = '+79872904401'
-  OR c.name = 'Галина (Тур Урал)'
-  OR c.director_name = 'Галина (Тур Урал)'
-)
+WHERE REPLACE(REPLACE(REPLACE(REPLACE(c.phone, ' ', ''), '-', ''), '(', ''), ')', '') = '+79872904401'
 AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 1140)
 LIMIT 1;
 
@@ -4408,11 +3886,7 @@ SELECT
   NOW(),
   NOW()
 FROM rental_clients c
-WHERE (
-  REPLACE(REPLACE(REPLACE(REPLACE(c.phone, ' ', ''), '-', ''), '(', ''), ')', '') = '+79872904401'
-  OR c.name = 'Галина (Тур Урал)'
-  OR c.director_name = 'Галина (Тур Урал)'
-)
+WHERE REPLACE(REPLACE(REPLACE(REPLACE(c.phone, ' ', ''), '-', ''), '(', ''), ')', '') = '+79872904401'
 AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 1139)
 LIMIT 1;
 
@@ -4441,11 +3915,7 @@ SELECT
   NOW(),
   NOW()
 FROM rental_clients c
-WHERE (
-  REPLACE(REPLACE(REPLACE(REPLACE(c.phone, ' ', ''), '-', ''), '(', ''), ')', '') = '+79222673014'
-  OR c.name = 'Юлия (Рыжий Слон)'
-  OR c.director_name = 'Юлия (Рыжий Слон)'
-)
+WHERE REPLACE(REPLACE(REPLACE(REPLACE(c.phone, ' ', ''), '-', ''), '(', ''), ')', '') = '+79222673014'
 AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 1138)
 LIMIT 1;
 
@@ -4474,11 +3944,7 @@ SELECT
   NOW(),
   NOW()
 FROM rental_clients c
-WHERE (
-  REPLACE(REPLACE(REPLACE(REPLACE(c.phone, ' ', ''), '-', ''), '(', ''), ')', '') = '+79063310993'
-  OR c.name = 'Гузель (Юралс)'
-  OR c.director_name = 'Гузель (Юралс)'
-)
+WHERE REPLACE(REPLACE(REPLACE(REPLACE(c.phone, ' ', ''), '-', ''), '(', ''), ')', '') = '+79063310993'
 AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 1137)
 LIMIT 1;
 
@@ -4507,11 +3973,7 @@ SELECT
   NOW(),
   NOW()
 FROM rental_clients c
-WHERE (
-  REPLACE(REPLACE(REPLACE(REPLACE(c.phone, ' ', ''), '-', ''), '(', ''), ')', '') = '+79503118747'
-  OR c.name = 'Любовь (ТИЦ)'
-  OR c.director_name = 'Любовь (ТИЦ)'
-)
+WHERE REPLACE(REPLACE(REPLACE(REPLACE(c.phone, ' ', ''), '-', ''), '(', ''), ')', '') = '+79503118747'
 AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 1136)
 LIMIT 1;
 
@@ -4540,11 +4002,7 @@ SELECT
   NOW(),
   NOW()
 FROM rental_clients c
-WHERE (
-  REPLACE(REPLACE(REPLACE(REPLACE(c.phone, ' ', ''), '-', ''), '(', ''), ')', '') = '+79503118747'
-  OR c.name = 'Любовь (ТИЦ)'
-  OR c.director_name = 'Любовь (ТИЦ)'
-)
+WHERE REPLACE(REPLACE(REPLACE(REPLACE(c.phone, ' ', ''), '-', ''), '(', ''), ')', '') = '+79503118747'
 AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 1135)
 LIMIT 1;
 
@@ -4573,11 +4031,7 @@ SELECT
   NOW(),
   NOW()
 FROM rental_clients c
-WHERE (
-  REPLACE(REPLACE(REPLACE(REPLACE(c.phone, ' ', ''), '-', ''), '(', ''), ')', '') = '+79159441878'
-  OR c.name = 'Екатерина «Романова Трэвел»'
-  OR c.director_name = 'Екатерина «Романова Трэвел»'
-)
+WHERE REPLACE(REPLACE(REPLACE(REPLACE(c.phone, ' ', ''), '-', ''), '(', ''), ')', '') = '+79159441878'
 AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 1134)
 LIMIT 1;
 
@@ -4606,11 +4060,7 @@ SELECT
   NOW(),
   NOW()
 FROM rental_clients c
-WHERE (
-  REPLACE(REPLACE(REPLACE(REPLACE(c.phone, ' ', ''), '-', ''), '(', ''), ')', '') = '+79178516882'
-  OR c.name = 'Дмитрий (Алабуга-Волокно)'
-  OR c.director_name = 'Дмитрий (Алабуга-Волокно)'
-)
+WHERE REPLACE(REPLACE(REPLACE(REPLACE(c.phone, ' ', ''), '-', ''), '(', ''), ')', '') = '+79178516882'
 AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 1133)
 LIMIT 1;
 
@@ -4639,11 +4089,7 @@ SELECT
   NOW(),
   NOW()
 FROM rental_clients c
-WHERE (
-  REPLACE(REPLACE(REPLACE(REPLACE(c.phone, ' ', ''), '-', ''), '(', ''), ')', '') = '+79152964580'
-  OR c.name = 'Арсен (Юнион)'
-  OR c.director_name = 'Арсен (Юнион)'
-)
+WHERE REPLACE(REPLACE(REPLACE(REPLACE(c.phone, ' ', ''), '-', ''), '(', ''), ')', '') = '+79152964580'
 AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 1132)
 LIMIT 1;
 
@@ -4672,11 +4118,7 @@ SELECT
   NOW(),
   NOW()
 FROM rental_clients c
-WHERE (
-  REPLACE(REPLACE(REPLACE(REPLACE(c.phone, ' ', ''), '-', ''), '(', ''), ')', '') = '+79872969542'
-  OR c.name = 'Елена'
-  OR c.director_name = 'Елена'
-)
+WHERE REPLACE(REPLACE(REPLACE(REPLACE(c.phone, ' ', ''), '-', ''), '(', ''), ')', '') = '+79872969542'
 AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 1131)
 LIMIT 1;
 
@@ -4705,11 +4147,7 @@ SELECT
   NOW(),
   NOW()
 FROM rental_clients c
-WHERE (
-  REPLACE(REPLACE(REPLACE(REPLACE(c.phone, ' ', ''), '-', ''), '(', ''), ')', '') = '+79264062333'
-  OR c.name = 'Марина Экс'
-  OR c.director_name = 'Марина Экс'
-)
+WHERE REPLACE(REPLACE(REPLACE(REPLACE(c.phone, ' ', ''), '-', ''), '(', ''), ')', '') = '+79264062333'
 AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 1130)
 LIMIT 1;
 
@@ -4738,11 +4176,7 @@ SELECT
   NOW(),
   NOW()
 FROM rental_clients c
-WHERE (
-  REPLACE(REPLACE(REPLACE(REPLACE(c.phone, ' ', ''), '-', ''), '(', ''), ')', '') = '+79274900014'
-  OR c.name = 'Мария Экскурсовод'
-  OR c.director_name = 'Мария Экскурсовод'
-)
+WHERE REPLACE(REPLACE(REPLACE(REPLACE(c.phone, ' ', ''), '-', ''), '(', ''), ')', '') = '+79274900014'
 AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 1129)
 LIMIT 1;
 
@@ -4771,11 +4205,7 @@ SELECT
   NOW(),
   NOW()
 FROM rental_clients c
-WHERE (
-  REPLACE(REPLACE(REPLACE(REPLACE(c.phone, ' ', ''), '-', ''), '(', ''), ')', '') = '+79503118747'
-  OR c.name = 'Любовь (ТИЦ)'
-  OR c.director_name = 'Любовь (ТИЦ)'
-)
+WHERE REPLACE(REPLACE(REPLACE(REPLACE(c.phone, ' ', ''), '-', ''), '(', ''), ')', '') = '+79503118747'
 AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 1128)
 LIMIT 1;
 
@@ -4804,11 +4234,7 @@ SELECT
   NOW(),
   NOW()
 FROM rental_clients c
-WHERE (
-  REPLACE(REPLACE(REPLACE(REPLACE(c.phone, ' ', ''), '-', ''), '(', ''), ')', '') = '+79179221193'
-  OR c.name = 'Карина (технологии путешествий)'
-  OR c.director_name = 'Карина (технологии путешествий)'
-)
+WHERE REPLACE(REPLACE(REPLACE(REPLACE(c.phone, ' ', ''), '-', ''), '(', ''), ')', '') = '+79179221193'
 AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 1127)
 LIMIT 1;
 
@@ -4837,11 +4263,7 @@ SELECT
   NOW(),
   NOW()
 FROM rental_clients c
-WHERE (
-  REPLACE(REPLACE(REPLACE(REPLACE(c.phone, ' ', ''), '-', ''), '(', ''), ')', '') = '+79179221193'
-  OR c.name = 'Карина (технологии путешествий)'
-  OR c.director_name = 'Карина (технологии путешествий)'
-)
+WHERE REPLACE(REPLACE(REPLACE(REPLACE(c.phone, ' ', ''), '-', ''), '(', ''), ')', '') = '+79179221193'
 AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 1126)
 LIMIT 1;
 
@@ -4870,11 +4292,7 @@ SELECT
   NOW(),
   NOW()
 FROM rental_clients c
-WHERE (
-  REPLACE(REPLACE(REPLACE(REPLACE(c.phone, ' ', ''), '-', ''), '(', ''), ')', '') = '+79179062560'
-  OR c.name = 'Ляйсан (Казань 360)'
-  OR c.director_name = 'Ляйсан (Казань 360)'
-)
+WHERE REPLACE(REPLACE(REPLACE(REPLACE(c.phone, ' ', ''), '-', ''), '(', ''), ')', '') = '+79179062560'
 AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 1125)
 LIMIT 1;
 
@@ -4903,11 +4321,7 @@ SELECT
   NOW(),
   NOW()
 FROM rental_clients c
-WHERE (
-  REPLACE(REPLACE(REPLACE(REPLACE(c.phone, ' ', ''), '-', ''), '(', ''), ')', '') = '+79503118747'
-  OR c.name = 'Любовь (ТИЦ)'
-  OR c.director_name = 'Любовь (ТИЦ)'
-)
+WHERE REPLACE(REPLACE(REPLACE(REPLACE(c.phone, ' ', ''), '-', ''), '(', ''), ')', '') = '+79503118747'
 AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 1124)
 LIMIT 1;
 
@@ -4936,11 +4350,7 @@ SELECT
   NOW(),
   NOW()
 FROM rental_clients c
-WHERE (
-  REPLACE(REPLACE(REPLACE(REPLACE(c.phone, ' ', ''), '-', ''), '(', ''), ')', '') = '+79503118747'
-  OR c.name = 'Любовь (ТИЦ)'
-  OR c.director_name = 'Любовь (ТИЦ)'
-)
+WHERE REPLACE(REPLACE(REPLACE(REPLACE(c.phone, ' ', ''), '-', ''), '(', ''), ')', '') = '+79503118747'
 AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 1123)
 LIMIT 1;
 
@@ -4969,11 +4379,7 @@ SELECT
   NOW(),
   NOW()
 FROM rental_clients c
-WHERE (
-  REPLACE(REPLACE(REPLACE(REPLACE(c.phone, ' ', ''), '-', ''), '(', ''), ')', '') = '+79503118747'
-  OR c.name = 'Любовь (ТИЦ)'
-  OR c.director_name = 'Любовь (ТИЦ)'
-)
+WHERE REPLACE(REPLACE(REPLACE(REPLACE(c.phone, ' ', ''), '-', ''), '(', ''), ')', '') = '+79503118747'
 AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 1122)
 LIMIT 1;
 
@@ -5002,10 +4408,7 @@ SELECT
   NOW(),
   NOW()
 FROM rental_clients c
-WHERE (
-  c.name = 'Эдик Заказы для групп'
-  OR c.director_name = 'Эдик Заказы для групп'
-)
+WHERE (c.name ILIKE '%Эдик%' OR c.director_name ILIKE '%Эдик%')
 AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 1121)
 LIMIT 1;
 
@@ -5034,10 +4437,7 @@ SELECT
   NOW(),
   NOW()
 FROM rental_clients c
-WHERE (
-  c.name = 'Эдик Заказы для групп'
-  OR c.director_name = 'Эдик Заказы для групп'
-)
+WHERE (c.name ILIKE '%Эдик%' OR c.director_name ILIKE '%Эдик%')
 AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 1120)
 LIMIT 1;
 
@@ -5066,10 +4466,7 @@ SELECT
   NOW(),
   NOW()
 FROM rental_clients c
-WHERE (
-  c.name = 'Эдик Заказы для групп'
-  OR c.director_name = 'Эдик Заказы для групп'
-)
+WHERE (c.name ILIKE '%Эдик%' OR c.director_name ILIKE '%Эдик%')
 AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 1119)
 LIMIT 1;
 
@@ -5098,10 +4495,7 @@ SELECT
   NOW(),
   NOW()
 FROM rental_clients c
-WHERE (
-  c.name = 'Эдик Заказы для групп'
-  OR c.director_name = 'Эдик Заказы для групп'
-)
+WHERE (c.name ILIKE '%Эдик%' OR c.director_name ILIKE '%Эдик%')
 AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 1118)
 LIMIT 1;
 
@@ -5130,11 +4524,7 @@ SELECT
   NOW(),
   NOW()
 FROM rental_clients c
-WHERE (
-  REPLACE(REPLACE(REPLACE(REPLACE(c.phone, ' ', ''), '-', ''), '(', ''), ')', '') = '+79869297050'
-  OR c.name = 'Инна Экскурсовод'
-  OR c.director_name = 'Инна Экскурсовод'
-)
+WHERE REPLACE(REPLACE(REPLACE(REPLACE(c.phone, ' ', ''), '-', ''), '(', ''), ')', '') = '+79869297050'
 AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 1117)
 LIMIT 1;
 
@@ -5163,11 +4553,7 @@ SELECT
   NOW(),
   NOW()
 FROM rental_clients c
-WHERE (
-  REPLACE(REPLACE(REPLACE(REPLACE(c.phone, ' ', ''), '-', ''), '(', ''), ')', '') = '+79503118747'
-  OR c.name = 'Любовь (ТИЦ)'
-  OR c.director_name = 'Любовь (ТИЦ)'
-)
+WHERE REPLACE(REPLACE(REPLACE(REPLACE(c.phone, ' ', ''), '-', ''), '(', ''), ')', '') = '+79503118747'
 AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 1116)
 LIMIT 1;
 
@@ -5196,11 +4582,7 @@ SELECT
   NOW(),
   NOW()
 FROM rental_clients c
-WHERE (
-  REPLACE(REPLACE(REPLACE(REPLACE(c.phone, ' ', ''), '-', ''), '(', ''), ')', '') = '+79869160808'
-  OR c.name = 'Мария (ОСР)'
-  OR c.director_name = 'Мария (ОСР)'
-)
+WHERE REPLACE(REPLACE(REPLACE(REPLACE(c.phone, ' ', ''), '-', ''), '(', ''), ')', '') = '+79869160808'
 AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 1115)
 LIMIT 1;
 
@@ -5229,11 +4611,7 @@ SELECT
   NOW(),
   NOW()
 FROM rental_clients c
-WHERE (
-  REPLACE(REPLACE(REPLACE(REPLACE(c.phone, ' ', ''), '-', ''), '(', ''), ')', '') = '+79503118747'
-  OR c.name = 'Любовь (ТИЦ)'
-  OR c.director_name = 'Любовь (ТИЦ)'
-)
+WHERE REPLACE(REPLACE(REPLACE(REPLACE(c.phone, ' ', ''), '-', ''), '(', ''), ')', '') = '+79503118747'
 AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 1114)
 LIMIT 1;
 
@@ -5262,11 +4640,7 @@ SELECT
   NOW(),
   NOW()
 FROM rental_clients c
-WHERE (
-  REPLACE(REPLACE(REPLACE(REPLACE(c.phone, ' ', ''), '-', ''), '(', ''), ')', '') = '+79219733344'
-  OR c.name = 'Титова Галина (Эллинлайн)'
-  OR c.director_name = 'Титова Галина (Эллинлайн)'
-)
+WHERE REPLACE(REPLACE(REPLACE(REPLACE(c.phone, ' ', ''), '-', ''), '(', ''), ')', '') = '+79219733344'
 AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 1113)
 LIMIT 1;
 
@@ -5295,11 +4669,7 @@ SELECT
   NOW(),
   NOW()
 FROM rental_clients c
-WHERE (
-  REPLACE(REPLACE(REPLACE(REPLACE(c.phone, ' ', ''), '-', ''), '(', ''), ')', '') = '+79179142756'
-  OR c.name = 'Татьяна (Гольфстрим)'
-  OR c.director_name = 'Татьяна (Гольфстрим)'
-)
+WHERE REPLACE(REPLACE(REPLACE(REPLACE(c.phone, ' ', ''), '-', ''), '(', ''), ')', '') = '+79179142756'
 AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 1112)
 LIMIT 1;
 
@@ -5328,11 +4698,7 @@ SELECT
   NOW(),
   NOW()
 FROM rental_clients c
-WHERE (
-  REPLACE(REPLACE(REPLACE(REPLACE(c.phone, ' ', ''), '-', ''), '(', ''), ')', '') = '+79179062560'
-  OR c.name = 'Ляйсан (Казань 360)'
-  OR c.director_name = 'Ляйсан (Казань 360)'
-)
+WHERE REPLACE(REPLACE(REPLACE(REPLACE(c.phone, ' ', ''), '-', ''), '(', ''), ')', '') = '+79179062560'
 AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 1111)
 LIMIT 1;
 
@@ -5361,11 +4727,7 @@ SELECT
   NOW(),
   NOW()
 FROM rental_clients c
-WHERE (
-  REPLACE(REPLACE(REPLACE(REPLACE(c.phone, ' ', ''), '-', ''), '(', ''), ')', '') = '+79179062560'
-  OR c.name = 'Ляйсан (Казань 360)'
-  OR c.director_name = 'Ляйсан (Казань 360)'
-)
+WHERE REPLACE(REPLACE(REPLACE(REPLACE(c.phone, ' ', ''), '-', ''), '(', ''), ')', '') = '+79179062560'
 AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 1110)
 LIMIT 1;
 
@@ -5394,11 +4756,7 @@ SELECT
   NOW(),
   NOW()
 FROM rental_clients c
-WHERE (
-  REPLACE(REPLACE(REPLACE(REPLACE(c.phone, ' ', ''), '-', ''), '(', ''), ')', '') = '+79179142756'
-  OR c.name = 'Татьяна (Гольфстрим)'
-  OR c.director_name = 'Татьяна (Гольфстрим)'
-)
+WHERE REPLACE(REPLACE(REPLACE(REPLACE(c.phone, ' ', ''), '-', ''), '(', ''), ')', '') = '+79179142756'
 AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 1109)
 LIMIT 1;
 
@@ -5427,11 +4785,7 @@ SELECT
   NOW(),
   NOW()
 FROM rental_clients c
-WHERE (
-  REPLACE(REPLACE(REPLACE(REPLACE(c.phone, ' ', ''), '-', ''), '(', ''), ')', '') = '+79872827166'
-  OR c.name = 'Татьяна Чуб'
-  OR c.director_name = 'Татьяна Чуб'
-)
+WHERE REPLACE(REPLACE(REPLACE(REPLACE(c.phone, ' ', ''), '-', ''), '(', ''), ')', '') = '+79872827166'
 AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 1108)
 LIMIT 1;
 
@@ -5460,10 +4814,7 @@ SELECT
   NOW(),
   NOW()
 FROM rental_clients c
-WHERE (
-  c.name = 'Эдик Заказы для групп'
-  OR c.director_name = 'Эдик Заказы для групп'
-)
+WHERE (c.name ILIKE '%Эдик%' OR c.director_name ILIKE '%Эдик%')
 AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 1107)
 LIMIT 1;
 
@@ -5492,11 +4843,7 @@ SELECT
   NOW(),
   NOW()
 FROM rental_clients c
-WHERE (
-  REPLACE(REPLACE(REPLACE(REPLACE(c.phone, ' ', ''), '-', ''), '(', ''), ')', '') = '+79600523400'
-  OR c.name = 'Эвелина (Инициатива)'
-  OR c.director_name = 'Эвелина (Инициатива)'
-)
+WHERE REPLACE(REPLACE(REPLACE(REPLACE(c.phone, ' ', ''), '-', ''), '(', ''), ')', '') = '+79600523400'
 AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 1106)
 LIMIT 1;
 
@@ -5525,11 +4872,7 @@ SELECT
   NOW(),
   NOW()
 FROM rental_clients c
-WHERE (
-  REPLACE(REPLACE(REPLACE(REPLACE(c.phone, ' ', ''), '-', ''), '(', ''), ')', '') = '+79869160808'
-  OR c.name = 'Мария (ОСР)'
-  OR c.director_name = 'Мария (ОСР)'
-)
+WHERE REPLACE(REPLACE(REPLACE(REPLACE(c.phone, ' ', ''), '-', ''), '(', ''), ')', '') = '+79869160808'
 AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 1105)
 LIMIT 1;
 
@@ -5558,10 +4901,7 @@ SELECT
   NOW(),
   NOW()
 FROM rental_clients c
-WHERE (
-  c.name = 'Эдик Заказы для групп'
-  OR c.director_name = 'Эдик Заказы для групп'
-)
+WHERE (c.name ILIKE '%Эдик%' OR c.director_name ILIKE '%Эдик%')
 AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 1104)
 LIMIT 1;
 
@@ -5590,11 +4930,7 @@ SELECT
   NOW(),
   NOW()
 FROM rental_clients c
-WHERE (
-  REPLACE(REPLACE(REPLACE(REPLACE(c.phone, ' ', ''), '-', ''), '(', ''), ')', '') = '+79277213758'
-  OR c.name = 'Любовь Ким'
-  OR c.director_name = 'Любовь Ким'
-)
+WHERE REPLACE(REPLACE(REPLACE(REPLACE(c.phone, ' ', ''), '-', ''), '(', ''), ')', '') = '+79277213758'
 AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 1103)
 LIMIT 1;
 
@@ -5623,11 +4959,7 @@ SELECT
   NOW(),
   NOW()
 FROM rental_clients c
-WHERE (
-  REPLACE(REPLACE(REPLACE(REPLACE(c.phone, ' ', ''), '-', ''), '(', ''), ')', '') = '+79277213758'
-  OR c.name = 'Любовь Ким'
-  OR c.director_name = 'Любовь Ким'
-)
+WHERE REPLACE(REPLACE(REPLACE(REPLACE(c.phone, ' ', ''), '-', ''), '(', ''), ')', '') = '+79277213758'
 AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 1102)
 LIMIT 1;
 
@@ -5656,11 +4988,7 @@ SELECT
   NOW(),
   NOW()
 FROM rental_clients c
-WHERE (
-  REPLACE(REPLACE(REPLACE(REPLACE(c.phone, ' ', ''), '-', ''), '(', ''), ')', '') = '+79872750395'
-  OR c.name = 'Зельфира'
-  OR c.director_name = 'Зельфира'
-)
+WHERE REPLACE(REPLACE(REPLACE(REPLACE(c.phone, ' ', ''), '-', ''), '(', ''), ')', '') = '+79872750395'
 AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 1101)
 LIMIT 1;
 
@@ -5689,11 +5017,7 @@ SELECT
   NOW(),
   NOW()
 FROM rental_clients c
-WHERE (
-  REPLACE(REPLACE(REPLACE(REPLACE(c.phone, ' ', ''), '-', ''), '(', ''), ')', '') = '+79950953373'
-  OR c.name = 'Екатерина'
-  OR c.director_name = 'Екатерина'
-)
+WHERE REPLACE(REPLACE(REPLACE(REPLACE(c.phone, ' ', ''), '-', ''), '(', ''), ')', '') = '+79950953373'
 AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 1100)
 LIMIT 1;
 
@@ -5722,11 +5046,7 @@ SELECT
   NOW(),
   NOW()
 FROM rental_clients c
-WHERE (
-  REPLACE(REPLACE(REPLACE(REPLACE(c.phone, ' ', ''), '-', ''), '(', ''), ')', '') = '+79172788430'
-  OR c.name = 'Владимир Нежданов'
-  OR c.director_name = 'Владимир Нежданов'
-)
+WHERE REPLACE(REPLACE(REPLACE(REPLACE(c.phone, ' ', ''), '-', ''), '(', ''), ')', '') = '+79172788430'
 AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 1099)
 LIMIT 1;
 
@@ -5755,11 +5075,7 @@ SELECT
   NOW(),
   NOW()
 FROM rental_clients c
-WHERE (
-  REPLACE(REPLACE(REPLACE(REPLACE(c.phone, ' ', ''), '-', ''), '(', ''), ')', '') = '+79600336033'
-  OR c.name = 'Галия'
-  OR c.director_name = 'Галия'
-)
+WHERE REPLACE(REPLACE(REPLACE(REPLACE(c.phone, ' ', ''), '-', ''), '(', ''), ')', '') = '+79600336033'
 AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 1098)
 LIMIT 1;
 
@@ -5788,11 +5104,7 @@ SELECT
   NOW(),
   NOW()
 FROM rental_clients c
-WHERE (
-  REPLACE(REPLACE(REPLACE(REPLACE(c.phone, ' ', ''), '-', ''), '(', ''), ')', '') = '+79172914815'
-  OR c.name = 'Елена (Конгресс Авиа)'
-  OR c.director_name = 'Елена (Конгресс Авиа)'
-)
+WHERE REPLACE(REPLACE(REPLACE(REPLACE(c.phone, ' ', ''), '-', ''), '(', ''), ')', '') = '+79172914815'
 AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 1097)
 LIMIT 1;
 
@@ -5821,11 +5133,7 @@ SELECT
   NOW(),
   NOW()
 FROM rental_clients c
-WHERE (
-  REPLACE(REPLACE(REPLACE(REPLACE(c.phone, ' ', ''), '-', ''), '(', ''), ')', '') = '+79178533525'
-  OR c.name = 'Татьяна (Агентство Удачи)'
-  OR c.director_name = 'Татьяна (Агентство Удачи)'
-)
+WHERE REPLACE(REPLACE(REPLACE(REPLACE(c.phone, ' ', ''), '-', ''), '(', ''), ')', '') = '+79178533525'
 AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 1096)
 LIMIT 1;
 
@@ -5854,11 +5162,7 @@ SELECT
   NOW(),
   NOW()
 FROM rental_clients c
-WHERE (
-  REPLACE(REPLACE(REPLACE(REPLACE(c.phone, ' ', ''), '-', ''), '(', ''), ')', '') = '+79179062560'
-  OR c.name = 'Ляйсан (Казань 360)'
-  OR c.director_name = 'Ляйсан (Казань 360)'
-)
+WHERE REPLACE(REPLACE(REPLACE(REPLACE(c.phone, ' ', ''), '-', ''), '(', ''), ')', '') = '+79179062560'
 AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 1095)
 LIMIT 1;
 
@@ -5887,11 +5191,7 @@ SELECT
   NOW(),
   NOW()
 FROM rental_clients c
-WHERE (
-  REPLACE(REPLACE(REPLACE(REPLACE(c.phone, ' ', ''), '-', ''), '(', ''), ')', '') = '+79969526558'
-  OR c.name = 'Дамир (Экскурс)'
-  OR c.director_name = 'Дамир (Экскурс)'
-)
+WHERE REPLACE(REPLACE(REPLACE(REPLACE(c.phone, ' ', ''), '-', ''), '(', ''), ')', '') = '+79969526558'
 AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 1094)
 LIMIT 1;
 
@@ -5920,11 +5220,7 @@ SELECT
   NOW(),
   NOW()
 FROM rental_clients c
-WHERE (
-  REPLACE(REPLACE(REPLACE(REPLACE(c.phone, ' ', ''), '-', ''), '(', ''), ')', '') = '+79376252850'
-  OR c.name = 'Ленар (ИП Ножкин)'
-  OR c.director_name = 'Ленар (ИП Ножкин)'
-)
+WHERE REPLACE(REPLACE(REPLACE(REPLACE(c.phone, ' ', ''), '-', ''), '(', ''), ')', '') = '+79376252850'
 AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 1093)
 LIMIT 1;
 
@@ -5953,11 +5249,7 @@ SELECT
   NOW(),
   NOW()
 FROM rental_clients c
-WHERE (
-  REPLACE(REPLACE(REPLACE(REPLACE(c.phone, ' ', ''), '-', ''), '(', ''), ')', '') = '+79033449007'
-  OR c.name = 'Искандер'
-  OR c.director_name = 'Искандер'
-)
+WHERE REPLACE(REPLACE(REPLACE(REPLACE(c.phone, ' ', ''), '-', ''), '(', ''), ')', '') = '+79033449007'
 AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 1092)
 LIMIT 1;
 
@@ -5986,11 +5278,7 @@ SELECT
   NOW(),
   NOW()
 FROM rental_clients c
-WHERE (
-  REPLACE(REPLACE(REPLACE(REPLACE(c.phone, ' ', ''), '-', ''), '(', ''), ')', '') = '+79503118747'
-  OR c.name = 'Любовь (ТИЦ)'
-  OR c.director_name = 'Любовь (ТИЦ)'
-)
+WHERE REPLACE(REPLACE(REPLACE(REPLACE(c.phone, ' ', ''), '-', ''), '(', ''), ')', '') = '+79503118747'
 AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 1091)
 LIMIT 1;
 
@@ -6019,11 +5307,7 @@ SELECT
   NOW(),
   NOW()
 FROM rental_clients c
-WHERE (
-  REPLACE(REPLACE(REPLACE(REPLACE(c.phone, ' ', ''), '-', ''), '(', ''), ')', '') = '+79046623179'
-  OR c.name = 'Екатерина Кореева'
-  OR c.director_name = 'Екатерина Кореева'
-)
+WHERE REPLACE(REPLACE(REPLACE(REPLACE(c.phone, ' ', ''), '-', ''), '(', ''), ')', '') = '+79046623179'
 AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 1090)
 LIMIT 1;
 
@@ -6052,11 +5336,7 @@ SELECT
   NOW(),
   NOW()
 FROM rental_clients c
-WHERE (
-  REPLACE(REPLACE(REPLACE(REPLACE(c.phone, ' ', ''), '-', ''), '(', ''), ')', '') = '+79152964580'
-  OR c.name = 'Арсен (Юнион)'
-  OR c.director_name = 'Арсен (Юнион)'
-)
+WHERE REPLACE(REPLACE(REPLACE(REPLACE(c.phone, ' ', ''), '-', ''), '(', ''), ')', '') = '+79152964580'
 AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 1089)
 LIMIT 1;
 
@@ -6085,11 +5365,7 @@ SELECT
   NOW(),
   NOW()
 FROM rental_clients c
-WHERE (
-  REPLACE(REPLACE(REPLACE(REPLACE(c.phone, ' ', ''), '-', ''), '(', ''), ')', '') = '+79152964580'
-  OR c.name = 'Арсен (Юнион)'
-  OR c.director_name = 'Арсен (Юнион)'
-)
+WHERE REPLACE(REPLACE(REPLACE(REPLACE(c.phone, ' ', ''), '-', ''), '(', ''), ')', '') = '+79152964580'
 AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 1088)
 LIMIT 1;
 
@@ -6118,11 +5394,7 @@ SELECT
   NOW(),
   NOW()
 FROM rental_clients c
-WHERE (
-  REPLACE(REPLACE(REPLACE(REPLACE(c.phone, ' ', ''), '-', ''), '(', ''), ')', '') = '+79600336033'
-  OR c.name = 'Галия'
-  OR c.director_name = 'Галия'
-)
+WHERE REPLACE(REPLACE(REPLACE(REPLACE(c.phone, ' ', ''), '-', ''), '(', ''), ')', '') = '+79600336033'
 AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 1087)
 LIMIT 1;
 
@@ -6151,11 +5423,7 @@ SELECT
   NOW(),
   NOW()
 FROM rental_clients c
-WHERE (
-  REPLACE(REPLACE(REPLACE(REPLACE(c.phone, ' ', ''), '-', ''), '(', ''), ')', '') = '+79372883686'
-  OR c.name = 'Юлия Супрунова (от Миры)'
-  OR c.director_name = 'Юлия Супрунова (от Миры)'
-)
+WHERE REPLACE(REPLACE(REPLACE(REPLACE(c.phone, ' ', ''), '-', ''), '(', ''), ')', '') = '+79372883686'
 AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 1086)
 LIMIT 1;
 
@@ -6184,11 +5452,7 @@ SELECT
   NOW(),
   NOW()
 FROM rental_clients c
-WHERE (
-  REPLACE(REPLACE(REPLACE(REPLACE(c.phone, ' ', ''), '-', ''), '(', ''), ')', '') = '+79274163395'
-  OR c.name = 'Сафина Алина (ФРГРТ)'
-  OR c.director_name = 'Сафина Алина (ФРГРТ)'
-)
+WHERE REPLACE(REPLACE(REPLACE(REPLACE(c.phone, ' ', ''), '-', ''), '(', ''), ')', '') = '+79274163395'
 AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 1085)
 LIMIT 1;
 
@@ -6217,11 +5481,7 @@ SELECT
   NOW(),
   NOW()
 FROM rental_clients c
-WHERE (
-  REPLACE(REPLACE(REPLACE(REPLACE(c.phone, ' ', ''), '-', ''), '(', ''), ')', '') = '+79179142756'
-  OR c.name = 'Татьяна (Гольфстрим)'
-  OR c.director_name = 'Татьяна (Гольфстрим)'
-)
+WHERE REPLACE(REPLACE(REPLACE(REPLACE(c.phone, ' ', ''), '-', ''), '(', ''), ')', '') = '+79179142756'
 AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 1084)
 LIMIT 1;
 
@@ -6250,11 +5510,7 @@ SELECT
   NOW(),
   NOW()
 FROM rental_clients c
-WHERE (
-  REPLACE(REPLACE(REPLACE(REPLACE(c.phone, ' ', ''), '-', ''), '(', ''), ')', '') = '+79179142756'
-  OR c.name = 'Татьяна (Гольфстрим)'
-  OR c.director_name = 'Татьяна (Гольфстрим)'
-)
+WHERE REPLACE(REPLACE(REPLACE(REPLACE(c.phone, ' ', ''), '-', ''), '(', ''), ')', '') = '+79179142756'
 AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 1083)
 LIMIT 1;
 
@@ -6283,11 +5539,7 @@ SELECT
   NOW(),
   NOW()
 FROM rental_clients c
-WHERE (
-  REPLACE(REPLACE(REPLACE(REPLACE(c.phone, ' ', ''), '-', ''), '(', ''), ')', '') = '+79274900014'
-  OR c.name = 'Мария Экскурсовод'
-  OR c.director_name = 'Мария Экскурсовод'
-)
+WHERE REPLACE(REPLACE(REPLACE(REPLACE(c.phone, ' ', ''), '-', ''), '(', ''), ')', '') = '+79274900014'
 AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 1082)
 LIMIT 1;
 
@@ -6316,11 +5568,7 @@ SELECT
   NOW(),
   NOW()
 FROM rental_clients c
-WHERE (
-  REPLACE(REPLACE(REPLACE(REPLACE(c.phone, ' ', ''), '-', ''), '(', ''), ')', '') = '+79662409276'
-  OR c.name = 'Мира (ИП)'
-  OR c.director_name = 'Мира (ИП)'
-)
+WHERE REPLACE(REPLACE(REPLACE(REPLACE(c.phone, ' ', ''), '-', ''), '(', ''), ')', '') = '+79662409276'
 AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 1081)
 LIMIT 1;
 
@@ -6349,11 +5597,7 @@ SELECT
   NOW(),
   NOW()
 FROM rental_clients c
-WHERE (
-  REPLACE(REPLACE(REPLACE(REPLACE(c.phone, ' ', ''), '-', ''), '(', ''), ')', '') = '+79196451838'
-  OR c.name = 'Вадим'
-  OR c.director_name = 'Вадим'
-)
+WHERE REPLACE(REPLACE(REPLACE(REPLACE(c.phone, ' ', ''), '-', ''), '(', ''), ')', '') = '+79196451838'
 AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 1080)
 LIMIT 1;
 
@@ -6382,11 +5626,7 @@ SELECT
   NOW(),
   NOW()
 FROM rental_clients c
-WHERE (
-  REPLACE(REPLACE(REPLACE(REPLACE(c.phone, ' ', ''), '-', ''), '(', ''), ')', '') = '+79274900014'
-  OR c.name = 'Мария Экскурсовод'
-  OR c.director_name = 'Мария Экскурсовод'
-)
+WHERE REPLACE(REPLACE(REPLACE(REPLACE(c.phone, ' ', ''), '-', ''), '(', ''), ')', '') = '+79274900014'
 AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 1079)
 LIMIT 1;
 
@@ -6415,10 +5655,7 @@ SELECT
   NOW(),
   NOW()
 FROM rental_clients c
-WHERE (
-  c.name = 'Эдик Заказы для групп'
-  OR c.director_name = 'Эдик Заказы для групп'
-)
+WHERE (c.name ILIKE '%Эдик%' OR c.director_name ILIKE '%Эдик%')
 AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 1078)
 LIMIT 1;
 
@@ -6447,11 +5684,7 @@ SELECT
   NOW(),
   NOW()
 FROM rental_clients c
-WHERE (
-  REPLACE(REPLACE(REPLACE(REPLACE(c.phone, ' ', ''), '-', ''), '(', ''), ')', '') = '+79179142756'
-  OR c.name = 'Татьяна (Гольфстрим)'
-  OR c.director_name = 'Татьяна (Гольфстрим)'
-)
+WHERE REPLACE(REPLACE(REPLACE(REPLACE(c.phone, ' ', ''), '-', ''), '(', ''), ')', '') = '+79179142756'
 AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 1077)
 LIMIT 1;
 
@@ -6480,11 +5713,7 @@ SELECT
   NOW(),
   NOW()
 FROM rental_clients c
-WHERE (
-  REPLACE(REPLACE(REPLACE(REPLACE(c.phone, ' ', ''), '-', ''), '(', ''), ')', '') = '+79179142756'
-  OR c.name = 'Татьяна (Гольфстрим)'
-  OR c.director_name = 'Татьяна (Гольфстрим)'
-)
+WHERE REPLACE(REPLACE(REPLACE(REPLACE(c.phone, ' ', ''), '-', ''), '(', ''), ')', '') = '+79179142756'
 AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 1076)
 LIMIT 1;
 
@@ -6513,11 +5742,7 @@ SELECT
   NOW(),
   NOW()
 FROM rental_clients c
-WHERE (
-  REPLACE(REPLACE(REPLACE(REPLACE(c.phone, ' ', ''), '-', ''), '(', ''), ')', '') = '+79179142756'
-  OR c.name = 'Татьяна (Гольфстрим)'
-  OR c.director_name = 'Татьяна (Гольфстрим)'
-)
+WHERE REPLACE(REPLACE(REPLACE(REPLACE(c.phone, ' ', ''), '-', ''), '(', ''), ')', '') = '+79179142756'
 AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 1075)
 LIMIT 1;
 
@@ -6546,11 +5771,7 @@ SELECT
   NOW(),
   NOW()
 FROM rental_clients c
-WHERE (
-  REPLACE(REPLACE(REPLACE(REPLACE(c.phone, ' ', ''), '-', ''), '(', ''), ')', '') = '+79179142756'
-  OR c.name = 'Татьяна (Гольфстрим)'
-  OR c.director_name = 'Татьяна (Гольфстрим)'
-)
+WHERE REPLACE(REPLACE(REPLACE(REPLACE(c.phone, ' ', ''), '-', ''), '(', ''), ')', '') = '+79179142756'
 AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 1074)
 LIMIT 1;
 
@@ -6579,11 +5800,7 @@ SELECT
   NOW(),
   NOW()
 FROM rental_clients c
-WHERE (
-  REPLACE(REPLACE(REPLACE(REPLACE(c.phone, ' ', ''), '-', ''), '(', ''), ')', '') = '+79179142756'
-  OR c.name = 'Татьяна (Гольфстрим)'
-  OR c.director_name = 'Татьяна (Гольфстрим)'
-)
+WHERE REPLACE(REPLACE(REPLACE(REPLACE(c.phone, ' ', ''), '-', ''), '(', ''), ')', '') = '+79179142756'
 AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 1073)
 LIMIT 1;
 
@@ -6612,11 +5829,7 @@ SELECT
   NOW(),
   NOW()
 FROM rental_clients c
-WHERE (
-  REPLACE(REPLACE(REPLACE(REPLACE(c.phone, ' ', ''), '-', ''), '(', ''), ')', '') = '+79046623179'
-  OR c.name = 'Екатерина Кореева'
-  OR c.director_name = 'Екатерина Кореева'
-)
+WHERE REPLACE(REPLACE(REPLACE(REPLACE(c.phone, ' ', ''), '-', ''), '(', ''), ')', '') = '+79046623179'
 AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 1072)
 LIMIT 1;
 
@@ -6645,11 +5858,7 @@ SELECT
   NOW(),
   NOW()
 FROM rental_clients c
-WHERE (
-  REPLACE(REPLACE(REPLACE(REPLACE(c.phone, ' ', ''), '-', ''), '(', ''), ')', '') = '+79108272699'
-  OR c.name = 'Ольга (Сиалия)'
-  OR c.director_name = 'Ольга (Сиалия)'
-)
+WHERE REPLACE(REPLACE(REPLACE(REPLACE(c.phone, ' ', ''), '-', ''), '(', ''), ')', '') = '+79108272699'
 AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 1071)
 LIMIT 1;
 
@@ -6678,11 +5887,7 @@ SELECT
   NOW(),
   NOW()
 FROM rental_clients c
-WHERE (
-  REPLACE(REPLACE(REPLACE(REPLACE(c.phone, ' ', ''), '-', ''), '(', ''), ')', '') = '+79179221193'
-  OR c.name = 'Карина (технологии путешествий)'
-  OR c.director_name = 'Карина (технологии путешествий)'
-)
+WHERE REPLACE(REPLACE(REPLACE(REPLACE(c.phone, ' ', ''), '-', ''), '(', ''), ')', '') = '+79179221193'
 AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 1070)
 LIMIT 1;
 
@@ -6711,11 +5916,7 @@ SELECT
   NOW(),
   NOW()
 FROM rental_clients c
-WHERE (
-  REPLACE(REPLACE(REPLACE(REPLACE(c.phone, ' ', ''), '-', ''), '(', ''), ')', '') = '+79872750395'
-  OR c.name = 'Зельфира'
-  OR c.director_name = 'Зельфира'
-)
+WHERE REPLACE(REPLACE(REPLACE(REPLACE(c.phone, ' ', ''), '-', ''), '(', ''), ')', '') = '+79872750395'
 AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 1069)
 LIMIT 1;
 
@@ -6744,10 +5945,7 @@ SELECT
   NOW(),
   NOW()
 FROM rental_clients c
-WHERE (
-  c.name = 'Эдик Заказы для групп'
-  OR c.director_name = 'Эдик Заказы для групп'
-)
+WHERE (c.name ILIKE '%Эдик%' OR c.director_name ILIKE '%Эдик%')
 AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 1068)
 LIMIT 1;
 
@@ -6776,11 +5974,7 @@ SELECT
   NOW(),
   NOW()
 FROM rental_clients c
-WHERE (
-  REPLACE(REPLACE(REPLACE(REPLACE(c.phone, ' ', ''), '-', ''), '(', ''), ')', '') = '+79503118747'
-  OR c.name = 'Любовь (ТИЦ)'
-  OR c.director_name = 'Любовь (ТИЦ)'
-)
+WHERE REPLACE(REPLACE(REPLACE(REPLACE(c.phone, ' ', ''), '-', ''), '(', ''), ')', '') = '+79503118747'
 AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 1067)
 LIMIT 1;
 
@@ -6809,11 +6003,7 @@ SELECT
   NOW(),
   NOW()
 FROM rental_clients c
-WHERE (
-  REPLACE(REPLACE(REPLACE(REPLACE(c.phone, ' ', ''), '-', ''), '(', ''), ')', '') = '+79503118747'
-  OR c.name = 'Любовь (ТИЦ)'
-  OR c.director_name = 'Любовь (ТИЦ)'
-)
+WHERE REPLACE(REPLACE(REPLACE(REPLACE(c.phone, ' ', ''), '-', ''), '(', ''), ')', '') = '+79503118747'
 AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 1066)
 LIMIT 1;
 
@@ -6842,11 +6032,7 @@ SELECT
   NOW(),
   NOW()
 FROM rental_clients c
-WHERE (
-  REPLACE(REPLACE(REPLACE(REPLACE(c.phone, ' ', ''), '-', ''), '(', ''), ')', '') = '+79152964580'
-  OR c.name = 'Арсен (Юнион)'
-  OR c.director_name = 'Арсен (Юнион)'
-)
+WHERE REPLACE(REPLACE(REPLACE(REPLACE(c.phone, ' ', ''), '-', ''), '(', ''), ')', '') = '+79152964580'
 AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 1065)
 LIMIT 1;
 
@@ -6875,11 +6061,7 @@ SELECT
   NOW(),
   NOW()
 FROM rental_clients c
-WHERE (
-  REPLACE(REPLACE(REPLACE(REPLACE(c.phone, ' ', ''), '-', ''), '(', ''), ')', '') = '+79179142756'
-  OR c.name = 'Татьяна (Гольфстрим)'
-  OR c.director_name = 'Татьяна (Гольфстрим)'
-)
+WHERE REPLACE(REPLACE(REPLACE(REPLACE(c.phone, ' ', ''), '-', ''), '(', ''), ')', '') = '+79179142756'
 AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 1064)
 LIMIT 1;
 
@@ -6908,11 +6090,7 @@ SELECT
   NOW(),
   NOW()
 FROM rental_clients c
-WHERE (
-  REPLACE(REPLACE(REPLACE(REPLACE(c.phone, ' ', ''), '-', ''), '(', ''), ')', '') = '+79659400307'
-  OR c.name = 'Зульхиза Кутлучурина'
-  OR c.director_name = 'Зульхиза Кутлучурина'
-)
+WHERE REPLACE(REPLACE(REPLACE(REPLACE(c.phone, ' ', ''), '-', ''), '(', ''), ')', '') = '+79659400307'
 AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 1063)
 LIMIT 1;
 
@@ -6941,11 +6119,7 @@ SELECT
   NOW(),
   NOW()
 FROM rental_clients c
-WHERE (
-  REPLACE(REPLACE(REPLACE(REPLACE(c.phone, ' ', ''), '-', ''), '(', ''), ')', '') = '+79393309448'
-  OR c.name = 'Андрей (Экскурс)'
-  OR c.director_name = 'Андрей (Экскурс)'
-)
+WHERE REPLACE(REPLACE(REPLACE(REPLACE(c.phone, ' ', ''), '-', ''), '(', ''), ')', '') = '+79393309448'
 AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 1062)
 LIMIT 1;
 
@@ -6974,11 +6148,7 @@ SELECT
   NOW(),
   NOW()
 FROM rental_clients c
-WHERE (
-  REPLACE(REPLACE(REPLACE(REPLACE(c.phone, ' ', ''), '-', ''), '(', ''), ')', '') = '+79509693961'
-  OR c.name = 'Татьяна'
-  OR c.director_name = 'Татьяна'
-)
+WHERE REPLACE(REPLACE(REPLACE(REPLACE(c.phone, ' ', ''), '-', ''), '(', ''), ')', '') = '+79509693961'
 AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 1061)
 LIMIT 1;
 
@@ -7007,11 +6177,7 @@ SELECT
   NOW(),
   NOW()
 FROM rental_clients c
-WHERE (
-  REPLACE(REPLACE(REPLACE(REPLACE(c.phone, ' ', ''), '-', ''), '(', ''), ')', '') = '+79006000057'
-  OR c.name = 'Ольга'
-  OR c.director_name = 'Ольга'
-)
+WHERE REPLACE(REPLACE(REPLACE(REPLACE(c.phone, ' ', ''), '-', ''), '(', ''), ')', '') = '+79006000057'
 AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 1060)
 LIMIT 1;
 
@@ -7040,11 +6206,7 @@ SELECT
   NOW(),
   NOW()
 FROM rental_clients c
-WHERE (
-  REPLACE(REPLACE(REPLACE(REPLACE(c.phone, ' ', ''), '-', ''), '(', ''), ')', '') = '+79274463215'
-  OR c.name = 'Айрат Нурмухаммадов'
-  OR c.director_name = 'Айрат Нурмухаммадов'
-)
+WHERE REPLACE(REPLACE(REPLACE(REPLACE(c.phone, ' ', ''), '-', ''), '(', ''), ')', '') = '+79274463215'
 AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 1059)
 LIMIT 1;
 
@@ -7073,11 +6235,7 @@ SELECT
   NOW(),
   NOW()
 FROM rental_clients c
-WHERE (
-  REPLACE(REPLACE(REPLACE(REPLACE(c.phone, ' ', ''), '-', ''), '(', ''), ')', '') = '+79274463215'
-  OR c.name = 'Айрат Нурмухаммадов'
-  OR c.director_name = 'Айрат Нурмухаммадов'
-)
+WHERE REPLACE(REPLACE(REPLACE(REPLACE(c.phone, ' ', ''), '-', ''), '(', ''), ')', '') = '+79274463215'
 AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 1058)
 LIMIT 1;
 
@@ -7106,10 +6264,7 @@ SELECT
   NOW(),
   NOW()
 FROM rental_clients c
-WHERE (
-  c.name = 'Эдик Заказы для групп'
-  OR c.director_name = 'Эдик Заказы для групп'
-)
+WHERE (c.name ILIKE '%Эдик%' OR c.director_name ILIKE '%Эдик%')
 AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 1057)
 LIMIT 1;
 
@@ -7138,11 +6293,7 @@ SELECT
   NOW(),
   NOW()
 FROM rental_clients c
-WHERE (
-  REPLACE(REPLACE(REPLACE(REPLACE(c.phone, ' ', ''), '-', ''), '(', ''), ')', '') = '+79503118747'
-  OR c.name = 'Любовь (ТИЦ)'
-  OR c.director_name = 'Любовь (ТИЦ)'
-)
+WHERE REPLACE(REPLACE(REPLACE(REPLACE(c.phone, ' ', ''), '-', ''), '(', ''), ')', '') = '+79503118747'
 AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 1056)
 LIMIT 1;
 
@@ -7171,11 +6322,7 @@ SELECT
   NOW(),
   NOW()
 FROM rental_clients c
-WHERE (
-  REPLACE(REPLACE(REPLACE(REPLACE(c.phone, ' ', ''), '-', ''), '(', ''), ')', '') = '+79159441878'
-  OR c.name = 'Екатерина «Романова Трэвел»'
-  OR c.director_name = 'Екатерина «Романова Трэвел»'
-)
+WHERE REPLACE(REPLACE(REPLACE(REPLACE(c.phone, ' ', ''), '-', ''), '(', ''), ')', '') = '+79159441878'
 AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 1055)
 LIMIT 1;
 
@@ -7204,11 +6351,7 @@ SELECT
   NOW(),
   NOW()
 FROM rental_clients c
-WHERE (
-  REPLACE(REPLACE(REPLACE(REPLACE(c.phone, ' ', ''), '-', ''), '(', ''), ')', '') = '+79950953373'
-  OR c.name = 'Екатерина'
-  OR c.director_name = 'Екатерина'
-)
+WHERE REPLACE(REPLACE(REPLACE(REPLACE(c.phone, ' ', ''), '-', ''), '(', ''), ')', '') = '+79950953373'
 AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 1054)
 LIMIT 1;
 
@@ -7237,11 +6380,7 @@ SELECT
   NOW(),
   NOW()
 FROM rental_clients c
-WHERE (
-  REPLACE(REPLACE(REPLACE(REPLACE(c.phone, ' ', ''), '-', ''), '(', ''), ')', '') = '+79950953373'
-  OR c.name = 'Екатерина'
-  OR c.director_name = 'Екатерина'
-)
+WHERE REPLACE(REPLACE(REPLACE(REPLACE(c.phone, ' ', ''), '-', ''), '(', ''), ')', '') = '+79950953373'
 AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 1053)
 LIMIT 1;
 
@@ -7270,11 +6409,7 @@ SELECT
   NOW(),
   NOW()
 FROM rental_clients c
-WHERE (
-  REPLACE(REPLACE(REPLACE(REPLACE(c.phone, ' ', ''), '-', ''), '(', ''), ')', '') = '+79246802568'
-  OR c.name = 'Татьяна (Мои Каникулы) (Круиз)'
-  OR c.director_name = 'Татьяна (Мои Каникулы) (Круиз)'
-)
+WHERE REPLACE(REPLACE(REPLACE(REPLACE(c.phone, ' ', ''), '-', ''), '(', ''), ')', '') = '+79246802568'
 AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 1052)
 LIMIT 1;
 
@@ -7303,11 +6438,7 @@ SELECT
   NOW(),
   NOW()
 FROM rental_clients c
-WHERE (
-  REPLACE(REPLACE(REPLACE(REPLACE(c.phone, ' ', ''), '-', ''), '(', ''), ')', '') = '+79061135111'
-  OR c.name = 'Управление Природными Территориями (УПТ)'
-  OR c.director_name = 'Управление Природными Территориями (УПТ)'
-)
+WHERE REPLACE(REPLACE(REPLACE(REPLACE(c.phone, ' ', ''), '-', ''), '(', ''), ')', '') = '+79061135111'
 AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 1051)
 LIMIT 1;
 
@@ -7336,11 +6467,7 @@ SELECT
   NOW(),
   NOW()
 FROM rental_clients c
-WHERE (
-  REPLACE(REPLACE(REPLACE(REPLACE(c.phone, ' ', ''), '-', ''), '(', ''), ')', '') = '+79872750395'
-  OR c.name = 'Зельфира'
-  OR c.director_name = 'Зельфира'
-)
+WHERE REPLACE(REPLACE(REPLACE(REPLACE(c.phone, ' ', ''), '-', ''), '(', ''), ')', '') = '+79872750395'
 AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 1050)
 LIMIT 1;
 
@@ -7369,11 +6496,7 @@ SELECT
   NOW(),
   NOW()
 FROM rental_clients c
-WHERE (
-  REPLACE(REPLACE(REPLACE(REPLACE(c.phone, ' ', ''), '-', ''), '(', ''), ')', '') = '+79277213758'
-  OR c.name = 'Любовь Ким'
-  OR c.director_name = 'Любовь Ким'
-)
+WHERE REPLACE(REPLACE(REPLACE(REPLACE(c.phone, ' ', ''), '-', ''), '(', ''), ')', '') = '+79277213758'
 AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 1049)
 LIMIT 1;
 
@@ -7402,11 +6525,7 @@ SELECT
   NOW(),
   NOW()
 FROM rental_clients c
-WHERE (
-  REPLACE(REPLACE(REPLACE(REPLACE(c.phone, ' ', ''), '-', ''), '(', ''), ')', '') = '+79172914815'
-  OR c.name = 'Елена (Конгресс Авиа)'
-  OR c.director_name = 'Елена (Конгресс Авиа)'
-)
+WHERE REPLACE(REPLACE(REPLACE(REPLACE(c.phone, ' ', ''), '-', ''), '(', ''), ')', '') = '+79172914815'
 AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 1048)
 LIMIT 1;
 
@@ -7435,10 +6554,7 @@ SELECT
   NOW(),
   NOW()
 FROM rental_clients c
-WHERE (
-  c.name = 'Эдик Заказы для групп'
-  OR c.director_name = 'Эдик Заказы для групп'
-)
+WHERE (c.name ILIKE '%Эдик%' OR c.director_name ILIKE '%Эдик%')
 AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 1046)
 LIMIT 1;
 
@@ -7467,11 +6583,7 @@ SELECT
   NOW(),
   NOW()
 FROM rental_clients c
-WHERE (
-  REPLACE(REPLACE(REPLACE(REPLACE(c.phone, ' ', ''), '-', ''), '(', ''), ')', '') = '+79163108629'
-  OR c.name = 'Галина Тур Москва'
-  OR c.director_name = 'Галина Тур Москва'
-)
+WHERE REPLACE(REPLACE(REPLACE(REPLACE(c.phone, ' ', ''), '-', ''), '(', ''), ')', '') = '+79163108629'
 AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 1044)
 LIMIT 1;
 
@@ -7500,11 +6612,7 @@ SELECT
   NOW(),
   NOW()
 FROM rental_clients c
-WHERE (
-  REPLACE(REPLACE(REPLACE(REPLACE(c.phone, ' ', ''), '-', ''), '(', ''), ')', '') = '+79600336033'
-  OR c.name = 'Галия'
-  OR c.director_name = 'Галия'
-)
+WHERE REPLACE(REPLACE(REPLACE(REPLACE(c.phone, ' ', ''), '-', ''), '(', ''), ')', '') = '+79600336033'
 AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 1043)
 LIMIT 1;
 
@@ -7533,11 +6641,7 @@ SELECT
   NOW(),
   NOW()
 FROM rental_clients c
-WHERE (
-  REPLACE(REPLACE(REPLACE(REPLACE(c.phone, ' ', ''), '-', ''), '(', ''), ')', '') = '+79869297050'
-  OR c.name = 'Инна Экскурсовод'
-  OR c.director_name = 'Инна Экскурсовод'
-)
+WHERE REPLACE(REPLACE(REPLACE(REPLACE(c.phone, ' ', ''), '-', ''), '(', ''), ')', '') = '+79869297050'
 AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 1042)
 LIMIT 1;
 
@@ -7566,11 +6670,7 @@ SELECT
   NOW(),
   NOW()
 FROM rental_clients c
-WHERE (
-  REPLACE(REPLACE(REPLACE(REPLACE(c.phone, ' ', ''), '-', ''), '(', ''), ')', '') = '+79274900014'
-  OR c.name = 'Мария Экскурсовод'
-  OR c.director_name = 'Мария Экскурсовод'
-)
+WHERE REPLACE(REPLACE(REPLACE(REPLACE(c.phone, ' ', ''), '-', ''), '(', ''), ')', '') = '+79274900014'
 AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 1041)
 LIMIT 1;
 
@@ -7599,11 +6699,7 @@ SELECT
   NOW(),
   NOW()
 FROM rental_clients c
-WHERE (
-  REPLACE(REPLACE(REPLACE(REPLACE(c.phone, ' ', ''), '-', ''), '(', ''), ')', '') = '+79179221193'
-  OR c.name = 'Карина (технологии путешествий)'
-  OR c.director_name = 'Карина (технологии путешествий)'
-)
+WHERE REPLACE(REPLACE(REPLACE(REPLACE(c.phone, ' ', ''), '-', ''), '(', ''), ')', '') = '+79179221193'
 AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 1040)
 LIMIT 1;
 
@@ -7632,11 +6728,7 @@ SELECT
   NOW(),
   NOW()
 FROM rental_clients c
-WHERE (
-  REPLACE(REPLACE(REPLACE(REPLACE(c.phone, ' ', ''), '-', ''), '(', ''), ')', '') = '+79503118747'
-  OR c.name = 'Любовь (ТИЦ)'
-  OR c.director_name = 'Любовь (ТИЦ)'
-)
+WHERE REPLACE(REPLACE(REPLACE(REPLACE(c.phone, ' ', ''), '-', ''), '(', ''), ')', '') = '+79503118747'
 AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 1039)
 LIMIT 1;
 
@@ -7665,11 +6757,7 @@ SELECT
   NOW(),
   NOW()
 FROM rental_clients c
-WHERE (
-  REPLACE(REPLACE(REPLACE(REPLACE(c.phone, ' ', ''), '-', ''), '(', ''), ')', '') = '+79872904401'
-  OR c.name = 'Галина (Тур Урал)'
-  OR c.director_name = 'Галина (Тур Урал)'
-)
+WHERE REPLACE(REPLACE(REPLACE(REPLACE(c.phone, ' ', ''), '-', ''), '(', ''), ')', '') = '+79872904401'
 AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 1038)
 LIMIT 1;
 
@@ -7698,11 +6786,7 @@ SELECT
   NOW(),
   NOW()
 FROM rental_clients c
-WHERE (
-  REPLACE(REPLACE(REPLACE(REPLACE(c.phone, ' ', ''), '-', ''), '(', ''), ')', '') = '+79168133609'
-  OR c.name = 'Давид (КФУ)'
-  OR c.director_name = 'Давид (КФУ)'
-)
+WHERE REPLACE(REPLACE(REPLACE(REPLACE(c.phone, ' ', ''), '-', ''), '(', ''), ')', '') = '+79168133609'
 AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 1037)
 LIMIT 1;
 
@@ -7731,11 +6815,7 @@ SELECT
   NOW(),
   NOW()
 FROM rental_clients c
-WHERE (
-  REPLACE(REPLACE(REPLACE(REPLACE(c.phone, ' ', ''), '-', ''), '(', ''), ')', '') = '+79127740429'
-  OR c.name = 'Мария'
-  OR c.director_name = 'Мария'
-)
+WHERE REPLACE(REPLACE(REPLACE(REPLACE(c.phone, ' ', ''), '-', ''), '(', ''), ')', '') = '+79127740429'
 AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 1036)
 LIMIT 1;
 
@@ -7764,11 +6844,7 @@ SELECT
   NOW(),
   NOW()
 FROM rental_clients c
-WHERE (
-  REPLACE(REPLACE(REPLACE(REPLACE(c.phone, ' ', ''), '-', ''), '(', ''), ')', '') = '+79127740429'
-  OR c.name = 'Мария'
-  OR c.director_name = 'Мария'
-)
+WHERE REPLACE(REPLACE(REPLACE(REPLACE(c.phone, ' ', ''), '-', ''), '(', ''), ')', '') = '+79127740429'
 AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 1035)
 LIMIT 1;
 
@@ -7797,11 +6873,7 @@ SELECT
   NOW(),
   NOW()
 FROM rental_clients c
-WHERE (
-  REPLACE(REPLACE(REPLACE(REPLACE(c.phone, ' ', ''), '-', ''), '(', ''), ')', '') = '+79276703000'
-  OR c.name = 'Ирина Пронина'
-  OR c.director_name = 'Ирина Пронина'
-)
+WHERE REPLACE(REPLACE(REPLACE(REPLACE(c.phone, ' ', ''), '-', ''), '(', ''), ')', '') = '+79276703000'
 AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 1034)
 LIMIT 1;
 
@@ -7830,11 +6902,7 @@ SELECT
   NOW(),
   NOW()
 FROM rental_clients c
-WHERE (
-  REPLACE(REPLACE(REPLACE(REPLACE(c.phone, ' ', ''), '-', ''), '(', ''), ')', '') = '+79152964580'
-  OR c.name = 'Арсен (Юнион)'
-  OR c.director_name = 'Арсен (Юнион)'
-)
+WHERE REPLACE(REPLACE(REPLACE(REPLACE(c.phone, ' ', ''), '-', ''), '(', ''), ')', '') = '+79152964580'
 AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 1033)
 LIMIT 1;
 
@@ -7863,11 +6931,7 @@ SELECT
   NOW(),
   NOW()
 FROM rental_clients c
-WHERE (
-  REPLACE(REPLACE(REPLACE(REPLACE(c.phone, ' ', ''), '-', ''), '(', ''), ')', '') = '+79152964580'
-  OR c.name = 'Арсен (Юнион)'
-  OR c.director_name = 'Арсен (Юнион)'
-)
+WHERE REPLACE(REPLACE(REPLACE(REPLACE(c.phone, ' ', ''), '-', ''), '(', ''), ')', '') = '+79152964580'
 AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 1032)
 LIMIT 1;
 
@@ -7896,11 +6960,7 @@ SELECT
   NOW(),
   NOW()
 FROM rental_clients c
-WHERE (
-  REPLACE(REPLACE(REPLACE(REPLACE(c.phone, ' ', ''), '-', ''), '(', ''), ')', '') = '+79503118747'
-  OR c.name = 'Любовь (ТИЦ)'
-  OR c.director_name = 'Любовь (ТИЦ)'
-)
+WHERE REPLACE(REPLACE(REPLACE(REPLACE(c.phone, ' ', ''), '-', ''), '(', ''), ')', '') = '+79503118747'
 AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 1031)
 LIMIT 1;
 
@@ -7929,11 +6989,7 @@ SELECT
   NOW(),
   NOW()
 FROM rental_clients c
-WHERE (
-  REPLACE(REPLACE(REPLACE(REPLACE(c.phone, ' ', ''), '-', ''), '(', ''), ')', '') = '+79950953373'
-  OR c.name = 'Екатерина'
-  OR c.director_name = 'Екатерина'
-)
+WHERE REPLACE(REPLACE(REPLACE(REPLACE(c.phone, ' ', ''), '-', ''), '(', ''), ')', '') = '+79950953373'
 AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 1030)
 LIMIT 1;
 
@@ -7962,11 +7018,7 @@ SELECT
   NOW(),
   NOW()
 FROM rental_clients c
-WHERE (
-  REPLACE(REPLACE(REPLACE(REPLACE(c.phone, ' ', ''), '-', ''), '(', ''), ')', '') = '+79872750395'
-  OR c.name = 'Зельфира'
-  OR c.director_name = 'Зельфира'
-)
+WHERE REPLACE(REPLACE(REPLACE(REPLACE(c.phone, ' ', ''), '-', ''), '(', ''), ')', '') = '+79872750395'
 AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 1029)
 LIMIT 1;
 
@@ -7995,11 +7047,7 @@ SELECT
   NOW(),
   NOW()
 FROM rental_clients c
-WHERE (
-  REPLACE(REPLACE(REPLACE(REPLACE(c.phone, ' ', ''), '-', ''), '(', ''), ')', '') = '+79503118747'
-  OR c.name = 'Любовь (ТИЦ)'
-  OR c.director_name = 'Любовь (ТИЦ)'
-)
+WHERE REPLACE(REPLACE(REPLACE(REPLACE(c.phone, ' ', ''), '-', ''), '(', ''), ')', '') = '+79503118747'
 AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 1027)
 LIMIT 1;
 
@@ -8028,11 +7076,7 @@ SELECT
   NOW(),
   NOW()
 FROM rental_clients c
-WHERE (
-  REPLACE(REPLACE(REPLACE(REPLACE(c.phone, ' ', ''), '-', ''), '(', ''), ')', '') = '+79872797484'
-  OR c.name = 'Алина Сафина'
-  OR c.director_name = 'Алина Сафина'
-)
+WHERE REPLACE(REPLACE(REPLACE(REPLACE(c.phone, ' ', ''), '-', ''), '(', ''), ')', '') = '+79872797484'
 AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 1026)
 LIMIT 1;
 
@@ -8061,11 +7105,7 @@ SELECT
   NOW(),
   NOW()
 FROM rental_clients c
-WHERE (
-  REPLACE(REPLACE(REPLACE(REPLACE(c.phone, ' ', ''), '-', ''), '(', ''), ')', '') = '+79179142756'
-  OR c.name = 'Татьяна (Гольфстрим)'
-  OR c.director_name = 'Татьяна (Гольфстрим)'
-)
+WHERE REPLACE(REPLACE(REPLACE(REPLACE(c.phone, ' ', ''), '-', ''), '(', ''), ')', '') = '+79179142756'
 AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 1025)
 LIMIT 1;
 
@@ -8094,11 +7134,7 @@ SELECT
   NOW(),
   NOW()
 FROM rental_clients c
-WHERE (
-  REPLACE(REPLACE(REPLACE(REPLACE(c.phone, ' ', ''), '-', ''), '(', ''), ')', '') = '+79179142756'
-  OR c.name = 'Татьяна (Гольфстрим)'
-  OR c.director_name = 'Татьяна (Гольфстрим)'
-)
+WHERE REPLACE(REPLACE(REPLACE(REPLACE(c.phone, ' ', ''), '-', ''), '(', ''), ')', '') = '+79179142756'
 AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 1024)
 LIMIT 1;
 
@@ -8127,11 +7163,7 @@ SELECT
   NOW(),
   NOW()
 FROM rental_clients c
-WHERE (
-  REPLACE(REPLACE(REPLACE(REPLACE(c.phone, ' ', ''), '-', ''), '(', ''), ')', '') = '+79272534202'
-  OR c.name = 'Александр'
-  OR c.director_name = 'Александр'
-)
+WHERE REPLACE(REPLACE(REPLACE(REPLACE(c.phone, ' ', ''), '-', ''), '(', ''), ')', '') = '+79272534202'
 AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 1023)
 LIMIT 1;
 
@@ -8160,11 +7192,7 @@ SELECT
   NOW(),
   NOW()
 FROM rental_clients c
-WHERE (
-  REPLACE(REPLACE(REPLACE(REPLACE(c.phone, ' ', ''), '-', ''), '(', ''), ')', '') = '+79043349504'
-  OR c.name = 'Андрей СПБ'
-  OR c.director_name = 'Андрей СПБ'
-)
+WHERE REPLACE(REPLACE(REPLACE(REPLACE(c.phone, ' ', ''), '-', ''), '(', ''), ')', '') = '+79043349504'
 AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 1022)
 LIMIT 1;
 
@@ -8193,11 +7221,7 @@ SELECT
   NOW(),
   NOW()
 FROM rental_clients c
-WHERE (
-  REPLACE(REPLACE(REPLACE(REPLACE(c.phone, ' ', ''), '-', ''), '(', ''), ')', '') = '+79050249197'
-  OR c.name = 'Ирина (Иль Мио Тур)'
-  OR c.director_name = 'Ирина (Иль Мио Тур)'
-)
+WHERE REPLACE(REPLACE(REPLACE(REPLACE(c.phone, ' ', ''), '-', ''), '(', ''), ')', '') = '+79050249197'
 AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 1021)
 LIMIT 1;
 
@@ -8226,11 +7250,7 @@ SELECT
   NOW(),
   NOW()
 FROM rental_clients c
-WHERE (
-  REPLACE(REPLACE(REPLACE(REPLACE(c.phone, ' ', ''), '-', ''), '(', ''), ')', '') = '+79179062560'
-  OR c.name = 'Ляйсан (Казань 360)'
-  OR c.director_name = 'Ляйсан (Казань 360)'
-)
+WHERE REPLACE(REPLACE(REPLACE(REPLACE(c.phone, ' ', ''), '-', ''), '(', ''), ')', '') = '+79179062560'
 AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 1020)
 LIMIT 1;
 
@@ -8259,11 +7279,7 @@ SELECT
   NOW(),
   NOW()
 FROM rental_clients c
-WHERE (
-  REPLACE(REPLACE(REPLACE(REPLACE(c.phone, ' ', ''), '-', ''), '(', ''), ')', '') = '+79872827166'
-  OR c.name = 'Татьяна Чуб'
-  OR c.director_name = 'Татьяна Чуб'
-)
+WHERE REPLACE(REPLACE(REPLACE(REPLACE(c.phone, ' ', ''), '-', ''), '(', ''), ')', '') = '+79872827166'
 AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 1019)
 LIMIT 1;
 
@@ -8292,11 +7308,7 @@ SELECT
   NOW(),
   NOW()
 FROM rental_clients c
-WHERE (
-  REPLACE(REPLACE(REPLACE(REPLACE(c.phone, ' ', ''), '-', ''), '(', ''), ')', '') = '+79659400307'
-  OR c.name = 'Зульхиза Кутлучурина'
-  OR c.director_name = 'Зульхиза Кутлучурина'
-)
+WHERE REPLACE(REPLACE(REPLACE(REPLACE(c.phone, ' ', ''), '-', ''), '(', ''), ')', '') = '+79659400307'
 AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 1018)
 LIMIT 1;
 
@@ -8325,11 +7337,7 @@ SELECT
   NOW(),
   NOW()
 FROM rental_clients c
-WHERE (
-  REPLACE(REPLACE(REPLACE(REPLACE(c.phone, ' ', ''), '-', ''), '(', ''), ')', '') = '+79042786414'
-  OR c.name = 'Анастасия'
-  OR c.director_name = 'Анастасия'
-)
+WHERE REPLACE(REPLACE(REPLACE(REPLACE(c.phone, ' ', ''), '-', ''), '(', ''), ')', '') = '+79042786414'
 AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 1017)
 LIMIT 1;
 
@@ -8358,11 +7366,7 @@ SELECT
   NOW(),
   NOW()
 FROM rental_clients c
-WHERE (
-  REPLACE(REPLACE(REPLACE(REPLACE(c.phone, ' ', ''), '-', ''), '(', ''), ')', '') = '+79061135111'
-  OR c.name = 'Управление Природными Территориями (УПТ)'
-  OR c.director_name = 'Управление Природными Территориями (УПТ)'
-)
+WHERE REPLACE(REPLACE(REPLACE(REPLACE(c.phone, ' ', ''), '-', ''), '(', ''), ')', '') = '+79061135111'
 AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 1016)
 LIMIT 1;
 
@@ -8391,11 +7395,7 @@ SELECT
   NOW(),
   NOW()
 FROM rental_clients c
-WHERE (
-  REPLACE(REPLACE(REPLACE(REPLACE(c.phone, ' ', ''), '-', ''), '(', ''), ')', '') = '+79179142756'
-  OR c.name = 'Татьяна (Гольфстрим)'
-  OR c.director_name = 'Татьяна (Гольфстрим)'
-)
+WHERE REPLACE(REPLACE(REPLACE(REPLACE(c.phone, ' ', ''), '-', ''), '(', ''), ')', '') = '+79179142756'
 AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 1015)
 LIMIT 1;
 
@@ -8424,11 +7424,7 @@ SELECT
   NOW(),
   NOW()
 FROM rental_clients c
-WHERE (
-  REPLACE(REPLACE(REPLACE(REPLACE(c.phone, ' ', ''), '-', ''), '(', ''), ')', '') = '+79101776156'
-  OR c.name = 'Анюта Родионова (Родина-тур)'
-  OR c.director_name = 'Анюта Родионова (Родина-тур)'
-)
+WHERE REPLACE(REPLACE(REPLACE(REPLACE(c.phone, ' ', ''), '-', ''), '(', ''), ')', '') = '+79101776156'
 AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 1014)
 LIMIT 1;
 
@@ -8457,10 +7453,7 @@ SELECT
   NOW(),
   NOW()
 FROM rental_clients c
-WHERE (
-  c.name = 'Эдик Заказы для групп'
-  OR c.director_name = 'Эдик Заказы для групп'
-)
+WHERE (c.name ILIKE '%Эдик%' OR c.director_name ILIKE '%Эдик%')
 AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 1012)
 LIMIT 1;
 
@@ -8489,11 +7482,7 @@ SELECT
   NOW(),
   NOW()
 FROM rental_clients c
-WHERE (
-  REPLACE(REPLACE(REPLACE(REPLACE(c.phone, ' ', ''), '-', ''), '(', ''), ')', '') = '+79272534202'
-  OR c.name = 'Александр'
-  OR c.director_name = 'Александр'
-)
+WHERE REPLACE(REPLACE(REPLACE(REPLACE(c.phone, ' ', ''), '-', ''), '(', ''), ')', '') = '+79272534202'
 AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 1011)
 LIMIT 1;
 
@@ -8522,11 +7511,7 @@ SELECT
   NOW(),
   NOW()
 FROM rental_clients c
-WHERE (
-  REPLACE(REPLACE(REPLACE(REPLACE(c.phone, ' ', ''), '-', ''), '(', ''), ')', '') = '+79264062333'
-  OR c.name = 'Марина Экс'
-  OR c.director_name = 'Марина Экс'
-)
+WHERE REPLACE(REPLACE(REPLACE(REPLACE(c.phone, ' ', ''), '-', ''), '(', ''), ')', '') = '+79264062333'
 AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 1010)
 LIMIT 1;
 
@@ -8555,11 +7540,7 @@ SELECT
   NOW(),
   NOW()
 FROM rental_clients c
-WHERE (
-  REPLACE(REPLACE(REPLACE(REPLACE(c.phone, ' ', ''), '-', ''), '(', ''), ')', '') = '+79046623179'
-  OR c.name = 'Екатерина Кореева'
-  OR c.director_name = 'Екатерина Кореева'
-)
+WHERE REPLACE(REPLACE(REPLACE(REPLACE(c.phone, ' ', ''), '-', ''), '(', ''), ')', '') = '+79046623179'
 AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 1009)
 LIMIT 1;
 
@@ -8588,11 +7569,7 @@ SELECT
   NOW(),
   NOW()
 FROM rental_clients c
-WHERE (
-  REPLACE(REPLACE(REPLACE(REPLACE(c.phone, ' ', ''), '-', ''), '(', ''), ')', '') = '+79171208622'
-  OR c.name = 'Ольга (Тольятти)'
-  OR c.director_name = 'Ольга (Тольятти)'
-)
+WHERE REPLACE(REPLACE(REPLACE(REPLACE(c.phone, ' ', ''), '-', ''), '(', ''), ')', '') = '+79171208622'
 AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 1008)
 LIMIT 1;
 
@@ -8621,11 +7598,7 @@ SELECT
   NOW(),
   NOW()
 FROM rental_clients c
-WHERE (
-  REPLACE(REPLACE(REPLACE(REPLACE(c.phone, ' ', ''), '-', ''), '(', ''), ')', '') = '+79503118747'
-  OR c.name = 'Любовь (ТИЦ)'
-  OR c.director_name = 'Любовь (ТИЦ)'
-)
+WHERE REPLACE(REPLACE(REPLACE(REPLACE(c.phone, ' ', ''), '-', ''), '(', ''), ')', '') = '+79503118747'
 AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 1007)
 LIMIT 1;
 
@@ -8654,11 +7627,7 @@ SELECT
   NOW(),
   NOW()
 FROM rental_clients c
-WHERE (
-  REPLACE(REPLACE(REPLACE(REPLACE(c.phone, ' ', ''), '-', ''), '(', ''), ')', '') = '+79152964580'
-  OR c.name = 'Арсен (Юнион)'
-  OR c.director_name = 'Арсен (Юнион)'
-)
+WHERE REPLACE(REPLACE(REPLACE(REPLACE(c.phone, ' ', ''), '-', ''), '(', ''), ')', '') = '+79152964580'
 AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 1006)
 LIMIT 1;
 
@@ -8687,11 +7656,7 @@ SELECT
   NOW(),
   NOW()
 FROM rental_clients c
-WHERE (
-  REPLACE(REPLACE(REPLACE(REPLACE(c.phone, ' ', ''), '-', ''), '(', ''), ')', '') = '+79503118747'
-  OR c.name = 'Любовь (ТИЦ)'
-  OR c.director_name = 'Любовь (ТИЦ)'
-)
+WHERE REPLACE(REPLACE(REPLACE(REPLACE(c.phone, ' ', ''), '-', ''), '(', ''), ')', '') = '+79503118747'
 AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 1005)
 LIMIT 1;
 
@@ -8720,11 +7685,7 @@ SELECT
   NOW(),
   NOW()
 FROM rental_clients c
-WHERE (
-  REPLACE(REPLACE(REPLACE(REPLACE(c.phone, ' ', ''), '-', ''), '(', ''), ')', '') = '+79503118747'
-  OR c.name = 'Любовь (ТИЦ)'
-  OR c.director_name = 'Любовь (ТИЦ)'
-)
+WHERE REPLACE(REPLACE(REPLACE(REPLACE(c.phone, ' ', ''), '-', ''), '(', ''), ')', '') = '+79503118747'
 AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 1004)
 LIMIT 1;
 
@@ -8753,11 +7714,7 @@ SELECT
   NOW(),
   NOW()
 FROM rental_clients c
-WHERE (
-  REPLACE(REPLACE(REPLACE(REPLACE(c.phone, ' ', ''), '-', ''), '(', ''), ')', '') = '+79510610028'
-  OR c.name = 'Гузелия'
-  OR c.director_name = 'Гузелия'
-)
+WHERE REPLACE(REPLACE(REPLACE(REPLACE(c.phone, ' ', ''), '-', ''), '(', ''), ')', '') = '+79510610028'
 AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 1003)
 LIMIT 1;
 
@@ -8786,10 +7743,7 @@ SELECT
   NOW(),
   NOW()
 FROM rental_clients c
-WHERE (
-  c.name = 'Эдик Заказы для групп'
-  OR c.director_name = 'Эдик Заказы для групп'
-)
+WHERE (c.name ILIKE '%Эдик%' OR c.director_name ILIKE '%Эдик%')
 AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 1002)
 LIMIT 1;
 
@@ -8818,11 +7772,7 @@ SELECT
   NOW(),
   NOW()
 FROM rental_clients c
-WHERE (
-  REPLACE(REPLACE(REPLACE(REPLACE(c.phone, ' ', ''), '-', ''), '(', ''), ')', '') = '+79222673014'
-  OR c.name = 'Юлия (Рыжий Слон)'
-  OR c.director_name = 'Юлия (Рыжий Слон)'
-)
+WHERE REPLACE(REPLACE(REPLACE(REPLACE(c.phone, ' ', ''), '-', ''), '(', ''), ')', '') = '+79222673014'
 AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 1001)
 LIMIT 1;
 
@@ -8851,11 +7801,7 @@ SELECT
   NOW(),
   NOW()
 FROM rental_clients c
-WHERE (
-  REPLACE(REPLACE(REPLACE(REPLACE(c.phone, ' ', ''), '-', ''), '(', ''), ')', '') = '+79662409276'
-  OR c.name = 'Мира (ИП)'
-  OR c.director_name = 'Мира (ИП)'
-)
+WHERE REPLACE(REPLACE(REPLACE(REPLACE(c.phone, ' ', ''), '-', ''), '(', ''), ')', '') = '+79662409276'
 AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 1000)
 LIMIT 1;
 
@@ -8884,11 +7830,7 @@ SELECT
   NOW(),
   NOW()
 FROM rental_clients c
-WHERE (
-  REPLACE(REPLACE(REPLACE(REPLACE(c.phone, ' ', ''), '-', ''), '(', ''), ')', '') = '+79272408250'
-  OR c.name = 'Лариса Перминова'
-  OR c.director_name = 'Лариса Перминова'
-)
+WHERE REPLACE(REPLACE(REPLACE(REPLACE(c.phone, ' ', ''), '-', ''), '(', ''), ')', '') = '+79272408250'
 AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 999)
 LIMIT 1;
 
@@ -8917,11 +7859,7 @@ SELECT
   NOW(),
   NOW()
 FROM rental_clients c
-WHERE (
-  REPLACE(REPLACE(REPLACE(REPLACE(c.phone, ' ', ''), '-', ''), '(', ''), ')', '') = '+79510610028'
-  OR c.name = 'Гузелия'
-  OR c.director_name = 'Гузелия'
-)
+WHERE REPLACE(REPLACE(REPLACE(REPLACE(c.phone, ' ', ''), '-', ''), '(', ''), ')', '') = '+79510610028'
 AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 998)
 LIMIT 1;
 
@@ -8950,11 +7888,7 @@ SELECT
   NOW(),
   NOW()
 FROM rental_clients c
-WHERE (
-  REPLACE(REPLACE(REPLACE(REPLACE(c.phone, ' ', ''), '-', ''), '(', ''), ')', '') = '+79108272699'
-  OR c.name = 'Ольга (Сиалия)'
-  OR c.director_name = 'Ольга (Сиалия)'
-)
+WHERE REPLACE(REPLACE(REPLACE(REPLACE(c.phone, ' ', ''), '-', ''), '(', ''), ')', '') = '+79108272699'
 AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 997)
 LIMIT 1;
 
@@ -8983,11 +7917,7 @@ SELECT
   NOW(),
   NOW()
 FROM rental_clients c
-WHERE (
-  REPLACE(REPLACE(REPLACE(REPLACE(c.phone, ' ', ''), '-', ''), '(', ''), ')', '') = '+79196862442'
-  OR c.name = 'Рената (Твоя Казань)'
-  OR c.director_name = 'Рената (Твоя Казань)'
-)
+WHERE REPLACE(REPLACE(REPLACE(REPLACE(c.phone, ' ', ''), '-', ''), '(', ''), ')', '') = '+79196862442'
 AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 996)
 LIMIT 1;
 
@@ -9016,11 +7946,7 @@ SELECT
   NOW(),
   NOW()
 FROM rental_clients c
-WHERE (
-  REPLACE(REPLACE(REPLACE(REPLACE(c.phone, ' ', ''), '-', ''), '(', ''), ')', '') = '+79600523400'
-  OR c.name = 'Эвелина (Инициатива)'
-  OR c.director_name = 'Эвелина (Инициатива)'
-)
+WHERE REPLACE(REPLACE(REPLACE(REPLACE(c.phone, ' ', ''), '-', ''), '(', ''), ')', '') = '+79600523400'
 AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 995)
 LIMIT 1;
 
@@ -9049,11 +7975,7 @@ SELECT
   NOW(),
   NOW()
 FROM rental_clients c
-WHERE (
-  REPLACE(REPLACE(REPLACE(REPLACE(c.phone, ' ', ''), '-', ''), '(', ''), ')', '') = '+79659400307'
-  OR c.name = 'Зульхиза Кутлучурина'
-  OR c.director_name = 'Зульхиза Кутлучурина'
-)
+WHERE REPLACE(REPLACE(REPLACE(REPLACE(c.phone, ' ', ''), '-', ''), '(', ''), ')', '') = '+79659400307'
 AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 994)
 LIMIT 1;
 
@@ -9082,11 +8004,7 @@ SELECT
   NOW(),
   NOW()
 FROM rental_clients c
-WHERE (
-  REPLACE(REPLACE(REPLACE(REPLACE(c.phone, ' ', ''), '-', ''), '(', ''), ')', '') = '+79042786414'
-  OR c.name = 'Анастасия'
-  OR c.director_name = 'Анастасия'
-)
+WHERE REPLACE(REPLACE(REPLACE(REPLACE(c.phone, ' ', ''), '-', ''), '(', ''), ')', '') = '+79042786414'
 AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 993)
 LIMIT 1;
 
@@ -9115,11 +8033,7 @@ SELECT
   NOW(),
   NOW()
 FROM rental_clients c
-WHERE (
-  REPLACE(REPLACE(REPLACE(REPLACE(c.phone, ' ', ''), '-', ''), '(', ''), ')', '') = '+79262332196'
-  OR c.name = 'Жанна'
-  OR c.director_name = 'Жанна'
-)
+WHERE REPLACE(REPLACE(REPLACE(REPLACE(c.phone, ' ', ''), '-', ''), '(', ''), ')', '') = '+79262332196'
 AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 992)
 LIMIT 1;
 
@@ -9148,11 +8062,7 @@ SELECT
   NOW(),
   NOW()
 FROM rental_clients c
-WHERE (
-  REPLACE(REPLACE(REPLACE(REPLACE(c.phone, ' ', ''), '-', ''), '(', ''), ')', '') = '+79179142756'
-  OR c.name = 'Татьяна (Гольфстрим)'
-  OR c.director_name = 'Татьяна (Гольфстрим)'
-)
+WHERE REPLACE(REPLACE(REPLACE(REPLACE(c.phone, ' ', ''), '-', ''), '(', ''), ')', '') = '+79179142756'
 AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 990)
 LIMIT 1;
 
@@ -9181,11 +8091,7 @@ SELECT
   NOW(),
   NOW()
 FROM rental_clients c
-WHERE (
-  REPLACE(REPLACE(REPLACE(REPLACE(c.phone, ' ', ''), '-', ''), '(', ''), ')', '') = '+79101776156'
-  OR c.name = 'Анюта Родионова (Родина-тур)'
-  OR c.director_name = 'Анюта Родионова (Родина-тур)'
-)
+WHERE REPLACE(REPLACE(REPLACE(REPLACE(c.phone, ' ', ''), '-', ''), '(', ''), ')', '') = '+79101776156'
 AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 989)
 LIMIT 1;
 
@@ -9214,11 +8120,7 @@ SELECT
   NOW(),
   NOW()
 FROM rental_clients c
-WHERE (
-  REPLACE(REPLACE(REPLACE(REPLACE(c.phone, ' ', ''), '-', ''), '(', ''), ')', '') = '+79274463215'
-  OR c.name = 'Айрат Нурмухаммадов'
-  OR c.director_name = 'Айрат Нурмухаммадов'
-)
+WHERE REPLACE(REPLACE(REPLACE(REPLACE(c.phone, ' ', ''), '-', ''), '(', ''), ')', '') = '+79274463215'
 AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 988)
 LIMIT 1;
 
@@ -9247,11 +8149,7 @@ SELECT
   NOW(),
   NOW()
 FROM rental_clients c
-WHERE (
-  REPLACE(REPLACE(REPLACE(REPLACE(c.phone, ' ', ''), '-', ''), '(', ''), ')', '') = '+79033408152'
-  OR c.name = 'Юлианна'
-  OR c.director_name = 'Юлианна'
-)
+WHERE REPLACE(REPLACE(REPLACE(REPLACE(c.phone, ' ', ''), '-', ''), '(', ''), ')', '') = '+79033408152'
 AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 987)
 LIMIT 1;
 
@@ -9280,11 +8178,7 @@ SELECT
   NOW(),
   NOW()
 FROM rental_clients c
-WHERE (
-  REPLACE(REPLACE(REPLACE(REPLACE(c.phone, ' ', ''), '-', ''), '(', ''), ')', '') = '+79534837004'
-  OR c.name = 'Фируза'
-  OR c.director_name = 'Фируза'
-)
+WHERE REPLACE(REPLACE(REPLACE(REPLACE(c.phone, ' ', ''), '-', ''), '(', ''), ')', '') = '+79534837004'
 AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 986)
 LIMIT 1;
 
@@ -9313,11 +8207,7 @@ SELECT
   NOW(),
   NOW()
 FROM rental_clients c
-WHERE (
-  REPLACE(REPLACE(REPLACE(REPLACE(c.phone, ' ', ''), '-', ''), '(', ''), ')', '') = '+79600523400'
-  OR c.name = 'Эвелина (Инициатива)'
-  OR c.director_name = 'Эвелина (Инициатива)'
-)
+WHERE REPLACE(REPLACE(REPLACE(REPLACE(c.phone, ' ', ''), '-', ''), '(', ''), ')', '') = '+79600523400'
 AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 985)
 LIMIT 1;
 
@@ -9346,11 +8236,7 @@ SELECT
   NOW(),
   NOW()
 FROM rental_clients c
-WHERE (
-  REPLACE(REPLACE(REPLACE(REPLACE(c.phone, ' ', ''), '-', ''), '(', ''), ')', '') = '+79600523400'
-  OR c.name = 'Эвелина (Инициатива)'
-  OR c.director_name = 'Эвелина (Инициатива)'
-)
+WHERE REPLACE(REPLACE(REPLACE(REPLACE(c.phone, ' ', ''), '-', ''), '(', ''), ')', '') = '+79600523400'
 AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 984)
 LIMIT 1;
 
@@ -9379,11 +8265,7 @@ SELECT
   NOW(),
   NOW()
 FROM rental_clients c
-WHERE (
-  REPLACE(REPLACE(REPLACE(REPLACE(c.phone, ' ', ''), '-', ''), '(', ''), ')', '') = '+79600523400'
-  OR c.name = 'Эвелина (Инициатива)'
-  OR c.director_name = 'Эвелина (Инициатива)'
-)
+WHERE REPLACE(REPLACE(REPLACE(REPLACE(c.phone, ' ', ''), '-', ''), '(', ''), ')', '') = '+79600523400'
 AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 983)
 LIMIT 1;
 
@@ -9412,11 +8294,7 @@ SELECT
   NOW(),
   NOW()
 FROM rental_clients c
-WHERE (
-  REPLACE(REPLACE(REPLACE(REPLACE(c.phone, ' ', ''), '-', ''), '(', ''), ')', '') = '+79600523400'
-  OR c.name = 'Эвелина (Инициатива)'
-  OR c.director_name = 'Эвелина (Инициатива)'
-)
+WHERE REPLACE(REPLACE(REPLACE(REPLACE(c.phone, ' ', ''), '-', ''), '(', ''), ')', '') = '+79600523400'
 AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 982)
 LIMIT 1;
 
@@ -9445,11 +8323,7 @@ SELECT
   NOW(),
   NOW()
 FROM rental_clients c
-WHERE (
-  REPLACE(REPLACE(REPLACE(REPLACE(c.phone, ' ', ''), '-', ''), '(', ''), ')', '') = '+79600523400'
-  OR c.name = 'Эвелина (Инициатива)'
-  OR c.director_name = 'Эвелина (Инициатива)'
-)
+WHERE REPLACE(REPLACE(REPLACE(REPLACE(c.phone, ' ', ''), '-', ''), '(', ''), ')', '') = '+79600523400'
 AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 981)
 LIMIT 1;
 
@@ -9478,11 +8352,7 @@ SELECT
   NOW(),
   NOW()
 FROM rental_clients c
-WHERE (
-  REPLACE(REPLACE(REPLACE(REPLACE(c.phone, ' ', ''), '-', ''), '(', ''), ')', '') = '+79600523400'
-  OR c.name = 'Эвелина (Инициатива)'
-  OR c.director_name = 'Эвелина (Инициатива)'
-)
+WHERE REPLACE(REPLACE(REPLACE(REPLACE(c.phone, ' ', ''), '-', ''), '(', ''), ')', '') = '+79600523400'
 AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 980)
 LIMIT 1;
 
@@ -9511,11 +8381,7 @@ SELECT
   NOW(),
   NOW()
 FROM rental_clients c
-WHERE (
-  REPLACE(REPLACE(REPLACE(REPLACE(c.phone, ' ', ''), '-', ''), '(', ''), ')', '') = '+79600523400'
-  OR c.name = 'Эвелина (Инициатива)'
-  OR c.director_name = 'Эвелина (Инициатива)'
-)
+WHERE REPLACE(REPLACE(REPLACE(REPLACE(c.phone, ' ', ''), '-', ''), '(', ''), ')', '') = '+79600523400'
 AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 979)
 LIMIT 1;
 
@@ -9544,11 +8410,7 @@ SELECT
   NOW(),
   NOW()
 FROM rental_clients c
-WHERE (
-  REPLACE(REPLACE(REPLACE(REPLACE(c.phone, ' ', ''), '-', ''), '(', ''), ')', '') = '+79600523400'
-  OR c.name = 'Эвелина (Инициатива)'
-  OR c.director_name = 'Эвелина (Инициатива)'
-)
+WHERE REPLACE(REPLACE(REPLACE(REPLACE(c.phone, ' ', ''), '-', ''), '(', ''), ')', '') = '+79600523400'
 AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 978)
 LIMIT 1;
 
@@ -9577,11 +8439,7 @@ SELECT
   NOW(),
   NOW()
 FROM rental_clients c
-WHERE (
-  REPLACE(REPLACE(REPLACE(REPLACE(c.phone, ' ', ''), '-', ''), '(', ''), ')', '') = '+79600523400'
-  OR c.name = 'Эвелина (Инициатива)'
-  OR c.director_name = 'Эвелина (Инициатива)'
-)
+WHERE REPLACE(REPLACE(REPLACE(REPLACE(c.phone, ' ', ''), '-', ''), '(', ''), ')', '') = '+79600523400'
 AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 977)
 LIMIT 1;
 
@@ -9610,11 +8468,7 @@ SELECT
   NOW(),
   NOW()
 FROM rental_clients c
-WHERE (
-  REPLACE(REPLACE(REPLACE(REPLACE(c.phone, ' ', ''), '-', ''), '(', ''), ')', '') = '+79600523400'
-  OR c.name = 'Эвелина (Инициатива)'
-  OR c.director_name = 'Эвелина (Инициатива)'
-)
+WHERE REPLACE(REPLACE(REPLACE(REPLACE(c.phone, ' ', ''), '-', ''), '(', ''), ')', '') = '+79600523400'
 AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 976)
 LIMIT 1;
 
@@ -9643,11 +8497,7 @@ SELECT
   NOW(),
   NOW()
 FROM rental_clients c
-WHERE (
-  REPLACE(REPLACE(REPLACE(REPLACE(c.phone, ' ', ''), '-', ''), '(', ''), ')', '') = '+79600523400'
-  OR c.name = 'Эвелина (Инициатива)'
-  OR c.director_name = 'Эвелина (Инициатива)'
-)
+WHERE REPLACE(REPLACE(REPLACE(REPLACE(c.phone, ' ', ''), '-', ''), '(', ''), ')', '') = '+79600523400'
 AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 975)
 LIMIT 1;
 
@@ -9676,11 +8526,7 @@ SELECT
   NOW(),
   NOW()
 FROM rental_clients c
-WHERE (
-  REPLACE(REPLACE(REPLACE(REPLACE(c.phone, ' ', ''), '-', ''), '(', ''), ')', '') = '+79152964580'
-  OR c.name = 'Арсен (Юнион)'
-  OR c.director_name = 'Арсен (Юнион)'
-)
+WHERE REPLACE(REPLACE(REPLACE(REPLACE(c.phone, ' ', ''), '-', ''), '(', ''), ')', '') = '+79152964580'
 AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 974)
 LIMIT 1;
 
@@ -9709,11 +8555,7 @@ SELECT
   NOW(),
   NOW()
 FROM rental_clients c
-WHERE (
-  REPLACE(REPLACE(REPLACE(REPLACE(c.phone, ' ', ''), '-', ''), '(', ''), ')', '') = '+79152964580'
-  OR c.name = 'Арсен (Юнион)'
-  OR c.director_name = 'Арсен (Юнион)'
-)
+WHERE REPLACE(REPLACE(REPLACE(REPLACE(c.phone, ' ', ''), '-', ''), '(', ''), ')', '') = '+79152964580'
 AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 973)
 LIMIT 1;
 
@@ -9742,11 +8584,7 @@ SELECT
   NOW(),
   NOW()
 FROM rental_clients c
-WHERE (
-  REPLACE(REPLACE(REPLACE(REPLACE(c.phone, ' ', ''), '-', ''), '(', ''), ')', '') = '+79600523400'
-  OR c.name = 'Эвелина (Инициатива)'
-  OR c.director_name = 'Эвелина (Инициатива)'
-)
+WHERE REPLACE(REPLACE(REPLACE(REPLACE(c.phone, ' ', ''), '-', ''), '(', ''), ')', '') = '+79600523400'
 AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 972)
 LIMIT 1;
 
@@ -9775,11 +8613,7 @@ SELECT
   NOW(),
   NOW()
 FROM rental_clients c
-WHERE (
-  REPLACE(REPLACE(REPLACE(REPLACE(c.phone, ' ', ''), '-', ''), '(', ''), ')', '') = '+79600523400'
-  OR c.name = 'Эвелина (Инициатива)'
-  OR c.director_name = 'Эвелина (Инициатива)'
-)
+WHERE REPLACE(REPLACE(REPLACE(REPLACE(c.phone, ' ', ''), '-', ''), '(', ''), ')', '') = '+79600523400'
 AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 971)
 LIMIT 1;
 
@@ -9808,11 +8642,7 @@ SELECT
   NOW(),
   NOW()
 FROM rental_clients c
-WHERE (
-  REPLACE(REPLACE(REPLACE(REPLACE(c.phone, ' ', ''), '-', ''), '(', ''), ')', '') = '+79376252850'
-  OR c.name = 'Ленар (ИП Ножкин)'
-  OR c.director_name = 'Ленар (ИП Ножкин)'
-)
+WHERE REPLACE(REPLACE(REPLACE(REPLACE(c.phone, ' ', ''), '-', ''), '(', ''), ')', '') = '+79376252850'
 AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 970)
 LIMIT 1;
 
@@ -9841,11 +8671,7 @@ SELECT
   NOW(),
   NOW()
 FROM rental_clients c
-WHERE (
-  REPLACE(REPLACE(REPLACE(REPLACE(c.phone, ' ', ''), '-', ''), '(', ''), ')', '') = '+79393309448'
-  OR c.name = 'Андрей (Экскурс)'
-  OR c.director_name = 'Андрей (Экскурс)'
-)
+WHERE REPLACE(REPLACE(REPLACE(REPLACE(c.phone, ' ', ''), '-', ''), '(', ''), ')', '') = '+79393309448'
 AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 969)
 LIMIT 1;
 
@@ -9874,11 +8700,7 @@ SELECT
   NOW(),
   NOW()
 FROM rental_clients c
-WHERE (
-  REPLACE(REPLACE(REPLACE(REPLACE(c.phone, ' ', ''), '-', ''), '(', ''), ')', '') = '+79872750395'
-  OR c.name = 'Зельфира'
-  OR c.director_name = 'Зельфира'
-)
+WHERE REPLACE(REPLACE(REPLACE(REPLACE(c.phone, ' ', ''), '-', ''), '(', ''), ')', '') = '+79872750395'
 AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 968)
 LIMIT 1;
 
@@ -9907,11 +8729,7 @@ SELECT
   NOW(),
   NOW()
 FROM rental_clients c
-WHERE (
-  REPLACE(REPLACE(REPLACE(REPLACE(c.phone, ' ', ''), '-', ''), '(', ''), ')', '') = '+79600565131'
-  OR c.name = 'Камила Ягудина'
-  OR c.director_name = 'Камила Ягудина'
-)
+WHERE REPLACE(REPLACE(REPLACE(REPLACE(c.phone, ' ', ''), '-', ''), '(', ''), ')', '') = '+79600565131'
 AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 967)
 LIMIT 1;
 
@@ -9940,11 +8758,7 @@ SELECT
   NOW(),
   NOW()
 FROM rental_clients c
-WHERE (
-  REPLACE(REPLACE(REPLACE(REPLACE(c.phone, ' ', ''), '-', ''), '(', ''), ')', '') = '+79503118747'
-  OR c.name = 'Любовь (ТИЦ)'
-  OR c.director_name = 'Любовь (ТИЦ)'
-)
+WHERE REPLACE(REPLACE(REPLACE(REPLACE(c.phone, ' ', ''), '-', ''), '(', ''), ')', '') = '+79503118747'
 AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 966)
 LIMIT 1;
 
@@ -9973,11 +8787,7 @@ SELECT
   NOW(),
   NOW()
 FROM rental_clients c
-WHERE (
-  REPLACE(REPLACE(REPLACE(REPLACE(c.phone, ' ', ''), '-', ''), '(', ''), ')', '') = '+79503118747'
-  OR c.name = 'Любовь (ТИЦ)'
-  OR c.director_name = 'Любовь (ТИЦ)'
-)
+WHERE REPLACE(REPLACE(REPLACE(REPLACE(c.phone, ' ', ''), '-', ''), '(', ''), ')', '') = '+79503118747'
 AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 965)
 LIMIT 1;
 
@@ -10006,11 +8816,7 @@ SELECT
   NOW(),
   NOW()
 FROM rental_clients c
-WHERE (
-  REPLACE(REPLACE(REPLACE(REPLACE(c.phone, ' ', ''), '-', ''), '(', ''), ')', '') = '+79274900014'
-  OR c.name = 'Мария Экскурсовод'
-  OR c.director_name = 'Мария Экскурсовод'
-)
+WHERE REPLACE(REPLACE(REPLACE(REPLACE(c.phone, ' ', ''), '-', ''), '(', ''), ')', '') = '+79274900014'
 AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 964)
 LIMIT 1;
 
@@ -10039,11 +8845,7 @@ SELECT
   NOW(),
   NOW()
 FROM rental_clients c
-WHERE (
-  REPLACE(REPLACE(REPLACE(REPLACE(c.phone, ' ', ''), '-', ''), '(', ''), ')', '') = '+79163108629'
-  OR c.name = 'Галина Тур Москва'
-  OR c.director_name = 'Галина Тур Москва'
-)
+WHERE REPLACE(REPLACE(REPLACE(REPLACE(c.phone, ' ', ''), '-', ''), '(', ''), ')', '') = '+79163108629'
 AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 963)
 LIMIT 1;
 
@@ -10072,11 +8874,7 @@ SELECT
   NOW(),
   NOW()
 FROM rental_clients c
-WHERE (
-  REPLACE(REPLACE(REPLACE(REPLACE(c.phone, ' ', ''), '-', ''), '(', ''), ')', '') = '+79206736156'
-  OR c.name = 'Ольга (Дольче Вита)'
-  OR c.director_name = 'Ольга (Дольче Вита)'
-)
+WHERE REPLACE(REPLACE(REPLACE(REPLACE(c.phone, ' ', ''), '-', ''), '(', ''), ')', '') = '+79206736156'
 AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 962)
 LIMIT 1;
 
@@ -10105,11 +8903,7 @@ SELECT
   NOW(),
   NOW()
 FROM rental_clients c
-WHERE (
-  REPLACE(REPLACE(REPLACE(REPLACE(c.phone, ' ', ''), '-', ''), '(', ''), ')', '') = '+79274163395'
-  OR c.name = 'Сафина Алина (ФРГРТ)'
-  OR c.director_name = 'Сафина Алина (ФРГРТ)'
-)
+WHERE REPLACE(REPLACE(REPLACE(REPLACE(c.phone, ' ', ''), '-', ''), '(', ''), ')', '') = '+79274163395'
 AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 961)
 LIMIT 1;
 
@@ -10138,11 +8932,7 @@ SELECT
   NOW(),
   NOW()
 FROM rental_clients c
-WHERE (
-  REPLACE(REPLACE(REPLACE(REPLACE(c.phone, ' ', ''), '-', ''), '(', ''), ')', '') = '+79068185524'
-  OR c.name = 'Артем Агафонов'
-  OR c.director_name = 'Артем Агафонов'
-)
+WHERE REPLACE(REPLACE(REPLACE(REPLACE(c.phone, ' ', ''), '-', ''), '(', ''), ')', '') = '+79068185524'
 AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 960)
 LIMIT 1;
 
@@ -10171,11 +8961,7 @@ SELECT
   NOW(),
   NOW()
 FROM rental_clients c
-WHERE (
-  REPLACE(REPLACE(REPLACE(REPLACE(c.phone, ' ', ''), '-', ''), '(', ''), ')', '') = '+79179142756'
-  OR c.name = 'Татьяна (Гольфстрим)'
-  OR c.director_name = 'Татьяна (Гольфстрим)'
-)
+WHERE REPLACE(REPLACE(REPLACE(REPLACE(c.phone, ' ', ''), '-', ''), '(', ''), ')', '') = '+79179142756'
 AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 959)
 LIMIT 1;
 
@@ -10204,11 +8990,7 @@ SELECT
   NOW(),
   NOW()
 FROM rental_clients c
-WHERE (
-  REPLACE(REPLACE(REPLACE(REPLACE(c.phone, ' ', ''), '-', ''), '(', ''), ')', '') = '+79510610028'
-  OR c.name = 'Гузелия'
-  OR c.director_name = 'Гузелия'
-)
+WHERE REPLACE(REPLACE(REPLACE(REPLACE(c.phone, ' ', ''), '-', ''), '(', ''), ')', '') = '+79510610028'
 AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 958)
 LIMIT 1;
 
@@ -10237,11 +9019,7 @@ SELECT
   NOW(),
   NOW()
 FROM rental_clients c
-WHERE (
-  REPLACE(REPLACE(REPLACE(REPLACE(c.phone, ' ', ''), '-', ''), '(', ''), ')', '') = '+79393309448'
-  OR c.name = 'Андрей (Экскурс)'
-  OR c.director_name = 'Андрей (Экскурс)'
-)
+WHERE REPLACE(REPLACE(REPLACE(REPLACE(c.phone, ' ', ''), '-', ''), '(', ''), ')', '') = '+79393309448'
 AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 957)
 LIMIT 1;
 
@@ -10270,11 +9048,7 @@ SELECT
   NOW(),
   NOW()
 FROM rental_clients c
-WHERE (
-  REPLACE(REPLACE(REPLACE(REPLACE(c.phone, ' ', ''), '-', ''), '(', ''), ')', '') = '+79178844225'
-  OR c.name = 'Анвар Каримов'
-  OR c.director_name = 'Анвар Каримов'
-)
+WHERE REPLACE(REPLACE(REPLACE(REPLACE(c.phone, ' ', ''), '-', ''), '(', ''), ')', '') = '+79178844225'
 AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 956)
 LIMIT 1;
 
@@ -10303,11 +9077,7 @@ SELECT
   NOW(),
   NOW()
 FROM rental_clients c
-WHERE (
-  REPLACE(REPLACE(REPLACE(REPLACE(c.phone, ' ', ''), '-', ''), '(', ''), ')', '') = '+79872904401'
-  OR c.name = 'Галина (Тур Урал)'
-  OR c.director_name = 'Галина (Тур Урал)'
-)
+WHERE REPLACE(REPLACE(REPLACE(REPLACE(c.phone, ' ', ''), '-', ''), '(', ''), ')', '') = '+79872904401'
 AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 955)
 LIMIT 1;
 
@@ -10336,11 +9106,7 @@ SELECT
   NOW(),
   NOW()
 FROM rental_clients c
-WHERE (
-  REPLACE(REPLACE(REPLACE(REPLACE(c.phone, ' ', ''), '-', ''), '(', ''), ')', '') = '+79179142756'
-  OR c.name = 'Татьяна (Гольфстрим)'
-  OR c.director_name = 'Татьяна (Гольфстрим)'
-)
+WHERE REPLACE(REPLACE(REPLACE(REPLACE(c.phone, ' ', ''), '-', ''), '(', ''), ')', '') = '+79179142756'
 AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 954)
 LIMIT 1;
 
@@ -10369,11 +9135,7 @@ SELECT
   NOW(),
   NOW()
 FROM rental_clients c
-WHERE (
-  REPLACE(REPLACE(REPLACE(REPLACE(c.phone, ' ', ''), '-', ''), '(', ''), ')', '') = '+79152964580'
-  OR c.name = 'Арсен (Юнион)'
-  OR c.director_name = 'Арсен (Юнион)'
-)
+WHERE REPLACE(REPLACE(REPLACE(REPLACE(c.phone, ' ', ''), '-', ''), '(', ''), ')', '') = '+79152964580'
 AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 953)
 LIMIT 1;
 
@@ -10402,11 +9164,7 @@ SELECT
   NOW(),
   NOW()
 FROM rental_clients c
-WHERE (
-  REPLACE(REPLACE(REPLACE(REPLACE(c.phone, ' ', ''), '-', ''), '(', ''), ')', '') = '+79206736156'
-  OR c.name = 'Ольга (Дольче Вита)'
-  OR c.director_name = 'Ольга (Дольче Вита)'
-)
+WHERE REPLACE(REPLACE(REPLACE(REPLACE(c.phone, ' ', ''), '-', ''), '(', ''), ')', '') = '+79206736156'
 AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 952)
 LIMIT 1;
 
@@ -10435,11 +9193,7 @@ SELECT
   NOW(),
   NOW()
 FROM rental_clients c
-WHERE (
-  REPLACE(REPLACE(REPLACE(REPLACE(c.phone, ' ', ''), '-', ''), '(', ''), ')', '') = '+79600565131'
-  OR c.name = 'Камила Ягудина'
-  OR c.director_name = 'Камила Ягудина'
-)
+WHERE REPLACE(REPLACE(REPLACE(REPLACE(c.phone, ' ', ''), '-', ''), '(', ''), ')', '') = '+79600565131'
 AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 951)
 LIMIT 1;
 
@@ -10468,11 +9222,7 @@ SELECT
   NOW(),
   NOW()
 FROM rental_clients c
-WHERE (
-  REPLACE(REPLACE(REPLACE(REPLACE(c.phone, ' ', ''), '-', ''), '(', ''), ')', '') = '+79869297050'
-  OR c.name = 'Инна Экскурсовод'
-  OR c.director_name = 'Инна Экскурсовод'
-)
+WHERE REPLACE(REPLACE(REPLACE(REPLACE(c.phone, ' ', ''), '-', ''), '(', ''), ')', '') = '+79869297050'
 AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 950)
 LIMIT 1;
 
@@ -10501,11 +9251,7 @@ SELECT
   NOW(),
   NOW()
 FROM rental_clients c
-WHERE (
-  REPLACE(REPLACE(REPLACE(REPLACE(c.phone, ' ', ''), '-', ''), '(', ''), ')', '') = '+79662409276'
-  OR c.name = 'Мира (ИП)'
-  OR c.director_name = 'Мира (ИП)'
-)
+WHERE REPLACE(REPLACE(REPLACE(REPLACE(c.phone, ' ', ''), '-', ''), '(', ''), ')', '') = '+79662409276'
 AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 949)
 LIMIT 1;
 
@@ -10534,10 +9280,7 @@ SELECT
   NOW(),
   NOW()
 FROM rental_clients c
-WHERE (
-  c.name = 'Эдик Заказы для групп'
-  OR c.director_name = 'Эдик Заказы для групп'
-)
+WHERE (c.name ILIKE '%Эдик%' OR c.director_name ILIKE '%Эдик%')
 AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 948)
 LIMIT 1;
 
@@ -10566,11 +9309,7 @@ SELECT
   NOW(),
   NOW()
 FROM rental_clients c
-WHERE (
-  REPLACE(REPLACE(REPLACE(REPLACE(c.phone, ' ', ''), '-', ''), '(', ''), ')', '') = '+79274163395'
-  OR c.name = 'Сафина Алина (ФРГРТ)'
-  OR c.director_name = 'Сафина Алина (ФРГРТ)'
-)
+WHERE REPLACE(REPLACE(REPLACE(REPLACE(c.phone, ' ', ''), '-', ''), '(', ''), ')', '') = '+79274163395'
 AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 947)
 LIMIT 1;
 
@@ -10599,11 +9338,7 @@ SELECT
   NOW(),
   NOW()
 FROM rental_clients c
-WHERE (
-  REPLACE(REPLACE(REPLACE(REPLACE(c.phone, ' ', ''), '-', ''), '(', ''), ')', '') = '+79600501515'
-  OR c.name = 'Руслан (Тимсофт)'
-  OR c.director_name = 'Руслан (Тимсофт)'
-)
+WHERE REPLACE(REPLACE(REPLACE(REPLACE(c.phone, ' ', ''), '-', ''), '(', ''), ')', '') = '+79600501515'
 AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 946)
 LIMIT 1;
 
@@ -10632,11 +9367,7 @@ SELECT
   NOW(),
   NOW()
 FROM rental_clients c
-WHERE (
-  REPLACE(REPLACE(REPLACE(REPLACE(c.phone, ' ', ''), '-', ''), '(', ''), ')', '') = '+79503118747'
-  OR c.name = 'Любовь (ТИЦ)'
-  OR c.director_name = 'Любовь (ТИЦ)'
-)
+WHERE REPLACE(REPLACE(REPLACE(REPLACE(c.phone, ' ', ''), '-', ''), '(', ''), ')', '') = '+79503118747'
 AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 945)
 LIMIT 1;
 
@@ -10665,11 +9396,7 @@ SELECT
   NOW(),
   NOW()
 FROM rental_clients c
-WHERE (
-  REPLACE(REPLACE(REPLACE(REPLACE(c.phone, ' ', ''), '-', ''), '(', ''), ')', '') = '+79503118747'
-  OR c.name = 'Любовь (ТИЦ)'
-  OR c.director_name = 'Любовь (ТИЦ)'
-)
+WHERE REPLACE(REPLACE(REPLACE(REPLACE(c.phone, ' ', ''), '-', ''), '(', ''), ')', '') = '+79503118747'
 AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 944)
 LIMIT 1;
 
@@ -10698,10 +9425,7 @@ SELECT
   NOW(),
   NOW()
 FROM rental_clients c
-WHERE (
-  c.name = 'Эдик Заказы для групп'
-  OR c.director_name = 'Эдик Заказы для групп'
-)
+WHERE (c.name ILIKE '%Эдик%' OR c.director_name ILIKE '%Эдик%')
 AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 943)
 LIMIT 1;
 
@@ -10730,11 +9454,7 @@ SELECT
   NOW(),
   NOW()
 FROM rental_clients c
-WHERE (
-  REPLACE(REPLACE(REPLACE(REPLACE(c.phone, ' ', ''), '-', ''), '(', ''), ')', '') = '+79036945019'
-  OR c.name = 'Наталья'
-  OR c.director_name = 'Наталья'
-)
+WHERE REPLACE(REPLACE(REPLACE(REPLACE(c.phone, ' ', ''), '-', ''), '(', ''), ')', '') = '+79036945019'
 AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 942)
 LIMIT 1;
 
@@ -10763,11 +9483,7 @@ SELECT
   NOW(),
   NOW()
 FROM rental_clients c
-WHERE (
-  REPLACE(REPLACE(REPLACE(REPLACE(c.phone, ' ', ''), '-', ''), '(', ''), ')', '') = '+79510610028'
-  OR c.name = 'Гузелия'
-  OR c.director_name = 'Гузелия'
-)
+WHERE REPLACE(REPLACE(REPLACE(REPLACE(c.phone, ' ', ''), '-', ''), '(', ''), ')', '') = '+79510610028'
 AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 941)
 LIMIT 1;
 
@@ -10796,11 +9512,7 @@ SELECT
   NOW(),
   NOW()
 FROM rental_clients c
-WHERE (
-  REPLACE(REPLACE(REPLACE(REPLACE(c.phone, ' ', ''), '-', ''), '(', ''), ')', '') = '+79274900014'
-  OR c.name = 'Мария Экскурсовод'
-  OR c.director_name = 'Мария Экскурсовод'
-)
+WHERE REPLACE(REPLACE(REPLACE(REPLACE(c.phone, ' ', ''), '-', ''), '(', ''), ')', '') = '+79274900014'
 AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 940)
 LIMIT 1;
 
@@ -10829,11 +9541,7 @@ SELECT
   NOW(),
   NOW()
 FROM rental_clients c
-WHERE (
-  REPLACE(REPLACE(REPLACE(REPLACE(c.phone, ' ', ''), '-', ''), '(', ''), ')', '') = '+79225115900'
-  OR c.name = 'Алексей'
-  OR c.director_name = 'Алексей'
-)
+WHERE REPLACE(REPLACE(REPLACE(REPLACE(c.phone, ' ', ''), '-', ''), '(', ''), ')', '') = '+79225115900'
 AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 939)
 LIMIT 1;
 
@@ -10862,11 +9570,7 @@ SELECT
   NOW(),
   NOW()
 FROM rental_clients c
-WHERE (
-  REPLACE(REPLACE(REPLACE(REPLACE(c.phone, ' ', ''), '-', ''), '(', ''), ')', '') = '+79206736156'
-  OR c.name = 'Ольга (Дольче Вита)'
-  OR c.director_name = 'Ольга (Дольче Вита)'
-)
+WHERE REPLACE(REPLACE(REPLACE(REPLACE(c.phone, ' ', ''), '-', ''), '(', ''), ')', '') = '+79206736156'
 AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 938)
 LIMIT 1;
 
@@ -10895,11 +9599,7 @@ SELECT
   NOW(),
   NOW()
 FROM rental_clients c
-WHERE (
-  REPLACE(REPLACE(REPLACE(REPLACE(c.phone, ' ', ''), '-', ''), '(', ''), ')', '') = '+79152964580'
-  OR c.name = 'Арсен (Юнион)'
-  OR c.director_name = 'Арсен (Юнион)'
-)
+WHERE REPLACE(REPLACE(REPLACE(REPLACE(c.phone, ' ', ''), '-', ''), '(', ''), ')', '') = '+79152964580'
 AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 937)
 LIMIT 1;
 
@@ -10928,11 +9628,7 @@ SELECT
   NOW(),
   NOW()
 FROM rental_clients c
-WHERE (
-  REPLACE(REPLACE(REPLACE(REPLACE(c.phone, ' ', ''), '-', ''), '(', ''), ')', '') = '+79152964580'
-  OR c.name = 'Арсен (Юнион)'
-  OR c.director_name = 'Арсен (Юнион)'
-)
+WHERE REPLACE(REPLACE(REPLACE(REPLACE(c.phone, ' ', ''), '-', ''), '(', ''), ')', '') = '+79152964580'
 AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 936)
 LIMIT 1;
 
@@ -10961,11 +9657,7 @@ SELECT
   NOW(),
   NOW()
 FROM rental_clients c
-WHERE (
-  REPLACE(REPLACE(REPLACE(REPLACE(c.phone, ' ', ''), '-', ''), '(', ''), ')', '') = '+79033443111'
-  OR c.name = 'Элина (Сититур)'
-  OR c.director_name = 'Элина (Сититур)'
-)
+WHERE REPLACE(REPLACE(REPLACE(REPLACE(c.phone, ' ', ''), '-', ''), '(', ''), ')', '') = '+79033443111'
 AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 935)
 LIMIT 1;
 
@@ -10994,11 +9686,7 @@ SELECT
   NOW(),
   NOW()
 FROM rental_clients c
-WHERE (
-  REPLACE(REPLACE(REPLACE(REPLACE(c.phone, ' ', ''), '-', ''), '(', ''), ')', '') = '+79006000057'
-  OR c.name = 'Ольга'
-  OR c.director_name = 'Ольга'
-)
+WHERE REPLACE(REPLACE(REPLACE(REPLACE(c.phone, ' ', ''), '-', ''), '(', ''), ')', '') = '+79006000057'
 AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 934)
 LIMIT 1;
 
@@ -11027,11 +9715,7 @@ SELECT
   NOW(),
   NOW()
 FROM rental_clients c
-WHERE (
-  REPLACE(REPLACE(REPLACE(REPLACE(c.phone, ' ', ''), '-', ''), '(', ''), ')', '') = '+79393902610'
-  OR c.name = 'Гульназ'
-  OR c.director_name = 'Гульназ'
-)
+WHERE REPLACE(REPLACE(REPLACE(REPLACE(c.phone, ' ', ''), '-', ''), '(', ''), ')', '') = '+79393902610'
 AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 933)
 LIMIT 1;
 
@@ -11060,11 +9744,7 @@ SELECT
   NOW(),
   NOW()
 FROM rental_clients c
-WHERE (
-  REPLACE(REPLACE(REPLACE(REPLACE(c.phone, ' ', ''), '-', ''), '(', ''), ')', '') = '+79377745735'
-  OR c.name = 'Вера'
-  OR c.director_name = 'Вера'
-)
+WHERE REPLACE(REPLACE(REPLACE(REPLACE(c.phone, ' ', ''), '-', ''), '(', ''), ')', '') = '+79377745735'
 AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 932)
 LIMIT 1;
 
@@ -11093,11 +9773,7 @@ SELECT
   NOW(),
   NOW()
 FROM rental_clients c
-WHERE (
-  REPLACE(REPLACE(REPLACE(REPLACE(c.phone, ' ', ''), '-', ''), '(', ''), ')', '') = '+79226624712'
-  OR c.name = 'Алла (Вятские Поляны)'
-  OR c.director_name = 'Алла (Вятские Поляны)'
-)
+WHERE REPLACE(REPLACE(REPLACE(REPLACE(c.phone, ' ', ''), '-', ''), '(', ''), ')', '') = '+79226624712'
 AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 931)
 LIMIT 1;
 
@@ -11126,11 +9802,7 @@ SELECT
   NOW(),
   NOW()
 FROM rental_clients c
-WHERE (
-  REPLACE(REPLACE(REPLACE(REPLACE(c.phone, ' ', ''), '-', ''), '(', ''), ')', '') = '+79503118747'
-  OR c.name = 'Любовь (ТИЦ)'
-  OR c.director_name = 'Любовь (ТИЦ)'
-)
+WHERE REPLACE(REPLACE(REPLACE(REPLACE(c.phone, ' ', ''), '-', ''), '(', ''), ')', '') = '+79503118747'
 AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 930)
 LIMIT 1;
 
@@ -11159,11 +9831,7 @@ SELECT
   NOW(),
   NOW()
 FROM rental_clients c
-WHERE (
-  REPLACE(REPLACE(REPLACE(REPLACE(c.phone, ' ', ''), '-', ''), '(', ''), ')', '') = '+79503118747'
-  OR c.name = 'Любовь (ТИЦ)'
-  OR c.director_name = 'Любовь (ТИЦ)'
-)
+WHERE REPLACE(REPLACE(REPLACE(REPLACE(c.phone, ' ', ''), '-', ''), '(', ''), ')', '') = '+79503118747'
 AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 929)
 LIMIT 1;
 
@@ -11192,11 +9860,7 @@ SELECT
   NOW(),
   NOW()
 FROM rental_clients c
-WHERE (
-  REPLACE(REPLACE(REPLACE(REPLACE(c.phone, ' ', ''), '-', ''), '(', ''), ')', '') = '+79872750395'
-  OR c.name = 'Зельфира'
-  OR c.director_name = 'Зельфира'
-)
+WHERE REPLACE(REPLACE(REPLACE(REPLACE(c.phone, ' ', ''), '-', ''), '(', ''), ')', '') = '+79872750395'
 AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 928)
 LIMIT 1;
 
@@ -11225,11 +9889,7 @@ SELECT
   NOW(),
   NOW()
 FROM rental_clients c
-WHERE (
-  REPLACE(REPLACE(REPLACE(REPLACE(c.phone, ' ', ''), '-', ''), '(', ''), ')', '') = '+79872750395'
-  OR c.name = 'Зельфира'
-  OR c.director_name = 'Зельфира'
-)
+WHERE REPLACE(REPLACE(REPLACE(REPLACE(c.phone, ' ', ''), '-', ''), '(', ''), ')', '') = '+79872750395'
 AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 927)
 LIMIT 1;
 
@@ -11258,11 +9918,7 @@ SELECT
   NOW(),
   NOW()
 FROM rental_clients c
-WHERE (
-  REPLACE(REPLACE(REPLACE(REPLACE(c.phone, ' ', ''), '-', ''), '(', ''), ')', '') = '+79503118747'
-  OR c.name = 'Любовь (ТИЦ)'
-  OR c.director_name = 'Любовь (ТИЦ)'
-)
+WHERE REPLACE(REPLACE(REPLACE(REPLACE(c.phone, ' ', ''), '-', ''), '(', ''), ')', '') = '+79503118747'
 AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 926)
 LIMIT 1;
 
@@ -11291,11 +9947,7 @@ SELECT
   NOW(),
   NOW()
 FROM rental_clients c
-WHERE (
-  REPLACE(REPLACE(REPLACE(REPLACE(c.phone, ' ', ''), '-', ''), '(', ''), ')', '') = '+79068185524'
-  OR c.name = 'Артем Агафонов'
-  OR c.director_name = 'Артем Агафонов'
-)
+WHERE REPLACE(REPLACE(REPLACE(REPLACE(c.phone, ' ', ''), '-', ''), '(', ''), ')', '') = '+79068185524'
 AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 925)
 LIMIT 1;
 
@@ -11324,11 +9976,7 @@ SELECT
   NOW(),
   NOW()
 FROM rental_clients c
-WHERE (
-  REPLACE(REPLACE(REPLACE(REPLACE(c.phone, ' ', ''), '-', ''), '(', ''), ')', '') = '+79503118747'
-  OR c.name = 'Любовь (ТИЦ)'
-  OR c.director_name = 'Любовь (ТИЦ)'
-)
+WHERE REPLACE(REPLACE(REPLACE(REPLACE(c.phone, ' ', ''), '-', ''), '(', ''), ')', '') = '+79503118747'
 AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 924)
 LIMIT 1;
 
@@ -11357,11 +10005,7 @@ SELECT
   NOW(),
   NOW()
 FROM rental_clients c
-WHERE (
-  REPLACE(REPLACE(REPLACE(REPLACE(c.phone, ' ', ''), '-', ''), '(', ''), ')', '') = '+79274662530'
-  OR c.name = 'Екатерина'
-  OR c.director_name = 'Екатерина'
-)
+WHERE REPLACE(REPLACE(REPLACE(REPLACE(c.phone, ' ', ''), '-', ''), '(', ''), ')', '') = '+79274662530'
 AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 923)
 LIMIT 1;
 
@@ -11390,11 +10034,7 @@ SELECT
   NOW(),
   NOW()
 FROM rental_clients c
-WHERE (
-  REPLACE(REPLACE(REPLACE(REPLACE(c.phone, ' ', ''), '-', ''), '(', ''), ')', '') = '+79206736156'
-  OR c.name = 'Ольга (Дольче Вита)'
-  OR c.director_name = 'Ольга (Дольче Вита)'
-)
+WHERE REPLACE(REPLACE(REPLACE(REPLACE(c.phone, ' ', ''), '-', ''), '(', ''), ')', '') = '+79206736156'
 AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 922)
 LIMIT 1;
 
@@ -11423,11 +10063,7 @@ SELECT
   NOW(),
   NOW()
 FROM rental_clients c
-WHERE (
-  REPLACE(REPLACE(REPLACE(REPLACE(c.phone, ' ', ''), '-', ''), '(', ''), ')', '') = '+79206736156'
-  OR c.name = 'Ольга (Дольче Вита)'
-  OR c.director_name = 'Ольга (Дольче Вита)'
-)
+WHERE REPLACE(REPLACE(REPLACE(REPLACE(c.phone, ' ', ''), '-', ''), '(', ''), ')', '') = '+79206736156'
 AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 921)
 LIMIT 1;
 
@@ -11456,11 +10092,7 @@ SELECT
   NOW(),
   NOW()
 FROM rental_clients c
-WHERE (
-  REPLACE(REPLACE(REPLACE(REPLACE(c.phone, ' ', ''), '-', ''), '(', ''), ')', '') = '+79206736156'
-  OR c.name = 'Ольга (Дольче Вита)'
-  OR c.director_name = 'Ольга (Дольче Вита)'
-)
+WHERE REPLACE(REPLACE(REPLACE(REPLACE(c.phone, ' ', ''), '-', ''), '(', ''), ')', '') = '+79206736156'
 AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 920)
 LIMIT 1;
 
@@ -11489,11 +10121,7 @@ SELECT
   NOW(),
   NOW()
 FROM rental_clients c
-WHERE (
-  REPLACE(REPLACE(REPLACE(REPLACE(c.phone, ' ', ''), '-', ''), '(', ''), ')', '') = '+79108272699'
-  OR c.name = 'Ольга (Сиалия)'
-  OR c.director_name = 'Ольга (Сиалия)'
-)
+WHERE REPLACE(REPLACE(REPLACE(REPLACE(c.phone, ' ', ''), '-', ''), '(', ''), ')', '') = '+79108272699'
 AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 919)
 LIMIT 1;
 
@@ -11522,11 +10150,7 @@ SELECT
   NOW(),
   NOW()
 FROM rental_clients c
-WHERE (
-  REPLACE(REPLACE(REPLACE(REPLACE(c.phone, ' ', ''), '-', ''), '(', ''), ')', '') = '+79625552796'
-  OR c.name = 'Гульнара'
-  OR c.director_name = 'Гульнара'
-)
+WHERE REPLACE(REPLACE(REPLACE(REPLACE(c.phone, ' ', ''), '-', ''), '(', ''), ')', '') = '+79625552796'
 AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 918)
 LIMIT 1;
 
@@ -11555,11 +10179,7 @@ SELECT
   NOW(),
   NOW()
 FROM rental_clients c
-WHERE (
-  REPLACE(REPLACE(REPLACE(REPLACE(c.phone, ' ', ''), '-', ''), '(', ''), ')', '') = '+79662409276'
-  OR c.name = 'Мира (ИП)'
-  OR c.director_name = 'Мира (ИП)'
-)
+WHERE REPLACE(REPLACE(REPLACE(REPLACE(c.phone, ' ', ''), '-', ''), '(', ''), ')', '') = '+79662409276'
 AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 917)
 LIMIT 1;
 
@@ -11588,11 +10208,7 @@ SELECT
   NOW(),
   NOW()
 FROM rental_clients c
-WHERE (
-  REPLACE(REPLACE(REPLACE(REPLACE(c.phone, ' ', ''), '-', ''), '(', ''), ')', '') = '+79033408152'
-  OR c.name = 'Юлианна'
-  OR c.director_name = 'Юлианна'
-)
+WHERE REPLACE(REPLACE(REPLACE(REPLACE(c.phone, ' ', ''), '-', ''), '(', ''), ')', '') = '+79033408152'
 AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 916)
 LIMIT 1;
 
@@ -11621,11 +10237,7 @@ SELECT
   NOW(),
   NOW()
 FROM rental_clients c
-WHERE (
-  REPLACE(REPLACE(REPLACE(REPLACE(c.phone, ' ', ''), '-', ''), '(', ''), ')', '') = '+79152964580'
-  OR c.name = 'Арсен (Юнион)'
-  OR c.director_name = 'Арсен (Юнион)'
-)
+WHERE REPLACE(REPLACE(REPLACE(REPLACE(c.phone, ' ', ''), '-', ''), '(', ''), ')', '') = '+79152964580'
 AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 915)
 LIMIT 1;
 
@@ -11654,11 +10266,7 @@ SELECT
   NOW(),
   NOW()
 FROM rental_clients c
-WHERE (
-  REPLACE(REPLACE(REPLACE(REPLACE(c.phone, ' ', ''), '-', ''), '(', ''), ')', '') = '+79152964580'
-  OR c.name = 'Арсен (Юнион)'
-  OR c.director_name = 'Арсен (Юнион)'
-)
+WHERE REPLACE(REPLACE(REPLACE(REPLACE(c.phone, ' ', ''), '-', ''), '(', ''), ')', '') = '+79152964580'
 AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 914)
 LIMIT 1;
 
@@ -11687,11 +10295,7 @@ SELECT
   NOW(),
   NOW()
 FROM rental_clients c
-WHERE (
-  REPLACE(REPLACE(REPLACE(REPLACE(c.phone, ' ', ''), '-', ''), '(', ''), ')', '') = '+79872969542'
-  OR c.name = 'Елена'
-  OR c.director_name = 'Елена'
-)
+WHERE REPLACE(REPLACE(REPLACE(REPLACE(c.phone, ' ', ''), '-', ''), '(', ''), ')', '') = '+79872969542'
 AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 913)
 LIMIT 1;
 
@@ -11720,11 +10324,7 @@ SELECT
   NOW(),
   NOW()
 FROM rental_clients c
-WHERE (
-  REPLACE(REPLACE(REPLACE(REPLACE(c.phone, ' ', ''), '-', ''), '(', ''), ')', '') = '+79530225627'
-  OR c.name = 'Алина Минеева'
-  OR c.director_name = 'Алина Минеева'
-)
+WHERE REPLACE(REPLACE(REPLACE(REPLACE(c.phone, ' ', ''), '-', ''), '(', ''), ')', '') = '+79530225627'
 AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 912)
 LIMIT 1;
 
@@ -11753,11 +10353,7 @@ SELECT
   NOW(),
   NOW()
 FROM rental_clients c
-WHERE (
-  REPLACE(REPLACE(REPLACE(REPLACE(c.phone, ' ', ''), '-', ''), '(', ''), ')', '') = '+79274900014'
-  OR c.name = 'Мария Экскурсовод'
-  OR c.director_name = 'Мария Экскурсовод'
-)
+WHERE REPLACE(REPLACE(REPLACE(REPLACE(c.phone, ' ', ''), '-', ''), '(', ''), ')', '') = '+79274900014'
 AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 911)
 LIMIT 1;
 
@@ -11786,11 +10382,7 @@ SELECT
   NOW(),
   NOW()
 FROM rental_clients c
-WHERE (
-  REPLACE(REPLACE(REPLACE(REPLACE(c.phone, ' ', ''), '-', ''), '(', ''), ')', '') = '+79503118747'
-  OR c.name = 'Любовь (ТИЦ)'
-  OR c.director_name = 'Любовь (ТИЦ)'
-)
+WHERE REPLACE(REPLACE(REPLACE(REPLACE(c.phone, ' ', ''), '-', ''), '(', ''), ')', '') = '+79503118747'
 AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 909)
 LIMIT 1;
 
@@ -11819,11 +10411,7 @@ SELECT
   NOW(),
   NOW()
 FROM rental_clients c
-WHERE (
-  REPLACE(REPLACE(REPLACE(REPLACE(c.phone, ' ', ''), '-', ''), '(', ''), ')', '') = '+79179062560'
-  OR c.name = 'Ляйсан (Казань 360)'
-  OR c.director_name = 'Ляйсан (Казань 360)'
-)
+WHERE REPLACE(REPLACE(REPLACE(REPLACE(c.phone, ' ', ''), '-', ''), '(', ''), ')', '') = '+79179062560'
 AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 908)
 LIMIT 1;
 
@@ -11852,11 +10440,7 @@ SELECT
   NOW(),
   NOW()
 FROM rental_clients c
-WHERE (
-  REPLACE(REPLACE(REPLACE(REPLACE(c.phone, ' ', ''), '-', ''), '(', ''), ')', '') = '+79179062560'
-  OR c.name = 'Ляйсан (Казань 360)'
-  OR c.director_name = 'Ляйсан (Казань 360)'
-)
+WHERE REPLACE(REPLACE(REPLACE(REPLACE(c.phone, ' ', ''), '-', ''), '(', ''), ')', '') = '+79179062560'
 AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 907)
 LIMIT 1;
 
@@ -11885,11 +10469,7 @@ SELECT
   NOW(),
   NOW()
 FROM rental_clients c
-WHERE (
-  REPLACE(REPLACE(REPLACE(REPLACE(c.phone, ' ', ''), '-', ''), '(', ''), ')', '') = '+79872827166'
-  OR c.name = 'Татьяна Чуб'
-  OR c.director_name = 'Татьяна Чуб'
-)
+WHERE REPLACE(REPLACE(REPLACE(REPLACE(c.phone, ' ', ''), '-', ''), '(', ''), ')', '') = '+79872827166'
 AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 906)
 LIMIT 1;
 
@@ -11918,11 +10498,7 @@ SELECT
   NOW(),
   NOW()
 FROM rental_clients c
-WHERE (
-  REPLACE(REPLACE(REPLACE(REPLACE(c.phone, ' ', ''), '-', ''), '(', ''), ')', '') = '+79226624712'
-  OR c.name = 'Алла (Вятские Поляны)'
-  OR c.director_name = 'Алла (Вятские Поляны)'
-)
+WHERE REPLACE(REPLACE(REPLACE(REPLACE(c.phone, ' ', ''), '-', ''), '(', ''), ')', '') = '+79226624712'
 AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 905)
 LIMIT 1;
 
@@ -11951,11 +10527,7 @@ SELECT
   NOW(),
   NOW()
 FROM rental_clients c
-WHERE (
-  REPLACE(REPLACE(REPLACE(REPLACE(c.phone, ' ', ''), '-', ''), '(', ''), ')', '') = '+79206736156'
-  OR c.name = 'Ольга (Дольче Вита)'
-  OR c.director_name = 'Ольга (Дольче Вита)'
-)
+WHERE REPLACE(REPLACE(REPLACE(REPLACE(c.phone, ' ', ''), '-', ''), '(', ''), ')', '') = '+79206736156'
 AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 904)
 LIMIT 1;
 
@@ -11984,11 +10556,7 @@ SELECT
   NOW(),
   NOW()
 FROM rental_clients c
-WHERE (
-  REPLACE(REPLACE(REPLACE(REPLACE(c.phone, ' ', ''), '-', ''), '(', ''), ')', '') = '+79063310993'
-  OR c.name = 'Гузель (Юралс)'
-  OR c.director_name = 'Гузель (Юралс)'
-)
+WHERE REPLACE(REPLACE(REPLACE(REPLACE(c.phone, ' ', ''), '-', ''), '(', ''), ')', '') = '+79063310993'
 AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 903)
 LIMIT 1;
 
@@ -12017,11 +10585,7 @@ SELECT
   NOW(),
   NOW()
 FROM rental_clients c
-WHERE (
-  REPLACE(REPLACE(REPLACE(REPLACE(c.phone, ' ', ''), '-', ''), '(', ''), ')', '') = '+79869297050'
-  OR c.name = 'Инна Экскурсовод'
-  OR c.director_name = 'Инна Экскурсовод'
-)
+WHERE REPLACE(REPLACE(REPLACE(REPLACE(c.phone, ' ', ''), '-', ''), '(', ''), ')', '') = '+79869297050'
 AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 902)
 LIMIT 1;
 
@@ -12050,11 +10614,7 @@ SELECT
   NOW(),
   NOW()
 FROM rental_clients c
-WHERE (
-  REPLACE(REPLACE(REPLACE(REPLACE(c.phone, ' ', ''), '-', ''), '(', ''), ')', '') = '+79530225627'
-  OR c.name = 'Алина Минеева'
-  OR c.director_name = 'Алина Минеева'
-)
+WHERE REPLACE(REPLACE(REPLACE(REPLACE(c.phone, ' ', ''), '-', ''), '(', ''), ')', '') = '+79530225627'
 AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 901)
 LIMIT 1;
 
@@ -12083,11 +10643,7 @@ SELECT
   NOW(),
   NOW()
 FROM rental_clients c
-WHERE (
-  REPLACE(REPLACE(REPLACE(REPLACE(c.phone, ' ', ''), '-', ''), '(', ''), ')', '') = '+79101776156'
-  OR c.name = 'Анюта Родионова (Родина-тур)'
-  OR c.director_name = 'Анюта Родионова (Родина-тур)'
-)
+WHERE REPLACE(REPLACE(REPLACE(REPLACE(c.phone, ' ', ''), '-', ''), '(', ''), ')', '') = '+79101776156'
 AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 900)
 LIMIT 1;
 
@@ -12116,11 +10672,7 @@ SELECT
   NOW(),
   NOW()
 FROM rental_clients c
-WHERE (
-  REPLACE(REPLACE(REPLACE(REPLACE(c.phone, ' ', ''), '-', ''), '(', ''), ')', '') = '+79872750395'
-  OR c.name = 'Зельфира'
-  OR c.director_name = 'Зельфира'
-)
+WHERE REPLACE(REPLACE(REPLACE(REPLACE(c.phone, ' ', ''), '-', ''), '(', ''), ')', '') = '+79872750395'
 AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 899)
 LIMIT 1;
 
@@ -12149,11 +10701,7 @@ SELECT
   NOW(),
   NOW()
 FROM rental_clients c
-WHERE (
-  REPLACE(REPLACE(REPLACE(REPLACE(c.phone, ' ', ''), '-', ''), '(', ''), ')', '') = '+79872750395'
-  OR c.name = 'Зельфира'
-  OR c.director_name = 'Зельфира'
-)
+WHERE REPLACE(REPLACE(REPLACE(REPLACE(c.phone, ' ', ''), '-', ''), '(', ''), ')', '') = '+79872750395'
 AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 898)
 LIMIT 1;
 
@@ -12182,11 +10730,7 @@ SELECT
   NOW(),
   NOW()
 FROM rental_clients c
-WHERE (
-  REPLACE(REPLACE(REPLACE(REPLACE(c.phone, ' ', ''), '-', ''), '(', ''), ')', '') = '+79600523400'
-  OR c.name = 'Эвелина (Инициатива)'
-  OR c.director_name = 'Эвелина (Инициатива)'
-)
+WHERE REPLACE(REPLACE(REPLACE(REPLACE(c.phone, ' ', ''), '-', ''), '(', ''), ')', '') = '+79600523400'
 AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 897)
 LIMIT 1;
 
@@ -12215,11 +10759,7 @@ SELECT
   NOW(),
   NOW()
 FROM rental_clients c
-WHERE (
-  REPLACE(REPLACE(REPLACE(REPLACE(c.phone, ' ', ''), '-', ''), '(', ''), ')', '') = '+79152964580'
-  OR c.name = 'Арсен (Юнион)'
-  OR c.director_name = 'Арсен (Юнион)'
-)
+WHERE REPLACE(REPLACE(REPLACE(REPLACE(c.phone, ' ', ''), '-', ''), '(', ''), ')', '') = '+79152964580'
 AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 896)
 LIMIT 1;
 
@@ -12248,11 +10788,7 @@ SELECT
   NOW(),
   NOW()
 FROM rental_clients c
-WHERE (
-  REPLACE(REPLACE(REPLACE(REPLACE(c.phone, ' ', ''), '-', ''), '(', ''), ')', '') = '+79503118747'
-  OR c.name = 'Любовь (ТИЦ)'
-  OR c.director_name = 'Любовь (ТИЦ)'
-)
+WHERE REPLACE(REPLACE(REPLACE(REPLACE(c.phone, ' ', ''), '-', ''), '(', ''), ')', '') = '+79503118747'
 AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 895)
 LIMIT 1;
 
@@ -12281,11 +10817,7 @@ SELECT
   NOW(),
   NOW()
 FROM rental_clients c
-WHERE (
-  REPLACE(REPLACE(REPLACE(REPLACE(c.phone, ' ', ''), '-', ''), '(', ''), ')', '') = '+79196862442'
-  OR c.name = 'Рената (Твоя Казань)'
-  OR c.director_name = 'Рената (Твоя Казань)'
-)
+WHERE REPLACE(REPLACE(REPLACE(REPLACE(c.phone, ' ', ''), '-', ''), '(', ''), ')', '') = '+79196862442'
 AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 894)
 LIMIT 1;
 
@@ -12314,11 +10846,7 @@ SELECT
   NOW(),
   NOW()
 FROM rental_clients c
-WHERE (
-  REPLACE(REPLACE(REPLACE(REPLACE(c.phone, ' ', ''), '-', ''), '(', ''), ')', '') = '+79503118747'
-  OR c.name = 'Любовь (ТИЦ)'
-  OR c.director_name = 'Любовь (ТИЦ)'
-)
+WHERE REPLACE(REPLACE(REPLACE(REPLACE(c.phone, ' ', ''), '-', ''), '(', ''), ')', '') = '+79503118747'
 AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 893)
 LIMIT 1;
 
@@ -12347,11 +10875,7 @@ SELECT
   NOW(),
   NOW()
 FROM rental_clients c
-WHERE (
-  REPLACE(REPLACE(REPLACE(REPLACE(c.phone, ' ', ''), '-', ''), '(', ''), ')', '') = '+79503118747'
-  OR c.name = 'Любовь (ТИЦ)'
-  OR c.director_name = 'Любовь (ТИЦ)'
-)
+WHERE REPLACE(REPLACE(REPLACE(REPLACE(c.phone, ' ', ''), '-', ''), '(', ''), ')', '') = '+79503118747'
 AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 892)
 LIMIT 1;
 
@@ -12380,11 +10904,7 @@ SELECT
   NOW(),
   NOW()
 FROM rental_clients c
-WHERE (
-  REPLACE(REPLACE(REPLACE(REPLACE(c.phone, ' ', ''), '-', ''), '(', ''), ')', '') = '+79503118747'
-  OR c.name = 'Любовь (ТИЦ)'
-  OR c.director_name = 'Любовь (ТИЦ)'
-)
+WHERE REPLACE(REPLACE(REPLACE(REPLACE(c.phone, ' ', ''), '-', ''), '(', ''), ')', '') = '+79503118747'
 AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 891)
 LIMIT 1;
 
@@ -12413,11 +10933,7 @@ SELECT
   NOW(),
   NOW()
 FROM rental_clients c
-WHERE (
-  REPLACE(REPLACE(REPLACE(REPLACE(c.phone, ' ', ''), '-', ''), '(', ''), ')', '') = '+79050249197'
-  OR c.name = 'Ирина (Иль Мио Тур)'
-  OR c.director_name = 'Ирина (Иль Мио Тур)'
-)
+WHERE REPLACE(REPLACE(REPLACE(REPLACE(c.phone, ' ', ''), '-', ''), '(', ''), ')', '') = '+79050249197'
 AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 890)
 LIMIT 1;
 
@@ -12446,11 +10962,7 @@ SELECT
   NOW(),
   NOW()
 FROM rental_clients c
-WHERE (
-  REPLACE(REPLACE(REPLACE(REPLACE(c.phone, ' ', ''), '-', ''), '(', ''), ')', '') = '+79274900014'
-  OR c.name = 'Мария Экскурсовод'
-  OR c.director_name = 'Мария Экскурсовод'
-)
+WHERE REPLACE(REPLACE(REPLACE(REPLACE(c.phone, ' ', ''), '-', ''), '(', ''), ')', '') = '+79274900014'
 AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 889)
 LIMIT 1;
 
@@ -12479,11 +10991,7 @@ SELECT
   NOW(),
   NOW()
 FROM rental_clients c
-WHERE (
-  REPLACE(REPLACE(REPLACE(REPLACE(c.phone, ' ', ''), '-', ''), '(', ''), ')', '') = '+79274900014'
-  OR c.name = 'Мария Экскурсовод'
-  OR c.director_name = 'Мария Экскурсовод'
-)
+WHERE REPLACE(REPLACE(REPLACE(REPLACE(c.phone, ' ', ''), '-', ''), '(', ''), ')', '') = '+79274900014'
 AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 888)
 LIMIT 1;
 
@@ -12512,10 +11020,7 @@ SELECT
   NOW(),
   NOW()
 FROM rental_clients c
-WHERE (
-  c.name = 'Эдик Заказы для групп'
-  OR c.director_name = 'Эдик Заказы для групп'
-)
+WHERE (c.name ILIKE '%Эдик%' OR c.director_name ILIKE '%Эдик%')
 AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 887)
 LIMIT 1;
 
@@ -12544,10 +11049,7 @@ SELECT
   NOW(),
   NOW()
 FROM rental_clients c
-WHERE (
-  c.name = 'Эдик Заказы для групп'
-  OR c.director_name = 'Эдик Заказы для групп'
-)
+WHERE (c.name ILIKE '%Эдик%' OR c.director_name ILIKE '%Эдик%')
 AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 886)
 LIMIT 1;
 
@@ -12576,11 +11078,7 @@ SELECT
   NOW(),
   NOW()
 FROM rental_clients c
-WHERE (
-  REPLACE(REPLACE(REPLACE(REPLACE(c.phone, ' ', ''), '-', ''), '(', ''), ')', '') = '+79172788430'
-  OR c.name = 'Владимир Нежданов'
-  OR c.director_name = 'Владимир Нежданов'
-)
+WHERE REPLACE(REPLACE(REPLACE(REPLACE(c.phone, ' ', ''), '-', ''), '(', ''), ')', '') = '+79172788430'
 AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 885)
 LIMIT 1;
 
@@ -12609,11 +11107,7 @@ SELECT
   NOW(),
   NOW()
 FROM rental_clients c
-WHERE (
-  REPLACE(REPLACE(REPLACE(REPLACE(c.phone, ' ', ''), '-', ''), '(', ''), ')', '') = '+79068185524'
-  OR c.name = 'Артем Агафонов'
-  OR c.director_name = 'Артем Агафонов'
-)
+WHERE REPLACE(REPLACE(REPLACE(REPLACE(c.phone, ' ', ''), '-', ''), '(', ''), ')', '') = '+79068185524'
 AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 884)
 LIMIT 1;
 
@@ -12642,11 +11136,7 @@ SELECT
   NOW(),
   NOW()
 FROM rental_clients c
-WHERE (
-  REPLACE(REPLACE(REPLACE(REPLACE(c.phone, ' ', ''), '-', ''), '(', ''), ')', '') = '+79393309448'
-  OR c.name = 'Андрей (Экскурс)'
-  OR c.director_name = 'Андрей (Экскурс)'
-)
+WHERE REPLACE(REPLACE(REPLACE(REPLACE(c.phone, ' ', ''), '-', ''), '(', ''), ')', '') = '+79393309448'
 AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 883)
 LIMIT 1;
 
@@ -12675,11 +11165,7 @@ SELECT
   NOW(),
   NOW()
 FROM rental_clients c
-WHERE (
-  REPLACE(REPLACE(REPLACE(REPLACE(c.phone, ' ', ''), '-', ''), '(', ''), ')', '') = '+79662409276'
-  OR c.name = 'Мира (ИП)'
-  OR c.director_name = 'Мира (ИП)'
-)
+WHERE REPLACE(REPLACE(REPLACE(REPLACE(c.phone, ' ', ''), '-', ''), '(', ''), ')', '') = '+79662409276'
 AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 882)
 LIMIT 1;
 
@@ -12708,11 +11194,7 @@ SELECT
   NOW(),
   NOW()
 FROM rental_clients c
-WHERE (
-  REPLACE(REPLACE(REPLACE(REPLACE(c.phone, ' ', ''), '-', ''), '(', ''), ')', '') = '+79220064070'
-  OR c.name = 'Сергей'
-  OR c.director_name = 'Сергей'
-)
+WHERE REPLACE(REPLACE(REPLACE(REPLACE(c.phone, ' ', ''), '-', ''), '(', ''), ')', '') = '+79220064070'
 AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 881)
 LIMIT 1;
 
@@ -12741,11 +11223,7 @@ SELECT
   NOW(),
   NOW()
 FROM rental_clients c
-WHERE (
-  REPLACE(REPLACE(REPLACE(REPLACE(c.phone, ' ', ''), '-', ''), '(', ''), ')', '') = '+79179142756'
-  OR c.name = 'Татьяна (Гольфстрим)'
-  OR c.director_name = 'Татьяна (Гольфстрим)'
-)
+WHERE REPLACE(REPLACE(REPLACE(REPLACE(c.phone, ' ', ''), '-', ''), '(', ''), ')', '') = '+79179142756'
 AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 880)
 LIMIT 1;
 
@@ -12774,11 +11252,7 @@ SELECT
   NOW(),
   NOW()
 FROM rental_clients c
-WHERE (
-  REPLACE(REPLACE(REPLACE(REPLACE(c.phone, ' ', ''), '-', ''), '(', ''), ')', '') = '+79503118747'
-  OR c.name = 'Любовь (ТИЦ)'
-  OR c.director_name = 'Любовь (ТИЦ)'
-)
+WHERE REPLACE(REPLACE(REPLACE(REPLACE(c.phone, ' ', ''), '-', ''), '(', ''), ')', '') = '+79503118747'
 AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 879)
 LIMIT 1;
 
@@ -12807,11 +11281,7 @@ SELECT
   NOW(),
   NOW()
 FROM rental_clients c
-WHERE (
-  REPLACE(REPLACE(REPLACE(REPLACE(c.phone, ' ', ''), '-', ''), '(', ''), ')', '') = '+79108272699'
-  OR c.name = 'Ольга (Сиалия)'
-  OR c.director_name = 'Ольга (Сиалия)'
-)
+WHERE REPLACE(REPLACE(REPLACE(REPLACE(c.phone, ' ', ''), '-', ''), '(', ''), ')', '') = '+79108272699'
 AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 878)
 LIMIT 1;
 
@@ -12840,11 +11310,7 @@ SELECT
   NOW(),
   NOW()
 FROM rental_clients c
-WHERE (
-  REPLACE(REPLACE(REPLACE(REPLACE(c.phone, ' ', ''), '-', ''), '(', ''), ')', '') = '+79152964580'
-  OR c.name = 'Арсен (Юнион)'
-  OR c.director_name = 'Арсен (Юнион)'
-)
+WHERE REPLACE(REPLACE(REPLACE(REPLACE(c.phone, ' ', ''), '-', ''), '(', ''), ')', '') = '+79152964580'
 AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 877)
 LIMIT 1;
 
@@ -12873,11 +11339,7 @@ SELECT
   NOW(),
   NOW()
 FROM rental_clients c
-WHERE (
-  REPLACE(REPLACE(REPLACE(REPLACE(c.phone, ' ', ''), '-', ''), '(', ''), ')', '') = '+79152964580'
-  OR c.name = 'Арсен (Юнион)'
-  OR c.director_name = 'Арсен (Юнион)'
-)
+WHERE REPLACE(REPLACE(REPLACE(REPLACE(c.phone, ' ', ''), '-', ''), '(', ''), ')', '') = '+79152964580'
 AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 876)
 LIMIT 1;
 
@@ -12906,11 +11368,7 @@ SELECT
   NOW(),
   NOW()
 FROM rental_clients c
-WHERE (
-  REPLACE(REPLACE(REPLACE(REPLACE(c.phone, ' ', ''), '-', ''), '(', ''), ')', '') = '+79376252850'
-  OR c.name = 'Ленар (ИП Ножкин)'
-  OR c.director_name = 'Ленар (ИП Ножкин)'
-)
+WHERE REPLACE(REPLACE(REPLACE(REPLACE(c.phone, ' ', ''), '-', ''), '(', ''), ')', '') = '+79376252850'
 AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 875)
 LIMIT 1;
 
@@ -12939,10 +11397,7 @@ SELECT
   NOW(),
   NOW()
 FROM rental_clients c
-WHERE (
-  c.name = 'Эдик Заказы для групп'
-  OR c.director_name = 'Эдик Заказы для групп'
-)
+WHERE (c.name ILIKE '%Эдик%' OR c.director_name ILIKE '%Эдик%')
 AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 874)
 LIMIT 1;
 
@@ -12971,11 +11426,7 @@ SELECT
   NOW(),
   NOW()
 FROM rental_clients c
-WHERE (
-  REPLACE(REPLACE(REPLACE(REPLACE(c.phone, ' ', ''), '-', ''), '(', ''), ')', '') = '+79206736156'
-  OR c.name = 'Ольга (Дольче Вита)'
-  OR c.director_name = 'Ольга (Дольче Вита)'
-)
+WHERE REPLACE(REPLACE(REPLACE(REPLACE(c.phone, ' ', ''), '-', ''), '(', ''), ')', '') = '+79206736156'
 AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 873)
 LIMIT 1;
 
@@ -13004,11 +11455,7 @@ SELECT
   NOW(),
   NOW()
 FROM rental_clients c
-WHERE (
-  REPLACE(REPLACE(REPLACE(REPLACE(c.phone, ' ', ''), '-', ''), '(', ''), ')', '') = '+79950953373'
-  OR c.name = 'Екатерина'
-  OR c.director_name = 'Екатерина'
-)
+WHERE REPLACE(REPLACE(REPLACE(REPLACE(c.phone, ' ', ''), '-', ''), '(', ''), ')', '') = '+79950953373'
 AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 872)
 LIMIT 1;
 
@@ -13037,11 +11484,7 @@ SELECT
   NOW(),
   NOW()
 FROM rental_clients c
-WHERE (
-  REPLACE(REPLACE(REPLACE(REPLACE(c.phone, ' ', ''), '-', ''), '(', ''), ')', '') = '+79506781207'
-  OR c.name = 'Виктор (Мастерминд)'
-  OR c.director_name = 'Виктор (Мастерминд)'
-)
+WHERE REPLACE(REPLACE(REPLACE(REPLACE(c.phone, ' ', ''), '-', ''), '(', ''), ')', '') = '+79506781207'
 AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 871)
 LIMIT 1;
 
@@ -13070,11 +11513,7 @@ SELECT
   NOW(),
   NOW()
 FROM rental_clients c
-WHERE (
-  REPLACE(REPLACE(REPLACE(REPLACE(c.phone, ' ', ''), '-', ''), '(', ''), ')', '') = '+79050249197'
-  OR c.name = 'Ирина (Иль Мио Тур)'
-  OR c.director_name = 'Ирина (Иль Мио Тур)'
-)
+WHERE REPLACE(REPLACE(REPLACE(REPLACE(c.phone, ' ', ''), '-', ''), '(', ''), ')', '') = '+79050249197'
 AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 870)
 LIMIT 1;
 
@@ -13103,11 +11542,7 @@ SELECT
   NOW(),
   NOW()
 FROM rental_clients c
-WHERE (
-  REPLACE(REPLACE(REPLACE(REPLACE(c.phone, ' ', ''), '-', ''), '(', ''), ')', '') = '+79274900014'
-  OR c.name = 'Мария Экскурсовод'
-  OR c.director_name = 'Мария Экскурсовод'
-)
+WHERE REPLACE(REPLACE(REPLACE(REPLACE(c.phone, ' ', ''), '-', ''), '(', ''), ')', '') = '+79274900014'
 AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 869)
 LIMIT 1;
 
@@ -13136,11 +11571,7 @@ SELECT
   NOW(),
   NOW()
 FROM rental_clients c
-WHERE (
-  REPLACE(REPLACE(REPLACE(REPLACE(c.phone, ' ', ''), '-', ''), '(', ''), ')', '') = '+79178533525'
-  OR c.name = 'Татьяна (Агентство Удачи)'
-  OR c.director_name = 'Татьяна (Агентство Удачи)'
-)
+WHERE REPLACE(REPLACE(REPLACE(REPLACE(c.phone, ' ', ''), '-', ''), '(', ''), ')', '') = '+79178533525'
 AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 868)
 LIMIT 1;
 
@@ -13169,11 +11600,7 @@ SELECT
   NOW(),
   NOW()
 FROM rental_clients c
-WHERE (
-  REPLACE(REPLACE(REPLACE(REPLACE(c.phone, ' ', ''), '-', ''), '(', ''), ')', '') = '+79032182869'
-  OR c.name = 'Валентина Воронкова (Ввел Ком)'
-  OR c.director_name = 'Валентина Воронкова (Ввел Ком)'
-)
+WHERE REPLACE(REPLACE(REPLACE(REPLACE(c.phone, ' ', ''), '-', ''), '(', ''), ')', '') = '+79032182869'
 AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 867)
 LIMIT 1;
 
@@ -13202,11 +11629,7 @@ SELECT
   NOW(),
   NOW()
 FROM rental_clients c
-WHERE (
-  REPLACE(REPLACE(REPLACE(REPLACE(c.phone, ' ', ''), '-', ''), '(', ''), ')', '') = '+79534837004'
-  OR c.name = 'Фируза'
-  OR c.director_name = 'Фируза'
-)
+WHERE REPLACE(REPLACE(REPLACE(REPLACE(c.phone, ' ', ''), '-', ''), '(', ''), ')', '') = '+79534837004'
 AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 866)
 LIMIT 1;
 
@@ -13235,11 +11658,7 @@ SELECT
   NOW(),
   NOW()
 FROM rental_clients c
-WHERE (
-  REPLACE(REPLACE(REPLACE(REPLACE(c.phone, ' ', ''), '-', ''), '(', ''), ')', '') = '+79206736156'
-  OR c.name = 'Ольга (Дольче Вита)'
-  OR c.director_name = 'Ольга (Дольче Вита)'
-)
+WHERE REPLACE(REPLACE(REPLACE(REPLACE(c.phone, ' ', ''), '-', ''), '(', ''), ')', '') = '+79206736156'
 AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 865)
 LIMIT 1;
 
@@ -13268,11 +11687,7 @@ SELECT
   NOW(),
   NOW()
 FROM rental_clients c
-WHERE (
-  REPLACE(REPLACE(REPLACE(REPLACE(c.phone, ' ', ''), '-', ''), '(', ''), ')', '') = '+79206736156'
-  OR c.name = 'Ольга (Дольче Вита)'
-  OR c.director_name = 'Ольга (Дольче Вита)'
-)
+WHERE REPLACE(REPLACE(REPLACE(REPLACE(c.phone, ' ', ''), '-', ''), '(', ''), ')', '') = '+79206736156'
 AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 864)
 LIMIT 1;
 
@@ -13301,11 +11716,7 @@ SELECT
   NOW(),
   NOW()
 FROM rental_clients c
-WHERE (
-  REPLACE(REPLACE(REPLACE(REPLACE(c.phone, ' ', ''), '-', ''), '(', ''), ')', '') = '+79206736156'
-  OR c.name = 'Ольга (Дольче Вита)'
-  OR c.director_name = 'Ольга (Дольче Вита)'
-)
+WHERE REPLACE(REPLACE(REPLACE(REPLACE(c.phone, ' ', ''), '-', ''), '(', ''), ')', '') = '+79206736156'
 AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 863)
 LIMIT 1;
 
@@ -13334,11 +11745,7 @@ SELECT
   NOW(),
   NOW()
 FROM rental_clients c
-WHERE (
-  REPLACE(REPLACE(REPLACE(REPLACE(c.phone, ' ', ''), '-', ''), '(', ''), ')', '') = '+79027805858'
-  OR c.name = 'Татьяна'
-  OR c.director_name = 'Татьяна'
-)
+WHERE REPLACE(REPLACE(REPLACE(REPLACE(c.phone, ' ', ''), '-', ''), '(', ''), ')', '') = '+79027805858'
 AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 862)
 LIMIT 1;
 
@@ -13367,11 +11774,7 @@ SELECT
   NOW(),
   NOW()
 FROM rental_clients c
-WHERE (
-  REPLACE(REPLACE(REPLACE(REPLACE(c.phone, ' ', ''), '-', ''), '(', ''), ')', '') = '+79503118747'
-  OR c.name = 'Любовь (ТИЦ)'
-  OR c.director_name = 'Любовь (ТИЦ)'
-)
+WHERE REPLACE(REPLACE(REPLACE(REPLACE(c.phone, ' ', ''), '-', ''), '(', ''), ')', '') = '+79503118747'
 AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 861)
 LIMIT 1;
 
@@ -13400,11 +11803,7 @@ SELECT
   NOW(),
   NOW()
 FROM rental_clients c
-WHERE (
-  REPLACE(REPLACE(REPLACE(REPLACE(c.phone, ' ', ''), '-', ''), '(', ''), ')', '') = '+79152964580'
-  OR c.name = 'Арсен (Юнион)'
-  OR c.director_name = 'Арсен (Юнион)'
-)
+WHERE REPLACE(REPLACE(REPLACE(REPLACE(c.phone, ' ', ''), '-', ''), '(', ''), ')', '') = '+79152964580'
 AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 860)
 LIMIT 1;
 
@@ -13433,11 +11832,7 @@ SELECT
   NOW(),
   NOW()
 FROM rental_clients c
-WHERE (
-  REPLACE(REPLACE(REPLACE(REPLACE(c.phone, ' ', ''), '-', ''), '(', ''), ')', '') = '+79662409276'
-  OR c.name = 'Мира (ИП)'
-  OR c.director_name = 'Мира (ИП)'
-)
+WHERE REPLACE(REPLACE(REPLACE(REPLACE(c.phone, ' ', ''), '-', ''), '(', ''), ')', '') = '+79662409276'
 AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 859)
 LIMIT 1;
 
@@ -13466,11 +11861,7 @@ SELECT
   NOW(),
   NOW()
 FROM rental_clients c
-WHERE (
-  REPLACE(REPLACE(REPLACE(REPLACE(c.phone, ' ', ''), '-', ''), '(', ''), ')', '') = '+79152964580'
-  OR c.name = 'Арсен (Юнион)'
-  OR c.director_name = 'Арсен (Юнион)'
-)
+WHERE REPLACE(REPLACE(REPLACE(REPLACE(c.phone, ' ', ''), '-', ''), '(', ''), ')', '') = '+79152964580'
 AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 858)
 LIMIT 1;
 
@@ -13499,11 +11890,7 @@ SELECT
   NOW(),
   NOW()
 FROM rental_clients c
-WHERE (
-  REPLACE(REPLACE(REPLACE(REPLACE(c.phone, ' ', ''), '-', ''), '(', ''), ')', '') = '+79172914815'
-  OR c.name = 'Елена (Конгресс Авиа)'
-  OR c.director_name = 'Елена (Конгресс Авиа)'
-)
+WHERE REPLACE(REPLACE(REPLACE(REPLACE(c.phone, ' ', ''), '-', ''), '(', ''), ')', '') = '+79172914815'
 AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 857)
 LIMIT 1;
 
@@ -13532,11 +11919,7 @@ SELECT
   NOW(),
   NOW()
 FROM rental_clients c
-WHERE (
-  REPLACE(REPLACE(REPLACE(REPLACE(c.phone, ' ', ''), '-', ''), '(', ''), ')', '') = '+79872904401'
-  OR c.name = 'Галина (Тур Урал)'
-  OR c.director_name = 'Галина (Тур Урал)'
-)
+WHERE REPLACE(REPLACE(REPLACE(REPLACE(c.phone, ' ', ''), '-', ''), '(', ''), ')', '') = '+79872904401'
 AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 856)
 LIMIT 1;
 
@@ -13565,11 +11948,7 @@ SELECT
   NOW(),
   NOW()
 FROM rental_clients c
-WHERE (
-  REPLACE(REPLACE(REPLACE(REPLACE(c.phone, ' ', ''), '-', ''), '(', ''), ')', '') = '+79662409276'
-  OR c.name = 'Мира (ИП)'
-  OR c.director_name = 'Мира (ИП)'
-)
+WHERE REPLACE(REPLACE(REPLACE(REPLACE(c.phone, ' ', ''), '-', ''), '(', ''), ')', '') = '+79662409276'
 AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 855)
 LIMIT 1;
 
@@ -13598,11 +11977,7 @@ SELECT
   NOW(),
   NOW()
 FROM rental_clients c
-WHERE (
-  REPLACE(REPLACE(REPLACE(REPLACE(c.phone, ' ', ''), '-', ''), '(', ''), ')', '') = '+79872750395'
-  OR c.name = 'Зельфира'
-  OR c.director_name = 'Зельфира'
-)
+WHERE REPLACE(REPLACE(REPLACE(REPLACE(c.phone, ' ', ''), '-', ''), '(', ''), ')', '') = '+79872750395'
 AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 854)
 LIMIT 1;
 
@@ -13631,11 +12006,7 @@ SELECT
   NOW(),
   NOW()
 FROM rental_clients c
-WHERE (
-  REPLACE(REPLACE(REPLACE(REPLACE(c.phone, ' ', ''), '-', ''), '(', ''), ')', '') = '+79869297050'
-  OR c.name = 'Инна Экскурсовод'
-  OR c.director_name = 'Инна Экскурсовод'
-)
+WHERE REPLACE(REPLACE(REPLACE(REPLACE(c.phone, ' ', ''), '-', ''), '(', ''), ')', '') = '+79869297050'
 AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 853)
 LIMIT 1;
 
@@ -13664,11 +12035,7 @@ SELECT
   NOW(),
   NOW()
 FROM rental_clients c
-WHERE (
-  REPLACE(REPLACE(REPLACE(REPLACE(c.phone, ' ', ''), '-', ''), '(', ''), ')', '') = '+79600565131'
-  OR c.name = 'Камила Ягудина'
-  OR c.director_name = 'Камила Ягудина'
-)
+WHERE REPLACE(REPLACE(REPLACE(REPLACE(c.phone, ' ', ''), '-', ''), '(', ''), ')', '') = '+79600565131'
 AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 852)
 LIMIT 1;
 
@@ -13697,11 +12064,7 @@ SELECT
   NOW(),
   NOW()
 FROM rental_clients c
-WHERE (
-  REPLACE(REPLACE(REPLACE(REPLACE(c.phone, ' ', ''), '-', ''), '(', ''), ')', '') = '+79950953373'
-  OR c.name = 'Екатерина'
-  OR c.director_name = 'Екатерина'
-)
+WHERE REPLACE(REPLACE(REPLACE(REPLACE(c.phone, ' ', ''), '-', ''), '(', ''), ')', '') = '+79950953373'
 AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 851)
 LIMIT 1;
 
@@ -13730,11 +12093,7 @@ SELECT
   NOW(),
   NOW()
 FROM rental_clients c
-WHERE (
-  REPLACE(REPLACE(REPLACE(REPLACE(c.phone, ' ', ''), '-', ''), '(', ''), ')', '') = '+79179142756'
-  OR c.name = 'Татьяна (Гольфстрим)'
-  OR c.director_name = 'Татьяна (Гольфстрим)'
-)
+WHERE REPLACE(REPLACE(REPLACE(REPLACE(c.phone, ' ', ''), '-', ''), '(', ''), ')', '') = '+79179142756'
 AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 850)
 LIMIT 1;
 
@@ -13763,11 +12122,7 @@ SELECT
   NOW(),
   NOW()
 FROM rental_clients c
-WHERE (
-  REPLACE(REPLACE(REPLACE(REPLACE(c.phone, ' ', ''), '-', ''), '(', ''), ')', '') = '+79625552796'
-  OR c.name = 'Гульнара'
-  OR c.director_name = 'Гульнара'
-)
+WHERE REPLACE(REPLACE(REPLACE(REPLACE(c.phone, ' ', ''), '-', ''), '(', ''), ')', '') = '+79625552796'
 AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 849)
 LIMIT 1;
 
@@ -13796,11 +12151,7 @@ SELECT
   NOW(),
   NOW()
 FROM rental_clients c
-WHERE (
-  REPLACE(REPLACE(REPLACE(REPLACE(c.phone, ' ', ''), '-', ''), '(', ''), ')', '') = '+79397368972'
-  OR c.name = 'Яна Янова'
-  OR c.director_name = 'Яна Янова'
-)
+WHERE REPLACE(REPLACE(REPLACE(REPLACE(c.phone, ' ', ''), '-', ''), '(', ''), ')', '') = '+79397368972'
 AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 848)
 LIMIT 1;
 
@@ -13829,11 +12180,7 @@ SELECT
   NOW(),
   NOW()
 FROM rental_clients c
-WHERE (
-  REPLACE(REPLACE(REPLACE(REPLACE(c.phone, ' ', ''), '-', ''), '(', ''), ')', '') = '+79152964580'
-  OR c.name = 'Арсен (Юнион)'
-  OR c.director_name = 'Арсен (Юнион)'
-)
+WHERE REPLACE(REPLACE(REPLACE(REPLACE(c.phone, ' ', ''), '-', ''), '(', ''), ')', '') = '+79152964580'
 AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 847)
 LIMIT 1;
 
@@ -13862,11 +12209,7 @@ SELECT
   NOW(),
   NOW()
 FROM rental_clients c
-WHERE (
-  REPLACE(REPLACE(REPLACE(REPLACE(c.phone, ' ', ''), '-', ''), '(', ''), ')', '') = '+79108272699'
-  OR c.name = 'Ольга (Сиалия)'
-  OR c.director_name = 'Ольга (Сиалия)'
-)
+WHERE REPLACE(REPLACE(REPLACE(REPLACE(c.phone, ' ', ''), '-', ''), '(', ''), ')', '') = '+79108272699'
 AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 846)
 LIMIT 1;
 
@@ -13895,11 +12238,7 @@ SELECT
   NOW(),
   NOW()
 FROM rental_clients c
-WHERE (
-  REPLACE(REPLACE(REPLACE(REPLACE(c.phone, ' ', ''), '-', ''), '(', ''), ')', '') = '+79063310993'
-  OR c.name = 'Гузель (Юралс)'
-  OR c.director_name = 'Гузель (Юралс)'
-)
+WHERE REPLACE(REPLACE(REPLACE(REPLACE(c.phone, ' ', ''), '-', ''), '(', ''), ')', '') = '+79063310993'
 AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 845)
 LIMIT 1;
 
@@ -13928,11 +12267,7 @@ SELECT
   NOW(),
   NOW()
 FROM rental_clients c
-WHERE (
-  REPLACE(REPLACE(REPLACE(REPLACE(c.phone, ' ', ''), '-', ''), '(', ''), ')', '') = '+79033443111'
-  OR c.name = 'Элина (Сититур)'
-  OR c.director_name = 'Элина (Сититур)'
-)
+WHERE REPLACE(REPLACE(REPLACE(REPLACE(c.phone, ' ', ''), '-', ''), '(', ''), ')', '') = '+79033443111'
 AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 844)
 LIMIT 1;
 
@@ -13961,11 +12296,7 @@ SELECT
   NOW(),
   NOW()
 FROM rental_clients c
-WHERE (
-  REPLACE(REPLACE(REPLACE(REPLACE(c.phone, ' ', ''), '-', ''), '(', ''), ')', '') = '+79006000057'
-  OR c.name = 'Ольга'
-  OR c.director_name = 'Ольга'
-)
+WHERE REPLACE(REPLACE(REPLACE(REPLACE(c.phone, ' ', ''), '-', ''), '(', ''), ')', '') = '+79006000057'
 AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 843)
 LIMIT 1;
 
@@ -13994,11 +12325,7 @@ SELECT
   NOW(),
   NOW()
 FROM rental_clients c
-WHERE (
-  REPLACE(REPLACE(REPLACE(REPLACE(c.phone, ' ', ''), '-', ''), '(', ''), ')', '') = '+79101776156'
-  OR c.name = 'Анюта Родионова (Родина-тур)'
-  OR c.director_name = 'Анюта Родионова (Родина-тур)'
-)
+WHERE REPLACE(REPLACE(REPLACE(REPLACE(c.phone, ' ', ''), '-', ''), '(', ''), ')', '') = '+79101776156'
 AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 842)
 LIMIT 1;
 
@@ -14027,11 +12354,7 @@ SELECT
   NOW(),
   NOW()
 FROM rental_clients c
-WHERE (
-  REPLACE(REPLACE(REPLACE(REPLACE(c.phone, ' ', ''), '-', ''), '(', ''), ')', '') = '+79206736156'
-  OR c.name = 'Ольга (Дольче Вита)'
-  OR c.director_name = 'Ольга (Дольче Вита)'
-)
+WHERE REPLACE(REPLACE(REPLACE(REPLACE(c.phone, ' ', ''), '-', ''), '(', ''), ')', '') = '+79206736156'
 AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 841)
 LIMIT 1;
 
@@ -14060,11 +12383,7 @@ SELECT
   NOW(),
   NOW()
 FROM rental_clients c
-WHERE (
-  REPLACE(REPLACE(REPLACE(REPLACE(c.phone, ' ', ''), '-', ''), '(', ''), ')', '') = '+79152964580'
-  OR c.name = 'Арсен (Юнион)'
-  OR c.director_name = 'Арсен (Юнион)'
-)
+WHERE REPLACE(REPLACE(REPLACE(REPLACE(c.phone, ' ', ''), '-', ''), '(', ''), ')', '') = '+79152964580'
 AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 840)
 LIMIT 1;
 
@@ -14093,11 +12412,7 @@ SELECT
   NOW(),
   NOW()
 FROM rental_clients c
-WHERE (
-  REPLACE(REPLACE(REPLACE(REPLACE(c.phone, ' ', ''), '-', ''), '(', ''), ')', '') = '+79503118747'
-  OR c.name = 'Любовь (ТИЦ)'
-  OR c.director_name = 'Любовь (ТИЦ)'
-)
+WHERE REPLACE(REPLACE(REPLACE(REPLACE(c.phone, ' ', ''), '-', ''), '(', ''), ')', '') = '+79503118747'
 AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 839)
 LIMIT 1;
 
@@ -14126,11 +12441,7 @@ SELECT
   NOW(),
   NOW()
 FROM rental_clients c
-WHERE (
-  REPLACE(REPLACE(REPLACE(REPLACE(c.phone, ' ', ''), '-', ''), '(', ''), ')', '') = '+79172891133'
-  OR c.name = 'Наталья Компания'
-  OR c.director_name = 'Наталья Компания'
-)
+WHERE REPLACE(REPLACE(REPLACE(REPLACE(c.phone, ' ', ''), '-', ''), '(', ''), ')', '') = '+79172891133'
 AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 838)
 LIMIT 1;
 
@@ -14159,11 +12470,7 @@ SELECT
   NOW(),
   NOW()
 FROM rental_clients c
-WHERE (
-  REPLACE(REPLACE(REPLACE(REPLACE(c.phone, ' ', ''), '-', ''), '(', ''), ')', '') = '+79503118747'
-  OR c.name = 'Любовь (ТИЦ)'
-  OR c.director_name = 'Любовь (ТИЦ)'
-)
+WHERE REPLACE(REPLACE(REPLACE(REPLACE(c.phone, ' ', ''), '-', ''), '(', ''), ')', '') = '+79503118747'
 AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 837)
 LIMIT 1;
 
@@ -14192,11 +12499,7 @@ SELECT
   NOW(),
   NOW()
 FROM rental_clients c
-WHERE (
-  REPLACE(REPLACE(REPLACE(REPLACE(c.phone, ' ', ''), '-', ''), '(', ''), ')', '') = '+79068185524'
-  OR c.name = 'Артем Агафонов'
-  OR c.director_name = 'Артем Агафонов'
-)
+WHERE REPLACE(REPLACE(REPLACE(REPLACE(c.phone, ' ', ''), '-', ''), '(', ''), ')', '') = '+79068185524'
 AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 835)
 LIMIT 1;
 
@@ -14225,11 +12528,7 @@ SELECT
   NOW(),
   NOW()
 FROM rental_clients c
-WHERE (
-  REPLACE(REPLACE(REPLACE(REPLACE(c.phone, ' ', ''), '-', ''), '(', ''), ')', '') = '+79659400307'
-  OR c.name = 'Зульхиза Кутлучурина'
-  OR c.director_name = 'Зульхиза Кутлучурина'
-)
+WHERE REPLACE(REPLACE(REPLACE(REPLACE(c.phone, ' ', ''), '-', ''), '(', ''), ')', '') = '+79659400307'
 AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 834)
 LIMIT 1;
 
@@ -14258,11 +12557,7 @@ SELECT
   NOW(),
   NOW()
 FROM rental_clients c
-WHERE (
-  REPLACE(REPLACE(REPLACE(REPLACE(c.phone, ' ', ''), '-', ''), '(', ''), ')', '') = '+79179142756'
-  OR c.name = 'Татьяна (Гольфстрим)'
-  OR c.director_name = 'Татьяна (Гольфстрим)'
-)
+WHERE REPLACE(REPLACE(REPLACE(REPLACE(c.phone, ' ', ''), '-', ''), '(', ''), ')', '') = '+79179142756'
 AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 833)
 LIMIT 1;
 
@@ -14291,11 +12586,7 @@ SELECT
   NOW(),
   NOW()
 FROM rental_clients c
-WHERE (
-  REPLACE(REPLACE(REPLACE(REPLACE(c.phone, ' ', ''), '-', ''), '(', ''), ')', '') = '+79206736156'
-  OR c.name = 'Ольга (Дольче Вита)'
-  OR c.director_name = 'Ольга (Дольче Вита)'
-)
+WHERE REPLACE(REPLACE(REPLACE(REPLACE(c.phone, ' ', ''), '-', ''), '(', ''), ')', '') = '+79206736156'
 AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 832)
 LIMIT 1;
 
@@ -14324,11 +12615,7 @@ SELECT
   NOW(),
   NOW()
 FROM rental_clients c
-WHERE (
-  REPLACE(REPLACE(REPLACE(REPLACE(c.phone, ' ', ''), '-', ''), '(', ''), ')', '') = '+79869160808'
-  OR c.name = 'Мария (ОСР)'
-  OR c.director_name = 'Мария (ОСР)'
-)
+WHERE REPLACE(REPLACE(REPLACE(REPLACE(c.phone, ' ', ''), '-', ''), '(', ''), ')', '') = '+79869160808'
 AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 831)
 LIMIT 1;
 
@@ -14357,11 +12644,7 @@ SELECT
   NOW(),
   NOW()
 FROM rental_clients c
-WHERE (
-  REPLACE(REPLACE(REPLACE(REPLACE(c.phone, ' ', ''), '-', ''), '(', ''), ')', '') = '+79872904401'
-  OR c.name = 'Галина (Тур Урал)'
-  OR c.director_name = 'Галина (Тур Урал)'
-)
+WHERE REPLACE(REPLACE(REPLACE(REPLACE(c.phone, ' ', ''), '-', ''), '(', ''), ')', '') = '+79872904401'
 AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 830)
 LIMIT 1;
 
@@ -14390,11 +12673,7 @@ SELECT
   NOW(),
   NOW()
 FROM rental_clients c
-WHERE (
-  REPLACE(REPLACE(REPLACE(REPLACE(c.phone, ' ', ''), '-', ''), '(', ''), ')', '') = '+79872961933'
-  OR c.name = 'Айгуль Файзуллина'
-  OR c.director_name = 'Айгуль Файзуллина'
-)
+WHERE REPLACE(REPLACE(REPLACE(REPLACE(c.phone, ' ', ''), '-', ''), '(', ''), ')', '') = '+79872961933'
 AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 829)
 LIMIT 1;
 
@@ -14423,11 +12702,7 @@ SELECT
   NOW(),
   NOW()
 FROM rental_clients c
-WHERE (
-  REPLACE(REPLACE(REPLACE(REPLACE(c.phone, ' ', ''), '-', ''), '(', ''), ')', '') = '+79600523400'
-  OR c.name = 'Эвелина (Инициатива)'
-  OR c.director_name = 'Эвелина (Инициатива)'
-)
+WHERE REPLACE(REPLACE(REPLACE(REPLACE(c.phone, ' ', ''), '-', ''), '(', ''), ')', '') = '+79600523400'
 AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 828)
 LIMIT 1;
 
@@ -14456,11 +12731,7 @@ SELECT
   NOW(),
   NOW()
 FROM rental_clients c
-WHERE (
-  REPLACE(REPLACE(REPLACE(REPLACE(c.phone, ' ', ''), '-', ''), '(', ''), ')', '') = '+79046623179'
-  OR c.name = 'Екатерина Кореева'
-  OR c.director_name = 'Екатерина Кореева'
-)
+WHERE REPLACE(REPLACE(REPLACE(REPLACE(c.phone, ' ', ''), '-', ''), '(', ''), ')', '') = '+79046623179'
 AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 827)
 LIMIT 1;
 
@@ -14489,10 +12760,7 @@ SELECT
   NOW(),
   NOW()
 FROM rental_clients c
-WHERE (
-  c.name = 'Эдик Заказы для групп'
-  OR c.director_name = 'Эдик Заказы для групп'
-)
+WHERE (c.name ILIKE '%Эдик%' OR c.director_name ILIKE '%Эдик%')
 AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 826)
 LIMIT 1;
 
@@ -14521,11 +12789,7 @@ SELECT
   NOW(),
   NOW()
 FROM rental_clients c
-WHERE (
-  REPLACE(REPLACE(REPLACE(REPLACE(c.phone, ' ', ''), '-', ''), '(', ''), ')', '') = '+79872750395'
-  OR c.name = 'Зельфира'
-  OR c.director_name = 'Зельфира'
-)
+WHERE REPLACE(REPLACE(REPLACE(REPLACE(c.phone, ' ', ''), '-', ''), '(', ''), ')', '') = '+79872750395'
 AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 825)
 LIMIT 1;
 
@@ -14554,11 +12818,7 @@ SELECT
   NOW(),
   NOW()
 FROM rental_clients c
-WHERE (
-  REPLACE(REPLACE(REPLACE(REPLACE(c.phone, ' ', ''), '-', ''), '(', ''), ')', '') = '+79179142756'
-  OR c.name = 'Татьяна (Гольфстрим)'
-  OR c.director_name = 'Татьяна (Гольфстрим)'
-)
+WHERE REPLACE(REPLACE(REPLACE(REPLACE(c.phone, ' ', ''), '-', ''), '(', ''), ')', '') = '+79179142756'
 AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 824)
 LIMIT 1;
 
@@ -14587,11 +12847,7 @@ SELECT
   NOW(),
   NOW()
 FROM rental_clients c
-WHERE (
-  REPLACE(REPLACE(REPLACE(REPLACE(c.phone, ' ', ''), '-', ''), '(', ''), ')', '') = '+79179142756'
-  OR c.name = 'Татьяна (Гольфстрим)'
-  OR c.director_name = 'Татьяна (Гольфстрим)'
-)
+WHERE REPLACE(REPLACE(REPLACE(REPLACE(c.phone, ' ', ''), '-', ''), '(', ''), ')', '') = '+79179142756'
 AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 823)
 LIMIT 1;
 
@@ -14620,10 +12876,7 @@ SELECT
   NOW(),
   NOW()
 FROM rental_clients c
-WHERE (
-  c.name = 'Эдик Заказы для групп'
-  OR c.director_name = 'Эдик Заказы для групп'
-)
+WHERE (c.name ILIKE '%Эдик%' OR c.director_name ILIKE '%Эдик%')
 AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 822)
 LIMIT 1;
 
@@ -14652,11 +12905,7 @@ SELECT
   NOW(),
   NOW()
 FROM rental_clients c
-WHERE (
-  REPLACE(REPLACE(REPLACE(REPLACE(c.phone, ' ', ''), '-', ''), '(', ''), ')', '') = '+79534837004'
-  OR c.name = 'Фируза'
-  OR c.director_name = 'Фируза'
-)
+WHERE REPLACE(REPLACE(REPLACE(REPLACE(c.phone, ' ', ''), '-', ''), '(', ''), ')', '') = '+79534837004'
 AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 821)
 LIMIT 1;
 
@@ -14685,11 +12934,7 @@ SELECT
   NOW(),
   NOW()
 FROM rental_clients c
-WHERE (
-  REPLACE(REPLACE(REPLACE(REPLACE(c.phone, ' ', ''), '-', ''), '(', ''), ')', '') = '+79046699399'
-  OR c.name = 'Альберт (КТ)'
-  OR c.director_name = 'Альберт (КТ)'
-)
+WHERE REPLACE(REPLACE(REPLACE(REPLACE(c.phone, ' ', ''), '-', ''), '(', ''), ')', '') = '+79046699399'
 AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 820)
 LIMIT 1;
 
@@ -14718,11 +12963,7 @@ SELECT
   NOW(),
   NOW()
 FROM rental_clients c
-WHERE (
-  REPLACE(REPLACE(REPLACE(REPLACE(c.phone, ' ', ''), '-', ''), '(', ''), ')', '') = '+79869297050'
-  OR c.name = 'Инна Экскурсовод'
-  OR c.director_name = 'Инна Экскурсовод'
-)
+WHERE REPLACE(REPLACE(REPLACE(REPLACE(c.phone, ' ', ''), '-', ''), '(', ''), ')', '') = '+79869297050'
 AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 819)
 LIMIT 1;
 
@@ -14751,11 +12992,7 @@ SELECT
   NOW(),
   NOW()
 FROM rental_clients c
-WHERE (
-  REPLACE(REPLACE(REPLACE(REPLACE(c.phone, ' ', ''), '-', ''), '(', ''), ')', '') = '+79068185524'
-  OR c.name = 'Артем Агафонов'
-  OR c.director_name = 'Артем Агафонов'
-)
+WHERE REPLACE(REPLACE(REPLACE(REPLACE(c.phone, ' ', ''), '-', ''), '(', ''), ')', '') = '+79068185524'
 AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 818)
 LIMIT 1;
 
@@ -14784,11 +13021,7 @@ SELECT
   NOW(),
   NOW()
 FROM rental_clients c
-WHERE (
-  REPLACE(REPLACE(REPLACE(REPLACE(c.phone, ' ', ''), '-', ''), '(', ''), ')', '') = '+79662409276'
-  OR c.name = 'Мира (ИП)'
-  OR c.director_name = 'Мира (ИП)'
-)
+WHERE REPLACE(REPLACE(REPLACE(REPLACE(c.phone, ' ', ''), '-', ''), '(', ''), ')', '') = '+79662409276'
 AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 817)
 LIMIT 1;
 
@@ -14817,11 +13050,7 @@ SELECT
   NOW(),
   NOW()
 FROM rental_clients c
-WHERE (
-  REPLACE(REPLACE(REPLACE(REPLACE(c.phone, ' ', ''), '-', ''), '(', ''), ')', '') = '+79046699399'
-  OR c.name = 'Альберт (КТ)'
-  OR c.director_name = 'Альберт (КТ)'
-)
+WHERE REPLACE(REPLACE(REPLACE(REPLACE(c.phone, ' ', ''), '-', ''), '(', ''), ')', '') = '+79046699399'
 AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 816)
 LIMIT 1;
 
@@ -14850,11 +13079,7 @@ SELECT
   NOW(),
   NOW()
 FROM rental_clients c
-WHERE (
-  REPLACE(REPLACE(REPLACE(REPLACE(c.phone, ' ', ''), '-', ''), '(', ''), ')', '') = '+79046699399'
-  OR c.name = 'Альберт (КТ)'
-  OR c.director_name = 'Альберт (КТ)'
-)
+WHERE REPLACE(REPLACE(REPLACE(REPLACE(c.phone, ' ', ''), '-', ''), '(', ''), ')', '') = '+79046699399'
 AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 815)
 LIMIT 1;
 
@@ -14883,11 +13108,7 @@ SELECT
   NOW(),
   NOW()
 FROM rental_clients c
-WHERE (
-  REPLACE(REPLACE(REPLACE(REPLACE(c.phone, ' ', ''), '-', ''), '(', ''), ')', '') = '+79046699399'
-  OR c.name = 'Альберт (КТ)'
-  OR c.director_name = 'Альберт (КТ)'
-)
+WHERE REPLACE(REPLACE(REPLACE(REPLACE(c.phone, ' ', ''), '-', ''), '(', ''), ')', '') = '+79046699399'
 AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 814)
 LIMIT 1;
 
@@ -14916,11 +13137,7 @@ SELECT
   NOW(),
   NOW()
 FROM rental_clients c
-WHERE (
-  REPLACE(REPLACE(REPLACE(REPLACE(c.phone, ' ', ''), '-', ''), '(', ''), ')', '') = '+79376252850'
-  OR c.name = 'Ленар (ИП Ножкин)'
-  OR c.director_name = 'Ленар (ИП Ножкин)'
-)
+WHERE REPLACE(REPLACE(REPLACE(REPLACE(c.phone, ' ', ''), '-', ''), '(', ''), ')', '') = '+79376252850'
 AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 813)
 LIMIT 1;
 
@@ -14949,11 +13166,7 @@ SELECT
   NOW(),
   NOW()
 FROM rental_clients c
-WHERE (
-  REPLACE(REPLACE(REPLACE(REPLACE(c.phone, ' ', ''), '-', ''), '(', ''), ')', '') = '+79503118747'
-  OR c.name = 'Любовь (ТИЦ)'
-  OR c.director_name = 'Любовь (ТИЦ)'
-)
+WHERE REPLACE(REPLACE(REPLACE(REPLACE(c.phone, ' ', ''), '-', ''), '(', ''), ')', '') = '+79503118747'
 AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 812)
 LIMIT 1;
 
@@ -14982,11 +13195,7 @@ SELECT
   NOW(),
   NOW()
 FROM rental_clients c
-WHERE (
-  REPLACE(REPLACE(REPLACE(REPLACE(c.phone, ' ', ''), '-', ''), '(', ''), ')', '') = '+79152964580'
-  OR c.name = 'Арсен (Юнион)'
-  OR c.director_name = 'Арсен (Юнион)'
-)
+WHERE REPLACE(REPLACE(REPLACE(REPLACE(c.phone, ' ', ''), '-', ''), '(', ''), ')', '') = '+79152964580'
 AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 811)
 LIMIT 1;
 
@@ -15015,11 +13224,7 @@ SELECT
   NOW(),
   NOW()
 FROM rental_clients c
-WHERE (
-  REPLACE(REPLACE(REPLACE(REPLACE(c.phone, ' ', ''), '-', ''), '(', ''), ')', '') = '+79152964580'
-  OR c.name = 'Арсен (Юнион)'
-  OR c.director_name = 'Арсен (Юнион)'
-)
+WHERE REPLACE(REPLACE(REPLACE(REPLACE(c.phone, ' ', ''), '-', ''), '(', ''), ')', '') = '+79152964580'
 AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 810)
 LIMIT 1;
 
@@ -15048,11 +13253,7 @@ SELECT
   NOW(),
   NOW()
 FROM rental_clients c
-WHERE (
-  REPLACE(REPLACE(REPLACE(REPLACE(c.phone, ' ', ''), '-', ''), '(', ''), ')', '') = '+79108272699'
-  OR c.name = 'Ольга (Сиалия)'
-  OR c.director_name = 'Ольга (Сиалия)'
-)
+WHERE REPLACE(REPLACE(REPLACE(REPLACE(c.phone, ' ', ''), '-', ''), '(', ''), ')', '') = '+79108272699'
 AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 809)
 LIMIT 1;
 
@@ -15081,11 +13282,7 @@ SELECT
   NOW(),
   NOW()
 FROM rental_clients c
-WHERE (
-  REPLACE(REPLACE(REPLACE(REPLACE(c.phone, ' ', ''), '-', ''), '(', ''), ')', '') = '+79600565131'
-  OR c.name = 'Камила Ягудина'
-  OR c.director_name = 'Камила Ягудина'
-)
+WHERE REPLACE(REPLACE(REPLACE(REPLACE(c.phone, ' ', ''), '-', ''), '(', ''), ')', '') = '+79600565131'
 AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 808)
 LIMIT 1;
 
@@ -15114,11 +13311,7 @@ SELECT
   NOW(),
   NOW()
 FROM rental_clients c
-WHERE (
-  REPLACE(REPLACE(REPLACE(REPLACE(c.phone, ' ', ''), '-', ''), '(', ''), ')', '') = '+79950953373'
-  OR c.name = 'Екатерина'
-  OR c.director_name = 'Екатерина'
-)
+WHERE REPLACE(REPLACE(REPLACE(REPLACE(c.phone, ' ', ''), '-', ''), '(', ''), ')', '') = '+79950953373'
 AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 807)
 LIMIT 1;
 
@@ -15147,11 +13340,7 @@ SELECT
   NOW(),
   NOW()
 FROM rental_clients c
-WHERE (
-  REPLACE(REPLACE(REPLACE(REPLACE(c.phone, ' ', ''), '-', ''), '(', ''), ')', '') = '+79503118747'
-  OR c.name = 'Любовь (ТИЦ)'
-  OR c.director_name = 'Любовь (ТИЦ)'
-)
+WHERE REPLACE(REPLACE(REPLACE(REPLACE(c.phone, ' ', ''), '-', ''), '(', ''), ')', '') = '+79503118747'
 AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 806)
 LIMIT 1;
 
@@ -15180,11 +13369,7 @@ SELECT
   NOW(),
   NOW()
 FROM rental_clients c
-WHERE (
-  REPLACE(REPLACE(REPLACE(REPLACE(c.phone, ' ', ''), '-', ''), '(', ''), ')', '') = '+79503118747'
-  OR c.name = 'Любовь (ТИЦ)'
-  OR c.director_name = 'Любовь (ТИЦ)'
-)
+WHERE REPLACE(REPLACE(REPLACE(REPLACE(c.phone, ' ', ''), '-', ''), '(', ''), ')', '') = '+79503118747'
 AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 805)
 LIMIT 1;
 
@@ -15213,11 +13398,7 @@ SELECT
   NOW(),
   NOW()
 FROM rental_clients c
-WHERE (
-  REPLACE(REPLACE(REPLACE(REPLACE(c.phone, ' ', ''), '-', ''), '(', ''), ')', '') = '+79172914815'
-  OR c.name = 'Елена (Конгресс Авиа)'
-  OR c.director_name = 'Елена (Конгресс Авиа)'
-)
+WHERE REPLACE(REPLACE(REPLACE(REPLACE(c.phone, ' ', ''), '-', ''), '(', ''), ')', '') = '+79172914815'
 AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 804)
 LIMIT 1;
 
@@ -15246,11 +13427,7 @@ SELECT
   NOW(),
   NOW()
 FROM rental_clients c
-WHERE (
-  REPLACE(REPLACE(REPLACE(REPLACE(c.phone, ' ', ''), '-', ''), '(', ''), ')', '') = '+79046699399'
-  OR c.name = 'Альберт (КТ)'
-  OR c.director_name = 'Альберт (КТ)'
-)
+WHERE REPLACE(REPLACE(REPLACE(REPLACE(c.phone, ' ', ''), '-', ''), '(', ''), ')', '') = '+79046699399'
 AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 803)
 LIMIT 1;
 
@@ -15279,10 +13456,7 @@ SELECT
   NOW(),
   NOW()
 FROM rental_clients c
-WHERE (
-  c.name = 'Эдик Заказы для групп'
-  OR c.director_name = 'Эдик Заказы для групп'
-)
+WHERE (c.name ILIKE '%Эдик%' OR c.director_name ILIKE '%Эдик%')
 AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 802)
 LIMIT 1;
 
@@ -15311,11 +13485,7 @@ SELECT
   NOW(),
   NOW()
 FROM rental_clients c
-WHERE (
-  REPLACE(REPLACE(REPLACE(REPLACE(c.phone, ' ', ''), '-', ''), '(', ''), ')', '') = '+79006000057'
-  OR c.name = 'Ольга'
-  OR c.director_name = 'Ольга'
-)
+WHERE REPLACE(REPLACE(REPLACE(REPLACE(c.phone, ' ', ''), '-', ''), '(', ''), ')', '') = '+79006000057'
 AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 801)
 LIMIT 1;
 
@@ -15344,11 +13514,7 @@ SELECT
   NOW(),
   NOW()
 FROM rental_clients c
-WHERE (
-  REPLACE(REPLACE(REPLACE(REPLACE(c.phone, ' ', ''), '-', ''), '(', ''), ')', '') = '+79503118747'
-  OR c.name = 'Любовь (ТИЦ)'
-  OR c.director_name = 'Любовь (ТИЦ)'
-)
+WHERE REPLACE(REPLACE(REPLACE(REPLACE(c.phone, ' ', ''), '-', ''), '(', ''), ')', '') = '+79503118747'
 AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 800)
 LIMIT 1;
 
@@ -15377,11 +13543,7 @@ SELECT
   NOW(),
   NOW()
 FROM rental_clients c
-WHERE (
-  REPLACE(REPLACE(REPLACE(REPLACE(c.phone, ' ', ''), '-', ''), '(', ''), ')', '') = '+79503118747'
-  OR c.name = 'Любовь (ТИЦ)'
-  OR c.director_name = 'Любовь (ТИЦ)'
-)
+WHERE REPLACE(REPLACE(REPLACE(REPLACE(c.phone, ' ', ''), '-', ''), '(', ''), ')', '') = '+79503118747'
 AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 799)
 LIMIT 1;
 
@@ -15410,11 +13572,7 @@ SELECT
   NOW(),
   NOW()
 FROM rental_clients c
-WHERE (
-  REPLACE(REPLACE(REPLACE(REPLACE(c.phone, ' ', ''), '-', ''), '(', ''), ')', '') = '+79046699399'
-  OR c.name = 'Альберт (КТ)'
-  OR c.director_name = 'Альберт (КТ)'
-)
+WHERE REPLACE(REPLACE(REPLACE(REPLACE(c.phone, ' ', ''), '-', ''), '(', ''), ')', '') = '+79046699399'
 AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 798)
 LIMIT 1;
 
@@ -15443,11 +13601,7 @@ SELECT
   NOW(),
   NOW()
 FROM rental_clients c
-WHERE (
-  REPLACE(REPLACE(REPLACE(REPLACE(c.phone, ' ', ''), '-', ''), '(', ''), ')', '') = '+79272534202'
-  OR c.name = 'Александр'
-  OR c.director_name = 'Александр'
-)
+WHERE REPLACE(REPLACE(REPLACE(REPLACE(c.phone, ' ', ''), '-', ''), '(', ''), ')', '') = '+79272534202'
 AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 797)
 LIMIT 1;
 
@@ -15476,11 +13630,7 @@ SELECT
   NOW(),
   NOW()
 FROM rental_clients c
-WHERE (
-  REPLACE(REPLACE(REPLACE(REPLACE(c.phone, ' ', ''), '-', ''), '(', ''), ')', '') = '+79950953373'
-  OR c.name = 'Екатерина'
-  OR c.director_name = 'Екатерина'
-)
+WHERE REPLACE(REPLACE(REPLACE(REPLACE(c.phone, ' ', ''), '-', ''), '(', ''), ')', '') = '+79950953373'
 AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 796)
 LIMIT 1;
 
@@ -15509,11 +13659,7 @@ SELECT
   NOW(),
   NOW()
 FROM rental_clients c
-WHERE (
-  REPLACE(REPLACE(REPLACE(REPLACE(c.phone, ' ', ''), '-', ''), '(', ''), ')', '') = '+79152964580'
-  OR c.name = 'Арсен (Юнион)'
-  OR c.director_name = 'Арсен (Юнион)'
-)
+WHERE REPLACE(REPLACE(REPLACE(REPLACE(c.phone, ' ', ''), '-', ''), '(', ''), ')', '') = '+79152964580'
 AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 795)
 LIMIT 1;
 
@@ -15542,11 +13688,7 @@ SELECT
   NOW(),
   NOW()
 FROM rental_clients c
-WHERE (
-  REPLACE(REPLACE(REPLACE(REPLACE(c.phone, ' ', ''), '-', ''), '(', ''), ')', '') = '+79152964580'
-  OR c.name = 'Арсен (Юнион)'
-  OR c.director_name = 'Арсен (Юнион)'
-)
+WHERE REPLACE(REPLACE(REPLACE(REPLACE(c.phone, ' ', ''), '-', ''), '(', ''), ')', '') = '+79152964580'
 AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 794)
 LIMIT 1;
 
@@ -15575,11 +13717,7 @@ SELECT
   NOW(),
   NOW()
 FROM rental_clients c
-WHERE (
-  REPLACE(REPLACE(REPLACE(REPLACE(c.phone, ' ', ''), '-', ''), '(', ''), ')', '') = '+79108272699'
-  OR c.name = 'Ольга (Сиалия)'
-  OR c.director_name = 'Ольга (Сиалия)'
-)
+WHERE REPLACE(REPLACE(REPLACE(REPLACE(c.phone, ' ', ''), '-', ''), '(', ''), ')', '') = '+79108272699'
 AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 792)
 LIMIT 1;
 
@@ -15608,11 +13746,7 @@ SELECT
   NOW(),
   NOW()
 FROM rental_clients c
-WHERE (
-  REPLACE(REPLACE(REPLACE(REPLACE(c.phone, ' ', ''), '-', ''), '(', ''), ')', '') = '+79163108629'
-  OR c.name = 'Галина Тур Москва'
-  OR c.director_name = 'Галина Тур Москва'
-)
+WHERE REPLACE(REPLACE(REPLACE(REPLACE(c.phone, ' ', ''), '-', ''), '(', ''), ')', '') = '+79163108629'
 AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 791)
 LIMIT 1;
 
@@ -15641,11 +13775,7 @@ SELECT
   NOW(),
   NOW()
 FROM rental_clients c
-WHERE (
-  REPLACE(REPLACE(REPLACE(REPLACE(c.phone, ' ', ''), '-', ''), '(', ''), ')', '') = '+79118348339'
-  OR c.name = 'Ольга'
-  OR c.director_name = 'Ольга'
-)
+WHERE REPLACE(REPLACE(REPLACE(REPLACE(c.phone, ' ', ''), '-', ''), '(', ''), ')', '') = '+79118348339'
 AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 790)
 LIMIT 1;
 
@@ -15674,11 +13804,7 @@ SELECT
   NOW(),
   NOW()
 FROM rental_clients c
-WHERE (
-  REPLACE(REPLACE(REPLACE(REPLACE(c.phone, ' ', ''), '-', ''), '(', ''), ')', '') = '+79950953373'
-  OR c.name = 'Екатерина'
-  OR c.director_name = 'Екатерина'
-)
+WHERE REPLACE(REPLACE(REPLACE(REPLACE(c.phone, ' ', ''), '-', ''), '(', ''), ')', '') = '+79950953373'
 AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 789)
 LIMIT 1;
 
@@ -15707,10 +13833,7 @@ SELECT
   NOW(),
   NOW()
 FROM rental_clients c
-WHERE (
-  c.name = 'Эдик Заказы для групп'
-  OR c.director_name = 'Эдик Заказы для групп'
-)
+WHERE (c.name ILIKE '%Эдик%' OR c.director_name ILIKE '%Эдик%')
 AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 788)
 LIMIT 1;
 
@@ -15739,11 +13862,7 @@ SELECT
   NOW(),
   NOW()
 FROM rental_clients c
-WHERE (
-  REPLACE(REPLACE(REPLACE(REPLACE(c.phone, ' ', ''), '-', ''), '(', ''), ')', '') = '+79872750395'
-  OR c.name = 'Зельфира'
-  OR c.director_name = 'Зельфира'
-)
+WHERE REPLACE(REPLACE(REPLACE(REPLACE(c.phone, ' ', ''), '-', ''), '(', ''), ')', '') = '+79872750395'
 AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 786)
 LIMIT 1;
 
@@ -15772,11 +13891,7 @@ SELECT
   NOW(),
   NOW()
 FROM rental_clients c
-WHERE (
-  REPLACE(REPLACE(REPLACE(REPLACE(c.phone, ' ', ''), '-', ''), '(', ''), ')', '') = '+79190117253'
-  OR c.name = 'Родина-тур'
-  OR c.director_name = 'Родина-тур'
-)
+WHERE REPLACE(REPLACE(REPLACE(REPLACE(c.phone, ' ', ''), '-', ''), '(', ''), ')', '') = '+79190117253'
 AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 785)
 LIMIT 1;
 
@@ -15805,11 +13920,7 @@ SELECT
   NOW(),
   NOW()
 FROM rental_clients c
-WHERE (
-  REPLACE(REPLACE(REPLACE(REPLACE(c.phone, ' ', ''), '-', ''), '(', ''), ')', '') = '+79872827166'
-  OR c.name = 'Татьяна Чуб'
-  OR c.director_name = 'Татьяна Чуб'
-)
+WHERE REPLACE(REPLACE(REPLACE(REPLACE(c.phone, ' ', ''), '-', ''), '(', ''), ')', '') = '+79872827166'
 AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 784)
 LIMIT 1;
 
@@ -15838,11 +13949,7 @@ SELECT
   NOW(),
   NOW()
 FROM rental_clients c
-WHERE (
-  REPLACE(REPLACE(REPLACE(REPLACE(c.phone, ' ', ''), '-', ''), '(', ''), ')', '') = '+79872904401'
-  OR c.name = 'Галина (Тур Урал)'
-  OR c.director_name = 'Галина (Тур Урал)'
-)
+WHERE REPLACE(REPLACE(REPLACE(REPLACE(c.phone, ' ', ''), '-', ''), '(', ''), ')', '') = '+79872904401'
 AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 783)
 LIMIT 1;
 
@@ -15871,11 +13978,7 @@ SELECT
   NOW(),
   NOW()
 FROM rental_clients c
-WHERE (
-  REPLACE(REPLACE(REPLACE(REPLACE(c.phone, ' ', ''), '-', ''), '(', ''), ')', '') = '+79503118747'
-  OR c.name = 'Любовь (ТИЦ)'
-  OR c.director_name = 'Любовь (ТИЦ)'
-)
+WHERE REPLACE(REPLACE(REPLACE(REPLACE(c.phone, ' ', ''), '-', ''), '(', ''), ')', '') = '+79503118747'
 AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 782)
 LIMIT 1;
 
@@ -15904,11 +14007,7 @@ SELECT
   NOW(),
   NOW()
 FROM rental_clients c
-WHERE (
-  REPLACE(REPLACE(REPLACE(REPLACE(c.phone, ' ', ''), '-', ''), '(', ''), ')', '') = '+79503118747'
-  OR c.name = 'Любовь (ТИЦ)'
-  OR c.director_name = 'Любовь (ТИЦ)'
-)
+WHERE REPLACE(REPLACE(REPLACE(REPLACE(c.phone, ' ', ''), '-', ''), '(', ''), ')', '') = '+79503118747'
 AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 781)
 LIMIT 1;
 
@@ -15937,11 +14036,7 @@ SELECT
   NOW(),
   NOW()
 FROM rental_clients c
-WHERE (
-  REPLACE(REPLACE(REPLACE(REPLACE(c.phone, ' ', ''), '-', ''), '(', ''), ')', '') = '+79677022929'
-  OR c.name = 'Дарья'
-  OR c.director_name = 'Дарья'
-)
+WHERE REPLACE(REPLACE(REPLACE(REPLACE(c.phone, ' ', ''), '-', ''), '(', ''), ')', '') = '+79677022929'
 AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 780)
 LIMIT 1;
 
@@ -15970,11 +14065,7 @@ SELECT
   NOW(),
   NOW()
 FROM rental_clients c
-WHERE (
-  REPLACE(REPLACE(REPLACE(REPLACE(c.phone, ' ', ''), '-', ''), '(', ''), ')', '') = '+79063310993'
-  OR c.name = 'Гузель (Юралс)'
-  OR c.director_name = 'Гузель (Юралс)'
-)
+WHERE REPLACE(REPLACE(REPLACE(REPLACE(c.phone, ' ', ''), '-', ''), '(', ''), ')', '') = '+79063310993'
 AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 779)
 LIMIT 1;
 
@@ -16003,11 +14094,7 @@ SELECT
   NOW(),
   NOW()
 FROM rental_clients c
-WHERE (
-  REPLACE(REPLACE(REPLACE(REPLACE(c.phone, ' ', ''), '-', ''), '(', ''), ')', '') = '+79600523400'
-  OR c.name = 'Эвелина (Инициатива)'
-  OR c.director_name = 'Эвелина (Инициатива)'
-)
+WHERE REPLACE(REPLACE(REPLACE(REPLACE(c.phone, ' ', ''), '-', ''), '(', ''), ')', '') = '+79600523400'
 AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 777)
 LIMIT 1;
 
@@ -16036,11 +14123,7 @@ SELECT
   NOW(),
   NOW()
 FROM rental_clients c
-WHERE (
-  REPLACE(REPLACE(REPLACE(REPLACE(c.phone, ' ', ''), '-', ''), '(', ''), ')', '') = '+79111708200'
-  OR c.name = 'Екатерина (ОЛТА Трэвел)'
-  OR c.director_name = 'Екатерина (ОЛТА Трэвел)'
-)
+WHERE REPLACE(REPLACE(REPLACE(REPLACE(c.phone, ' ', ''), '-', ''), '(', ''), ')', '') = '+79111708200'
 AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 776)
 LIMIT 1;
 
@@ -16069,11 +14152,7 @@ SELECT
   NOW(),
   NOW()
 FROM rental_clients c
-WHERE (
-  REPLACE(REPLACE(REPLACE(REPLACE(c.phone, ' ', ''), '-', ''), '(', ''), ')', '') = '+79206736156'
-  OR c.name = 'Ольга (Дольче Вита)'
-  OR c.director_name = 'Ольга (Дольче Вита)'
-)
+WHERE REPLACE(REPLACE(REPLACE(REPLACE(c.phone, ' ', ''), '-', ''), '(', ''), ')', '') = '+79206736156'
 AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 775)
 LIMIT 1;
 
@@ -16102,11 +14181,7 @@ SELECT
   NOW(),
   NOW()
 FROM rental_clients c
-WHERE (
-  REPLACE(REPLACE(REPLACE(REPLACE(c.phone, ' ', ''), '-', ''), '(', ''), ')', '') = '+79206736156'
-  OR c.name = 'Ольга (Дольче Вита)'
-  OR c.director_name = 'Ольга (Дольче Вита)'
-)
+WHERE REPLACE(REPLACE(REPLACE(REPLACE(c.phone, ' ', ''), '-', ''), '(', ''), ')', '') = '+79206736156'
 AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 774)
 LIMIT 1;
 
@@ -16135,11 +14210,7 @@ SELECT
   NOW(),
   NOW()
 FROM rental_clients c
-WHERE (
-  REPLACE(REPLACE(REPLACE(REPLACE(c.phone, ' ', ''), '-', ''), '(', ''), ')', '') = '+79050249197'
-  OR c.name = 'Ирина (Иль Мио Тур)'
-  OR c.director_name = 'Ирина (Иль Мио Тур)'
-)
+WHERE REPLACE(REPLACE(REPLACE(REPLACE(c.phone, ' ', ''), '-', ''), '(', ''), ')', '') = '+79050249197'
 AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 773)
 LIMIT 1;
 
@@ -16168,11 +14239,7 @@ SELECT
   NOW(),
   NOW()
 FROM rental_clients c
-WHERE (
-  REPLACE(REPLACE(REPLACE(REPLACE(c.phone, ' ', ''), '-', ''), '(', ''), ')', '') = '+79274900014'
-  OR c.name = 'Мария Экскурсовод'
-  OR c.director_name = 'Мария Экскурсовод'
-)
+WHERE REPLACE(REPLACE(REPLACE(REPLACE(c.phone, ' ', ''), '-', ''), '(', ''), ')', '') = '+79274900014'
 AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 772)
 LIMIT 1;
 
@@ -16201,11 +14268,7 @@ SELECT
   NOW(),
   NOW()
 FROM rental_clients c
-WHERE (
-  REPLACE(REPLACE(REPLACE(REPLACE(c.phone, ' ', ''), '-', ''), '(', ''), ')', '') = '+79179142756'
-  OR c.name = 'Татьяна (Гольфстрим)'
-  OR c.director_name = 'Татьяна (Гольфстрим)'
-)
+WHERE REPLACE(REPLACE(REPLACE(REPLACE(c.phone, ' ', ''), '-', ''), '(', ''), ')', '') = '+79179142756'
 AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 771)
 LIMIT 1;
 
@@ -16234,11 +14297,7 @@ SELECT
   NOW(),
   NOW()
 FROM rental_clients c
-WHERE (
-  REPLACE(REPLACE(REPLACE(REPLACE(c.phone, ' ', ''), '-', ''), '(', ''), ')', '') = '+79152964580'
-  OR c.name = 'Арсен (Юнион)'
-  OR c.director_name = 'Арсен (Юнион)'
-)
+WHERE REPLACE(REPLACE(REPLACE(REPLACE(c.phone, ' ', ''), '-', ''), '(', ''), ')', '') = '+79152964580'
 AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 769)
 LIMIT 1;
 
@@ -16267,11 +14326,7 @@ SELECT
   NOW(),
   NOW()
 FROM rental_clients c
-WHERE (
-  REPLACE(REPLACE(REPLACE(REPLACE(c.phone, ' ', ''), '-', ''), '(', ''), ')', '') = '+79152964580'
-  OR c.name = 'Арсен (Юнион)'
-  OR c.director_name = 'Арсен (Юнион)'
-)
+WHERE REPLACE(REPLACE(REPLACE(REPLACE(c.phone, ' ', ''), '-', ''), '(', ''), ')', '') = '+79152964580'
 AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 768)
 LIMIT 1;
 
@@ -16300,11 +14355,7 @@ SELECT
   NOW(),
   NOW()
 FROM rental_clients c
-WHERE (
-  REPLACE(REPLACE(REPLACE(REPLACE(c.phone, ' ', ''), '-', ''), '(', ''), ')', '') = '+79872750395'
-  OR c.name = 'Зельфира'
-  OR c.director_name = 'Зельфира'
-)
+WHERE REPLACE(REPLACE(REPLACE(REPLACE(c.phone, ' ', ''), '-', ''), '(', ''), ')', '') = '+79872750395'
 AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 767)
 LIMIT 1;
 
@@ -16333,11 +14384,7 @@ SELECT
   NOW(),
   NOW()
 FROM rental_clients c
-WHERE (
-  REPLACE(REPLACE(REPLACE(REPLACE(c.phone, ' ', ''), '-', ''), '(', ''), ')', '') = '+79046699399'
-  OR c.name = 'Альберт (КТ)'
-  OR c.director_name = 'Альберт (КТ)'
-)
+WHERE REPLACE(REPLACE(REPLACE(REPLACE(c.phone, ' ', ''), '-', ''), '(', ''), ')', '') = '+79046699399'
 AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 765)
 LIMIT 1;
 
@@ -16366,11 +14413,7 @@ SELECT
   NOW(),
   NOW()
 FROM rental_clients c
-WHERE (
-  REPLACE(REPLACE(REPLACE(REPLACE(c.phone, ' ', ''), '-', ''), '(', ''), ')', '') = '+79662409276'
-  OR c.name = 'Мира (ИП)'
-  OR c.director_name = 'Мира (ИП)'
-)
+WHERE REPLACE(REPLACE(REPLACE(REPLACE(c.phone, ' ', ''), '-', ''), '(', ''), ')', '') = '+79662409276'
 AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 764)
 LIMIT 1;
 
@@ -16399,11 +14442,7 @@ SELECT
   NOW(),
   NOW()
 FROM rental_clients c
-WHERE (
-  REPLACE(REPLACE(REPLACE(REPLACE(c.phone, ' ', ''), '-', ''), '(', ''), ')', '') = '+79050249197'
-  OR c.name = 'Ирина (Иль Мио Тур)'
-  OR c.director_name = 'Ирина (Иль Мио Тур)'
-)
+WHERE REPLACE(REPLACE(REPLACE(REPLACE(c.phone, ' ', ''), '-', ''), '(', ''), ')', '') = '+79050249197'
 AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 763)
 LIMIT 1;
 
@@ -16432,11 +14471,7 @@ SELECT
   NOW(),
   NOW()
 FROM rental_clients c
-WHERE (
-  REPLACE(REPLACE(REPLACE(REPLACE(c.phone, ' ', ''), '-', ''), '(', ''), ')', '') = '+79190117253'
-  OR c.name = 'Родина-тур'
-  OR c.director_name = 'Родина-тур'
-)
+WHERE REPLACE(REPLACE(REPLACE(REPLACE(c.phone, ' ', ''), '-', ''), '(', ''), ')', '') = '+79190117253'
 AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 762)
 LIMIT 1;
 
@@ -16465,11 +14500,7 @@ SELECT
   NOW(),
   NOW()
 FROM rental_clients c
-WHERE (
-  REPLACE(REPLACE(REPLACE(REPLACE(c.phone, ' ', ''), '-', ''), '(', ''), ')', '') = '+79276703000'
-  OR c.name = 'Ирина Пронина'
-  OR c.director_name = 'Ирина Пронина'
-)
+WHERE REPLACE(REPLACE(REPLACE(REPLACE(c.phone, ' ', ''), '-', ''), '(', ''), ')', '') = '+79276703000'
 AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 761)
 LIMIT 1;
 
@@ -16498,11 +14529,7 @@ SELECT
   NOW(),
   NOW()
 FROM rental_clients c
-WHERE (
-  REPLACE(REPLACE(REPLACE(REPLACE(c.phone, ' ', ''), '-', ''), '(', ''), ')', '') = '+79179142756'
-  OR c.name = 'Татьяна (Гольфстрим)'
-  OR c.director_name = 'Татьяна (Гольфстрим)'
-)
+WHERE REPLACE(REPLACE(REPLACE(REPLACE(c.phone, ' ', ''), '-', ''), '(', ''), ')', '') = '+79179142756'
 AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 760)
 LIMIT 1;
 
@@ -16531,11 +14558,7 @@ SELECT
   NOW(),
   NOW()
 FROM rental_clients c
-WHERE (
-  REPLACE(REPLACE(REPLACE(REPLACE(c.phone, ' ', ''), '-', ''), '(', ''), ')', '') = '+79225115900'
-  OR c.name = 'Алексей'
-  OR c.director_name = 'Алексей'
-)
+WHERE REPLACE(REPLACE(REPLACE(REPLACE(c.phone, ' ', ''), '-', ''), '(', ''), ')', '') = '+79225115900'
 AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 759)
 LIMIT 1;
 
@@ -16564,11 +14587,7 @@ SELECT
   NOW(),
   NOW()
 FROM rental_clients c
-WHERE (
-  REPLACE(REPLACE(REPLACE(REPLACE(c.phone, ' ', ''), '-', ''), '(', ''), ')', '') = '+79033408152'
-  OR c.name = 'Юлианна'
-  OR c.director_name = 'Юлианна'
-)
+WHERE REPLACE(REPLACE(REPLACE(REPLACE(c.phone, ' ', ''), '-', ''), '(', ''), ')', '') = '+79033408152'
 AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 758)
 LIMIT 1;
 
@@ -16597,11 +14616,7 @@ SELECT
   NOW(),
   NOW()
 FROM rental_clients c
-WHERE (
-  REPLACE(REPLACE(REPLACE(REPLACE(c.phone, ' ', ''), '-', ''), '(', ''), ')', '') = '+79659400307'
-  OR c.name = 'Зульхиза Кутлучурина'
-  OR c.director_name = 'Зульхиза Кутлучурина'
-)
+WHERE REPLACE(REPLACE(REPLACE(REPLACE(c.phone, ' ', ''), '-', ''), '(', ''), ')', '') = '+79659400307'
 AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 757)
 LIMIT 1;
 
@@ -16630,11 +14645,7 @@ SELECT
   NOW(),
   NOW()
 FROM rental_clients c
-WHERE (
-  REPLACE(REPLACE(REPLACE(REPLACE(c.phone, ' ', ''), '-', ''), '(', ''), ')', '') = '+79179062560'
-  OR c.name = 'Ляйсан (Казань 360)'
-  OR c.director_name = 'Ляйсан (Казань 360)'
-)
+WHERE REPLACE(REPLACE(REPLACE(REPLACE(c.phone, ' ', ''), '-', ''), '(', ''), ')', '') = '+79179062560'
 AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 756)
 LIMIT 1;
 
@@ -16663,11 +14674,7 @@ SELECT
   NOW(),
   NOW()
 FROM rental_clients c
-WHERE (
-  REPLACE(REPLACE(REPLACE(REPLACE(c.phone, ' ', ''), '-', ''), '(', ''), ')', '') = '+79950953373'
-  OR c.name = 'Екатерина'
-  OR c.director_name = 'Екатерина'
-)
+WHERE REPLACE(REPLACE(REPLACE(REPLACE(c.phone, ' ', ''), '-', ''), '(', ''), ')', '') = '+79950953373'
 AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 755)
 LIMIT 1;
 
@@ -16696,11 +14703,7 @@ SELECT
   NOW(),
   NOW()
 FROM rental_clients c
-WHERE (
-  REPLACE(REPLACE(REPLACE(REPLACE(c.phone, ' ', ''), '-', ''), '(', ''), ')', '') = '+79033408152'
-  OR c.name = 'Юлианна'
-  OR c.director_name = 'Юлианна'
-)
+WHERE REPLACE(REPLACE(REPLACE(REPLACE(c.phone, ' ', ''), '-', ''), '(', ''), ')', '') = '+79033408152'
 AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 754)
 LIMIT 1;
 
@@ -16729,11 +14732,7 @@ SELECT
   NOW(),
   NOW()
 FROM rental_clients c
-WHERE (
-  REPLACE(REPLACE(REPLACE(REPLACE(c.phone, ' ', ''), '-', ''), '(', ''), ')', '') = '+79033408152'
-  OR c.name = 'Юлианна'
-  OR c.director_name = 'Юлианна'
-)
+WHERE REPLACE(REPLACE(REPLACE(REPLACE(c.phone, ' ', ''), '-', ''), '(', ''), ')', '') = '+79033408152'
 AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 753)
 LIMIT 1;
 
@@ -16762,10 +14761,7 @@ SELECT
   NOW(),
   NOW()
 FROM rental_clients c
-WHERE (
-  c.name = 'Эдик Заказы для групп'
-  OR c.director_name = 'Эдик Заказы для групп'
-)
+WHERE (c.name ILIKE '%Эдик%' OR c.director_name ILIKE '%Эдик%')
 AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 752)
 LIMIT 1;
 
@@ -16794,11 +14790,7 @@ SELECT
   NOW(),
   NOW()
 FROM rental_clients c
-WHERE (
-  REPLACE(REPLACE(REPLACE(REPLACE(c.phone, ' ', ''), '-', ''), '(', ''), ')', '') = '+79515639790'
-  OR c.name = 'Елена Павловна'
-  OR c.director_name = 'Елена Павловна'
-)
+WHERE REPLACE(REPLACE(REPLACE(REPLACE(c.phone, ' ', ''), '-', ''), '(', ''), ')', '') = '+79515639790'
 AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 751)
 LIMIT 1;
 
@@ -16827,11 +14819,7 @@ SELECT
   NOW(),
   NOW()
 FROM rental_clients c
-WHERE (
-  REPLACE(REPLACE(REPLACE(REPLACE(c.phone, ' ', ''), '-', ''), '(', ''), ')', '') = '+79530225627'
-  OR c.name = 'Алина Минеева'
-  OR c.director_name = 'Алина Минеева'
-)
+WHERE REPLACE(REPLACE(REPLACE(REPLACE(c.phone, ' ', ''), '-', ''), '(', ''), ')', '') = '+79530225627'
 AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 750)
 LIMIT 1;
 
@@ -16860,11 +14848,7 @@ SELECT
   NOW(),
   NOW()
 FROM rental_clients c
-WHERE (
-  REPLACE(REPLACE(REPLACE(REPLACE(c.phone, ' ', ''), '-', ''), '(', ''), ')', '') = '+79534880189'
-  OR c.name = 'Имя'
-  OR c.director_name = 'Имя'
-)
+WHERE REPLACE(REPLACE(REPLACE(REPLACE(c.phone, ' ', ''), '-', ''), '(', ''), ')', '') = '+79534880189'
 AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 749)
 LIMIT 1;
 
@@ -16893,11 +14877,7 @@ SELECT
   NOW(),
   NOW()
 FROM rental_clients c
-WHERE (
-  REPLACE(REPLACE(REPLACE(REPLACE(c.phone, ' ', ''), '-', ''), '(', ''), ')', '') = '+79172922000'
-  OR c.name = 'Наталья'
-  OR c.director_name = 'Наталья'
-)
+WHERE REPLACE(REPLACE(REPLACE(REPLACE(c.phone, ' ', ''), '-', ''), '(', ''), ')', '') = '+79172922000'
 AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 748)
 LIMIT 1;
 
@@ -16926,11 +14906,7 @@ SELECT
   NOW(),
   NOW()
 FROM rental_clients c
-WHERE (
-  REPLACE(REPLACE(REPLACE(REPLACE(c.phone, ' ', ''), '-', ''), '(', ''), ')', '') = '+79046623179'
-  OR c.name = 'Екатерина Кореева'
-  OR c.director_name = 'Екатерина Кореева'
-)
+WHERE REPLACE(REPLACE(REPLACE(REPLACE(c.phone, ' ', ''), '-', ''), '(', ''), ')', '') = '+79046623179'
 AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 747)
 LIMIT 1;
 
@@ -16959,11 +14935,7 @@ SELECT
   NOW(),
   NOW()
 FROM rental_clients c
-WHERE (
-  REPLACE(REPLACE(REPLACE(REPLACE(c.phone, ' ', ''), '-', ''), '(', ''), ')', '') = '+79179142756'
-  OR c.name = 'Татьяна (Гольфстрим)'
-  OR c.director_name = 'Татьяна (Гольфстрим)'
-)
+WHERE REPLACE(REPLACE(REPLACE(REPLACE(c.phone, ' ', ''), '-', ''), '(', ''), ')', '') = '+79179142756'
 AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 746)
 LIMIT 1;
 
@@ -16992,11 +14964,7 @@ SELECT
   NOW(),
   NOW()
 FROM rental_clients c
-WHERE (
-  REPLACE(REPLACE(REPLACE(REPLACE(c.phone, ' ', ''), '-', ''), '(', ''), ')', '') = '+79152964580'
-  OR c.name = 'Арсен (Юнион)'
-  OR c.director_name = 'Арсен (Юнион)'
-)
+WHERE REPLACE(REPLACE(REPLACE(REPLACE(c.phone, ' ', ''), '-', ''), '(', ''), ')', '') = '+79152964580'
 AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 745)
 LIMIT 1;
 
@@ -17025,11 +14993,7 @@ SELECT
   NOW(),
   NOW()
 FROM rental_clients c
-WHERE (
-  REPLACE(REPLACE(REPLACE(REPLACE(c.phone, ' ', ''), '-', ''), '(', ''), ')', '') = '+79503118747'
-  OR c.name = 'Любовь (ТИЦ)'
-  OR c.director_name = 'Любовь (ТИЦ)'
-)
+WHERE REPLACE(REPLACE(REPLACE(REPLACE(c.phone, ' ', ''), '-', ''), '(', ''), ')', '') = '+79503118747'
 AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 744)
 LIMIT 1;
 
@@ -17058,11 +15022,7 @@ SELECT
   NOW(),
   NOW()
 FROM rental_clients c
-WHERE (
-  REPLACE(REPLACE(REPLACE(REPLACE(c.phone, ' ', ''), '-', ''), '(', ''), ')', '') = '+79101776156'
-  OR c.name = 'Анюта Родионова (Родина-тур)'
-  OR c.director_name = 'Анюта Родионова (Родина-тур)'
-)
+WHERE REPLACE(REPLACE(REPLACE(REPLACE(c.phone, ' ', ''), '-', ''), '(', ''), ')', '') = '+79101776156'
 AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 743)
 LIMIT 1;
 
@@ -17091,11 +15051,7 @@ SELECT
   NOW(),
   NOW()
 FROM rental_clients c
-WHERE (
-  REPLACE(REPLACE(REPLACE(REPLACE(c.phone, ' ', ''), '-', ''), '(', ''), ')', '') = '+79950953373'
-  OR c.name = 'Екатерина'
-  OR c.director_name = 'Екатерина'
-)
+WHERE REPLACE(REPLACE(REPLACE(REPLACE(c.phone, ' ', ''), '-', ''), '(', ''), ')', '') = '+79950953373'
 AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 742)
 LIMIT 1;
 
@@ -17124,11 +15080,7 @@ SELECT
   NOW(),
   NOW()
 FROM rental_clients c
-WHERE (
-  REPLACE(REPLACE(REPLACE(REPLACE(c.phone, ' ', ''), '-', ''), '(', ''), ')', '') = '+79503118747'
-  OR c.name = 'Любовь (ТИЦ)'
-  OR c.director_name = 'Любовь (ТИЦ)'
-)
+WHERE REPLACE(REPLACE(REPLACE(REPLACE(c.phone, ' ', ''), '-', ''), '(', ''), ')', '') = '+79503118747'
 AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 741)
 LIMIT 1;
 
@@ -17157,11 +15109,7 @@ SELECT
   NOW(),
   NOW()
 FROM rental_clients c
-WHERE (
-  REPLACE(REPLACE(REPLACE(REPLACE(c.phone, ' ', ''), '-', ''), '(', ''), ')', '') = '+79639629332'
-  OR c.name = 'Анастасия Пашинин (НК Транс Тур)'
-  OR c.director_name = 'Анастасия Пашинин (НК Транс Тур)'
-)
+WHERE REPLACE(REPLACE(REPLACE(REPLACE(c.phone, ' ', ''), '-', ''), '(', ''), ')', '') = '+79639629332'
 AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 740)
 LIMIT 1;
 
@@ -17190,11 +15138,7 @@ SELECT
   NOW(),
   NOW()
 FROM rental_clients c
-WHERE (
-  REPLACE(REPLACE(REPLACE(REPLACE(c.phone, ' ', ''), '-', ''), '(', ''), ')', '') = '+79639629332'
-  OR c.name = 'Анастасия Пашинин (НК Транс Тур)'
-  OR c.director_name = 'Анастасия Пашинин (НК Транс Тур)'
-)
+WHERE REPLACE(REPLACE(REPLACE(REPLACE(c.phone, ' ', ''), '-', ''), '(', ''), ')', '') = '+79639629332'
 AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 739)
 LIMIT 1;
 
@@ -17223,11 +15167,7 @@ SELECT
   NOW(),
   NOW()
 FROM rental_clients c
-WHERE (
-  REPLACE(REPLACE(REPLACE(REPLACE(c.phone, ' ', ''), '-', ''), '(', ''), ')', '') = '+79639629332'
-  OR c.name = 'Анастасия Пашинин (НК Транс Тур)'
-  OR c.director_name = 'Анастасия Пашинин (НК Транс Тур)'
-)
+WHERE REPLACE(REPLACE(REPLACE(REPLACE(c.phone, ' ', ''), '-', ''), '(', ''), ')', '') = '+79639629332'
 AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 738)
 LIMIT 1;
 
@@ -17256,11 +15196,7 @@ SELECT
   NOW(),
   NOW()
 FROM rental_clients c
-WHERE (
-  REPLACE(REPLACE(REPLACE(REPLACE(c.phone, ' ', ''), '-', ''), '(', ''), ')', '') = '+79639629332'
-  OR c.name = 'Анастасия Пашинин (НК Транс Тур)'
-  OR c.director_name = 'Анастасия Пашинин (НК Транс Тур)'
-)
+WHERE REPLACE(REPLACE(REPLACE(REPLACE(c.phone, ' ', ''), '-', ''), '(', ''), ')', '') = '+79639629332'
 AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 737)
 LIMIT 1;
 
@@ -17289,11 +15225,7 @@ SELECT
   NOW(),
   NOW()
 FROM rental_clients c
-WHERE (
-  REPLACE(REPLACE(REPLACE(REPLACE(c.phone, ' ', ''), '-', ''), '(', ''), ')', '') = '+79872961933'
-  OR c.name = 'Айгуль Файзуллина'
-  OR c.director_name = 'Айгуль Файзуллина'
-)
+WHERE REPLACE(REPLACE(REPLACE(REPLACE(c.phone, ' ', ''), '-', ''), '(', ''), ')', '') = '+79872961933'
 AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 736)
 LIMIT 1;
 
@@ -17322,11 +15254,7 @@ SELECT
   NOW(),
   NOW()
 FROM rental_clients c
-WHERE (
-  REPLACE(REPLACE(REPLACE(REPLACE(c.phone, ' ', ''), '-', ''), '(', ''), ')', '') = '+79639629332'
-  OR c.name = 'Анастасия Пашинин (НК Транс Тур)'
-  OR c.director_name = 'Анастасия Пашинин (НК Транс Тур)'
-)
+WHERE REPLACE(REPLACE(REPLACE(REPLACE(c.phone, ' ', ''), '-', ''), '(', ''), ')', '') = '+79639629332'
 AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 735)
 LIMIT 1;
 
@@ -17355,10 +15283,7 @@ SELECT
   NOW(),
   NOW()
 FROM rental_clients c
-WHERE (
-  c.name = 'Эдик Заказы для групп'
-  OR c.director_name = 'Эдик Заказы для групп'
-)
+WHERE (c.name ILIKE '%Эдик%' OR c.director_name ILIKE '%Эдик%')
 AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 734)
 LIMIT 1;
 
@@ -17387,10 +15312,7 @@ SELECT
   NOW(),
   NOW()
 FROM rental_clients c
-WHERE (
-  c.name = 'Эдик Заказы для групп'
-  OR c.director_name = 'Эдик Заказы для групп'
-)
+WHERE (c.name ILIKE '%Эдик%' OR c.director_name ILIKE '%Эдик%')
 AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 733)
 LIMIT 1;
 
@@ -17419,10 +15341,7 @@ SELECT
   NOW(),
   NOW()
 FROM rental_clients c
-WHERE (
-  c.name = 'Эдик Заказы для групп'
-  OR c.director_name = 'Эдик Заказы для групп'
-)
+WHERE (c.name ILIKE '%Эдик%' OR c.director_name ILIKE '%Эдик%')
 AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 732)
 LIMIT 1;
 
@@ -17451,10 +15370,7 @@ SELECT
   NOW(),
   NOW()
 FROM rental_clients c
-WHERE (
-  c.name = 'Эдик Заказы для групп'
-  OR c.director_name = 'Эдик Заказы для групп'
-)
+WHERE (c.name ILIKE '%Эдик%' OR c.director_name ILIKE '%Эдик%')
 AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 731)
 LIMIT 1;
 
@@ -17483,10 +15399,7 @@ SELECT
   NOW(),
   NOW()
 FROM rental_clients c
-WHERE (
-  c.name = 'Эдик Заказы для групп'
-  OR c.director_name = 'Эдик Заказы для групп'
-)
+WHERE (c.name ILIKE '%Эдик%' OR c.director_name ILIKE '%Эдик%')
 AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 730)
 LIMIT 1;
 
@@ -17515,10 +15428,7 @@ SELECT
   NOW(),
   NOW()
 FROM rental_clients c
-WHERE (
-  c.name = 'Эдик Заказы для групп'
-  OR c.director_name = 'Эдик Заказы для групп'
-)
+WHERE (c.name ILIKE '%Эдик%' OR c.director_name ILIKE '%Эдик%')
 AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 729)
 LIMIT 1;
 
@@ -17547,10 +15457,7 @@ SELECT
   NOW(),
   NOW()
 FROM rental_clients c
-WHERE (
-  c.name = 'Эдик Заказы для групп'
-  OR c.director_name = 'Эдик Заказы для групп'
-)
+WHERE (c.name ILIKE '%Эдик%' OR c.director_name ILIKE '%Эдик%')
 AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 728)
 LIMIT 1;
 
@@ -17579,10 +15486,7 @@ SELECT
   NOW(),
   NOW()
 FROM rental_clients c
-WHERE (
-  c.name = 'Эдик Заказы для групп'
-  OR c.director_name = 'Эдик Заказы для групп'
-)
+WHERE (c.name ILIKE '%Эдик%' OR c.director_name ILIKE '%Эдик%')
 AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 727)
 LIMIT 1;
 
@@ -17611,10 +15515,7 @@ SELECT
   NOW(),
   NOW()
 FROM rental_clients c
-WHERE (
-  c.name = 'Эдик Заказы для групп'
-  OR c.director_name = 'Эдик Заказы для групп'
-)
+WHERE (c.name ILIKE '%Эдик%' OR c.director_name ILIKE '%Эдик%')
 AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 726)
 LIMIT 1;
 
@@ -17643,10 +15544,7 @@ SELECT
   NOW(),
   NOW()
 FROM rental_clients c
-WHERE (
-  c.name = 'Эдик Заказы для групп'
-  OR c.director_name = 'Эдик Заказы для групп'
-)
+WHERE (c.name ILIKE '%Эдик%' OR c.director_name ILIKE '%Эдик%')
 AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 725)
 LIMIT 1;
 
@@ -17675,11 +15573,7 @@ SELECT
   NOW(),
   NOW()
 FROM rental_clients c
-WHERE (
-  REPLACE(REPLACE(REPLACE(REPLACE(c.phone, ' ', ''), '-', ''), '(', ''), ')', '') = '+79274662530'
-  OR c.name = 'Екатерина'
-  OR c.director_name = 'Екатерина'
-)
+WHERE REPLACE(REPLACE(REPLACE(REPLACE(c.phone, ' ', ''), '-', ''), '(', ''), ')', '') = '+79274662530'
 AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 724)
 LIMIT 1;
 
@@ -17708,11 +15602,7 @@ SELECT
   NOW(),
   NOW()
 FROM rental_clients c
-WHERE (
-  REPLACE(REPLACE(REPLACE(REPLACE(c.phone, ' ', ''), '-', ''), '(', ''), ')', '') = '+79105850558'
-  OR c.name = 'Александра (Александрия)'
-  OR c.director_name = 'Александра (Александрия)'
-)
+WHERE REPLACE(REPLACE(REPLACE(REPLACE(c.phone, ' ', ''), '-', ''), '(', ''), ')', '') = '+79105850558'
 AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 723)
 LIMIT 1;
 
@@ -17741,11 +15631,7 @@ SELECT
   NOW(),
   NOW()
 FROM rental_clients c
-WHERE (
-  REPLACE(REPLACE(REPLACE(REPLACE(c.phone, ' ', ''), '-', ''), '(', ''), ')', '') = '+79600523400'
-  OR c.name = 'Эвелина (Инициатива)'
-  OR c.director_name = 'Эвелина (Инициатива)'
-)
+WHERE REPLACE(REPLACE(REPLACE(REPLACE(c.phone, ' ', ''), '-', ''), '(', ''), ')', '') = '+79600523400'
 AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 722)
 LIMIT 1;
 
@@ -17774,11 +15660,7 @@ SELECT
   NOW(),
   NOW()
 FROM rental_clients c
-WHERE (
-  REPLACE(REPLACE(REPLACE(REPLACE(c.phone, ' ', ''), '-', ''), '(', ''), ')', '') = '+79503118747'
-  OR c.name = 'Любовь (ТИЦ)'
-  OR c.director_name = 'Любовь (ТИЦ)'
-)
+WHERE REPLACE(REPLACE(REPLACE(REPLACE(c.phone, ' ', ''), '-', ''), '(', ''), ')', '') = '+79503118747'
 AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 721)
 LIMIT 1;
 
@@ -17807,11 +15689,7 @@ SELECT
   NOW(),
   NOW()
 FROM rental_clients c
-WHERE (
-  REPLACE(REPLACE(REPLACE(REPLACE(c.phone, ' ', ''), '-', ''), '(', ''), ')', '') = '+79274900014'
-  OR c.name = 'Мария Экскурсовод'
-  OR c.director_name = 'Мария Экскурсовод'
-)
+WHERE REPLACE(REPLACE(REPLACE(REPLACE(c.phone, ' ', ''), '-', ''), '(', ''), ')', '') = '+79274900014'
 AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 720)
 LIMIT 1;
 
@@ -17840,11 +15718,7 @@ SELECT
   NOW(),
   NOW()
 FROM rental_clients c
-WHERE (
-  REPLACE(REPLACE(REPLACE(REPLACE(c.phone, ' ', ''), '-', ''), '(', ''), ')', '') = '+79179221193'
-  OR c.name = 'Карина (технологии путешествий)'
-  OR c.director_name = 'Карина (технологии путешествий)'
-)
+WHERE REPLACE(REPLACE(REPLACE(REPLACE(c.phone, ' ', ''), '-', ''), '(', ''), ')', '') = '+79179221193'
 AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 719)
 LIMIT 1;
 
@@ -17873,11 +15747,7 @@ SELECT
   NOW(),
   NOW()
 FROM rental_clients c
-WHERE (
-  REPLACE(REPLACE(REPLACE(REPLACE(c.phone, ' ', ''), '-', ''), '(', ''), ')', '') = '+79050249197'
-  OR c.name = 'Ирина (Иль Мио Тур)'
-  OR c.director_name = 'Ирина (Иль Мио Тур)'
-)
+WHERE REPLACE(REPLACE(REPLACE(REPLACE(c.phone, ' ', ''), '-', ''), '(', ''), ')', '') = '+79050249197'
 AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 718)
 LIMIT 1;
 
@@ -17906,11 +15776,7 @@ SELECT
   NOW(),
   NOW()
 FROM rental_clients c
-WHERE (
-  REPLACE(REPLACE(REPLACE(REPLACE(c.phone, ' ', ''), '-', ''), '(', ''), ')', '') = '+79677791807'
-  OR c.name = 'Иванов Семён'
-  OR c.director_name = 'Иванов Семён'
-)
+WHERE REPLACE(REPLACE(REPLACE(REPLACE(c.phone, ' ', ''), '-', ''), '(', ''), ')', '') = '+79677791807'
 AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 716)
 LIMIT 1;
 
@@ -17939,11 +15805,7 @@ SELECT
   NOW(),
   NOW()
 FROM rental_clients c
-WHERE (
-  REPLACE(REPLACE(REPLACE(REPLACE(c.phone, ' ', ''), '-', ''), '(', ''), ')', '') = '+79101776156'
-  OR c.name = 'Анюта Родионова (Родина-тур)'
-  OR c.director_name = 'Анюта Родионова (Родина-тур)'
-)
+WHERE REPLACE(REPLACE(REPLACE(REPLACE(c.phone, ' ', ''), '-', ''), '(', ''), ')', '') = '+79101776156'
 AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 715)
 LIMIT 1;
 
@@ -17972,11 +15834,7 @@ SELECT
   NOW(),
   NOW()
 FROM rental_clients c
-WHERE (
-  REPLACE(REPLACE(REPLACE(REPLACE(c.phone, ' ', ''), '-', ''), '(', ''), ')', '') = '+79276703000'
-  OR c.name = 'Ирина Пронина'
-  OR c.director_name = 'Ирина Пронина'
-)
+WHERE REPLACE(REPLACE(REPLACE(REPLACE(c.phone, ' ', ''), '-', ''), '(', ''), ')', '') = '+79276703000'
 AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 714)
 LIMIT 1;
 
@@ -18005,11 +15863,7 @@ SELECT
   NOW(),
   NOW()
 FROM rental_clients c
-WHERE (
-  REPLACE(REPLACE(REPLACE(REPLACE(c.phone, ' ', ''), '-', ''), '(', ''), ')', '') = '+79273735552'
-  OR c.name = 'Лариса'
-  OR c.director_name = 'Лариса'
-)
+WHERE REPLACE(REPLACE(REPLACE(REPLACE(c.phone, ' ', ''), '-', ''), '(', ''), ')', '') = '+79273735552'
 AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 713)
 LIMIT 1;
 
@@ -18038,11 +15892,7 @@ SELECT
   NOW(),
   NOW()
 FROM rental_clients c
-WHERE (
-  REPLACE(REPLACE(REPLACE(REPLACE(c.phone, ' ', ''), '-', ''), '(', ''), ')', '') = '+79196862442'
-  OR c.name = 'Рената (Твоя Казань)'
-  OR c.director_name = 'Рената (Твоя Казань)'
-)
+WHERE REPLACE(REPLACE(REPLACE(REPLACE(c.phone, ' ', ''), '-', ''), '(', ''), ')', '') = '+79196862442'
 AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 712)
 LIMIT 1;
 
@@ -18071,11 +15921,7 @@ SELECT
   NOW(),
   NOW()
 FROM rental_clients c
-WHERE (
-  REPLACE(REPLACE(REPLACE(REPLACE(c.phone, ' ', ''), '-', ''), '(', ''), ')', '') = '+79152964580'
-  OR c.name = 'Арсен (Юнион)'
-  OR c.director_name = 'Арсен (Юнион)'
-)
+WHERE REPLACE(REPLACE(REPLACE(REPLACE(c.phone, ' ', ''), '-', ''), '(', ''), ')', '') = '+79152964580'
 AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 711)
 LIMIT 1;
 
@@ -18104,11 +15950,7 @@ SELECT
   NOW(),
   NOW()
 FROM rental_clients c
-WHERE (
-  REPLACE(REPLACE(REPLACE(REPLACE(c.phone, ' ', ''), '-', ''), '(', ''), ')', '') = '+79869297050'
-  OR c.name = 'Инна Экскурсовод'
-  OR c.director_name = 'Инна Экскурсовод'
-)
+WHERE REPLACE(REPLACE(REPLACE(REPLACE(c.phone, ' ', ''), '-', ''), '(', ''), ')', '') = '+79869297050'
 AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 710)
 LIMIT 1;
 
@@ -18137,11 +15979,7 @@ SELECT
   NOW(),
   NOW()
 FROM rental_clients c
-WHERE (
-  REPLACE(REPLACE(REPLACE(REPLACE(c.phone, ' ', ''), '-', ''), '(', ''), ')', '') = '+79872827166'
-  OR c.name = 'Татьяна Чуб'
-  OR c.director_name = 'Татьяна Чуб'
-)
+WHERE REPLACE(REPLACE(REPLACE(REPLACE(c.phone, ' ', ''), '-', ''), '(', ''), ')', '') = '+79872827166'
 AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 709)
 LIMIT 1;
 
@@ -18170,11 +16008,7 @@ SELECT
   NOW(),
   NOW()
 FROM rental_clients c
-WHERE (
-  REPLACE(REPLACE(REPLACE(REPLACE(c.phone, ' ', ''), '-', ''), '(', ''), ')', '') = '+79179062560'
-  OR c.name = 'Ляйсан (Казань 360)'
-  OR c.director_name = 'Ляйсан (Казань 360)'
-)
+WHERE REPLACE(REPLACE(REPLACE(REPLACE(c.phone, ' ', ''), '-', ''), '(', ''), ')', '') = '+79179062560'
 AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 708)
 LIMIT 1;
 
@@ -18203,11 +16037,7 @@ SELECT
   NOW(),
   NOW()
 FROM rental_clients c
-WHERE (
-  REPLACE(REPLACE(REPLACE(REPLACE(c.phone, ' ', ''), '-', ''), '(', ''), ')', '') = '+79050249197'
-  OR c.name = 'Ирина (Иль Мио Тур)'
-  OR c.director_name = 'Ирина (Иль Мио Тур)'
-)
+WHERE REPLACE(REPLACE(REPLACE(REPLACE(c.phone, ' ', ''), '-', ''), '(', ''), ')', '') = '+79050249197'
 AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 707)
 LIMIT 1;
 
@@ -18236,11 +16066,7 @@ SELECT
   NOW(),
   NOW()
 FROM rental_clients c
-WHERE (
-  REPLACE(REPLACE(REPLACE(REPLACE(c.phone, ' ', ''), '-', ''), '(', ''), ')', '') = '+79050249197'
-  OR c.name = 'Ирина (Иль Мио Тур)'
-  OR c.director_name = 'Ирина (Иль Мио Тур)'
-)
+WHERE REPLACE(REPLACE(REPLACE(REPLACE(c.phone, ' ', ''), '-', ''), '(', ''), ')', '') = '+79050249197'
 AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 706)
 LIMIT 1;
 
@@ -18269,11 +16095,7 @@ SELECT
   NOW(),
   NOW()
 FROM rental_clients c
-WHERE (
-  REPLACE(REPLACE(REPLACE(REPLACE(c.phone, ' ', ''), '-', ''), '(', ''), ')', '') = '+79677791807'
-  OR c.name = 'Иванов Семён'
-  OR c.director_name = 'Иванов Семён'
-)
+WHERE REPLACE(REPLACE(REPLACE(REPLACE(c.phone, ' ', ''), '-', ''), '(', ''), ')', '') = '+79677791807'
 AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 705)
 LIMIT 1;
 
@@ -18302,11 +16124,7 @@ SELECT
   NOW(),
   NOW()
 FROM rental_clients c
-WHERE (
-  REPLACE(REPLACE(REPLACE(REPLACE(c.phone, ' ', ''), '-', ''), '(', ''), ')', '') = '+79503118747'
-  OR c.name = 'Любовь (ТИЦ)'
-  OR c.director_name = 'Любовь (ТИЦ)'
-)
+WHERE REPLACE(REPLACE(REPLACE(REPLACE(c.phone, ' ', ''), '-', ''), '(', ''), ')', '') = '+79503118747'
 AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 704)
 LIMIT 1;
 
@@ -18335,11 +16153,7 @@ SELECT
   NOW(),
   NOW()
 FROM rental_clients c
-WHERE (
-  REPLACE(REPLACE(REPLACE(REPLACE(c.phone, ' ', ''), '-', ''), '(', ''), ')', '') = '+79503118747'
-  OR c.name = 'Любовь (ТИЦ)'
-  OR c.director_name = 'Любовь (ТИЦ)'
-)
+WHERE REPLACE(REPLACE(REPLACE(REPLACE(c.phone, ' ', ''), '-', ''), '(', ''), ')', '') = '+79503118747'
 AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 703)
 LIMIT 1;
 
@@ -18368,11 +16182,7 @@ SELECT
   NOW(),
   NOW()
 FROM rental_clients c
-WHERE (
-  REPLACE(REPLACE(REPLACE(REPLACE(c.phone, ' ', ''), '-', ''), '(', ''), ')', '') = '+79046699399'
-  OR c.name = 'Альберт (КТ)'
-  OR c.director_name = 'Альберт (КТ)'
-)
+WHERE REPLACE(REPLACE(REPLACE(REPLACE(c.phone, ' ', ''), '-', ''), '(', ''), ')', '') = '+79046699399'
 AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 702)
 LIMIT 1;
 
@@ -18401,11 +16211,7 @@ SELECT
   NOW(),
   NOW()
 FROM rental_clients c
-WHERE (
-  REPLACE(REPLACE(REPLACE(REPLACE(c.phone, ' ', ''), '-', ''), '(', ''), ')', '') = '+79179142756'
-  OR c.name = 'Татьяна (Гольфстрим)'
-  OR c.director_name = 'Татьяна (Гольфстрим)'
-)
+WHERE REPLACE(REPLACE(REPLACE(REPLACE(c.phone, ' ', ''), '-', ''), '(', ''), ')', '') = '+79179142756'
 AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 701)
 LIMIT 1;
 
@@ -18434,10 +16240,7 @@ SELECT
   NOW(),
   NOW()
 FROM rental_clients c
-WHERE (
-  c.name = 'Эдик Заказы для групп'
-  OR c.director_name = 'Эдик Заказы для групп'
-)
+WHERE (c.name ILIKE '%Эдик%' OR c.director_name ILIKE '%Эдик%')
 AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 700)
 LIMIT 1;
 
@@ -18466,10 +16269,7 @@ SELECT
   NOW(),
   NOW()
 FROM rental_clients c
-WHERE (
-  c.name = 'Эдик Заказы для групп'
-  OR c.director_name = 'Эдик Заказы для групп'
-)
+WHERE (c.name ILIKE '%Эдик%' OR c.director_name ILIKE '%Эдик%')
 AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 699)
 LIMIT 1;
 
@@ -18498,11 +16298,7 @@ SELECT
   NOW(),
   NOW()
 FROM rental_clients c
-WHERE (
-  REPLACE(REPLACE(REPLACE(REPLACE(c.phone, ' ', ''), '-', ''), '(', ''), ')', '') = '+79172989675'
-  OR c.name = 'Валентина Экскурсовод'
-  OR c.director_name = 'Валентина Экскурсовод'
-)
+WHERE REPLACE(REPLACE(REPLACE(REPLACE(c.phone, ' ', ''), '-', ''), '(', ''), ')', '') = '+79172989675'
 AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 698)
 LIMIT 1;
 
@@ -18531,11 +16327,7 @@ SELECT
   NOW(),
   NOW()
 FROM rental_clients c
-WHERE (
-  REPLACE(REPLACE(REPLACE(REPLACE(c.phone, ' ', ''), '-', ''), '(', ''), ')', '') = '+79178605272'
-  OR c.name = 'Гульнара'
-  OR c.director_name = 'Гульнара'
-)
+WHERE REPLACE(REPLACE(REPLACE(REPLACE(c.phone, ' ', ''), '-', ''), '(', ''), ')', '') = '+79178605272'
 AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 697)
 LIMIT 1;
 
@@ -18564,10 +16356,7 @@ SELECT
   NOW(),
   NOW()
 FROM rental_clients c
-WHERE (
-  c.name = 'Твой Гид'
-  OR c.director_name = 'Твой Гид'
-)
+WHERE (c.name ILIKE '%Твой%' OR c.director_name ILIKE '%Твой%')
 AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 696)
 LIMIT 1;
 
@@ -18596,11 +16385,7 @@ SELECT
   NOW(),
   NOW()
 FROM rental_clients c
-WHERE (
-  REPLACE(REPLACE(REPLACE(REPLACE(c.phone, ' ', ''), '-', ''), '(', ''), ')', '') = '+79179142756'
-  OR c.name = 'Татьяна (Гольфстрим)'
-  OR c.director_name = 'Татьяна (Гольфстрим)'
-)
+WHERE REPLACE(REPLACE(REPLACE(REPLACE(c.phone, ' ', ''), '-', ''), '(', ''), ')', '') = '+79179142756'
 AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 694)
 LIMIT 1;
 
@@ -18629,11 +16414,7 @@ SELECT
   NOW(),
   NOW()
 FROM rental_clients c
-WHERE (
-  REPLACE(REPLACE(REPLACE(REPLACE(c.phone, ' ', ''), '-', ''), '(', ''), ')', '') = '+79179142756'
-  OR c.name = 'Татьяна (Гольфстрим)'
-  OR c.director_name = 'Татьяна (Гольфстрим)'
-)
+WHERE REPLACE(REPLACE(REPLACE(REPLACE(c.phone, ' ', ''), '-', ''), '(', ''), ')', '') = '+79179142756'
 AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 693)
 LIMIT 1;
 
@@ -18662,11 +16443,7 @@ SELECT
   NOW(),
   NOW()
 FROM rental_clients c
-WHERE (
-  REPLACE(REPLACE(REPLACE(REPLACE(c.phone, ' ', ''), '-', ''), '(', ''), ')', '') = '+79179142756'
-  OR c.name = 'Татьяна (Гольфстрим)'
-  OR c.director_name = 'Татьяна (Гольфстрим)'
-)
+WHERE REPLACE(REPLACE(REPLACE(REPLACE(c.phone, ' ', ''), '-', ''), '(', ''), ')', '') = '+79179142756'
 AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 692)
 LIMIT 1;
 
@@ -18695,11 +16472,7 @@ SELECT
   NOW(),
   NOW()
 FROM rental_clients c
-WHERE (
-  REPLACE(REPLACE(REPLACE(REPLACE(c.phone, ' ', ''), '-', ''), '(', ''), ')', '') = '+79179142756'
-  OR c.name = 'Татьяна (Гольфстрим)'
-  OR c.director_name = 'Татьяна (Гольфстрим)'
-)
+WHERE REPLACE(REPLACE(REPLACE(REPLACE(c.phone, ' ', ''), '-', ''), '(', ''), ')', '') = '+79179142756'
 AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 691)
 LIMIT 1;
 
@@ -18728,11 +16501,7 @@ SELECT
   NOW(),
   NOW()
 FROM rental_clients c
-WHERE (
-  REPLACE(REPLACE(REPLACE(REPLACE(c.phone, ' ', ''), '-', ''), '(', ''), ')', '') = '+79503118747'
-  OR c.name = 'Любовь (ТИЦ)'
-  OR c.director_name = 'Любовь (ТИЦ)'
-)
+WHERE REPLACE(REPLACE(REPLACE(REPLACE(c.phone, ' ', ''), '-', ''), '(', ''), ')', '') = '+79503118747'
 AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 690)
 LIMIT 1;
 
@@ -18761,11 +16530,7 @@ SELECT
   NOW(),
   NOW()
 FROM rental_clients c
-WHERE (
-  REPLACE(REPLACE(REPLACE(REPLACE(c.phone, ' ', ''), '-', ''), '(', ''), ')', '') = '+79196862442'
-  OR c.name = 'Рената (Твоя Казань)'
-  OR c.director_name = 'Рената (Твоя Казань)'
-)
+WHERE REPLACE(REPLACE(REPLACE(REPLACE(c.phone, ' ', ''), '-', ''), '(', ''), ')', '') = '+79196862442'
 AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 688)
 LIMIT 1;
 
@@ -18794,11 +16559,7 @@ SELECT
   NOW(),
   NOW()
 FROM rental_clients c
-WHERE (
-  REPLACE(REPLACE(REPLACE(REPLACE(c.phone, ' ', ''), '-', ''), '(', ''), ')', '') = '+79178533525'
-  OR c.name = 'Татьяна (Агентство Удачи)'
-  OR c.director_name = 'Татьяна (Агентство Удачи)'
-)
+WHERE REPLACE(REPLACE(REPLACE(REPLACE(c.phone, ' ', ''), '-', ''), '(', ''), ')', '') = '+79178533525'
 AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 687)
 LIMIT 1;
 
@@ -18827,11 +16588,7 @@ SELECT
   NOW(),
   NOW()
 FROM rental_clients c
-WHERE (
-  REPLACE(REPLACE(REPLACE(REPLACE(c.phone, ' ', ''), '-', ''), '(', ''), ')', '') = '+79503118747'
-  OR c.name = 'Любовь (ТИЦ)'
-  OR c.director_name = 'Любовь (ТИЦ)'
-)
+WHERE REPLACE(REPLACE(REPLACE(REPLACE(c.phone, ' ', ''), '-', ''), '(', ''), ')', '') = '+79503118747'
 AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 686)
 LIMIT 1;
 
@@ -18860,11 +16617,7 @@ SELECT
   NOW(),
   NOW()
 FROM rental_clients c
-WHERE (
-  REPLACE(REPLACE(REPLACE(REPLACE(c.phone, ' ', ''), '-', ''), '(', ''), ')', '') = '+79503118747'
-  OR c.name = 'Любовь (ТИЦ)'
-  OR c.director_name = 'Любовь (ТИЦ)'
-)
+WHERE REPLACE(REPLACE(REPLACE(REPLACE(c.phone, ' ', ''), '-', ''), '(', ''), ')', '') = '+79503118747'
 AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 685)
 LIMIT 1;
 
@@ -18893,11 +16646,7 @@ SELECT
   NOW(),
   NOW()
 FROM rental_clients c
-WHERE (
-  REPLACE(REPLACE(REPLACE(REPLACE(c.phone, ' ', ''), '-', ''), '(', ''), ')', '') = '+79393309448'
-  OR c.name = 'Андрей (Экскурс)'
-  OR c.director_name = 'Андрей (Экскурс)'
-)
+WHERE REPLACE(REPLACE(REPLACE(REPLACE(c.phone, ' ', ''), '-', ''), '(', ''), ')', '') = '+79393309448'
 AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 684)
 LIMIT 1;
 
@@ -18926,11 +16675,7 @@ SELECT
   NOW(),
   NOW()
 FROM rental_clients c
-WHERE (
-  REPLACE(REPLACE(REPLACE(REPLACE(c.phone, ' ', ''), '-', ''), '(', ''), ')', '') = '+79503118747'
-  OR c.name = 'Любовь (ТИЦ)'
-  OR c.director_name = 'Любовь (ТИЦ)'
-)
+WHERE REPLACE(REPLACE(REPLACE(REPLACE(c.phone, ' ', ''), '-', ''), '(', ''), ')', '') = '+79503118747'
 AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 683)
 LIMIT 1;
 
@@ -18959,11 +16704,7 @@ SELECT
   NOW(),
   NOW()
 FROM rental_clients c
-WHERE (
-  REPLACE(REPLACE(REPLACE(REPLACE(c.phone, ' ', ''), '-', ''), '(', ''), ')', '') = '+79778302928'
-  OR c.name = 'Яна (Вариот)'
-  OR c.director_name = 'Яна (Вариот)'
-)
+WHERE REPLACE(REPLACE(REPLACE(REPLACE(c.phone, ' ', ''), '-', ''), '(', ''), ')', '') = '+79778302928'
 AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 682)
 LIMIT 1;
 
@@ -18992,11 +16733,7 @@ SELECT
   NOW(),
   NOW()
 FROM rental_clients c
-WHERE (
-  REPLACE(REPLACE(REPLACE(REPLACE(c.phone, ' ', ''), '-', ''), '(', ''), ')', '') = '+79179221193'
-  OR c.name = 'Карина (технологии путешествий)'
-  OR c.director_name = 'Карина (технологии путешествий)'
-)
+WHERE REPLACE(REPLACE(REPLACE(REPLACE(c.phone, ' ', ''), '-', ''), '(', ''), ')', '') = '+79179221193'
 AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 681)
 LIMIT 1;
 
@@ -19025,11 +16762,7 @@ SELECT
   NOW(),
   NOW()
 FROM rental_clients c
-WHERE (
-  REPLACE(REPLACE(REPLACE(REPLACE(c.phone, ' ', ''), '-', ''), '(', ''), ')', '') = '+79278000133'
-  OR c.name = 'Ольга'
-  OR c.director_name = 'Ольга'
-)
+WHERE REPLACE(REPLACE(REPLACE(REPLACE(c.phone, ' ', ''), '-', ''), '(', ''), ')', '') = '+79278000133'
 AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 680)
 LIMIT 1;
 
@@ -19058,11 +16791,7 @@ SELECT
   NOW(),
   NOW()
 FROM rental_clients c
-WHERE (
-  REPLACE(REPLACE(REPLACE(REPLACE(c.phone, ' ', ''), '-', ''), '(', ''), ')', '') = '+79179221193'
-  OR c.name = 'Карина (технологии путешествий)'
-  OR c.director_name = 'Карина (технологии путешествий)'
-)
+WHERE REPLACE(REPLACE(REPLACE(REPLACE(c.phone, ' ', ''), '-', ''), '(', ''), ')', '') = '+79179221193'
 AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 678)
 LIMIT 1;
 
@@ -19091,11 +16820,7 @@ SELECT
   NOW(),
   NOW()
 FROM rental_clients c
-WHERE (
-  REPLACE(REPLACE(REPLACE(REPLACE(c.phone, ' ', ''), '-', ''), '(', ''), ')', '') = '+79274662530'
-  OR c.name = 'Екатерина'
-  OR c.director_name = 'Екатерина'
-)
+WHERE REPLACE(REPLACE(REPLACE(REPLACE(c.phone, ' ', ''), '-', ''), '(', ''), ')', '') = '+79274662530'
 AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 677)
 LIMIT 1;
 
@@ -19124,11 +16849,7 @@ SELECT
   NOW(),
   NOW()
 FROM rental_clients c
-WHERE (
-  REPLACE(REPLACE(REPLACE(REPLACE(c.phone, ' ', ''), '-', ''), '(', ''), ')', '') = '+79172403085'
-  OR c.name = 'Лариса Позднякова'
-  OR c.director_name = 'Лариса Позднякова'
-)
+WHERE REPLACE(REPLACE(REPLACE(REPLACE(c.phone, ' ', ''), '-', ''), '(', ''), ')', '') = '+79172403085'
 AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 676)
 LIMIT 1;
 
@@ -19157,11 +16878,7 @@ SELECT
   NOW(),
   NOW()
 FROM rental_clients c
-WHERE (
-  REPLACE(REPLACE(REPLACE(REPLACE(c.phone, ' ', ''), '-', ''), '(', ''), ')', '') = '+79853891999'
-  OR c.name = 'Сергей (Авангард)'
-  OR c.director_name = 'Сергей (Авангард)'
-)
+WHERE REPLACE(REPLACE(REPLACE(REPLACE(c.phone, ' ', ''), '-', ''), '(', ''), ')', '') = '+79853891999'
 AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 675)
 LIMIT 1;
 
@@ -19190,11 +16907,7 @@ SELECT
   NOW(),
   NOW()
 FROM rental_clients c
-WHERE (
-  REPLACE(REPLACE(REPLACE(REPLACE(c.phone, ' ', ''), '-', ''), '(', ''), ')', '') = '+79172922000'
-  OR c.name = 'Наталья'
-  OR c.director_name = 'Наталья'
-)
+WHERE REPLACE(REPLACE(REPLACE(REPLACE(c.phone, ' ', ''), '-', ''), '(', ''), ')', '') = '+79172922000'
 AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 674)
 LIMIT 1;
 
@@ -19223,11 +16936,7 @@ SELECT
   NOW(),
   NOW()
 FROM rental_clients c
-WHERE (
-  REPLACE(REPLACE(REPLACE(REPLACE(c.phone, ' ', ''), '-', ''), '(', ''), ')', '') = '+79503118747'
-  OR c.name = 'Любовь (ТИЦ)'
-  OR c.director_name = 'Любовь (ТИЦ)'
-)
+WHERE REPLACE(REPLACE(REPLACE(REPLACE(c.phone, ' ', ''), '-', ''), '(', ''), ')', '') = '+79503118747'
 AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 672)
 LIMIT 1;
 
@@ -19256,11 +16965,7 @@ SELECT
   NOW(),
   NOW()
 FROM rental_clients c
-WHERE (
-  REPLACE(REPLACE(REPLACE(REPLACE(c.phone, ' ', ''), '-', ''), '(', ''), ')', '') = '+79046699399'
-  OR c.name = 'Альберт (КТ)'
-  OR c.director_name = 'Альберт (КТ)'
-)
+WHERE REPLACE(REPLACE(REPLACE(REPLACE(c.phone, ' ', ''), '-', ''), '(', ''), ')', '') = '+79046699399'
 AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 671)
 LIMIT 1;
 
@@ -19289,11 +16994,7 @@ SELECT
   NOW(),
   NOW()
 FROM rental_clients c
-WHERE (
-  REPLACE(REPLACE(REPLACE(REPLACE(c.phone, ' ', ''), '-', ''), '(', ''), ')', '') = '+79503118747'
-  OR c.name = 'Любовь (ТИЦ)'
-  OR c.director_name = 'Любовь (ТИЦ)'
-)
+WHERE REPLACE(REPLACE(REPLACE(REPLACE(c.phone, ' ', ''), '-', ''), '(', ''), ')', '') = '+79503118747'
 AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 670)
 LIMIT 1;
 
@@ -19322,11 +17023,7 @@ SELECT
   NOW(),
   NOW()
 FROM rental_clients c
-WHERE (
-  REPLACE(REPLACE(REPLACE(REPLACE(c.phone, ' ', ''), '-', ''), '(', ''), ')', '') = '+79503118747'
-  OR c.name = 'Любовь (ТИЦ)'
-  OR c.director_name = 'Любовь (ТИЦ)'
-)
+WHERE REPLACE(REPLACE(REPLACE(REPLACE(c.phone, ' ', ''), '-', ''), '(', ''), ')', '') = '+79503118747'
 AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 669)
 LIMIT 1;
 
@@ -19355,11 +17052,7 @@ SELECT
   NOW(),
   NOW()
 FROM rental_clients c
-WHERE (
-  REPLACE(REPLACE(REPLACE(REPLACE(c.phone, ' ', ''), '-', ''), '(', ''), ')', '') = '+79393309448'
-  OR c.name = 'Андрей (Экскурс)'
-  OR c.director_name = 'Андрей (Экскурс)'
-)
+WHERE REPLACE(REPLACE(REPLACE(REPLACE(c.phone, ' ', ''), '-', ''), '(', ''), ')', '') = '+79393309448'
 AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 668)
 LIMIT 1;
 
@@ -19388,11 +17081,7 @@ SELECT
   NOW(),
   NOW()
 FROM rental_clients c
-WHERE (
-  REPLACE(REPLACE(REPLACE(REPLACE(c.phone, ' ', ''), '-', ''), '(', ''), ')', '') = '+79220064070'
-  OR c.name = 'Сергей'
-  OR c.director_name = 'Сергей'
-)
+WHERE REPLACE(REPLACE(REPLACE(REPLACE(c.phone, ' ', ''), '-', ''), '(', ''), ')', '') = '+79220064070'
 AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 667)
 LIMIT 1;
 
@@ -19421,11 +17110,7 @@ SELECT
   NOW(),
   NOW()
 FROM rental_clients c
-WHERE (
-  REPLACE(REPLACE(REPLACE(REPLACE(c.phone, ' ', ''), '-', ''), '(', ''), ')', '') = '+79503118747'
-  OR c.name = 'Любовь (ТИЦ)'
-  OR c.director_name = 'Любовь (ТИЦ)'
-)
+WHERE REPLACE(REPLACE(REPLACE(REPLACE(c.phone, ' ', ''), '-', ''), '(', ''), ')', '') = '+79503118747'
 AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 666)
 LIMIT 1;
 
@@ -19454,11 +17139,7 @@ SELECT
   NOW(),
   NOW()
 FROM rental_clients c
-WHERE (
-  REPLACE(REPLACE(REPLACE(REPLACE(c.phone, ' ', ''), '-', ''), '(', ''), ')', '') = '+79872904401'
-  OR c.name = 'Галина (Тур Урал)'
-  OR c.director_name = 'Галина (Тур Урал)'
-)
+WHERE REPLACE(REPLACE(REPLACE(REPLACE(c.phone, ' ', ''), '-', ''), '(', ''), ')', '') = '+79872904401'
 AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 664)
 LIMIT 1;
 
@@ -19487,11 +17168,7 @@ SELECT
   NOW(),
   NOW()
 FROM rental_clients c
-WHERE (
-  REPLACE(REPLACE(REPLACE(REPLACE(c.phone, ' ', ''), '-', ''), '(', ''), ')', '') = '+79063310993'
-  OR c.name = 'Гузель (Юралс)'
-  OR c.director_name = 'Гузель (Юралс)'
-)
+WHERE REPLACE(REPLACE(REPLACE(REPLACE(c.phone, ' ', ''), '-', ''), '(', ''), ')', '') = '+79063310993'
 AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 663)
 LIMIT 1;
 
@@ -19520,11 +17197,7 @@ SELECT
   NOW(),
   NOW()
 FROM rental_clients c
-WHERE (
-  REPLACE(REPLACE(REPLACE(REPLACE(c.phone, ' ', ''), '-', ''), '(', ''), ')', '') = '+79872904401'
-  OR c.name = 'Галина (Тур Урал)'
-  OR c.director_name = 'Галина (Тур Урал)'
-)
+WHERE REPLACE(REPLACE(REPLACE(REPLACE(c.phone, ' ', ''), '-', ''), '(', ''), ')', '') = '+79872904401'
 AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 662)
 LIMIT 1;
 
@@ -19553,11 +17226,7 @@ SELECT
   NOW(),
   NOW()
 FROM rental_clients c
-WHERE (
-  REPLACE(REPLACE(REPLACE(REPLACE(c.phone, ' ', ''), '-', ''), '(', ''), ')', '') = '+79222673014'
-  OR c.name = 'Юлия (Рыжий Слон)'
-  OR c.director_name = 'Юлия (Рыжий Слон)'
-)
+WHERE REPLACE(REPLACE(REPLACE(REPLACE(c.phone, ' ', ''), '-', ''), '(', ''), ')', '') = '+79222673014'
 AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 661)
 LIMIT 1;
 
@@ -19586,11 +17255,7 @@ SELECT
   NOW(),
   NOW()
 FROM rental_clients c
-WHERE (
-  REPLACE(REPLACE(REPLACE(REPLACE(c.phone, ' ', ''), '-', ''), '(', ''), ')', '') = '+79046699399'
-  OR c.name = 'Альберт (КТ)'
-  OR c.director_name = 'Альберт (КТ)'
-)
+WHERE REPLACE(REPLACE(REPLACE(REPLACE(c.phone, ' ', ''), '-', ''), '(', ''), ')', '') = '+79046699399'
 AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 660)
 LIMIT 1;
 
@@ -19619,11 +17284,7 @@ SELECT
   NOW(),
   NOW()
 FROM rental_clients c
-WHERE (
-  REPLACE(REPLACE(REPLACE(REPLACE(c.phone, ' ', ''), '-', ''), '(', ''), ')', '') = '+79872904401'
-  OR c.name = 'Галина (Тур Урал)'
-  OR c.director_name = 'Галина (Тур Урал)'
-)
+WHERE REPLACE(REPLACE(REPLACE(REPLACE(c.phone, ' ', ''), '-', ''), '(', ''), ')', '') = '+79872904401'
 AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 659)
 LIMIT 1;
 
@@ -19652,11 +17313,7 @@ SELECT
   NOW(),
   NOW()
 FROM rental_clients c
-WHERE (
-  REPLACE(REPLACE(REPLACE(REPLACE(c.phone, ' ', ''), '-', ''), '(', ''), ')', '') = '+79827935377'
-  OR c.name = 'Наталья'
-  OR c.director_name = 'Наталья'
-)
+WHERE REPLACE(REPLACE(REPLACE(REPLACE(c.phone, ' ', ''), '-', ''), '(', ''), ')', '') = '+79827935377'
 AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 658)
 LIMIT 1;
 
@@ -19685,11 +17342,7 @@ SELECT
   NOW(),
   NOW()
 FROM rental_clients c
-WHERE (
-  REPLACE(REPLACE(REPLACE(REPLACE(c.phone, ' ', ''), '-', ''), '(', ''), ')', '') = '+79152964580'
-  OR c.name = 'Арсен (Юнион)'
-  OR c.director_name = 'Арсен (Юнион)'
-)
+WHERE REPLACE(REPLACE(REPLACE(REPLACE(c.phone, ' ', ''), '-', ''), '(', ''), ')', '') = '+79152964580'
 AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 657)
 LIMIT 1;
 
@@ -19718,11 +17371,7 @@ SELECT
   NOW(),
   NOW()
 FROM rental_clients c
-WHERE (
-  REPLACE(REPLACE(REPLACE(REPLACE(c.phone, ' ', ''), '-', ''), '(', ''), ')', '') = '+79600523400'
-  OR c.name = 'Эвелина (Инициатива)'
-  OR c.director_name = 'Эвелина (Инициатива)'
-)
+WHERE REPLACE(REPLACE(REPLACE(REPLACE(c.phone, ' ', ''), '-', ''), '(', ''), ')', '') = '+79600523400'
 AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 656)
 LIMIT 1;
 
@@ -19751,11 +17400,7 @@ SELECT
   NOW(),
   NOW()
 FROM rental_clients c
-WHERE (
-  REPLACE(REPLACE(REPLACE(REPLACE(c.phone, ' ', ''), '-', ''), '(', ''), ')', '') = '+79161638158'
-  OR c.name = 'Наталья Москва'
-  OR c.director_name = 'Наталья Москва'
-)
+WHERE REPLACE(REPLACE(REPLACE(REPLACE(c.phone, ' ', ''), '-', ''), '(', ''), ')', '') = '+79161638158'
 AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 655)
 LIMIT 1;
 
@@ -19784,11 +17429,7 @@ SELECT
   NOW(),
   NOW()
 FROM rental_clients c
-WHERE (
-  REPLACE(REPLACE(REPLACE(REPLACE(c.phone, ' ', ''), '-', ''), '(', ''), ')', '') = '+79869297050'
-  OR c.name = 'Инна Экскурсовод'
-  OR c.director_name = 'Инна Экскурсовод'
-)
+WHERE REPLACE(REPLACE(REPLACE(REPLACE(c.phone, ' ', ''), '-', ''), '(', ''), ')', '') = '+79869297050'
 AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 654)
 LIMIT 1;
 
@@ -19817,11 +17458,7 @@ SELECT
   NOW(),
   NOW()
 FROM rental_clients c
-WHERE (
-  REPLACE(REPLACE(REPLACE(REPLACE(c.phone, ' ', ''), '-', ''), '(', ''), ')', '') = '+79872797484'
-  OR c.name = 'Алина Сафина'
-  OR c.director_name = 'Алина Сафина'
-)
+WHERE REPLACE(REPLACE(REPLACE(REPLACE(c.phone, ' ', ''), '-', ''), '(', ''), ')', '') = '+79872797484'
 AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 653)
 LIMIT 1;
 
@@ -19850,10 +17487,7 @@ SELECT
   NOW(),
   NOW()
 FROM rental_clients c
-WHERE (
-  c.name = 'Эдик Заказы для групп'
-  OR c.director_name = 'Эдик Заказы для групп'
-)
+WHERE (c.name ILIKE '%Эдик%' OR c.director_name ILIKE '%Эдик%')
 AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 652)
 LIMIT 1;
 
@@ -19882,11 +17516,7 @@ SELECT
   NOW(),
   NOW()
 FROM rental_clients c
-WHERE (
-  REPLACE(REPLACE(REPLACE(REPLACE(c.phone, ' ', ''), '-', ''), '(', ''), ')', '') = '+79046699399'
-  OR c.name = 'Альберт (КТ)'
-  OR c.director_name = 'Альберт (КТ)'
-)
+WHERE REPLACE(REPLACE(REPLACE(REPLACE(c.phone, ' ', ''), '-', ''), '(', ''), ')', '') = '+79046699399'
 AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 651)
 LIMIT 1;
 
@@ -19915,11 +17545,7 @@ SELECT
   NOW(),
   NOW()
 FROM rental_clients c
-WHERE (
-  REPLACE(REPLACE(REPLACE(REPLACE(c.phone, ' ', ''), '-', ''), '(', ''), ')', '') = '+79600336033'
-  OR c.name = 'Галия'
-  OR c.director_name = 'Галия'
-)
+WHERE REPLACE(REPLACE(REPLACE(REPLACE(c.phone, ' ', ''), '-', ''), '(', ''), ')', '') = '+79600336033'
 AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 650)
 LIMIT 1;
 
@@ -19948,11 +17574,7 @@ SELECT
   NOW(),
   NOW()
 FROM rental_clients c
-WHERE (
-  REPLACE(REPLACE(REPLACE(REPLACE(c.phone, ' ', ''), '-', ''), '(', ''), ')', '') = '+79870051978'
-  OR c.name = 'Светлана (Лана-тур Казань)'
-  OR c.director_name = 'Светлана (Лана-тур Казань)'
-)
+WHERE REPLACE(REPLACE(REPLACE(REPLACE(c.phone, ' ', ''), '-', ''), '(', ''), ')', '') = '+79870051978'
 AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 649)
 LIMIT 1;
 
@@ -19981,11 +17603,7 @@ SELECT
   NOW(),
   NOW()
 FROM rental_clients c
-WHERE (
-  REPLACE(REPLACE(REPLACE(REPLACE(c.phone, ' ', ''), '-', ''), '(', ''), ')', '') = '+79297259743'
-  OR c.name = 'Галина Рыжикова'
-  OR c.director_name = 'Галина Рыжикова'
-)
+WHERE REPLACE(REPLACE(REPLACE(REPLACE(c.phone, ' ', ''), '-', ''), '(', ''), ')', '') = '+79297259743'
 AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 648)
 LIMIT 1;
 
@@ -20014,11 +17632,7 @@ SELECT
   NOW(),
   NOW()
 FROM rental_clients c
-WHERE (
-  REPLACE(REPLACE(REPLACE(REPLACE(c.phone, ' ', ''), '-', ''), '(', ''), ')', '') = '+79112636331'
-  OR c.name = 'Вера (СК-Интур)'
-  OR c.director_name = 'Вера (СК-Интур)'
-)
+WHERE REPLACE(REPLACE(REPLACE(REPLACE(c.phone, ' ', ''), '-', ''), '(', ''), ')', '') = '+79112636331'
 AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 647)
 LIMIT 1;
 
@@ -20047,11 +17661,7 @@ SELECT
   NOW(),
   NOW()
 FROM rental_clients c
-WHERE (
-  REPLACE(REPLACE(REPLACE(REPLACE(c.phone, ' ', ''), '-', ''), '(', ''), ')', '') = '+79503118747'
-  OR c.name = 'Любовь (ТИЦ)'
-  OR c.director_name = 'Любовь (ТИЦ)'
-)
+WHERE REPLACE(REPLACE(REPLACE(REPLACE(c.phone, ' ', ''), '-', ''), '(', ''), ')', '') = '+79503118747'
 AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 646)
 LIMIT 1;
 
@@ -20080,11 +17690,7 @@ SELECT
   NOW(),
   NOW()
 FROM rental_clients c
-WHERE (
-  REPLACE(REPLACE(REPLACE(REPLACE(c.phone, ' ', ''), '-', ''), '(', ''), ')', '') = '+79600523400'
-  OR c.name = 'Эвелина (Инициатива)'
-  OR c.director_name = 'Эвелина (Инициатива)'
-)
+WHERE REPLACE(REPLACE(REPLACE(REPLACE(c.phone, ' ', ''), '-', ''), '(', ''), ')', '') = '+79600523400'
 AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 645)
 LIMIT 1;
 
@@ -20113,11 +17719,7 @@ SELECT
   NOW(),
   NOW()
 FROM rental_clients c
-WHERE (
-  REPLACE(REPLACE(REPLACE(REPLACE(c.phone, ' ', ''), '-', ''), '(', ''), ')', '') = '+79600523400'
-  OR c.name = 'Эвелина (Инициатива)'
-  OR c.director_name = 'Эвелина (Инициатива)'
-)
+WHERE REPLACE(REPLACE(REPLACE(REPLACE(c.phone, ' ', ''), '-', ''), '(', ''), ')', '') = '+79600523400'
 AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 644)
 LIMIT 1;
 
@@ -20146,11 +17748,7 @@ SELECT
   NOW(),
   NOW()
 FROM rental_clients c
-WHERE (
-  REPLACE(REPLACE(REPLACE(REPLACE(c.phone, ' ', ''), '-', ''), '(', ''), ')', '') = '+79600523400'
-  OR c.name = 'Эвелина (Инициатива)'
-  OR c.director_name = 'Эвелина (Инициатива)'
-)
+WHERE REPLACE(REPLACE(REPLACE(REPLACE(c.phone, ' ', ''), '-', ''), '(', ''), ')', '') = '+79600523400'
 AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 643)
 LIMIT 1;
 
@@ -20179,11 +17777,7 @@ SELECT
   NOW(),
   NOW()
 FROM rental_clients c
-WHERE (
-  REPLACE(REPLACE(REPLACE(REPLACE(c.phone, ' ', ''), '-', ''), '(', ''), ')', '') = '+79872750395'
-  OR c.name = 'Зельфира'
-  OR c.director_name = 'Зельфира'
-)
+WHERE REPLACE(REPLACE(REPLACE(REPLACE(c.phone, ' ', ''), '-', ''), '(', ''), ')', '') = '+79872750395'
 AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 642)
 LIMIT 1;
 
@@ -20212,10 +17806,7 @@ SELECT
   NOW(),
   NOW()
 FROM rental_clients c
-WHERE (
-  c.name = 'Эдик Заказы для групп'
-  OR c.director_name = 'Эдик Заказы для групп'
-)
+WHERE (c.name ILIKE '%Эдик%' OR c.director_name ILIKE '%Эдик%')
 AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 641)
 LIMIT 1;
 
@@ -20244,10 +17835,7 @@ SELECT
   NOW(),
   NOW()
 FROM rental_clients c
-WHERE (
-  c.name = 'Эдик Заказы для групп'
-  OR c.director_name = 'Эдик Заказы для групп'
-)
+WHERE (c.name ILIKE '%Эдик%' OR c.director_name ILIKE '%Эдик%')
 AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 640)
 LIMIT 1;
 
@@ -20276,10 +17864,7 @@ SELECT
   NOW(),
   NOW()
 FROM rental_clients c
-WHERE (
-  c.name = 'Эдик Заказы для групп'
-  OR c.director_name = 'Эдик Заказы для групп'
-)
+WHERE (c.name ILIKE '%Эдик%' OR c.director_name ILIKE '%Эдик%')
 AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 639)
 LIMIT 1;
 
@@ -20308,10 +17893,7 @@ SELECT
   NOW(),
   NOW()
 FROM rental_clients c
-WHERE (
-  c.name = 'Эдик Заказы для групп'
-  OR c.director_name = 'Эдик Заказы для групп'
-)
+WHERE (c.name ILIKE '%Эдик%' OR c.director_name ILIKE '%Эдик%')
 AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 638)
 LIMIT 1;
 
@@ -20340,10 +17922,7 @@ SELECT
   NOW(),
   NOW()
 FROM rental_clients c
-WHERE (
-  c.name = 'Эдик Заказы для групп'
-  OR c.director_name = 'Эдик Заказы для групп'
-)
+WHERE (c.name ILIKE '%Эдик%' OR c.director_name ILIKE '%Эдик%')
 AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 637)
 LIMIT 1;
 
@@ -20372,10 +17951,7 @@ SELECT
   NOW(),
   NOW()
 FROM rental_clients c
-WHERE (
-  c.name = 'Эдик Заказы для групп'
-  OR c.director_name = 'Эдик Заказы для групп'
-)
+WHERE (c.name ILIKE '%Эдик%' OR c.director_name ILIKE '%Эдик%')
 AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 634)
 LIMIT 1;
 
@@ -20404,10 +17980,7 @@ SELECT
   NOW(),
   NOW()
 FROM rental_clients c
-WHERE (
-  c.name = 'Эдик Заказы для групп'
-  OR c.director_name = 'Эдик Заказы для групп'
-)
+WHERE (c.name ILIKE '%Эдик%' OR c.director_name ILIKE '%Эдик%')
 AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 633)
 LIMIT 1;
 
@@ -20436,10 +18009,7 @@ SELECT
   NOW(),
   NOW()
 FROM rental_clients c
-WHERE (
-  c.name = 'Эдик Заказы для групп'
-  OR c.director_name = 'Эдик Заказы для групп'
-)
+WHERE (c.name ILIKE '%Эдик%' OR c.director_name ILIKE '%Эдик%')
 AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 632)
 LIMIT 1;
 
@@ -20468,10 +18038,7 @@ SELECT
   NOW(),
   NOW()
 FROM rental_clients c
-WHERE (
-  c.name = 'Эдик Заказы для групп'
-  OR c.director_name = 'Эдик Заказы для групп'
-)
+WHERE (c.name ILIKE '%Эдик%' OR c.director_name ILIKE '%Эдик%')
 AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 630)
 LIMIT 1;
 
@@ -20500,10 +18067,7 @@ SELECT
   NOW(),
   NOW()
 FROM rental_clients c
-WHERE (
-  c.name = 'Эдик Заказы для групп'
-  OR c.director_name = 'Эдик Заказы для групп'
-)
+WHERE (c.name ILIKE '%Эдик%' OR c.director_name ILIKE '%Эдик%')
 AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 629)
 LIMIT 1;
 
@@ -20532,10 +18096,7 @@ SELECT
   NOW(),
   NOW()
 FROM rental_clients c
-WHERE (
-  c.name = 'Эдик Заказы для групп'
-  OR c.director_name = 'Эдик Заказы для групп'
-)
+WHERE (c.name ILIKE '%Эдик%' OR c.director_name ILIKE '%Эдик%')
 AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 628)
 LIMIT 1;
 
@@ -20564,10 +18125,7 @@ SELECT
   NOW(),
   NOW()
 FROM rental_clients c
-WHERE (
-  c.name = 'Эдик Заказы для групп'
-  OR c.director_name = 'Эдик Заказы для групп'
-)
+WHERE (c.name ILIKE '%Эдик%' OR c.director_name ILIKE '%Эдик%')
 AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 627)
 LIMIT 1;
 
@@ -20596,11 +18154,7 @@ SELECT
   NOW(),
   NOW()
 FROM rental_clients c
-WHERE (
-  REPLACE(REPLACE(REPLACE(REPLACE(c.phone, ' ', ''), '-', ''), '(', ''), ')', '') = '+79050249197'
-  OR c.name = 'Ирина (Иль Мио Тур)'
-  OR c.director_name = 'Ирина (Иль Мио Тур)'
-)
+WHERE REPLACE(REPLACE(REPLACE(REPLACE(c.phone, ' ', ''), '-', ''), '(', ''), ')', '') = '+79050249197'
 AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 626)
 LIMIT 1;
 
@@ -20629,11 +18183,7 @@ SELECT
   NOW(),
   NOW()
 FROM rental_clients c
-WHERE (
-  REPLACE(REPLACE(REPLACE(REPLACE(c.phone, ' ', ''), '-', ''), '(', ''), ')', '') = '+79099242488'
-  OR c.name = 'Оксана'
-  OR c.director_name = 'Оксана'
-)
+WHERE REPLACE(REPLACE(REPLACE(REPLACE(c.phone, ' ', ''), '-', ''), '(', ''), ')', '') = '+79099242488'
 AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 625)
 LIMIT 1;
 
@@ -20662,11 +18212,7 @@ SELECT
   NOW(),
   NOW()
 FROM rental_clients c
-WHERE (
-  REPLACE(REPLACE(REPLACE(REPLACE(c.phone, ' ', ''), '-', ''), '(', ''), ')', '') = '+79503118747'
-  OR c.name = 'Любовь (ТИЦ)'
-  OR c.director_name = 'Любовь (ТИЦ)'
-)
+WHERE REPLACE(REPLACE(REPLACE(REPLACE(c.phone, ' ', ''), '-', ''), '(', ''), ')', '') = '+79503118747'
 AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 624)
 LIMIT 1;
 
@@ -20695,11 +18241,7 @@ SELECT
   NOW(),
   NOW()
 FROM rental_clients c
-WHERE (
-  REPLACE(REPLACE(REPLACE(REPLACE(c.phone, ' ', ''), '-', ''), '(', ''), ')', '') = '+79179142756'
-  OR c.name = 'Татьяна (Гольфстрим)'
-  OR c.director_name = 'Татьяна (Гольфстрим)'
-)
+WHERE REPLACE(REPLACE(REPLACE(REPLACE(c.phone, ' ', ''), '-', ''), '(', ''), ')', '') = '+79179142756'
 AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 623)
 LIMIT 1;
 
@@ -20728,11 +18270,7 @@ SELECT
   NOW(),
   NOW()
 FROM rental_clients c
-WHERE (
-  REPLACE(REPLACE(REPLACE(REPLACE(c.phone, ' ', ''), '-', ''), '(', ''), ')', '') = '+79179142756'
-  OR c.name = 'Татьяна (Гольфстрим)'
-  OR c.director_name = 'Татьяна (Гольфстрим)'
-)
+WHERE REPLACE(REPLACE(REPLACE(REPLACE(c.phone, ' ', ''), '-', ''), '(', ''), ')', '') = '+79179142756'
 AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 622)
 LIMIT 1;
 
@@ -20761,11 +18299,7 @@ SELECT
   NOW(),
   NOW()
 FROM rental_clients c
-WHERE (
-  REPLACE(REPLACE(REPLACE(REPLACE(c.phone, ' ', ''), '-', ''), '(', ''), ')', '') = '+79179142756'
-  OR c.name = 'Татьяна (Гольфстрим)'
-  OR c.director_name = 'Татьяна (Гольфстрим)'
-)
+WHERE REPLACE(REPLACE(REPLACE(REPLACE(c.phone, ' ', ''), '-', ''), '(', ''), ')', '') = '+79179142756'
 AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 621)
 LIMIT 1;
 
@@ -20794,11 +18328,7 @@ SELECT
   NOW(),
   NOW()
 FROM rental_clients c
-WHERE (
-  REPLACE(REPLACE(REPLACE(REPLACE(c.phone, ' ', ''), '-', ''), '(', ''), ')', '') = '+79179142756'
-  OR c.name = 'Татьяна (Гольфстрим)'
-  OR c.director_name = 'Татьяна (Гольфстрим)'
-)
+WHERE REPLACE(REPLACE(REPLACE(REPLACE(c.phone, ' ', ''), '-', ''), '(', ''), ')', '') = '+79179142756'
 AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 620)
 LIMIT 1;
 
@@ -20827,11 +18357,7 @@ SELECT
   NOW(),
   NOW()
 FROM rental_clients c
-WHERE (
-  REPLACE(REPLACE(REPLACE(REPLACE(c.phone, ' ', ''), '-', ''), '(', ''), ')', '') = '+79274900014'
-  OR c.name = 'Мария Экскурсовод'
-  OR c.director_name = 'Мария Экскурсовод'
-)
+WHERE REPLACE(REPLACE(REPLACE(REPLACE(c.phone, ' ', ''), '-', ''), '(', ''), ')', '') = '+79274900014'
 AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 619)
 LIMIT 1;
 
@@ -20860,11 +18386,7 @@ SELECT
   NOW(),
   NOW()
 FROM rental_clients c
-WHERE (
-  REPLACE(REPLACE(REPLACE(REPLACE(c.phone, ' ', ''), '-', ''), '(', ''), ')', '') = '+79152964580'
-  OR c.name = 'Арсен (Юнион)'
-  OR c.director_name = 'Арсен (Юнион)'
-)
+WHERE REPLACE(REPLACE(REPLACE(REPLACE(c.phone, ' ', ''), '-', ''), '(', ''), ')', '') = '+79152964580'
 AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 618)
 LIMIT 1;
 
@@ -20893,11 +18415,7 @@ SELECT
   NOW(),
   NOW()
 FROM rental_clients c
-WHERE (
-  REPLACE(REPLACE(REPLACE(REPLACE(c.phone, ' ', ''), '-', ''), '(', ''), ')', '') = '+79152964580'
-  OR c.name = 'Арсен (Юнион)'
-  OR c.director_name = 'Арсен (Юнион)'
-)
+WHERE REPLACE(REPLACE(REPLACE(REPLACE(c.phone, ' ', ''), '-', ''), '(', ''), ')', '') = '+79152964580'
 AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 617)
 LIMIT 1;
 
@@ -20926,11 +18444,7 @@ SELECT
   NOW(),
   NOW()
 FROM rental_clients c
-WHERE (
-  REPLACE(REPLACE(REPLACE(REPLACE(c.phone, ' ', ''), '-', ''), '(', ''), ')', '') = '+79179275489'
-  OR c.name = 'Диляра'
-  OR c.director_name = 'Диляра'
-)
+WHERE REPLACE(REPLACE(REPLACE(REPLACE(c.phone, ' ', ''), '-', ''), '(', ''), ')', '') = '+79179275489'
 AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 615)
 LIMIT 1;
 
@@ -20959,11 +18473,7 @@ SELECT
   NOW(),
   NOW()
 FROM rental_clients c
-WHERE (
-  REPLACE(REPLACE(REPLACE(REPLACE(c.phone, ' ', ''), '-', ''), '(', ''), ')', '') = '+79179142756'
-  OR c.name = 'Татьяна (Гольфстрим)'
-  OR c.director_name = 'Татьяна (Гольфстрим)'
-)
+WHERE REPLACE(REPLACE(REPLACE(REPLACE(c.phone, ' ', ''), '-', ''), '(', ''), ')', '') = '+79179142756'
 AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 614)
 LIMIT 1;
 
@@ -20992,11 +18502,7 @@ SELECT
   NOW(),
   NOW()
 FROM rental_clients c
-WHERE (
-  REPLACE(REPLACE(REPLACE(REPLACE(c.phone, ' ', ''), '-', ''), '(', ''), ')', '') = '+79179142756'
-  OR c.name = 'Татьяна (Гольфстрим)'
-  OR c.director_name = 'Татьяна (Гольфстрим)'
-)
+WHERE REPLACE(REPLACE(REPLACE(REPLACE(c.phone, ' ', ''), '-', ''), '(', ''), ')', '') = '+79179142756'
 AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 613)
 LIMIT 1;
 
@@ -21025,11 +18531,7 @@ SELECT
   NOW(),
   NOW()
 FROM rental_clients c
-WHERE (
-  REPLACE(REPLACE(REPLACE(REPLACE(c.phone, ' ', ''), '-', ''), '(', ''), ')', '') = '+79046699399'
-  OR c.name = 'Альберт (КТ)'
-  OR c.director_name = 'Альберт (КТ)'
-)
+WHERE REPLACE(REPLACE(REPLACE(REPLACE(c.phone, ' ', ''), '-', ''), '(', ''), ')', '') = '+79046699399'
 AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 612)
 LIMIT 1;
 
@@ -21058,11 +18560,7 @@ SELECT
   NOW(),
   NOW()
 FROM rental_clients c
-WHERE (
-  REPLACE(REPLACE(REPLACE(REPLACE(c.phone, ' ', ''), '-', ''), '(', ''), ')', '') = '+79503118747'
-  OR c.name = 'Любовь (ТИЦ)'
-  OR c.director_name = 'Любовь (ТИЦ)'
-)
+WHERE REPLACE(REPLACE(REPLACE(REPLACE(c.phone, ' ', ''), '-', ''), '(', ''), ')', '') = '+79503118747'
 AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 611)
 LIMIT 1;
 
@@ -21091,11 +18589,7 @@ SELECT
   NOW(),
   NOW()
 FROM rental_clients c
-WHERE (
-  REPLACE(REPLACE(REPLACE(REPLACE(c.phone, ' ', ''), '-', ''), '(', ''), ')', '') = '+79872904401'
-  OR c.name = 'Галина (Тур Урал)'
-  OR c.director_name = 'Галина (Тур Урал)'
-)
+WHERE REPLACE(REPLACE(REPLACE(REPLACE(c.phone, ' ', ''), '-', ''), '(', ''), ')', '') = '+79872904401'
 AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 610)
 LIMIT 1;
 
@@ -21124,11 +18618,7 @@ SELECT
   NOW(),
   NOW()
 FROM rental_clients c
-WHERE (
-  REPLACE(REPLACE(REPLACE(REPLACE(c.phone, ' ', ''), '-', ''), '(', ''), ')', '') = '+79872904401'
-  OR c.name = 'Галина (Тур Урал)'
-  OR c.director_name = 'Галина (Тур Урал)'
-)
+WHERE REPLACE(REPLACE(REPLACE(REPLACE(c.phone, ' ', ''), '-', ''), '(', ''), ')', '') = '+79872904401'
 AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 609)
 LIMIT 1;
 
@@ -21157,11 +18647,7 @@ SELECT
   NOW(),
   NOW()
 FROM rental_clients c
-WHERE (
-  REPLACE(REPLACE(REPLACE(REPLACE(c.phone, ' ', ''), '-', ''), '(', ''), ')', '') = '+79503118747'
-  OR c.name = 'Любовь (ТИЦ)'
-  OR c.director_name = 'Любовь (ТИЦ)'
-)
+WHERE REPLACE(REPLACE(REPLACE(REPLACE(c.phone, ' ', ''), '-', ''), '(', ''), ')', '') = '+79503118747'
 AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 608)
 LIMIT 1;
 
@@ -21190,11 +18676,7 @@ SELECT
   NOW(),
   NOW()
 FROM rental_clients c
-WHERE (
-  REPLACE(REPLACE(REPLACE(REPLACE(c.phone, ' ', ''), '-', ''), '(', ''), ')', '') = '+79152964580'
-  OR c.name = 'Арсен (Юнион)'
-  OR c.director_name = 'Арсен (Юнион)'
-)
+WHERE REPLACE(REPLACE(REPLACE(REPLACE(c.phone, ' ', ''), '-', ''), '(', ''), ')', '') = '+79152964580'
 AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 607)
 LIMIT 1;
 
@@ -21223,11 +18705,7 @@ SELECT
   NOW(),
   NOW()
 FROM rental_clients c
-WHERE (
-  REPLACE(REPLACE(REPLACE(REPLACE(c.phone, ' ', ''), '-', ''), '(', ''), ')', '') = '+79152964580'
-  OR c.name = 'Арсен (Юнион)'
-  OR c.director_name = 'Арсен (Юнион)'
-)
+WHERE REPLACE(REPLACE(REPLACE(REPLACE(c.phone, ' ', ''), '-', ''), '(', ''), ')', '') = '+79152964580'
 AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 606)
 LIMIT 1;
 
@@ -21256,11 +18734,7 @@ SELECT
   NOW(),
   NOW()
 FROM rental_clients c
-WHERE (
-  REPLACE(REPLACE(REPLACE(REPLACE(c.phone, ' ', ''), '-', ''), '(', ''), ')', '') = '+79152964580'
-  OR c.name = 'Арсен (Юнион)'
-  OR c.director_name = 'Арсен (Юнион)'
-)
+WHERE REPLACE(REPLACE(REPLACE(REPLACE(c.phone, ' ', ''), '-', ''), '(', ''), ')', '') = '+79152964580'
 AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 605)
 LIMIT 1;
 
@@ -21289,11 +18763,7 @@ SELECT
   NOW(),
   NOW()
 FROM rental_clients c
-WHERE (
-  REPLACE(REPLACE(REPLACE(REPLACE(c.phone, ' ', ''), '-', ''), '(', ''), ')', '') = '+79179062560'
-  OR c.name = 'Ляйсан (Казань 360)'
-  OR c.director_name = 'Ляйсан (Казань 360)'
-)
+WHERE REPLACE(REPLACE(REPLACE(REPLACE(c.phone, ' ', ''), '-', ''), '(', ''), ')', '') = '+79179062560'
 AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 604)
 LIMIT 1;
 
@@ -21322,11 +18792,7 @@ SELECT
   NOW(),
   NOW()
 FROM rental_clients c
-WHERE (
-  REPLACE(REPLACE(REPLACE(REPLACE(c.phone, ' ', ''), '-', ''), '(', ''), ')', '') = '+79050249197'
-  OR c.name = 'Ирина (Иль Мио Тур)'
-  OR c.director_name = 'Ирина (Иль Мио Тур)'
-)
+WHERE REPLACE(REPLACE(REPLACE(REPLACE(c.phone, ' ', ''), '-', ''), '(', ''), ')', '') = '+79050249197'
 AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 602)
 LIMIT 1;
 
@@ -21355,11 +18821,7 @@ SELECT
   NOW(),
   NOW()
 FROM rental_clients c
-WHERE (
-  REPLACE(REPLACE(REPLACE(REPLACE(c.phone, ' ', ''), '-', ''), '(', ''), ')', '') = '+79872904401'
-  OR c.name = 'Галина (Тур Урал)'
-  OR c.director_name = 'Галина (Тур Урал)'
-)
+WHERE REPLACE(REPLACE(REPLACE(REPLACE(c.phone, ' ', ''), '-', ''), '(', ''), ')', '') = '+79872904401'
 AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 601)
 LIMIT 1;
 
@@ -21388,11 +18850,7 @@ SELECT
   NOW(),
   NOW()
 FROM rental_clients c
-WHERE (
-  REPLACE(REPLACE(REPLACE(REPLACE(c.phone, ' ', ''), '-', ''), '(', ''), ')', '') = '+79872904401'
-  OR c.name = 'Галина (Тур Урал)'
-  OR c.director_name = 'Галина (Тур Урал)'
-)
+WHERE REPLACE(REPLACE(REPLACE(REPLACE(c.phone, ' ', ''), '-', ''), '(', ''), ')', '') = '+79872904401'
 AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 600)
 LIMIT 1;
 
@@ -21421,11 +18879,7 @@ SELECT
   NOW(),
   NOW()
 FROM rental_clients c
-WHERE (
-  REPLACE(REPLACE(REPLACE(REPLACE(c.phone, ' ', ''), '-', ''), '(', ''), ')', '') = '+79600523400'
-  OR c.name = 'Эвелина (Инициатива)'
-  OR c.director_name = 'Эвелина (Инициатива)'
-)
+WHERE REPLACE(REPLACE(REPLACE(REPLACE(c.phone, ' ', ''), '-', ''), '(', ''), ')', '') = '+79600523400'
 AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 599)
 LIMIT 1;
 
@@ -21454,11 +18908,7 @@ SELECT
   NOW(),
   NOW()
 FROM rental_clients c
-WHERE (
-  REPLACE(REPLACE(REPLACE(REPLACE(c.phone, ' ', ''), '-', ''), '(', ''), ')', '') = '+79600523400'
-  OR c.name = 'Эвелина (Инициатива)'
-  OR c.director_name = 'Эвелина (Инициатива)'
-)
+WHERE REPLACE(REPLACE(REPLACE(REPLACE(c.phone, ' ', ''), '-', ''), '(', ''), ')', '') = '+79600523400'
 AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 598)
 LIMIT 1;
 
@@ -21487,11 +18937,7 @@ SELECT
   NOW(),
   NOW()
 FROM rental_clients c
-WHERE (
-  REPLACE(REPLACE(REPLACE(REPLACE(c.phone, ' ', ''), '-', ''), '(', ''), ')', '') = '+79872904401'
-  OR c.name = 'Галина (Тур Урал)'
-  OR c.director_name = 'Галина (Тур Урал)'
-)
+WHERE REPLACE(REPLACE(REPLACE(REPLACE(c.phone, ' ', ''), '-', ''), '(', ''), ')', '') = '+79872904401'
 AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 597)
 LIMIT 1;
 
@@ -21520,11 +18966,7 @@ SELECT
   NOW(),
   NOW()
 FROM rental_clients c
-WHERE (
-  REPLACE(REPLACE(REPLACE(REPLACE(c.phone, ' ', ''), '-', ''), '(', ''), ')', '') = '+79872904401'
-  OR c.name = 'Галина (Тур Урал)'
-  OR c.director_name = 'Галина (Тур Урал)'
-)
+WHERE REPLACE(REPLACE(REPLACE(REPLACE(c.phone, ' ', ''), '-', ''), '(', ''), ')', '') = '+79872904401'
 AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 596)
 LIMIT 1;
 
@@ -21553,11 +18995,7 @@ SELECT
   NOW(),
   NOW()
 FROM rental_clients c
-WHERE (
-  REPLACE(REPLACE(REPLACE(REPLACE(c.phone, ' ', ''), '-', ''), '(', ''), ')', '') = '+79872904401'
-  OR c.name = 'Галина (Тур Урал)'
-  OR c.director_name = 'Галина (Тур Урал)'
-)
+WHERE REPLACE(REPLACE(REPLACE(REPLACE(c.phone, ' ', ''), '-', ''), '(', ''), ')', '') = '+79872904401'
 AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 595)
 LIMIT 1;
 
@@ -21586,11 +19024,7 @@ SELECT
   NOW(),
   NOW()
 FROM rental_clients c
-WHERE (
-  REPLACE(REPLACE(REPLACE(REPLACE(c.phone, ' ', ''), '-', ''), '(', ''), ')', '') = '+79225115900'
-  OR c.name = 'Алексей'
-  OR c.director_name = 'Алексей'
-)
+WHERE REPLACE(REPLACE(REPLACE(REPLACE(c.phone, ' ', ''), '-', ''), '(', ''), ')', '') = '+79225115900'
 AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 594)
 LIMIT 1;
 
@@ -21619,11 +19053,7 @@ SELECT
   NOW(),
   NOW()
 FROM rental_clients c
-WHERE (
-  REPLACE(REPLACE(REPLACE(REPLACE(c.phone, ' ', ''), '-', ''), '(', ''), ')', '') = '+79046699399'
-  OR c.name = 'Альберт (КТ)'
-  OR c.director_name = 'Альберт (КТ)'
-)
+WHERE REPLACE(REPLACE(REPLACE(REPLACE(c.phone, ' ', ''), '-', ''), '(', ''), ')', '') = '+79046699399'
 AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 593)
 LIMIT 1;
 
@@ -21652,11 +19082,7 @@ SELECT
   NOW(),
   NOW()
 FROM rental_clients c
-WHERE (
-  REPLACE(REPLACE(REPLACE(REPLACE(c.phone, ' ', ''), '-', ''), '(', ''), ')', '') = '+79206736156'
-  OR c.name = 'Ольга (Дольче Вита)'
-  OR c.director_name = 'Ольга (Дольче Вита)'
-)
+WHERE REPLACE(REPLACE(REPLACE(REPLACE(c.phone, ' ', ''), '-', ''), '(', ''), ')', '') = '+79206736156'
 AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 592)
 LIMIT 1;
 
@@ -21685,11 +19111,7 @@ SELECT
   NOW(),
   NOW()
 FROM rental_clients c
-WHERE (
-  REPLACE(REPLACE(REPLACE(REPLACE(c.phone, ' ', ''), '-', ''), '(', ''), ')', '') = '+79206736156'
-  OR c.name = 'Ольга (Дольче Вита)'
-  OR c.director_name = 'Ольга (Дольче Вита)'
-)
+WHERE REPLACE(REPLACE(REPLACE(REPLACE(c.phone, ' ', ''), '-', ''), '(', ''), ')', '') = '+79206736156'
 AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 591)
 LIMIT 1;
 
@@ -21718,11 +19140,7 @@ SELECT
   NOW(),
   NOW()
 FROM rental_clients c
-WHERE (
-  REPLACE(REPLACE(REPLACE(REPLACE(c.phone, ' ', ''), '-', ''), '(', ''), ')', '') = '+79276797970'
-  OR c.name = 'Елизавета Ткач'
-  OR c.director_name = 'Елизавета Ткач'
-)
+WHERE REPLACE(REPLACE(REPLACE(REPLACE(c.phone, ' ', ''), '-', ''), '(', ''), ')', '') = '+79276797970'
 AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 589)
 LIMIT 1;
 
@@ -21751,11 +19169,7 @@ SELECT
   NOW(),
   NOW()
 FROM rental_clients c
-WHERE (
-  REPLACE(REPLACE(REPLACE(REPLACE(c.phone, ' ', ''), '-', ''), '(', ''), ')', '') = '+79101776156'
-  OR c.name = 'Анюта Родионова (Родина-тур)'
-  OR c.director_name = 'Анюта Родионова (Родина-тур)'
-)
+WHERE REPLACE(REPLACE(REPLACE(REPLACE(c.phone, ' ', ''), '-', ''), '(', ''), ')', '') = '+79101776156'
 AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 588)
 LIMIT 1;
 
@@ -21784,11 +19198,7 @@ SELECT
   NOW(),
   NOW()
 FROM rental_clients c
-WHERE (
-  REPLACE(REPLACE(REPLACE(REPLACE(c.phone, ' ', ''), '-', ''), '(', ''), ')', '') = '+79179142756'
-  OR c.name = 'Татьяна (Гольфстрим)'
-  OR c.director_name = 'Татьяна (Гольфстрим)'
-)
+WHERE REPLACE(REPLACE(REPLACE(REPLACE(c.phone, ' ', ''), '-', ''), '(', ''), ')', '') = '+79179142756'
 AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 587)
 LIMIT 1;
 
@@ -21817,11 +19227,7 @@ SELECT
   NOW(),
   NOW()
 FROM rental_clients c
-WHERE (
-  REPLACE(REPLACE(REPLACE(REPLACE(c.phone, ' ', ''), '-', ''), '(', ''), ')', '') = '+79179142756'
-  OR c.name = 'Татьяна (Гольфстрим)'
-  OR c.director_name = 'Татьяна (Гольфстрим)'
-)
+WHERE REPLACE(REPLACE(REPLACE(REPLACE(c.phone, ' ', ''), '-', ''), '(', ''), ')', '') = '+79179142756'
 AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 586)
 LIMIT 1;
 
@@ -21850,11 +19256,7 @@ SELECT
   NOW(),
   NOW()
 FROM rental_clients c
-WHERE (
-  REPLACE(REPLACE(REPLACE(REPLACE(c.phone, ' ', ''), '-', ''), '(', ''), ')', '') = '+79179142756'
-  OR c.name = 'Татьяна (Гольфстрим)'
-  OR c.director_name = 'Татьяна (Гольфстрим)'
-)
+WHERE REPLACE(REPLACE(REPLACE(REPLACE(c.phone, ' ', ''), '-', ''), '(', ''), ')', '') = '+79179142756'
 AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 585)
 LIMIT 1;
 
@@ -21883,11 +19285,7 @@ SELECT
   NOW(),
   NOW()
 FROM rental_clients c
-WHERE (
-  REPLACE(REPLACE(REPLACE(REPLACE(c.phone, ' ', ''), '-', ''), '(', ''), ')', '') = '+79179142756'
-  OR c.name = 'Татьяна (Гольфстрим)'
-  OR c.director_name = 'Татьяна (Гольфстрим)'
-)
+WHERE REPLACE(REPLACE(REPLACE(REPLACE(c.phone, ' ', ''), '-', ''), '(', ''), ')', '') = '+79179142756'
 AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 584)
 LIMIT 1;
 
@@ -21916,11 +19314,7 @@ SELECT
   NOW(),
   NOW()
 FROM rental_clients c
-WHERE (
-  REPLACE(REPLACE(REPLACE(REPLACE(c.phone, ' ', ''), '-', ''), '(', ''), ')', '') = '+79179142756'
-  OR c.name = 'Татьяна (Гольфстрим)'
-  OR c.director_name = 'Татьяна (Гольфстрим)'
-)
+WHERE REPLACE(REPLACE(REPLACE(REPLACE(c.phone, ' ', ''), '-', ''), '(', ''), ')', '') = '+79179142756'
 AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 583)
 LIMIT 1;
 
@@ -21949,10 +19343,7 @@ SELECT
   NOW(),
   NOW()
 FROM rental_clients c
-WHERE (
-  c.name = 'Эдик Заказы для групп'
-  OR c.director_name = 'Эдик Заказы для групп'
-)
+WHERE (c.name ILIKE '%Эдик%' OR c.director_name ILIKE '%Эдик%')
 AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 582)
 LIMIT 1;
 
@@ -21981,11 +19372,7 @@ SELECT
   NOW(),
   NOW()
 FROM rental_clients c
-WHERE (
-  REPLACE(REPLACE(REPLACE(REPLACE(c.phone, ' ', ''), '-', ''), '(', ''), ')', '') = '+79190783257'
-  OR c.name = 'Светлана Зеленина'
-  OR c.director_name = 'Светлана Зеленина'
-)
+WHERE REPLACE(REPLACE(REPLACE(REPLACE(c.phone, ' ', ''), '-', ''), '(', ''), ')', '') = '+79190783257'
 AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 581)
 LIMIT 1;
 
@@ -22014,11 +19401,7 @@ SELECT
   NOW(),
   NOW()
 FROM rental_clients c
-WHERE (
-  REPLACE(REPLACE(REPLACE(REPLACE(c.phone, ' ', ''), '-', ''), '(', ''), ')', '') = '+79274463215'
-  OR c.name = 'Айрат Нурмухаммадов'
-  OR c.director_name = 'Айрат Нурмухаммадов'
-)
+WHERE REPLACE(REPLACE(REPLACE(REPLACE(c.phone, ' ', ''), '-', ''), '(', ''), ')', '') = '+79274463215'
 AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 580)
 LIMIT 1;
 
@@ -22047,11 +19430,7 @@ SELECT
   NOW(),
   NOW()
 FROM rental_clients c
-WHERE (
-  REPLACE(REPLACE(REPLACE(REPLACE(c.phone, ' ', ''), '-', ''), '(', ''), ')', '') = '+79178605272'
-  OR c.name = 'Гульнара'
-  OR c.director_name = 'Гульнара'
-)
+WHERE REPLACE(REPLACE(REPLACE(REPLACE(c.phone, ' ', ''), '-', ''), '(', ''), ')', '') = '+79178605272'
 AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 579)
 LIMIT 1;
 
@@ -22080,11 +19459,7 @@ SELECT
   NOW(),
   NOW()
 FROM rental_clients c
-WHERE (
-  REPLACE(REPLACE(REPLACE(REPLACE(c.phone, ' ', ''), '-', ''), '(', ''), ')', '') = '+79046699399'
-  OR c.name = 'Альберт (КТ)'
-  OR c.director_name = 'Альберт (КТ)'
-)
+WHERE REPLACE(REPLACE(REPLACE(REPLACE(c.phone, ' ', ''), '-', ''), '(', ''), ')', '') = '+79046699399'
 AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 578)
 LIMIT 1;
 
@@ -22113,11 +19488,7 @@ SELECT
   NOW(),
   NOW()
 FROM rental_clients c
-WHERE (
-  REPLACE(REPLACE(REPLACE(REPLACE(c.phone, ' ', ''), '-', ''), '(', ''), ')', '') = '+79172989675'
-  OR c.name = 'Валентина Экскурсовод'
-  OR c.director_name = 'Валентина Экскурсовод'
-)
+WHERE REPLACE(REPLACE(REPLACE(REPLACE(c.phone, ' ', ''), '-', ''), '(', ''), ')', '') = '+79172989675'
 AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 577)
 LIMIT 1;
 
@@ -22146,11 +19517,7 @@ SELECT
   NOW(),
   NOW()
 FROM rental_clients c
-WHERE (
-  REPLACE(REPLACE(REPLACE(REPLACE(c.phone, ' ', ''), '-', ''), '(', ''), ')', '') = '+79872827166'
-  OR c.name = 'Татьяна Чуб'
-  OR c.director_name = 'Татьяна Чуб'
-)
+WHERE REPLACE(REPLACE(REPLACE(REPLACE(c.phone, ' ', ''), '-', ''), '(', ''), ')', '') = '+79872827166'
 AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 576)
 LIMIT 1;
 
@@ -22179,11 +19546,7 @@ SELECT
   NOW(),
   NOW()
 FROM rental_clients c
-WHERE (
-  REPLACE(REPLACE(REPLACE(REPLACE(c.phone, ' ', ''), '-', ''), '(', ''), ')', '') = '+79872827166'
-  OR c.name = 'Татьяна Чуб'
-  OR c.director_name = 'Татьяна Чуб'
-)
+WHERE REPLACE(REPLACE(REPLACE(REPLACE(c.phone, ' ', ''), '-', ''), '(', ''), ')', '') = '+79872827166'
 AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 575)
 LIMIT 1;
 
@@ -22212,11 +19575,7 @@ SELECT
   NOW(),
   NOW()
 FROM rental_clients c
-WHERE (
-  REPLACE(REPLACE(REPLACE(REPLACE(c.phone, ' ', ''), '-', ''), '(', ''), ')', '') = '+79872827166'
-  OR c.name = 'Татьяна Чуб'
-  OR c.director_name = 'Татьяна Чуб'
-)
+WHERE REPLACE(REPLACE(REPLACE(REPLACE(c.phone, ' ', ''), '-', ''), '(', ''), ')', '') = '+79872827166'
 AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 574)
 LIMIT 1;
 
@@ -22245,11 +19604,7 @@ SELECT
   NOW(),
   NOW()
 FROM rental_clients c
-WHERE (
-  REPLACE(REPLACE(REPLACE(REPLACE(c.phone, ' ', ''), '-', ''), '(', ''), ')', '') = '+79872827166'
-  OR c.name = 'Татьяна Чуб'
-  OR c.director_name = 'Татьяна Чуб'
-)
+WHERE REPLACE(REPLACE(REPLACE(REPLACE(c.phone, ' ', ''), '-', ''), '(', ''), ')', '') = '+79872827166'
 AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 573)
 LIMIT 1;
 
@@ -22278,11 +19633,7 @@ SELECT
   NOW(),
   NOW()
 FROM rental_clients c
-WHERE (
-  REPLACE(REPLACE(REPLACE(REPLACE(c.phone, ' ', ''), '-', ''), '(', ''), ')', '') = '+79179142756'
-  OR c.name = 'Татьяна (Гольфстрим)'
-  OR c.director_name = 'Татьяна (Гольфстрим)'
-)
+WHERE REPLACE(REPLACE(REPLACE(REPLACE(c.phone, ' ', ''), '-', ''), '(', ''), ')', '') = '+79179142756'
 AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 572)
 LIMIT 1;
 
@@ -22311,11 +19662,7 @@ SELECT
   NOW(),
   NOW()
 FROM rental_clients c
-WHERE (
-  REPLACE(REPLACE(REPLACE(REPLACE(c.phone, ' ', ''), '-', ''), '(', ''), ')', '') = '+79179332160'
-  OR c.name = 'Анна'
-  OR c.director_name = 'Анна'
-)
+WHERE REPLACE(REPLACE(REPLACE(REPLACE(c.phone, ' ', ''), '-', ''), '(', ''), ')', '') = '+79179332160'
 AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 571)
 LIMIT 1;
 
@@ -22344,10 +19691,7 @@ SELECT
   NOW(),
   NOW()
 FROM rental_clients c
-WHERE (
-  c.name = 'Эдик Заказы для групп'
-  OR c.director_name = 'Эдик Заказы для групп'
-)
+WHERE (c.name ILIKE '%Эдик%' OR c.director_name ILIKE '%Эдик%')
 AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 570)
 LIMIT 1;
 
@@ -22376,10 +19720,7 @@ SELECT
   NOW(),
   NOW()
 FROM rental_clients c
-WHERE (
-  c.name = 'Эдик Заказы для групп'
-  OR c.director_name = 'Эдик Заказы для групп'
-)
+WHERE (c.name ILIKE '%Эдик%' OR c.director_name ILIKE '%Эдик%')
 AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 569)
 LIMIT 1;
 
@@ -22408,11 +19749,7 @@ SELECT
   NOW(),
   NOW()
 FROM rental_clients c
-WHERE (
-  REPLACE(REPLACE(REPLACE(REPLACE(c.phone, ' ', ''), '-', ''), '(', ''), ')', '') = '+79063248898'
-  OR c.name = 'Константин'
-  OR c.director_name = 'Константин'
-)
+WHERE REPLACE(REPLACE(REPLACE(REPLACE(c.phone, ' ', ''), '-', ''), '(', ''), ')', '') = '+79063248898'
 AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 568)
 LIMIT 1;
 
@@ -22441,10 +19778,7 @@ SELECT
   NOW(),
   NOW()
 FROM rental_clients c
-WHERE (
-  c.name = 'Эдик Заказы для групп'
-  OR c.director_name = 'Эдик Заказы для групп'
-)
+WHERE (c.name ILIKE '%Эдик%' OR c.director_name ILIKE '%Эдик%')
 AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 567)
 LIMIT 1;
 
@@ -22473,11 +19807,7 @@ SELECT
   NOW(),
   NOW()
 FROM rental_clients c
-WHERE (
-  REPLACE(REPLACE(REPLACE(REPLACE(c.phone, ' ', ''), '-', ''), '(', ''), ')', '') = '+79222673014'
-  OR c.name = 'Юлия (Рыжий Слон)'
-  OR c.director_name = 'Юлия (Рыжий Слон)'
-)
+WHERE REPLACE(REPLACE(REPLACE(REPLACE(c.phone, ' ', ''), '-', ''), '(', ''), ')', '') = '+79222673014'
 AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 566)
 LIMIT 1;
 
@@ -22506,11 +19836,7 @@ SELECT
   NOW(),
   NOW()
 FROM rental_clients c
-WHERE (
-  REPLACE(REPLACE(REPLACE(REPLACE(c.phone, ' ', ''), '-', ''), '(', ''), ')', '') = '+79872827166'
-  OR c.name = 'Татьяна Чуб'
-  OR c.director_name = 'Татьяна Чуб'
-)
+WHERE REPLACE(REPLACE(REPLACE(REPLACE(c.phone, ' ', ''), '-', ''), '(', ''), ')', '') = '+79872827166'
 AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 565)
 LIMIT 1;
 
@@ -22539,11 +19865,7 @@ SELECT
   NOW(),
   NOW()
 FROM rental_clients c
-WHERE (
-  REPLACE(REPLACE(REPLACE(REPLACE(c.phone, ' ', ''), '-', ''), '(', ''), ')', '') = '+79872827166'
-  OR c.name = 'Татьяна Чуб'
-  OR c.director_name = 'Татьяна Чуб'
-)
+WHERE REPLACE(REPLACE(REPLACE(REPLACE(c.phone, ' ', ''), '-', ''), '(', ''), ')', '') = '+79872827166'
 AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 563)
 LIMIT 1;
 
@@ -22572,11 +19894,7 @@ SELECT
   NOW(),
   NOW()
 FROM rental_clients c
-WHERE (
-  REPLACE(REPLACE(REPLACE(REPLACE(c.phone, ' ', ''), '-', ''), '(', ''), ')', '') = '+79158685892'
-  OR c.name = 'Елена Тамбова (Апрель)'
-  OR c.director_name = 'Елена Тамбова (Апрель)'
-)
+WHERE REPLACE(REPLACE(REPLACE(REPLACE(c.phone, ' ', ''), '-', ''), '(', ''), ')', '') = '+79158685892'
 AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 562)
 LIMIT 1;
 
@@ -22605,11 +19923,7 @@ SELECT
   NOW(),
   NOW()
 FROM rental_clients c
-WHERE (
-  REPLACE(REPLACE(REPLACE(REPLACE(c.phone, ' ', ''), '-', ''), '(', ''), ')', '') = '+79274143743'
-  OR c.name = 'Анастасия Шадрина'
-  OR c.director_name = 'Анастасия Шадрина'
-)
+WHERE REPLACE(REPLACE(REPLACE(REPLACE(c.phone, ' ', ''), '-', ''), '(', ''), ')', '') = '+79274143743'
 AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 561)
 LIMIT 1;
 
@@ -22638,11 +19952,7 @@ SELECT
   NOW(),
   NOW()
 FROM rental_clients c
-WHERE (
-  REPLACE(REPLACE(REPLACE(REPLACE(c.phone, ' ', ''), '-', ''), '(', ''), ')', '') = '+79662409276'
-  OR c.name = 'Мира (ИП)'
-  OR c.director_name = 'Мира (ИП)'
-)
+WHERE REPLACE(REPLACE(REPLACE(REPLACE(c.phone, ' ', ''), '-', ''), '(', ''), ')', '') = '+79662409276'
 AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 560)
 LIMIT 1;
 
@@ -22671,11 +19981,7 @@ SELECT
   NOW(),
   NOW()
 FROM rental_clients c
-WHERE (
-  REPLACE(REPLACE(REPLACE(REPLACE(c.phone, ' ', ''), '-', ''), '(', ''), ')', '') = '+79662409276'
-  OR c.name = 'Мира (ИП)'
-  OR c.director_name = 'Мира (ИП)'
-)
+WHERE REPLACE(REPLACE(REPLACE(REPLACE(c.phone, ' ', ''), '-', ''), '(', ''), ')', '') = '+79662409276'
 AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 559)
 LIMIT 1;
 
@@ -22704,11 +20010,7 @@ SELECT
   NOW(),
   NOW()
 FROM rental_clients c
-WHERE (
-  REPLACE(REPLACE(REPLACE(REPLACE(c.phone, ' ', ''), '-', ''), '(', ''), ')', '') = '+79178605272'
-  OR c.name = 'Гульнара'
-  OR c.director_name = 'Гульнара'
-)
+WHERE REPLACE(REPLACE(REPLACE(REPLACE(c.phone, ' ', ''), '-', ''), '(', ''), ')', '') = '+79178605272'
 AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 557)
 LIMIT 1;
 
@@ -22737,11 +20039,7 @@ SELECT
   NOW(),
   NOW()
 FROM rental_clients c
-WHERE (
-  REPLACE(REPLACE(REPLACE(REPLACE(c.phone, ' ', ''), '-', ''), '(', ''), ')', '') = '+79950953373'
-  OR c.name = 'Екатерина'
-  OR c.director_name = 'Екатерина'
-)
+WHERE REPLACE(REPLACE(REPLACE(REPLACE(c.phone, ' ', ''), '-', ''), '(', ''), ')', '') = '+79950953373'
 AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 556)
 LIMIT 1;
 
@@ -22770,11 +20068,7 @@ SELECT
   NOW(),
   NOW()
 FROM rental_clients c
-WHERE (
-  REPLACE(REPLACE(REPLACE(REPLACE(c.phone, ' ', ''), '-', ''), '(', ''), ')', '') = '+79377797273'
-  OR c.name = 'Эльвира'
-  OR c.director_name = 'Эльвира'
-)
+WHERE REPLACE(REPLACE(REPLACE(REPLACE(c.phone, ' ', ''), '-', ''), '(', ''), ')', '') = '+79377797273'
 AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 555)
 LIMIT 1;
 
@@ -22803,10 +20097,7 @@ SELECT
   NOW(),
   NOW()
 FROM rental_clients c
-WHERE (
-  c.name = 'Эдик Заказы для групп'
-  OR c.director_name = 'Эдик Заказы для групп'
-)
+WHERE (c.name ILIKE '%Эдик%' OR c.director_name ILIKE '%Эдик%')
 AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 554)
 LIMIT 1;
 
@@ -22835,10 +20126,7 @@ SELECT
   NOW(),
   NOW()
 FROM rental_clients c
-WHERE (
-  c.name = 'Эдик Заказы для групп'
-  OR c.director_name = 'Эдик Заказы для групп'
-)
+WHERE (c.name ILIKE '%Эдик%' OR c.director_name ILIKE '%Эдик%')
 AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 553)
 LIMIT 1;
 
@@ -22867,11 +20155,7 @@ SELECT
   NOW(),
   NOW()
 FROM rental_clients c
-WHERE (
-  REPLACE(REPLACE(REPLACE(REPLACE(c.phone, ' ', ''), '-', ''), '(', ''), ')', '') = '+79179142756'
-  OR c.name = 'Татьяна (Гольфстрим)'
-  OR c.director_name = 'Татьяна (Гольфстрим)'
-)
+WHERE REPLACE(REPLACE(REPLACE(REPLACE(c.phone, ' ', ''), '-', ''), '(', ''), ')', '') = '+79179142756'
 AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 551)
 LIMIT 1;
 
@@ -22900,11 +20184,7 @@ SELECT
   NOW(),
   NOW()
 FROM rental_clients c
-WHERE (
-  REPLACE(REPLACE(REPLACE(REPLACE(c.phone, ' ', ''), '-', ''), '(', ''), ')', '') = '+79179142756'
-  OR c.name = 'Татьяна (Гольфстрим)'
-  OR c.director_name = 'Татьяна (Гольфстрим)'
-)
+WHERE REPLACE(REPLACE(REPLACE(REPLACE(c.phone, ' ', ''), '-', ''), '(', ''), ')', '') = '+79179142756'
 AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 550)
 LIMIT 1;
 
@@ -22933,10 +20213,7 @@ SELECT
   NOW(),
   NOW()
 FROM rental_clients c
-WHERE (
-  c.name = 'Эдик Заказы для групп'
-  OR c.director_name = 'Эдик Заказы для групп'
-)
+WHERE (c.name ILIKE '%Эдик%' OR c.director_name ILIKE '%Эдик%')
 AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 548)
 LIMIT 1;
 
@@ -22965,11 +20242,7 @@ SELECT
   NOW(),
   NOW()
 FROM rental_clients c
-WHERE (
-  REPLACE(REPLACE(REPLACE(REPLACE(c.phone, ' ', ''), '-', ''), '(', ''), ')', '') = '+79662409276'
-  OR c.name = 'Мира (ИП)'
-  OR c.director_name = 'Мира (ИП)'
-)
+WHERE REPLACE(REPLACE(REPLACE(REPLACE(c.phone, ' ', ''), '-', ''), '(', ''), ')', '') = '+79662409276'
 AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 547)
 LIMIT 1;
 
@@ -22998,11 +20271,7 @@ SELECT
   NOW(),
   NOW()
 FROM rental_clients c
-WHERE (
-  REPLACE(REPLACE(REPLACE(REPLACE(c.phone, ' ', ''), '-', ''), '(', ''), ')', '') = '+79179142756'
-  OR c.name = 'Татьяна (Гольфстрим)'
-  OR c.director_name = 'Татьяна (Гольфстрим)'
-)
+WHERE REPLACE(REPLACE(REPLACE(REPLACE(c.phone, ' ', ''), '-', ''), '(', ''), ')', '') = '+79179142756'
 AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 546)
 LIMIT 1;
 
@@ -23031,11 +20300,7 @@ SELECT
   NOW(),
   NOW()
 FROM rental_clients c
-WHERE (
-  REPLACE(REPLACE(REPLACE(REPLACE(c.phone, ' ', ''), '-', ''), '(', ''), ')', '') = '+79103961028'
-  OR c.name = 'Антон'
-  OR c.director_name = 'Антон'
-)
+WHERE REPLACE(REPLACE(REPLACE(REPLACE(c.phone, ' ', ''), '-', ''), '(', ''), ')', '') = '+79103961028'
 AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 544)
 LIMIT 1;
 
@@ -23064,10 +20329,7 @@ SELECT
   NOW(),
   NOW()
 FROM rental_clients c
-WHERE (
-  c.name = 'Эдик Заказы для групп'
-  OR c.director_name = 'Эдик Заказы для групп'
-)
+WHERE (c.name ILIKE '%Эдик%' OR c.director_name ILIKE '%Эдик%')
 AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 543)
 LIMIT 1;
 
@@ -23096,11 +20358,7 @@ SELECT
   NOW(),
   NOW()
 FROM rental_clients c
-WHERE (
-  REPLACE(REPLACE(REPLACE(REPLACE(c.phone, ' ', ''), '-', ''), '(', ''), ')', '') = '+79662409276'
-  OR c.name = 'Мира (ИП)'
-  OR c.director_name = 'Мира (ИП)'
-)
+WHERE REPLACE(REPLACE(REPLACE(REPLACE(c.phone, ' ', ''), '-', ''), '(', ''), ')', '') = '+79662409276'
 AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 542)
 LIMIT 1;
 
@@ -23129,10 +20387,7 @@ SELECT
   NOW(),
   NOW()
 FROM rental_clients c
-WHERE (
-  c.name = 'Эдик Заказы для групп'
-  OR c.director_name = 'Эдик Заказы для групп'
-)
+WHERE (c.name ILIKE '%Эдик%' OR c.director_name ILIKE '%Эдик%')
 AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 541)
 LIMIT 1;
 
@@ -23161,11 +20416,7 @@ SELECT
   NOW(),
   NOW()
 FROM rental_clients c
-WHERE (
-  REPLACE(REPLACE(REPLACE(REPLACE(c.phone, ' ', ''), '-', ''), '(', ''), ')', '') = '+79033408152'
-  OR c.name = 'Юлианна'
-  OR c.director_name = 'Юлианна'
-)
+WHERE REPLACE(REPLACE(REPLACE(REPLACE(c.phone, ' ', ''), '-', ''), '(', ''), ')', '') = '+79033408152'
 AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 540)
 LIMIT 1;
 
@@ -23194,10 +20445,7 @@ SELECT
   NOW(),
   NOW()
 FROM rental_clients c
-WHERE (
-  c.name = 'Эдик Заказы для групп'
-  OR c.director_name = 'Эдик Заказы для групп'
-)
+WHERE (c.name ILIKE '%Эдик%' OR c.director_name ILIKE '%Эдик%')
 AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 539)
 LIMIT 1;
 
@@ -23226,11 +20474,7 @@ SELECT
   NOW(),
   NOW()
 FROM rental_clients c
-WHERE (
-  REPLACE(REPLACE(REPLACE(REPLACE(c.phone, ' ', ''), '-', ''), '(', ''), ')', '') = '+79033443111'
-  OR c.name = 'Элина (Сититур)'
-  OR c.director_name = 'Элина (Сититур)'
-)
+WHERE REPLACE(REPLACE(REPLACE(REPLACE(c.phone, ' ', ''), '-', ''), '(', ''), ')', '') = '+79033443111'
 AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 537)
 LIMIT 1;
 
@@ -23259,11 +20503,7 @@ SELECT
   NOW(),
   NOW()
 FROM rental_clients c
-WHERE (
-  REPLACE(REPLACE(REPLACE(REPLACE(c.phone, ' ', ''), '-', ''), '(', ''), ')', '') = '+79872965880'
-  OR c.name = 'Ольга Лукоянова'
-  OR c.director_name = 'Ольга Лукоянова'
-)
+WHERE REPLACE(REPLACE(REPLACE(REPLACE(c.phone, ' ', ''), '-', ''), '(', ''), ')', '') = '+79872965880'
 AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 536)
 LIMIT 1;
 
@@ -23292,11 +20532,7 @@ SELECT
   NOW(),
   NOW()
 FROM rental_clients c
-WHERE (
-  REPLACE(REPLACE(REPLACE(REPLACE(c.phone, ' ', ''), '-', ''), '(', ''), ')', '') = '+79172278327'
-  OR c.name = 'Юлия Воронова'
-  OR c.director_name = 'Юлия Воронова'
-)
+WHERE REPLACE(REPLACE(REPLACE(REPLACE(c.phone, ' ', ''), '-', ''), '(', ''), ')', '') = '+79172278327'
 AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 533)
 LIMIT 1;
 
@@ -23325,11 +20561,7 @@ SELECT
   NOW(),
   NOW()
 FROM rental_clients c
-WHERE (
-  REPLACE(REPLACE(REPLACE(REPLACE(c.phone, ' ', ''), '-', ''), '(', ''), ')', '') = '+79179142756'
-  OR c.name = 'Татьяна (Гольфстрим)'
-  OR c.director_name = 'Татьяна (Гольфстрим)'
-)
+WHERE REPLACE(REPLACE(REPLACE(REPLACE(c.phone, ' ', ''), '-', ''), '(', ''), ')', '') = '+79179142756'
 AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 532)
 LIMIT 1;
 
@@ -23358,11 +20590,7 @@ SELECT
   NOW(),
   NOW()
 FROM rental_clients c
-WHERE (
-  REPLACE(REPLACE(REPLACE(REPLACE(c.phone, ' ', ''), '-', ''), '(', ''), ')', '') = '+79179142756'
-  OR c.name = 'Татьяна (Гольфстрим)'
-  OR c.director_name = 'Татьяна (Гольфстрим)'
-)
+WHERE REPLACE(REPLACE(REPLACE(REPLACE(c.phone, ' ', ''), '-', ''), '(', ''), ')', '') = '+79179142756'
 AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 531)
 LIMIT 1;
 
@@ -23391,11 +20619,7 @@ SELECT
   NOW(),
   NOW()
 FROM rental_clients c
-WHERE (
-  REPLACE(REPLACE(REPLACE(REPLACE(c.phone, ' ', ''), '-', ''), '(', ''), ')', '') = '+79053171049'
-  OR c.name = 'Виолетта'
-  OR c.director_name = 'Виолетта'
-)
+WHERE REPLACE(REPLACE(REPLACE(REPLACE(c.phone, ' ', ''), '-', ''), '(', ''), ')', '') = '+79053171049'
 AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 530)
 LIMIT 1;
 
@@ -23424,11 +20648,7 @@ SELECT
   NOW(),
   NOW()
 FROM rental_clients c
-WHERE (
-  REPLACE(REPLACE(REPLACE(REPLACE(c.phone, ' ', ''), '-', ''), '(', ''), ')', '') = '+79046699399'
-  OR c.name = 'Альберт (КТ)'
-  OR c.director_name = 'Альберт (КТ)'
-)
+WHERE REPLACE(REPLACE(REPLACE(REPLACE(c.phone, ' ', ''), '-', ''), '(', ''), ')', '') = '+79046699399'
 AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 529)
 LIMIT 1;
 
@@ -23457,11 +20677,7 @@ SELECT
   NOW(),
   NOW()
 FROM rental_clients c
-WHERE (
-  REPLACE(REPLACE(REPLACE(REPLACE(c.phone, ' ', ''), '-', ''), '(', ''), ')', '') = '+79046699399'
-  OR c.name = 'Альберт (КТ)'
-  OR c.director_name = 'Альберт (КТ)'
-)
+WHERE REPLACE(REPLACE(REPLACE(REPLACE(c.phone, ' ', ''), '-', ''), '(', ''), ')', '') = '+79046699399'
 AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 528)
 LIMIT 1;
 
@@ -23490,11 +20706,7 @@ SELECT
   NOW(),
   NOW()
 FROM rental_clients c
-WHERE (
-  REPLACE(REPLACE(REPLACE(REPLACE(c.phone, ' ', ''), '-', ''), '(', ''), ')', '') = '+79046699399'
-  OR c.name = 'Альберт (КТ)'
-  OR c.director_name = 'Альберт (КТ)'
-)
+WHERE REPLACE(REPLACE(REPLACE(REPLACE(c.phone, ' ', ''), '-', ''), '(', ''), ')', '') = '+79046699399'
 AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 527)
 LIMIT 1;
 
@@ -23523,11 +20735,7 @@ SELECT
   NOW(),
   NOW()
 FROM rental_clients c
-WHERE (
-  REPLACE(REPLACE(REPLACE(REPLACE(c.phone, ' ', ''), '-', ''), '(', ''), ')', '') = '+79179142756'
-  OR c.name = 'Татьяна (Гольфстрим)'
-  OR c.director_name = 'Татьяна (Гольфстрим)'
-)
+WHERE REPLACE(REPLACE(REPLACE(REPLACE(c.phone, ' ', ''), '-', ''), '(', ''), ')', '') = '+79179142756'
 AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 526)
 LIMIT 1;
 
@@ -23556,11 +20764,7 @@ SELECT
   NOW(),
   NOW()
 FROM rental_clients c
-WHERE (
-  REPLACE(REPLACE(REPLACE(REPLACE(c.phone, ' ', ''), '-', ''), '(', ''), ')', '') = '+79179142756'
-  OR c.name = 'Татьяна (Гольфстрим)'
-  OR c.director_name = 'Татьяна (Гольфстрим)'
-)
+WHERE REPLACE(REPLACE(REPLACE(REPLACE(c.phone, ' ', ''), '-', ''), '(', ''), ')', '') = '+79179142756'
 AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 525)
 LIMIT 1;
 
@@ -23589,11 +20793,7 @@ SELECT
   NOW(),
   NOW()
 FROM rental_clients c
-WHERE (
-  REPLACE(REPLACE(REPLACE(REPLACE(c.phone, ' ', ''), '-', ''), '(', ''), ')', '') = '+79662409276'
-  OR c.name = 'Мира (ИП)'
-  OR c.director_name = 'Мира (ИП)'
-)
+WHERE REPLACE(REPLACE(REPLACE(REPLACE(c.phone, ' ', ''), '-', ''), '(', ''), ')', '') = '+79662409276'
 AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 524)
 LIMIT 1;
 
@@ -23622,11 +20822,7 @@ SELECT
   NOW(),
   NOW()
 FROM rental_clients c
-WHERE (
-  REPLACE(REPLACE(REPLACE(REPLACE(c.phone, ' ', ''), '-', ''), '(', ''), ')', '') = '+79178605272'
-  OR c.name = 'Гульнара'
-  OR c.director_name = 'Гульнара'
-)
+WHERE REPLACE(REPLACE(REPLACE(REPLACE(c.phone, ' ', ''), '-', ''), '(', ''), ')', '') = '+79178605272'
 AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 523)
 LIMIT 1;
 
@@ -23655,10 +20851,7 @@ SELECT
   NOW(),
   NOW()
 FROM rental_clients c
-WHERE (
-  c.name = 'Эдик Заказы для групп'
-  OR c.director_name = 'Эдик Заказы для групп'
-)
+WHERE (c.name ILIKE '%Эдик%' OR c.director_name ILIKE '%Эдик%')
 AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 522)
 LIMIT 1;
 
@@ -23687,11 +20880,7 @@ SELECT
   NOW(),
   NOW()
 FROM rental_clients c
-WHERE (
-  REPLACE(REPLACE(REPLACE(REPLACE(c.phone, ' ', ''), '-', ''), '(', ''), ')', '') = '+79179142756'
-  OR c.name = 'Татьяна (Гольфстрим)'
-  OR c.director_name = 'Татьяна (Гольфстрим)'
-)
+WHERE REPLACE(REPLACE(REPLACE(REPLACE(c.phone, ' ', ''), '-', ''), '(', ''), ')', '') = '+79179142756'
 AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 521)
 LIMIT 1;
 
@@ -23720,11 +20909,7 @@ SELECT
   NOW(),
   NOW()
 FROM rental_clients c
-WHERE (
-  REPLACE(REPLACE(REPLACE(REPLACE(c.phone, ' ', ''), '-', ''), '(', ''), ')', '') = '+79872750395'
-  OR c.name = 'Зельфира'
-  OR c.director_name = 'Зельфира'
-)
+WHERE REPLACE(REPLACE(REPLACE(REPLACE(c.phone, ' ', ''), '-', ''), '(', ''), ')', '') = '+79872750395'
 AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 520)
 LIMIT 1;
 
@@ -23753,11 +20938,7 @@ SELECT
   NOW(),
   NOW()
 FROM rental_clients c
-WHERE (
-  REPLACE(REPLACE(REPLACE(REPLACE(c.phone, ' ', ''), '-', ''), '(', ''), ')', '') = '+79178605272'
-  OR c.name = 'Гульнара'
-  OR c.director_name = 'Гульнара'
-)
+WHERE REPLACE(REPLACE(REPLACE(REPLACE(c.phone, ' ', ''), '-', ''), '(', ''), ')', '') = '+79178605272'
 AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 519)
 LIMIT 1;
 
@@ -23786,11 +20967,7 @@ SELECT
   NOW(),
   NOW()
 FROM rental_clients c
-WHERE (
-  REPLACE(REPLACE(REPLACE(REPLACE(c.phone, ' ', ''), '-', ''), '(', ''), ')', '') = '+79179142756'
-  OR c.name = 'Татьяна (Гольфстрим)'
-  OR c.director_name = 'Татьяна (Гольфстрим)'
-)
+WHERE REPLACE(REPLACE(REPLACE(REPLACE(c.phone, ' ', ''), '-', ''), '(', ''), ')', '') = '+79179142756'
 AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 518)
 LIMIT 1;
 
@@ -23819,11 +20996,7 @@ SELECT
   NOW(),
   NOW()
 FROM rental_clients c
-WHERE (
-  REPLACE(REPLACE(REPLACE(REPLACE(c.phone, ' ', ''), '-', ''), '(', ''), ')', '') = '+79179142756'
-  OR c.name = 'Татьяна (Гольфстрим)'
-  OR c.director_name = 'Татьяна (Гольфстрим)'
-)
+WHERE REPLACE(REPLACE(REPLACE(REPLACE(c.phone, ' ', ''), '-', ''), '(', ''), ')', '') = '+79179142756'
 AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 517)
 LIMIT 1;
 
@@ -23852,11 +21025,7 @@ SELECT
   NOW(),
   NOW()
 FROM rental_clients c
-WHERE (
-  REPLACE(REPLACE(REPLACE(REPLACE(c.phone, ' ', ''), '-', ''), '(', ''), ')', '') = '+79179142756'
-  OR c.name = 'Татьяна (Гольфстрим)'
-  OR c.director_name = 'Татьяна (Гольфстрим)'
-)
+WHERE REPLACE(REPLACE(REPLACE(REPLACE(c.phone, ' ', ''), '-', ''), '(', ''), ')', '') = '+79179142756'
 AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 516)
 LIMIT 1;
 
@@ -23885,11 +21054,7 @@ SELECT
   NOW(),
   NOW()
 FROM rental_clients c
-WHERE (
-  REPLACE(REPLACE(REPLACE(REPLACE(c.phone, ' ', ''), '-', ''), '(', ''), ')', '') = '+79179142756'
-  OR c.name = 'Татьяна (Гольфстрим)'
-  OR c.director_name = 'Татьяна (Гольфстрим)'
-)
+WHERE REPLACE(REPLACE(REPLACE(REPLACE(c.phone, ' ', ''), '-', ''), '(', ''), ')', '') = '+79179142756'
 AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 515)
 LIMIT 1;
 
@@ -23918,11 +21083,7 @@ SELECT
   NOW(),
   NOW()
 FROM rental_clients c
-WHERE (
-  REPLACE(REPLACE(REPLACE(REPLACE(c.phone, ' ', ''), '-', ''), '(', ''), ')', '') = '+79853891999'
-  OR c.name = 'Сергей (Авангард)'
-  OR c.director_name = 'Сергей (Авангард)'
-)
+WHERE REPLACE(REPLACE(REPLACE(REPLACE(c.phone, ' ', ''), '-', ''), '(', ''), ')', '') = '+79853891999'
 AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 514)
 LIMIT 1;
 
@@ -23951,11 +21112,7 @@ SELECT
   NOW(),
   NOW()
 FROM rental_clients c
-WHERE (
-  REPLACE(REPLACE(REPLACE(REPLACE(c.phone, ' ', ''), '-', ''), '(', ''), ')', '') = '+79172278327'
-  OR c.name = 'Юлия Воронова'
-  OR c.director_name = 'Юлия Воронова'
-)
+WHERE REPLACE(REPLACE(REPLACE(REPLACE(c.phone, ' ', ''), '-', ''), '(', ''), ')', '') = '+79172278327'
 AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 513)
 LIMIT 1;
 
@@ -23984,11 +21141,7 @@ SELECT
   NOW(),
   NOW()
 FROM rental_clients c
-WHERE (
-  REPLACE(REPLACE(REPLACE(REPLACE(c.phone, ' ', ''), '-', ''), '(', ''), ')', '') = '+79274900014'
-  OR c.name = 'Мария Экскурсовод'
-  OR c.director_name = 'Мария Экскурсовод'
-)
+WHERE REPLACE(REPLACE(REPLACE(REPLACE(c.phone, ' ', ''), '-', ''), '(', ''), ')', '') = '+79274900014'
 AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 512)
 LIMIT 1;
 
@@ -24017,11 +21170,7 @@ SELECT
   NOW(),
   NOW()
 FROM rental_clients c
-WHERE (
-  REPLACE(REPLACE(REPLACE(REPLACE(c.phone, ' ', ''), '-', ''), '(', ''), ')', '') = '+79033443111'
-  OR c.name = 'Элина (Сититур)'
-  OR c.director_name = 'Элина (Сититур)'
-)
+WHERE REPLACE(REPLACE(REPLACE(REPLACE(c.phone, ' ', ''), '-', ''), '(', ''), ')', '') = '+79033443111'
 AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 509)
 LIMIT 1;
 
@@ -24050,11 +21199,7 @@ SELECT
   NOW(),
   NOW()
 FROM rental_clients c
-WHERE (
-  REPLACE(REPLACE(REPLACE(REPLACE(c.phone, ' ', ''), '-', ''), '(', ''), ')', '') = '+79270303303'
-  OR c.name = 'Ирина Обыденникова'
-  OR c.director_name = 'Ирина Обыденникова'
-)
+WHERE REPLACE(REPLACE(REPLACE(REPLACE(c.phone, ' ', ''), '-', ''), '(', ''), ')', '') = '+79270303303'
 AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 508)
 LIMIT 1;
 
@@ -24083,11 +21228,7 @@ SELECT
   NOW(),
   NOW()
 FROM rental_clients c
-WHERE (
-  REPLACE(REPLACE(REPLACE(REPLACE(c.phone, ' ', ''), '-', ''), '(', ''), ')', '') = '+79662409276'
-  OR c.name = 'Мира (ИП)'
-  OR c.director_name = 'Мира (ИП)'
-)
+WHERE REPLACE(REPLACE(REPLACE(REPLACE(c.phone, ' ', ''), '-', ''), '(', ''), ')', '') = '+79662409276'
 AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 507)
 LIMIT 1;
 
@@ -24116,11 +21257,7 @@ SELECT
   NOW(),
   NOW()
 FROM rental_clients c
-WHERE (
-  REPLACE(REPLACE(REPLACE(REPLACE(c.phone, ' ', ''), '-', ''), '(', ''), ')', '') = '+79662409276'
-  OR c.name = 'Мира (ИП)'
-  OR c.director_name = 'Мира (ИП)'
-)
+WHERE REPLACE(REPLACE(REPLACE(REPLACE(c.phone, ' ', ''), '-', ''), '(', ''), ')', '') = '+79662409276'
 AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 506)
 LIMIT 1;
 
@@ -24149,11 +21286,7 @@ SELECT
   NOW(),
   NOW()
 FROM rental_clients c
-WHERE (
-  REPLACE(REPLACE(REPLACE(REPLACE(c.phone, ' ', ''), '-', ''), '(', ''), ')', '') = '+79393309448'
-  OR c.name = 'Андрей (Экскурс)'
-  OR c.director_name = 'Андрей (Экскурс)'
-)
+WHERE REPLACE(REPLACE(REPLACE(REPLACE(c.phone, ' ', ''), '-', ''), '(', ''), ')', '') = '+79393309448'
 AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 505)
 LIMIT 1;
 
@@ -24182,11 +21315,7 @@ SELECT
   NOW(),
   NOW()
 FROM rental_clients c
-WHERE (
-  REPLACE(REPLACE(REPLACE(REPLACE(c.phone, ' ', ''), '-', ''), '(', ''), ')', '') = '+79274900014'
-  OR c.name = 'Мария Экскурсовод'
-  OR c.director_name = 'Мария Экскурсовод'
-)
+WHERE REPLACE(REPLACE(REPLACE(REPLACE(c.phone, ' ', ''), '-', ''), '(', ''), ')', '') = '+79274900014'
 AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 504)
 LIMIT 1;
 
@@ -24215,11 +21344,7 @@ SELECT
   NOW(),
   NOW()
 FROM rental_clients c
-WHERE (
-  REPLACE(REPLACE(REPLACE(REPLACE(c.phone, ' ', ''), '-', ''), '(', ''), ')', '') = '+79042786414'
-  OR c.name = 'Анастасия'
-  OR c.director_name = 'Анастасия'
-)
+WHERE REPLACE(REPLACE(REPLACE(REPLACE(c.phone, ' ', ''), '-', ''), '(', ''), ')', '') = '+79042786414'
 AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 503)
 LIMIT 1;
 
@@ -24248,11 +21373,7 @@ SELECT
   NOW(),
   NOW()
 FROM rental_clients c
-WHERE (
-  REPLACE(REPLACE(REPLACE(REPLACE(c.phone, ' ', ''), '-', ''), '(', ''), ')', '') = '+79600336033'
-  OR c.name = 'Галия'
-  OR c.director_name = 'Галия'
-)
+WHERE REPLACE(REPLACE(REPLACE(REPLACE(c.phone, ' ', ''), '-', ''), '(', ''), ')', '') = '+79600336033'
 AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 502)
 LIMIT 1;
 
@@ -24281,11 +21402,7 @@ SELECT
   NOW(),
   NOW()
 FROM rental_clients c
-WHERE (
-  REPLACE(REPLACE(REPLACE(REPLACE(c.phone, ' ', ''), '-', ''), '(', ''), ')', '') = '+79274900014'
-  OR c.name = 'Мария Экскурсовод'
-  OR c.director_name = 'Мария Экскурсовод'
-)
+WHERE REPLACE(REPLACE(REPLACE(REPLACE(c.phone, ' ', ''), '-', ''), '(', ''), ')', '') = '+79274900014'
 AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 501)
 LIMIT 1;
 
@@ -24314,11 +21431,7 @@ SELECT
   NOW(),
   NOW()
 FROM rental_clients c
-WHERE (
-  REPLACE(REPLACE(REPLACE(REPLACE(c.phone, ' ', ''), '-', ''), '(', ''), ')', '') = '+79046699399'
-  OR c.name = 'Альберт (КТ)'
-  OR c.director_name = 'Альберт (КТ)'
-)
+WHERE REPLACE(REPLACE(REPLACE(REPLACE(c.phone, ' ', ''), '-', ''), '(', ''), ')', '') = '+79046699399'
 AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 500)
 LIMIT 1;
 
@@ -24347,10 +21460,7 @@ SELECT
   NOW(),
   NOW()
 FROM rental_clients c
-WHERE (
-  c.name = 'Эдик Заказы для групп'
-  OR c.director_name = 'Эдик Заказы для групп'
-)
+WHERE (c.name ILIKE '%Эдик%' OR c.director_name ILIKE '%Эдик%')
 AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 499)
 LIMIT 1;
 
@@ -24379,10 +21489,7 @@ SELECT
   NOW(),
   NOW()
 FROM rental_clients c
-WHERE (
-  c.name = 'Эдик Заказы для групп'
-  OR c.director_name = 'Эдик Заказы для групп'
-)
+WHERE (c.name ILIKE '%Эдик%' OR c.director_name ILIKE '%Эдик%')
 AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 498)
 LIMIT 1;
 
@@ -24411,10 +21518,7 @@ SELECT
   NOW(),
   NOW()
 FROM rental_clients c
-WHERE (
-  c.name = 'Эдик Заказы для групп'
-  OR c.director_name = 'Эдик Заказы для групп'
-)
+WHERE (c.name ILIKE '%Эдик%' OR c.director_name ILIKE '%Эдик%')
 AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 497)
 LIMIT 1;
 
@@ -24443,10 +21547,7 @@ SELECT
   NOW(),
   NOW()
 FROM rental_clients c
-WHERE (
-  c.name = 'Эдик Заказы для групп'
-  OR c.director_name = 'Эдик Заказы для групп'
-)
+WHERE (c.name ILIKE '%Эдик%' OR c.director_name ILIKE '%Эдик%')
 AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 496)
 LIMIT 1;
 
@@ -24475,11 +21576,7 @@ SELECT
   NOW(),
   NOW()
 FROM rental_clients c
-WHERE (
-  REPLACE(REPLACE(REPLACE(REPLACE(c.phone, ' ', ''), '-', ''), '(', ''), ')', '') = '+79172922000'
-  OR c.name = 'Наталья'
-  OR c.director_name = 'Наталья'
-)
+WHERE REPLACE(REPLACE(REPLACE(REPLACE(c.phone, ' ', ''), '-', ''), '(', ''), ')', '') = '+79172922000'
 AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 495)
 LIMIT 1;
 
@@ -24508,11 +21605,7 @@ SELECT
   NOW(),
   NOW()
 FROM rental_clients c
-WHERE (
-  REPLACE(REPLACE(REPLACE(REPLACE(c.phone, ' ', ''), '-', ''), '(', ''), ')', '') = '+79172922000'
-  OR c.name = 'Наталья'
-  OR c.director_name = 'Наталья'
-)
+WHERE REPLACE(REPLACE(REPLACE(REPLACE(c.phone, ' ', ''), '-', ''), '(', ''), ')', '') = '+79172922000'
 AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 494)
 LIMIT 1;
 
@@ -24541,11 +21634,7 @@ SELECT
   NOW(),
   NOW()
 FROM rental_clients c
-WHERE (
-  REPLACE(REPLACE(REPLACE(REPLACE(c.phone, ' ', ''), '-', ''), '(', ''), ')', '') = '+79046699399'
-  OR c.name = 'Альберт (КТ)'
-  OR c.director_name = 'Альберт (КТ)'
-)
+WHERE REPLACE(REPLACE(REPLACE(REPLACE(c.phone, ' ', ''), '-', ''), '(', ''), ')', '') = '+79046699399'
 AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 493)
 LIMIT 1;
 
@@ -24574,10 +21663,7 @@ SELECT
   NOW(),
   NOW()
 FROM rental_clients c
-WHERE (
-  c.name = 'Эдик Заказы для групп'
-  OR c.director_name = 'Эдик Заказы для групп'
-)
+WHERE (c.name ILIKE '%Эдик%' OR c.director_name ILIKE '%Эдик%')
 AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 492)
 LIMIT 1;
 
@@ -24606,11 +21692,7 @@ SELECT
   NOW(),
   NOW()
 FROM rental_clients c
-WHERE (
-  REPLACE(REPLACE(REPLACE(REPLACE(c.phone, ' ', ''), '-', ''), '(', ''), ')', '') = '+79179142756'
-  OR c.name = 'Татьяна (Гольфстрим)'
-  OR c.director_name = 'Татьяна (Гольфстрим)'
-)
+WHERE REPLACE(REPLACE(REPLACE(REPLACE(c.phone, ' ', ''), '-', ''), '(', ''), ')', '') = '+79179142756'
 AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 491)
 LIMIT 1;
 
@@ -24639,11 +21721,7 @@ SELECT
   NOW(),
   NOW()
 FROM rental_clients c
-WHERE (
-  REPLACE(REPLACE(REPLACE(REPLACE(c.phone, ' ', ''), '-', ''), '(', ''), ')', '') = '+79222673014'
-  OR c.name = 'Юлия (Рыжий Слон)'
-  OR c.director_name = 'Юлия (Рыжий Слон)'
-)
+WHERE REPLACE(REPLACE(REPLACE(REPLACE(c.phone, ' ', ''), '-', ''), '(', ''), ')', '') = '+79222673014'
 AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 490)
 LIMIT 1;
 
@@ -24672,11 +21750,7 @@ SELECT
   NOW(),
   NOW()
 FROM rental_clients c
-WHERE (
-  REPLACE(REPLACE(REPLACE(REPLACE(c.phone, ' ', ''), '-', ''), '(', ''), ')', '') = '+79179142756'
-  OR c.name = 'Татьяна (Гольфстрим)'
-  OR c.director_name = 'Татьяна (Гольфстрим)'
-)
+WHERE REPLACE(REPLACE(REPLACE(REPLACE(c.phone, ' ', ''), '-', ''), '(', ''), ')', '') = '+79179142756'
 AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 489)
 LIMIT 1;
 
@@ -24705,11 +21779,7 @@ SELECT
   NOW(),
   NOW()
 FROM rental_clients c
-WHERE (
-  REPLACE(REPLACE(REPLACE(REPLACE(c.phone, ' ', ''), '-', ''), '(', ''), ')', '') = '+79179142756'
-  OR c.name = 'Татьяна (Гольфстрим)'
-  OR c.director_name = 'Татьяна (Гольфстрим)'
-)
+WHERE REPLACE(REPLACE(REPLACE(REPLACE(c.phone, ' ', ''), '-', ''), '(', ''), ')', '') = '+79179142756'
 AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 488)
 LIMIT 1;
 
@@ -24738,11 +21808,7 @@ SELECT
   NOW(),
   NOW()
 FROM rental_clients c
-WHERE (
-  REPLACE(REPLACE(REPLACE(REPLACE(c.phone, ' ', ''), '-', ''), '(', ''), ')', '') = '+79179142756'
-  OR c.name = 'Татьяна (Гольфстрим)'
-  OR c.director_name = 'Татьяна (Гольфстрим)'
-)
+WHERE REPLACE(REPLACE(REPLACE(REPLACE(c.phone, ' ', ''), '-', ''), '(', ''), ')', '') = '+79179142756'
 AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 487)
 LIMIT 1;
 
@@ -24771,11 +21837,7 @@ SELECT
   NOW(),
   NOW()
 FROM rental_clients c
-WHERE (
-  REPLACE(REPLACE(REPLACE(REPLACE(c.phone, ' ', ''), '-', ''), '(', ''), ')', '') = '+79179142756'
-  OR c.name = 'Татьяна (Гольфстрим)'
-  OR c.director_name = 'Татьяна (Гольфстрим)'
-)
+WHERE REPLACE(REPLACE(REPLACE(REPLACE(c.phone, ' ', ''), '-', ''), '(', ''), ')', '') = '+79179142756'
 AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 486)
 LIMIT 1;
 
@@ -24804,11 +21866,7 @@ SELECT
   NOW(),
   NOW()
 FROM rental_clients c
-WHERE (
-  REPLACE(REPLACE(REPLACE(REPLACE(c.phone, ' ', ''), '-', ''), '(', ''), ')', '') = '+79179142756'
-  OR c.name = 'Татьяна (Гольфстрим)'
-  OR c.director_name = 'Татьяна (Гольфстрим)'
-)
+WHERE REPLACE(REPLACE(REPLACE(REPLACE(c.phone, ' ', ''), '-', ''), '(', ''), ')', '') = '+79179142756'
 AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 485)
 LIMIT 1;
 
@@ -24837,11 +21895,7 @@ SELECT
   NOW(),
   NOW()
 FROM rental_clients c
-WHERE (
-  REPLACE(REPLACE(REPLACE(REPLACE(c.phone, ' ', ''), '-', ''), '(', ''), ')', '') = '+79179142756'
-  OR c.name = 'Татьяна (Гольфстрим)'
-  OR c.director_name = 'Татьяна (Гольфстрим)'
-)
+WHERE REPLACE(REPLACE(REPLACE(REPLACE(c.phone, ' ', ''), '-', ''), '(', ''), ')', '') = '+79179142756'
 AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 484)
 LIMIT 1;
 
@@ -24870,11 +21924,7 @@ SELECT
   NOW(),
   NOW()
 FROM rental_clients c
-WHERE (
-  REPLACE(REPLACE(REPLACE(REPLACE(c.phone, ' ', ''), '-', ''), '(', ''), ')', '') = '+79179142756'
-  OR c.name = 'Татьяна (Гольфстрим)'
-  OR c.director_name = 'Татьяна (Гольфстрим)'
-)
+WHERE REPLACE(REPLACE(REPLACE(REPLACE(c.phone, ' ', ''), '-', ''), '(', ''), ')', '') = '+79179142756'
 AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 483)
 LIMIT 1;
 
@@ -24903,11 +21953,7 @@ SELECT
   NOW(),
   NOW()
 FROM rental_clients c
-WHERE (
-  REPLACE(REPLACE(REPLACE(REPLACE(c.phone, ' ', ''), '-', ''), '(', ''), ')', '') = '+79179142756'
-  OR c.name = 'Татьяна (Гольфстрим)'
-  OR c.director_name = 'Татьяна (Гольфстрим)'
-)
+WHERE REPLACE(REPLACE(REPLACE(REPLACE(c.phone, ' ', ''), '-', ''), '(', ''), ')', '') = '+79179142756'
 AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 482)
 LIMIT 1;
 
@@ -24936,11 +21982,7 @@ SELECT
   NOW(),
   NOW()
 FROM rental_clients c
-WHERE (
-  REPLACE(REPLACE(REPLACE(REPLACE(c.phone, ' ', ''), '-', ''), '(', ''), ')', '') = '+79179142756'
-  OR c.name = 'Татьяна (Гольфстрим)'
-  OR c.director_name = 'Татьяна (Гольфстрим)'
-)
+WHERE REPLACE(REPLACE(REPLACE(REPLACE(c.phone, ' ', ''), '-', ''), '(', ''), ')', '') = '+79179142756'
 AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 481)
 LIMIT 1;
 
@@ -24969,11 +22011,7 @@ SELECT
   NOW(),
   NOW()
 FROM rental_clients c
-WHERE (
-  REPLACE(REPLACE(REPLACE(REPLACE(c.phone, ' ', ''), '-', ''), '(', ''), ')', '') = '+79179142756'
-  OR c.name = 'Татьяна (Гольфстрим)'
-  OR c.director_name = 'Татьяна (Гольфстрим)'
-)
+WHERE REPLACE(REPLACE(REPLACE(REPLACE(c.phone, ' ', ''), '-', ''), '(', ''), ')', '') = '+79179142756'
 AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 480)
 LIMIT 1;
 
@@ -25002,11 +22040,7 @@ SELECT
   NOW(),
   NOW()
 FROM rental_clients c
-WHERE (
-  REPLACE(REPLACE(REPLACE(REPLACE(c.phone, ' ', ''), '-', ''), '(', ''), ')', '') = '+79179142756'
-  OR c.name = 'Татьяна (Гольфстрим)'
-  OR c.director_name = 'Татьяна (Гольфстрим)'
-)
+WHERE REPLACE(REPLACE(REPLACE(REPLACE(c.phone, ' ', ''), '-', ''), '(', ''), ')', '') = '+79179142756'
 AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 479)
 LIMIT 1;
 
@@ -25035,11 +22069,7 @@ SELECT
   NOW(),
   NOW()
 FROM rental_clients c
-WHERE (
-  REPLACE(REPLACE(REPLACE(REPLACE(c.phone, ' ', ''), '-', ''), '(', ''), ')', '') = '+79179142756'
-  OR c.name = 'Татьяна (Гольфстрим)'
-  OR c.director_name = 'Татьяна (Гольфстрим)'
-)
+WHERE REPLACE(REPLACE(REPLACE(REPLACE(c.phone, ' ', ''), '-', ''), '(', ''), ')', '') = '+79179142756'
 AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 478)
 LIMIT 1;
 
@@ -25068,11 +22098,7 @@ SELECT
   NOW(),
   NOW()
 FROM rental_clients c
-WHERE (
-  REPLACE(REPLACE(REPLACE(REPLACE(c.phone, ' ', ''), '-', ''), '(', ''), ')', '') = '+79089197168'
-  OR c.name = 'Дмитрий Попков'
-  OR c.director_name = 'Дмитрий Попков'
-)
+WHERE REPLACE(REPLACE(REPLACE(REPLACE(c.phone, ' ', ''), '-', ''), '(', ''), ')', '') = '+79089197168'
 AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 477)
 LIMIT 1;
 
@@ -25101,11 +22127,7 @@ SELECT
   NOW(),
   NOW()
 FROM rental_clients c
-WHERE (
-  REPLACE(REPLACE(REPLACE(REPLACE(c.phone, ' ', ''), '-', ''), '(', ''), ')', '') = '+79006000057'
-  OR c.name = 'Ольга'
-  OR c.director_name = 'Ольга'
-)
+WHERE REPLACE(REPLACE(REPLACE(REPLACE(c.phone, ' ', ''), '-', ''), '(', ''), ')', '') = '+79006000057'
 AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 476)
 LIMIT 1;
 
@@ -25134,11 +22156,7 @@ SELECT
   NOW(),
   NOW()
 FROM rental_clients c
-WHERE (
-  REPLACE(REPLACE(REPLACE(REPLACE(c.phone, ' ', ''), '-', ''), '(', ''), ')', '') = '+79600565131'
-  OR c.name = 'Камила Ягудина'
-  OR c.director_name = 'Камила Ягудина'
-)
+WHERE REPLACE(REPLACE(REPLACE(REPLACE(c.phone, ' ', ''), '-', ''), '(', ''), ')', '') = '+79600565131'
 AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 475)
 LIMIT 1;
 
@@ -25167,11 +22185,7 @@ SELECT
   NOW(),
   NOW()
 FROM rental_clients c
-WHERE (
-  REPLACE(REPLACE(REPLACE(REPLACE(c.phone, ' ', ''), '-', ''), '(', ''), ')', '') = '+79196855619'
-  OR c.name = 'Луиза'
-  OR c.director_name = 'Луиза'
-)
+WHERE REPLACE(REPLACE(REPLACE(REPLACE(c.phone, ' ', ''), '-', ''), '(', ''), ')', '') = '+79196855619'
 AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 474)
 LIMIT 1;
 
@@ -25200,11 +22214,7 @@ SELECT
   NOW(),
   NOW()
 FROM rental_clients c
-WHERE (
-  REPLACE(REPLACE(REPLACE(REPLACE(c.phone, ' ', ''), '-', ''), '(', ''), ')', '') = '+79033061734'
-  OR c.name = 'Нина Тиханова'
-  OR c.director_name = 'Нина Тиханова'
-)
+WHERE REPLACE(REPLACE(REPLACE(REPLACE(c.phone, ' ', ''), '-', ''), '(', ''), ')', '') = '+79033061734'
 AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 473)
 LIMIT 1;
 
@@ -25233,11 +22243,7 @@ SELECT
   NOW(),
   NOW()
 FROM rental_clients c
-WHERE (
-  REPLACE(REPLACE(REPLACE(REPLACE(c.phone, ' ', ''), '-', ''), '(', ''), ')', '') = '+79261608591'
-  OR c.name = 'Ольга Тандалова'
-  OR c.director_name = 'Ольга Тандалова'
-)
+WHERE REPLACE(REPLACE(REPLACE(REPLACE(c.phone, ' ', ''), '-', ''), '(', ''), ')', '') = '+79261608591'
 AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 472)
 LIMIT 1;
 
@@ -25266,11 +22272,7 @@ SELECT
   NOW(),
   NOW()
 FROM rental_clients c
-WHERE (
-  REPLACE(REPLACE(REPLACE(REPLACE(c.phone, ' ', ''), '-', ''), '(', ''), ')', '') = '+79872827166'
-  OR c.name = 'Татьяна Чуб'
-  OR c.director_name = 'Татьяна Чуб'
-)
+WHERE REPLACE(REPLACE(REPLACE(REPLACE(c.phone, ' ', ''), '-', ''), '(', ''), ')', '') = '+79872827166'
 AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 470)
 LIMIT 1;
 
@@ -25299,11 +22301,7 @@ SELECT
   NOW(),
   NOW()
 FROM rental_clients c
-WHERE (
-  REPLACE(REPLACE(REPLACE(REPLACE(c.phone, ' ', ''), '-', ''), '(', ''), ')', '') = '+79261409872'
-  OR c.name = 'Наталья'
-  OR c.director_name = 'Наталья'
-)
+WHERE REPLACE(REPLACE(REPLACE(REPLACE(c.phone, ' ', ''), '-', ''), '(', ''), ')', '') = '+79261409872'
 AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 469)
 LIMIT 1;
 
@@ -25332,11 +22330,7 @@ SELECT
   NOW(),
   NOW()
 FROM rental_clients c
-WHERE (
-  REPLACE(REPLACE(REPLACE(REPLACE(c.phone, ' ', ''), '-', ''), '(', ''), ')', '') = '+79600336033'
-  OR c.name = 'Галия'
-  OR c.director_name = 'Галия'
-)
+WHERE REPLACE(REPLACE(REPLACE(REPLACE(c.phone, ' ', ''), '-', ''), '(', ''), ')', '') = '+79600336033'
 AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 468)
 LIMIT 1;
 
@@ -25365,11 +22359,7 @@ SELECT
   NOW(),
   NOW()
 FROM rental_clients c
-WHERE (
-  REPLACE(REPLACE(REPLACE(REPLACE(c.phone, ' ', ''), '-', ''), '(', ''), ')', '') = '+79033443111'
-  OR c.name = 'Элина (Сититур)'
-  OR c.director_name = 'Элина (Сититур)'
-)
+WHERE REPLACE(REPLACE(REPLACE(REPLACE(c.phone, ' ', ''), '-', ''), '(', ''), ')', '') = '+79033443111'
 AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 467)
 LIMIT 1;
 
@@ -25398,11 +22388,7 @@ SELECT
   NOW(),
   NOW()
 FROM rental_clients c
-WHERE (
-  REPLACE(REPLACE(REPLACE(REPLACE(c.phone, ' ', ''), '-', ''), '(', ''), ')', '') = '+79033443111'
-  OR c.name = 'Элина (Сититур)'
-  OR c.director_name = 'Элина (Сититур)'
-)
+WHERE REPLACE(REPLACE(REPLACE(REPLACE(c.phone, ' ', ''), '-', ''), '(', ''), ')', '') = '+79033443111'
 AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 466)
 LIMIT 1;
 
@@ -25431,11 +22417,7 @@ SELECT
   NOW(),
   NOW()
 FROM rental_clients c
-WHERE (
-  REPLACE(REPLACE(REPLACE(REPLACE(c.phone, ' ', ''), '-', ''), '(', ''), ')', '') = '+79031562454'
-  OR c.name = 'Аниса'
-  OR c.director_name = 'Аниса'
-)
+WHERE REPLACE(REPLACE(REPLACE(REPLACE(c.phone, ' ', ''), '-', ''), '(', ''), ')', '') = '+79031562454'
 AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 465)
 LIMIT 1;
 
@@ -25464,11 +22446,7 @@ SELECT
   NOW(),
   NOW()
 FROM rental_clients c
-WHERE (
-  REPLACE(REPLACE(REPLACE(REPLACE(c.phone, ' ', ''), '-', ''), '(', ''), ')', '') = '+79161550131'
-  OR c.name = 'Варвара'
-  OR c.director_name = 'Варвара'
-)
+WHERE REPLACE(REPLACE(REPLACE(REPLACE(c.phone, ' ', ''), '-', ''), '(', ''), ')', '') = '+79161550131'
 AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 463)
 LIMIT 1;
 
@@ -25497,11 +22475,7 @@ SELECT
   NOW(),
   NOW()
 FROM rental_clients c
-WHERE (
-  REPLACE(REPLACE(REPLACE(REPLACE(c.phone, ' ', ''), '-', ''), '(', ''), ')', '') = '+79950953373'
-  OR c.name = 'Екатерина'
-  OR c.director_name = 'Екатерина'
-)
+WHERE REPLACE(REPLACE(REPLACE(REPLACE(c.phone, ' ', ''), '-', ''), '(', ''), ')', '') = '+79950953373'
 AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 462)
 LIMIT 1;
 
@@ -25530,11 +22504,7 @@ SELECT
   NOW(),
   NOW()
 FROM rental_clients c
-WHERE (
-  REPLACE(REPLACE(REPLACE(REPLACE(c.phone, ' ', ''), '-', ''), '(', ''), ')', '') = '+79662409276'
-  OR c.name = 'Мира (ИП)'
-  OR c.director_name = 'Мира (ИП)'
-)
+WHERE REPLACE(REPLACE(REPLACE(REPLACE(c.phone, ' ', ''), '-', ''), '(', ''), ')', '') = '+79662409276'
 AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 461)
 LIMIT 1;
 
@@ -25563,11 +22533,7 @@ SELECT
   NOW(),
   NOW()
 FROM rental_clients c
-WHERE (
-  REPLACE(REPLACE(REPLACE(REPLACE(c.phone, ' ', ''), '-', ''), '(', ''), ')', '') = '+79172934870'
-  OR c.name = 'Ирина Сафронова'
-  OR c.director_name = 'Ирина Сафронова'
-)
+WHERE REPLACE(REPLACE(REPLACE(REPLACE(c.phone, ' ', ''), '-', ''), '(', ''), ')', '') = '+79172934870'
 AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 460)
 LIMIT 1;
 
@@ -25596,11 +22562,7 @@ SELECT
   NOW(),
   NOW()
 FROM rental_clients c
-WHERE (
-  REPLACE(REPLACE(REPLACE(REPLACE(c.phone, ' ', ''), '-', ''), '(', ''), ')', '') = '+79172278327'
-  OR c.name = 'Юлия Воронова'
-  OR c.director_name = 'Юлия Воронова'
-)
+WHERE REPLACE(REPLACE(REPLACE(REPLACE(c.phone, ' ', ''), '-', ''), '(', ''), ')', '') = '+79172278327'
 AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 459)
 LIMIT 1;
 
@@ -25629,11 +22591,7 @@ SELECT
   NOW(),
   NOW()
 FROM rental_clients c
-WHERE (
-  REPLACE(REPLACE(REPLACE(REPLACE(c.phone, ' ', ''), '-', ''), '(', ''), ')', '') = '+79171014003'
-  OR c.name = 'Палитра Тур'
-  OR c.director_name = 'Палитра Тур'
-)
+WHERE REPLACE(REPLACE(REPLACE(REPLACE(c.phone, ' ', ''), '-', ''), '(', ''), ')', '') = '+79171014003'
 AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 458)
 LIMIT 1;
 
@@ -25662,11 +22620,7 @@ SELECT
   NOW(),
   NOW()
 FROM rental_clients c
-WHERE (
-  REPLACE(REPLACE(REPLACE(REPLACE(c.phone, ' ', ''), '-', ''), '(', ''), ')', '') = '+79600336033'
-  OR c.name = 'Галия'
-  OR c.director_name = 'Галия'
-)
+WHERE REPLACE(REPLACE(REPLACE(REPLACE(c.phone, ' ', ''), '-', ''), '(', ''), ')', '') = '+79600336033'
 AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 457)
 LIMIT 1;
 
@@ -25695,11 +22649,7 @@ SELECT
   NOW(),
   NOW()
 FROM rental_clients c
-WHERE (
-  REPLACE(REPLACE(REPLACE(REPLACE(c.phone, ' ', ''), '-', ''), '(', ''), ')', '') = '+79172278327'
-  OR c.name = 'Юлия Воронова'
-  OR c.director_name = 'Юлия Воронова'
-)
+WHERE REPLACE(REPLACE(REPLACE(REPLACE(c.phone, ' ', ''), '-', ''), '(', ''), ')', '') = '+79172278327'
 AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 455)
 LIMIT 1;
 
@@ -25728,11 +22678,7 @@ SELECT
   NOW(),
   NOW()
 FROM rental_clients c
-WHERE (
-  REPLACE(REPLACE(REPLACE(REPLACE(c.phone, ' ', ''), '-', ''), '(', ''), ')', '') = '+79172278327'
-  OR c.name = 'Юлия Воронова'
-  OR c.director_name = 'Юлия Воронова'
-)
+WHERE REPLACE(REPLACE(REPLACE(REPLACE(c.phone, ' ', ''), '-', ''), '(', ''), ')', '') = '+79172278327'
 AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 454)
 LIMIT 1;
 
@@ -25761,11 +22707,7 @@ SELECT
   NOW(),
   NOW()
 FROM rental_clients c
-WHERE (
-  REPLACE(REPLACE(REPLACE(REPLACE(c.phone, ' ', ''), '-', ''), '(', ''), ')', '') = '+79127740429'
-  OR c.name = 'Мария'
-  OR c.director_name = 'Мария'
-)
+WHERE REPLACE(REPLACE(REPLACE(REPLACE(c.phone, ' ', ''), '-', ''), '(', ''), ')', '') = '+79127740429'
 AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 453)
 LIMIT 1;
 
@@ -25794,11 +22736,7 @@ SELECT
   NOW(),
   NOW()
 FROM rental_clients c
-WHERE (
-  REPLACE(REPLACE(REPLACE(REPLACE(c.phone, ' ', ''), '-', ''), '(', ''), ')', '') = '+79127740429'
-  OR c.name = 'Мария'
-  OR c.director_name = 'Мария'
-)
+WHERE REPLACE(REPLACE(REPLACE(REPLACE(c.phone, ' ', ''), '-', ''), '(', ''), ')', '') = '+79127740429'
 AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 452)
 LIMIT 1;
 
@@ -25827,11 +22765,7 @@ SELECT
   NOW(),
   NOW()
 FROM rental_clients c
-WHERE (
-  REPLACE(REPLACE(REPLACE(REPLACE(c.phone, ' ', ''), '-', ''), '(', ''), ')', '') = '+79127740429'
-  OR c.name = 'Мария'
-  OR c.director_name = 'Мария'
-)
+WHERE REPLACE(REPLACE(REPLACE(REPLACE(c.phone, ' ', ''), '-', ''), '(', ''), ')', '') = '+79127740429'
 AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 451)
 LIMIT 1;
 
@@ -25860,11 +22794,7 @@ SELECT
   NOW(),
   NOW()
 FROM rental_clients c
-WHERE (
-  REPLACE(REPLACE(REPLACE(REPLACE(c.phone, ' ', ''), '-', ''), '(', ''), ')', '') = '+79270303303'
-  OR c.name = 'Ирина Обыденникова'
-  OR c.director_name = 'Ирина Обыденникова'
-)
+WHERE REPLACE(REPLACE(REPLACE(REPLACE(c.phone, ' ', ''), '-', ''), '(', ''), ')', '') = '+79270303303'
 AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 450)
 LIMIT 1;
 
@@ -25893,11 +22823,7 @@ SELECT
   NOW(),
   NOW()
 FROM rental_clients c
-WHERE (
-  REPLACE(REPLACE(REPLACE(REPLACE(c.phone, ' ', ''), '-', ''), '(', ''), ')', '') = '+79270303303'
-  OR c.name = 'Ирина Обыденникова'
-  OR c.director_name = 'Ирина Обыденникова'
-)
+WHERE REPLACE(REPLACE(REPLACE(REPLACE(c.phone, ' ', ''), '-', ''), '(', ''), ')', '') = '+79270303303'
 AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 449)
 LIMIT 1;
 
@@ -25926,11 +22852,7 @@ SELECT
   NOW(),
   NOW()
 FROM rental_clients c
-WHERE (
-  REPLACE(REPLACE(REPLACE(REPLACE(c.phone, ' ', ''), '-', ''), '(', ''), ')', '') = '+79274900014'
-  OR c.name = 'Мария Экскурсовод'
-  OR c.director_name = 'Мария Экскурсовод'
-)
+WHERE REPLACE(REPLACE(REPLACE(REPLACE(c.phone, ' ', ''), '-', ''), '(', ''), ')', '') = '+79274900014'
 AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 445)
 LIMIT 1;
 
@@ -25959,11 +22881,7 @@ SELECT
   NOW(),
   NOW()
 FROM rental_clients c
-WHERE (
-  REPLACE(REPLACE(REPLACE(REPLACE(c.phone, ' ', ''), '-', ''), '(', ''), ')', '') = '+79872821123'
-  OR c.name = 'Гульфия'
-  OR c.director_name = 'Гульфия'
-)
+WHERE REPLACE(REPLACE(REPLACE(REPLACE(c.phone, ' ', ''), '-', ''), '(', ''), ')', '') = '+79872821123'
 AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 444)
 LIMIT 1;
 
@@ -25992,11 +22910,7 @@ SELECT
   NOW(),
   NOW()
 FROM rental_clients c
-WHERE (
-  REPLACE(REPLACE(REPLACE(REPLACE(c.phone, ' ', ''), '-', ''), '(', ''), ')', '') = '+79022870302'
-  OR c.name = 'Лариса'
-  OR c.director_name = 'Лариса'
-)
+WHERE REPLACE(REPLACE(REPLACE(REPLACE(c.phone, ' ', ''), '-', ''), '(', ''), ')', '') = '+79022870302'
 AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 443)
 LIMIT 1;
 
@@ -26025,11 +22939,7 @@ SELECT
   NOW(),
   NOW()
 FROM rental_clients c
-WHERE (
-  REPLACE(REPLACE(REPLACE(REPLACE(c.phone, ' ', ''), '-', ''), '(', ''), ')', '') = '+79179142756'
-  OR c.name = 'Татьяна (Гольфстрим)'
-  OR c.director_name = 'Татьяна (Гольфстрим)'
-)
+WHERE REPLACE(REPLACE(REPLACE(REPLACE(c.phone, ' ', ''), '-', ''), '(', ''), ')', '') = '+79179142756'
 AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 442)
 LIMIT 1;
 
@@ -26058,11 +22968,7 @@ SELECT
   NOW(),
   NOW()
 FROM rental_clients c
-WHERE (
-  REPLACE(REPLACE(REPLACE(REPLACE(c.phone, ' ', ''), '-', ''), '(', ''), ')', '') = '+79276703000'
-  OR c.name = 'Ирина Пронина'
-  OR c.director_name = 'Ирина Пронина'
-)
+WHERE REPLACE(REPLACE(REPLACE(REPLACE(c.phone, ' ', ''), '-', ''), '(', ''), ')', '') = '+79276703000'
 AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 441)
 LIMIT 1;
 
@@ -26091,11 +22997,7 @@ SELECT
   NOW(),
   NOW()
 FROM rental_clients c
-WHERE (
-  REPLACE(REPLACE(REPLACE(REPLACE(c.phone, ' ', ''), '-', ''), '(', ''), ')', '') = '+79869297050'
-  OR c.name = 'Инна Экскурсовод'
-  OR c.director_name = 'Инна Экскурсовод'
-)
+WHERE REPLACE(REPLACE(REPLACE(REPLACE(c.phone, ' ', ''), '-', ''), '(', ''), ')', '') = '+79869297050'
 AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 440)
 LIMIT 1;
 
@@ -26124,11 +23026,7 @@ SELECT
   NOW(),
   NOW()
 FROM rental_clients c
-WHERE (
-  REPLACE(REPLACE(REPLACE(REPLACE(c.phone, ' ', ''), '-', ''), '(', ''), ')', '') = '+79033408152'
-  OR c.name = 'Юлианна'
-  OR c.director_name = 'Юлианна'
-)
+WHERE REPLACE(REPLACE(REPLACE(REPLACE(c.phone, ' ', ''), '-', ''), '(', ''), ')', '') = '+79033408152'
 AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 439)
 LIMIT 1;
 
@@ -26157,11 +23055,7 @@ SELECT
   NOW(),
   NOW()
 FROM rental_clients c
-WHERE (
-  REPLACE(REPLACE(REPLACE(REPLACE(c.phone, ' ', ''), '-', ''), '(', ''), ')', '') = '+79179064739'
-  OR c.name = 'Питер'
-  OR c.director_name = 'Питер'
-)
+WHERE REPLACE(REPLACE(REPLACE(REPLACE(c.phone, ' ', ''), '-', ''), '(', ''), ')', '') = '+79179064739'
 AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 438)
 LIMIT 1;
 
@@ -26190,11 +23084,7 @@ SELECT
   NOW(),
   NOW()
 FROM rental_clients c
-WHERE (
-  REPLACE(REPLACE(REPLACE(REPLACE(c.phone, ' ', ''), '-', ''), '(', ''), ')', '') = '+79179064739'
-  OR c.name = 'Питер'
-  OR c.director_name = 'Питер'
-)
+WHERE REPLACE(REPLACE(REPLACE(REPLACE(c.phone, ' ', ''), '-', ''), '(', ''), ')', '') = '+79179064739'
 AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 437)
 LIMIT 1;
 
@@ -26223,11 +23113,7 @@ SELECT
   NOW(),
   NOW()
 FROM rental_clients c
-WHERE (
-  REPLACE(REPLACE(REPLACE(REPLACE(c.phone, ' ', ''), '-', ''), '(', ''), ')', '') = '+79179064739'
-  OR c.name = 'Питер'
-  OR c.director_name = 'Питер'
-)
+WHERE REPLACE(REPLACE(REPLACE(REPLACE(c.phone, ' ', ''), '-', ''), '(', ''), ')', '') = '+79179064739'
 AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 436)
 LIMIT 1;
 
@@ -26256,11 +23142,7 @@ SELECT
   NOW(),
   NOW()
 FROM rental_clients c
-WHERE (
-  REPLACE(REPLACE(REPLACE(REPLACE(c.phone, ' ', ''), '-', ''), '(', ''), ')', '') = '+79179064739'
-  OR c.name = 'Питер'
-  OR c.director_name = 'Питер'
-)
+WHERE REPLACE(REPLACE(REPLACE(REPLACE(c.phone, ' ', ''), '-', ''), '(', ''), ')', '') = '+79179064739'
 AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 435)
 LIMIT 1;
 
@@ -26289,11 +23171,7 @@ SELECT
   NOW(),
   NOW()
 FROM rental_clients c
-WHERE (
-  REPLACE(REPLACE(REPLACE(REPLACE(c.phone, ' ', ''), '-', ''), '(', ''), ')', '') = '+79179142756'
-  OR c.name = 'Татьяна (Гольфстрим)'
-  OR c.director_name = 'Татьяна (Гольфстрим)'
-)
+WHERE REPLACE(REPLACE(REPLACE(REPLACE(c.phone, ' ', ''), '-', ''), '(', ''), ')', '') = '+79179142756'
 AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 434)
 LIMIT 1;
 
@@ -26322,11 +23200,7 @@ SELECT
   NOW(),
   NOW()
 FROM rental_clients c
-WHERE (
-  REPLACE(REPLACE(REPLACE(REPLACE(c.phone, ' ', ''), '-', ''), '(', ''), ')', '') = '+79179142756'
-  OR c.name = 'Татьяна (Гольфстрим)'
-  OR c.director_name = 'Татьяна (Гольфстрим)'
-)
+WHERE REPLACE(REPLACE(REPLACE(REPLACE(c.phone, ' ', ''), '-', ''), '(', ''), ')', '') = '+79179142756'
 AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 433)
 LIMIT 1;
 
@@ -26355,11 +23229,7 @@ SELECT
   NOW(),
   NOW()
 FROM rental_clients c
-WHERE (
-  REPLACE(REPLACE(REPLACE(REPLACE(c.phone, ' ', ''), '-', ''), '(', ''), ')', '') = '+79179142756'
-  OR c.name = 'Татьяна (Гольфстрим)'
-  OR c.director_name = 'Татьяна (Гольфстрим)'
-)
+WHERE REPLACE(REPLACE(REPLACE(REPLACE(c.phone, ' ', ''), '-', ''), '(', ''), ')', '') = '+79179142756'
 AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 432)
 LIMIT 1;
 
@@ -26388,11 +23258,7 @@ SELECT
   NOW(),
   NOW()
 FROM rental_clients c
-WHERE (
-  REPLACE(REPLACE(REPLACE(REPLACE(c.phone, ' ', ''), '-', ''), '(', ''), ')', '') = '+79179142756'
-  OR c.name = 'Татьяна (Гольфстрим)'
-  OR c.director_name = 'Татьяна (Гольфстрим)'
-)
+WHERE REPLACE(REPLACE(REPLACE(REPLACE(c.phone, ' ', ''), '-', ''), '(', ''), ')', '') = '+79179142756'
 AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 431)
 LIMIT 1;
 
@@ -26421,11 +23287,7 @@ SELECT
   NOW(),
   NOW()
 FROM rental_clients c
-WHERE (
-  REPLACE(REPLACE(REPLACE(REPLACE(c.phone, ' ', ''), '-', ''), '(', ''), ')', '') = '+79179142756'
-  OR c.name = 'Татьяна (Гольфстрим)'
-  OR c.director_name = 'Татьяна (Гольфстрим)'
-)
+WHERE REPLACE(REPLACE(REPLACE(REPLACE(c.phone, ' ', ''), '-', ''), '(', ''), ')', '') = '+79179142756'
 AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 430)
 LIMIT 1;
 
@@ -26454,11 +23316,7 @@ SELECT
   NOW(),
   NOW()
 FROM rental_clients c
-WHERE (
-  REPLACE(REPLACE(REPLACE(REPLACE(c.phone, ' ', ''), '-', ''), '(', ''), ')', '') = '+79503244678'
-  OR c.name = 'Алена Волина'
-  OR c.director_name = 'Алена Волина'
-)
+WHERE REPLACE(REPLACE(REPLACE(REPLACE(c.phone, ' ', ''), '-', ''), '(', ''), ')', '') = '+79503244678'
 AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 429)
 LIMIT 1;
 
@@ -26487,11 +23345,7 @@ SELECT
   NOW(),
   NOW()
 FROM rental_clients c
-WHERE (
-  REPLACE(REPLACE(REPLACE(REPLACE(c.phone, ' ', ''), '-', ''), '(', ''), ')', '') = '+79046699399'
-  OR c.name = 'Альберт (КТ)'
-  OR c.director_name = 'Альберт (КТ)'
-)
+WHERE REPLACE(REPLACE(REPLACE(REPLACE(c.phone, ' ', ''), '-', ''), '(', ''), ')', '') = '+79046699399'
 AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 428)
 LIMIT 1;
 
@@ -26520,11 +23374,7 @@ SELECT
   NOW(),
   NOW()
 FROM rental_clients c
-WHERE (
-  REPLACE(REPLACE(REPLACE(REPLACE(c.phone, ' ', ''), '-', ''), '(', ''), ')', '') = '+79129231660'
-  OR c.name = 'Юрий'
-  OR c.director_name = 'Юрий'
-)
+WHERE REPLACE(REPLACE(REPLACE(REPLACE(c.phone, ' ', ''), '-', ''), '(', ''), ')', '') = '+79129231660'
 AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 427)
 LIMIT 1;
 
@@ -26553,11 +23403,7 @@ SELECT
   NOW(),
   NOW()
 FROM rental_clients c
-WHERE (
-  REPLACE(REPLACE(REPLACE(REPLACE(c.phone, ' ', ''), '-', ''), '(', ''), ')', '') = '+79625552796'
-  OR c.name = 'Гульнара'
-  OR c.director_name = 'Гульнара'
-)
+WHERE REPLACE(REPLACE(REPLACE(REPLACE(c.phone, ' ', ''), '-', ''), '(', ''), ')', '') = '+79625552796'
 AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 426)
 LIMIT 1;
 
@@ -26586,11 +23432,7 @@ SELECT
   NOW(),
   NOW()
 FROM rental_clients c
-WHERE (
-  REPLACE(REPLACE(REPLACE(REPLACE(c.phone, ' ', ''), '-', ''), '(', ''), ')', '') = '+79625552796'
-  OR c.name = 'Гульнара'
-  OR c.director_name = 'Гульнара'
-)
+WHERE REPLACE(REPLACE(REPLACE(REPLACE(c.phone, ' ', ''), '-', ''), '(', ''), ')', '') = '+79625552796'
 AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 425)
 LIMIT 1;
 
@@ -26619,11 +23461,7 @@ SELECT
   NOW(),
   NOW()
 FROM rental_clients c
-WHERE (
-  REPLACE(REPLACE(REPLACE(REPLACE(c.phone, ' ', ''), '-', ''), '(', ''), ')', '') = '+79101776156'
-  OR c.name = 'Анюта Родионова (Родина-тур)'
-  OR c.director_name = 'Анюта Родионова (Родина-тур)'
-)
+WHERE REPLACE(REPLACE(REPLACE(REPLACE(c.phone, ' ', ''), '-', ''), '(', ''), ')', '') = '+79101776156'
 AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 424)
 LIMIT 1;
 
@@ -26652,11 +23490,7 @@ SELECT
   NOW(),
   NOW()
 FROM rental_clients c
-WHERE (
-  REPLACE(REPLACE(REPLACE(REPLACE(c.phone, ' ', ''), '-', ''), '(', ''), ')', '') = '+79033443111'
-  OR c.name = 'Элина (Сититур)'
-  OR c.director_name = 'Элина (Сититур)'
-)
+WHERE REPLACE(REPLACE(REPLACE(REPLACE(c.phone, ' ', ''), '-', ''), '(', ''), ')', '') = '+79033443111'
 AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 423)
 LIMIT 1;
 
@@ -26685,11 +23519,7 @@ SELECT
   NOW(),
   NOW()
 FROM rental_clients c
-WHERE (
-  REPLACE(REPLACE(REPLACE(REPLACE(c.phone, ' ', ''), '-', ''), '(', ''), ')', '') = '+79179142756'
-  OR c.name = 'Татьяна (Гольфстрим)'
-  OR c.director_name = 'Татьяна (Гольфстрим)'
-)
+WHERE REPLACE(REPLACE(REPLACE(REPLACE(c.phone, ' ', ''), '-', ''), '(', ''), ')', '') = '+79179142756'
 AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 422)
 LIMIT 1;
 
@@ -26718,11 +23548,7 @@ SELECT
   NOW(),
   NOW()
 FROM rental_clients c
-WHERE (
-  REPLACE(REPLACE(REPLACE(REPLACE(c.phone, ' ', ''), '-', ''), '(', ''), ')', '') = '+79046699399'
-  OR c.name = 'Альберт (КТ)'
-  OR c.director_name = 'Альберт (КТ)'
-)
+WHERE REPLACE(REPLACE(REPLACE(REPLACE(c.phone, ' ', ''), '-', ''), '(', ''), ')', '') = '+79046699399'
 AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 421)
 LIMIT 1;
 
@@ -26751,11 +23577,7 @@ SELECT
   NOW(),
   NOW()
 FROM rental_clients c
-WHERE (
-  REPLACE(REPLACE(REPLACE(REPLACE(c.phone, ' ', ''), '-', ''), '(', ''), ')', '') = '+79127740429'
-  OR c.name = 'Мария'
-  OR c.director_name = 'Мария'
-)
+WHERE REPLACE(REPLACE(REPLACE(REPLACE(c.phone, ' ', ''), '-', ''), '(', ''), ')', '') = '+79127740429'
 AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 419)
 LIMIT 1;
 
@@ -26784,11 +23606,7 @@ SELECT
   NOW(),
   NOW()
 FROM rental_clients c
-WHERE (
-  REPLACE(REPLACE(REPLACE(REPLACE(c.phone, ' ', ''), '-', ''), '(', ''), ')', '') = '+79127740429'
-  OR c.name = 'Мария'
-  OR c.director_name = 'Мария'
-)
+WHERE REPLACE(REPLACE(REPLACE(REPLACE(c.phone, ' ', ''), '-', ''), '(', ''), ')', '') = '+79127740429'
 AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 418)
 LIMIT 1;
 
@@ -26817,11 +23635,7 @@ SELECT
   NOW(),
   NOW()
 FROM rental_clients c
-WHERE (
-  REPLACE(REPLACE(REPLACE(REPLACE(c.phone, ' ', ''), '-', ''), '(', ''), ')', '') = '+79274900014'
-  OR c.name = 'Мария Экскурсовод'
-  OR c.director_name = 'Мария Экскурсовод'
-)
+WHERE REPLACE(REPLACE(REPLACE(REPLACE(c.phone, ' ', ''), '-', ''), '(', ''), ')', '') = '+79274900014'
 AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 417)
 LIMIT 1;
 
@@ -26850,11 +23664,7 @@ SELECT
   NOW(),
   NOW()
 FROM rental_clients c
-WHERE (
-  REPLACE(REPLACE(REPLACE(REPLACE(c.phone, ' ', ''), '-', ''), '(', ''), ')', '') = '+79274900014'
-  OR c.name = 'Мария Экскурсовод'
-  OR c.director_name = 'Мария Экскурсовод'
-)
+WHERE REPLACE(REPLACE(REPLACE(REPLACE(c.phone, ' ', ''), '-', ''), '(', ''), ')', '') = '+79274900014'
 AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 416)
 LIMIT 1;
 
@@ -26883,10 +23693,7 @@ SELECT
   NOW(),
   NOW()
 FROM rental_clients c
-WHERE (
-  c.name = 'Твой Гид'
-  OR c.director_name = 'Твой Гид'
-)
+WHERE (c.name ILIKE '%Твой%' OR c.director_name ILIKE '%Твой%')
 AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 414)
 LIMIT 1;
 
@@ -26915,11 +23722,7 @@ SELECT
   NOW(),
   NOW()
 FROM rental_clients c
-WHERE (
-  REPLACE(REPLACE(REPLACE(REPLACE(c.phone, ' ', ''), '-', ''), '(', ''), ')', '') = '+79112872606'
-  OR c.name = 'Александр Романов'
-  OR c.director_name = 'Александр Романов'
-)
+WHERE REPLACE(REPLACE(REPLACE(REPLACE(c.phone, ' ', ''), '-', ''), '(', ''), ')', '') = '+79112872606'
 AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 413)
 LIMIT 1;
 
@@ -26948,10 +23751,7 @@ SELECT
   NOW(),
   NOW()
 FROM rental_clients c
-WHERE (
-  c.name = 'Эдик Заказы для групп'
-  OR c.director_name = 'Эдик Заказы для групп'
-)
+WHERE (c.name ILIKE '%Эдик%' OR c.director_name ILIKE '%Эдик%')
 AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 412)
 LIMIT 1;
 
@@ -26980,11 +23780,7 @@ SELECT
   NOW(),
   NOW()
 FROM rental_clients c
-WHERE (
-  REPLACE(REPLACE(REPLACE(REPLACE(c.phone, ' ', ''), '-', ''), '(', ''), ')', '') = '+79872965880'
-  OR c.name = 'Ольга Лукоянова'
-  OR c.director_name = 'Ольга Лукоянова'
-)
+WHERE REPLACE(REPLACE(REPLACE(REPLACE(c.phone, ' ', ''), '-', ''), '(', ''), ')', '') = '+79872965880'
 AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 411)
 LIMIT 1;
 
@@ -27013,11 +23809,7 @@ SELECT
   NOW(),
   NOW()
 FROM rental_clients c
-WHERE (
-  REPLACE(REPLACE(REPLACE(REPLACE(c.phone, ' ', ''), '-', ''), '(', ''), ')', '') = '+79872827166'
-  OR c.name = 'Татьяна Чуб'
-  OR c.director_name = 'Татьяна Чуб'
-)
+WHERE REPLACE(REPLACE(REPLACE(REPLACE(c.phone, ' ', ''), '-', ''), '(', ''), ')', '') = '+79872827166'
 AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 410)
 LIMIT 1;
 
@@ -27046,10 +23838,7 @@ SELECT
   NOW(),
   NOW()
 FROM rental_clients c
-WHERE (
-  c.name = 'Эдик Заказы для групп'
-  OR c.director_name = 'Эдик Заказы для групп'
-)
+WHERE (c.name ILIKE '%Эдик%' OR c.director_name ILIKE '%Эдик%')
 AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 409)
 LIMIT 1;
 
@@ -27078,10 +23867,7 @@ SELECT
   NOW(),
   NOW()
 FROM rental_clients c
-WHERE (
-  c.name = 'Эдик Заказы для групп'
-  OR c.director_name = 'Эдик Заказы для групп'
-)
+WHERE (c.name ILIKE '%Эдик%' OR c.director_name ILIKE '%Эдик%')
 AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 408)
 LIMIT 1;
 
@@ -27110,11 +23896,7 @@ SELECT
   NOW(),
   NOW()
 FROM rental_clients c
-WHERE (
-  REPLACE(REPLACE(REPLACE(REPLACE(c.phone, ' ', ''), '-', ''), '(', ''), ')', '') = '+79662409276'
-  OR c.name = 'Мира (ИП)'
-  OR c.director_name = 'Мира (ИП)'
-)
+WHERE REPLACE(REPLACE(REPLACE(REPLACE(c.phone, ' ', ''), '-', ''), '(', ''), ')', '') = '+79662409276'
 AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 407)
 LIMIT 1;
 
@@ -27143,11 +23925,7 @@ SELECT
   NOW(),
   NOW()
 FROM rental_clients c
-WHERE (
-  REPLACE(REPLACE(REPLACE(REPLACE(c.phone, ' ', ''), '-', ''), '(', ''), ')', '') = '+79662409276'
-  OR c.name = 'Мира (ИП)'
-  OR c.director_name = 'Мира (ИП)'
-)
+WHERE REPLACE(REPLACE(REPLACE(REPLACE(c.phone, ' ', ''), '-', ''), '(', ''), ')', '') = '+79662409276'
 AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 406)
 LIMIT 1;
 
@@ -27176,11 +23954,7 @@ SELECT
   NOW(),
   NOW()
 FROM rental_clients c
-WHERE (
-  REPLACE(REPLACE(REPLACE(REPLACE(c.phone, ' ', ''), '-', ''), '(', ''), ')', '') = '+79274662530'
-  OR c.name = 'Екатерина'
-  OR c.director_name = 'Екатерина'
-)
+WHERE REPLACE(REPLACE(REPLACE(REPLACE(c.phone, ' ', ''), '-', ''), '(', ''), ')', '') = '+79274662530'
 AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 405)
 LIMIT 1;
 
@@ -27209,11 +23983,7 @@ SELECT
   NOW(),
   NOW()
 FROM rental_clients c
-WHERE (
-  REPLACE(REPLACE(REPLACE(REPLACE(c.phone, ' ', ''), '-', ''), '(', ''), ')', '') = '+79274662530'
-  OR c.name = 'Екатерина'
-  OR c.director_name = 'Екатерина'
-)
+WHERE REPLACE(REPLACE(REPLACE(REPLACE(c.phone, ' ', ''), '-', ''), '(', ''), ')', '') = '+79274662530'
 AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 404)
 LIMIT 1;
 
@@ -27242,11 +24012,7 @@ SELECT
   NOW(),
   NOW()
 FROM rental_clients c
-WHERE (
-  REPLACE(REPLACE(REPLACE(REPLACE(c.phone, ' ', ''), '-', ''), '(', ''), ')', '') = '+79172278327'
-  OR c.name = 'Юлия Воронова'
-  OR c.director_name = 'Юлия Воронова'
-)
+WHERE REPLACE(REPLACE(REPLACE(REPLACE(c.phone, ' ', ''), '-', ''), '(', ''), ')', '') = '+79172278327'
 AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 403)
 LIMIT 1;
 
@@ -27275,11 +24041,7 @@ SELECT
   NOW(),
   NOW()
 FROM rental_clients c
-WHERE (
-  REPLACE(REPLACE(REPLACE(REPLACE(c.phone, ' ', ''), '-', ''), '(', ''), ')', '') = '+79600336033'
-  OR c.name = 'Галия'
-  OR c.director_name = 'Галия'
-)
+WHERE REPLACE(REPLACE(REPLACE(REPLACE(c.phone, ' ', ''), '-', ''), '(', ''), ')', '') = '+79600336033'
 AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 402)
 LIMIT 1;
 
@@ -27308,10 +24070,7 @@ SELECT
   NOW(),
   NOW()
 FROM rental_clients c
-WHERE (
-  c.name = 'Эдик Заказы для групп'
-  OR c.director_name = 'Эдик Заказы для групп'
-)
+WHERE (c.name ILIKE '%Эдик%' OR c.director_name ILIKE '%Эдик%')
 AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 401)
 LIMIT 1;
 
@@ -27340,11 +24099,7 @@ SELECT
   NOW(),
   NOW()
 FROM rental_clients c
-WHERE (
-  REPLACE(REPLACE(REPLACE(REPLACE(c.phone, ' ', ''), '-', ''), '(', ''), ')', '') = '+79179142756'
-  OR c.name = 'Татьяна (Гольфстрим)'
-  OR c.director_name = 'Татьяна (Гольфстрим)'
-)
+WHERE REPLACE(REPLACE(REPLACE(REPLACE(c.phone, ' ', ''), '-', ''), '(', ''), ')', '') = '+79179142756'
 AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 400)
 LIMIT 1;
 
@@ -27373,11 +24128,7 @@ SELECT
   NOW(),
   NOW()
 FROM rental_clients c
-WHERE (
-  REPLACE(REPLACE(REPLACE(REPLACE(c.phone, ' ', ''), '-', ''), '(', ''), ')', '') = '+79872750395'
-  OR c.name = 'Зельфира'
-  OR c.director_name = 'Зельфира'
-)
+WHERE REPLACE(REPLACE(REPLACE(REPLACE(c.phone, ' ', ''), '-', ''), '(', ''), ')', '') = '+79872750395'
 AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 399)
 LIMIT 1;
 
@@ -27406,11 +24157,7 @@ SELECT
   NOW(),
   NOW()
 FROM rental_clients c
-WHERE (
-  REPLACE(REPLACE(REPLACE(REPLACE(c.phone, ' ', ''), '-', ''), '(', ''), ')', '') = '+79872750395'
-  OR c.name = 'Зельфира'
-  OR c.director_name = 'Зельфира'
-)
+WHERE REPLACE(REPLACE(REPLACE(REPLACE(c.phone, ' ', ''), '-', ''), '(', ''), ')', '') = '+79872750395'
 AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 398)
 LIMIT 1;
 
@@ -27439,10 +24186,7 @@ SELECT
   NOW(),
   NOW()
 FROM rental_clients c
-WHERE (
-  c.name = 'Эдик Заказы для групп'
-  OR c.director_name = 'Эдик Заказы для групп'
-)
+WHERE (c.name ILIKE '%Эдик%' OR c.director_name ILIKE '%Эдик%')
 AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 397)
 LIMIT 1;
 
@@ -27471,10 +24215,7 @@ SELECT
   NOW(),
   NOW()
 FROM rental_clients c
-WHERE (
-  c.name = 'Эдик Заказы для групп'
-  OR c.director_name = 'Эдик Заказы для групп'
-)
+WHERE (c.name ILIKE '%Эдик%' OR c.director_name ILIKE '%Эдик%')
 AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 396)
 LIMIT 1;
 
@@ -27503,11 +24244,7 @@ SELECT
   NOW(),
   NOW()
 FROM rental_clients c
-WHERE (
-  REPLACE(REPLACE(REPLACE(REPLACE(c.phone, ' ', ''), '-', ''), '(', ''), ')', '') = '+79219733344'
-  OR c.name = 'Титова Галина (Эллинлайн)'
-  OR c.director_name = 'Титова Галина (Эллинлайн)'
-)
+WHERE REPLACE(REPLACE(REPLACE(REPLACE(c.phone, ' ', ''), '-', ''), '(', ''), ')', '') = '+79219733344'
 AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 395)
 LIMIT 1;
 
@@ -27536,11 +24273,7 @@ SELECT
   NOW(),
   NOW()
 FROM rental_clients c
-WHERE (
-  REPLACE(REPLACE(REPLACE(REPLACE(c.phone, ' ', ''), '-', ''), '(', ''), ')', '') = '+79046699399'
-  OR c.name = 'Альберт (КТ)'
-  OR c.director_name = 'Альберт (КТ)'
-)
+WHERE REPLACE(REPLACE(REPLACE(REPLACE(c.phone, ' ', ''), '-', ''), '(', ''), ')', '') = '+79046699399'
 AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 394)
 LIMIT 1;
 
@@ -27569,11 +24302,7 @@ SELECT
   NOW(),
   NOW()
 FROM rental_clients c
-WHERE (
-  REPLACE(REPLACE(REPLACE(REPLACE(c.phone, ' ', ''), '-', ''), '(', ''), ')', '') = '+79046699399'
-  OR c.name = 'Альберт (КТ)'
-  OR c.director_name = 'Альберт (КТ)'
-)
+WHERE REPLACE(REPLACE(REPLACE(REPLACE(c.phone, ' ', ''), '-', ''), '(', ''), ')', '') = '+79046699399'
 AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 393)
 LIMIT 1;
 
@@ -27602,11 +24331,7 @@ SELECT
   NOW(),
   NOW()
 FROM rental_clients c
-WHERE (
-  REPLACE(REPLACE(REPLACE(REPLACE(c.phone, ' ', ''), '-', ''), '(', ''), ')', '') = '+79172488804'
-  OR c.name = 'Лейла'
-  OR c.director_name = 'Лейла'
-)
+WHERE REPLACE(REPLACE(REPLACE(REPLACE(c.phone, ' ', ''), '-', ''), '(', ''), ')', '') = '+79172488804'
 AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 392)
 LIMIT 1;
 
@@ -27635,10 +24360,7 @@ SELECT
   NOW(),
   NOW()
 FROM rental_clients c
-WHERE (
-  c.name = 'Эдик Заказы для групп'
-  OR c.director_name = 'Эдик Заказы для групп'
-)
+WHERE (c.name ILIKE '%Эдик%' OR c.director_name ILIKE '%Эдик%')
 AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 391)
 LIMIT 1;
 
@@ -27667,11 +24389,7 @@ SELECT
   NOW(),
   NOW()
 FROM rental_clients c
-WHERE (
-  REPLACE(REPLACE(REPLACE(REPLACE(c.phone, ' ', ''), '-', ''), '(', ''), ')', '') = '+79033449007'
-  OR c.name = 'Искандер'
-  OR c.director_name = 'Искандер'
-)
+WHERE REPLACE(REPLACE(REPLACE(REPLACE(c.phone, ' ', ''), '-', ''), '(', ''), ')', '') = '+79033449007'
 AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 390)
 LIMIT 1;
 
@@ -27700,10 +24418,7 @@ SELECT
   NOW(),
   NOW()
 FROM rental_clients c
-WHERE (
-  c.name = 'Эдик Заказы для групп'
-  OR c.director_name = 'Эдик Заказы для групп'
-)
+WHERE (c.name ILIKE '%Эдик%' OR c.director_name ILIKE '%Эдик%')
 AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 389)
 LIMIT 1;
 
@@ -27732,11 +24447,7 @@ SELECT
   NOW(),
   NOW()
 FROM rental_clients c
-WHERE (
-  REPLACE(REPLACE(REPLACE(REPLACE(c.phone, ' ', ''), '-', ''), '(', ''), ')', '') = '+79169501665'
-  OR c.name = 'Ирина'
-  OR c.director_name = 'Ирина'
-)
+WHERE REPLACE(REPLACE(REPLACE(REPLACE(c.phone, ' ', ''), '-', ''), '(', ''), ')', '') = '+79169501665'
 AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 388)
 LIMIT 1;
 
@@ -27765,11 +24476,7 @@ SELECT
   NOW(),
   NOW()
 FROM rental_clients c
-WHERE (
-  REPLACE(REPLACE(REPLACE(REPLACE(c.phone, ' ', ''), '-', ''), '(', ''), ')', '') = '+79662409276'
-  OR c.name = 'Мира (ИП)'
-  OR c.director_name = 'Мира (ИП)'
-)
+WHERE REPLACE(REPLACE(REPLACE(REPLACE(c.phone, ' ', ''), '-', ''), '(', ''), ')', '') = '+79662409276'
 AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 387)
 LIMIT 1;
 
@@ -27798,10 +24505,7 @@ SELECT
   NOW(),
   NOW()
 FROM rental_clients c
-WHERE (
-  c.name = 'Эдик Заказы для групп'
-  OR c.director_name = 'Эдик Заказы для групп'
-)
+WHERE (c.name ILIKE '%Эдик%' OR c.director_name ILIKE '%Эдик%')
 AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 386)
 LIMIT 1;
 
@@ -27830,10 +24534,7 @@ SELECT
   NOW(),
   NOW()
 FROM rental_clients c
-WHERE (
-  c.name = 'Эдик Заказы для групп'
-  OR c.director_name = 'Эдик Заказы для групп'
-)
+WHERE (c.name ILIKE '%Эдик%' OR c.director_name ILIKE '%Эдик%')
 AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 385)
 LIMIT 1;
 
@@ -27862,11 +24563,7 @@ SELECT
   NOW(),
   NOW()
 FROM rental_clients c
-WHERE (
-  REPLACE(REPLACE(REPLACE(REPLACE(c.phone, ' ', ''), '-', ''), '(', ''), ')', '') = '+79033888929'
-  OR c.name = 'Ильмира'
-  OR c.director_name = 'Ильмира'
-)
+WHERE REPLACE(REPLACE(REPLACE(REPLACE(c.phone, ' ', ''), '-', ''), '(', ''), ')', '') = '+79033888929'
 AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 384)
 LIMIT 1;
 
@@ -27895,11 +24592,7 @@ SELECT
   NOW(),
   NOW()
 FROM rental_clients c
-WHERE (
-  REPLACE(REPLACE(REPLACE(REPLACE(c.phone, ' ', ''), '-', ''), '(', ''), ')', '') = '+79033888929'
-  OR c.name = 'Ильмира'
-  OR c.director_name = 'Ильмира'
-)
+WHERE REPLACE(REPLACE(REPLACE(REPLACE(c.phone, ' ', ''), '-', ''), '(', ''), ')', '') = '+79033888929'
 AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 383)
 LIMIT 1;
 
@@ -27928,11 +24621,7 @@ SELECT
   NOW(),
   NOW()
 FROM rental_clients c
-WHERE (
-  REPLACE(REPLACE(REPLACE(REPLACE(c.phone, ' ', ''), '-', ''), '(', ''), ')', '') = '+79046699399'
-  OR c.name = 'Альберт (КТ)'
-  OR c.director_name = 'Альберт (КТ)'
-)
+WHERE REPLACE(REPLACE(REPLACE(REPLACE(c.phone, ' ', ''), '-', ''), '(', ''), ')', '') = '+79046699399'
 AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 382)
 LIMIT 1;
 
@@ -27961,11 +24650,7 @@ SELECT
   NOW(),
   NOW()
 FROM rental_clients c
-WHERE (
-  REPLACE(REPLACE(REPLACE(REPLACE(c.phone, ' ', ''), '-', ''), '(', ''), ')', '') = '+79179142756'
-  OR c.name = 'Татьяна (Гольфстрим)'
-  OR c.director_name = 'Татьяна (Гольфстрим)'
-)
+WHERE REPLACE(REPLACE(REPLACE(REPLACE(c.phone, ' ', ''), '-', ''), '(', ''), ')', '') = '+79179142756'
 AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 381)
 LIMIT 1;
 
@@ -27994,11 +24679,7 @@ SELECT
   NOW(),
   NOW()
 FROM rental_clients c
-WHERE (
-  REPLACE(REPLACE(REPLACE(REPLACE(c.phone, ' ', ''), '-', ''), '(', ''), ')', '') = '+79272534202'
-  OR c.name = 'Александр'
-  OR c.director_name = 'Александр'
-)
+WHERE REPLACE(REPLACE(REPLACE(REPLACE(c.phone, ' ', ''), '-', ''), '(', ''), ')', '') = '+79272534202'
 AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 380)
 LIMIT 1;
 
@@ -28027,11 +24708,7 @@ SELECT
   NOW(),
   NOW()
 FROM rental_clients c
-WHERE (
-  REPLACE(REPLACE(REPLACE(REPLACE(c.phone, ' ', ''), '-', ''), '(', ''), ')', '') = '+79274900014'
-  OR c.name = 'Мария Экскурсовод'
-  OR c.director_name = 'Мария Экскурсовод'
-)
+WHERE REPLACE(REPLACE(REPLACE(REPLACE(c.phone, ' ', ''), '-', ''), '(', ''), ')', '') = '+79274900014'
 AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 379)
 LIMIT 1;
 
@@ -28060,10 +24737,7 @@ SELECT
   NOW(),
   NOW()
 FROM rental_clients c
-WHERE (
-  c.name = 'Эдик Заказы для групп'
-  OR c.director_name = 'Эдик Заказы для групп'
-)
+WHERE (c.name ILIKE '%Эдик%' OR c.director_name ILIKE '%Эдик%')
 AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 378)
 LIMIT 1;
 
@@ -28092,11 +24766,7 @@ SELECT
   NOW(),
   NOW()
 FROM rental_clients c
-WHERE (
-  REPLACE(REPLACE(REPLACE(REPLACE(c.phone, ' ', ''), '-', ''), '(', ''), ')', '') = '+79853891999'
-  OR c.name = 'Сергей (Авангард)'
-  OR c.director_name = 'Сергей (Авангард)'
-)
+WHERE REPLACE(REPLACE(REPLACE(REPLACE(c.phone, ' ', ''), '-', ''), '(', ''), ')', '') = '+79853891999'
 AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 377)
 LIMIT 1;
 
@@ -28125,11 +24795,7 @@ SELECT
   NOW(),
   NOW()
 FROM rental_clients c
-WHERE (
-  REPLACE(REPLACE(REPLACE(REPLACE(c.phone, ' ', ''), '-', ''), '(', ''), ')', '') = '+79033443111'
-  OR c.name = 'Элина (Сититур)'
-  OR c.director_name = 'Элина (Сититур)'
-)
+WHERE REPLACE(REPLACE(REPLACE(REPLACE(c.phone, ' ', ''), '-', ''), '(', ''), ')', '') = '+79033443111'
 AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 376)
 LIMIT 1;
 
@@ -28158,11 +24824,7 @@ SELECT
   NOW(),
   NOW()
 FROM rental_clients c
-WHERE (
-  REPLACE(REPLACE(REPLACE(REPLACE(c.phone, ' ', ''), '-', ''), '(', ''), ')', '') = '+79101776156'
-  OR c.name = 'Анюта Родионова (Родина-тур)'
-  OR c.director_name = 'Анюта Родионова (Родина-тур)'
-)
+WHERE REPLACE(REPLACE(REPLACE(REPLACE(c.phone, ' ', ''), '-', ''), '(', ''), ')', '') = '+79101776156'
 AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 375)
 LIMIT 1;
 
@@ -28191,11 +24853,7 @@ SELECT
   NOW(),
   NOW()
 FROM rental_clients c
-WHERE (
-  REPLACE(REPLACE(REPLACE(REPLACE(c.phone, ' ', ''), '-', ''), '(', ''), ')', '') = '+79662409276'
-  OR c.name = 'Мира (ИП)'
-  OR c.director_name = 'Мира (ИП)'
-)
+WHERE REPLACE(REPLACE(REPLACE(REPLACE(c.phone, ' ', ''), '-', ''), '(', ''), ')', '') = '+79662409276'
 AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 374)
 LIMIT 1;
 
@@ -28224,11 +24882,7 @@ SELECT
   NOW(),
   NOW()
 FROM rental_clients c
-WHERE (
-  REPLACE(REPLACE(REPLACE(REPLACE(c.phone, ' ', ''), '-', ''), '(', ''), ')', '') = '+79225115900'
-  OR c.name = 'Алексей'
-  OR c.director_name = 'Алексей'
-)
+WHERE REPLACE(REPLACE(REPLACE(REPLACE(c.phone, ' ', ''), '-', ''), '(', ''), ')', '') = '+79225115900'
 AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 373)
 LIMIT 1;
 
@@ -28257,11 +24911,7 @@ SELECT
   NOW(),
   NOW()
 FROM rental_clients c
-WHERE (
-  REPLACE(REPLACE(REPLACE(REPLACE(c.phone, ' ', ''), '-', ''), '(', ''), ')', '') = '+79225115900'
-  OR c.name = 'Алексей'
-  OR c.director_name = 'Алексей'
-)
+WHERE REPLACE(REPLACE(REPLACE(REPLACE(c.phone, ' ', ''), '-', ''), '(', ''), ')', '') = '+79225115900'
 AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 372)
 LIMIT 1;
 
@@ -28290,11 +24940,7 @@ SELECT
   NOW(),
   NOW()
 FROM rental_clients c
-WHERE (
-  REPLACE(REPLACE(REPLACE(REPLACE(c.phone, ' ', ''), '-', ''), '(', ''), ')', '') = '+79225115900'
-  OR c.name = 'Алексей'
-  OR c.director_name = 'Алексей'
-)
+WHERE REPLACE(REPLACE(REPLACE(REPLACE(c.phone, ' ', ''), '-', ''), '(', ''), ')', '') = '+79225115900'
 AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 371)
 LIMIT 1;
 
@@ -28323,11 +24969,7 @@ SELECT
   NOW(),
   NOW()
 FROM rental_clients c
-WHERE (
-  REPLACE(REPLACE(REPLACE(REPLACE(c.phone, ' ', ''), '-', ''), '(', ''), ')', '') = '+79178605272'
-  OR c.name = 'Гульнара'
-  OR c.director_name = 'Гульнара'
-)
+WHERE REPLACE(REPLACE(REPLACE(REPLACE(c.phone, ' ', ''), '-', ''), '(', ''), ')', '') = '+79178605272'
 AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 370)
 LIMIT 1;
 
@@ -28356,11 +24998,7 @@ SELECT
   NOW(),
   NOW()
 FROM rental_clients c
-WHERE (
-  REPLACE(REPLACE(REPLACE(REPLACE(c.phone, ' ', ''), '-', ''), '(', ''), ')', '') = '+79033449007'
-  OR c.name = 'Искандер'
-  OR c.director_name = 'Искандер'
-)
+WHERE REPLACE(REPLACE(REPLACE(REPLACE(c.phone, ' ', ''), '-', ''), '(', ''), ')', '') = '+79033449007'
 AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 369)
 LIMIT 1;
 
@@ -28389,11 +25027,7 @@ SELECT
   NOW(),
   NOW()
 FROM rental_clients c
-WHERE (
-  REPLACE(REPLACE(REPLACE(REPLACE(c.phone, ' ', ''), '-', ''), '(', ''), ')', '') = '+79179142756'
-  OR c.name = 'Татьяна (Гольфстрим)'
-  OR c.director_name = 'Татьяна (Гольфстрим)'
-)
+WHERE REPLACE(REPLACE(REPLACE(REPLACE(c.phone, ' ', ''), '-', ''), '(', ''), ')', '') = '+79179142756'
 AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 368)
 LIMIT 1;
 
@@ -28422,11 +25056,7 @@ SELECT
   NOW(),
   NOW()
 FROM rental_clients c
-WHERE (
-  REPLACE(REPLACE(REPLACE(REPLACE(c.phone, ' ', ''), '-', ''), '(', ''), ')', '') = '+79046699399'
-  OR c.name = 'Альберт (КТ)'
-  OR c.director_name = 'Альберт (КТ)'
-)
+WHERE REPLACE(REPLACE(REPLACE(REPLACE(c.phone, ' ', ''), '-', ''), '(', ''), ')', '') = '+79046699399'
 AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 367)
 LIMIT 1;
 
@@ -28455,11 +25085,7 @@ SELECT
   NOW(),
   NOW()
 FROM rental_clients c
-WHERE (
-  REPLACE(REPLACE(REPLACE(REPLACE(c.phone, ' ', ''), '-', ''), '(', ''), ')', '') = '+79109939725'
-  OR c.name = 'Екатерина'
-  OR c.director_name = 'Екатерина'
-)
+WHERE REPLACE(REPLACE(REPLACE(REPLACE(c.phone, ' ', ''), '-', ''), '(', ''), ')', '') = '+79109939725'
 AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 366)
 LIMIT 1;
 
@@ -28488,11 +25114,7 @@ SELECT
   NOW(),
   NOW()
 FROM rental_clients c
-WHERE (
-  REPLACE(REPLACE(REPLACE(REPLACE(c.phone, ' ', ''), '-', ''), '(', ''), ')', '') = '+79179142756'
-  OR c.name = 'Татьяна (Гольфстрим)'
-  OR c.director_name = 'Татьяна (Гольфстрим)'
-)
+WHERE REPLACE(REPLACE(REPLACE(REPLACE(c.phone, ' ', ''), '-', ''), '(', ''), ')', '') = '+79179142756'
 AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 365)
 LIMIT 1;
 
@@ -28521,11 +25143,7 @@ SELECT
   NOW(),
   NOW()
 FROM rental_clients c
-WHERE (
-  REPLACE(REPLACE(REPLACE(REPLACE(c.phone, ' ', ''), '-', ''), '(', ''), ')', '') = '+79827935377'
-  OR c.name = 'Наталья'
-  OR c.director_name = 'Наталья'
-)
+WHERE REPLACE(REPLACE(REPLACE(REPLACE(c.phone, ' ', ''), '-', ''), '(', ''), ')', '') = '+79827935377'
 AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 364)
 LIMIT 1;
 
@@ -28554,11 +25172,7 @@ SELECT
   NOW(),
   NOW()
 FROM rental_clients c
-WHERE (
-  REPLACE(REPLACE(REPLACE(REPLACE(c.phone, ' ', ''), '-', ''), '(', ''), ')', '') = '+79179142756'
-  OR c.name = 'Татьяна (Гольфстрим)'
-  OR c.director_name = 'Татьяна (Гольфстрим)'
-)
+WHERE REPLACE(REPLACE(REPLACE(REPLACE(c.phone, ' ', ''), '-', ''), '(', ''), ')', '') = '+79179142756'
 AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 363)
 LIMIT 1;
 
@@ -28587,11 +25201,7 @@ SELECT
   NOW(),
   NOW()
 FROM rental_clients c
-WHERE (
-  REPLACE(REPLACE(REPLACE(REPLACE(c.phone, ' ', ''), '-', ''), '(', ''), ')', '') = '+79179142756'
-  OR c.name = 'Татьяна (Гольфстрим)'
-  OR c.director_name = 'Татьяна (Гольфстрим)'
-)
+WHERE REPLACE(REPLACE(REPLACE(REPLACE(c.phone, ' ', ''), '-', ''), '(', ''), ')', '') = '+79179142756'
 AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 362)
 LIMIT 1;
 
@@ -28620,11 +25230,7 @@ SELECT
   NOW(),
   NOW()
 FROM rental_clients c
-WHERE (
-  REPLACE(REPLACE(REPLACE(REPLACE(c.phone, ' ', ''), '-', ''), '(', ''), ')', '') = '+79179142756'
-  OR c.name = 'Татьяна (Гольфстрим)'
-  OR c.director_name = 'Татьяна (Гольфстрим)'
-)
+WHERE REPLACE(REPLACE(REPLACE(REPLACE(c.phone, ' ', ''), '-', ''), '(', ''), ')', '') = '+79179142756'
 AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 361)
 LIMIT 1;
 
@@ -28653,11 +25259,7 @@ SELECT
   NOW(),
   NOW()
 FROM rental_clients c
-WHERE (
-  REPLACE(REPLACE(REPLACE(REPLACE(c.phone, ' ', ''), '-', ''), '(', ''), ')', '') = '+79179142756'
-  OR c.name = 'Татьяна (Гольфстрим)'
-  OR c.director_name = 'Татьяна (Гольфстрим)'
-)
+WHERE REPLACE(REPLACE(REPLACE(REPLACE(c.phone, ' ', ''), '-', ''), '(', ''), ')', '') = '+79179142756'
 AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 360)
 LIMIT 1;
 
@@ -28686,11 +25288,7 @@ SELECT
   NOW(),
   NOW()
 FROM rental_clients c
-WHERE (
-  REPLACE(REPLACE(REPLACE(REPLACE(c.phone, ' ', ''), '-', ''), '(', ''), ')', '') = '+79179142756'
-  OR c.name = 'Татьяна (Гольфстрим)'
-  OR c.director_name = 'Татьяна (Гольфстрим)'
-)
+WHERE REPLACE(REPLACE(REPLACE(REPLACE(c.phone, ' ', ''), '-', ''), '(', ''), ')', '') = '+79179142756'
 AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 359)
 LIMIT 1;
 
@@ -28719,11 +25317,7 @@ SELECT
   NOW(),
   NOW()
 FROM rental_clients c
-WHERE (
-  REPLACE(REPLACE(REPLACE(REPLACE(c.phone, ' ', ''), '-', ''), '(', ''), ')', '') = '+79172278327'
-  OR c.name = 'Юлия Воронова'
-  OR c.director_name = 'Юлия Воронова'
-)
+WHERE REPLACE(REPLACE(REPLACE(REPLACE(c.phone, ' ', ''), '-', ''), '(', ''), ')', '') = '+79172278327'
 AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 358)
 LIMIT 1;
 
@@ -28752,11 +25346,7 @@ SELECT
   NOW(),
   NOW()
 FROM rental_clients c
-WHERE (
-  REPLACE(REPLACE(REPLACE(REPLACE(c.phone, ' ', ''), '-', ''), '(', ''), ')', '') = '+79172278327'
-  OR c.name = 'Юлия Воронова'
-  OR c.director_name = 'Юлия Воронова'
-)
+WHERE REPLACE(REPLACE(REPLACE(REPLACE(c.phone, ' ', ''), '-', ''), '(', ''), ')', '') = '+79172278327'
 AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 357)
 LIMIT 1;
 
@@ -28785,11 +25375,7 @@ SELECT
   NOW(),
   NOW()
 FROM rental_clients c
-WHERE (
-  REPLACE(REPLACE(REPLACE(REPLACE(c.phone, ' ', ''), '-', ''), '(', ''), ')', '') = '+79046699399'
-  OR c.name = 'Альберт (КТ)'
-  OR c.director_name = 'Альберт (КТ)'
-)
+WHERE REPLACE(REPLACE(REPLACE(REPLACE(c.phone, ' ', ''), '-', ''), '(', ''), ')', '') = '+79046699399'
 AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 356)
 LIMIT 1;
 
@@ -28818,11 +25404,7 @@ SELECT
   NOW(),
   NOW()
 FROM rental_clients c
-WHERE (
-  REPLACE(REPLACE(REPLACE(REPLACE(c.phone, ' ', ''), '-', ''), '(', ''), ')', '') = '+79046699399'
-  OR c.name = 'Альберт (КТ)'
-  OR c.director_name = 'Альберт (КТ)'
-)
+WHERE REPLACE(REPLACE(REPLACE(REPLACE(c.phone, ' ', ''), '-', ''), '(', ''), ')', '') = '+79046699399'
 AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 355)
 LIMIT 1;
 
@@ -28851,11 +25433,7 @@ SELECT
   NOW(),
   NOW()
 FROM rental_clients c
-WHERE (
-  REPLACE(REPLACE(REPLACE(REPLACE(c.phone, ' ', ''), '-', ''), '(', ''), ')', '') = '+79046699399'
-  OR c.name = 'Альберт (КТ)'
-  OR c.director_name = 'Альберт (КТ)'
-)
+WHERE REPLACE(REPLACE(REPLACE(REPLACE(c.phone, ' ', ''), '-', ''), '(', ''), ')', '') = '+79046699399'
 AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 354)
 LIMIT 1;
 
@@ -28884,11 +25462,7 @@ SELECT
   NOW(),
   NOW()
 FROM rental_clients c
-WHERE (
-  REPLACE(REPLACE(REPLACE(REPLACE(c.phone, ' ', ''), '-', ''), '(', ''), ')', '') = '+79046699399'
-  OR c.name = 'Альберт (КТ)'
-  OR c.director_name = 'Альберт (КТ)'
-)
+WHERE REPLACE(REPLACE(REPLACE(REPLACE(c.phone, ' ', ''), '-', ''), '(', ''), ')', '') = '+79046699399'
 AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 353)
 LIMIT 1;
 
@@ -28917,10 +25491,7 @@ SELECT
   NOW(),
   NOW()
 FROM rental_clients c
-WHERE (
-  c.name = 'Эдик Заказы для групп'
-  OR c.director_name = 'Эдик Заказы для групп'
-)
+WHERE (c.name ILIKE '%Эдик%' OR c.director_name ILIKE '%Эдик%')
 AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 352)
 LIMIT 1;
 
@@ -28949,10 +25520,7 @@ SELECT
   NOW(),
   NOW()
 FROM rental_clients c
-WHERE (
-  c.name = 'Эдик Заказы для групп'
-  OR c.director_name = 'Эдик Заказы для групп'
-)
+WHERE (c.name ILIKE '%Эдик%' OR c.director_name ILIKE '%Эдик%')
 AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 351)
 LIMIT 1;
 
@@ -28981,11 +25549,7 @@ SELECT
   NOW(),
   NOW()
 FROM rental_clients c
-WHERE (
-  REPLACE(REPLACE(REPLACE(REPLACE(c.phone, ' ', ''), '-', ''), '(', ''), ')', '') = '+79274900014'
-  OR c.name = 'Мария Экскурсовод'
-  OR c.director_name = 'Мария Экскурсовод'
-)
+WHERE REPLACE(REPLACE(REPLACE(REPLACE(c.phone, ' ', ''), '-', ''), '(', ''), ')', '') = '+79274900014'
 AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 350)
 LIMIT 1;
 
@@ -29014,11 +25578,7 @@ SELECT
   NOW(),
   NOW()
 FROM rental_clients c
-WHERE (
-  REPLACE(REPLACE(REPLACE(REPLACE(c.phone, ' ', ''), '-', ''), '(', ''), ')', '') = '+79046699399'
-  OR c.name = 'Альберт (КТ)'
-  OR c.director_name = 'Альберт (КТ)'
-)
+WHERE REPLACE(REPLACE(REPLACE(REPLACE(c.phone, ' ', ''), '-', ''), '(', ''), ')', '') = '+79046699399'
 AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 349)
 LIMIT 1;
 
@@ -29047,11 +25607,7 @@ SELECT
   NOW(),
   NOW()
 FROM rental_clients c
-WHERE (
-  REPLACE(REPLACE(REPLACE(REPLACE(c.phone, ' ', ''), '-', ''), '(', ''), ')', '') = '+79172989675'
-  OR c.name = 'Валентина Экскурсовод'
-  OR c.director_name = 'Валентина Экскурсовод'
-)
+WHERE REPLACE(REPLACE(REPLACE(REPLACE(c.phone, ' ', ''), '-', ''), '(', ''), ')', '') = '+79172989675'
 AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 348)
 LIMIT 1;
 
@@ -29080,11 +25636,7 @@ SELECT
   NOW(),
   NOW()
 FROM rental_clients c
-WHERE (
-  REPLACE(REPLACE(REPLACE(REPLACE(c.phone, ' ', ''), '-', ''), '(', ''), ')', '') = '+79122438485'
-  OR c.name = 'Елена Марковна ( черный список)'
-  OR c.director_name = 'Елена Марковна ( черный список)'
-)
+WHERE REPLACE(REPLACE(REPLACE(REPLACE(c.phone, ' ', ''), '-', ''), '(', ''), ')', '') = '+79122438485'
 AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 347)
 LIMIT 1;
 
@@ -29113,11 +25665,7 @@ SELECT
   NOW(),
   NOW()
 FROM rental_clients c
-WHERE (
-  REPLACE(REPLACE(REPLACE(REPLACE(c.phone, ' ', ''), '-', ''), '(', ''), ')', '') = '+79872141100'
-  OR c.name = 'Ксения'
-  OR c.director_name = 'Ксения'
-)
+WHERE REPLACE(REPLACE(REPLACE(REPLACE(c.phone, ' ', ''), '-', ''), '(', ''), ')', '') = '+79872141100'
 AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 346)
 LIMIT 1;
 
@@ -29146,11 +25694,7 @@ SELECT
   NOW(),
   NOW()
 FROM rental_clients c
-WHERE (
-  REPLACE(REPLACE(REPLACE(REPLACE(c.phone, ' ', ''), '-', ''), '(', ''), ')', '') = '+79994502017'
-  OR c.name = 'Галина'
-  OR c.director_name = 'Галина'
-)
+WHERE REPLACE(REPLACE(REPLACE(REPLACE(c.phone, ' ', ''), '-', ''), '(', ''), ')', '') = '+79994502017'
 AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 345)
 LIMIT 1;
 
@@ -29179,11 +25723,7 @@ SELECT
   NOW(),
   NOW()
 FROM rental_clients c
-WHERE (
-  REPLACE(REPLACE(REPLACE(REPLACE(c.phone, ' ', ''), '-', ''), '(', ''), ')', '') = '+79994502017'
-  OR c.name = 'Галина'
-  OR c.director_name = 'Галина'
-)
+WHERE REPLACE(REPLACE(REPLACE(REPLACE(c.phone, ' ', ''), '-', ''), '(', ''), ')', '') = '+79994502017'
 AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 344)
 LIMIT 1;
 
@@ -29212,11 +25752,7 @@ SELECT
   NOW(),
   NOW()
 FROM rental_clients c
-WHERE (
-  REPLACE(REPLACE(REPLACE(REPLACE(c.phone, ' ', ''), '-', ''), '(', ''), ')', '') = '+79994502017'
-  OR c.name = 'Галина'
-  OR c.director_name = 'Галина'
-)
+WHERE REPLACE(REPLACE(REPLACE(REPLACE(c.phone, ' ', ''), '-', ''), '(', ''), ')', '') = '+79994502017'
 AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 343)
 LIMIT 1;
 
@@ -29245,11 +25781,7 @@ SELECT
   NOW(),
   NOW()
 FROM rental_clients c
-WHERE (
-  REPLACE(REPLACE(REPLACE(REPLACE(c.phone, ' ', ''), '-', ''), '(', ''), ')', '') = '+79872902704'
-  OR c.name = 'Лиля Экскурсовод'
-  OR c.director_name = 'Лиля Экскурсовод'
-)
+WHERE REPLACE(REPLACE(REPLACE(REPLACE(c.phone, ' ', ''), '-', ''), '(', ''), ')', '') = '+79872902704'
 AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 342)
 LIMIT 1;
 
@@ -29278,11 +25810,7 @@ SELECT
   NOW(),
   NOW()
 FROM rental_clients c
-WHERE (
-  REPLACE(REPLACE(REPLACE(REPLACE(c.phone, ' ', ''), '-', ''), '(', ''), ')', '') = '+79853891999'
-  OR c.name = 'Сергей (Авангард)'
-  OR c.director_name = 'Сергей (Авангард)'
-)
+WHERE REPLACE(REPLACE(REPLACE(REPLACE(c.phone, ' ', ''), '-', ''), '(', ''), ')', '') = '+79853891999'
 AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 341)
 LIMIT 1;
 
@@ -29311,11 +25839,7 @@ SELECT
   NOW(),
   NOW()
 FROM rental_clients c
-WHERE (
-  REPLACE(REPLACE(REPLACE(REPLACE(c.phone, ' ', ''), '-', ''), '(', ''), ')', '') = '+79853891999'
-  OR c.name = 'Сергей (Авангард)'
-  OR c.director_name = 'Сергей (Авангард)'
-)
+WHERE REPLACE(REPLACE(REPLACE(REPLACE(c.phone, ' ', ''), '-', ''), '(', ''), ')', '') = '+79853891999'
 AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 340)
 LIMIT 1;
 
@@ -29344,11 +25868,7 @@ SELECT
   NOW(),
   NOW()
 FROM rental_clients c
-WHERE (
-  REPLACE(REPLACE(REPLACE(REPLACE(c.phone, ' ', ''), '-', ''), '(', ''), ')', '') = '+79633126228'
-  OR c.name = 'Светлана Клиент'
-  OR c.director_name = 'Светлана Клиент'
-)
+WHERE REPLACE(REPLACE(REPLACE(REPLACE(c.phone, ' ', ''), '-', ''), '(', ''), ')', '') = '+79633126228'
 AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 339)
 LIMIT 1;
 
@@ -29377,11 +25897,7 @@ SELECT
   NOW(),
   NOW()
 FROM rental_clients c
-WHERE (
-  REPLACE(REPLACE(REPLACE(REPLACE(c.phone, ' ', ''), '-', ''), '(', ''), ')', '') = '+79273838350'
-  OR c.name = 'Ольга Волковец'
-  OR c.director_name = 'Ольга Волковец'
-)
+WHERE REPLACE(REPLACE(REPLACE(REPLACE(c.phone, ' ', ''), '-', ''), '(', ''), ')', '') = '+79273838350'
 AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 338)
 LIMIT 1;
 
@@ -29410,11 +25926,7 @@ SELECT
   NOW(),
   NOW()
 FROM rental_clients c
-WHERE (
-  REPLACE(REPLACE(REPLACE(REPLACE(c.phone, ' ', ''), '-', ''), '(', ''), ')', '') = '+79872231391'
-  OR c.name = 'Эмилия'
-  OR c.director_name = 'Эмилия'
-)
+WHERE REPLACE(REPLACE(REPLACE(REPLACE(c.phone, ' ', ''), '-', ''), '(', ''), ')', '') = '+79872231391'
 AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 337)
 LIMIT 1;
 
@@ -29443,11 +25955,7 @@ SELECT
   NOW(),
   NOW()
 FROM rental_clients c
-WHERE (
-  REPLACE(REPLACE(REPLACE(REPLACE(c.phone, ' ', ''), '-', ''), '(', ''), ')', '') = '+79659400307'
-  OR c.name = 'Зульхиза Кутлучурина'
-  OR c.director_name = 'Зульхиза Кутлучурина'
-)
+WHERE REPLACE(REPLACE(REPLACE(REPLACE(c.phone, ' ', ''), '-', ''), '(', ''), ')', '') = '+79659400307'
 AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 335)
 LIMIT 1;
 
@@ -29476,10 +25984,7 @@ SELECT
   NOW(),
   NOW()
 FROM rental_clients c
-WHERE (
-  c.name = 'Эдик Заказы для групп'
-  OR c.director_name = 'Эдик Заказы для групп'
-)
+WHERE (c.name ILIKE '%Эдик%' OR c.director_name ILIKE '%Эдик%')
 AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 334)
 LIMIT 1;
 
@@ -29508,11 +26013,7 @@ SELECT
   NOW(),
   NOW()
 FROM rental_clients c
-WHERE (
-  REPLACE(REPLACE(REPLACE(REPLACE(c.phone, ' ', ''), '-', ''), '(', ''), ')', '') = '+79874092737'
-  OR c.name = 'Камилла'
-  OR c.director_name = 'Камилла'
-)
+WHERE REPLACE(REPLACE(REPLACE(REPLACE(c.phone, ' ', ''), '-', ''), '(', ''), ')', '') = '+79874092737'
 AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 333)
 LIMIT 1;
 
@@ -29541,11 +26042,7 @@ SELECT
   NOW(),
   NOW()
 FROM rental_clients c
-WHERE (
-  REPLACE(REPLACE(REPLACE(REPLACE(c.phone, ' ', ''), '-', ''), '(', ''), ')', '') = '+79662409276'
-  OR c.name = 'Мира (ИП)'
-  OR c.director_name = 'Мира (ИП)'
-)
+WHERE REPLACE(REPLACE(REPLACE(REPLACE(c.phone, ' ', ''), '-', ''), '(', ''), ')', '') = '+79662409276'
 AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 332)
 LIMIT 1;
 
@@ -29574,11 +26071,7 @@ SELECT
   NOW(),
   NOW()
 FROM rental_clients c
-WHERE (
-  REPLACE(REPLACE(REPLACE(REPLACE(c.phone, ' ', ''), '-', ''), '(', ''), ')', '') = '+79068185524'
-  OR c.name = 'Артем Агафонов'
-  OR c.director_name = 'Артем Агафонов'
-)
+WHERE REPLACE(REPLACE(REPLACE(REPLACE(c.phone, ' ', ''), '-', ''), '(', ''), ')', '') = '+79068185524'
 AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 331)
 LIMIT 1;
 
@@ -29607,11 +26100,7 @@ SELECT
   NOW(),
   NOW()
 FROM rental_clients c
-WHERE (
-  REPLACE(REPLACE(REPLACE(REPLACE(c.phone, ' ', ''), '-', ''), '(', ''), ')', '') = '+79274900014'
-  OR c.name = 'Мария Экскурсовод'
-  OR c.director_name = 'Мария Экскурсовод'
-)
+WHERE REPLACE(REPLACE(REPLACE(REPLACE(c.phone, ' ', ''), '-', ''), '(', ''), ')', '') = '+79274900014'
 AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 330)
 LIMIT 1;
 
@@ -29640,11 +26129,7 @@ SELECT
   NOW(),
   NOW()
 FROM rental_clients c
-WHERE (
-  REPLACE(REPLACE(REPLACE(REPLACE(c.phone, ' ', ''), '-', ''), '(', ''), ')', '') = '+79274900014'
-  OR c.name = 'Мария Экскурсовод'
-  OR c.director_name = 'Мария Экскурсовод'
-)
+WHERE REPLACE(REPLACE(REPLACE(REPLACE(c.phone, ' ', ''), '-', ''), '(', ''), ')', '') = '+79274900014'
 AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 329)
 LIMIT 1;
 
@@ -29673,11 +26158,7 @@ SELECT
   NOW(),
   NOW()
 FROM rental_clients c
-WHERE (
-  REPLACE(REPLACE(REPLACE(REPLACE(c.phone, ' ', ''), '-', ''), '(', ''), ')', '') = '+79274900014'
-  OR c.name = 'Мария Экскурсовод'
-  OR c.director_name = 'Мария Экскурсовод'
-)
+WHERE REPLACE(REPLACE(REPLACE(REPLACE(c.phone, ' ', ''), '-', ''), '(', ''), ')', '') = '+79274900014'
 AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 328)
 LIMIT 1;
 
@@ -29706,11 +26187,7 @@ SELECT
   NOW(),
   NOW()
 FROM rental_clients c
-WHERE (
-  REPLACE(REPLACE(REPLACE(REPLACE(c.phone, ' ', ''), '-', ''), '(', ''), ')', '') = '+79178605272'
-  OR c.name = 'Гульнара'
-  OR c.director_name = 'Гульнара'
-)
+WHERE REPLACE(REPLACE(REPLACE(REPLACE(c.phone, ' ', ''), '-', ''), '(', ''), ')', '') = '+79178605272'
 AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 327)
 LIMIT 1;
 
@@ -29739,11 +26216,7 @@ SELECT
   NOW(),
   NOW()
 FROM rental_clients c
-WHERE (
-  REPLACE(REPLACE(REPLACE(REPLACE(c.phone, ' ', ''), '-', ''), '(', ''), ')', '') = '+79179142756'
-  OR c.name = 'Татьяна (Гольфстрим)'
-  OR c.director_name = 'Татьяна (Гольфстрим)'
-)
+WHERE REPLACE(REPLACE(REPLACE(REPLACE(c.phone, ' ', ''), '-', ''), '(', ''), ')', '') = '+79179142756'
 AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 326)
 LIMIT 1;
 
@@ -29772,11 +26245,7 @@ SELECT
   NOW(),
   NOW()
 FROM rental_clients c
-WHERE (
-  REPLACE(REPLACE(REPLACE(REPLACE(c.phone, ' ', ''), '-', ''), '(', ''), ')', '') = '+79179142756'
-  OR c.name = 'Татьяна (Гольфстрим)'
-  OR c.director_name = 'Татьяна (Гольфстрим)'
-)
+WHERE REPLACE(REPLACE(REPLACE(REPLACE(c.phone, ' ', ''), '-', ''), '(', ''), ')', '') = '+79179142756'
 AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 324)
 LIMIT 1;
 
@@ -29805,11 +26274,7 @@ SELECT
   NOW(),
   NOW()
 FROM rental_clients c
-WHERE (
-  REPLACE(REPLACE(REPLACE(REPLACE(c.phone, ' ', ''), '-', ''), '(', ''), ')', '') = '+79179142756'
-  OR c.name = 'Татьяна (Гольфстрим)'
-  OR c.director_name = 'Татьяна (Гольфстрим)'
-)
+WHERE REPLACE(REPLACE(REPLACE(REPLACE(c.phone, ' ', ''), '-', ''), '(', ''), ')', '') = '+79179142756'
 AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 323)
 LIMIT 1;
 
@@ -29838,11 +26303,7 @@ SELECT
   NOW(),
   NOW()
 FROM rental_clients c
-WHERE (
-  REPLACE(REPLACE(REPLACE(REPLACE(c.phone, ' ', ''), '-', ''), '(', ''), ')', '') = '+79179142756'
-  OR c.name = 'Татьяна (Гольфстрим)'
-  OR c.director_name = 'Татьяна (Гольфстрим)'
-)
+WHERE REPLACE(REPLACE(REPLACE(REPLACE(c.phone, ' ', ''), '-', ''), '(', ''), ')', '') = '+79179142756'
 AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 322)
 LIMIT 1;
 
@@ -29871,11 +26332,7 @@ SELECT
   NOW(),
   NOW()
 FROM rental_clients c
-WHERE (
-  REPLACE(REPLACE(REPLACE(REPLACE(c.phone, ' ', ''), '-', ''), '(', ''), ')', '') = '+79179142756'
-  OR c.name = 'Татьяна (Гольфстрим)'
-  OR c.director_name = 'Татьяна (Гольфстрим)'
-)
+WHERE REPLACE(REPLACE(REPLACE(REPLACE(c.phone, ' ', ''), '-', ''), '(', ''), ')', '') = '+79179142756'
 AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 321)
 LIMIT 1;
 
@@ -29904,11 +26361,7 @@ SELECT
   NOW(),
   NOW()
 FROM rental_clients c
-WHERE (
-  REPLACE(REPLACE(REPLACE(REPLACE(c.phone, ' ', ''), '-', ''), '(', ''), ')', '') = '+79179142756'
-  OR c.name = 'Татьяна (Гольфстрим)'
-  OR c.director_name = 'Татьяна (Гольфстрим)'
-)
+WHERE REPLACE(REPLACE(REPLACE(REPLACE(c.phone, ' ', ''), '-', ''), '(', ''), ')', '') = '+79179142756'
 AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 320)
 LIMIT 1;
 
@@ -29937,11 +26390,7 @@ SELECT
   NOW(),
   NOW()
 FROM rental_clients c
-WHERE (
-  REPLACE(REPLACE(REPLACE(REPLACE(c.phone, ' ', ''), '-', ''), '(', ''), ')', '') = '+79179142756'
-  OR c.name = 'Татьяна (Гольфстрим)'
-  OR c.director_name = 'Татьяна (Гольфстрим)'
-)
+WHERE REPLACE(REPLACE(REPLACE(REPLACE(c.phone, ' ', ''), '-', ''), '(', ''), ')', '') = '+79179142756'
 AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 319)
 LIMIT 1;
 
@@ -29970,11 +26419,7 @@ SELECT
   NOW(),
   NOW()
 FROM rental_clients c
-WHERE (
-  REPLACE(REPLACE(REPLACE(REPLACE(c.phone, ' ', ''), '-', ''), '(', ''), ')', '') = '+79179142756'
-  OR c.name = 'Татьяна (Гольфстрим)'
-  OR c.director_name = 'Татьяна (Гольфстрим)'
-)
+WHERE REPLACE(REPLACE(REPLACE(REPLACE(c.phone, ' ', ''), '-', ''), '(', ''), ')', '') = '+79179142756'
 AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 318)
 LIMIT 1;
 
@@ -30003,11 +26448,7 @@ SELECT
   NOW(),
   NOW()
 FROM rental_clients c
-WHERE (
-  REPLACE(REPLACE(REPLACE(REPLACE(c.phone, ' ', ''), '-', ''), '(', ''), ')', '') = '+79179142756'
-  OR c.name = 'Татьяна (Гольфстрим)'
-  OR c.director_name = 'Татьяна (Гольфстрим)'
-)
+WHERE REPLACE(REPLACE(REPLACE(REPLACE(c.phone, ' ', ''), '-', ''), '(', ''), ')', '') = '+79179142756'
 AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 317)
 LIMIT 1;
 
@@ -30036,11 +26477,7 @@ SELECT
   NOW(),
   NOW()
 FROM rental_clients c
-WHERE (
-  REPLACE(REPLACE(REPLACE(REPLACE(c.phone, ' ', ''), '-', ''), '(', ''), ')', '') = '+79179142756'
-  OR c.name = 'Татьяна (Гольфстрим)'
-  OR c.director_name = 'Татьяна (Гольфстрим)'
-)
+WHERE REPLACE(REPLACE(REPLACE(REPLACE(c.phone, ' ', ''), '-', ''), '(', ''), ')', '') = '+79179142756'
 AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 316)
 LIMIT 1;
 
@@ -30069,11 +26506,7 @@ SELECT
   NOW(),
   NOW()
 FROM rental_clients c
-WHERE (
-  REPLACE(REPLACE(REPLACE(REPLACE(c.phone, ' ', ''), '-', ''), '(', ''), ')', '') = '+79179142756'
-  OR c.name = 'Татьяна (Гольфстрим)'
-  OR c.director_name = 'Татьяна (Гольфстрим)'
-)
+WHERE REPLACE(REPLACE(REPLACE(REPLACE(c.phone, ' ', ''), '-', ''), '(', ''), ')', '') = '+79179142756'
 AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 315)
 LIMIT 1;
 
@@ -30102,11 +26535,7 @@ SELECT
   NOW(),
   NOW()
 FROM rental_clients c
-WHERE (
-  REPLACE(REPLACE(REPLACE(REPLACE(c.phone, ' ', ''), '-', ''), '(', ''), ')', '') = '+79179142756'
-  OR c.name = 'Татьяна (Гольфстрим)'
-  OR c.director_name = 'Татьяна (Гольфстрим)'
-)
+WHERE REPLACE(REPLACE(REPLACE(REPLACE(c.phone, ' ', ''), '-', ''), '(', ''), ')', '') = '+79179142756'
 AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 314)
 LIMIT 1;
 
@@ -30135,11 +26564,7 @@ SELECT
   NOW(),
   NOW()
 FROM rental_clients c
-WHERE (
-  REPLACE(REPLACE(REPLACE(REPLACE(c.phone, ' ', ''), '-', ''), '(', ''), ')', '') = '+79179142756'
-  OR c.name = 'Татьяна (Гольфстрим)'
-  OR c.director_name = 'Татьяна (Гольфстрим)'
-)
+WHERE REPLACE(REPLACE(REPLACE(REPLACE(c.phone, ' ', ''), '-', ''), '(', ''), ')', '') = '+79179142756'
 AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 313)
 LIMIT 1;
 
@@ -30168,11 +26593,7 @@ SELECT
   NOW(),
   NOW()
 FROM rental_clients c
-WHERE (
-  REPLACE(REPLACE(REPLACE(REPLACE(c.phone, ' ', ''), '-', ''), '(', ''), ')', '') = '+79393309448'
-  OR c.name = 'Андрей (Экскурс)'
-  OR c.director_name = 'Андрей (Экскурс)'
-)
+WHERE REPLACE(REPLACE(REPLACE(REPLACE(c.phone, ' ', ''), '-', ''), '(', ''), ')', '') = '+79393309448'
 AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 310)
 LIMIT 1;
 
@@ -30201,11 +26622,7 @@ SELECT
   NOW(),
   NOW()
 FROM rental_clients c
-WHERE (
-  REPLACE(REPLACE(REPLACE(REPLACE(c.phone, ' ', ''), '-', ''), '(', ''), ')', '') = '+79659400307'
-  OR c.name = 'Зульхиза Кутлучурина'
-  OR c.director_name = 'Зульхиза Кутлучурина'
-)
+WHERE REPLACE(REPLACE(REPLACE(REPLACE(c.phone, ' ', ''), '-', ''), '(', ''), ')', '') = '+79659400307'
 AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 308)
 LIMIT 1;
 
@@ -30234,11 +26651,7 @@ SELECT
   NOW(),
   NOW()
 FROM rental_clients c
-WHERE (
-  REPLACE(REPLACE(REPLACE(REPLACE(c.phone, ' ', ''), '-', ''), '(', ''), ')', '') = '+79662409276'
-  OR c.name = 'Мира (ИП)'
-  OR c.director_name = 'Мира (ИП)'
-)
+WHERE REPLACE(REPLACE(REPLACE(REPLACE(c.phone, ' ', ''), '-', ''), '(', ''), ')', '') = '+79662409276'
 AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 307)
 LIMIT 1;
 
@@ -30267,11 +26680,7 @@ SELECT
   NOW(),
   NOW()
 FROM rental_clients c
-WHERE (
-  REPLACE(REPLACE(REPLACE(REPLACE(c.phone, ' ', ''), '-', ''), '(', ''), ')', '') = '+79853891999'
-  OR c.name = 'Сергей (Авангард)'
-  OR c.director_name = 'Сергей (Авангард)'
-)
+WHERE REPLACE(REPLACE(REPLACE(REPLACE(c.phone, ' ', ''), '-', ''), '(', ''), ')', '') = '+79853891999'
 AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 306)
 LIMIT 1;
 
@@ -30300,11 +26709,7 @@ SELECT
   NOW(),
   NOW()
 FROM rental_clients c
-WHERE (
-  REPLACE(REPLACE(REPLACE(REPLACE(c.phone, ' ', ''), '-', ''), '(', ''), ')', '') = '+79872750395'
-  OR c.name = 'Зельфира'
-  OR c.director_name = 'Зельфира'
-)
+WHERE REPLACE(REPLACE(REPLACE(REPLACE(c.phone, ' ', ''), '-', ''), '(', ''), ')', '') = '+79872750395'
 AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 305)
 LIMIT 1;
 
@@ -30333,11 +26738,7 @@ SELECT
   NOW(),
   NOW()
 FROM rental_clients c
-WHERE (
-  REPLACE(REPLACE(REPLACE(REPLACE(c.phone, ' ', ''), '-', ''), '(', ''), ')', '') = '+79172278327'
-  OR c.name = 'Юлия Воронова'
-  OR c.director_name = 'Юлия Воронова'
-)
+WHERE REPLACE(REPLACE(REPLACE(REPLACE(c.phone, ' ', ''), '-', ''), '(', ''), ')', '') = '+79172278327'
 AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 304)
 LIMIT 1;
 
@@ -30366,11 +26767,7 @@ SELECT
   NOW(),
   NOW()
 FROM rental_clients c
-WHERE (
-  REPLACE(REPLACE(REPLACE(REPLACE(c.phone, ' ', ''), '-', ''), '(', ''), ')', '') = '+79631166119'
-  OR c.name = 'Морозова'
-  OR c.director_name = 'Морозова'
-)
+WHERE REPLACE(REPLACE(REPLACE(REPLACE(c.phone, ' ', ''), '-', ''), '(', ''), ')', '') = '+79631166119'
 AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 303)
 LIMIT 1;
 
@@ -30399,11 +26796,7 @@ SELECT
   NOW(),
   NOW()
 FROM rental_clients c
-WHERE (
-  REPLACE(REPLACE(REPLACE(REPLACE(c.phone, ' ', ''), '-', ''), '(', ''), ')', '') = '+79872750395'
-  OR c.name = 'Зельфира'
-  OR c.director_name = 'Зельфира'
-)
+WHERE REPLACE(REPLACE(REPLACE(REPLACE(c.phone, ' ', ''), '-', ''), '(', ''), ')', '') = '+79872750395'
 AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 302)
 LIMIT 1;
 
@@ -30432,10 +26825,7 @@ SELECT
   NOW(),
   NOW()
 FROM rental_clients c
-WHERE (
-  c.name = 'Эдик Заказы для групп'
-  OR c.director_name = 'Эдик Заказы для групп'
-)
+WHERE (c.name ILIKE '%Эдик%' OR c.director_name ILIKE '%Эдик%')
 AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 301)
 LIMIT 1;
 
@@ -30464,11 +26854,7 @@ SELECT
   NOW(),
   NOW()
 FROM rental_clients c
-WHERE (
-  REPLACE(REPLACE(REPLACE(REPLACE(c.phone, ' ', ''), '-', ''), '(', ''), ')', '') = '+79274463215'
-  OR c.name = 'Айрат Нурмухаммадов'
-  OR c.director_name = 'Айрат Нурмухаммадов'
-)
+WHERE REPLACE(REPLACE(REPLACE(REPLACE(c.phone, ' ', ''), '-', ''), '(', ''), ')', '') = '+79274463215'
 AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 300)
 LIMIT 1;
 
@@ -30497,11 +26883,7 @@ SELECT
   NOW(),
   NOW()
 FROM rental_clients c
-WHERE (
-  REPLACE(REPLACE(REPLACE(REPLACE(c.phone, ' ', ''), '-', ''), '(', ''), ')', '') = '+79178605272'
-  OR c.name = 'Гульнара'
-  OR c.director_name = 'Гульнара'
-)
+WHERE REPLACE(REPLACE(REPLACE(REPLACE(c.phone, ' ', ''), '-', ''), '(', ''), ')', '') = '+79178605272'
 AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 299)
 LIMIT 1;
 
@@ -30530,11 +26912,7 @@ SELECT
   NOW(),
   NOW()
 FROM rental_clients c
-WHERE (
-  REPLACE(REPLACE(REPLACE(REPLACE(c.phone, ' ', ''), '-', ''), '(', ''), ')', '') = '+79179142756'
-  OR c.name = 'Татьяна (Гольфстрим)'
-  OR c.director_name = 'Татьяна (Гольфстрим)'
-)
+WHERE REPLACE(REPLACE(REPLACE(REPLACE(c.phone, ' ', ''), '-', ''), '(', ''), ')', '') = '+79179142756'
 AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 298)
 LIMIT 1;
 
@@ -30563,11 +26941,7 @@ SELECT
   NOW(),
   NOW()
 FROM rental_clients c
-WHERE (
-  REPLACE(REPLACE(REPLACE(REPLACE(c.phone, ' ', ''), '-', ''), '(', ''), ')', '') = '+79046699399'
-  OR c.name = 'Альберт (КТ)'
-  OR c.director_name = 'Альберт (КТ)'
-)
+WHERE REPLACE(REPLACE(REPLACE(REPLACE(c.phone, ' ', ''), '-', ''), '(', ''), ')', '') = '+79046699399'
 AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 297)
 LIMIT 1;
 
@@ -30596,11 +26970,7 @@ SELECT
   NOW(),
   NOW()
 FROM rental_clients c
-WHERE (
-  REPLACE(REPLACE(REPLACE(REPLACE(c.phone, ' ', ''), '-', ''), '(', ''), ')', '') = '+79179142756'
-  OR c.name = 'Татьяна (Гольфстрим)'
-  OR c.director_name = 'Татьяна (Гольфстрим)'
-)
+WHERE REPLACE(REPLACE(REPLACE(REPLACE(c.phone, ' ', ''), '-', ''), '(', ''), ')', '') = '+79179142756'
 AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 296)
 LIMIT 1;
 
@@ -30629,11 +26999,7 @@ SELECT
   NOW(),
   NOW()
 FROM rental_clients c
-WHERE (
-  REPLACE(REPLACE(REPLACE(REPLACE(c.phone, ' ', ''), '-', ''), '(', ''), ')', '') = '+79179142756'
-  OR c.name = 'Татьяна (Гольфстрим)'
-  OR c.director_name = 'Татьяна (Гольфстрим)'
-)
+WHERE REPLACE(REPLACE(REPLACE(REPLACE(c.phone, ' ', ''), '-', ''), '(', ''), ')', '') = '+79179142756'
 AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 295)
 LIMIT 1;
 
@@ -30662,11 +27028,7 @@ SELECT
   NOW(),
   NOW()
 FROM rental_clients c
-WHERE (
-  REPLACE(REPLACE(REPLACE(REPLACE(c.phone, ' ', ''), '-', ''), '(', ''), ')', '') = '+79179142756'
-  OR c.name = 'Татьяна (Гольфстрим)'
-  OR c.director_name = 'Татьяна (Гольфстрим)'
-)
+WHERE REPLACE(REPLACE(REPLACE(REPLACE(c.phone, ' ', ''), '-', ''), '(', ''), ')', '') = '+79179142756'
 AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 294)
 LIMIT 1;
 
@@ -30695,11 +27057,7 @@ SELECT
   NOW(),
   NOW()
 FROM rental_clients c
-WHERE (
-  REPLACE(REPLACE(REPLACE(REPLACE(c.phone, ' ', ''), '-', ''), '(', ''), ')', '') = '+79853891999'
-  OR c.name = 'Сергей (Авангард)'
-  OR c.director_name = 'Сергей (Авангард)'
-)
+WHERE REPLACE(REPLACE(REPLACE(REPLACE(c.phone, ' ', ''), '-', ''), '(', ''), ')', '') = '+79853891999'
 AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 293)
 LIMIT 1;
 
@@ -30728,11 +27086,7 @@ SELECT
   NOW(),
   NOW()
 FROM rental_clients c
-WHERE (
-  REPLACE(REPLACE(REPLACE(REPLACE(c.phone, ' ', ''), '-', ''), '(', ''), ')', '') = '+79027805858'
-  OR c.name = 'Татьяна'
-  OR c.director_name = 'Татьяна'
-)
+WHERE REPLACE(REPLACE(REPLACE(REPLACE(c.phone, ' ', ''), '-', ''), '(', ''), ')', '') = '+79027805858'
 AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 292)
 LIMIT 1;
 
@@ -30761,11 +27115,7 @@ SELECT
   NOW(),
   NOW()
 FROM rental_clients c
-WHERE (
-  REPLACE(REPLACE(REPLACE(REPLACE(c.phone, ' ', ''), '-', ''), '(', ''), ')', '') = '+79027805858'
-  OR c.name = 'Татьяна'
-  OR c.director_name = 'Татьяна'
-)
+WHERE REPLACE(REPLACE(REPLACE(REPLACE(c.phone, ' ', ''), '-', ''), '(', ''), ')', '') = '+79027805858'
 AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 291)
 LIMIT 1;
 
@@ -30794,11 +27144,7 @@ SELECT
   NOW(),
   NOW()
 FROM rental_clients c
-WHERE (
-  REPLACE(REPLACE(REPLACE(REPLACE(c.phone, ' ', ''), '-', ''), '(', ''), ')', '') = '+79662409276'
-  OR c.name = 'Мира (ИП)'
-  OR c.director_name = 'Мира (ИП)'
-)
+WHERE REPLACE(REPLACE(REPLACE(REPLACE(c.phone, ' ', ''), '-', ''), '(', ''), ')', '') = '+79662409276'
 AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 290)
 LIMIT 1;
 
@@ -30827,11 +27173,7 @@ SELECT
   NOW(),
   NOW()
 FROM rental_clients c
-WHERE (
-  REPLACE(REPLACE(REPLACE(REPLACE(c.phone, ' ', ''), '-', ''), '(', ''), ')', '') = '+79600311560'
-  OR c.name = 'Андрей'
-  OR c.director_name = 'Андрей'
-)
+WHERE REPLACE(REPLACE(REPLACE(REPLACE(c.phone, ' ', ''), '-', ''), '(', ''), ')', '') = '+79600311560'
 AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 289)
 LIMIT 1;
 
@@ -30860,11 +27202,7 @@ SELECT
   NOW(),
   NOW()
 FROM rental_clients c
-WHERE (
-  REPLACE(REPLACE(REPLACE(REPLACE(c.phone, ' ', ''), '-', ''), '(', ''), ')', '') = '+79033405711'
-  OR c.name = 'Наталья'
-  OR c.director_name = 'Наталья'
-)
+WHERE REPLACE(REPLACE(REPLACE(REPLACE(c.phone, ' ', ''), '-', ''), '(', ''), ')', '') = '+79033405711'
 AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 288)
 LIMIT 1;
 
@@ -30893,11 +27231,7 @@ SELECT
   NOW(),
   NOW()
 FROM rental_clients c
-WHERE (
-  REPLACE(REPLACE(REPLACE(REPLACE(c.phone, ' ', ''), '-', ''), '(', ''), ')', '') = '+79033405711'
-  OR c.name = 'Наталья'
-  OR c.director_name = 'Наталья'
-)
+WHERE REPLACE(REPLACE(REPLACE(REPLACE(c.phone, ' ', ''), '-', ''), '(', ''), ')', '') = '+79033405711'
 AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 287)
 LIMIT 1;
 
@@ -30926,11 +27260,7 @@ SELECT
   NOW(),
   NOW()
 FROM rental_clients c
-WHERE (
-  REPLACE(REPLACE(REPLACE(REPLACE(c.phone, ' ', ''), '-', ''), '(', ''), ')', '') = '+79662409276'
-  OR c.name = 'Мира (ИП)'
-  OR c.director_name = 'Мира (ИП)'
-)
+WHERE REPLACE(REPLACE(REPLACE(REPLACE(c.phone, ' ', ''), '-', ''), '(', ''), ')', '') = '+79662409276'
 AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 286)
 LIMIT 1;
 
@@ -30959,11 +27289,7 @@ SELECT
   NOW(),
   NOW()
 FROM rental_clients c
-WHERE (
-  REPLACE(REPLACE(REPLACE(REPLACE(c.phone, ' ', ''), '-', ''), '(', ''), ')', '') = '+79659400307'
-  OR c.name = 'Зульхиза Кутлучурина'
-  OR c.director_name = 'Зульхиза Кутлучурина'
-)
+WHERE REPLACE(REPLACE(REPLACE(REPLACE(c.phone, ' ', ''), '-', ''), '(', ''), ')', '') = '+79659400307'
 AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 283)
 LIMIT 1;
 
@@ -30992,11 +27318,7 @@ SELECT
   NOW(),
   NOW()
 FROM rental_clients c
-WHERE (
-  REPLACE(REPLACE(REPLACE(REPLACE(c.phone, ' ', ''), '-', ''), '(', ''), ')', '') = '+79659400307'
-  OR c.name = 'Зульхиза Кутлучурина'
-  OR c.director_name = 'Зульхиза Кутлучурина'
-)
+WHERE REPLACE(REPLACE(REPLACE(REPLACE(c.phone, ' ', ''), '-', ''), '(', ''), ')', '') = '+79659400307'
 AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 282)
 LIMIT 1;
 
@@ -31025,11 +27347,7 @@ SELECT
   NOW(),
   NOW()
 FROM rental_clients c
-WHERE (
-  REPLACE(REPLACE(REPLACE(REPLACE(c.phone, ' ', ''), '-', ''), '(', ''), ')', '') = '+79659400307'
-  OR c.name = 'Зульхиза Кутлучурина'
-  OR c.director_name = 'Зульхиза Кутлучурина'
-)
+WHERE REPLACE(REPLACE(REPLACE(REPLACE(c.phone, ' ', ''), '-', ''), '(', ''), ')', '') = '+79659400307'
 AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 281)
 LIMIT 1;
 
@@ -31058,11 +27376,7 @@ SELECT
   NOW(),
   NOW()
 FROM rental_clients c
-WHERE (
-  REPLACE(REPLACE(REPLACE(REPLACE(c.phone, ' ', ''), '-', ''), '(', ''), ')', '') = '+79178605272'
-  OR c.name = 'Гульнара'
-  OR c.director_name = 'Гульнара'
-)
+WHERE REPLACE(REPLACE(REPLACE(REPLACE(c.phone, ' ', ''), '-', ''), '(', ''), ')', '') = '+79178605272'
 AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 280)
 LIMIT 1;
 
@@ -31091,11 +27405,7 @@ SELECT
   NOW(),
   NOW()
 FROM rental_clients c
-WHERE (
-  REPLACE(REPLACE(REPLACE(REPLACE(c.phone, ' ', ''), '-', ''), '(', ''), ')', '') = '+79659400307'
-  OR c.name = 'Зульхиза Кутлучурина'
-  OR c.director_name = 'Зульхиза Кутлучурина'
-)
+WHERE REPLACE(REPLACE(REPLACE(REPLACE(c.phone, ' ', ''), '-', ''), '(', ''), ')', '') = '+79659400307'
 AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 279)
 LIMIT 1;
 
@@ -31124,11 +27434,7 @@ SELECT
   NOW(),
   NOW()
 FROM rental_clients c
-WHERE (
-  REPLACE(REPLACE(REPLACE(REPLACE(c.phone, ' ', ''), '-', ''), '(', ''), ')', '') = '+79662409276'
-  OR c.name = 'Мира (ИП)'
-  OR c.director_name = 'Мира (ИП)'
-)
+WHERE REPLACE(REPLACE(REPLACE(REPLACE(c.phone, ' ', ''), '-', ''), '(', ''), ')', '') = '+79662409276'
 AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 278)
 LIMIT 1;
 
@@ -31157,11 +27463,7 @@ SELECT
   NOW(),
   NOW()
 FROM rental_clients c
-WHERE (
-  REPLACE(REPLACE(REPLACE(REPLACE(c.phone, ' ', ''), '-', ''), '(', ''), ')', '') = '+79179142756'
-  OR c.name = 'Татьяна (Гольфстрим)'
-  OR c.director_name = 'Татьяна (Гольфстрим)'
-)
+WHERE REPLACE(REPLACE(REPLACE(REPLACE(c.phone, ' ', ''), '-', ''), '(', ''), ')', '') = '+79179142756'
 AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 277)
 LIMIT 1;
 
@@ -31190,11 +27492,7 @@ SELECT
   NOW(),
   NOW()
 FROM rental_clients c
-WHERE (
-  REPLACE(REPLACE(REPLACE(REPLACE(c.phone, ' ', ''), '-', ''), '(', ''), ')', '') = '+79179142756'
-  OR c.name = 'Татьяна (Гольфстрим)'
-  OR c.director_name = 'Татьяна (Гольфстрим)'
-)
+WHERE REPLACE(REPLACE(REPLACE(REPLACE(c.phone, ' ', ''), '-', ''), '(', ''), ')', '') = '+79179142756'
 AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 276)
 LIMIT 1;
 
@@ -31223,11 +27521,7 @@ SELECT
   NOW(),
   NOW()
 FROM rental_clients c
-WHERE (
-  REPLACE(REPLACE(REPLACE(REPLACE(c.phone, ' ', ''), '-', ''), '(', ''), ')', '') = '+79872750395'
-  OR c.name = 'Зельфира'
-  OR c.director_name = 'Зельфира'
-)
+WHERE REPLACE(REPLACE(REPLACE(REPLACE(c.phone, ' ', ''), '-', ''), '(', ''), ')', '') = '+79872750395'
 AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 275)
 LIMIT 1;
 
@@ -31256,11 +27550,7 @@ SELECT
   NOW(),
   NOW()
 FROM rental_clients c
-WHERE (
-  REPLACE(REPLACE(REPLACE(REPLACE(c.phone, ' ', ''), '-', ''), '(', ''), ')', '') = '+79257337010'
-  OR c.name = 'Наталья'
-  OR c.director_name = 'Наталья'
-)
+WHERE REPLACE(REPLACE(REPLACE(REPLACE(c.phone, ' ', ''), '-', ''), '(', ''), ')', '') = '+79257337010'
 AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 274)
 LIMIT 1;
 
@@ -31289,11 +27579,7 @@ SELECT
   NOW(),
   NOW()
 FROM rental_clients c
-WHERE (
-  REPLACE(REPLACE(REPLACE(REPLACE(c.phone, ' ', ''), '-', ''), '(', ''), ')', '') = '+79127740429'
-  OR c.name = 'Мария'
-  OR c.director_name = 'Мария'
-)
+WHERE REPLACE(REPLACE(REPLACE(REPLACE(c.phone, ' ', ''), '-', ''), '(', ''), ')', '') = '+79127740429'
 AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 272)
 LIMIT 1;
 
@@ -31322,11 +27608,7 @@ SELECT
   NOW(),
   NOW()
 FROM rental_clients c
-WHERE (
-  REPLACE(REPLACE(REPLACE(REPLACE(c.phone, ' ', ''), '-', ''), '(', ''), ')', '') = '+79376267304'
-  OR c.name = 'Елена'
-  OR c.director_name = 'Елена'
-)
+WHERE REPLACE(REPLACE(REPLACE(REPLACE(c.phone, ' ', ''), '-', ''), '(', ''), ')', '') = '+79376267304'
 AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 271)
 LIMIT 1;
 
@@ -31355,11 +27637,7 @@ SELECT
   NOW(),
   NOW()
 FROM rental_clients c
-WHERE (
-  REPLACE(REPLACE(REPLACE(REPLACE(c.phone, ' ', ''), '-', ''), '(', ''), ')', '') = '+79179142756'
-  OR c.name = 'Татьяна (Гольфстрим)'
-  OR c.director_name = 'Татьяна (Гольфстрим)'
-)
+WHERE REPLACE(REPLACE(REPLACE(REPLACE(c.phone, ' ', ''), '-', ''), '(', ''), ')', '') = '+79179142756'
 AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 270)
 LIMIT 1;
 
@@ -31388,11 +27666,7 @@ SELECT
   NOW(),
   NOW()
 FROM rental_clients c
-WHERE (
-  REPLACE(REPLACE(REPLACE(REPLACE(c.phone, ' ', ''), '-', ''), '(', ''), ')', '') = '+79033443111'
-  OR c.name = 'Элина (Сититур)'
-  OR c.director_name = 'Элина (Сититур)'
-)
+WHERE REPLACE(REPLACE(REPLACE(REPLACE(c.phone, ' ', ''), '-', ''), '(', ''), ')', '') = '+79033443111'
 AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 269)
 LIMIT 1;
 
@@ -31421,11 +27695,7 @@ SELECT
   NOW(),
   NOW()
 FROM rental_clients c
-WHERE (
-  REPLACE(REPLACE(REPLACE(REPLACE(c.phone, ' ', ''), '-', ''), '(', ''), ')', '') = '+79530225627'
-  OR c.name = 'Алина Минеева'
-  OR c.director_name = 'Алина Минеева'
-)
+WHERE REPLACE(REPLACE(REPLACE(REPLACE(c.phone, ' ', ''), '-', ''), '(', ''), ')', '') = '+79530225627'
 AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 268)
 LIMIT 1;
 
@@ -31454,11 +27724,7 @@ SELECT
   NOW(),
   NOW()
 FROM rental_clients c
-WHERE (
-  REPLACE(REPLACE(REPLACE(REPLACE(c.phone, ' ', ''), '-', ''), '(', ''), ')', '') = '+79277213758'
-  OR c.name = 'Любовь Ким'
-  OR c.director_name = 'Любовь Ким'
-)
+WHERE REPLACE(REPLACE(REPLACE(REPLACE(c.phone, ' ', ''), '-', ''), '(', ''), ')', '') = '+79277213758'
 AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 267)
 LIMIT 1;
 
@@ -31487,11 +27753,7 @@ SELECT
   NOW(),
   NOW()
 FROM rental_clients c
-WHERE (
-  REPLACE(REPLACE(REPLACE(REPLACE(c.phone, ' ', ''), '-', ''), '(', ''), ')', '') = '+79272434367'
-  OR c.name = 'Наталья Жукова'
-  OR c.director_name = 'Наталья Жукова'
-)
+WHERE REPLACE(REPLACE(REPLACE(REPLACE(c.phone, ' ', ''), '-', ''), '(', ''), ')', '') = '+79272434367'
 AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 266)
 LIMIT 1;
 
@@ -31520,11 +27782,7 @@ SELECT
   NOW(),
   NOW()
 FROM rental_clients c
-WHERE (
-  REPLACE(REPLACE(REPLACE(REPLACE(c.phone, ' ', ''), '-', ''), '(', ''), ')', '') = '+79659400307'
-  OR c.name = 'Зульхиза Кутлучурина'
-  OR c.director_name = 'Зульхиза Кутлучурина'
-)
+WHERE REPLACE(REPLACE(REPLACE(REPLACE(c.phone, ' ', ''), '-', ''), '(', ''), ')', '') = '+79659400307'
 AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 265)
 LIMIT 1;
 
@@ -31553,11 +27811,7 @@ SELECT
   NOW(),
   NOW()
 FROM rental_clients c
-WHERE (
-  REPLACE(REPLACE(REPLACE(REPLACE(c.phone, ' ', ''), '-', ''), '(', ''), ')', '') = '+79101776156'
-  OR c.name = 'Анюта Родионова (Родина-тур)'
-  OR c.director_name = 'Анюта Родионова (Родина-тур)'
-)
+WHERE REPLACE(REPLACE(REPLACE(REPLACE(c.phone, ' ', ''), '-', ''), '(', ''), ')', '') = '+79101776156'
 AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 264)
 LIMIT 1;
 
@@ -31586,11 +27840,7 @@ SELECT
   NOW(),
   NOW()
 FROM rental_clients c
-WHERE (
-  REPLACE(REPLACE(REPLACE(REPLACE(c.phone, ' ', ''), '-', ''), '(', ''), ')', '') = '+79172278327'
-  OR c.name = 'Юлия Воронова'
-  OR c.director_name = 'Юлия Воронова'
-)
+WHERE REPLACE(REPLACE(REPLACE(REPLACE(c.phone, ' ', ''), '-', ''), '(', ''), ')', '') = '+79172278327'
 AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 263)
 LIMIT 1;
 
@@ -31619,10 +27869,7 @@ SELECT
   NOW(),
   NOW()
 FROM rental_clients c
-WHERE (
-  c.name = 'Эдик Заказы для групп'
-  OR c.director_name = 'Эдик Заказы для групп'
-)
+WHERE (c.name ILIKE '%Эдик%' OR c.director_name ILIKE '%Эдик%')
 AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 262)
 LIMIT 1;
 
@@ -31651,10 +27898,7 @@ SELECT
   NOW(),
   NOW()
 FROM rental_clients c
-WHERE (
-  c.name = 'Эдик Заказы для групп'
-  OR c.director_name = 'Эдик Заказы для групп'
-)
+WHERE (c.name ILIKE '%Эдик%' OR c.director_name ILIKE '%Эдик%')
 AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 261)
 LIMIT 1;
 
@@ -31683,11 +27927,7 @@ SELECT
   NOW(),
   NOW()
 FROM rental_clients c
-WHERE (
-  REPLACE(REPLACE(REPLACE(REPLACE(c.phone, ' ', ''), '-', ''), '(', ''), ')', '') = '+79087256018'
-  OR c.name = 'Екатерина'
-  OR c.director_name = 'Екатерина'
-)
+WHERE REPLACE(REPLACE(REPLACE(REPLACE(c.phone, ' ', ''), '-', ''), '(', ''), ')', '') = '+79087256018'
 AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 260)
 LIMIT 1;
 
@@ -31716,11 +27956,7 @@ SELECT
   NOW(),
   NOW()
 FROM rental_clients c
-WHERE (
-  REPLACE(REPLACE(REPLACE(REPLACE(c.phone, ' ', ''), '-', ''), '(', ''), ')', '') = '+79003225015'
-  OR c.name = 'Марианна'
-  OR c.director_name = 'Марианна'
-)
+WHERE REPLACE(REPLACE(REPLACE(REPLACE(c.phone, ' ', ''), '-', ''), '(', ''), ')', '') = '+79003225015'
 AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 259)
 LIMIT 1;
 
@@ -31749,11 +27985,7 @@ SELECT
   NOW(),
   NOW()
 FROM rental_clients c
-WHERE (
-  REPLACE(REPLACE(REPLACE(REPLACE(c.phone, ' ', ''), '-', ''), '(', ''), ')', '') = '+79272434367'
-  OR c.name = 'Наталья Жукова'
-  OR c.director_name = 'Наталья Жукова'
-)
+WHERE REPLACE(REPLACE(REPLACE(REPLACE(c.phone, ' ', ''), '-', ''), '(', ''), ')', '') = '+79272434367'
 AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 258)
 LIMIT 1;
 
@@ -31782,10 +28014,7 @@ SELECT
   NOW(),
   NOW()
 FROM rental_clients c
-WHERE (
-  c.name = 'Эдик Заказы для групп'
-  OR c.director_name = 'Эдик Заказы для групп'
-)
+WHERE (c.name ILIKE '%Эдик%' OR c.director_name ILIKE '%Эдик%')
 AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 257)
 LIMIT 1;
 
@@ -31814,11 +28043,7 @@ SELECT
   NOW(),
   NOW()
 FROM rental_clients c
-WHERE (
-  REPLACE(REPLACE(REPLACE(REPLACE(c.phone, ' ', ''), '-', ''), '(', ''), ')', '') = '+79179142756'
-  OR c.name = 'Татьяна (Гольфстрим)'
-  OR c.director_name = 'Татьяна (Гольфстрим)'
-)
+WHERE REPLACE(REPLACE(REPLACE(REPLACE(c.phone, ' ', ''), '-', ''), '(', ''), ')', '') = '+79179142756'
 AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 256)
 LIMIT 1;
 
@@ -31847,11 +28072,7 @@ SELECT
   NOW(),
   NOW()
 FROM rental_clients c
-WHERE (
-  REPLACE(REPLACE(REPLACE(REPLACE(c.phone, ' ', ''), '-', ''), '(', ''), ')', '') = '+79178605272'
-  OR c.name = 'Гульнара'
-  OR c.director_name = 'Гульнара'
-)
+WHERE REPLACE(REPLACE(REPLACE(REPLACE(c.phone, ' ', ''), '-', ''), '(', ''), ')', '') = '+79178605272'
 AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 255)
 LIMIT 1;
 
@@ -31880,11 +28101,7 @@ SELECT
   NOW(),
   NOW()
 FROM rental_clients c
-WHERE (
-  REPLACE(REPLACE(REPLACE(REPLACE(c.phone, ' ', ''), '-', ''), '(', ''), ')', '') = '+79600565131'
-  OR c.name = 'Камила Ягудина'
-  OR c.director_name = 'Камила Ягудина'
-)
+WHERE REPLACE(REPLACE(REPLACE(REPLACE(c.phone, ' ', ''), '-', ''), '(', ''), ')', '') = '+79600565131'
 AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 254)
 LIMIT 1;
 
@@ -31913,11 +28130,7 @@ SELECT
   NOW(),
   NOW()
 FROM rental_clients c
-WHERE (
-  REPLACE(REPLACE(REPLACE(REPLACE(c.phone, ' ', ''), '-', ''), '(', ''), ')', '') = '+79053770542'
-  OR c.name = 'Игорь Воронов'
-  OR c.director_name = 'Игорь Воронов'
-)
+WHERE REPLACE(REPLACE(REPLACE(REPLACE(c.phone, ' ', ''), '-', ''), '(', ''), ')', '') = '+79053770542'
 AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 253)
 LIMIT 1;
 
@@ -31946,11 +28159,7 @@ SELECT
   NOW(),
   NOW()
 FROM rental_clients c
-WHERE (
-  REPLACE(REPLACE(REPLACE(REPLACE(c.phone, ' ', ''), '-', ''), '(', ''), ')', '') = '+380714403848'
-  OR c.name = 'Нина Салькова'
-  OR c.director_name = 'Нина Салькова'
-)
+WHERE REPLACE(REPLACE(REPLACE(REPLACE(c.phone, ' ', ''), '-', ''), '(', ''), ')', '') = '+380714403848'
 AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 252)
 LIMIT 1;
 
@@ -31979,11 +28188,7 @@ SELECT
   NOW(),
   NOW()
 FROM rental_clients c
-WHERE (
-  REPLACE(REPLACE(REPLACE(REPLACE(c.phone, ' ', ''), '-', ''), '(', ''), ')', '') = '+79033403252'
-  OR c.name = 'Ирина Михайловна'
-  OR c.director_name = 'Ирина Михайловна'
-)
+WHERE REPLACE(REPLACE(REPLACE(REPLACE(c.phone, ' ', ''), '-', ''), '(', ''), ')', '') = '+79033403252'
 AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 251)
 LIMIT 1;
 
@@ -32012,11 +28217,7 @@ SELECT
   NOW(),
   NOW()
 FROM rental_clients c
-WHERE (
-  REPLACE(REPLACE(REPLACE(REPLACE(c.phone, ' ', ''), '-', ''), '(', ''), ')', '') = '+79600565131'
-  OR c.name = 'Камила Ягудина'
-  OR c.director_name = 'Камила Ягудина'
-)
+WHERE REPLACE(REPLACE(REPLACE(REPLACE(c.phone, ' ', ''), '-', ''), '(', ''), ')', '') = '+79600565131'
 AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 250)
 LIMIT 1;
 
@@ -32045,11 +28246,7 @@ SELECT
   NOW(),
   NOW()
 FROM rental_clients c
-WHERE (
-  REPLACE(REPLACE(REPLACE(REPLACE(c.phone, ' ', ''), '-', ''), '(', ''), ')', '') = '+79053770542'
-  OR c.name = 'Игорь Воронов'
-  OR c.director_name = 'Игорь Воронов'
-)
+WHERE REPLACE(REPLACE(REPLACE(REPLACE(c.phone, ' ', ''), '-', ''), '(', ''), ')', '') = '+79053770542'
 AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 249)
 LIMIT 1;
 
@@ -32078,11 +28275,7 @@ SELECT
   NOW(),
   NOW()
 FROM rental_clients c
-WHERE (
-  REPLACE(REPLACE(REPLACE(REPLACE(c.phone, ' ', ''), '-', ''), '(', ''), ')', '') = '+79033408152'
-  OR c.name = 'Юлианна'
-  OR c.director_name = 'Юлианна'
-)
+WHERE REPLACE(REPLACE(REPLACE(REPLACE(c.phone, ' ', ''), '-', ''), '(', ''), ')', '') = '+79033408152'
 AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 248)
 LIMIT 1;
 
@@ -32111,11 +28304,7 @@ SELECT
   NOW(),
   NOW()
 FROM rental_clients c
-WHERE (
-  REPLACE(REPLACE(REPLACE(REPLACE(c.phone, ' ', ''), '-', ''), '(', ''), ')', '') = '+79013633803'
-  OR c.name = 'Евгения Заговорина'
-  OR c.director_name = 'Евгения Заговорина'
-)
+WHERE REPLACE(REPLACE(REPLACE(REPLACE(c.phone, ' ', ''), '-', ''), '(', ''), ')', '') = '+79013633803'
 AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 247)
 LIMIT 1;
 
@@ -32144,11 +28333,7 @@ SELECT
   NOW(),
   NOW()
 FROM rental_clients c
-WHERE (
-  REPLACE(REPLACE(REPLACE(REPLACE(c.phone, ' ', ''), '-', ''), '(', ''), ')', '') = '+79662409276'
-  OR c.name = 'Мира (ИП)'
-  OR c.director_name = 'Мира (ИП)'
-)
+WHERE REPLACE(REPLACE(REPLACE(REPLACE(c.phone, ' ', ''), '-', ''), '(', ''), ')', '') = '+79662409276'
 AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 246)
 LIMIT 1;
 
@@ -32177,11 +28362,7 @@ SELECT
   NOW(),
   NOW()
 FROM rental_clients c
-WHERE (
-  REPLACE(REPLACE(REPLACE(REPLACE(c.phone, ' ', ''), '-', ''), '(', ''), ')', '') = '+79662409276'
-  OR c.name = 'Мира (ИП)'
-  OR c.director_name = 'Мира (ИП)'
-)
+WHERE REPLACE(REPLACE(REPLACE(REPLACE(c.phone, ' ', ''), '-', ''), '(', ''), ')', '') = '+79662409276'
 AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 245)
 LIMIT 1;
 
@@ -32210,11 +28391,7 @@ SELECT
   NOW(),
   NOW()
 FROM rental_clients c
-WHERE (
-  REPLACE(REPLACE(REPLACE(REPLACE(c.phone, ' ', ''), '-', ''), '(', ''), ')', '') = '+79662409276'
-  OR c.name = 'Мира (ИП)'
-  OR c.director_name = 'Мира (ИП)'
-)
+WHERE REPLACE(REPLACE(REPLACE(REPLACE(c.phone, ' ', ''), '-', ''), '(', ''), ')', '') = '+79662409276'
 AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 244)
 LIMIT 1;
 
@@ -32243,10 +28420,7 @@ SELECT
   NOW(),
   NOW()
 FROM rental_clients c
-WHERE (
-  c.name = 'Салькова Нина'
-  OR c.director_name = 'Салькова Нина'
-)
+WHERE (c.name ILIKE '%Салькова%' OR c.director_name ILIKE '%Салькова%')
 AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 243)
 LIMIT 1;
 
@@ -32275,11 +28449,7 @@ SELECT
   NOW(),
   NOW()
 FROM rental_clients c
-WHERE (
-  REPLACE(REPLACE(REPLACE(REPLACE(c.phone, ' ', ''), '-', ''), '(', ''), ')', '') = '+79107527951'
-  OR c.name = 'Наталья Рыжкова'
-  OR c.director_name = 'Наталья Рыжкова'
-)
+WHERE REPLACE(REPLACE(REPLACE(REPLACE(c.phone, ' ', ''), '-', ''), '(', ''), ')', '') = '+79107527951'
 AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 242)
 LIMIT 1;
 
@@ -32308,11 +28478,7 @@ SELECT
   NOW(),
   NOW()
 FROM rental_clients c
-WHERE (
-  REPLACE(REPLACE(REPLACE(REPLACE(c.phone, ' ', ''), '-', ''), '(', ''), ')', '') = '+79033443111'
-  OR c.name = 'Элина (Сититур)'
-  OR c.director_name = 'Элина (Сититур)'
-)
+WHERE REPLACE(REPLACE(REPLACE(REPLACE(c.phone, ' ', ''), '-', ''), '(', ''), ')', '') = '+79033443111'
 AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 241)
 LIMIT 1;
 
@@ -32341,11 +28507,7 @@ SELECT
   NOW(),
   NOW()
 FROM rental_clients c
-WHERE (
-  REPLACE(REPLACE(REPLACE(REPLACE(c.phone, ' ', ''), '-', ''), '(', ''), ')', '') = '+79068185524'
-  OR c.name = 'Артем Агафонов'
-  OR c.director_name = 'Артем Агафонов'
-)
+WHERE REPLACE(REPLACE(REPLACE(REPLACE(c.phone, ' ', ''), '-', ''), '(', ''), ')', '') = '+79068185524'
 AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 240)
 LIMIT 1;
 
@@ -32374,11 +28536,7 @@ SELECT
   NOW(),
   NOW()
 FROM rental_clients c
-WHERE (
-  REPLACE(REPLACE(REPLACE(REPLACE(c.phone, ' ', ''), '-', ''), '(', ''), ')', '') = '+79178605272'
-  OR c.name = 'Гульнара'
-  OR c.director_name = 'Гульнара'
-)
+WHERE REPLACE(REPLACE(REPLACE(REPLACE(c.phone, ' ', ''), '-', ''), '(', ''), ')', '') = '+79178605272'
 AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 239)
 LIMIT 1;
 
@@ -32407,11 +28565,7 @@ SELECT
   NOW(),
   NOW()
 FROM rental_clients c
-WHERE (
-  REPLACE(REPLACE(REPLACE(REPLACE(c.phone, ' ', ''), '-', ''), '(', ''), ')', '') = '+79033408152'
-  OR c.name = 'Юлианна'
-  OR c.director_name = 'Юлианна'
-)
+WHERE REPLACE(REPLACE(REPLACE(REPLACE(c.phone, ' ', ''), '-', ''), '(', ''), ')', '') = '+79033408152'
 AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 238)
 LIMIT 1;
 
@@ -32440,11 +28594,7 @@ SELECT
   NOW(),
   NOW()
 FROM rental_clients c
-WHERE (
-  REPLACE(REPLACE(REPLACE(REPLACE(c.phone, ' ', ''), '-', ''), '(', ''), ')', '') = '+79033408152'
-  OR c.name = 'Юлианна'
-  OR c.director_name = 'Юлианна'
-)
+WHERE REPLACE(REPLACE(REPLACE(REPLACE(c.phone, ' ', ''), '-', ''), '(', ''), ')', '') = '+79033408152'
 AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 237)
 LIMIT 1;
 
@@ -32473,11 +28623,7 @@ SELECT
   NOW(),
   NOW()
 FROM rental_clients c
-WHERE (
-  REPLACE(REPLACE(REPLACE(REPLACE(c.phone, ' ', ''), '-', ''), '(', ''), ')', '') = '+79028352353'
-  OR c.name = 'Автокруиз'
-  OR c.director_name = 'Автокруиз'
-)
+WHERE REPLACE(REPLACE(REPLACE(REPLACE(c.phone, ' ', ''), '-', ''), '(', ''), ')', '') = '+79028352353'
 AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 236)
 LIMIT 1;
 
@@ -32506,11 +28652,7 @@ SELECT
   NOW(),
   NOW()
 FROM rental_clients c
-WHERE (
-  REPLACE(REPLACE(REPLACE(REPLACE(c.phone, ' ', ''), '-', ''), '(', ''), ')', '') = '+79127740429'
-  OR c.name = 'Мария'
-  OR c.director_name = 'Мария'
-)
+WHERE REPLACE(REPLACE(REPLACE(REPLACE(c.phone, ' ', ''), '-', ''), '(', ''), ')', '') = '+79127740429'
 AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 235)
 LIMIT 1;
 
@@ -32539,11 +28681,7 @@ SELECT
   NOW(),
   NOW()
 FROM rental_clients c
-WHERE (
-  REPLACE(REPLACE(REPLACE(REPLACE(c.phone, ' ', ''), '-', ''), '(', ''), ')', '') = '+79872816240'
-  OR c.name = 'Оксана'
-  OR c.director_name = 'Оксана'
-)
+WHERE REPLACE(REPLACE(REPLACE(REPLACE(c.phone, ' ', ''), '-', ''), '(', ''), ')', '') = '+79872816240'
 AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 234)
 LIMIT 1;
 
@@ -32572,10 +28710,7 @@ SELECT
   NOW(),
   NOW()
 FROM rental_clients c
-WHERE (
-  c.name = 'Эдик Заказы для групп'
-  OR c.director_name = 'Эдик Заказы для групп'
-)
+WHERE (c.name ILIKE '%Эдик%' OR c.director_name ILIKE '%Эдик%')
 AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 232)
 LIMIT 1;
 
@@ -32604,10 +28739,7 @@ SELECT
   NOW(),
   NOW()
 FROM rental_clients c
-WHERE (
-  c.name = 'Эдик Заказы для групп'
-  OR c.director_name = 'Эдик Заказы для групп'
-)
+WHERE (c.name ILIKE '%Эдик%' OR c.director_name ILIKE '%Эдик%')
 AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 231)
 LIMIT 1;
 
@@ -32636,10 +28768,7 @@ SELECT
   NOW(),
   NOW()
 FROM rental_clients c
-WHERE (
-  c.name = 'Эдик Заказы для групп'
-  OR c.director_name = 'Эдик Заказы для групп'
-)
+WHERE (c.name ILIKE '%Эдик%' OR c.director_name ILIKE '%Эдик%')
 AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 230)
 LIMIT 1;
 
@@ -32668,11 +28797,7 @@ SELECT
   NOW(),
   NOW()
 FROM rental_clients c
-WHERE (
-  REPLACE(REPLACE(REPLACE(REPLACE(c.phone, ' ', ''), '-', ''), '(', ''), ')', '') = '+79101776156'
-  OR c.name = 'Анюта Родионова (Родина-тур)'
-  OR c.director_name = 'Анюта Родионова (Родина-тур)'
-)
+WHERE REPLACE(REPLACE(REPLACE(REPLACE(c.phone, ' ', ''), '-', ''), '(', ''), ')', '') = '+79101776156'
 AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 229)
 LIMIT 1;
 
@@ -32701,11 +28826,7 @@ SELECT
   NOW(),
   NOW()
 FROM rental_clients c
-WHERE (
-  REPLACE(REPLACE(REPLACE(REPLACE(c.phone, ' ', ''), '-', ''), '(', ''), ')', '') = '+79141859919'
-  OR c.name = 'Клиент'
-  OR c.director_name = 'Клиент'
-)
+WHERE REPLACE(REPLACE(REPLACE(REPLACE(c.phone, ' ', ''), '-', ''), '(', ''), ')', '') = '+79141859919'
 AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 228)
 LIMIT 1;
 
@@ -32734,11 +28855,7 @@ SELECT
   NOW(),
   NOW()
 FROM rental_clients c
-WHERE (
-  REPLACE(REPLACE(REPLACE(REPLACE(c.phone, ' ', ''), '-', ''), '(', ''), ')', '') = '+79600336033'
-  OR c.name = 'Галия'
-  OR c.director_name = 'Галия'
-)
+WHERE REPLACE(REPLACE(REPLACE(REPLACE(c.phone, ' ', ''), '-', ''), '(', ''), ')', '') = '+79600336033'
 AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 227)
 LIMIT 1;
 
@@ -32767,11 +28884,7 @@ SELECT
   NOW(),
   NOW()
 FROM rental_clients c
-WHERE (
-  REPLACE(REPLACE(REPLACE(REPLACE(c.phone, ' ', ''), '-', ''), '(', ''), ')', '') = '+79211263650'
-  OR c.name = 'Андрей Вологда'
-  OR c.director_name = 'Андрей Вологда'
-)
+WHERE REPLACE(REPLACE(REPLACE(REPLACE(c.phone, ' ', ''), '-', ''), '(', ''), ')', '') = '+79211263650'
 AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 226)
 LIMIT 1;
 
@@ -32800,11 +28913,7 @@ SELECT
   NOW(),
   NOW()
 FROM rental_clients c
-WHERE (
-  REPLACE(REPLACE(REPLACE(REPLACE(c.phone, ' ', ''), '-', ''), '(', ''), ')', '') = '+79220064070'
-  OR c.name = 'Сергей'
-  OR c.director_name = 'Сергей'
-)
+WHERE REPLACE(REPLACE(REPLACE(REPLACE(c.phone, ' ', ''), '-', ''), '(', ''), ')', '') = '+79220064070'
 AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 225)
 LIMIT 1;
 
@@ -32833,11 +28942,7 @@ SELECT
   NOW(),
   NOW()
 FROM rental_clients c
-WHERE (
-  REPLACE(REPLACE(REPLACE(REPLACE(c.phone, ' ', ''), '-', ''), '(', ''), ')', '') = '+79662409276'
-  OR c.name = 'Мира (ИП)'
-  OR c.director_name = 'Мира (ИП)'
-)
+WHERE REPLACE(REPLACE(REPLACE(REPLACE(c.phone, ' ', ''), '-', ''), '(', ''), ')', '') = '+79662409276'
 AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 224)
 LIMIT 1;
 
@@ -32866,11 +28971,7 @@ SELECT
   NOW(),
   NOW()
 FROM rental_clients c
-WHERE (
-  REPLACE(REPLACE(REPLACE(REPLACE(c.phone, ' ', ''), '-', ''), '(', ''), ')', '') = '+79872750395'
-  OR c.name = 'Зельфира'
-  OR c.director_name = 'Зельфира'
-)
+WHERE REPLACE(REPLACE(REPLACE(REPLACE(c.phone, ' ', ''), '-', ''), '(', ''), ')', '') = '+79872750395'
 AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 223)
 LIMIT 1;
 
@@ -32899,11 +29000,7 @@ SELECT
   NOW(),
   NOW()
 FROM rental_clients c
-WHERE (
-  REPLACE(REPLACE(REPLACE(REPLACE(c.phone, ' ', ''), '-', ''), '(', ''), ')', '') = '+79033408152'
-  OR c.name = 'Юлианна'
-  OR c.director_name = 'Юлианна'
-)
+WHERE REPLACE(REPLACE(REPLACE(REPLACE(c.phone, ' ', ''), '-', ''), '(', ''), ')', '') = '+79033408152'
 AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 222)
 LIMIT 1;
 
@@ -32932,11 +29029,7 @@ SELECT
   NOW(),
   NOW()
 FROM rental_clients c
-WHERE (
-  REPLACE(REPLACE(REPLACE(REPLACE(c.phone, ' ', ''), '-', ''), '(', ''), ')', '') = '+79874092737'
-  OR c.name = 'Камилла'
-  OR c.director_name = 'Камилла'
-)
+WHERE REPLACE(REPLACE(REPLACE(REPLACE(c.phone, ' ', ''), '-', ''), '(', ''), ')', '') = '+79874092737'
 AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 221)
 LIMIT 1;
 
@@ -32965,11 +29058,7 @@ SELECT
   NOW(),
   NOW()
 FROM rental_clients c
-WHERE (
-  REPLACE(REPLACE(REPLACE(REPLACE(c.phone, ' ', ''), '-', ''), '(', ''), ')', '') = '+79274299177'
-  OR c.name = 'Мария Экскурсовод'
-  OR c.director_name = 'Мария Экскурсовод'
-)
+WHERE REPLACE(REPLACE(REPLACE(REPLACE(c.phone, ' ', ''), '-', ''), '(', ''), ')', '') = '+79274299177'
 AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 220)
 LIMIT 1;
 
@@ -32998,11 +29087,7 @@ SELECT
   NOW(),
   NOW()
 FROM rental_clients c
-WHERE (
-  REPLACE(REPLACE(REPLACE(REPLACE(c.phone, ' ', ''), '-', ''), '(', ''), ')', '') = '+79036945019'
-  OR c.name = 'Наталья'
-  OR c.director_name = 'Наталья'
-)
+WHERE REPLACE(REPLACE(REPLACE(REPLACE(c.phone, ' ', ''), '-', ''), '(', ''), ')', '') = '+79036945019'
 AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 219)
 LIMIT 1;
 
@@ -33031,11 +29116,7 @@ SELECT
   NOW(),
   NOW()
 FROM rental_clients c
-WHERE (
-  REPLACE(REPLACE(REPLACE(REPLACE(c.phone, ' ', ''), '-', ''), '(', ''), ')', '') = '+79393902610'
-  OR c.name = 'Гульназ'
-  OR c.director_name = 'Гульназ'
-)
+WHERE REPLACE(REPLACE(REPLACE(REPLACE(c.phone, ' ', ''), '-', ''), '(', ''), ')', '') = '+79393902610'
 AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 218)
 LIMIT 1;
 
@@ -33064,10 +29145,7 @@ SELECT
   NOW(),
   NOW()
 FROM rental_clients c
-WHERE (
-  c.name = 'Клиент'
-  OR c.director_name = 'Клиент'
-)
+WHERE (c.name ILIKE '%Клиент%' OR c.director_name ILIKE '%Клиент%')
 AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 217)
 LIMIT 1;
 
@@ -33096,11 +29174,7 @@ SELECT
   NOW(),
   NOW()
 FROM rental_clients c
-WHERE (
-  REPLACE(REPLACE(REPLACE(REPLACE(c.phone, ' ', ''), '-', ''), '(', ''), ')', '') = '+79530225627'
-  OR c.name = 'Алина Минеева'
-  OR c.director_name = 'Алина Минеева'
-)
+WHERE REPLACE(REPLACE(REPLACE(REPLACE(c.phone, ' ', ''), '-', ''), '(', ''), ')', '') = '+79530225627'
 AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 216)
 LIMIT 1;
 
@@ -33129,11 +29203,7 @@ SELECT
   NOW(),
   NOW()
 FROM rental_clients c
-WHERE (
-  REPLACE(REPLACE(REPLACE(REPLACE(c.phone, ' ', ''), '-', ''), '(', ''), ')', '') = '+79530225627'
-  OR c.name = 'Алина Минеева'
-  OR c.director_name = 'Алина Минеева'
-)
+WHERE REPLACE(REPLACE(REPLACE(REPLACE(c.phone, ' ', ''), '-', ''), '(', ''), ')', '') = '+79530225627'
 AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 215)
 LIMIT 1;
 
@@ -33162,11 +29232,7 @@ SELECT
   NOW(),
   NOW()
 FROM rental_clients c
-WHERE (
-  REPLACE(REPLACE(REPLACE(REPLACE(c.phone, ' ', ''), '-', ''), '(', ''), ')', '') = '+79530225627'
-  OR c.name = 'Алина Минеева'
-  OR c.director_name = 'Алина Минеева'
-)
+WHERE REPLACE(REPLACE(REPLACE(REPLACE(c.phone, ' ', ''), '-', ''), '(', ''), ')', '') = '+79530225627'
 AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 214)
 LIMIT 1;
 
@@ -33195,11 +29261,7 @@ SELECT
   NOW(),
   NOW()
 FROM rental_clients c
-WHERE (
-  REPLACE(REPLACE(REPLACE(REPLACE(c.phone, ' ', ''), '-', ''), '(', ''), ')', '') = '+79172278327'
-  OR c.name = 'Юлия Воронова'
-  OR c.director_name = 'Юлия Воронова'
-)
+WHERE REPLACE(REPLACE(REPLACE(REPLACE(c.phone, ' ', ''), '-', ''), '(', ''), ')', '') = '+79172278327'
 AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 213)
 LIMIT 1;
 
@@ -33228,11 +29290,7 @@ SELECT
   NOW(),
   NOW()
 FROM rental_clients c
-WHERE (
-  REPLACE(REPLACE(REPLACE(REPLACE(c.phone, ' ', ''), '-', ''), '(', ''), ')', '') = '+79172278327'
-  OR c.name = 'Юлия Воронова'
-  OR c.director_name = 'Юлия Воронова'
-)
+WHERE REPLACE(REPLACE(REPLACE(REPLACE(c.phone, ' ', ''), '-', ''), '(', ''), ')', '') = '+79172278327'
 AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 212)
 LIMIT 1;
 
@@ -33261,11 +29319,7 @@ SELECT
   NOW(),
   NOW()
 FROM rental_clients c
-WHERE (
-  REPLACE(REPLACE(REPLACE(REPLACE(c.phone, ' ', ''), '-', ''), '(', ''), ')', '') = '+79046623179'
-  OR c.name = 'Екатерина Кореева'
-  OR c.director_name = 'Екатерина Кореева'
-)
+WHERE REPLACE(REPLACE(REPLACE(REPLACE(c.phone, ' ', ''), '-', ''), '(', ''), ')', '') = '+79046623179'
 AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 211)
 LIMIT 1;
 
@@ -33294,11 +29348,7 @@ SELECT
   NOW(),
   NOW()
 FROM rental_clients c
-WHERE (
-  REPLACE(REPLACE(REPLACE(REPLACE(c.phone, ' ', ''), '-', ''), '(', ''), ')', '') = '+79600565131'
-  OR c.name = 'Камила Ягудина'
-  OR c.director_name = 'Камила Ягудина'
-)
+WHERE REPLACE(REPLACE(REPLACE(REPLACE(c.phone, ' ', ''), '-', ''), '(', ''), ')', '') = '+79600565131'
 AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 210)
 LIMIT 1;
 
@@ -33327,11 +29377,7 @@ SELECT
   NOW(),
   NOW()
 FROM rental_clients c
-WHERE (
-  REPLACE(REPLACE(REPLACE(REPLACE(c.phone, ' ', ''), '-', ''), '(', ''), ')', '') = '+79872750395'
-  OR c.name = 'Зельфира'
-  OR c.director_name = 'Зельфира'
-)
+WHERE REPLACE(REPLACE(REPLACE(REPLACE(c.phone, ' ', ''), '-', ''), '(', ''), ')', '') = '+79872750395'
 AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 208)
 LIMIT 1;
 
@@ -33360,11 +29406,7 @@ SELECT
   NOW(),
   NOW()
 FROM rental_clients c
-WHERE (
-  REPLACE(REPLACE(REPLACE(REPLACE(c.phone, ' ', ''), '-', ''), '(', ''), ')', '') = '+79033408152'
-  OR c.name = 'Юлианна'
-  OR c.director_name = 'Юлианна'
-)
+WHERE REPLACE(REPLACE(REPLACE(REPLACE(c.phone, ' ', ''), '-', ''), '(', ''), ')', '') = '+79033408152'
 AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 207)
 LIMIT 1;
 
@@ -33393,11 +29435,7 @@ SELECT
   NOW(),
   NOW()
 FROM rental_clients c
-WHERE (
-  REPLACE(REPLACE(REPLACE(REPLACE(c.phone, ' ', ''), '-', ''), '(', ''), ')', '') = '+79274299177'
-  OR c.name = 'Мария Экскурсовод'
-  OR c.director_name = 'Мария Экскурсовод'
-)
+WHERE REPLACE(REPLACE(REPLACE(REPLACE(c.phone, ' ', ''), '-', ''), '(', ''), ')', '') = '+79274299177'
 AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 206)
 LIMIT 1;
 
@@ -33426,11 +29464,7 @@ SELECT
   NOW(),
   NOW()
 FROM rental_clients c
-WHERE (
-  REPLACE(REPLACE(REPLACE(REPLACE(c.phone, ' ', ''), '-', ''), '(', ''), ')', '') = '+79625552796'
-  OR c.name = 'Гульнара'
-  OR c.director_name = 'Гульнара'
-)
+WHERE REPLACE(REPLACE(REPLACE(REPLACE(c.phone, ' ', ''), '-', ''), '(', ''), ')', '') = '+79625552796'
 AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 205)
 LIMIT 1;
 
@@ -33459,11 +29493,7 @@ SELECT
   NOW(),
   NOW()
 FROM rental_clients c
-WHERE (
-  REPLACE(REPLACE(REPLACE(REPLACE(c.phone, ' ', ''), '-', ''), '(', ''), ')', '') = '+79625552796'
-  OR c.name = 'Гульнара'
-  OR c.director_name = 'Гульнара'
-)
+WHERE REPLACE(REPLACE(REPLACE(REPLACE(c.phone, ' ', ''), '-', ''), '(', ''), ')', '') = '+79625552796'
 AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 204)
 LIMIT 1;
 
@@ -33492,11 +29522,7 @@ SELECT
   NOW(),
   NOW()
 FROM rental_clients c
-WHERE (
-  REPLACE(REPLACE(REPLACE(REPLACE(c.phone, ' ', ''), '-', ''), '(', ''), ')', '') = '+79172733148'
-  OR c.name = 'Алёна Лазука'
-  OR c.director_name = 'Алёна Лазука'
-)
+WHERE REPLACE(REPLACE(REPLACE(REPLACE(c.phone, ' ', ''), '-', ''), '(', ''), ')', '') = '+79172733148'
 AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 203)
 LIMIT 1;
 
@@ -33525,11 +29551,7 @@ SELECT
   NOW(),
   NOW()
 FROM rental_clients c
-WHERE (
-  REPLACE(REPLACE(REPLACE(REPLACE(c.phone, ' ', ''), '-', ''), '(', ''), ')', '') = '+79028352353'
-  OR c.name = 'Автокруиз'
-  OR c.director_name = 'Автокруиз'
-)
+WHERE REPLACE(REPLACE(REPLACE(REPLACE(c.phone, ' ', ''), '-', ''), '(', ''), ')', '') = '+79028352353'
 AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 202)
 LIMIT 1;
 
@@ -33558,11 +29580,7 @@ SELECT
   NOW(),
   NOW()
 FROM rental_clients c
-WHERE (
-  REPLACE(REPLACE(REPLACE(REPLACE(c.phone, ' ', ''), '-', ''), '(', ''), ')', '') = '+79872750395'
-  OR c.name = 'Зельфира'
-  OR c.director_name = 'Зельфира'
-)
+WHERE REPLACE(REPLACE(REPLACE(REPLACE(c.phone, ' ', ''), '-', ''), '(', ''), ')', '') = '+79872750395'
 AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 201)
 LIMIT 1;
 
@@ -33591,11 +29609,7 @@ SELECT
   NOW(),
   NOW()
 FROM rental_clients c
-WHERE (
-  REPLACE(REPLACE(REPLACE(REPLACE(c.phone, ' ', ''), '-', ''), '(', ''), ')', '') = '+79107527951'
-  OR c.name = 'Наталья Рыжкова'
-  OR c.director_name = 'Наталья Рыжкова'
-)
+WHERE REPLACE(REPLACE(REPLACE(REPLACE(c.phone, ' ', ''), '-', ''), '(', ''), ')', '') = '+79107527951'
 AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 200)
 LIMIT 1;
 
@@ -33624,11 +29638,7 @@ SELECT
   NOW(),
   NOW()
 FROM rental_clients c
-WHERE (
-  REPLACE(REPLACE(REPLACE(REPLACE(c.phone, ' ', ''), '-', ''), '(', ''), ')', '') = '+79872902704'
-  OR c.name = 'Лиля Экскурсовод'
-  OR c.director_name = 'Лиля Экскурсовод'
-)
+WHERE REPLACE(REPLACE(REPLACE(REPLACE(c.phone, ' ', ''), '-', ''), '(', ''), ')', '') = '+79872902704'
 AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 199)
 LIMIT 1;
 
@@ -33657,11 +29667,7 @@ SELECT
   NOW(),
   NOW()
 FROM rental_clients c
-WHERE (
-  REPLACE(REPLACE(REPLACE(REPLACE(c.phone, ' ', ''), '-', ''), '(', ''), ')', '') = '+79179142756'
-  OR c.name = 'Татьяна (Гольфстрим)'
-  OR c.director_name = 'Татьяна (Гольфстрим)'
-)
+WHERE REPLACE(REPLACE(REPLACE(REPLACE(c.phone, ' ', ''), '-', ''), '(', ''), ')', '') = '+79179142756'
 AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 198)
 LIMIT 1;
 
@@ -33690,11 +29696,7 @@ SELECT
   NOW(),
   NOW()
 FROM rental_clients c
-WHERE (
-  REPLACE(REPLACE(REPLACE(REPLACE(c.phone, ' ', ''), '-', ''), '(', ''), ')', '') = '+79179142756'
-  OR c.name = 'Татьяна (Гольфстрим)'
-  OR c.director_name = 'Татьяна (Гольфстрим)'
-)
+WHERE REPLACE(REPLACE(REPLACE(REPLACE(c.phone, ' ', ''), '-', ''), '(', ''), ')', '') = '+79179142756'
 AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 197)
 LIMIT 1;
 
@@ -33723,11 +29725,7 @@ SELECT
   NOW(),
   NOW()
 FROM rental_clients c
-WHERE (
-  REPLACE(REPLACE(REPLACE(REPLACE(c.phone, ' ', ''), '-', ''), '(', ''), ')', '') = '+79179142756'
-  OR c.name = 'Татьяна (Гольфстрим)'
-  OR c.director_name = 'Татьяна (Гольфстрим)'
-)
+WHERE REPLACE(REPLACE(REPLACE(REPLACE(c.phone, ' ', ''), '-', ''), '(', ''), ')', '') = '+79179142756'
 AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 196)
 LIMIT 1;
 
@@ -33756,11 +29754,7 @@ SELECT
   NOW(),
   NOW()
 FROM rental_clients c
-WHERE (
-  REPLACE(REPLACE(REPLACE(REPLACE(c.phone, ' ', ''), '-', ''), '(', ''), ')', '') = '+79220064070'
-  OR c.name = 'Сергей'
-  OR c.director_name = 'Сергей'
-)
+WHERE REPLACE(REPLACE(REPLACE(REPLACE(c.phone, ' ', ''), '-', ''), '(', ''), ')', '') = '+79220064070'
 AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 195)
 LIMIT 1;
 
@@ -33789,11 +29783,7 @@ SELECT
   NOW(),
   NOW()
 FROM rental_clients c
-WHERE (
-  REPLACE(REPLACE(REPLACE(REPLACE(c.phone, ' ', ''), '-', ''), '(', ''), ')', '') = '+79277213758'
-  OR c.name = 'Любовь Ким'
-  OR c.director_name = 'Любовь Ким'
-)
+WHERE REPLACE(REPLACE(REPLACE(REPLACE(c.phone, ' ', ''), '-', ''), '(', ''), ')', '') = '+79277213758'
 AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 194)
 LIMIT 1;
 
@@ -33822,11 +29812,7 @@ SELECT
   NOW(),
   NOW()
 FROM rental_clients c
-WHERE (
-  REPLACE(REPLACE(REPLACE(REPLACE(c.phone, ' ', ''), '-', ''), '(', ''), ')', '') = '+79274299177'
-  OR c.name = 'Мария Экскурсовод'
-  OR c.director_name = 'Мария Экскурсовод'
-)
+WHERE REPLACE(REPLACE(REPLACE(REPLACE(c.phone, ' ', ''), '-', ''), '(', ''), ')', '') = '+79274299177'
 AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 193)
 LIMIT 1;
 
@@ -33855,11 +29841,7 @@ SELECT
   NOW(),
   NOW()
 FROM rental_clients c
-WHERE (
-  REPLACE(REPLACE(REPLACE(REPLACE(c.phone, ' ', ''), '-', ''), '(', ''), ')', '') = '+79393309448'
-  OR c.name = 'Андрей (Экскурс)'
-  OR c.director_name = 'Андрей (Экскурс)'
-)
+WHERE REPLACE(REPLACE(REPLACE(REPLACE(c.phone, ' ', ''), '-', ''), '(', ''), ')', '') = '+79393309448'
 AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 192)
 LIMIT 1;
 
@@ -33888,11 +29870,7 @@ SELECT
   NOW(),
   NOW()
 FROM rental_clients c
-WHERE (
-  REPLACE(REPLACE(REPLACE(REPLACE(c.phone, ' ', ''), '-', ''), '(', ''), ')', '') = '+79028352353'
-  OR c.name = 'Автокруиз'
-  OR c.director_name = 'Автокруиз'
-)
+WHERE REPLACE(REPLACE(REPLACE(REPLACE(c.phone, ' ', ''), '-', ''), '(', ''), ')', '') = '+79028352353'
 AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 191)
 LIMIT 1;
 
@@ -33921,11 +29899,7 @@ SELECT
   NOW(),
   NOW()
 FROM rental_clients c
-WHERE (
-  REPLACE(REPLACE(REPLACE(REPLACE(c.phone, ' ', ''), '-', ''), '(', ''), ')', '') = '+79033408152'
-  OR c.name = 'Юлианна'
-  OR c.director_name = 'Юлианна'
-)
+WHERE REPLACE(REPLACE(REPLACE(REPLACE(c.phone, ' ', ''), '-', ''), '(', ''), ')', '') = '+79033408152'
 AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 190)
 LIMIT 1;
 
@@ -33954,11 +29928,7 @@ SELECT
   NOW(),
   NOW()
 FROM rental_clients c
-WHERE (
-  REPLACE(REPLACE(REPLACE(REPLACE(c.phone, ' ', ''), '-', ''), '(', ''), ')', '') = '+79033408152'
-  OR c.name = 'Юлианна'
-  OR c.director_name = 'Юлианна'
-)
+WHERE REPLACE(REPLACE(REPLACE(REPLACE(c.phone, ' ', ''), '-', ''), '(', ''), ')', '') = '+79033408152'
 AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 189)
 LIMIT 1;
 
@@ -33987,11 +29957,7 @@ SELECT
   NOW(),
   NOW()
 FROM rental_clients c
-WHERE (
-  REPLACE(REPLACE(REPLACE(REPLACE(c.phone, ' ', ''), '-', ''), '(', ''), ')', '') = '+79163108629'
-  OR c.name = 'Галина Тур Москва'
-  OR c.director_name = 'Галина Тур Москва'
-)
+WHERE REPLACE(REPLACE(REPLACE(REPLACE(c.phone, ' ', ''), '-', ''), '(', ''), ')', '') = '+79163108629'
 AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 188)
 LIMIT 1;
 
@@ -34020,11 +29986,7 @@ SELECT
   NOW(),
   NOW()
 FROM rental_clients c
-WHERE (
-  REPLACE(REPLACE(REPLACE(REPLACE(c.phone, ' ', ''), '-', ''), '(', ''), ')', '') = '+79872750395'
-  OR c.name = 'Зельфира'
-  OR c.director_name = 'Зельфира'
-)
+WHERE REPLACE(REPLACE(REPLACE(REPLACE(c.phone, ' ', ''), '-', ''), '(', ''), ')', '') = '+79872750395'
 AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 187)
 LIMIT 1;
 
@@ -34053,11 +30015,7 @@ SELECT
   NOW(),
   NOW()
 FROM rental_clients c
-WHERE (
-  REPLACE(REPLACE(REPLACE(REPLACE(c.phone, ' ', ''), '-', ''), '(', ''), ')', '') = '+79872750395'
-  OR c.name = 'Зельфира'
-  OR c.director_name = 'Зельфира'
-)
+WHERE REPLACE(REPLACE(REPLACE(REPLACE(c.phone, ' ', ''), '-', ''), '(', ''), ')', '') = '+79872750395'
 AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 186)
 LIMIT 1;
 
@@ -34086,11 +30044,7 @@ SELECT
   NOW(),
   NOW()
 FROM rental_clients c
-WHERE (
-  REPLACE(REPLACE(REPLACE(REPLACE(c.phone, ' ', ''), '-', ''), '(', ''), ')', '') = '+79625795347'
-  OR c.name = 'Снежана'
-  OR c.director_name = 'Снежана'
-)
+WHERE REPLACE(REPLACE(REPLACE(REPLACE(c.phone, ' ', ''), '-', ''), '(', ''), ')', '') = '+79625795347'
 AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 185)
 LIMIT 1;
 
@@ -34119,11 +30073,7 @@ SELECT
   NOW(),
   NOW()
 FROM rental_clients c
-WHERE (
-  REPLACE(REPLACE(REPLACE(REPLACE(c.phone, ' ', ''), '-', ''), '(', ''), ')', '') = '+79028352353'
-  OR c.name = 'Автокруиз'
-  OR c.director_name = 'Автокруиз'
-)
+WHERE REPLACE(REPLACE(REPLACE(REPLACE(c.phone, ' ', ''), '-', ''), '(', ''), ')', '') = '+79028352353'
 AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 184)
 LIMIT 1;
 
@@ -34152,11 +30102,7 @@ SELECT
   NOW(),
   NOW()
 FROM rental_clients c
-WHERE (
-  REPLACE(REPLACE(REPLACE(REPLACE(c.phone, ' ', ''), '-', ''), '(', ''), ')', '') = '+79872902704'
-  OR c.name = 'Лиля Экскурсовод'
-  OR c.director_name = 'Лиля Экскурсовод'
-)
+WHERE REPLACE(REPLACE(REPLACE(REPLACE(c.phone, ' ', ''), '-', ''), '(', ''), ')', '') = '+79872902704'
 AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 183)
 LIMIT 1;
 
@@ -34185,11 +30131,7 @@ SELECT
   NOW(),
   NOW()
 FROM rental_clients c
-WHERE (
-  REPLACE(REPLACE(REPLACE(REPLACE(c.phone, ' ', ''), '-', ''), '(', ''), ')', '') = '+79274299177'
-  OR c.name = 'Мария Экскурсовод'
-  OR c.director_name = 'Мария Экскурсовод'
-)
+WHERE REPLACE(REPLACE(REPLACE(REPLACE(c.phone, ' ', ''), '-', ''), '(', ''), ')', '') = '+79274299177'
 AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 182)
 LIMIT 1;
 
@@ -34218,11 +30160,7 @@ SELECT
   NOW(),
   NOW()
 FROM rental_clients c
-WHERE (
-  REPLACE(REPLACE(REPLACE(REPLACE(c.phone, ' ', ''), '-', ''), '(', ''), ')', '') = '+79872827166'
-  OR c.name = 'Татьяна Чуб'
-  OR c.director_name = 'Татьяна Чуб'
-)
+WHERE REPLACE(REPLACE(REPLACE(REPLACE(c.phone, ' ', ''), '-', ''), '(', ''), ')', '') = '+79872827166'
 AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 181)
 LIMIT 1;
 
@@ -34251,11 +30189,7 @@ SELECT
   NOW(),
   NOW()
 FROM rental_clients c
-WHERE (
-  REPLACE(REPLACE(REPLACE(REPLACE(c.phone, ' ', ''), '-', ''), '(', ''), ')', '') = '+79211263650'
-  OR c.name = 'Андрей Вологда'
-  OR c.director_name = 'Андрей Вологда'
-)
+WHERE REPLACE(REPLACE(REPLACE(REPLACE(c.phone, ' ', ''), '-', ''), '(', ''), ')', '') = '+79211263650'
 AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 180)
 LIMIT 1;
 
@@ -34284,11 +30218,7 @@ SELECT
   NOW(),
   NOW()
 FROM rental_clients c
-WHERE (
-  REPLACE(REPLACE(REPLACE(REPLACE(c.phone, ' ', ''), '-', ''), '(', ''), ')', '') = '+79625552796'
-  OR c.name = 'Гульнара'
-  OR c.director_name = 'Гульнара'
-)
+WHERE REPLACE(REPLACE(REPLACE(REPLACE(c.phone, ' ', ''), '-', ''), '(', ''), ')', '') = '+79625552796'
 AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 179)
 LIMIT 1;
 
@@ -34317,11 +30247,7 @@ SELECT
   NOW(),
   NOW()
 FROM rental_clients c
-WHERE (
-  REPLACE(REPLACE(REPLACE(REPLACE(c.phone, ' ', ''), '-', ''), '(', ''), ')', '') = '+79036945019'
-  OR c.name = 'Наталья'
-  OR c.director_name = 'Наталья'
-)
+WHERE REPLACE(REPLACE(REPLACE(REPLACE(c.phone, ' ', ''), '-', ''), '(', ''), ')', '') = '+79036945019'
 AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 178)
 LIMIT 1;
 
@@ -34350,11 +30276,7 @@ SELECT
   NOW(),
   NOW()
 FROM rental_clients c
-WHERE (
-  REPLACE(REPLACE(REPLACE(REPLACE(c.phone, ' ', ''), '-', ''), '(', ''), ')', '') = '+79600336033'
-  OR c.name = 'Галия'
-  OR c.director_name = 'Галия'
-)
+WHERE REPLACE(REPLACE(REPLACE(REPLACE(c.phone, ' ', ''), '-', ''), '(', ''), ')', '') = '+79600336033'
 AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 177)
 LIMIT 1;
 
@@ -34383,11 +30305,7 @@ SELECT
   NOW(),
   NOW()
 FROM rental_clients c
-WHERE (
-  REPLACE(REPLACE(REPLACE(REPLACE(c.phone, ' ', ''), '-', ''), '(', ''), ')', '') = '+79101776156'
-  OR c.name = 'Анюта Родионова (Родина-тур)'
-  OR c.director_name = 'Анюта Родионова (Родина-тур)'
-)
+WHERE REPLACE(REPLACE(REPLACE(REPLACE(c.phone, ' ', ''), '-', ''), '(', ''), ')', '') = '+79101776156'
 AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 176)
 LIMIT 1;
 
@@ -34416,11 +30334,7 @@ SELECT
   NOW(),
   NOW()
 FROM rental_clients c
-WHERE (
-  REPLACE(REPLACE(REPLACE(REPLACE(c.phone, ' ', ''), '-', ''), '(', ''), ')', '') = '+79033443111'
-  OR c.name = 'Элина (Сититур)'
-  OR c.director_name = 'Элина (Сититур)'
-)
+WHERE REPLACE(REPLACE(REPLACE(REPLACE(c.phone, ' ', ''), '-', ''), '(', ''), ')', '') = '+79033443111'
 AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 175)
 LIMIT 1;
 
@@ -34449,11 +30363,7 @@ SELECT
   NOW(),
   NOW()
 FROM rental_clients c
-WHERE (
-  REPLACE(REPLACE(REPLACE(REPLACE(c.phone, ' ', ''), '-', ''), '(', ''), ')', '') = '+79872821123'
-  OR c.name = 'Гульфия'
-  OR c.director_name = 'Гульфия'
-)
+WHERE REPLACE(REPLACE(REPLACE(REPLACE(c.phone, ' ', ''), '-', ''), '(', ''), ')', '') = '+79872821123'
 AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 174)
 LIMIT 1;
 
@@ -34482,11 +30392,7 @@ SELECT
   NOW(),
   NOW()
 FROM rental_clients c
-WHERE (
-  REPLACE(REPLACE(REPLACE(REPLACE(c.phone, ' ', ''), '-', ''), '(', ''), ')', '') = '+79033408152'
-  OR c.name = 'Юлианна'
-  OR c.director_name = 'Юлианна'
-)
+WHERE REPLACE(REPLACE(REPLACE(REPLACE(c.phone, ' ', ''), '-', ''), '(', ''), ')', '') = '+79033408152'
 AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 173)
 LIMIT 1;
 
@@ -34515,11 +30421,7 @@ SELECT
   NOW(),
   NOW()
 FROM rental_clients c
-WHERE (
-  REPLACE(REPLACE(REPLACE(REPLACE(c.phone, ' ', ''), '-', ''), '(', ''), ')', '') = '+79872902704'
-  OR c.name = 'Лиля Экскурсовод'
-  OR c.director_name = 'Лиля Экскурсовод'
-)
+WHERE REPLACE(REPLACE(REPLACE(REPLACE(c.phone, ' ', ''), '-', ''), '(', ''), ')', '') = '+79872902704'
 AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 172)
 LIMIT 1;
 
@@ -34548,11 +30450,7 @@ SELECT
   NOW(),
   NOW()
 FROM rental_clients c
-WHERE (
-  REPLACE(REPLACE(REPLACE(REPLACE(c.phone, ' ', ''), '-', ''), '(', ''), ')', '') = '+79179142756'
-  OR c.name = 'Татьяна (Гольфстрим)'
-  OR c.director_name = 'Татьяна (Гольфстрим)'
-)
+WHERE REPLACE(REPLACE(REPLACE(REPLACE(c.phone, ' ', ''), '-', ''), '(', ''), ')', '') = '+79179142756'
 AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 171)
 LIMIT 1;
 
@@ -34581,11 +30479,7 @@ SELECT
   NOW(),
   NOW()
 FROM rental_clients c
-WHERE (
-  REPLACE(REPLACE(REPLACE(REPLACE(c.phone, ' ', ''), '-', ''), '(', ''), ')', '') = '+79179142756'
-  OR c.name = 'Татьяна (Гольфстрим)'
-  OR c.director_name = 'Татьяна (Гольфстрим)'
-)
+WHERE REPLACE(REPLACE(REPLACE(REPLACE(c.phone, ' ', ''), '-', ''), '(', ''), ')', '') = '+79179142756'
 AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 170)
 LIMIT 1;
 
@@ -34614,11 +30508,7 @@ SELECT
   NOW(),
   NOW()
 FROM rental_clients c
-WHERE (
-  REPLACE(REPLACE(REPLACE(REPLACE(c.phone, ' ', ''), '-', ''), '(', ''), ')', '') = '+79274299177'
-  OR c.name = 'Мария Экскурсовод'
-  OR c.director_name = 'Мария Экскурсовод'
-)
+WHERE REPLACE(REPLACE(REPLACE(REPLACE(c.phone, ' ', ''), '-', ''), '(', ''), ')', '') = '+79274299177'
 AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 169)
 LIMIT 1;
 
@@ -34647,11 +30537,7 @@ SELECT
   NOW(),
   NOW()
 FROM rental_clients c
-WHERE (
-  REPLACE(REPLACE(REPLACE(REPLACE(c.phone, ' ', ''), '-', ''), '(', ''), ')', '') = '+79625552796'
-  OR c.name = 'Гульнара'
-  OR c.director_name = 'Гульнара'
-)
+WHERE REPLACE(REPLACE(REPLACE(REPLACE(c.phone, ' ', ''), '-', ''), '(', ''), ')', '') = '+79625552796'
 AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 168)
 LIMIT 1;
 
@@ -34680,11 +30566,7 @@ SELECT
   NOW(),
   NOW()
 FROM rental_clients c
-WHERE (
-  REPLACE(REPLACE(REPLACE(REPLACE(c.phone, ' ', ''), '-', ''), '(', ''), ')', '') = '+79872750395'
-  OR c.name = 'Зельфира'
-  OR c.director_name = 'Зельфира'
-)
+WHERE REPLACE(REPLACE(REPLACE(REPLACE(c.phone, ' ', ''), '-', ''), '(', ''), ')', '') = '+79872750395'
 AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 167)
 LIMIT 1;
 
@@ -34713,11 +30595,7 @@ SELECT
   NOW(),
   NOW()
 FROM rental_clients c
-WHERE (
-  REPLACE(REPLACE(REPLACE(REPLACE(c.phone, ' ', ''), '-', ''), '(', ''), ')', '') = '+79033428060'
-  OR c.name = 'Светлана'
-  OR c.director_name = 'Светлана'
-)
+WHERE REPLACE(REPLACE(REPLACE(REPLACE(c.phone, ' ', ''), '-', ''), '(', ''), ')', '') = '+79033428060'
 AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 166)
 LIMIT 1;
 
@@ -34746,11 +30624,7 @@ SELECT
   NOW(),
   NOW()
 FROM rental_clients c
-WHERE (
-  REPLACE(REPLACE(REPLACE(REPLACE(c.phone, ' ', ''), '-', ''), '(', ''), ')', '') = '+79397368972'
-  OR c.name = 'Яна Янова'
-  OR c.director_name = 'Яна Янова'
-)
+WHERE REPLACE(REPLACE(REPLACE(REPLACE(c.phone, ' ', ''), '-', ''), '(', ''), ')', '') = '+79397368972'
 AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 165)
 LIMIT 1;
 
@@ -34779,11 +30653,7 @@ SELECT
   NOW(),
   NOW()
 FROM rental_clients c
-WHERE (
-  REPLACE(REPLACE(REPLACE(REPLACE(c.phone, ' ', ''), '-', ''), '(', ''), ')', '') = '+79274299177'
-  OR c.name = 'Мария Экскурсовод'
-  OR c.director_name = 'Мария Экскурсовод'
-)
+WHERE REPLACE(REPLACE(REPLACE(REPLACE(c.phone, ' ', ''), '-', ''), '(', ''), ')', '') = '+79274299177'
 AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 164)
 LIMIT 1;
 
@@ -34812,11 +30682,7 @@ SELECT
   NOW(),
   NOW()
 FROM rental_clients c
-WHERE (
-  REPLACE(REPLACE(REPLACE(REPLACE(c.phone, ' ', ''), '-', ''), '(', ''), ')', '') = '+79872821123'
-  OR c.name = 'Гульфия'
-  OR c.director_name = 'Гульфия'
-)
+WHERE REPLACE(REPLACE(REPLACE(REPLACE(c.phone, ' ', ''), '-', ''), '(', ''), ')', '') = '+79872821123'
 AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 163)
 LIMIT 1;
 
@@ -34845,11 +30711,7 @@ SELECT
   NOW(),
   NOW()
 FROM rental_clients c
-WHERE (
-  REPLACE(REPLACE(REPLACE(REPLACE(c.phone, ' ', ''), '-', ''), '(', ''), ')', '') = '+79033428060'
-  OR c.name = 'Светлана'
-  OR c.director_name = 'Светлана'
-)
+WHERE REPLACE(REPLACE(REPLACE(REPLACE(c.phone, ' ', ''), '-', ''), '(', ''), ')', '') = '+79033428060'
 AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 162)
 LIMIT 1;
 
@@ -34878,11 +30740,7 @@ SELECT
   NOW(),
   NOW()
 FROM rental_clients c
-WHERE (
-  REPLACE(REPLACE(REPLACE(REPLACE(c.phone, ' ', ''), '-', ''), '(', ''), ')', '') = '+79274662530'
-  OR c.name = 'Екатерина'
-  OR c.director_name = 'Екатерина'
-)
+WHERE REPLACE(REPLACE(REPLACE(REPLACE(c.phone, ' ', ''), '-', ''), '(', ''), ')', '') = '+79274662530'
 AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 161)
 LIMIT 1;
 
@@ -34911,11 +30769,7 @@ SELECT
   NOW(),
   NOW()
 FROM rental_clients c
-WHERE (
-  REPLACE(REPLACE(REPLACE(REPLACE(c.phone, ' ', ''), '-', ''), '(', ''), ')', '') = '+79033414430'
-  OR c.name = 'Рамис'
-  OR c.director_name = 'Рамис'
-)
+WHERE REPLACE(REPLACE(REPLACE(REPLACE(c.phone, ' ', ''), '-', ''), '(', ''), ')', '') = '+79033414430'
 AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 160)
 LIMIT 1;
 
@@ -34944,11 +30798,7 @@ SELECT
   NOW(),
   NOW()
 FROM rental_clients c
-WHERE (
-  REPLACE(REPLACE(REPLACE(REPLACE(c.phone, ' ', ''), '-', ''), '(', ''), ')', '') = '+79397368972'
-  OR c.name = 'Яна Янова'
-  OR c.director_name = 'Яна Янова'
-)
+WHERE REPLACE(REPLACE(REPLACE(REPLACE(c.phone, ' ', ''), '-', ''), '(', ''), ')', '') = '+79397368972'
 AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 159)
 LIMIT 1;
 
@@ -34977,11 +30827,7 @@ SELECT
   NOW(),
   NOW()
 FROM rental_clients c
-WHERE (
-  REPLACE(REPLACE(REPLACE(REPLACE(c.phone, ' ', ''), '-', ''), '(', ''), ')', '') = '+79262118230'
-  OR c.name = 'Елена Игнатьева'
-  OR c.director_name = 'Елена Игнатьева'
-)
+WHERE REPLACE(REPLACE(REPLACE(REPLACE(c.phone, ' ', ''), '-', ''), '(', ''), ')', '') = '+79262118230'
 AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 158)
 LIMIT 1;
 
@@ -35010,11 +30856,7 @@ SELECT
   NOW(),
   NOW()
 FROM rental_clients c
-WHERE (
-  REPLACE(REPLACE(REPLACE(REPLACE(c.phone, ' ', ''), '-', ''), '(', ''), ')', '') = '+79003208221'
-  OR c.name = 'Елена Экскурсовод'
-  OR c.director_name = 'Елена Экскурсовод'
-)
+WHERE REPLACE(REPLACE(REPLACE(REPLACE(c.phone, ' ', ''), '-', ''), '(', ''), ')', '') = '+79003208221'
 AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 157)
 LIMIT 1;
 
@@ -35043,11 +30885,7 @@ SELECT
   NOW(),
   NOW()
 FROM rental_clients c
-WHERE (
-  REPLACE(REPLACE(REPLACE(REPLACE(c.phone, ' ', ''), '-', ''), '(', ''), ')', '') = '+79172278327'
-  OR c.name = 'Юлия Воронова'
-  OR c.director_name = 'Юлия Воронова'
-)
+WHERE REPLACE(REPLACE(REPLACE(REPLACE(c.phone, ' ', ''), '-', ''), '(', ''), ')', '') = '+79172278327'
 AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 156)
 LIMIT 1;
 
@@ -35076,11 +30914,7 @@ SELECT
   NOW(),
   NOW()
 FROM rental_clients c
-WHERE (
-  REPLACE(REPLACE(REPLACE(REPLACE(c.phone, ' ', ''), '-', ''), '(', ''), ')', '') = '+79662409276'
-  OR c.name = 'Мира (ИП)'
-  OR c.director_name = 'Мира (ИП)'
-)
+WHERE REPLACE(REPLACE(REPLACE(REPLACE(c.phone, ' ', ''), '-', ''), '(', ''), ')', '') = '+79662409276'
 AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 155)
 LIMIT 1;
 
@@ -35109,10 +30943,7 @@ SELECT
   NOW(),
   NOW()
 FROM rental_clients c
-WHERE (
-  c.name = 'Эдик Заказы для групп'
-  OR c.director_name = 'Эдик Заказы для групп'
-)
+WHERE (c.name ILIKE '%Эдик%' OR c.director_name ILIKE '%Эдик%')
 AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 154)
 LIMIT 1;
 
@@ -35141,11 +30972,7 @@ SELECT
   NOW(),
   NOW()
 FROM rental_clients c
-WHERE (
-  REPLACE(REPLACE(REPLACE(REPLACE(c.phone, ' ', ''), '-', ''), '(', ''), ')', '') = '+79872797484'
-  OR c.name = 'Алина Сафина'
-  OR c.director_name = 'Алина Сафина'
-)
+WHERE REPLACE(REPLACE(REPLACE(REPLACE(c.phone, ' ', ''), '-', ''), '(', ''), ')', '') = '+79872797484'
 AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 153)
 LIMIT 1;
 
@@ -35174,11 +31001,7 @@ SELECT
   NOW(),
   NOW()
 FROM rental_clients c
-WHERE (
-  REPLACE(REPLACE(REPLACE(REPLACE(c.phone, ' ', ''), '-', ''), '(', ''), ')', '') = '+79867215041'
-  OR c.name = 'Наргиз'
-  OR c.director_name = 'Наргиз'
-)
+WHERE REPLACE(REPLACE(REPLACE(REPLACE(c.phone, ' ', ''), '-', ''), '(', ''), ')', '') = '+79867215041'
 AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 152)
 LIMIT 1;
 
@@ -35207,11 +31030,7 @@ SELECT
   NOW(),
   NOW()
 FROM rental_clients c
-WHERE (
-  REPLACE(REPLACE(REPLACE(REPLACE(c.phone, ' ', ''), '-', ''), '(', ''), ')', '') = '+79033428060'
-  OR c.name = 'Светлана'
-  OR c.director_name = 'Светлана'
-)
+WHERE REPLACE(REPLACE(REPLACE(REPLACE(c.phone, ' ', ''), '-', ''), '(', ''), ')', '') = '+79033428060'
 AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 151)
 LIMIT 1;
 
@@ -35240,11 +31059,7 @@ SELECT
   NOW(),
   NOW()
 FROM rental_clients c
-WHERE (
-  REPLACE(REPLACE(REPLACE(REPLACE(c.phone, ' ', ''), '-', ''), '(', ''), ')', '') = '+79179142756'
-  OR c.name = 'Татьяна (Гольфстрим)'
-  OR c.director_name = 'Татьяна (Гольфстрим)'
-)
+WHERE REPLACE(REPLACE(REPLACE(REPLACE(c.phone, ' ', ''), '-', ''), '(', ''), ')', '') = '+79179142756'
 AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 150)
 LIMIT 1;
 
@@ -35273,11 +31088,7 @@ SELECT
   NOW(),
   NOW()
 FROM rental_clients c
-WHERE (
-  REPLACE(REPLACE(REPLACE(REPLACE(c.phone, ' ', ''), '-', ''), '(', ''), ')', '') = '+79211263650'
-  OR c.name = 'Андрей Вологда'
-  OR c.director_name = 'Андрей Вологда'
-)
+WHERE REPLACE(REPLACE(REPLACE(REPLACE(c.phone, ' ', ''), '-', ''), '(', ''), ')', '') = '+79211263650'
 AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 149)
 LIMIT 1;
 
@@ -35306,11 +31117,7 @@ SELECT
   NOW(),
   NOW()
 FROM rental_clients c
-WHERE (
-  REPLACE(REPLACE(REPLACE(REPLACE(c.phone, ' ', ''), '-', ''), '(', ''), ')', '') = '+79274299177'
-  OR c.name = 'Мария Экскурсовод'
-  OR c.director_name = 'Мария Экскурсовод'
-)
+WHERE REPLACE(REPLACE(REPLACE(REPLACE(c.phone, ' ', ''), '-', ''), '(', ''), ')', '') = '+79274299177'
 AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 148)
 LIMIT 1;
 
@@ -35339,11 +31146,7 @@ SELECT
   NOW(),
   NOW()
 FROM rental_clients c
-WHERE (
-  REPLACE(REPLACE(REPLACE(REPLACE(c.phone, ' ', ''), '-', ''), '(', ''), ')', '') = '+79991640682'
-  OR c.name = 'Клиент'
-  OR c.director_name = 'Клиент'
-)
+WHERE REPLACE(REPLACE(REPLACE(REPLACE(c.phone, ' ', ''), '-', ''), '(', ''), ')', '') = '+79991640682'
 AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 147)
 LIMIT 1;
 
@@ -35372,11 +31175,7 @@ SELECT
   NOW(),
   NOW()
 FROM rental_clients c
-WHERE (
-  REPLACE(REPLACE(REPLACE(REPLACE(c.phone, ' ', ''), '-', ''), '(', ''), ')', '') = '+79872141100'
-  OR c.name = 'Ксения'
-  OR c.director_name = 'Ксения'
-)
+WHERE REPLACE(REPLACE(REPLACE(REPLACE(c.phone, ' ', ''), '-', ''), '(', ''), ')', '') = '+79872141100'
 AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 146)
 LIMIT 1;
 
@@ -35405,11 +31204,7 @@ SELECT
   NOW(),
   NOW()
 FROM rental_clients c
-WHERE (
-  REPLACE(REPLACE(REPLACE(REPLACE(c.phone, ' ', ''), '-', ''), '(', ''), ')', '') = '+79033408152'
-  OR c.name = 'Юлианна'
-  OR c.director_name = 'Юлианна'
-)
+WHERE REPLACE(REPLACE(REPLACE(REPLACE(c.phone, ' ', ''), '-', ''), '(', ''), ')', '') = '+79033408152'
 AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 145)
 LIMIT 1;
 
@@ -35438,11 +31233,7 @@ SELECT
   NOW(),
   NOW()
 FROM rental_clients c
-WHERE (
-  REPLACE(REPLACE(REPLACE(REPLACE(c.phone, ' ', ''), '-', ''), '(', ''), ')', '') = '+79274111993'
-  OR c.name = 'София'
-  OR c.director_name = 'София'
-)
+WHERE REPLACE(REPLACE(REPLACE(REPLACE(c.phone, ' ', ''), '-', ''), '(', ''), ')', '') = '+79274111993'
 AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 144)
 LIMIT 1;
 
@@ -35471,11 +31262,7 @@ SELECT
   NOW(),
   NOW()
 FROM rental_clients c
-WHERE (
-  REPLACE(REPLACE(REPLACE(REPLACE(c.phone, ' ', ''), '-', ''), '(', ''), ')', '') = '+79220064070'
-  OR c.name = 'Сергей'
-  OR c.director_name = 'Сергей'
-)
+WHERE REPLACE(REPLACE(REPLACE(REPLACE(c.phone, ' ', ''), '-', ''), '(', ''), ')', '') = '+79220064070'
 AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 143)
 LIMIT 1;
 
@@ -35504,11 +31291,7 @@ SELECT
   NOW(),
   NOW()
 FROM rental_clients c
-WHERE (
-  REPLACE(REPLACE(REPLACE(REPLACE(c.phone, ' ', ''), '-', ''), '(', ''), ')', '') = '+79397368972'
-  OR c.name = 'Яна Янова'
-  OR c.director_name = 'Яна Янова'
-)
+WHERE REPLACE(REPLACE(REPLACE(REPLACE(c.phone, ' ', ''), '-', ''), '(', ''), ')', '') = '+79397368972'
 AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 142)
 LIMIT 1;
 
@@ -35537,11 +31320,7 @@ SELECT
   NOW(),
   NOW()
 FROM rental_clients c
-WHERE (
-  REPLACE(REPLACE(REPLACE(REPLACE(c.phone, ' ', ''), '-', ''), '(', ''), ')', '') = '+79172278327'
-  OR c.name = 'Юлия Воронова'
-  OR c.director_name = 'Юлия Воронова'
-)
+WHERE REPLACE(REPLACE(REPLACE(REPLACE(c.phone, ' ', ''), '-', ''), '(', ''), ')', '') = '+79172278327'
 AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 140)
 LIMIT 1;
 
@@ -35570,11 +31349,7 @@ SELECT
   NOW(),
   NOW()
 FROM rental_clients c
-WHERE (
-  REPLACE(REPLACE(REPLACE(REPLACE(c.phone, ' ', ''), '-', ''), '(', ''), ')', '') = '+79397368972'
-  OR c.name = 'Яна Янова'
-  OR c.director_name = 'Яна Янова'
-)
+WHERE REPLACE(REPLACE(REPLACE(REPLACE(c.phone, ' ', ''), '-', ''), '(', ''), ')', '') = '+79397368972'
 AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 139)
 LIMIT 1;
 
@@ -35603,11 +31378,7 @@ SELECT
   NOW(),
   NOW()
 FROM rental_clients c
-WHERE (
-  REPLACE(REPLACE(REPLACE(REPLACE(c.phone, ' ', ''), '-', ''), '(', ''), ')', '') = '+79179142756'
-  OR c.name = 'Татьяна (Гольфстрим)'
-  OR c.director_name = 'Татьяна (Гольфстрим)'
-)
+WHERE REPLACE(REPLACE(REPLACE(REPLACE(c.phone, ' ', ''), '-', ''), '(', ''), ')', '') = '+79179142756'
 AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 138)
 LIMIT 1;
 
@@ -35636,11 +31407,7 @@ SELECT
   NOW(),
   NOW()
 FROM rental_clients c
-WHERE (
-  REPLACE(REPLACE(REPLACE(REPLACE(c.phone, ' ', ''), '-', ''), '(', ''), ')', '') = '+79033405711'
-  OR c.name = 'Наталья'
-  OR c.director_name = 'Наталья'
-)
+WHERE REPLACE(REPLACE(REPLACE(REPLACE(c.phone, ' ', ''), '-', ''), '(', ''), ')', '') = '+79033405711'
 AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 137)
 LIMIT 1;
 
@@ -35669,11 +31436,7 @@ SELECT
   NOW(),
   NOW()
 FROM rental_clients c
-WHERE (
-  REPLACE(REPLACE(REPLACE(REPLACE(c.phone, ' ', ''), '-', ''), '(', ''), ')', '') = '+79274299177'
-  OR c.name = 'Мария Экскурсовод'
-  OR c.director_name = 'Мария Экскурсовод'
-)
+WHERE REPLACE(REPLACE(REPLACE(REPLACE(c.phone, ' ', ''), '-', ''), '(', ''), ')', '') = '+79274299177'
 AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 136)
 LIMIT 1;
 
@@ -35702,11 +31465,7 @@ SELECT
   NOW(),
   NOW()
 FROM rental_clients c
-WHERE (
-  REPLACE(REPLACE(REPLACE(REPLACE(c.phone, ' ', ''), '-', ''), '(', ''), ')', '') = '+79101776156'
-  OR c.name = 'Анюта Родионова (Родина-тур)'
-  OR c.director_name = 'Анюта Родионова (Родина-тур)'
-)
+WHERE REPLACE(REPLACE(REPLACE(REPLACE(c.phone, ' ', ''), '-', ''), '(', ''), ')', '') = '+79101776156'
 AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 135)
 LIMIT 1;
 
@@ -35735,11 +31494,7 @@ SELECT
   NOW(),
   NOW()
 FROM rental_clients c
-WHERE (
-  REPLACE(REPLACE(REPLACE(REPLACE(c.phone, ' ', ''), '-', ''), '(', ''), ')', '') = '+79393309448'
-  OR c.name = 'Андрей (Экскурс)'
-  OR c.director_name = 'Андрей (Экскурс)'
-)
+WHERE REPLACE(REPLACE(REPLACE(REPLACE(c.phone, ' ', ''), '-', ''), '(', ''), ')', '') = '+79393309448'
 AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 134)
 LIMIT 1;
 
@@ -35768,11 +31523,7 @@ SELECT
   NOW(),
   NOW()
 FROM rental_clients c
-WHERE (
-  REPLACE(REPLACE(REPLACE(REPLACE(c.phone, ' ', ''), '-', ''), '(', ''), ')', '') = '+79872961344'
-  OR c.name = 'Зуфар(Аграрный Университет)'
-  OR c.director_name = 'Зуфар(Аграрный Университет)'
-)
+WHERE REPLACE(REPLACE(REPLACE(REPLACE(c.phone, ' ', ''), '-', ''), '(', ''), ')', '') = '+79872961344'
 AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 133)
 LIMIT 1;
 
@@ -35801,11 +31552,7 @@ SELECT
   NOW(),
   NOW()
 FROM rental_clients c
-WHERE (
-  REPLACE(REPLACE(REPLACE(REPLACE(c.phone, ' ', ''), '-', ''), '(', ''), ')', '') = '+79600362522'
-  OR c.name = 'Алсу'
-  OR c.director_name = 'Алсу'
-)
+WHERE REPLACE(REPLACE(REPLACE(REPLACE(c.phone, ' ', ''), '-', ''), '(', ''), ')', '') = '+79600362522'
 AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 132)
 LIMIT 1;
 
@@ -35834,11 +31581,7 @@ SELECT
   NOW(),
   NOW()
 FROM rental_clients c
-WHERE (
-  REPLACE(REPLACE(REPLACE(REPLACE(c.phone, ' ', ''), '-', ''), '(', ''), ')', '') = '+79872797484'
-  OR c.name = 'Алина Сафина'
-  OR c.director_name = 'Алина Сафина'
-)
+WHERE REPLACE(REPLACE(REPLACE(REPLACE(c.phone, ' ', ''), '-', ''), '(', ''), ')', '') = '+79872797484'
 AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 131)
 LIMIT 1;
 
@@ -35867,11 +31610,7 @@ SELECT
   NOW(),
   NOW()
 FROM rental_clients c
-WHERE (
-  REPLACE(REPLACE(REPLACE(REPLACE(c.phone, ' ', ''), '-', ''), '(', ''), ')', '') = '+79397368972'
-  OR c.name = 'Яна Янова'
-  OR c.director_name = 'Яна Янова'
-)
+WHERE REPLACE(REPLACE(REPLACE(REPLACE(c.phone, ' ', ''), '-', ''), '(', ''), ')', '') = '+79397368972'
 AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 130)
 LIMIT 1;
 
@@ -35900,11 +31639,7 @@ SELECT
   NOW(),
   NOW()
 FROM rental_clients c
-WHERE (
-  REPLACE(REPLACE(REPLACE(REPLACE(c.phone, ' ', ''), '-', ''), '(', ''), ')', '') = '+79853891999'
-  OR c.name = 'Сергей (Авангард)'
-  OR c.director_name = 'Сергей (Авангард)'
-)
+WHERE REPLACE(REPLACE(REPLACE(REPLACE(c.phone, ' ', ''), '-', ''), '(', ''), ')', '') = '+79853891999'
 AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 129)
 LIMIT 1;
 
@@ -35933,11 +31668,7 @@ SELECT
   NOW(),
   NOW()
 FROM rental_clients c
-WHERE (
-  REPLACE(REPLACE(REPLACE(REPLACE(c.phone, ' ', ''), '-', ''), '(', ''), ')', '') = '+79261409872'
-  OR c.name = 'Наталья'
-  OR c.director_name = 'Наталья'
-)
+WHERE REPLACE(REPLACE(REPLACE(REPLACE(c.phone, ' ', ''), '-', ''), '(', ''), ')', '') = '+79261409872'
 AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 128)
 LIMIT 1;
 
@@ -35966,11 +31697,7 @@ SELECT
   NOW(),
   NOW()
 FROM rental_clients c
-WHERE (
-  REPLACE(REPLACE(REPLACE(REPLACE(c.phone, ' ', ''), '-', ''), '(', ''), ')', '') = '+79397368972'
-  OR c.name = 'Яна Янова'
-  OR c.director_name = 'Яна Янова'
-)
+WHERE REPLACE(REPLACE(REPLACE(REPLACE(c.phone, ' ', ''), '-', ''), '(', ''), ')', '') = '+79397368972'
 AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 127)
 LIMIT 1;
 
@@ -35999,11 +31726,7 @@ SELECT
   NOW(),
   NOW()
 FROM rental_clients c
-WHERE (
-  REPLACE(REPLACE(REPLACE(REPLACE(c.phone, ' ', ''), '-', ''), '(', ''), ')', '') = '+79872750395'
-  OR c.name = 'Зельфира'
-  OR c.director_name = 'Зельфира'
-)
+WHERE REPLACE(REPLACE(REPLACE(REPLACE(c.phone, ' ', ''), '-', ''), '(', ''), ')', '') = '+79872750395'
 AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 126)
 LIMIT 1;
 
@@ -36032,11 +31755,7 @@ SELECT
   NOW(),
   NOW()
 FROM rental_clients c
-WHERE (
-  REPLACE(REPLACE(REPLACE(REPLACE(c.phone, ' ', ''), '-', ''), '(', ''), ')', '') = '+79872797484'
-  OR c.name = 'Алина Сафина'
-  OR c.director_name = 'Алина Сафина'
-)
+WHERE REPLACE(REPLACE(REPLACE(REPLACE(c.phone, ' ', ''), '-', ''), '(', ''), ')', '') = '+79872797484'
 AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 125)
 LIMIT 1;
 
@@ -36065,11 +31784,7 @@ SELECT
   NOW(),
   NOW()
 FROM rental_clients c
-WHERE (
-  REPLACE(REPLACE(REPLACE(REPLACE(c.phone, ' ', ''), '-', ''), '(', ''), ')', '') = '+79534129930'
-  OR c.name = 'Данил (Антей Групп)'
-  OR c.director_name = 'Данил (Антей Групп)'
-)
+WHERE REPLACE(REPLACE(REPLACE(REPLACE(c.phone, ' ', ''), '-', ''), '(', ''), ')', '') = '+79534129930'
 AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 124)
 LIMIT 1;
 
@@ -36098,11 +31813,7 @@ SELECT
   NOW(),
   NOW()
 FROM rental_clients c
-WHERE (
-  REPLACE(REPLACE(REPLACE(REPLACE(c.phone, ' ', ''), '-', ''), '(', ''), ')', '') = '+79033063787'
-  OR c.name = 'Марат Даутов'
-  OR c.director_name = 'Марат Даутов'
-)
+WHERE REPLACE(REPLACE(REPLACE(REPLACE(c.phone, ' ', ''), '-', ''), '(', ''), ')', '') = '+79033063787'
 AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 123)
 LIMIT 1;
 
@@ -36131,11 +31842,7 @@ SELECT
   NOW(),
   NOW()
 FROM rental_clients c
-WHERE (
-  REPLACE(REPLACE(REPLACE(REPLACE(c.phone, ' ', ''), '-', ''), '(', ''), ')', '') = '+79872821123'
-  OR c.name = 'Гульфия'
-  OR c.director_name = 'Гульфия'
-)
+WHERE REPLACE(REPLACE(REPLACE(REPLACE(c.phone, ' ', ''), '-', ''), '(', ''), ')', '') = '+79872821123'
 AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 122)
 LIMIT 1;
 
@@ -36164,11 +31871,7 @@ SELECT
   NOW(),
   NOW()
 FROM rental_clients c
-WHERE (
-  REPLACE(REPLACE(REPLACE(REPLACE(c.phone, ' ', ''), '-', ''), '(', ''), ')', '') = '+79033414430'
-  OR c.name = 'Рамис'
-  OR c.director_name = 'Рамис'
-)
+WHERE REPLACE(REPLACE(REPLACE(REPLACE(c.phone, ' ', ''), '-', ''), '(', ''), ')', '') = '+79033414430'
 AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 121)
 LIMIT 1;
 
@@ -36197,11 +31900,7 @@ SELECT
   NOW(),
   NOW()
 FROM rental_clients c
-WHERE (
-  REPLACE(REPLACE(REPLACE(REPLACE(c.phone, ' ', ''), '-', ''), '(', ''), ')', '') = '+79033414430'
-  OR c.name = 'Рамис'
-  OR c.director_name = 'Рамис'
-)
+WHERE REPLACE(REPLACE(REPLACE(REPLACE(c.phone, ' ', ''), '-', ''), '(', ''), ')', '') = '+79033414430'
 AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 120)
 LIMIT 1;
 
@@ -36230,11 +31929,7 @@ SELECT
   NOW(),
   NOW()
 FROM rental_clients c
-WHERE (
-  REPLACE(REPLACE(REPLACE(REPLACE(c.phone, ' ', ''), '-', ''), '(', ''), ')', '') = '+79662409276'
-  OR c.name = 'Мира (ИП)'
-  OR c.director_name = 'Мира (ИП)'
-)
+WHERE REPLACE(REPLACE(REPLACE(REPLACE(c.phone, ' ', ''), '-', ''), '(', ''), ')', '') = '+79662409276'
 AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 119)
 LIMIT 1;
 
@@ -36263,11 +31958,7 @@ SELECT
   NOW(),
   NOW()
 FROM rental_clients c
-WHERE (
-  REPLACE(REPLACE(REPLACE(REPLACE(c.phone, ' ', ''), '-', ''), '(', ''), ')', '') = '+79625552796'
-  OR c.name = 'Гульнара'
-  OR c.director_name = 'Гульнара'
-)
+WHERE REPLACE(REPLACE(REPLACE(REPLACE(c.phone, ' ', ''), '-', ''), '(', ''), ')', '') = '+79625552796'
 AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 118)
 LIMIT 1;
 
@@ -36296,11 +31987,7 @@ SELECT
   NOW(),
   NOW()
 FROM rental_clients c
-WHERE (
-  REPLACE(REPLACE(REPLACE(REPLACE(c.phone, ' ', ''), '-', ''), '(', ''), ')', '') = '+79600336033'
-  OR c.name = 'Галия'
-  OR c.director_name = 'Галия'
-)
+WHERE REPLACE(REPLACE(REPLACE(REPLACE(c.phone, ' ', ''), '-', ''), '(', ''), ')', '') = '+79600336033'
 AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 117)
 LIMIT 1;
 
@@ -36329,11 +32016,7 @@ SELECT
   NOW(),
   NOW()
 FROM rental_clients c
-WHERE (
-  REPLACE(REPLACE(REPLACE(REPLACE(c.phone, ' ', ''), '-', ''), '(', ''), ')', '') = '+79872750395'
-  OR c.name = 'Зельфира'
-  OR c.director_name = 'Зельфира'
-)
+WHERE REPLACE(REPLACE(REPLACE(REPLACE(c.phone, ' ', ''), '-', ''), '(', ''), ')', '') = '+79872750395'
 AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 116)
 LIMIT 1;
 
@@ -36362,11 +32045,7 @@ SELECT
   NOW(),
   NOW()
 FROM rental_clients c
-WHERE (
-  REPLACE(REPLACE(REPLACE(REPLACE(c.phone, ' ', ''), '-', ''), '(', ''), ')', '') = '+79068185524'
-  OR c.name = 'Артем Агафонов'
-  OR c.director_name = 'Артем Агафонов'
-)
+WHERE REPLACE(REPLACE(REPLACE(REPLACE(c.phone, ' ', ''), '-', ''), '(', ''), ')', '') = '+79068185524'
 AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 115)
 LIMIT 1;
 
@@ -36395,11 +32074,7 @@ SELECT
   NOW(),
   NOW()
 FROM rental_clients c
-WHERE (
-  REPLACE(REPLACE(REPLACE(REPLACE(c.phone, ' ', ''), '-', ''), '(', ''), ')', '') = '+79853891999'
-  OR c.name = 'Сергей (Авангард)'
-  OR c.director_name = 'Сергей (Авангард)'
-)
+WHERE REPLACE(REPLACE(REPLACE(REPLACE(c.phone, ' ', ''), '-', ''), '(', ''), ')', '') = '+79853891999'
 AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 114)
 LIMIT 1;
 
@@ -36428,11 +32103,7 @@ SELECT
   NOW(),
   NOW()
 FROM rental_clients c
-WHERE (
-  REPLACE(REPLACE(REPLACE(REPLACE(c.phone, ' ', ''), '-', ''), '(', ''), ')', '') = '+79172278327'
-  OR c.name = 'Юлия Воронова'
-  OR c.director_name = 'Юлия Воронова'
-)
+WHERE REPLACE(REPLACE(REPLACE(REPLACE(c.phone, ' ', ''), '-', ''), '(', ''), ')', '') = '+79172278327'
 AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 113)
 LIMIT 1;
 
@@ -36461,11 +32132,7 @@ SELECT
   NOW(),
   NOW()
 FROM rental_clients c
-WHERE (
-  REPLACE(REPLACE(REPLACE(REPLACE(c.phone, ' ', ''), '-', ''), '(', ''), ')', '') = '+79179142756'
-  OR c.name = 'Татьяна (Гольфстрим)'
-  OR c.director_name = 'Татьяна (Гольфстрим)'
-)
+WHERE REPLACE(REPLACE(REPLACE(REPLACE(c.phone, ' ', ''), '-', ''), '(', ''), ')', '') = '+79179142756'
 AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 112)
 LIMIT 1;
 
@@ -36494,11 +32161,7 @@ SELECT
   NOW(),
   NOW()
 FROM rental_clients c
-WHERE (
-  REPLACE(REPLACE(REPLACE(REPLACE(c.phone, ' ', ''), '-', ''), '(', ''), ')', '') = '+79179142756'
-  OR c.name = 'Татьяна (Гольфстрим)'
-  OR c.director_name = 'Татьяна (Гольфстрим)'
-)
+WHERE REPLACE(REPLACE(REPLACE(REPLACE(c.phone, ' ', ''), '-', ''), '(', ''), ')', '') = '+79179142756'
 AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 111)
 LIMIT 1;
 
@@ -36527,11 +32190,7 @@ SELECT
   NOW(),
   NOW()
 FROM rental_clients c
-WHERE (
-  REPLACE(REPLACE(REPLACE(REPLACE(c.phone, ' ', ''), '-', ''), '(', ''), ')', '') = '+79179142756'
-  OR c.name = 'Татьяна (Гольфстрим)'
-  OR c.director_name = 'Татьяна (Гольфстрим)'
-)
+WHERE REPLACE(REPLACE(REPLACE(REPLACE(c.phone, ' ', ''), '-', ''), '(', ''), ')', '') = '+79179142756'
 AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 110)
 LIMIT 1;
 
@@ -36560,11 +32219,7 @@ SELECT
   NOW(),
   NOW()
 FROM rental_clients c
-WHERE (
-  REPLACE(REPLACE(REPLACE(REPLACE(c.phone, ' ', ''), '-', ''), '(', ''), ')', '') = '+79179142756'
-  OR c.name = 'Татьяна (Гольфстрим)'
-  OR c.director_name = 'Татьяна (Гольфстрим)'
-)
+WHERE REPLACE(REPLACE(REPLACE(REPLACE(c.phone, ' ', ''), '-', ''), '(', ''), ')', '') = '+79179142756'
 AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 109)
 LIMIT 1;
 
@@ -36593,11 +32248,7 @@ SELECT
   NOW(),
   NOW()
 FROM rental_clients c
-WHERE (
-  REPLACE(REPLACE(REPLACE(REPLACE(c.phone, ' ', ''), '-', ''), '(', ''), ')', '') = '+79179142756'
-  OR c.name = 'Татьяна (Гольфстрим)'
-  OR c.director_name = 'Татьяна (Гольфстрим)'
-)
+WHERE REPLACE(REPLACE(REPLACE(REPLACE(c.phone, ' ', ''), '-', ''), '(', ''), ')', '') = '+79179142756'
 AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 108)
 LIMIT 1;
 
@@ -36626,11 +32277,7 @@ SELECT
   NOW(),
   NOW()
 FROM rental_clients c
-WHERE (
-  REPLACE(REPLACE(REPLACE(REPLACE(c.phone, ' ', ''), '-', ''), '(', ''), ')', '') = '+79179142756'
-  OR c.name = 'Татьяна (Гольфстрим)'
-  OR c.director_name = 'Татьяна (Гольфстрим)'
-)
+WHERE REPLACE(REPLACE(REPLACE(REPLACE(c.phone, ' ', ''), '-', ''), '(', ''), ')', '') = '+79179142756'
 AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 107)
 LIMIT 1;
 
@@ -36659,11 +32306,7 @@ SELECT
   NOW(),
   NOW()
 FROM rental_clients c
-WHERE (
-  REPLACE(REPLACE(REPLACE(REPLACE(c.phone, ' ', ''), '-', ''), '(', ''), ')', '') = '+79274299177'
-  OR c.name = 'Мария Экскурсовод'
-  OR c.director_name = 'Мария Экскурсовод'
-)
+WHERE REPLACE(REPLACE(REPLACE(REPLACE(c.phone, ' ', ''), '-', ''), '(', ''), ')', '') = '+79274299177'
 AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 106)
 LIMIT 1;
 
@@ -36692,11 +32335,7 @@ SELECT
   NOW(),
   NOW()
 FROM rental_clients c
-WHERE (
-  REPLACE(REPLACE(REPLACE(REPLACE(c.phone, ' ', ''), '-', ''), '(', ''), ')', '') = '+79063279749'
-  OR c.name = 'Динар (ТатКабель)'
-  OR c.director_name = 'Динар (ТатКабель)'
-)
+WHERE REPLACE(REPLACE(REPLACE(REPLACE(c.phone, ' ', ''), '-', ''), '(', ''), ')', '') = '+79063279749'
 AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 105)
 LIMIT 1;
 
@@ -36725,11 +32364,7 @@ SELECT
   NOW(),
   NOW()
 FROM rental_clients c
-WHERE (
-  REPLACE(REPLACE(REPLACE(REPLACE(c.phone, ' ', ''), '-', ''), '(', ''), ')', '') = '+79872821123'
-  OR c.name = 'Гульфия'
-  OR c.director_name = 'Гульфия'
-)
+WHERE REPLACE(REPLACE(REPLACE(REPLACE(c.phone, ' ', ''), '-', ''), '(', ''), ')', '') = '+79872821123'
 AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 104)
 LIMIT 1;
 
@@ -36758,11 +32393,7 @@ SELECT
   NOW(),
   NOW()
 FROM rental_clients c
-WHERE (
-  REPLACE(REPLACE(REPLACE(REPLACE(c.phone, ' ', ''), '-', ''), '(', ''), ')', '') = '+79872821123'
-  OR c.name = 'Гульфия'
-  OR c.director_name = 'Гульфия'
-)
+WHERE REPLACE(REPLACE(REPLACE(REPLACE(c.phone, ' ', ''), '-', ''), '(', ''), ')', '') = '+79872821123'
 AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 103)
 LIMIT 1;
 
@@ -36791,11 +32422,7 @@ SELECT
   NOW(),
   NOW()
 FROM rental_clients c
-WHERE (
-  REPLACE(REPLACE(REPLACE(REPLACE(c.phone, ' ', ''), '-', ''), '(', ''), ')', '') = '+79211263650'
-  OR c.name = 'Андрей Вологда'
-  OR c.director_name = 'Андрей Вологда'
-)
+WHERE REPLACE(REPLACE(REPLACE(REPLACE(c.phone, ' ', ''), '-', ''), '(', ''), ')', '') = '+79211263650'
 AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 102)
 LIMIT 1;
 
@@ -36824,11 +32451,7 @@ SELECT
   NOW(),
   NOW()
 FROM rental_clients c
-WHERE (
-  REPLACE(REPLACE(REPLACE(REPLACE(c.phone, ' ', ''), '-', ''), '(', ''), ')', '') = '+79033888929'
-  OR c.name = 'Ильмира'
-  OR c.director_name = 'Ильмира'
-)
+WHERE REPLACE(REPLACE(REPLACE(REPLACE(c.phone, ' ', ''), '-', ''), '(', ''), ')', '') = '+79033888929'
 AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 101)
 LIMIT 1;
 
@@ -36857,10 +32480,7 @@ SELECT
   NOW(),
   NOW()
 FROM rental_clients c
-WHERE (
-  c.name = 'Эдик Заказы для групп'
-  OR c.director_name = 'Эдик Заказы для групп'
-)
+WHERE (c.name ILIKE '%Эдик%' OR c.director_name ILIKE '%Эдик%')
 AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 100)
 LIMIT 1;
 
@@ -36889,11 +32509,7 @@ SELECT
   NOW(),
   NOW()
 FROM rental_clients c
-WHERE (
-  REPLACE(REPLACE(REPLACE(REPLACE(c.phone, ' ', ''), '-', ''), '(', ''), ')', '') = '+79872231391'
-  OR c.name = 'Эмилия'
-  OR c.director_name = 'Эмилия'
-)
+WHERE REPLACE(REPLACE(REPLACE(REPLACE(c.phone, ' ', ''), '-', ''), '(', ''), ')', '') = '+79872231391'
 AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 99)
 LIMIT 1;
 
@@ -36922,11 +32538,7 @@ SELECT
   NOW(),
   NOW()
 FROM rental_clients c
-WHERE (
-  REPLACE(REPLACE(REPLACE(REPLACE(c.phone, ' ', ''), '-', ''), '(', ''), ')', '') = '+79033408152'
-  OR c.name = 'Юлианна'
-  OR c.director_name = 'Юлианна'
-)
+WHERE REPLACE(REPLACE(REPLACE(REPLACE(c.phone, ' ', ''), '-', ''), '(', ''), ')', '') = '+79033408152'
 AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 98)
 LIMIT 1;
 
@@ -36955,11 +32567,7 @@ SELECT
   NOW(),
   NOW()
 FROM rental_clients c
-WHERE (
-  REPLACE(REPLACE(REPLACE(REPLACE(c.phone, ' ', ''), '-', ''), '(', ''), ')', '') = '+79853891999'
-  OR c.name = 'Сергей (Авангард)'
-  OR c.director_name = 'Сергей (Авангард)'
-)
+WHERE REPLACE(REPLACE(REPLACE(REPLACE(c.phone, ' ', ''), '-', ''), '(', ''), ')', '') = '+79853891999'
 AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 97)
 LIMIT 1;
 
@@ -36988,11 +32596,7 @@ SELECT
   NOW(),
   NOW()
 FROM rental_clients c
-WHERE (
-  REPLACE(REPLACE(REPLACE(REPLACE(c.phone, ' ', ''), '-', ''), '(', ''), ')', '') = '+79270303303'
-  OR c.name = 'Ирина Обыденникова'
-  OR c.director_name = 'Ирина Обыденникова'
-)
+WHERE REPLACE(REPLACE(REPLACE(REPLACE(c.phone, ' ', ''), '-', ''), '(', ''), ')', '') = '+79270303303'
 AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 96)
 LIMIT 1;
 
@@ -37021,11 +32625,7 @@ SELECT
   NOW(),
   NOW()
 FROM rental_clients c
-WHERE (
-  REPLACE(REPLACE(REPLACE(REPLACE(c.phone, ' ', ''), '-', ''), '(', ''), ')', '') = '+79219471867'
-  OR c.name = 'Елена (Магазин Путешествий)'
-  OR c.director_name = 'Елена (Магазин Путешествий)'
-)
+WHERE REPLACE(REPLACE(REPLACE(REPLACE(c.phone, ' ', ''), '-', ''), '(', ''), ')', '') = '+79219471867'
 AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 95)
 LIMIT 1;
 
@@ -37054,11 +32654,7 @@ SELECT
   NOW(),
   NOW()
 FROM rental_clients c
-WHERE (
-  REPLACE(REPLACE(REPLACE(REPLACE(c.phone, ' ', ''), '-', ''), '(', ''), ')', '') = '+79179142756'
-  OR c.name = 'Татьяна (Гольфстрим)'
-  OR c.director_name = 'Татьяна (Гольфстрим)'
-)
+WHERE REPLACE(REPLACE(REPLACE(REPLACE(c.phone, ' ', ''), '-', ''), '(', ''), ')', '') = '+79179142756'
 AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 94)
 LIMIT 1;
 
@@ -37087,11 +32683,7 @@ SELECT
   NOW(),
   NOW()
 FROM rental_clients c
-WHERE (
-  REPLACE(REPLACE(REPLACE(REPLACE(c.phone, ' ', ''), '-', ''), '(', ''), ')', '') = '+79179142756'
-  OR c.name = 'Татьяна (Гольфстрим)'
-  OR c.director_name = 'Татьяна (Гольфстрим)'
-)
+WHERE REPLACE(REPLACE(REPLACE(REPLACE(c.phone, ' ', ''), '-', ''), '(', ''), ')', '') = '+79179142756'
 AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 93)
 LIMIT 1;
 
@@ -37120,11 +32712,7 @@ SELECT
   NOW(),
   NOW()
 FROM rental_clients c
-WHERE (
-  REPLACE(REPLACE(REPLACE(REPLACE(c.phone, ' ', ''), '-', ''), '(', ''), ')', '') = '+79179142756'
-  OR c.name = 'Татьяна (Гольфстрим)'
-  OR c.director_name = 'Татьяна (Гольфстрим)'
-)
+WHERE REPLACE(REPLACE(REPLACE(REPLACE(c.phone, ' ', ''), '-', ''), '(', ''), ')', '') = '+79179142756'
 AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 92)
 LIMIT 1;
 
@@ -37153,11 +32741,7 @@ SELECT
   NOW(),
   NOW()
 FROM rental_clients c
-WHERE (
-  REPLACE(REPLACE(REPLACE(REPLACE(c.phone, ' ', ''), '-', ''), '(', ''), ')', '') = '+79179142756'
-  OR c.name = 'Татьяна (Гольфстрим)'
-  OR c.director_name = 'Татьяна (Гольфстрим)'
-)
+WHERE REPLACE(REPLACE(REPLACE(REPLACE(c.phone, ' ', ''), '-', ''), '(', ''), ')', '') = '+79179142756'
 AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 91)
 LIMIT 1;
 
@@ -37186,11 +32770,7 @@ SELECT
   NOW(),
   NOW()
 FROM rental_clients c
-WHERE (
-  REPLACE(REPLACE(REPLACE(REPLACE(c.phone, ' ', ''), '-', ''), '(', ''), ')', '') = '+79179142756'
-  OR c.name = 'Татьяна (Гольфстрим)'
-  OR c.director_name = 'Татьяна (Гольфстрим)'
-)
+WHERE REPLACE(REPLACE(REPLACE(REPLACE(c.phone, ' ', ''), '-', ''), '(', ''), ')', '') = '+79179142756'
 AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 90)
 LIMIT 1;
 
@@ -37219,11 +32799,7 @@ SELECT
   NOW(),
   NOW()
 FROM rental_clients c
-WHERE (
-  REPLACE(REPLACE(REPLACE(REPLACE(c.phone, ' ', ''), '-', ''), '(', ''), ')', '') = '+79179142756'
-  OR c.name = 'Татьяна (Гольфстрим)'
-  OR c.director_name = 'Татьяна (Гольфстрим)'
-)
+WHERE REPLACE(REPLACE(REPLACE(REPLACE(c.phone, ' ', ''), '-', ''), '(', ''), ')', '') = '+79179142756'
 AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 89)
 LIMIT 1;
 
@@ -37252,11 +32828,7 @@ SELECT
   NOW(),
   NOW()
 FROM rental_clients c
-WHERE (
-  REPLACE(REPLACE(REPLACE(REPLACE(c.phone, ' ', ''), '-', ''), '(', ''), ')', '') = '+79872965880'
-  OR c.name = 'Ольга Лукоянова'
-  OR c.director_name = 'Ольга Лукоянова'
-)
+WHERE REPLACE(REPLACE(REPLACE(REPLACE(c.phone, ' ', ''), '-', ''), '(', ''), ')', '') = '+79872965880'
 AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 88)
 LIMIT 1;
 
@@ -37285,11 +32857,7 @@ SELECT
   NOW(),
   NOW()
 FROM rental_clients c
-WHERE (
-  REPLACE(REPLACE(REPLACE(REPLACE(c.phone, ' ', ''), '-', ''), '(', ''), ')', '') = '+79662409276'
-  OR c.name = 'Мира (ИП)'
-  OR c.director_name = 'Мира (ИП)'
-)
+WHERE REPLACE(REPLACE(REPLACE(REPLACE(c.phone, ' ', ''), '-', ''), '(', ''), ')', '') = '+79662409276'
 AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 87)
 LIMIT 1;
 
@@ -37318,11 +32886,7 @@ SELECT
   NOW(),
   NOW()
 FROM rental_clients c
-WHERE (
-  REPLACE(REPLACE(REPLACE(REPLACE(c.phone, ' ', ''), '-', ''), '(', ''), ')', '') = '+79624554760'
-  OR c.name = 'Наталья'
-  OR c.director_name = 'Наталья'
-)
+WHERE REPLACE(REPLACE(REPLACE(REPLACE(c.phone, ' ', ''), '-', ''), '(', ''), ')', '') = '+79624554760'
 AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 86)
 LIMIT 1;
 
@@ -37351,11 +32915,7 @@ SELECT
   NOW(),
   NOW()
 FROM rental_clients c
-WHERE (
-  REPLACE(REPLACE(REPLACE(REPLACE(c.phone, ' ', ''), '-', ''), '(', ''), ')', '') = '+79869297050'
-  OR c.name = 'Инна Экскурсовод'
-  OR c.director_name = 'Инна Экскурсовод'
-)
+WHERE REPLACE(REPLACE(REPLACE(REPLACE(c.phone, ' ', ''), '-', ''), '(', ''), ')', '') = '+79869297050'
 AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 85)
 LIMIT 1;
 
@@ -37384,11 +32944,7 @@ SELECT
   NOW(),
   NOW()
 FROM rental_clients c
-WHERE (
-  REPLACE(REPLACE(REPLACE(REPLACE(c.phone, ' ', ''), '-', ''), '(', ''), ')', '') = '+79179142756'
-  OR c.name = 'Татьяна (Гольфстрим)'
-  OR c.director_name = 'Татьяна (Гольфстрим)'
-)
+WHERE REPLACE(REPLACE(REPLACE(REPLACE(c.phone, ' ', ''), '-', ''), '(', ''), ')', '') = '+79179142756'
 AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 84)
 LIMIT 1;
 
@@ -37417,11 +32973,7 @@ SELECT
   NOW(),
   NOW()
 FROM rental_clients c
-WHERE (
-  REPLACE(REPLACE(REPLACE(REPLACE(c.phone, ' ', ''), '-', ''), '(', ''), ')', '') = '+79872821123'
-  OR c.name = 'Гульфия'
-  OR c.director_name = 'Гульфия'
-)
+WHERE REPLACE(REPLACE(REPLACE(REPLACE(c.phone, ' ', ''), '-', ''), '(', ''), ')', '') = '+79872821123'
 AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 83)
 LIMIT 1;
 
@@ -37450,11 +33002,7 @@ SELECT
   NOW(),
   NOW()
 FROM rental_clients c
-WHERE (
-  REPLACE(REPLACE(REPLACE(REPLACE(c.phone, ' ', ''), '-', ''), '(', ''), ')', '') = '+79662409276'
-  OR c.name = 'Мира (ИП)'
-  OR c.director_name = 'Мира (ИП)'
-)
+WHERE REPLACE(REPLACE(REPLACE(REPLACE(c.phone, ' ', ''), '-', ''), '(', ''), ')', '') = '+79662409276'
 AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 82)
 LIMIT 1;
 
@@ -37483,11 +33031,7 @@ SELECT
   NOW(),
   NOW()
 FROM rental_clients c
-WHERE (
-  REPLACE(REPLACE(REPLACE(REPLACE(c.phone, ' ', ''), '-', ''), '(', ''), ')', '') = '+79178605272'
-  OR c.name = 'Гульнара'
-  OR c.director_name = 'Гульнара'
-)
+WHERE REPLACE(REPLACE(REPLACE(REPLACE(c.phone, ' ', ''), '-', ''), '(', ''), ')', '') = '+79178605272'
 AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 81)
 LIMIT 1;
 
@@ -37516,11 +33060,7 @@ SELECT
   NOW(),
   NOW()
 FROM rental_clients c
-WHERE (
-  REPLACE(REPLACE(REPLACE(REPLACE(c.phone, ' ', ''), '-', ''), '(', ''), ')', '') = '+79270303303'
-  OR c.name = 'Ирина Обыденникова'
-  OR c.director_name = 'Ирина Обыденникова'
-)
+WHERE REPLACE(REPLACE(REPLACE(REPLACE(c.phone, ' ', ''), '-', ''), '(', ''), ')', '') = '+79270303303'
 AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 80)
 LIMIT 1;
 
@@ -37549,11 +33089,7 @@ SELECT
   NOW(),
   NOW()
 FROM rental_clients c
-WHERE (
-  REPLACE(REPLACE(REPLACE(REPLACE(c.phone, ' ', ''), '-', ''), '(', ''), ')', '') = '+79172733148'
-  OR c.name = 'Алёна Лазука'
-  OR c.director_name = 'Алёна Лазука'
-)
+WHERE REPLACE(REPLACE(REPLACE(REPLACE(c.phone, ' ', ''), '-', ''), '(', ''), ')', '') = '+79172733148'
 AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 79)
 LIMIT 1;
 
@@ -37582,11 +33118,7 @@ SELECT
   NOW(),
   NOW()
 FROM rental_clients c
-WHERE (
-  REPLACE(REPLACE(REPLACE(REPLACE(c.phone, ' ', ''), '-', ''), '(', ''), ')', '') = '+79274662530'
-  OR c.name = 'Екатерина'
-  OR c.director_name = 'Екатерина'
-)
+WHERE REPLACE(REPLACE(REPLACE(REPLACE(c.phone, ' ', ''), '-', ''), '(', ''), ')', '') = '+79274662530'
 AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 78)
 LIMIT 1;
 
@@ -37615,11 +33147,7 @@ SELECT
   NOW(),
   NOW()
 FROM rental_clients c
-WHERE (
-  REPLACE(REPLACE(REPLACE(REPLACE(c.phone, ' ', ''), '-', ''), '(', ''), ')', '') = '+79274662530'
-  OR c.name = 'Екатерина'
-  OR c.director_name = 'Екатерина'
-)
+WHERE REPLACE(REPLACE(REPLACE(REPLACE(c.phone, ' ', ''), '-', ''), '(', ''), ')', '') = '+79274662530'
 AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 77)
 LIMIT 1;
 
@@ -37648,11 +33176,7 @@ SELECT
   NOW(),
   NOW()
 FROM rental_clients c
-WHERE (
-  REPLACE(REPLACE(REPLACE(REPLACE(c.phone, ' ', ''), '-', ''), '(', ''), ')', '') = '+79046623179'
-  OR c.name = 'Екатерина Кореева'
-  OR c.director_name = 'Екатерина Кореева'
-)
+WHERE REPLACE(REPLACE(REPLACE(REPLACE(c.phone, ' ', ''), '-', ''), '(', ''), ')', '') = '+79046623179'
 AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 76)
 LIMIT 1;
 
@@ -37681,11 +33205,7 @@ SELECT
   NOW(),
   NOW()
 FROM rental_clients c
-WHERE (
-  REPLACE(REPLACE(REPLACE(REPLACE(c.phone, ' ', ''), '-', ''), '(', ''), ')', '') = '+79853891999'
-  OR c.name = 'Сергей (Авангард)'
-  OR c.director_name = 'Сергей (Авангард)'
-)
+WHERE REPLACE(REPLACE(REPLACE(REPLACE(c.phone, ' ', ''), '-', ''), '(', ''), ')', '') = '+79853891999'
 AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 75)
 LIMIT 1;
 
@@ -37714,11 +33234,7 @@ SELECT
   NOW(),
   NOW()
 FROM rental_clients c
-WHERE (
-  REPLACE(REPLACE(REPLACE(REPLACE(c.phone, ' ', ''), '-', ''), '(', ''), ')', '') = '+79179142756'
-  OR c.name = 'Татьяна (Гольфстрим)'
-  OR c.director_name = 'Татьяна (Гольфстрим)'
-)
+WHERE REPLACE(REPLACE(REPLACE(REPLACE(c.phone, ' ', ''), '-', ''), '(', ''), ')', '') = '+79179142756'
 AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 74)
 LIMIT 1;
 
@@ -37747,11 +33263,7 @@ SELECT
   NOW(),
   NOW()
 FROM rental_clients c
-WHERE (
-  REPLACE(REPLACE(REPLACE(REPLACE(c.phone, ' ', ''), '-', ''), '(', ''), ')', '') = '+79393309448'
-  OR c.name = 'Андрей (Экскурс)'
-  OR c.director_name = 'Андрей (Экскурс)'
-)
+WHERE REPLACE(REPLACE(REPLACE(REPLACE(c.phone, ' ', ''), '-', ''), '(', ''), ')', '') = '+79393309448'
 AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 73)
 LIMIT 1;
 
@@ -37780,11 +33292,7 @@ SELECT
   NOW(),
   NOW()
 FROM rental_clients c
-WHERE (
-  REPLACE(REPLACE(REPLACE(REPLACE(c.phone, ' ', ''), '-', ''), '(', ''), ')', '') = '+79276797970'
-  OR c.name = 'Елизавета Ткач'
-  OR c.director_name = 'Елизавета Ткач'
-)
+WHERE REPLACE(REPLACE(REPLACE(REPLACE(c.phone, ' ', ''), '-', ''), '(', ''), ')', '') = '+79276797970'
 AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 72)
 LIMIT 1;
 
@@ -37813,11 +33321,7 @@ SELECT
   NOW(),
   NOW()
 FROM rental_clients c
-WHERE (
-  REPLACE(REPLACE(REPLACE(REPLACE(c.phone, ' ', ''), '-', ''), '(', ''), ')', '') = '+79107527951'
-  OR c.name = 'Наталья Рыжкова'
-  OR c.director_name = 'Наталья Рыжкова'
-)
+WHERE REPLACE(REPLACE(REPLACE(REPLACE(c.phone, ' ', ''), '-', ''), '(', ''), ')', '') = '+79107527951'
 AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 71)
 LIMIT 1;
 
@@ -37846,11 +33350,7 @@ SELECT
   NOW(),
   NOW()
 FROM rental_clients c
-WHERE (
-  REPLACE(REPLACE(REPLACE(REPLACE(c.phone, ' ', ''), '-', ''), '(', ''), ')', '') = '+79493022939'
-  OR c.name = 'Нечаева Тамара'
-  OR c.director_name = 'Нечаева Тамара'
-)
+WHERE REPLACE(REPLACE(REPLACE(REPLACE(c.phone, ' ', ''), '-', ''), '(', ''), ')', '') = '+79493022939'
 AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 70)
 LIMIT 1;
 
@@ -37879,11 +33379,7 @@ SELECT
   NOW(),
   NOW()
 FROM rental_clients c
-WHERE (
-  REPLACE(REPLACE(REPLACE(REPLACE(c.phone, ' ', ''), '-', ''), '(', ''), ')', '') = '+79211263650'
-  OR c.name = 'Андрей Вологда'
-  OR c.director_name = 'Андрей Вологда'
-)
+WHERE REPLACE(REPLACE(REPLACE(REPLACE(c.phone, ' ', ''), '-', ''), '(', ''), ')', '') = '+79211263650'
 AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 69)
 LIMIT 1;
 
@@ -37912,11 +33408,7 @@ SELECT
   NOW(),
   NOW()
 FROM rental_clients c
-WHERE (
-  REPLACE(REPLACE(REPLACE(REPLACE(c.phone, ' ', ''), '-', ''), '(', ''), ')', '') = '+79627930811'
-  OR c.name = 'Зеленина'
-  OR c.director_name = 'Зеленина'
-)
+WHERE REPLACE(REPLACE(REPLACE(REPLACE(c.phone, ' ', ''), '-', ''), '(', ''), ')', '') = '+79627930811'
 AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 68)
 LIMIT 1;
 
@@ -37945,11 +33437,7 @@ SELECT
   NOW(),
   NOW()
 FROM rental_clients c
-WHERE (
-  REPLACE(REPLACE(REPLACE(REPLACE(c.phone, ' ', ''), '-', ''), '(', ''), ')', '') = '+79127740429'
-  OR c.name = 'Мария'
-  OR c.director_name = 'Мария'
-)
+WHERE REPLACE(REPLACE(REPLACE(REPLACE(c.phone, ' ', ''), '-', ''), '(', ''), ')', '') = '+79127740429'
 AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 67)
 LIMIT 1;
 
@@ -37978,11 +33466,7 @@ SELECT
   NOW(),
   NOW()
 FROM rental_clients c
-WHERE (
-  REPLACE(REPLACE(REPLACE(REPLACE(c.phone, ' ', ''), '-', ''), '(', ''), ')', '') = '+79127740429'
-  OR c.name = 'Мария'
-  OR c.director_name = 'Мария'
-)
+WHERE REPLACE(REPLACE(REPLACE(REPLACE(c.phone, ' ', ''), '-', ''), '(', ''), ')', '') = '+79127740429'
 AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 66)
 LIMIT 1;
 
@@ -38011,11 +33495,7 @@ SELECT
   NOW(),
   NOW()
 FROM rental_clients c
-WHERE (
-  REPLACE(REPLACE(REPLACE(REPLACE(c.phone, ' ', ''), '-', ''), '(', ''), ')', '') = '+79127740429'
-  OR c.name = 'Мария'
-  OR c.director_name = 'Мария'
-)
+WHERE REPLACE(REPLACE(REPLACE(REPLACE(c.phone, ' ', ''), '-', ''), '(', ''), ')', '') = '+79127740429'
 AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 65)
 LIMIT 1;
 
@@ -38044,11 +33524,7 @@ SELECT
   NOW(),
   NOW()
 FROM rental_clients c
-WHERE (
-  REPLACE(REPLACE(REPLACE(REPLACE(c.phone, ' ', ''), '-', ''), '(', ''), ')', '') = '+79178761282'
-  OR c.name = 'Татьяна (КБПИЭ)'
-  OR c.director_name = 'Татьяна (КБПИЭ)'
-)
+WHERE REPLACE(REPLACE(REPLACE(REPLACE(c.phone, ' ', ''), '-', ''), '(', ''), ')', '') = '+79178761282'
 AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 64)
 LIMIT 1;
 
@@ -38077,11 +33553,7 @@ SELECT
   NOW(),
   NOW()
 FROM rental_clients c
-WHERE (
-  REPLACE(REPLACE(REPLACE(REPLACE(c.phone, ' ', ''), '-', ''), '(', ''), ')', '') = '+79662409276'
-  OR c.name = 'Мира (ИП)'
-  OR c.director_name = 'Мира (ИП)'
-)
+WHERE REPLACE(REPLACE(REPLACE(REPLACE(c.phone, ' ', ''), '-', ''), '(', ''), ')', '') = '+79662409276'
 AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 63)
 LIMIT 1;
 
@@ -38110,11 +33582,7 @@ SELECT
   NOW(),
   NOW()
 FROM rental_clients c
-WHERE (
-  REPLACE(REPLACE(REPLACE(REPLACE(c.phone, ' ', ''), '-', ''), '(', ''), ')', '') = '+79662409276'
-  OR c.name = 'Мира (ИП)'
-  OR c.director_name = 'Мира (ИП)'
-)
+WHERE REPLACE(REPLACE(REPLACE(REPLACE(c.phone, ' ', ''), '-', ''), '(', ''), ')', '') = '+79662409276'
 AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 62)
 LIMIT 1;
 
@@ -38143,11 +33611,7 @@ SELECT
   NOW(),
   NOW()
 FROM rental_clients c
-WHERE (
-  REPLACE(REPLACE(REPLACE(REPLACE(c.phone, ' ', ''), '-', ''), '(', ''), ')', '') = '+79046699399'
-  OR c.name = 'Альберт (КТ)'
-  OR c.director_name = 'Альберт (КТ)'
-)
+WHERE REPLACE(REPLACE(REPLACE(REPLACE(c.phone, ' ', ''), '-', ''), '(', ''), ')', '') = '+79046699399'
 AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 61)
 LIMIT 1;
 
@@ -38176,11 +33640,7 @@ SELECT
   NOW(),
   NOW()
 FROM rental_clients c
-WHERE (
-  REPLACE(REPLACE(REPLACE(REPLACE(c.phone, ' ', ''), '-', ''), '(', ''), ')', '') = '+79178761282'
-  OR c.name = 'Татьяна (КБПИЭ)'
-  OR c.director_name = 'Татьяна (КБПИЭ)'
-)
+WHERE REPLACE(REPLACE(REPLACE(REPLACE(c.phone, ' ', ''), '-', ''), '(', ''), ')', '') = '+79178761282'
 AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 60)
 LIMIT 1;
 
@@ -38209,11 +33669,7 @@ SELECT
   NOW(),
   NOW()
 FROM rental_clients c
-WHERE (
-  REPLACE(REPLACE(REPLACE(REPLACE(c.phone, ' ', ''), '-', ''), '(', ''), ')', '') = '+79662409276'
-  OR c.name = 'Мира (ИП)'
-  OR c.director_name = 'Мира (ИП)'
-)
+WHERE REPLACE(REPLACE(REPLACE(REPLACE(c.phone, ' ', ''), '-', ''), '(', ''), ')', '') = '+79662409276'
 AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 59)
 LIMIT 1;
 
@@ -38242,11 +33698,7 @@ SELECT
   NOW(),
   NOW()
 FROM rental_clients c
-WHERE (
-  REPLACE(REPLACE(REPLACE(REPLACE(c.phone, ' ', ''), '-', ''), '(', ''), ')', '') = '+79994502017'
-  OR c.name = 'Галина'
-  OR c.director_name = 'Галина'
-)
+WHERE REPLACE(REPLACE(REPLACE(REPLACE(c.phone, ' ', ''), '-', ''), '(', ''), ')', '') = '+79994502017'
 AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 58)
 LIMIT 1;
 
@@ -38275,11 +33727,7 @@ SELECT
   NOW(),
   NOW()
 FROM rental_clients c
-WHERE (
-  REPLACE(REPLACE(REPLACE(REPLACE(c.phone, ' ', ''), '-', ''), '(', ''), ')', '') = '+79994502017'
-  OR c.name = 'Галина'
-  OR c.director_name = 'Галина'
-)
+WHERE REPLACE(REPLACE(REPLACE(REPLACE(c.phone, ' ', ''), '-', ''), '(', ''), ')', '') = '+79994502017'
 AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 57)
 LIMIT 1;
 
@@ -38308,11 +33756,7 @@ SELECT
   NOW(),
   NOW()
 FROM rental_clients c
-WHERE (
-  REPLACE(REPLACE(REPLACE(REPLACE(c.phone, ' ', ''), '-', ''), '(', ''), ')', '') = '+79994502017'
-  OR c.name = 'Галина'
-  OR c.director_name = 'Галина'
-)
+WHERE REPLACE(REPLACE(REPLACE(REPLACE(c.phone, ' ', ''), '-', ''), '(', ''), ')', '') = '+79994502017'
 AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 56)
 LIMIT 1;
 
@@ -38341,11 +33785,7 @@ SELECT
   NOW(),
   NOW()
 FROM rental_clients c
-WHERE (
-  REPLACE(REPLACE(REPLACE(REPLACE(c.phone, ' ', ''), '-', ''), '(', ''), ')', '') = '+79853891999'
-  OR c.name = 'Сергей (Авангард)'
-  OR c.director_name = 'Сергей (Авангард)'
-)
+WHERE REPLACE(REPLACE(REPLACE(REPLACE(c.phone, ' ', ''), '-', ''), '(', ''), ')', '') = '+79853891999'
 AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 55)
 LIMIT 1;
 
@@ -38374,11 +33814,7 @@ SELECT
   NOW(),
   NOW()
 FROM rental_clients c
-WHERE (
-  REPLACE(REPLACE(REPLACE(REPLACE(c.phone, ' ', ''), '-', ''), '(', ''), ')', '') = '+79178761282'
-  OR c.name = 'Татьяна (КБПИЭ)'
-  OR c.director_name = 'Татьяна (КБПИЭ)'
-)
+WHERE REPLACE(REPLACE(REPLACE(REPLACE(c.phone, ' ', ''), '-', ''), '(', ''), ')', '') = '+79178761282'
 AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 54)
 LIMIT 1;
 
@@ -38407,11 +33843,7 @@ SELECT
   NOW(),
   NOW()
 FROM rental_clients c
-WHERE (
-  REPLACE(REPLACE(REPLACE(REPLACE(c.phone, ' ', ''), '-', ''), '(', ''), ')', '') = '+79178761282'
-  OR c.name = 'Татьяна (КБПИЭ)'
-  OR c.director_name = 'Татьяна (КБПИЭ)'
-)
+WHERE REPLACE(REPLACE(REPLACE(REPLACE(c.phone, ' ', ''), '-', ''), '(', ''), ')', '') = '+79178761282'
 AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 53)
 LIMIT 1;
 
@@ -38440,11 +33872,7 @@ SELECT
   NOW(),
   NOW()
 FROM rental_clients c
-WHERE (
-  REPLACE(REPLACE(REPLACE(REPLACE(c.phone, ' ', ''), '-', ''), '(', ''), ')', '') = '+79178761282'
-  OR c.name = 'Татьяна (КБПИЭ)'
-  OR c.director_name = 'Татьяна (КБПИЭ)'
-)
+WHERE REPLACE(REPLACE(REPLACE(REPLACE(c.phone, ' ', ''), '-', ''), '(', ''), ')', '') = '+79178761282'
 AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 52)
 LIMIT 1;
 
@@ -38473,11 +33901,7 @@ SELECT
   NOW(),
   NOW()
 FROM rental_clients c
-WHERE (
-  REPLACE(REPLACE(REPLACE(REPLACE(c.phone, ' ', ''), '-', ''), '(', ''), ')', '') = '+79393309448'
-  OR c.name = 'Андрей (Экскурс)'
-  OR c.director_name = 'Андрей (Экскурс)'
-)
+WHERE REPLACE(REPLACE(REPLACE(REPLACE(c.phone, ' ', ''), '-', ''), '(', ''), ')', '') = '+79393309448'
 AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 51)
 LIMIT 1;
 
@@ -38506,11 +33930,7 @@ SELECT
   NOW(),
   NOW()
 FROM rental_clients c
-WHERE (
-  REPLACE(REPLACE(REPLACE(REPLACE(c.phone, ' ', ''), '-', ''), '(', ''), ')', '') = '+79178761282'
-  OR c.name = 'Татьяна (КБПИЭ)'
-  OR c.director_name = 'Татьяна (КБПИЭ)'
-)
+WHERE REPLACE(REPLACE(REPLACE(REPLACE(c.phone, ' ', ''), '-', ''), '(', ''), ')', '') = '+79178761282'
 AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 50)
 LIMIT 1;
 
@@ -38539,11 +33959,7 @@ SELECT
   NOW(),
   NOW()
 FROM rental_clients c
-WHERE (
-  REPLACE(REPLACE(REPLACE(REPLACE(c.phone, ' ', ''), '-', ''), '(', ''), ')', '') = '+79633126228'
-  OR c.name = 'Светлана Клиент'
-  OR c.director_name = 'Светлана Клиент'
-)
+WHERE REPLACE(REPLACE(REPLACE(REPLACE(c.phone, ' ', ''), '-', ''), '(', ''), ')', '') = '+79633126228'
 AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 49)
 LIMIT 1;
 
@@ -38572,11 +33988,7 @@ SELECT
   NOW(),
   NOW()
 FROM rental_clients c
-WHERE (
-  REPLACE(REPLACE(REPLACE(REPLACE(c.phone, ' ', ''), '-', ''), '(', ''), ')', '') = '+79179142756'
-  OR c.name = 'Татьяна (Гольфстрим)'
-  OR c.director_name = 'Татьяна (Гольфстрим)'
-)
+WHERE REPLACE(REPLACE(REPLACE(REPLACE(c.phone, ' ', ''), '-', ''), '(', ''), ')', '') = '+79179142756'
 AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 48)
 LIMIT 1;
 
@@ -38605,11 +34017,7 @@ SELECT
   NOW(),
   NOW()
 FROM rental_clients c
-WHERE (
-  REPLACE(REPLACE(REPLACE(REPLACE(c.phone, ' ', ''), '-', ''), '(', ''), ')', '') = '+79662409276'
-  OR c.name = 'Мира (ИП)'
-  OR c.director_name = 'Мира (ИП)'
-)
+WHERE REPLACE(REPLACE(REPLACE(REPLACE(c.phone, ' ', ''), '-', ''), '(', ''), ')', '') = '+79662409276'
 AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 47)
 LIMIT 1;
 
@@ -38638,11 +34046,7 @@ SELECT
   NOW(),
   NOW()
 FROM rental_clients c
-WHERE (
-  REPLACE(REPLACE(REPLACE(REPLACE(c.phone, ' ', ''), '-', ''), '(', ''), ')', '') = '+79046699399'
-  OR c.name = 'Альберт (КТ)'
-  OR c.director_name = 'Альберт (КТ)'
-)
+WHERE REPLACE(REPLACE(REPLACE(REPLACE(c.phone, ' ', ''), '-', ''), '(', ''), ')', '') = '+79046699399'
 AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 46)
 LIMIT 1;
 
@@ -38671,11 +34075,7 @@ SELECT
   NOW(),
   NOW()
 FROM rental_clients c
-WHERE (
-  REPLACE(REPLACE(REPLACE(REPLACE(c.phone, ' ', ''), '-', ''), '(', ''), ')', '') = '+79600336033'
-  OR c.name = 'Галия'
-  OR c.director_name = 'Галия'
-)
+WHERE REPLACE(REPLACE(REPLACE(REPLACE(c.phone, ' ', ''), '-', ''), '(', ''), ')', '') = '+79600336033'
 AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 45)
 LIMIT 1;
 
@@ -38704,11 +34104,7 @@ SELECT
   NOW(),
   NOW()
 FROM rental_clients c
-WHERE (
-  REPLACE(REPLACE(REPLACE(REPLACE(c.phone, ' ', ''), '-', ''), '(', ''), ')', '') = '+79393309448'
-  OR c.name = 'Андрей (Экскурс)'
-  OR c.director_name = 'Андрей (Экскурс)'
-)
+WHERE REPLACE(REPLACE(REPLACE(REPLACE(c.phone, ' ', ''), '-', ''), '(', ''), ')', '') = '+79393309448'
 AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 44)
 LIMIT 1;
 
@@ -38737,11 +34133,7 @@ SELECT
   NOW(),
   NOW()
 FROM rental_clients c
-WHERE (
-  REPLACE(REPLACE(REPLACE(REPLACE(c.phone, ' ', ''), '-', ''), '(', ''), ')', '') = '+79994502017'
-  OR c.name = 'Галина'
-  OR c.director_name = 'Галина'
-)
+WHERE REPLACE(REPLACE(REPLACE(REPLACE(c.phone, ' ', ''), '-', ''), '(', ''), ')', '') = '+79994502017'
 AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 43)
 LIMIT 1;
 
@@ -38770,11 +34162,7 @@ SELECT
   NOW(),
   NOW()
 FROM rental_clients c
-WHERE (
-  REPLACE(REPLACE(REPLACE(REPLACE(c.phone, ' ', ''), '-', ''), '(', ''), ')', '') = '+79022038859'
-  OR c.name = 'Тамара'
-  OR c.director_name = 'Тамара'
-)
+WHERE REPLACE(REPLACE(REPLACE(REPLACE(c.phone, ' ', ''), '-', ''), '(', ''), ')', '') = '+79022038859'
 AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 42)
 LIMIT 1;
 
@@ -38803,11 +34191,7 @@ SELECT
   NOW(),
   NOW()
 FROM rental_clients c
-WHERE (
-  REPLACE(REPLACE(REPLACE(REPLACE(c.phone, ' ', ''), '-', ''), '(', ''), ')', '') = '+79872965880'
-  OR c.name = 'Ольга Лукоянова'
-  OR c.director_name = 'Ольга Лукоянова'
-)
+WHERE REPLACE(REPLACE(REPLACE(REPLACE(c.phone, ' ', ''), '-', ''), '(', ''), ')', '') = '+79872965880'
 AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 41)
 LIMIT 1;
 
@@ -38836,11 +34220,7 @@ SELECT
   NOW(),
   NOW()
 FROM rental_clients c
-WHERE (
-  REPLACE(REPLACE(REPLACE(REPLACE(c.phone, ' ', ''), '-', ''), '(', ''), ')', '') = '+79393309448'
-  OR c.name = 'Андрей (Экскурс)'
-  OR c.director_name = 'Андрей (Экскурс)'
-)
+WHERE REPLACE(REPLACE(REPLACE(REPLACE(c.phone, ' ', ''), '-', ''), '(', ''), ')', '') = '+79393309448'
 AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 40)
 LIMIT 1;
 
@@ -38869,11 +34249,7 @@ SELECT
   NOW(),
   NOW()
 FROM rental_clients c
-WHERE (
-  REPLACE(REPLACE(REPLACE(REPLACE(c.phone, ' ', ''), '-', ''), '(', ''), ')', '') = '+79178761282'
-  OR c.name = 'Татьяна (КБПИЭ)'
-  OR c.director_name = 'Татьяна (КБПИЭ)'
-)
+WHERE REPLACE(REPLACE(REPLACE(REPLACE(c.phone, ' ', ''), '-', ''), '(', ''), ')', '') = '+79178761282'
 AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 39)
 LIMIT 1;
 
@@ -38902,11 +34278,7 @@ SELECT
   NOW(),
   NOW()
 FROM rental_clients c
-WHERE (
-  REPLACE(REPLACE(REPLACE(REPLACE(c.phone, ' ', ''), '-', ''), '(', ''), ')', '') = '+79178761282'
-  OR c.name = 'Татьяна (КБПИЭ)'
-  OR c.director_name = 'Татьяна (КБПИЭ)'
-)
+WHERE REPLACE(REPLACE(REPLACE(REPLACE(c.phone, ' ', ''), '-', ''), '(', ''), ')', '') = '+79178761282'
 AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 38)
 LIMIT 1;
 
@@ -38935,11 +34307,7 @@ SELECT
   NOW(),
   NOW()
 FROM rental_clients c
-WHERE (
-  REPLACE(REPLACE(REPLACE(REPLACE(c.phone, ' ', ''), '-', ''), '(', ''), ')', '') = '+79179142756'
-  OR c.name = 'Татьяна (Гольфстрим)'
-  OR c.director_name = 'Татьяна (Гольфстрим)'
-)
+WHERE REPLACE(REPLACE(REPLACE(REPLACE(c.phone, ' ', ''), '-', ''), '(', ''), ')', '') = '+79179142756'
 AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 37)
 LIMIT 1;
 
@@ -38968,11 +34336,7 @@ SELECT
   NOW(),
   NOW()
 FROM rental_clients c
-WHERE (
-  REPLACE(REPLACE(REPLACE(REPLACE(c.phone, ' ', ''), '-', ''), '(', ''), ')', '') = '+79179142756'
-  OR c.name = 'Татьяна (Гольфстрим)'
-  OR c.director_name = 'Татьяна (Гольфстрим)'
-)
+WHERE REPLACE(REPLACE(REPLACE(REPLACE(c.phone, ' ', ''), '-', ''), '(', ''), ')', '') = '+79179142756'
 AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 36)
 LIMIT 1;
 
@@ -39001,11 +34365,7 @@ SELECT
   NOW(),
   NOW()
 FROM rental_clients c
-WHERE (
-  REPLACE(REPLACE(REPLACE(REPLACE(c.phone, ' ', ''), '-', ''), '(', ''), ')', '') = '+79179142756'
-  OR c.name = 'Татьяна (Гольфстрим)'
-  OR c.director_name = 'Татьяна (Гольфстрим)'
-)
+WHERE REPLACE(REPLACE(REPLACE(REPLACE(c.phone, ' ', ''), '-', ''), '(', ''), ')', '') = '+79179142756'
 AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 35)
 LIMIT 1;
 
@@ -39034,11 +34394,7 @@ SELECT
   NOW(),
   NOW()
 FROM rental_clients c
-WHERE (
-  REPLACE(REPLACE(REPLACE(REPLACE(c.phone, ' ', ''), '-', ''), '(', ''), ')', '') = '+79179142756'
-  OR c.name = 'Татьяна (Гольфстрим)'
-  OR c.director_name = 'Татьяна (Гольфстрим)'
-)
+WHERE REPLACE(REPLACE(REPLACE(REPLACE(c.phone, ' ', ''), '-', ''), '(', ''), ')', '') = '+79179142756'
 AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 34)
 LIMIT 1;
 
@@ -39067,11 +34423,7 @@ SELECT
   NOW(),
   NOW()
 FROM rental_clients c
-WHERE (
-  REPLACE(REPLACE(REPLACE(REPLACE(c.phone, ' ', ''), '-', ''), '(', ''), ')', '') = '+79179142756'
-  OR c.name = 'Татьяна (Гольфстрим)'
-  OR c.director_name = 'Татьяна (Гольфстрим)'
-)
+WHERE REPLACE(REPLACE(REPLACE(REPLACE(c.phone, ' ', ''), '-', ''), '(', ''), ')', '') = '+79179142756'
 AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 33)
 LIMIT 1;
 
@@ -39100,11 +34452,7 @@ SELECT
   NOW(),
   NOW()
 FROM rental_clients c
-WHERE (
-  REPLACE(REPLACE(REPLACE(REPLACE(c.phone, ' ', ''), '-', ''), '(', ''), ')', '') = '+79179142756'
-  OR c.name = 'Татьяна (Гольфстрим)'
-  OR c.director_name = 'Татьяна (Гольфстрим)'
-)
+WHERE REPLACE(REPLACE(REPLACE(REPLACE(c.phone, ' ', ''), '-', ''), '(', ''), ')', '') = '+79179142756'
 AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 32)
 LIMIT 1;
 
@@ -39133,11 +34481,7 @@ SELECT
   NOW(),
   NOW()
 FROM rental_clients c
-WHERE (
-  REPLACE(REPLACE(REPLACE(REPLACE(c.phone, ' ', ''), '-', ''), '(', ''), ')', '') = '+79179142756'
-  OR c.name = 'Татьяна (Гольфстрим)'
-  OR c.director_name = 'Татьяна (Гольфстрим)'
-)
+WHERE REPLACE(REPLACE(REPLACE(REPLACE(c.phone, ' ', ''), '-', ''), '(', ''), ')', '') = '+79179142756'
 AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 31)
 LIMIT 1;
 
@@ -39166,11 +34510,7 @@ SELECT
   NOW(),
   NOW()
 FROM rental_clients c
-WHERE (
-  REPLACE(REPLACE(REPLACE(REPLACE(c.phone, ' ', ''), '-', ''), '(', ''), ')', '') = '+79179142756'
-  OR c.name = 'Татьяна (Гольфстрим)'
-  OR c.director_name = 'Татьяна (Гольфстрим)'
-)
+WHERE REPLACE(REPLACE(REPLACE(REPLACE(c.phone, ' ', ''), '-', ''), '(', ''), ')', '') = '+79179142756'
 AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 30)
 LIMIT 1;
 
@@ -39199,11 +34539,7 @@ SELECT
   NOW(),
   NOW()
 FROM rental_clients c
-WHERE (
-  REPLACE(REPLACE(REPLACE(REPLACE(c.phone, ' ', ''), '-', ''), '(', ''), ')', '') = '+79179142756'
-  OR c.name = 'Татьяна (Гольфстрим)'
-  OR c.director_name = 'Татьяна (Гольфстрим)'
-)
+WHERE REPLACE(REPLACE(REPLACE(REPLACE(c.phone, ' ', ''), '-', ''), '(', ''), ')', '') = '+79179142756'
 AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 29)
 LIMIT 1;
 
@@ -39232,11 +34568,7 @@ SELECT
   NOW(),
   NOW()
 FROM rental_clients c
-WHERE (
-  REPLACE(REPLACE(REPLACE(REPLACE(c.phone, ' ', ''), '-', ''), '(', ''), ')', '') = '+79179142756'
-  OR c.name = 'Татьяна (Гольфстрим)'
-  OR c.director_name = 'Татьяна (Гольфстрим)'
-)
+WHERE REPLACE(REPLACE(REPLACE(REPLACE(c.phone, ' ', ''), '-', ''), '(', ''), ')', '') = '+79179142756'
 AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 28)
 LIMIT 1;
 
@@ -39265,11 +34597,7 @@ SELECT
   NOW(),
   NOW()
 FROM rental_clients c
-WHERE (
-  REPLACE(REPLACE(REPLACE(REPLACE(c.phone, ' ', ''), '-', ''), '(', ''), ')', '') = '+79179142756'
-  OR c.name = 'Татьяна (Гольфстрим)'
-  OR c.director_name = 'Татьяна (Гольфстрим)'
-)
+WHERE REPLACE(REPLACE(REPLACE(REPLACE(c.phone, ' ', ''), '-', ''), '(', ''), ')', '') = '+79179142756'
 AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 27)
 LIMIT 1;
 
@@ -39298,11 +34626,7 @@ SELECT
   NOW(),
   NOW()
 FROM rental_clients c
-WHERE (
-  REPLACE(REPLACE(REPLACE(REPLACE(c.phone, ' ', ''), '-', ''), '(', ''), ')', '') = '+79179142756'
-  OR c.name = 'Татьяна (Гольфстрим)'
-  OR c.director_name = 'Татьяна (Гольфстрим)'
-)
+WHERE REPLACE(REPLACE(REPLACE(REPLACE(c.phone, ' ', ''), '-', ''), '(', ''), ')', '') = '+79179142756'
 AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 26)
 LIMIT 1;
 
@@ -39331,11 +34655,7 @@ SELECT
   NOW(),
   NOW()
 FROM rental_clients c
-WHERE (
-  REPLACE(REPLACE(REPLACE(REPLACE(c.phone, ' ', ''), '-', ''), '(', ''), ')', '') = '+79179142756'
-  OR c.name = 'Татьяна (Гольфстрим)'
-  OR c.director_name = 'Татьяна (Гольфстрим)'
-)
+WHERE REPLACE(REPLACE(REPLACE(REPLACE(c.phone, ' ', ''), '-', ''), '(', ''), ')', '') = '+79179142756'
 AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 25)
 LIMIT 1;
 
@@ -39364,11 +34684,7 @@ SELECT
   NOW(),
   NOW()
 FROM rental_clients c
-WHERE (
-  REPLACE(REPLACE(REPLACE(REPLACE(c.phone, ' ', ''), '-', ''), '(', ''), ')', '') = '+79179142756'
-  OR c.name = 'Татьяна (Гольфстрим)'
-  OR c.director_name = 'Татьяна (Гольфстрим)'
-)
+WHERE REPLACE(REPLACE(REPLACE(REPLACE(c.phone, ' ', ''), '-', ''), '(', ''), ')', '') = '+79179142756'
 AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 24)
 LIMIT 1;
 
@@ -39397,11 +34713,7 @@ SELECT
   NOW(),
   NOW()
 FROM rental_clients c
-WHERE (
-  REPLACE(REPLACE(REPLACE(REPLACE(c.phone, ' ', ''), '-', ''), '(', ''), ')', '') = '+79179142756'
-  OR c.name = 'Татьяна (Гольфстрим)'
-  OR c.director_name = 'Татьяна (Гольфстрим)'
-)
+WHERE REPLACE(REPLACE(REPLACE(REPLACE(c.phone, ' ', ''), '-', ''), '(', ''), ')', '') = '+79179142756'
 AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 23)
 LIMIT 1;
 
@@ -39430,11 +34742,7 @@ SELECT
   NOW(),
   NOW()
 FROM rental_clients c
-WHERE (
-  REPLACE(REPLACE(REPLACE(REPLACE(c.phone, ' ', ''), '-', ''), '(', ''), ')', '') = '+79033443111'
-  OR c.name = 'Элина (Сититур)'
-  OR c.director_name = 'Элина (Сититур)'
-)
+WHERE REPLACE(REPLACE(REPLACE(REPLACE(c.phone, ' ', ''), '-', ''), '(', ''), ')', '') = '+79033443111'
 AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 22)
 LIMIT 1;
 
@@ -39463,11 +34771,7 @@ SELECT
   NOW(),
   NOW()
 FROM rental_clients c
-WHERE (
-  REPLACE(REPLACE(REPLACE(REPLACE(c.phone, ' ', ''), '-', ''), '(', ''), ')', '') = '+79179142756'
-  OR c.name = 'Татьяна (Гольфстрим)'
-  OR c.director_name = 'Татьяна (Гольфстрим)'
-)
+WHERE REPLACE(REPLACE(REPLACE(REPLACE(c.phone, ' ', ''), '-', ''), '(', ''), ')', '') = '+79179142756'
 AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 19)
 LIMIT 1;
 
@@ -39496,11 +34800,7 @@ SELECT
   NOW(),
   NOW()
 FROM rental_clients c
-WHERE (
-  REPLACE(REPLACE(REPLACE(REPLACE(c.phone, ' ', ''), '-', ''), '(', ''), ')', '') = '+79172278327'
-  OR c.name = 'Юлия Воронова'
-  OR c.director_name = 'Юлия Воронова'
-)
+WHERE REPLACE(REPLACE(REPLACE(REPLACE(c.phone, ' ', ''), '-', ''), '(', ''), ')', '') = '+79172278327'
 AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 18)
 LIMIT 1;
 
@@ -39529,11 +34829,7 @@ SELECT
   NOW(),
   NOW()
 FROM rental_clients c
-WHERE (
-  REPLACE(REPLACE(REPLACE(REPLACE(c.phone, ' ', ''), '-', ''), '(', ''), ')', '') = '+79262118230'
-  OR c.name = 'Елена Игнатьева'
-  OR c.director_name = 'Елена Игнатьева'
-)
+WHERE REPLACE(REPLACE(REPLACE(REPLACE(c.phone, ' ', ''), '-', ''), '(', ''), ')', '') = '+79262118230'
 AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 17)
 LIMIT 1;
 
@@ -39562,11 +34858,7 @@ SELECT
   NOW(),
   NOW()
 FROM rental_clients c
-WHERE (
-  REPLACE(REPLACE(REPLACE(REPLACE(c.phone, ' ', ''), '-', ''), '(', ''), ')', '') = '+79872827166'
-  OR c.name = 'Татьяна Чуб'
-  OR c.director_name = 'Татьяна Чуб'
-)
+WHERE REPLACE(REPLACE(REPLACE(REPLACE(c.phone, ' ', ''), '-', ''), '(', ''), ')', '') = '+79872827166'
 AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 16)
 LIMIT 1;
 
@@ -39595,11 +34887,7 @@ SELECT
   NOW(),
   NOW()
 FROM rental_clients c
-WHERE (
-  REPLACE(REPLACE(REPLACE(REPLACE(c.phone, ' ', ''), '-', ''), '(', ''), ')', '') = '+79159613586'
-  OR c.name = 'Мария Батяева'
-  OR c.director_name = 'Мария Батяева'
-)
+WHERE REPLACE(REPLACE(REPLACE(REPLACE(c.phone, ' ', ''), '-', ''), '(', ''), ')', '') = '+79159613586'
 AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 15)
 LIMIT 1;
 
@@ -39628,11 +34916,7 @@ SELECT
   NOW(),
   NOW()
 FROM rental_clients c
-WHERE (
-  REPLACE(REPLACE(REPLACE(REPLACE(c.phone, ' ', ''), '-', ''), '(', ''), ')', '') = '+79872797484'
-  OR c.name = 'Алина Сафина'
-  OR c.director_name = 'Алина Сафина'
-)
+WHERE REPLACE(REPLACE(REPLACE(REPLACE(c.phone, ' ', ''), '-', ''), '(', ''), ')', '') = '+79872797484'
 AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 14)
 LIMIT 1;
 
@@ -39661,11 +34945,7 @@ SELECT
   NOW(),
   NOW()
 FROM rental_clients c
-WHERE (
-  REPLACE(REPLACE(REPLACE(REPLACE(c.phone, ' ', ''), '-', ''), '(', ''), ')', '') = '+79179142756'
-  OR c.name = 'Татьяна (Гольфстрим)'
-  OR c.director_name = 'Татьяна (Гольфстрим)'
-)
+WHERE REPLACE(REPLACE(REPLACE(REPLACE(c.phone, ' ', ''), '-', ''), '(', ''), ')', '') = '+79179142756'
 AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 13)
 LIMIT 1;
 
@@ -39694,11 +34974,7 @@ SELECT
   NOW(),
   NOW()
 FROM rental_clients c
-WHERE (
-  REPLACE(REPLACE(REPLACE(REPLACE(c.phone, ' ', ''), '-', ''), '(', ''), ')', '') = '+79994502017'
-  OR c.name = 'Галина'
-  OR c.director_name = 'Галина'
-)
+WHERE REPLACE(REPLACE(REPLACE(REPLACE(c.phone, ' ', ''), '-', ''), '(', ''), ')', '') = '+79994502017'
 AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 12)
 LIMIT 1;
 
@@ -39727,11 +35003,7 @@ SELECT
   NOW(),
   NOW()
 FROM rental_clients c
-WHERE (
-  REPLACE(REPLACE(REPLACE(REPLACE(c.phone, ' ', ''), '-', ''), '(', ''), ')', '') = '+79107527951'
-  OR c.name = 'Наталья Рыжкова'
-  OR c.director_name = 'Наталья Рыжкова'
-)
+WHERE REPLACE(REPLACE(REPLACE(REPLACE(c.phone, ' ', ''), '-', ''), '(', ''), ')', '') = '+79107527951'
 AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 11)
 LIMIT 1;
 
@@ -39760,11 +35032,7 @@ SELECT
   NOW(),
   NOW()
 FROM rental_clients c
-WHERE (
-  REPLACE(REPLACE(REPLACE(REPLACE(c.phone, ' ', ''), '-', ''), '(', ''), ')', '') = '+79179142756'
-  OR c.name = 'Татьяна (Гольфстрим)'
-  OR c.director_name = 'Татьяна (Гольфстрим)'
-)
+WHERE REPLACE(REPLACE(REPLACE(REPLACE(c.phone, ' ', ''), '-', ''), '(', ''), ')', '') = '+79179142756'
 AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 9)
 LIMIT 1;
 
@@ -39793,11 +35061,7 @@ SELECT
   NOW(),
   NOW()
 FROM rental_clients c
-WHERE (
-  REPLACE(REPLACE(REPLACE(REPLACE(c.phone, ' ', ''), '-', ''), '(', ''), ')', '') = '+79179142756'
-  OR c.name = 'Татьяна (Гольфстрим)'
-  OR c.director_name = 'Татьяна (Гольфстрим)'
-)
+WHERE REPLACE(REPLACE(REPLACE(REPLACE(c.phone, ' ', ''), '-', ''), '(', ''), ')', '') = '+79179142756'
 AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 8)
 LIMIT 1;
 
@@ -39826,11 +35090,7 @@ SELECT
   NOW(),
   NOW()
 FROM rental_clients c
-WHERE (
-  REPLACE(REPLACE(REPLACE(REPLACE(c.phone, ' ', ''), '-', ''), '(', ''), ')', '') = '+79179142756'
-  OR c.name = 'Татьяна (Гольфстрим)'
-  OR c.director_name = 'Татьяна (Гольфстрим)'
-)
+WHERE REPLACE(REPLACE(REPLACE(REPLACE(c.phone, ' ', ''), '-', ''), '(', ''), ')', '') = '+79179142756'
 AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 7)
 LIMIT 1;
 
@@ -39859,11 +35119,7 @@ SELECT
   NOW(),
   NOW()
 FROM rental_clients c
-WHERE (
-  REPLACE(REPLACE(REPLACE(REPLACE(c.phone, ' ', ''), '-', ''), '(', ''), ')', '') = '+79179142756'
-  OR c.name = 'Татьяна (Гольфстрим)'
-  OR c.director_name = 'Татьяна (Гольфстрим)'
-)
+WHERE REPLACE(REPLACE(REPLACE(REPLACE(c.phone, ' ', ''), '-', ''), '(', ''), ')', '') = '+79179142756'
 AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 6)
 LIMIT 1;
 
@@ -39892,11 +35148,7 @@ SELECT
   NOW(),
   NOW()
 FROM rental_clients c
-WHERE (
-  REPLACE(REPLACE(REPLACE(REPLACE(c.phone, ' ', ''), '-', ''), '(', ''), ')', '') = '+79172751068'
-  OR c.name = 'Наталья'
-  OR c.director_name = 'Наталья'
-)
+WHERE REPLACE(REPLACE(REPLACE(REPLACE(c.phone, ' ', ''), '-', ''), '(', ''), ')', '') = '+79172751068'
 AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 5)
 LIMIT 1;
 
@@ -39925,11 +35177,7 @@ SELECT
   NOW(),
   NOW()
 FROM rental_clients c
-WHERE (
-  REPLACE(REPLACE(REPLACE(REPLACE(c.phone, ' ', ''), '-', ''), '(', ''), ')', '') = '+79600336033'
-  OR c.name = 'Галия'
-  OR c.director_name = 'Галия'
-)
+WHERE REPLACE(REPLACE(REPLACE(REPLACE(c.phone, ' ', ''), '-', ''), '(', ''), ')', '') = '+79600336033'
 AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 4)
 LIMIT 1;
 
@@ -39958,14 +35206,9 @@ SELECT
   NOW(),
   NOW()
 FROM rental_clients c
-WHERE (
-  REPLACE(REPLACE(REPLACE(REPLACE(c.phone, ' ', ''), '-', ''), '(', ''), ')', '') = '+79046699399'
-  OR c.name = 'Альберт (КТ)'
-  OR c.director_name = 'Альберт (КТ)'
-)
+WHERE REPLACE(REPLACE(REPLACE(REPLACE(c.phone, ' ', ''), '-', ''), '(', ''), ')', '') = '+79046699399'
 AND NOT EXISTS (SELECT 1 FROM rental_orders ro WHERE ro.order_number = 3)
 LIMIT 1;
 
 
--- Check imported count:
 SELECT COUNT(*) as imported_orders FROM rental_orders;
