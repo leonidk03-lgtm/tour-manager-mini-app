@@ -385,11 +385,13 @@ export default function DashboardScreen() {
   }, [rentalOrders]);
 
   const rentalStats = useMemo(() => {
-    const { startDate, endDate } = getDateRangeForPeriod("day", referenceDate);
+    const tomorrow = new Date(referenceDate);
+    tomorrow.setDate(tomorrow.getDate() + 1);
+    const { startDate, endDate } = getDateRangeForPeriod("day", tomorrow);
     const startDateObj = new Date(startDate);
     const endDateObj = new Date(endDate);
     
-    const todayOrders = rentalOrders.filter(order => {
+    const tomorrowOrders = rentalOrders.filter(order => {
       const orderDate = new Date(order.startDate);
       return orderDate >= startDateObj && orderDate <= endDateObj;
     });
@@ -398,9 +400,9 @@ export default function DashboardScreen() {
       order.status === 'new' || order.status === 'issued'
     ).length;
     
-    const todayRevenue = todayOrders.reduce((sum, order) => sum + (order.totalPrice || 0), 0);
+    const tomorrowRevenue = tomorrowOrders.reduce((sum, order) => sum + (order.totalPrice || 0), 0);
     
-    return { active: activeCount, todayOrders: todayOrders.length, todayRevenue };
+    return { active: activeCount, tomorrowOrders: tomorrowOrders.length, tomorrowRevenue };
   }, [rentalOrders, referenceDate]);
 
   const alerts = useMemo(() => {
@@ -655,12 +657,12 @@ export default function DashboardScreen() {
                   <View style={styles.rentalKpiRow}>
                     <ThemedView style={[styles.rentalKpiCard, { backgroundColor: theme.backgroundSecondary }]}>
                       <Icon name="file-text" size={18} color={theme.primary} />
-                      <ThemedText style={[styles.rentalKpiValue, { color: theme.text }]}>{rentalStats.todayOrders}</ThemedText>
-                      <ThemedText style={[styles.rentalKpiLabel, { color: theme.textSecondary }]}>Сегодня</ThemedText>
+                      <ThemedText style={[styles.rentalKpiValue, { color: theme.text }]}>{rentalStats.tomorrowOrders}</ThemedText>
+                      <ThemedText style={[styles.rentalKpiLabel, { color: theme.textSecondary }]}>Завтра</ThemedText>
                     </ThemedView>
                     <ThemedView style={[styles.rentalKpiCard, { backgroundColor: theme.backgroundSecondary }]}>
                       <Icon name="dollar-sign" size={18} color={theme.success} />
-                      <ThemedText style={[styles.rentalKpiValue, { color: theme.success }]}>{formatCurrency(rentalStats.todayRevenue)}</ThemedText>
+                      <ThemedText style={[styles.rentalKpiValue, { color: theme.success }]}>{formatCurrency(rentalStats.tomorrowRevenue)}</ThemedText>
                       <ThemedText style={[styles.rentalKpiLabel, { color: theme.textSecondary }]}>Доход</ThemedText>
                     </ThemedView>
                   </View>
