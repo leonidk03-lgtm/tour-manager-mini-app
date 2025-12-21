@@ -227,7 +227,7 @@ export default function RentalClientsScreen() {
           <View style={styles.clientInfo}>
             <View style={styles.clientNameRow}>
               <ThemedText style={styles.clientName} numberOfLines={1}>
-                {item.name}
+                {item.type === "company" && item.directorName ? item.directorName : item.name}
               </ThemedText>
               {!item.isActive ? (
                 <View style={[styles.badge, { backgroundColor: theme.error + "30" }]}>
@@ -237,8 +237,8 @@ export default function RentalClientsScreen() {
                 </View>
               ) : null}
             </View>
-            <ThemedText style={[styles.clientType, { color: theme.textSecondary }]}>
-              {item.type === "company" ? "Компания" : "Физ. лицо"}
+            <ThemedText style={[styles.clientType, { color: theme.textSecondary }]} numberOfLines={1}>
+              {item.type === "company" ? (item.directorName ? item.name : "Компания") : "Физ. лицо"}
               {ordersCount > 0 ? ` • ${ordersCount} заказов` : ""}
             </ThemedText>
           </View>
