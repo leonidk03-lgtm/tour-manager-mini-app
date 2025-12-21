@@ -13,7 +13,7 @@ import { ThemedText } from "@/components/ThemedText";
 import { ThemedView } from "@/components/ThemedView";
 import { PermissionGate } from "@/components/PermissionGate";
 import { useTheme } from "@/hooks/useTheme";
-import { useData, DispatchingNote, Excursion } from "@/contexts/DataContext";
+import { useData, DispatchingNote, Excursion, DispatchMarkEvent } from "@/contexts/DataContext";
 import { useAuth } from "@/contexts/AuthContext";
 import { Spacing, BorderRadius, Typography } from "@/constants/theme";
 import { hapticFeedback } from "@/utils/haptics";
@@ -35,7 +35,7 @@ export default function DispatchingScreen() {
   const { theme } = useTheme();
   const insets = useSafeAreaInsets();
   const navigation = useNavigation<NavigationProp>();
-  const { dispatchingNotes, addDispatchingNote, updateDispatchingNote, deleteDispatchingNote, excursions, tourTypes, addExcursionNote, linkDispatchingNoteToExcursion } = useData();
+  const { dispatchingNotes, addDispatchingNote, updateDispatchingNote, deleteDispatchingNote, excursions, tourTypes, addExcursionNote, linkDispatchingNoteToExcursion, addDispatchMarkEvents } = useData();
   const { profile, isAdmin } = useAuth();
   const [currentNote, setCurrentNote] = useState("");
   const [showNotesList, setShowNotesList] = useState(false);
@@ -61,6 +61,14 @@ export default function DispatchingScreen() {
   const prevNoteRef = useRef("");
   const processedCodesRef = useRef<Set<string>>(new Set());
   const noteInputRef = useRef<TextInput>(null);
+  
+  // Dispatch mark tracking
+  const [sessionMarkCount, setSessionMarkCount] = useState({ phones: 0, pax: 0 });
+  const pendingEventsRef = useRef<Omit<DispatchMarkEvent, 'id' | 'createdAt' | 'managerId' | 'managerName'>[]>([]);
+  const recordedMarksRef = useRef<Set<string>>(new Set()); // phone+date combos already recorded
+  const batchTimerRef = useRef<ReturnType<typeof setTimeout> | null>(null);
+  const BATCH_SIZE = 10;
+  const BATCH_INTERVAL = 30000; // 30 seconds
 
   const activeTab = tabs.find(t => t.id === activeTabId) || tabs[0];
 
@@ -120,6 +128,89 @@ export default function DispatchingScreen() {
       console.error("Failed to save tabs:", error);
     }
   };
+
+  // Flush pending mark events to database
+  const flushPendingEvents = async () => {
+    if (pendingEventsRef.current.length === 0) return;
+    
+    const eventsToSend = [...pendingEventsRef.current];
+    pendingEventsRef.current = [];
+    
+    try {
+      await addDispatchMarkEvents(eventsToSend);
+    } catch (error) {
+      console.error("Failed to flush dispatch mark events:", error);
+      // Re-add failed events back to pending
+      pendingEventsRef.current = [...eventsToSend, ...pendingEventsRef.current];
+      // Schedule retry
+      scheduleBatchFlush();
+    }
+  };
+
+  // Schedule batch flush
+  const scheduleBatchFlush = () => {
+    if (batchTimerRef.current) {
+      clearTimeout(batchTimerRef.current);
+    }
+    batchTimerRef.current = setTimeout(() => {
+      flushPendingEvents();
+    }, BATCH_INTERVAL);
+  };
+
+  // Add mark event to pending queue
+  const addMarkEvent = (event: Omit<DispatchMarkEvent, 'id' | 'createdAt' | 'managerId' | 'managerName'>) => {
+    const eventKey = `${event.phone}_${event.excursionDate}_${event.action}`;
+    
+    // For mark events, check if already recorded to avoid duplicates
+    if (event.action === 'mark') {
+      const markKey = `${event.phone}_${event.excursionDate}`;
+      if (recordedMarksRef.current.has(markKey)) {
+        return; // Already recorded this mark
+      }
+      recordedMarksRef.current.add(markKey);
+      setSessionMarkCount(prev => ({
+        phones: prev.phones + 1,
+        pax: prev.pax + event.paxCount
+      }));
+    } else {
+      // For unmark, remove from recorded and update count
+      const markKey = `${event.phone}_${event.excursionDate}`;
+      recordedMarksRef.current.delete(markKey);
+      setSessionMarkCount(prev => ({
+        phones: Math.max(0, prev.phones - 1),
+        pax: Math.max(0, prev.pax - event.paxCount)
+      }));
+    }
+    
+    pendingEventsRef.current.push(event);
+    
+    // Flush if batch size reached
+    if (pendingEventsRef.current.length >= BATCH_SIZE) {
+      flushPendingEvents();
+    } else {
+      scheduleBatchFlush();
+    }
+  };
+
+  // Reset session counter
+  const resetSessionCount = () => {
+    setSessionMarkCount({ phones: 0, pax: 0 });
+    recordedMarksRef.current.clear();
+    hapticFeedback.success();
+  };
+
+  // Flush on unmount
+  useEffect(() => {
+    return () => {
+      if (batchTimerRef.current) {
+        clearTimeout(batchTimerRef.current);
+      }
+      // Flush remaining events
+      if (pendingEventsRef.current.length > 0) {
+        addDispatchMarkEvents(pendingEventsRef.current).catch(console.error);
+      }
+    };
+  }, []);
 
   const addNewTab = () => {
     hapticFeedback.medium();
@@ -324,6 +415,19 @@ export default function DispatchingScreen() {
             "Скопировано",
             `${phones.length} номер(ов) для обзвона:\n\n${phones.slice(0, 5).join('\n')}${phones.length > 5 ? `\n... и ещё ${phones.length - 5}` : ''}`
           );
+        }
+      } else if (data.type === 'markEvent') {
+        // Tourist marked/unmarked event from WebView
+        const { phone, paxCount, excursionDate, excursionName, action } = data;
+        if (phone && paxCount && excursionDate && action) {
+          addMarkEvent({
+            phone,
+            paxCount: parseInt(paxCount) || 1,
+            excursionDate,
+            excursionName: excursionName || undefined,
+            action,
+          });
+          hapticFeedback.light();
         }
       }
     } catch (e) {
@@ -800,6 +904,25 @@ export default function DispatchingScreen() {
             </ThemedText>
           ) : null}
         </View>
+        
+        {/* Session mark counter */}
+        {(sessionMarkCount.phones > 0 || sessionMarkCount.pax > 0) ? (
+          <View style={[styles.sessionCounterBar, { backgroundColor: theme.backgroundSecondary }]}>
+            <View style={styles.sessionCounterContent}>
+              <Icon name="check-circle" size={16} color={theme.success} />
+              <ThemedText style={[styles.sessionCounterText, { color: theme.text }]}>
+                Сессия: {sessionMarkCount.phones} номер(ов), {sessionMarkCount.pax} чел.
+              </ThemedText>
+            </View>
+            <Pressable
+              style={[styles.sessionCounterResetBtn, { backgroundColor: theme.backgroundTertiary }]}
+              onPress={resetSessionCount}
+            >
+              <Icon name="x" size={14} color={theme.textSecondary} />
+            </Pressable>
+          </View>
+        ) : null}
+        
         {Platform.OS === "web" ? (
           <View style={[styles.webFallback, { backgroundColor: theme.backgroundDefault }]}>
             <Icon name="globe" size={48} color={theme.textSecondary} />
@@ -830,6 +953,85 @@ export default function DispatchingScreen() {
                       updateTabUrl(tab.id, navState.url);
                     }
                   }}
+                  injectedJavaScript={`
+                    (function() {
+                      if (window.__dispatchTrackerInitialized) return;
+                      window.__dispatchTrackerInitialized = true;
+                      
+                      var lastClickTime = 0;
+                      var DEBOUNCE_MS = 500;
+                      
+                      function isGreenRow(row) {
+                        var bg = getComputedStyle(row).backgroundColor;
+                        var cells = row.querySelectorAll('td');
+                        if (!cells.length) return false;
+                        var cellBg = getComputedStyle(cells[0]).backgroundColor;
+                        var combinedBg = (bg + cellBg).toLowerCase();
+                        return combinedBg.includes('green') ||
+                          combinedBg.includes('144, 238') ||
+                          combinedBg.includes('152, 251') ||
+                          combinedBg.includes('0, 128, 0') ||
+                          combinedBg.includes('34, 139') ||
+                          combinedBg.includes('50, 205') ||
+                          /rgb\\(\\s*\\d{1,2}\\s*,\\s*(1[2-9]\\d|2\\d\\d)\\s*,\\s*\\d{1,3}\\s*\\)/.test(combinedBg);
+                      }
+                      
+                      function getRowData(row) {
+                        var cells = row.querySelectorAll('td');
+                        if (cells.length < 7) return null;
+                        var phoneCell = cells[3];
+                        var dateCell = cells[4];
+                        var excursionCell = cells[5];
+                        var countCell = cells[6];
+                        var phone = phoneCell ? phoneCell.innerText.trim() : '';
+                        var dateText = dateCell ? dateCell.innerText.trim() : '';
+                        var excursionName = excursionCell ? excursionCell.innerText.trim() : '';
+                        var paxCount = parseInt(countCell ? countCell.innerText.trim() : '1') || 1;
+                        var dateParts = dateText.match(/(\\d{2})\\.(\\d{2})\\.(\\d{4})/);
+                        var excursionDate = dateParts ? dateParts[3] + '-' + dateParts[2] + '-' + dateParts[1] : new Date().toISOString().split('T')[0];
+                        return { phone: phone, excursionDate: excursionDate, excursionName: excursionName, paxCount: paxCount };
+                      }
+                      
+                      document.addEventListener('click', function(e) {
+                        var now = Date.now();
+                        if (now - lastClickTime < DEBOUNCE_MS) return;
+                        
+                        var link = e.target.closest('a[href*="tel:"], a[href^="+"]');
+                        if (!link) {
+                          var td = e.target.closest('td');
+                          if (td) {
+                            var text = td.innerText.trim();
+                            if (!text.startsWith('+')) return;
+                          } else return;
+                        }
+                        
+                        var row = e.target.closest('tr');
+                        if (!row) return;
+                        
+                        lastClickTime = now;
+                        var wasGreen = isGreenRow(row);
+                        
+                        setTimeout(function() {
+                          var isNowGreen = isGreenRow(row);
+                          if (wasGreen === isNowGreen) return;
+                          
+                          var data = getRowData(row);
+                          if (!data || !data.phone) return;
+                          
+                          var action = isNowGreen ? 'mark' : 'unmark';
+                          window.ReactNativeWebView.postMessage(JSON.stringify({
+                            type: 'markEvent',
+                            phone: data.phone,
+                            paxCount: data.paxCount,
+                            excursionDate: data.excursionDate,
+                            excursionName: data.excursionName,
+                            action: action
+                          }));
+                        }, 300);
+                      }, true);
+                    })();
+                    true;
+                  `}
                 />
               </View>
             ))}
@@ -1214,6 +1416,26 @@ const styles = StyleSheet.create({
   searchResultText: {
     fontSize: 13,
     fontWeight: "500",
+  },
+  sessionCounterBar: {
+    flexDirection: "row",
+    alignItems: "center",
+    justifyContent: "space-between",
+    paddingHorizontal: Spacing.md,
+    paddingVertical: Spacing.sm,
+  },
+  sessionCounterContent: {
+    flexDirection: "row",
+    alignItems: "center",
+    gap: Spacing.sm,
+  },
+  sessionCounterText: {
+    fontSize: 13,
+    fontWeight: "500",
+  },
+  sessionCounterResetBtn: {
+    padding: Spacing.xs,
+    borderRadius: BorderRadius.sm,
   },
   tabsContainer: {
     flexDirection: "row",

@@ -61,6 +61,13 @@ const reportItems: ReportItem[] = [
     screen: "RentalReport",
   },
   {
+    id: "dispatch",
+    title: "Статистика отправлений",
+    description: "Отметки туристов по менеджерам",
+    icon: "user-check",
+    screen: "DispatchActivityReport",
+  },
+  {
     id: "export",
     title: "Экспорт данных",
     description: "Скачать отчёт в файл",

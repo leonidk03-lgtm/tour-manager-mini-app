@@ -120,6 +120,18 @@ Equipment losses can be registered from both excursion radio guide assignments a
   - **Recovery tracking**: Mark lost equipment as found with optional notes
   - When equipment is marked as found, quantity is automatically restored to warehouse inventory
 
+### Dispatch Marking Activity Tracking
+Tracks manager activity when marking tourists in the dispatching WebView:
+- **dispatch_mark_events table**: Stores individual mark/unmark events with phone, pax count, and timestamp
+- **Batched writes**: Events are collected locally and flushed every 30 seconds or when 10 events accumulate
+- **Net calculation**: Aggregates marks minus unmarks to get actual work done
+- **RPC function**: `get_dispatch_stats(start_date, end_date)` returns aggregated stats per manager
+- **DispatchActivityReportScreen**: Admin-only report showing manager rankings by phones/tourists marked
+- **Session counter**: Real-time feedback in DispatchingScreen showing current session progress
+
+**Database Setup**:
+- Execute `sql/dispatch_mark_events_setup.sql` in Supabase SQL Editor to create the table, RLS policies, and aggregation function
+
 ### Platform-Specific Considerations
 The app implements platform-specific UI adjustments (e.g., iOS blur effects, Android edge-to-edge layout) and web fallbacks for native-only features. Replit deployment includes custom dev and build scripts with environment variable usage.
 

@@ -266,6 +266,29 @@ export interface EquipmentMovement {
   createdAt: string;
 }
 
+export interface DispatchMarkEvent {
+  id: string;
+  managerId: string;
+  managerName?: string;
+  phone: string;
+  paxCount: number;
+  excursionDate: string;
+  action: 'mark' | 'unmark';
+  excursionName?: string;
+  createdAt: string;
+}
+
+export interface DispatchStats {
+  managerId: string;
+  managerName: string;
+  totalPhones: number;
+  totalPax: number;
+  markCount: number;
+  unmarkCount: number;
+  netPhones: number;
+  netPax: number;
+}
+
 interface DataContextType {
   tourTypes: TourType[];
   addTourType: (tourType: Omit<TourType, 'id'>) => Promise<void>;
@@ -345,6 +368,9 @@ interface DataContextType {
   addEquipmentMovement: (movement: Omit<EquipmentMovement, 'id' | 'createdAt' | 'managerId' | 'managerName'>) => Promise<void>;
   processAutoWriteoff: (date?: Date) => Promise<{ processed: number; items: Array<{ name: string; quantity: number }> }>;
   autoWriteoffOnIssue: (receiversCount: number, note: string) => Promise<void>;
+  dispatchMarkEvents: DispatchMarkEvent[];
+  addDispatchMarkEvents: (events: Omit<DispatchMarkEvent, 'id' | 'createdAt' | 'managerId' | 'managerName'>[]) => Promise<void>;
+  getDispatchStats: (startDate: string, endDate: string, managerId?: string) => Promise<DispatchStats[]>;
 }
 
 const DataContext = createContext<DataContextType | undefined>(undefined);
@@ -375,6 +401,7 @@ export function DataProvider({ children }: { children: ReactNode }) {
   const [equipmentCategories, setEquipmentCategories] = useState<EquipmentCategory[]>([]);
   const [equipmentItems, setEquipmentItems] = useState<EquipmentItem[]>([]);
   const [equipmentMovements, setEquipmentMovements] = useState<EquipmentMovement[]>([]);
+  const [dispatchMarkEvents, setDispatchMarkEvents] = useState<DispatchMarkEvent[]>([]);
   const [isLoading, setIsLoading] = useState(true);
   const [networkError, setNetworkError] = useState<string | null>(null);
   const [isOffline, setIsOffline] = useState(false);
@@ -2858,6 +2885,62 @@ export function DataProvider({ children }: { children: ReactNode }) {
     return { processed: totalReceiversIssued, items: processedItems };
   };
 
+  const addDispatchMarkEvents = async (events: Omit<DispatchMarkEvent, 'id' | 'createdAt' | 'managerId' | 'managerName'>[]) => {
+    if (!currentUser || events.length === 0) return;
+
+    try {
+      const insertData = events.map(event => ({
+        manager_id: currentUser.id,
+        phone: event.phone,
+        pax_count: event.paxCount,
+        excursion_date: event.excursionDate,
+        action: event.action,
+        excursion_name: event.excursionName || null,
+      }));
+
+      const { error } = await supabase
+        .from('dispatch_mark_events')
+        .insert(insertData);
+
+      if (error) {
+        console.error('Error inserting dispatch mark events:', error);
+        throw error;
+      }
+    } catch (err) {
+      console.error('Error adding dispatch mark events:', err);
+      throw err;
+    }
+  };
+
+  const getDispatchStats = async (startDate: string, endDate: string, managerId?: string): Promise<DispatchStats[]> => {
+    try {
+      const { data, error } = await supabase.rpc('get_dispatch_stats', {
+        p_start_date: startDate,
+        p_end_date: endDate,
+        p_manager_id: managerId || null,
+      });
+
+      if (error) {
+        console.error('Error fetching dispatch stats:', error);
+        throw error;
+      }
+
+      return (data || []).map((row: { manager_id: string; manager_name: string; total_phones: number; total_pax: number; mark_count: number; unmark_count: number; net_phones: number; net_pax: number }) => ({
+        managerId: row.manager_id,
+        managerName: row.manager_name,
+        totalPhones: row.total_phones,
+        totalPax: row.total_pax,
+        markCount: row.mark_count,
+        unmarkCount: row.unmark_count,
+        netPhones: row.net_phones,
+        netPax: row.net_pax,
+      }));
+    } catch (err) {
+      console.error('Error getting dispatch stats:', err);
+      return [];
+    }
+  };
+
   return (
     <DataContext.Provider
       value={{
@@ -2939,6 +3022,9 @@ export function DataProvider({ children }: { children: ReactNode }) {
         addEquipmentMovement,
         processAutoWriteoff,
         autoWriteoffOnIssue,
+        dispatchMarkEvents,
+        addDispatchMarkEvents,
+        getDispatchStats,
       }}
     >
       {children}
