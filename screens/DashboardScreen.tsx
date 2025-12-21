@@ -221,7 +221,7 @@ function SectionHeader({ title, onSeeAll }: { title: string; onSeeAll?: () => vo
 export default function DashboardScreen() {
   const { theme } = useTheme();
   const navigation = useNavigation<NavigationProp<MainTabParamList>>();
-  const { excursions, tourTypes, additionalServices, transactions, radioGuideKits, equipmentItems } = useData();
+  const { excursions, tourTypes, additionalServices, transactions, radioGuideKits, radioGuideAssignments, equipmentItems, equipmentLosses } = useData();
   const { rentalOrders, rentalClients, rentalPayments } = useRental();
   const { isAdmin, hasPermission, profile } = useAuth();
   const [referenceDate, setReferenceDate] = useState(new Date());
@@ -462,6 +462,21 @@ export default function DashboardScreen() {
     return alertsList;
   }, [rentalOrders, radioGuideKits, equipmentItems, theme, hasAnyRentalAccess]);
 
+  const radioGuidesStats = useMemo(() => {
+    const activeAssignments = radioGuideAssignments.filter(a => !a.returnedAt);
+    const onExcursions = activeAssignments.filter(a => a.excursionId).length;
+    
+    const onRentals = rentalOrders.filter(order => 
+      order.status === 'issued' && order.bagNumber
+    ).length;
+    
+    const totalInUse = onExcursions + onRentals;
+    
+    const lostCount = equipmentLosses.filter(loss => loss.status === 'lost').reduce((sum, loss) => sum + loss.missingCount, 0);
+    
+    return { onExcursions, onRentals, totalInUse, lostCount };
+  }, [radioGuideAssignments, rentalOrders, equipmentLosses]);
+
   const getTourName = (tourTypeId: string) => {
     const tour = tourTypes.find(t => t.id === tourTypeId);
     return tour?.name || "Неизвестный тур";
@@ -624,6 +639,43 @@ export default function DashboardScreen() {
                       onPress={() => navigation.navigate('SettingsTab' as never, { screen: alert.route } as never)}
                     />
                   ))}
+                </View>
+              );
+
+            case 'radio_guides_stats':
+              return (
+                <View key={widget.key} style={styles.section}>
+                  <SectionHeader 
+                    title="Радиогиды" 
+                    onSeeAll={() => navigation.navigate('SettingsTab' as never, { screen: 'RadioGuides' } as never)} 
+                  />
+                  <View style={styles.radioGuidesStatsRow}>
+                    <View style={[styles.radioGuideStat, { backgroundColor: theme.backgroundSecondary }]}>
+                      <Icon name="briefcase" size={20} color={theme.primary} />
+                      <ThemedText style={styles.radioGuideStatValue}>{radioGuidesStats.onExcursions}</ThemedText>
+                      <ThemedText style={[styles.radioGuideStatLabel, { color: theme.textSecondary }]}>Экскурсии</ThemedText>
+                    </View>
+                    <View style={[styles.radioGuideStat, { backgroundColor: theme.backgroundSecondary }]}>
+                      <Icon name="truck" size={20} color={theme.success} />
+                      <ThemedText style={styles.radioGuideStatValue}>{radioGuidesStats.onRentals}</ThemedText>
+                      <ThemedText style={[styles.radioGuideStatLabel, { color: theme.textSecondary }]}>Аренда</ThemedText>
+                    </View>
+                    <View style={[styles.radioGuideStat, { backgroundColor: theme.backgroundSecondary }]}>
+                      <Icon name="radio" size={20} color={theme.warning} />
+                      <ThemedText style={styles.radioGuideStatValue}>{radioGuidesStats.totalInUse}</ThemedText>
+                      <ThemedText style={[styles.radioGuideStatLabel, { color: theme.textSecondary }]}>Всего</ThemedText>
+                    </View>
+                    <Pressable 
+                      style={[styles.radioGuideStat, { backgroundColor: theme.backgroundSecondary }]}
+                      onPress={() => navigation.navigate('SettingsTab' as never, { screen: 'EquipmentLosses' } as never)}
+                    >
+                      <Icon name="alert-triangle" size={20} color={theme.error} />
+                      <ThemedText style={[styles.radioGuideStatValue, { color: radioGuidesStats.lostCount > 0 ? theme.error : theme.text }]}>
+                        {radioGuidesStats.lostCount}
+                      </ThemedText>
+                      <ThemedText style={[styles.radioGuideStatLabel, { color: theme.textSecondary }]}>Утеряно</ThemedText>
+                    </Pressable>
+                  </View>
                 </View>
               );
 
@@ -954,5 +1006,24 @@ const styles = StyleSheet.create({
   modalTitle: {
     fontSize: 17,
     fontWeight: "600",
+  },
+  radioGuidesStatsRow: {
+    flexDirection: "row",
+    gap: Spacing.sm,
+  },
+  radioGuideStat: {
+    flex: 1,
+    padding: Spacing.md,
+    borderRadius: BorderRadius.sm,
+    alignItems: "center",
+    gap: Spacing.xs,
+  },
+  radioGuideStatValue: {
+    fontSize: 18,
+    fontWeight: "700",
+  },
+  radioGuideStatLabel: {
+    fontSize: 10,
+    textAlign: "center",
   },
 });

@@ -179,6 +179,7 @@ export type DashboardWidgetKey =
   | 'kpi_cards'
   | 'period_summary'
   | 'alerts'
+  | 'radio_guides_stats'
   | 'today_excursions'
   | 'rental_section';
 
@@ -186,6 +187,7 @@ export const DASHBOARD_WIDGET_DEFINITIONS: { key: DashboardWidgetKey; label: str
   { key: 'kpi_cards', label: 'KPI карточки', description: 'Прибыль, доход, расходы, участники' },
   { key: 'period_summary', label: 'Сводка по периодам', description: 'Неделя и месяц' },
   { key: 'alerts', label: 'Оповещения', description: 'Низкий заряд, запас, просроченные' },
+  { key: 'radio_guides_stats', label: 'Радиогиды', description: 'В работе и утеряно' },
   { key: 'today_excursions', label: 'Экскурсии на сегодня', description: 'Список экскурсий' },
   { key: 'rental_section', label: 'Аренда', description: 'Активные заказы аренды' },
 ];
@@ -203,8 +205,9 @@ export const DEFAULT_DASHBOARD_CONFIG: DashboardConfig = {
     { key: 'kpi_cards', visible: true, order: 0 },
     { key: 'period_summary', visible: true, order: 1 },
     { key: 'alerts', visible: true, order: 2 },
-    { key: 'today_excursions', visible: true, order: 3 },
-    { key: 'rental_section', visible: true, order: 4 },
+    { key: 'radio_guides_stats', visible: true, order: 3 },
+    { key: 'today_excursions', visible: true, order: 4 },
+    { key: 'rental_section', visible: true, order: 5 },
   ],
 };
 
