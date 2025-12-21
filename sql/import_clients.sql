@@ -1,17 +1,13 @@
 -- SQL скрипт для импорта клиентов
 -- Выполните в Supabase SQL Editor
 
--- Сначала получаем ID менеджеров
--- Замените UUID на реальные ID из таблицы profiles
 DO $$
 DECLARE
   leonid_id UUID;
   stas_id UUID;
-  yana_id UUID;
 BEGIN
   SELECT id INTO leonid_id FROM profiles WHERE display_name ILIKE '%Леонид%' LIMIT 1;
   SELECT id INTO stas_id FROM profiles WHERE display_name ILIKE '%Стас%' LIMIT 1;
-  SELECT id INTO yana_id FROM profiles WHERE display_name ILIKE '%Яна%' LIMIT 1;
 
   INSERT INTO rental_clients (type, name, phone, email, director_name, legal_address, kpp, inn, default_price, assigned_manager_id, is_active, notes, created_at, updated_at)
   VALUES
@@ -61,7 +57,7 @@ BEGIN
   ('individual', 'Иванов Семён', '+79677791807', NULL, NULL, NULL, NULL, NULL, 100, stas_id, true, NULL, NOW(), NOW()),
   ('company', 'Общество с ограниченной ответственностью «Твоя Казань»', '+79196862442', 'tvoyakazanadm@mail.ru', 'Зарипова Рената Наилевна', 'Юридический адрес:420055, РТ, г. Казань, ул. Ново - Давликеевская, д. 2А', NULL, '1684015318', 100, NULL, true, NULL, NOW(), NOW()),
   ('company', 'Общество с ограниченной ответственностью «АГЕНТСТВО УДАЧИ»', '+79178533525', NULL, 'Ганиев И.Р.', '420111, ТАТАРСТАН РЕСПУБЛИКА, ГОРОД КАЗАНЬ, УЛИЦА ПУШКИНА, ДОМ 29, ЛИТЕРА А, ОФИС 11', NULL, '1655405320', 100, NULL, true, NULL, NOW(), NOW()),
-  ('company', 'ООО «ВАРИОТ»', '+79778302928', NULL, 'Бабичев Дмитрий Сергеевич', '107078, г. Москва, ул. Садовая-Спасская, д.20, стр.1, 4 этаж, пом.1, ком.13', NULL, '7708734918', 100, yana_id, true, NULL, NOW(), NOW()),
+  ('company', 'ООО «ВАРИОТ»', '+79778302928', NULL, 'Бабичев Дмитрий Сергеевич', '107078, г. Москва, ул. Садовая-Спасская, д.20, стр.1, 4 этаж, пом.1, ком.13', NULL, '7708734918', 100, NULL, true, NULL, NOW(), NOW()),
   ('individual', 'Ольга', '+79278000133', NULL, NULL, NULL, NULL, NULL, 100, NULL, true, NULL, NOW(), NOW()),
   ('individual', 'Валерий', '+79053195486', NULL, NULL, NULL, NULL, NULL, 100, NULL, true, NULL, NOW(), NOW()),
   ('company', 'Индивидуальный Предприниматель Ханнанов Ришат Асфанович', '+79179221193', NULL, 'Ханнанов Ришат Асфанович', '420500, Россия, Респ. Татарстан, Верхнеуслонский р-н, г. Иннополис, Ул. Спортивная, д. 114, Кв 5', NULL, '164444448875', 100, stas_id, true, NULL, NOW(), NOW()),
