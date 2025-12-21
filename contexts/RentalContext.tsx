@@ -1,6 +1,7 @@
 import React, { createContext, useContext, useState, useEffect, ReactNode, useCallback } from "react";
 import { supabase } from "@/lib/supabase";
 import { useAuth } from "./AuthContext";
+import { useData } from "./DataContext";
 
 export type RentalClientType = 'individual' | 'company';
 
@@ -162,6 +163,7 @@ const RentalContext = createContext<RentalContextType | undefined>(undefined);
 
 export function RentalProvider({ children }: { children: ReactNode }) {
   const { user, profile } = useAuth();
+  const { autoWriteoffOnIssue } = useData();
   
   const [rentalClients, setRentalClients] = useState<RentalClient[]>([]);
   const [rentalOrders, setRentalOrders] = useState<RentalOrder[]>([]);
@@ -680,57 +682,6 @@ export function RentalProvider({ children }: { children: ReactNode }) {
     await fetchRentalOrders();
   };
 
-  const performAutoWriteoff = async (receiversCount: number, note: string) => {
-    if (!profile) return;
-    if (receiversCount <= 0) return;
-
-    const headphonesCount = receiversCount + 5;
-
-    try {
-      const { data: categories } = await supabase
-        .from('equipment_categories')
-        .select('*')
-        .eq('auto_writeoff', true)
-        .not('auto_writeoff_source_id', 'is', null);
-
-      if (!categories || categories.length === 0) return;
-
-      for (const category of categories) {
-        const { data: items } = await supabase
-          .from('equipment_items')
-          .select('*')
-          .eq('category_id', category.id)
-          .gt('quantity', 0);
-
-        if (!items) continue;
-
-        for (const item of items) {
-          const quantityToWriteoff = Math.min(headphonesCount, item.quantity);
-
-          await supabase.from('equipment_movements').insert({
-            item_id: item.id,
-            type: 'writeoff',
-            quantity: quantityToWriteoff,
-            note: `${note} (${headphonesCount} шт.)`,
-            manager_id: profile.id,
-            manager_name: profile.display_name || profile.email,
-          });
-
-          await supabase
-            .from('equipment_items')
-            .update({ 
-              quantity: item.quantity - quantityToWriteoff,
-              written_off: (item.written_off || 0) + quantityToWriteoff,
-              updated_at: new Date().toISOString() 
-            })
-            .eq('id', item.id);
-        }
-      }
-    } catch (err) {
-      console.error('Error auto-writeoff:', err);
-    }
-  };
-
   const updateOrderStatus = async (id: string, status: RentalOrderStatus) => {
     const statusLabels: Record<RentalOrderStatus, string> = {
       new: 'Новый',
@@ -759,7 +710,11 @@ export function RentalProvider({ children }: { children: ReactNode }) {
         const totalReceivers = (orderData.kit_count || 0) + (orderData.spare_receiver_count || 0);
         const clientName = orderData.client?.name || 'клиент';
         const bagNumber = orderData.bag_number || '?';
-        await performAutoWriteoff(totalReceivers, `Автосписание аренда: ${clientName}, сумка ${bagNumber}`);
+        try {
+          await autoWriteoffOnIssue(totalReceivers, `Автосписание аренда: ${clientName}, сумка ${bagNumber}`);
+        } catch (err) {
+          console.error('Error auto-writeoff for rental:', err);
+        }
       }
     }
     
