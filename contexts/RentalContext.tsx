@@ -130,6 +130,12 @@ export interface RentalOrderService {
   createdAt: string;
 }
 
+export interface BulkPaymentResult {
+  successCount: number;
+  totalAmount: number;
+  batchId?: string;
+}
+
 interface RentalContextType {
   rentalClients: RentalClient[];
   rentalOrders: RentalOrder[];
@@ -152,6 +158,9 @@ interface RentalContextType {
   getOrderHistory: (orderId: string) => RentalOrderHistory[];
   getClientOrders: (clientId: string) => RentalOrder[];
   getOrderServices: (orderId: string) => RentalOrderService[];
+  getClientUnpaidOrders: (clientId: string) => RentalOrder[];
+  getOrderRemainingAmount: (orderId: string) => number;
+  bulkPayOrders: (clientId: string, orderIds: string[], paymentMethod: RentalPaymentMethod, notes?: string) => Promise<BulkPaymentResult>;
   getManagerCommissions: (managerId: string) => RentalCommission[];
   markCommissionPaid: (commissionId: string) => Promise<void>;
   markManagerCommissionsPaid: (managerId: string) => Promise<void>;
@@ -834,6 +843,132 @@ export function RentalProvider({ children }: { children: ReactNode }) {
     return rentalOrders.filter(o => o.clientId === clientId);
   };
 
+  const getOrderRemainingAmount = (orderId: string): number => {
+    const order = rentalOrders.find(o => o.id === orderId);
+    if (!order) return 0;
+    
+    const orderPayments = rentalPayments.filter(p => p.orderId === orderId);
+    const totalPaid = orderPayments.reduce((sum, p) => {
+      if (p.type === "refund" || p.type === "service_expense") return sum - p.amount;
+      return sum + p.amount;
+    }, 0);
+    
+    return Math.max(0, order.totalPrice - totalPaid);
+  };
+
+  const getClientUnpaidOrders = (clientId: string): RentalOrder[] => {
+    const clientOrders = rentalOrders.filter(o => 
+      o.clientId === clientId && 
+      o.status !== 'cancelled' && 
+      o.status !== 'completed'
+    );
+    
+    return clientOrders.filter(order => {
+      const remaining = getOrderRemainingAmount(order.id);
+      return remaining > 0;
+    }).sort((a, b) => new Date(a.startDate).getTime() - new Date(b.startDate).getTime());
+  };
+
+  const bulkPayOrders = async (
+    clientId: string, 
+    orderIds: string[], 
+    paymentMethod: RentalPaymentMethod, 
+    notes?: string
+  ): Promise<BulkPaymentResult> => {
+    if (orderIds.length === 0) {
+      return { successCount: 0, totalAmount: 0 };
+    }
+
+    let totalAmount = 0;
+    let successCount = 0;
+    const failedOrders: string[] = [];
+    
+    const client = rentalClients.find(c => c.id === clientId);
+    const batchNote = notes || `Групповая оплата ${orderIds.length} заказов`;
+
+    for (const orderId of orderIds) {
+      const order = rentalOrders.find(o => o.id === orderId);
+      if (!order) {
+        failedOrders.push(orderId);
+        continue;
+      }
+
+      if (order.status === 'cancelled' || order.status === 'completed') {
+        continue;
+      }
+
+      const remainingAmount = getOrderRemainingAmount(orderId);
+      if (remainingAmount <= 0) continue;
+
+      try {
+        const { error: paymentError } = await supabase
+          .from('rental_payments')
+          .insert({
+            order_id: orderId,
+            type: 'final',
+            method: paymentMethod,
+            amount: remainingAmount,
+            notes: batchNote,
+            manager_id: profile?.id || null,
+            manager_name: profile?.display_name || profile?.email || null,
+          });
+
+        if (paymentError) {
+          console.error('Error adding payment for order:', orderId, paymentError);
+          failedOrders.push(orderId);
+          continue;
+        }
+
+        await addOrderHistory(orderId, `Окончательный расчёт: ${remainingAmount}₽ (групповая оплата)`);
+
+        const { data: existingCommissions } = await supabase
+          .from('rental_commissions')
+          .select('id')
+          .eq('order_id', orderId)
+          .limit(1);
+
+        if (!existingCommissions || existingCommissions.length === 0) {
+          await createCommissionsForOrder(orderId, order.totalPrice);
+        }
+
+        const newStatus = order.status === 'returned' ? 'completed' : 'returned';
+        const statusLabel = newStatus === 'completed' ? 'Завершён' : 'Возвращён';
+        
+        const { error: statusError } = await supabase
+          .from('rental_orders')
+          .update({ status: newStatus })
+          .eq('id', orderId);
+
+        if (!statusError) {
+          await addOrderHistory(orderId, `Статус изменён на "${statusLabel}" (групповая оплата)`);
+        }
+
+        totalAmount += remainingAmount;
+        successCount++;
+      } catch (err) {
+        console.error('Error processing order:', orderId, err);
+        failedOrders.push(orderId);
+      }
+    }
+
+    if (profile && successCount > 0) {
+      await supabase.from('activities').insert({
+        manager_id: profile.id,
+        manager_name: profile.display_name,
+        type: 'rental_bulk_payment',
+        description: `оплатил ${successCount} заказов для ${client?.name || 'клиента'} на ${totalAmount}₽`,
+        target_id: clientId,
+      });
+    }
+
+    await fetchRentalPayments();
+    await fetchRentalOrders();
+    await fetchRentalCommissions();
+    await fetchRentalOrderHistory();
+
+    return { successCount, totalAmount };
+  };
+
   const getManagerCommissions = (managerId: string): RentalCommission[] => {
     return rentalCommissions.filter(c => c.recipientId === managerId);
   };
@@ -1127,6 +1262,9 @@ export function RentalProvider({ children }: { children: ReactNode }) {
         getOrderHistory,
         getClientOrders,
         getOrderServices,
+        getClientUnpaidOrders,
+        getOrderRemainingAmount,
+        bulkPayOrders,
         getManagerCommissions,
         markCommissionPaid,
         markManagerCommissionsPaid,

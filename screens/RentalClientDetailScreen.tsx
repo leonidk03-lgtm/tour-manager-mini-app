@@ -14,13 +14,15 @@ import {
 } from "react-native";
 import { useSafeAreaInsets } from "react-native-safe-area-context";
 import { useNavigation, useRoute, RouteProp, NavigationProp } from "@react-navigation/native";
+import * as Clipboard from "expo-clipboard";
+import * as Sharing from "expo-sharing";
 import { Icon } from "@/components/Icon";
 import { ThemedText } from "@/components/ThemedText";
 import { ThemedView } from "@/components/ThemedView";
 import { ScreenScrollView } from "@/components/ScreenScrollView";
 import { Spacing, BorderRadius } from "@/constants/theme";
 import { useTheme } from "@/hooks/useTheme";
-import { useRental, RentalOrder, RentalOrderStatus } from "@/contexts/RentalContext";
+import { useRental, RentalOrder, RentalOrderStatus, RentalPaymentMethod } from "@/contexts/RentalContext";
 import { useAuth } from "@/contexts/AuthContext";
 import { SettingsStackParamList } from "@/navigation/SettingsStackNavigator";
 import { hapticFeedback } from "@/utils/haptics";
@@ -35,12 +37,27 @@ const STATUS_CONFIG: Record<RentalOrderStatus, { label: string; color: string }>
   cancelled: { label: "Отменён", color: "#F44336" },
 };
 
+const PAYMENT_METHODS: { value: RentalPaymentMethod; label: string }[] = [
+  { value: "cash", label: "Наличные" },
+  { value: "card", label: "Карта" },
+  { value: "transfer", label: "Перевод" },
+];
+
 export default function RentalClientDetailScreen() {
   const { theme } = useTheme();
   const navigation = useNavigation<NavigationProp<SettingsStackParamList>>();
   const route = useRoute<RouteParams>();
   const insets = useSafeAreaInsets();
-  const { rentalClients, rentalOrders, updateRentalClient, deleteRentalClient } = useRental();
+  const { 
+    rentalClients, 
+    rentalOrders, 
+    rentalOrderServices,
+    updateRentalClient, 
+    deleteRentalClient,
+    getClientUnpaidOrders,
+    getOrderRemainingAmount,
+    bulkPayOrders,
+  } = useRental();
   const { managers } = useAuth();
 
   const clientId = route.params?.clientId;
@@ -48,6 +65,8 @@ export default function RentalClientDetailScreen() {
 
   const [showEditModal, setShowEditModal] = useState(false);
   const [showManagerModal, setShowManagerModal] = useState(false);
+  const [showBulkPaymentModal, setShowBulkPaymentModal] = useState(false);
+  const [showReconciliationModal, setShowReconciliationModal] = useState(false);
   const [editName, setEditName] = useState(client?.name || "");
   const [editPhone, setEditPhone] = useState(client?.phone || "");
   const [editEmail, setEditEmail] = useState(client?.email || "");
@@ -61,12 +80,22 @@ export default function RentalClientDetailScreen() {
   const [editInn, setEditInn] = useState(client?.inn || "");
   const [editKpp, setEditKpp] = useState(client?.kpp || "");
 
+  const [selectedOrderIds, setSelectedOrderIds] = useState<string[]>([]);
+  const [bulkPaymentMethod, setBulkPaymentMethod] = useState<RentalPaymentMethod>("cash");
+  const [bulkPaymentNotes, setBulkPaymentNotes] = useState("");
+  const [isBulkPaymentProcessing, setIsBulkPaymentProcessing] = useState(false);
+
   const clientOrders = useMemo(() => {
     if (!client) return [];
     return rentalOrders.filter(o => o.clientId === client.id).sort((a, b) => 
       new Date(b.createdAt).getTime() - new Date(a.createdAt).getTime()
     );
   }, [rentalOrders, client]);
+
+  const unpaidOrders = useMemo(() => {
+    if (!client) return [];
+    return getClientUnpaidOrders(client.id);
+  }, [client, getClientUnpaidOrders]);
 
   const stats = useMemo(() => {
     const totalOrders = clientOrders.length;
@@ -76,6 +105,12 @@ export default function RentalClientDetailScreen() {
     const activeOrders = clientOrders.filter(o => o.status === "issued").length;
     return { totalOrders, totalRevenue, activeOrders };
   }, [clientOrders]);
+
+  const selectedOrdersTotal = useMemo(() => {
+    return selectedOrderIds.reduce((sum, orderId) => {
+      return sum + getOrderRemainingAmount(orderId);
+    }, 0);
+  }, [selectedOrderIds, getOrderRemainingAmount]);
 
   const formatDate = (dateStr: string): string => {
     const date = new Date(dateStr);
@@ -166,6 +201,130 @@ export default function RentalClientDetailScreen() {
     }
   };
 
+  const handleOpenBulkPaymentModal = () => {
+    setSelectedOrderIds([]);
+    setBulkPaymentMethod("cash");
+    setBulkPaymentNotes("");
+    setShowBulkPaymentModal(true);
+  };
+
+  const handleToggleOrderSelection = (orderId: string) => {
+    hapticFeedback.selection();
+    setSelectedOrderIds(prev => 
+      prev.includes(orderId)
+        ? prev.filter(id => id !== orderId)
+        : [...prev, orderId]
+    );
+  };
+
+  const handleSelectAllOrders = () => {
+    hapticFeedback.selection();
+    if (selectedOrderIds.length === unpaidOrders.length) {
+      setSelectedOrderIds([]);
+    } else {
+      setSelectedOrderIds(unpaidOrders.map(o => o.id));
+    }
+  };
+
+  const handleBulkPayment = async () => {
+    if (!client || selectedOrderIds.length === 0) return;
+
+    setIsBulkPaymentProcessing(true);
+    hapticFeedback.selection();
+
+    try {
+      const result = await bulkPayOrders(
+        client.id,
+        selectedOrderIds,
+        bulkPaymentMethod,
+        bulkPaymentNotes.trim() || undefined
+      );
+
+      setShowBulkPaymentModal(false);
+      hapticFeedback.success();
+
+      Alert.alert(
+        "Оплата успешна",
+        `Оплачено ${result.successCount} заказов на сумму ${result.totalAmount.toLocaleString("ru-RU")}₽`
+      );
+    } catch (error) {
+      Alert.alert("Ошибка", "Не удалось выполнить оплату");
+    } finally {
+      setIsBulkPaymentProcessing(false);
+    }
+  };
+
+  const generateReconciliationReport = (): string => {
+    if (!client) return "";
+
+    const lines: string[] = [];
+    lines.push(`СВЕРКА: ${client.name}`);
+    lines.push(`Дата: ${formatDate(new Date().toISOString())}`);
+    lines.push("");
+    lines.push("НЕОПЛАЧЕННЫЕ ЗАКАЗЫ:");
+    lines.push("─".repeat(40));
+
+    let total = 0;
+
+    unpaidOrders.forEach((order, index) => {
+      const remaining = getOrderRemainingAmount(order.id);
+      total += remaining;
+
+      lines.push(`${index + 1}. Заказ #${order.orderNumber}`);
+      lines.push(`   ${formatDate(order.startDate)} - ${formatDate(order.endDate)}`);
+      
+      const equipment: string[] = [];
+      if (order.kitCount > 0) equipment.push(`Комплекты: ${order.kitCount}`);
+      if (order.spareReceiverCount > 0) equipment.push(`Зап. приёмники: ${order.spareReceiverCount}`);
+      if (order.transmitterCount > 0) equipment.push(`Передатчики: ${order.transmitterCount}`);
+      if (order.microphoneCount > 0) equipment.push(`Микрофоны: ${order.microphoneCount}`);
+      
+      if (equipment.length > 0) {
+        lines.push(`   ${equipment.join(", ")}`);
+      }
+
+      const orderServices = rentalOrderServices.filter(s => s.orderId === order.id);
+      if (orderServices.length > 0) {
+        lines.push(`   Услуги: ${orderServices.map(s => `${s.serviceName} x${s.quantity}`).join(", ")}`);
+      }
+
+      lines.push(`   К оплате: ${remaining.toLocaleString("ru-RU")}₽`);
+      lines.push("");
+    });
+
+    lines.push("─".repeat(40));
+    lines.push(`ИТОГО К ОПЛАТЕ: ${total.toLocaleString("ru-RU")}₽`);
+
+    return lines.join("\n");
+  };
+
+  const handleCopyReconciliation = async () => {
+    const report = generateReconciliationReport();
+    await Clipboard.setStringAsync(report);
+    hapticFeedback.success();
+    Alert.alert("Скопировано", "Отчёт сверки скопирован в буфер обмена");
+  };
+
+  const handleShareReconciliation = async () => {
+    const report = generateReconciliationReport();
+    
+    if (!(await Sharing.isAvailableAsync())) {
+      Alert.alert("Ошибка", "Функция не доступна на данном устройстве");
+      return;
+    }
+
+    try {
+      const fileName = `reconciliation_${client?.name.replace(/\s+/g, "_")}_${Date.now()}.txt`;
+      const fileUri = `${Platform.OS === "ios" ? "" : "file://"}${fileName}`;
+      
+      await Clipboard.setStringAsync(report);
+      hapticFeedback.success();
+      Alert.alert("Отчёт готов", "Текст скопирован в буфер обмена. Вставьте в любое приложение для отправки.");
+    } catch (error) {
+      Alert.alert("Ошибка", "Не удалось поделиться отчётом");
+    }
+  };
+
   const assignedManager = client?.assignedManagerId 
     ? managers.find(m => m.id === client.assignedManagerId) 
     : null;
@@ -209,6 +368,10 @@ export default function RentalClientDetailScreen() {
       </Pressable>
     );
   };
+
+  const totalUnpaidAmount = useMemo(() => {
+    return unpaidOrders.reduce((sum, order) => sum + getOrderRemainingAmount(order.id), 0);
+  }, [unpaidOrders, getOrderRemainingAmount]);
 
   return (
     <ThemedView style={styles.container}>
@@ -380,6 +543,29 @@ export default function RentalClientDetailScreen() {
               {client.defaultPrice}₽
             </ThemedText>
           </View>
+
+          {unpaidOrders.length > 0 ? (
+            <View style={styles.bulkActionsRow}>
+              <Pressable
+                onPress={handleOpenBulkPaymentModal}
+                style={[styles.bulkActionBtn, { backgroundColor: theme.success + "15" }]}
+              >
+                <Icon name="credit-card" size={18} color={theme.success} />
+                <ThemedText style={{ color: theme.success, fontSize: 13, fontWeight: "500" }}>
+                  Оплатить заказы
+                </ThemedText>
+              </Pressable>
+              <Pressable
+                onPress={() => setShowReconciliationModal(true)}
+                style={[styles.bulkActionBtn, { backgroundColor: theme.primary + "15" }]}
+              >
+                <Icon name="file-text" size={18} color={theme.primary} />
+                <ThemedText style={{ color: theme.primary, fontSize: 13, fontWeight: "500" }}>
+                  Сверка
+                </ThemedText>
+              </Pressable>
+            </View>
+          ) : null}
         </View>
 
         <View style={[styles.card, { backgroundColor: theme.backgroundSecondary }]}>
@@ -653,6 +839,290 @@ export default function RentalClientDetailScreen() {
           </View>
         </View>
       </Modal>
+
+      <Modal visible={showBulkPaymentModal} animationType="slide" transparent>
+        <KeyboardAvoidingView 
+          behavior={Platform.OS === "ios" ? "padding" : "height"}
+          style={{ flex: 1 }}
+        >
+          <View style={[styles.modalOverlay, { justifyContent: "flex-end" }]}>
+            <View style={[styles.modalContent, { backgroundColor: theme.backgroundDefault, maxHeight: "85%" }]}>
+              <View style={styles.modalHeader}>
+                <ThemedText style={styles.modalTitle}>Массовая оплата</ThemedText>
+                <Pressable onPress={() => setShowBulkPaymentModal(false)}>
+                  <Icon name="x" size={24} color={theme.text} />
+                </Pressable>
+              </View>
+
+              <ScrollView style={styles.modalBody} showsVerticalScrollIndicator={false}>
+                <Pressable
+                  onPress={handleSelectAllOrders}
+                  style={[styles.selectAllRow, { backgroundColor: theme.backgroundSecondary }]}
+                >
+                  <View style={[
+                    styles.checkbox,
+                    { 
+                      backgroundColor: selectedOrderIds.length === unpaidOrders.length ? theme.primary : "transparent",
+                      borderColor: selectedOrderIds.length === unpaidOrders.length ? theme.primary : theme.textSecondary,
+                    }
+                  ]}>
+                    {selectedOrderIds.length === unpaidOrders.length ? (
+                      <Icon name="check" size={14} color="#fff" />
+                    ) : null}
+                  </View>
+                  <ThemedText style={{ fontWeight: "500" }}>
+                    Выбрать все ({unpaidOrders.length})
+                  </ThemedText>
+                </Pressable>
+
+                <View style={styles.unpaidOrdersList}>
+                  {unpaidOrders.map(order => {
+                    const remaining = getOrderRemainingAmount(order.id);
+                    const isSelected = selectedOrderIds.includes(order.id);
+                    return (
+                      <Pressable
+                        key={order.id}
+                        onPress={() => handleToggleOrderSelection(order.id)}
+                        style={[
+                          styles.unpaidOrderItem,
+                          { 
+                            backgroundColor: isSelected ? theme.primary + "10" : theme.backgroundSecondary,
+                            borderColor: isSelected ? theme.primary : "transparent",
+                          }
+                        ]}
+                      >
+                        <View style={[
+                          styles.checkbox,
+                          { 
+                            backgroundColor: isSelected ? theme.primary : "transparent",
+                            borderColor: isSelected ? theme.primary : theme.textSecondary,
+                          }
+                        ]}>
+                          {isSelected ? (
+                            <Icon name="check" size={14} color="#fff" />
+                          ) : null}
+                        </View>
+                        <View style={{ flex: 1 }}>
+                          <ThemedText style={styles.unpaidOrderNumber}>
+                            #{order.orderNumber}
+                          </ThemedText>
+                          <ThemedText style={[styles.unpaidOrderDates, { color: theme.textSecondary }]}>
+                            {formatDate(order.startDate)} - {formatDate(order.endDate)}
+                          </ThemedText>
+                        </View>
+                        <ThemedText style={[styles.unpaidOrderAmount, { color: theme.error }]}>
+                          {remaining.toLocaleString("ru-RU")}₽
+                        </ThemedText>
+                      </Pressable>
+                    );
+                  })}
+                </View>
+
+                <ThemedText style={[styles.inputLabel, { color: theme.textSecondary, marginTop: Spacing.lg }]}>
+                  Способ оплаты
+                </ThemedText>
+                <View style={styles.paymentMethodsRow}>
+                  {PAYMENT_METHODS.map(method => (
+                    <Pressable
+                      key={method.value}
+                      onPress={() => {
+                        hapticFeedback.selection();
+                        setBulkPaymentMethod(method.value);
+                      }}
+                      style={[
+                        styles.paymentMethodBtn,
+                        { 
+                          backgroundColor: bulkPaymentMethod === method.value 
+                            ? theme.primary + "20" 
+                            : theme.backgroundSecondary 
+                        }
+                      ]}
+                    >
+                      <ThemedText style={{ 
+                        color: bulkPaymentMethod === method.value ? theme.primary : theme.textSecondary,
+                        fontWeight: bulkPaymentMethod === method.value ? "600" : "400",
+                      }}>
+                        {method.label}
+                      </ThemedText>
+                    </Pressable>
+                  ))}
+                </View>
+
+                <ThemedText style={[styles.inputLabel, { color: theme.textSecondary, marginTop: Spacing.md }]}>
+                  Комментарий (опционально)
+                </ThemedText>
+                <TextInput
+                  style={[styles.input, { backgroundColor: theme.backgroundSecondary, color: theme.text }]}
+                  value={bulkPaymentNotes}
+                  onChangeText={setBulkPaymentNotes}
+                  placeholder="Комментарий к платежу"
+                  placeholderTextColor={theme.textSecondary}
+                />
+
+                <View style={[styles.totalRow, { backgroundColor: theme.backgroundSecondary }]}>
+                  <ThemedText style={{ color: theme.textSecondary }}>
+                    Выбрано заказов: {selectedOrderIds.length}
+                  </ThemedText>
+                  <ThemedText style={[styles.totalAmount, { color: theme.success }]}>
+                    {selectedOrdersTotal.toLocaleString("ru-RU")}₽
+                  </ThemedText>
+                </View>
+
+                <Pressable
+                  onPress={handleBulkPayment}
+                  disabled={selectedOrderIds.length === 0 || isBulkPaymentProcessing}
+                  style={[
+                    styles.saveBtn,
+                    { 
+                      backgroundColor: selectedOrderIds.length === 0 ? theme.textSecondary : theme.success,
+                      opacity: isBulkPaymentProcessing ? 0.6 : 1,
+                    }
+                  ]}
+                >
+                  <ThemedText style={{ color: "#fff", fontWeight: "600" }}>
+                    {isBulkPaymentProcessing ? "Обработка..." : "Оплатить"}
+                  </ThemedText>
+                </Pressable>
+
+                <View style={{ height: Spacing.xl }} />
+              </ScrollView>
+            </View>
+          </View>
+        </KeyboardAvoidingView>
+      </Modal>
+
+      <Modal visible={showReconciliationModal} animationType="slide" transparent>
+        <View style={[styles.modalOverlay, { justifyContent: "flex-end" }]}>
+          <View style={[styles.modalContent, { backgroundColor: theme.backgroundDefault, maxHeight: "85%" }]}>
+            <View style={styles.modalHeader}>
+              <ThemedText style={styles.modalTitle}>Сверка</ThemedText>
+              <Pressable onPress={() => setShowReconciliationModal(false)}>
+                <Icon name="x" size={24} color={theme.text} />
+              </Pressable>
+            </View>
+
+            <ScrollView style={styles.modalBody} showsVerticalScrollIndicator={false}>
+              <ThemedText style={[styles.reconciliationTitle, { color: theme.textSecondary }]}>
+                Неоплаченные заказы
+              </ThemedText>
+
+              {unpaidOrders.length === 0 ? (
+                <View style={[styles.emptyReconciliation, { backgroundColor: theme.backgroundSecondary }]}>
+                  <Icon name="check-circle" size={32} color={theme.success} />
+                  <ThemedText style={{ color: theme.textSecondary, marginTop: Spacing.sm }}>
+                    Все заказы оплачены
+                  </ThemedText>
+                </View>
+              ) : (
+                <View style={styles.reconciliationList}>
+                  {unpaidOrders.map((order, index) => {
+                    const remaining = getOrderRemainingAmount(order.id);
+                    const orderServices = rentalOrderServices.filter(s => s.orderId === order.id);
+
+                    return (
+                      <View 
+                        key={order.id} 
+                        style={[styles.reconciliationItem, { backgroundColor: theme.backgroundSecondary }]}
+                      >
+                        <View style={styles.reconciliationItemHeader}>
+                          <ThemedText style={styles.reconciliationOrderNumber}>
+                            {index + 1}. Заказ #{order.orderNumber}
+                          </ThemedText>
+                          <ThemedText style={[styles.reconciliationAmount, { color: theme.error }]}>
+                            {remaining.toLocaleString("ru-RU")}₽
+                          </ThemedText>
+                        </View>
+
+                        <ThemedText style={[styles.reconciliationDates, { color: theme.textSecondary }]}>
+                          {formatDate(order.startDate)} - {formatDate(order.endDate)}
+                        </ThemedText>
+
+                        <View style={styles.reconciliationEquipment}>
+                          {order.kitCount > 0 ? (
+                            <View style={[styles.equipmentTag, { backgroundColor: theme.backgroundTertiary }]}>
+                              <ThemedText style={[styles.equipmentTagText, { color: theme.textSecondary }]}>
+                                Компл: {order.kitCount}
+                              </ThemedText>
+                            </View>
+                          ) : null}
+                          {order.spareReceiverCount > 0 ? (
+                            <View style={[styles.equipmentTag, { backgroundColor: theme.backgroundTertiary }]}>
+                              <ThemedText style={[styles.equipmentTagText, { color: theme.textSecondary }]}>
+                                Зап.прм: {order.spareReceiverCount}
+                              </ThemedText>
+                            </View>
+                          ) : null}
+                          {order.transmitterCount > 0 ? (
+                            <View style={[styles.equipmentTag, { backgroundColor: theme.backgroundTertiary }]}>
+                              <ThemedText style={[styles.equipmentTagText, { color: theme.textSecondary }]}>
+                                Передат: {order.transmitterCount}
+                              </ThemedText>
+                            </View>
+                          ) : null}
+                          {order.microphoneCount > 0 ? (
+                            <View style={[styles.equipmentTag, { backgroundColor: theme.backgroundTertiary }]}>
+                              <ThemedText style={[styles.equipmentTagText, { color: theme.textSecondary }]}>
+                                Микр: {order.microphoneCount}
+                              </ThemedText>
+                            </View>
+                          ) : null}
+                        </View>
+
+                        {orderServices.length > 0 ? (
+                          <View style={styles.reconciliationServices}>
+                            <ThemedText style={[styles.servicesLabel, { color: theme.textSecondary }]}>
+                              Услуги:
+                            </ThemedText>
+                            {orderServices.map(service => (
+                              <ThemedText key={service.id} style={[styles.serviceName, { color: theme.text }]}>
+                                {service.serviceName} x{service.quantity}
+                              </ThemedText>
+                            ))}
+                          </View>
+                        ) : null}
+                      </View>
+                    );
+                  })}
+                </View>
+              )}
+
+              {unpaidOrders.length > 0 ? (
+                <>
+                  <View style={[styles.reconciliationTotal, { backgroundColor: theme.primary + "15" }]}>
+                    <ThemedText style={{ fontWeight: "600" }}>ИТОГО К ОПЛАТЕ:</ThemedText>
+                    <ThemedText style={[styles.reconciliationTotalAmount, { color: theme.primary }]}>
+                      {totalUnpaidAmount.toLocaleString("ru-RU")}₽
+                    </ThemedText>
+                  </View>
+
+                  <View style={styles.reconciliationActions}>
+                    <Pressable
+                      onPress={handleCopyReconciliation}
+                      style={[styles.reconciliationActionBtn, { backgroundColor: theme.backgroundSecondary }]}
+                    >
+                      <Icon name="copy" size={18} color={theme.primary} />
+                      <ThemedText style={{ color: theme.primary, fontWeight: "500" }}>
+                        Копировать
+                      </ThemedText>
+                    </Pressable>
+                    <Pressable
+                      onPress={handleShareReconciliation}
+                      style={[styles.reconciliationActionBtn, { backgroundColor: theme.primary }]}
+                    >
+                      <Icon name="share-2" size={18} color="#fff" />
+                      <ThemedText style={{ color: "#fff", fontWeight: "500" }}>
+                        Поделиться
+                      </ThemedText>
+                    </Pressable>
+                  </View>
+                </>
+              ) : null}
+
+              <View style={{ height: insets.bottom + Spacing.xl }} />
+            </ScrollView>
+          </View>
+        </View>
+      </Modal>
     </ThemedView>
   );
 }
@@ -799,6 +1269,21 @@ const styles = StyleSheet.create({
   defaultPrice: {
     fontSize: 18,
     fontWeight: "700",
+  },
+  bulkActionsRow: {
+    flexDirection: "row",
+    gap: Spacing.sm,
+    marginTop: Spacing.md,
+  },
+  bulkActionBtn: {
+    flex: 1,
+    flexDirection: "row",
+    alignItems: "center",
+    justifyContent: "center",
+    gap: Spacing.xs,
+    paddingVertical: Spacing.sm,
+    paddingHorizontal: Spacing.sm,
+    borderRadius: BorderRadius.md,
   },
   card: {
     padding: Spacing.md,
@@ -973,5 +1458,151 @@ const styles = StyleSheet.create({
     flex: 1,
     fontSize: 16,
     fontWeight: "500",
+  },
+  selectAllRow: {
+    flexDirection: "row",
+    alignItems: "center",
+    gap: Spacing.md,
+    padding: Spacing.md,
+    borderRadius: BorderRadius.md,
+    marginBottom: Spacing.sm,
+  },
+  checkbox: {
+    width: 22,
+    height: 22,
+    borderRadius: 4,
+    borderWidth: 2,
+    justifyContent: "center",
+    alignItems: "center",
+  },
+  unpaidOrdersList: {
+    gap: Spacing.sm,
+  },
+  unpaidOrderItem: {
+    flexDirection: "row",
+    alignItems: "center",
+    gap: Spacing.md,
+    padding: Spacing.md,
+    borderRadius: BorderRadius.md,
+    borderWidth: 1,
+  },
+  unpaidOrderNumber: {
+    fontSize: 15,
+    fontWeight: "600",
+  },
+  unpaidOrderDates: {
+    fontSize: 12,
+    marginTop: 2,
+  },
+  unpaidOrderAmount: {
+    fontSize: 15,
+    fontWeight: "600",
+  },
+  paymentMethodsRow: {
+    flexDirection: "row",
+    gap: Spacing.sm,
+  },
+  paymentMethodBtn: {
+    flex: 1,
+    paddingVertical: Spacing.sm,
+    borderRadius: BorderRadius.md,
+    alignItems: "center",
+  },
+  totalRow: {
+    flexDirection: "row",
+    justifyContent: "space-between",
+    alignItems: "center",
+    padding: Spacing.md,
+    borderRadius: BorderRadius.md,
+    marginTop: Spacing.lg,
+  },
+  totalAmount: {
+    fontSize: 20,
+    fontWeight: "700",
+  },
+  reconciliationTitle: {
+    fontSize: 13,
+    fontWeight: "500",
+    textTransform: "uppercase",
+    marginBottom: Spacing.md,
+  },
+  emptyReconciliation: {
+    padding: Spacing.xl,
+    borderRadius: BorderRadius.md,
+    alignItems: "center",
+  },
+  reconciliationList: {
+    gap: Spacing.sm,
+  },
+  reconciliationItem: {
+    padding: Spacing.md,
+    borderRadius: BorderRadius.md,
+  },
+  reconciliationItemHeader: {
+    flexDirection: "row",
+    justifyContent: "space-between",
+    alignItems: "center",
+  },
+  reconciliationOrderNumber: {
+    fontSize: 15,
+    fontWeight: "600",
+  },
+  reconciliationAmount: {
+    fontSize: 15,
+    fontWeight: "600",
+  },
+  reconciliationDates: {
+    fontSize: 12,
+    marginTop: 2,
+  },
+  reconciliationEquipment: {
+    flexDirection: "row",
+    flexWrap: "wrap",
+    gap: Spacing.xs,
+    marginTop: Spacing.sm,
+  },
+  equipmentTag: {
+    paddingHorizontal: Spacing.xs,
+    paddingVertical: 2,
+    borderRadius: BorderRadius.sm,
+  },
+  equipmentTagText: {
+    fontSize: 11,
+  },
+  reconciliationServices: {
+    marginTop: Spacing.sm,
+  },
+  servicesLabel: {
+    fontSize: 12,
+    marginBottom: 2,
+  },
+  serviceName: {
+    fontSize: 12,
+  },
+  reconciliationTotal: {
+    flexDirection: "row",
+    justifyContent: "space-between",
+    alignItems: "center",
+    padding: Spacing.md,
+    borderRadius: BorderRadius.md,
+    marginTop: Spacing.md,
+  },
+  reconciliationTotalAmount: {
+    fontSize: 20,
+    fontWeight: "700",
+  },
+  reconciliationActions: {
+    flexDirection: "row",
+    gap: Spacing.sm,
+    marginTop: Spacing.md,
+  },
+  reconciliationActionBtn: {
+    flex: 1,
+    flexDirection: "row",
+    alignItems: "center",
+    justifyContent: "center",
+    gap: Spacing.sm,
+    paddingVertical: Spacing.md,
+    borderRadius: BorderRadius.md,
   },
 });
