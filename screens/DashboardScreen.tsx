@@ -1,11 +1,10 @@
 import { useState, useMemo, useCallback } from "react";
-import { View, StyleSheet, RefreshControl, Pressable, Modal, Platform } from "react-native";
+import { View, StyleSheet, RefreshControl, Pressable, Modal, Platform, ScrollView } from "react-native";
 import { Icon } from "@/components/Icon";
 import DateTimePicker from "@react-native-community/datetimepicker";
 import { ThemedText } from "@/components/ThemedText";
 import { ThemedView } from "@/components/ThemedView";
 import { ScreenScrollView } from "@/components/ScreenScrollView";
-import { StatCard } from "@/components/StatCard";
 import { NetworkErrorBanner } from "@/components/NetworkErrorBanner";
 import { Spacing, BorderRadius } from "@/constants/theme";
 import { useTheme } from "@/hooks/useTheme";
@@ -18,77 +17,211 @@ import {
   calculateTotalRevenue,
   calculateTotalExpenses,
   calculateAdditionalTransactionsTotal,
+  calculateExcursionRevenue,
   formatCurrency,
 } from "@/utils/calculations";
 import { useNavigation, NavigationProp } from "@react-navigation/native";
 import { MainTabParamList } from "@/navigation/MainTabNavigator";
 
-interface PeriodStats {
-  revenue: number;
-  excursionExpenses: number;
-  additionalIncome: number;
-  additionalExpenses: number;
-  profit: number;
-  excursions: number;
-  participants: number;
-}
-
-interface RentalPeriodStats {
-  orders: number;
-  revenue: number;
-  activeOrders: number;
-}
-
-function PeriodWidget({ 
-  title, 
-  iconColor,
-  stats,
+function KpiCard({ 
+  label, 
+  value, 
+  delta, 
+  deltaLabel,
+  color,
+  icon,
 }: { 
-  title: string; 
-  iconColor: string;
-  stats: PeriodStats;
+  label: string;
+  value: string;
+  delta?: number;
+  deltaLabel?: string;
+  color: string;
+  icon: string;
+}) {
+  const { theme } = useTheme();
+  const deltaColor = delta !== undefined ? (delta >= 0 ? theme.success : theme.error) : theme.textSecondary;
+  const deltaSign = delta !== undefined && delta > 0 ? "+" : "";
+  
+  return (
+    <ThemedView style={[styles.kpiCard, { backgroundColor: theme.backgroundSecondary }]}>
+      <View style={styles.kpiHeader}>
+        <View style={[styles.kpiIconBg, { backgroundColor: color + '20' }]}>
+          <Icon name={icon as any} size={14} color={color} />
+        </View>
+        <ThemedText style={[styles.kpiLabel, { color: theme.textSecondary }]}>{label}</ThemedText>
+      </View>
+      <ThemedText style={[styles.kpiValue, { color: theme.text }]} numberOfLines={1}>{value}</ThemedText>
+      {delta !== undefined ? (
+        <View style={styles.kpiDelta}>
+          <Icon name={delta >= 0 ? "trending-up" : "trending-down"} size={12} color={deltaColor} />
+          <ThemedText style={[styles.kpiDeltaText, { color: deltaColor }]}>
+            {deltaSign}{formatCurrency(delta)}
+          </ThemedText>
+          {deltaLabel ? (
+            <ThemedText style={[styles.kpiDeltaLabel, { color: theme.textSecondary }]}>{deltaLabel}</ThemedText>
+          ) : null}
+        </View>
+      ) : null}
+    </ThemedView>
+  );
+}
+
+function ExcursionCard({ 
+  time, 
+  tourName, 
+  participants, 
+  revenue,
+  onPress,
+}: { 
+  time: string;
+  tourName: string;
+  participants: number;
+  revenue: number;
+  onPress?: () => void;
 }) {
   const { theme } = useTheme();
   
   return (
-    <ThemedView style={[styles.periodWidget, { backgroundColor: theme.backgroundSecondary }]}>
-      <View style={styles.periodHeader}>
-        <View style={[styles.periodIconBg, { backgroundColor: iconColor + '20' }]}>
-          <Icon name="calendar" size={16} color={iconColor} />
+    <Pressable onPress={onPress} style={({ pressed }) => [{ opacity: pressed ? 0.7 : 1 }]}>
+      <ThemedView style={[styles.excursionCard, { backgroundColor: theme.backgroundSecondary }]}>
+        <View style={styles.excursionTimeCol}>
+          <ThemedText style={[styles.excursionTime, { color: theme.primary }]}>{time}</ThemedText>
         </View>
-        <ThemedText style={styles.periodTitle}>{title}</ThemedText>
-      </View>
-      
-      <View style={styles.periodStatsRow}>
-        <View style={styles.periodStatMain}>
-          <ThemedText style={[styles.periodStatValue, { color: stats.profit >= 0 ? theme.success : theme.error }]}>
-            {formatCurrency(stats.profit)}
-          </ThemedText>
-          <ThemedText style={[styles.periodStatLabel, { color: theme.textSecondary }]}>Прибыль</ThemedText>
-        </View>
-        
-        <View style={styles.periodStatsDivider} />
-        
-        <View style={styles.periodStatSecondary}>
-          <View style={styles.periodStatItem}>
-            <ThemedText style={[styles.periodStatSmallValue, { color: theme.text }]}>{stats.excursions}</ThemedText>
-            <ThemedText style={[styles.periodStatSmallLabel, { color: theme.textSecondary }]}>Экскурсий</ThemedText>
-          </View>
-          <View style={styles.periodStatItem}>
-            <ThemedText style={[styles.periodStatSmallValue, { color: theme.text }]}>{stats.participants}</ThemedText>
-            <ThemedText style={[styles.periodStatSmallLabel, { color: theme.textSecondary }]}>Человек</ThemedText>
+        <View style={styles.excursionInfo}>
+          <ThemedText style={styles.excursionTour} numberOfLines={1}>{tourName}</ThemedText>
+          <View style={styles.excursionMeta}>
+            <View style={styles.excursionMetaItem}>
+              <Icon name="users" size={12} color={theme.textSecondary} />
+              <ThemedText style={[styles.excursionMetaText, { color: theme.textSecondary }]}>{participants}</ThemedText>
+            </View>
+            <View style={styles.excursionMetaItem}>
+              <Icon name="dollar-sign" size={12} color={theme.success} />
+              <ThemedText style={[styles.excursionMetaText, { color: theme.success }]}>{formatCurrency(revenue)}</ThemedText>
+            </View>
           </View>
         </View>
-      </View>
-    </ThemedView>
+        <Icon name="chevron-right" size={18} color={theme.textSecondary} />
+      </ThemedView>
+    </Pressable>
+  );
+}
+
+function RentalOrderCard({ 
+  clientName, 
+  status, 
+  kits,
+  startDate,
+  endDate,
+  onPress,
+}: { 
+  clientName: string;
+  status: string;
+  kits: number;
+  startDate: string;
+  endDate: string;
+  onPress?: () => void;
+}) {
+  const { theme } = useTheme();
+  
+  const statusColors: Record<string, string> = {
+    new: theme.warning,
+    issued: theme.primary,
+    returned: theme.success,
+    completed: theme.success,
+    cancelled: theme.error,
+  };
+  
+  const statusLabels: Record<string, string> = {
+    new: "Новый",
+    issued: "Выдан",
+    returned: "Возвращён",
+    completed: "Завершён",
+    cancelled: "Отменён",
+  };
+  
+  const formatDate = (dateStr: string) => {
+    const date = new Date(dateStr);
+    return date.toLocaleDateString("ru-RU", { day: "2-digit", month: "2-digit" });
+  };
+  
+  return (
+    <Pressable onPress={onPress} style={({ pressed }) => [{ opacity: pressed ? 0.7 : 1 }]}>
+      <ThemedView style={[styles.rentalCard, { backgroundColor: theme.backgroundSecondary }]}>
+        <View style={styles.rentalCardHeader}>
+          <ThemedText style={styles.rentalClientName} numberOfLines={1}>{clientName}</ThemedText>
+          <View style={[styles.rentalStatusBadge, { backgroundColor: (statusColors[status] || theme.textSecondary) + '20' }]}>
+            <ThemedText style={[styles.rentalStatusText, { color: statusColors[status] || theme.textSecondary }]}>
+              {statusLabels[status] || status}
+            </ThemedText>
+          </View>
+        </View>
+        <View style={styles.rentalCardMeta}>
+          <View style={styles.rentalMetaItem}>
+            <Icon name="radio" size={12} color={theme.textSecondary} />
+            <ThemedText style={[styles.rentalMetaText, { color: theme.textSecondary }]}>{kits} комп.</ThemedText>
+          </View>
+          <View style={styles.rentalMetaItem}>
+            <Icon name="calendar" size={12} color={theme.textSecondary} />
+            <ThemedText style={[styles.rentalMetaText, { color: theme.textSecondary }]}>
+              {formatDate(startDate)} - {formatDate(endDate)}
+            </ThemedText>
+          </View>
+        </View>
+      </ThemedView>
+    </Pressable>
+  );
+}
+
+function AlertCard({ 
+  icon, 
+  title, 
+  description, 
+  color,
+  onPress,
+}: { 
+  icon: string;
+  title: string;
+  description: string;
+  color: string;
+  onPress?: () => void;
+}) {
+  const { theme } = useTheme();
+  
+  return (
+    <Pressable onPress={onPress} style={({ pressed }) => [{ opacity: pressed && onPress ? 0.7 : 1 }]}>
+      <ThemedView style={[styles.alertCard, { backgroundColor: color + '15', borderColor: color + '30' }]}>
+        <View style={[styles.alertIconBg, { backgroundColor: color + '25' }]}>
+          <Icon name={icon as any} size={16} color={color} />
+        </View>
+        <View style={styles.alertContent}>
+          <ThemedText style={[styles.alertTitle, { color }]}>{title}</ThemedText>
+          <ThemedText style={[styles.alertDesc, { color: theme.textSecondary }]}>{description}</ThemedText>
+        </View>
+      </ThemedView>
+    </Pressable>
+  );
+}
+
+function SectionHeader({ title, onSeeAll }: { title: string; onSeeAll?: () => void }) {
+  const { theme } = useTheme();
+  
+  return (
+    <View style={styles.sectionHeader}>
+      <ThemedText style={styles.sectionTitle}>{title}</ThemedText>
+      {onSeeAll ? (
+        <Pressable onPress={onSeeAll}>
+          <ThemedText style={[styles.seeAllText, { color: theme.primary }]}>Все</ThemedText>
+        </Pressable>
+      ) : null}
+    </View>
   );
 }
 
 export default function DashboardScreen() {
   const { theme } = useTheme();
   const navigation = useNavigation<NavigationProp<MainTabParamList>>();
-  const { excursions, tourTypes, additionalServices, transactions } = useData();
-  const { rentalOrders } = useRental();
+  const { excursions, tourTypes, additionalServices, transactions, radioGuideKits, equipmentItems } = useData();
+  const { rentalOrders, rentalClients } = useRental();
   const { isAdmin, hasPermission } = useAuth();
   const [referenceDate, setReferenceDate] = useState(new Date());
   const [refreshing, setRefreshing] = useState(false);
@@ -112,10 +245,24 @@ export default function DashboardScreen() {
   };
   
   const formatDisplayDate = (date: Date) => {
+    const today = new Date();
+    today.setHours(0, 0, 0, 0);
+    const compareDate = new Date(date);
+    compareDate.setHours(0, 0, 0, 0);
+    
+    if (compareDate.getTime() === today.getTime()) {
+      return "Сегодня";
+    }
+    
+    const yesterday = new Date(today);
+    yesterday.setDate(yesterday.getDate() - 1);
+    if (compareDate.getTime() === yesterday.getTime()) {
+      return "Вчера";
+    }
+    
     return date.toLocaleDateString("ru-RU", {
-      day: "2-digit",
-      month: "2-digit",
-      year: "numeric",
+      day: "numeric",
+      month: "long",
     });
   };
 
@@ -124,8 +271,8 @@ export default function DashboardScreen() {
     setTimeout(() => setRefreshing(false), 1000);
   };
 
-  const calculatePeriodStats = useCallback((period: "day" | "week" | "month"): PeriodStats => {
-    const { startDate, endDate } = getDateRangeForPeriod(period, referenceDate);
+  const todayStats = useMemo(() => {
+    const { startDate, endDate } = getDateRangeForPeriod("day", referenceDate);
     const filtered = filterExcursionsByDateRange(excursions, startDate, endDate);
     const filteredTx = transactions.filter((t) => t.date >= startDate && t.date <= endDate);
     
@@ -134,7 +281,9 @@ export default function DashboardScreen() {
     const additionalIncome = calculateAdditionalTransactionsTotal(filteredTx, "income");
     const additionalExpenses = calculateAdditionalTransactionsTotal(filteredTx, "expense");
     
-    const profit = revenue - excursionExpenses + additionalIncome - additionalExpenses;
+    const totalRevenue = revenue + additionalIncome;
+    const totalExpenses = excursionExpenses + additionalExpenses;
+    const profit = totalRevenue - totalExpenses;
     
     const participants = filtered.reduce((sum, exc) => {
       return sum + exc.fullPriceCount + exc.discountedCount + exc.freeCount + 
@@ -142,45 +291,169 @@ export default function DashboardScreen() {
     }, 0);
     
     return {
-      revenue,
-      excursionExpenses,
-      additionalIncome,
-      additionalExpenses,
+      revenue: totalRevenue,
+      expenses: totalExpenses,
       profit,
       excursions: filtered.length,
       participants,
     };
   }, [excursions, transactions, tourTypes, additionalServices, referenceDate]);
 
-  const calculateRentalStats = useCallback((period: "day" | "week" | "month"): RentalPeriodStats => {
-    const { startDate, endDate } = getDateRangeForPeriod(period, referenceDate);
+  const yesterdayStats = useMemo(() => {
+    const yesterday = new Date(referenceDate);
+    yesterday.setDate(yesterday.getDate() - 1);
+    const { startDate, endDate } = getDateRangeForPeriod("day", yesterday);
+    const filtered = filterExcursionsByDateRange(excursions, startDate, endDate);
+    const filteredTx = transactions.filter((t) => t.date >= startDate && t.date <= endDate);
+    
+    const revenue = calculateTotalRevenue(filtered, tourTypes, additionalServices);
+    const excursionExpenses = calculateTotalExpenses(filtered);
+    const additionalIncome = calculateAdditionalTransactionsTotal(filteredTx, "income");
+    const additionalExpenses = calculateAdditionalTransactionsTotal(filteredTx, "expense");
+    
+    const totalRevenue = revenue + additionalIncome;
+    const totalExpenses = excursionExpenses + additionalExpenses;
+    const profit = totalRevenue - totalExpenses;
+    
+    return { revenue: totalRevenue, expenses: totalExpenses, profit };
+  }, [excursions, transactions, tourTypes, additionalServices, referenceDate]);
+
+  const weekStats = useMemo(() => {
+    const { startDate, endDate } = getDateRangeForPeriod("week", referenceDate);
+    const filtered = filterExcursionsByDateRange(excursions, startDate, endDate);
+    const filteredTx = transactions.filter((t) => t.date >= startDate && t.date <= endDate);
+    
+    const revenue = calculateTotalRevenue(filtered, tourTypes, additionalServices);
+    const excursionExpenses = calculateTotalExpenses(filtered);
+    const additionalIncome = calculateAdditionalTransactionsTotal(filteredTx, "income");
+    const additionalExpenses = calculateAdditionalTransactionsTotal(filteredTx, "expense");
+    
+    return {
+      revenue: revenue + additionalIncome,
+      expenses: excursionExpenses + additionalExpenses,
+      profit: revenue + additionalIncome - excursionExpenses - additionalExpenses,
+      excursions: filtered.length,
+    };
+  }, [excursions, transactions, tourTypes, additionalServices, referenceDate]);
+
+  const monthStats = useMemo(() => {
+    const { startDate, endDate } = getDateRangeForPeriod("month", referenceDate);
+    const filtered = filterExcursionsByDateRange(excursions, startDate, endDate);
+    const filteredTx = transactions.filter((t) => t.date >= startDate && t.date <= endDate);
+    
+    const revenue = calculateTotalRevenue(filtered, tourTypes, additionalServices);
+    const excursionExpenses = calculateTotalExpenses(filtered);
+    const additionalIncome = calculateAdditionalTransactionsTotal(filteredTx, "income");
+    const additionalExpenses = calculateAdditionalTransactionsTotal(filteredTx, "expense");
+    
+    return {
+      revenue: revenue + additionalIncome,
+      expenses: excursionExpenses + additionalExpenses,
+      profit: revenue + additionalIncome - excursionExpenses - additionalExpenses,
+      excursions: filtered.length,
+    };
+  }, [excursions, transactions, tourTypes, additionalServices, referenceDate]);
+
+  const todayExcursions = useMemo(() => {
+    const { startDate, endDate } = getDateRangeForPeriod("day", referenceDate);
+    return filterExcursionsByDateRange(excursions, startDate, endDate)
+      .sort((a, b) => a.time.localeCompare(b.time))
+      .slice(0, 5);
+  }, [excursions, referenceDate]);
+
+  const activeRentalOrders = useMemo(() => {
+    return rentalOrders
+      .filter(order => order.status === 'new' || order.status === 'issued')
+      .sort((a, b) => new Date(a.startDate).getTime() - new Date(b.startDate).getTime())
+      .slice(0, 4);
+  }, [rentalOrders]);
+
+  const rentalStats = useMemo(() => {
+    const { startDate, endDate } = getDateRangeForPeriod("day", referenceDate);
     const startDateObj = new Date(startDate);
     const endDateObj = new Date(endDate);
     
-    const filteredOrders = rentalOrders.filter(order => {
+    const todayOrders = rentalOrders.filter(order => {
       const orderDate = new Date(order.startDate);
       return orderDate >= startDateObj && orderDate <= endDateObj;
     });
     
-    const revenue = filteredOrders.reduce((sum, order) => sum + (order.totalPrice || 0), 0);
-    const activeOrders = rentalOrders.filter(order => 
+    const activeCount = rentalOrders.filter(order => 
       order.status === 'new' || order.status === 'issued'
     ).length;
     
-    return {
-      orders: filteredOrders.length,
-      revenue,
-      activeOrders,
-    };
+    const todayRevenue = todayOrders.reduce((sum, order) => sum + (order.totalPrice || 0), 0);
+    
+    return { active: activeCount, todayOrders: todayOrders.length, todayRevenue };
   }, [rentalOrders, referenceDate]);
 
-  const todayStats = useMemo(() => calculatePeriodStats("day"), [calculatePeriodStats]);
-  const weekStats = useMemo(() => calculatePeriodStats("week"), [calculatePeriodStats]);
-  const monthStats = useMemo(() => calculatePeriodStats("month"), [calculatePeriodStats]);
-  
-  const todayRental = useMemo(() => calculateRentalStats("day"), [calculateRentalStats]);
-  const weekRental = useMemo(() => calculateRentalStats("week"), [calculateRentalStats]);
-  const monthRental = useMemo(() => calculateRentalStats("month"), [calculateRentalStats]);
+  const alerts = useMemo(() => {
+    const alertsList: { icon: string; title: string; description: string; color: string; key: string }[] = [];
+    
+    if (hasAnyRentalAccess) {
+      const overdueReturns = rentalOrders.filter(order => {
+        if (order.status !== 'issued') return false;
+        const endDate = new Date(order.endDate);
+        const today = new Date();
+        today.setHours(0, 0, 0, 0);
+        return endDate < today;
+      });
+      
+      if (overdueReturns.length > 0) {
+        alertsList.push({
+          key: 'overdue',
+          icon: 'alert-circle',
+          title: `Просрочено: ${overdueReturns.length}`,
+          description: 'Заказов аренды не возвращено вовремя',
+          color: theme.error,
+        });
+      }
+    }
+    
+    const lowBatteryKits = radioGuideKits.filter(kit => kit.batteryLevel === 'low' && kit.status === 'available');
+    if (lowBatteryKits.length > 0) {
+      alertsList.push({
+        key: 'battery',
+        icon: 'battery',
+        title: `Низкий заряд: ${lowBatteryKits.length}`,
+        description: 'Комплектов радиогидов требуют зарядки',
+        color: theme.warning,
+      });
+    }
+    
+    const lowStockItems = equipmentItems.filter(item => item.quantity <= item.minQuantity);
+    if (lowStockItems.length > 0) {
+      alertsList.push({
+        key: 'stock',
+        icon: 'package',
+        title: `Низкий запас: ${lowStockItems.length}`,
+        description: 'Позиций на складе требуют пополнения',
+        color: theme.warning,
+      });
+    }
+    
+    return alertsList;
+  }, [rentalOrders, radioGuideKits, equipmentItems, theme, hasAnyRentalAccess]);
+
+  const getTourName = (tourTypeId: string) => {
+    const tour = tourTypes.find(t => t.id === tourTypeId);
+    return tour?.name || "Неизвестный тур";
+  };
+
+  const getParticipants = (exc: typeof excursions[0]) => {
+    return exc.fullPriceCount + exc.discountedCount + exc.freeCount + exc.byTourCount + exc.paidCount;
+  };
+
+  const getExcursionRevenue = (exc: typeof excursions[0]) => {
+    const tour = tourTypes.find(t => t.id === exc.tourTypeId);
+    if (!tour) return 0;
+    return calculateExcursionRevenue(exc, tour, additionalServices);
+  };
+
+  const getClientName = (clientId: string) => {
+    const client = rentalClients.find(c => c.id === clientId);
+    return client?.name || "Неизвестный клиент";
+  };
 
   return (
     <ScreenScrollView
@@ -188,179 +461,198 @@ export default function DashboardScreen() {
     >
       <NetworkErrorBanner />
       <View style={styles.container}>
-        <View style={styles.section}>
-          <View style={styles.dateRow}>
-            <Pressable
-              onPress={() => setShowDatePicker(true)}
-              style={[
-                styles.dateFilter,
-                {
-                  backgroundColor: theme.backgroundSecondary,
-                  borderRadius: BorderRadius.xs,
-                  flex: 1,
-                },
-              ]}
-            >
-              <Icon name="calendar" size={20} color={theme.textSecondary} />
-              <ThemedText style={[styles.dateText, { color: theme.text }]}>
-                {formatDisplayDate(referenceDate)}
-              </ThemedText>
-            </Pressable>
-            <Pressable
-              onPress={() => {
-                navigation.navigate('DailyReport' as never);
-              }}
-              style={[
-                styles.dailyReportButton,
-                {
-                  backgroundColor: theme.primary,
-                  borderRadius: BorderRadius.xs,
-                },
-              ]}
-            >
-              <Icon name="clipboard" size={20} color={theme.buttonText} />
-            </Pressable>
-          </View>
-          {showDatePicker ? (
-            Platform.OS === "ios" ? (
-              <Modal
-                visible={showDatePicker}
-                transparent
-                animationType="fade"
-                onRequestClose={() => setShowDatePicker(false)}
-              >
-                <View style={styles.modalOverlay}>
-                  <Pressable style={styles.modalBackdrop} onPress={() => setShowDatePicker(false)} />
-                  <ThemedView style={[styles.datePickerModal, { backgroundColor: theme.backgroundDefault }]}>
-                    <View style={styles.datePickerHeader}>
-                      <ThemedText style={styles.modalTitle}>Выберите дату</ThemedText>
-                      <Pressable onPress={() => setShowDatePicker(false)}>
-                        <ThemedText style={{ color: theme.primary, fontWeight: "600" }}>Готово</ThemedText>
-                      </Pressable>
-                    </View>
-                    <DateTimePicker
-                      value={referenceDate}
-                      mode="date"
-                      display="spinner"
-                      onChange={handleDateChange}
-                      locale="ru"
-                    />
-                  </ThemedView>
-                </View>
-              </Modal>
-            ) : (
-              <DateTimePicker
-                value={referenceDate}
-                mode="date"
-                display="default"
-                onChange={handleDateChange}
-              />
-            )
-          ) : null}
+        <View style={styles.dateRow}>
+          <Pressable
+            onPress={() => setShowDatePicker(true)}
+            style={[styles.dateButton, { backgroundColor: theme.backgroundSecondary }]}
+          >
+            <Icon name="calendar" size={18} color={theme.primary} />
+            <ThemedText style={[styles.dateText, { color: theme.text }]}>
+              {formatDisplayDate(referenceDate)}
+            </ThemedText>
+            <Icon name="chevron-down" size={16} color={theme.textSecondary} />
+          </Pressable>
+          <Pressable
+            onPress={() => navigation.navigate('DailyReport' as never)}
+            style={[styles.reportButton, { backgroundColor: theme.primary }]}
+          >
+            <Icon name="clipboard" size={18} color={theme.buttonText} />
+          </Pressable>
         </View>
+        
+        {showDatePicker ? (
+          Platform.OS === "ios" ? (
+            <Modal
+              visible={showDatePicker}
+              transparent
+              animationType="fade"
+              onRequestClose={() => setShowDatePicker(false)}
+            >
+              <View style={styles.modalOverlay}>
+                <Pressable style={styles.modalBackdrop} onPress={() => setShowDatePicker(false)} />
+                <ThemedView style={[styles.datePickerModal, { backgroundColor: theme.backgroundDefault }]}>
+                  <View style={styles.datePickerHeader}>
+                    <ThemedText style={styles.modalTitle}>Выберите дату</ThemedText>
+                    <Pressable onPress={() => setShowDatePicker(false)}>
+                      <ThemedText style={{ color: theme.primary, fontWeight: "600" }}>Готово</ThemedText>
+                    </Pressable>
+                  </View>
+                  <DateTimePicker
+                    value={referenceDate}
+                    mode="date"
+                    display="spinner"
+                    onChange={handleDateChange}
+                    locale="ru"
+                  />
+                </ThemedView>
+              </View>
+            </Modal>
+          ) : (
+            <DateTimePicker
+              value={referenceDate}
+              mode="date"
+              display="default"
+              onChange={handleDateChange}
+            />
+          )
+        ) : null}
 
-        <View style={styles.section}>
-          <ThemedText style={styles.sectionTitle}>Сегодня</ThemedText>
-          <View style={styles.statsGrid}>
-            <StatCard title="Доход" value={formatCurrency(todayStats.revenue)} color="default" />
-            <StatCard title="Расходы" value={formatCurrency(todayStats.excursionExpenses + todayStats.additionalExpenses)} color="default" />
-          </View>
-          <StatCard
-            title="Чистая прибыль"
-            value={formatCurrency(todayStats.profit)}
-            color={todayStats.profit >= 0 ? "success" : "error"}
+        <ScrollView horizontal showsHorizontalScrollIndicator={false} style={styles.kpiScroll} contentContainerStyle={styles.kpiContainer}>
+          <KpiCard 
+            label="Прибыль" 
+            value={formatCurrency(todayStats.profit)} 
+            delta={todayStats.profit - yesterdayStats.profit}
+            deltaLabel="vs вчера"
+            color={todayStats.profit >= 0 ? theme.success : theme.error}
+            icon="trending-up"
           />
-          <View style={styles.quickStats}>
-            <ThemedView style={[styles.quickStatItem, { borderColor: theme.border }]}>
-              <Icon name="users" size={20} color={theme.primary} />
-              <View style={styles.quickStatText}>
-                <ThemedText style={[styles.quickStatValue, { color: theme.text }]}>
-                  {todayStats.participants}
-                </ThemedText>
-                <ThemedText style={[styles.quickStatLabel, { color: theme.textSecondary }]}>
-                  Человек
-                </ThemedText>
-              </View>
-            </ThemedView>
-            <ThemedView style={[styles.quickStatItem, { borderColor: theme.border }]}>
-              <Icon name="list" size={20} color={theme.primary} />
-              <View style={styles.quickStatText}>
-                <ThemedText style={[styles.quickStatValue, { color: theme.text }]}>
-                  {todayStats.excursions}
-                </ThemedText>
-                <ThemedText style={[styles.quickStatLabel, { color: theme.textSecondary }]}>
-                  Экскурсий
-                </ThemedText>
-              </View>
-            </ThemedView>
+          <KpiCard 
+            label="Доход" 
+            value={formatCurrency(todayStats.revenue)} 
+            delta={todayStats.revenue - yesterdayStats.revenue}
+            color={theme.primary}
+            icon="dollar-sign"
+          />
+          <KpiCard 
+            label="Расходы" 
+            value={formatCurrency(todayStats.expenses)} 
+            delta={todayStats.expenses - yesterdayStats.expenses}
+            color={theme.error}
+            icon="credit-card"
+          />
+          <KpiCard 
+            label="Человек" 
+            value={String(todayStats.participants)} 
+            color={theme.primary}
+            icon="users"
+          />
+        </ScrollView>
+
+        <ThemedView style={[styles.periodSummary, { backgroundColor: theme.backgroundSecondary }]}>
+          <View style={styles.periodRow}>
+            <View style={styles.periodItem}>
+              <ThemedText style={[styles.periodLabel, { color: theme.textSecondary }]}>Неделя</ThemedText>
+              <ThemedText style={[styles.periodValue, { color: weekStats.profit >= 0 ? theme.success : theme.error }]}>
+                {formatCurrency(weekStats.profit)}
+              </ThemedText>
+              <ThemedText style={[styles.periodSubtext, { color: theme.textSecondary }]}>
+                {weekStats.excursions} экс.
+              </ThemedText>
+            </View>
+            <View style={[styles.periodDivider, { backgroundColor: theme.border }]} />
+            <View style={styles.periodItem}>
+              <ThemedText style={[styles.periodLabel, { color: theme.textSecondary }]}>Месяц</ThemedText>
+              <ThemedText style={[styles.periodValue, { color: monthStats.profit >= 0 ? theme.success : theme.error }]}>
+                {formatCurrency(monthStats.profit)}
+              </ThemedText>
+              <ThemedText style={[styles.periodSubtext, { color: theme.textSecondary }]}>
+                {monthStats.excursions} экс.
+              </ThemedText>
+            </View>
           </View>
-        </View>
+        </ThemedView>
+
+        {alerts.length > 0 ? (
+          <View style={styles.section}>
+            <SectionHeader title="Оповещения" />
+            {alerts.map(alert => (
+              <AlertCard 
+                key={alert.key} 
+                icon={alert.icon}
+                title={alert.title}
+                description={alert.description}
+                color={alert.color}
+              />
+            ))}
+          </View>
+        ) : null}
 
         <View style={styles.section}>
-          <ThemedText style={styles.sectionTitle}>Период</ThemedText>
-          <PeriodWidget title="Неделя" iconColor={theme.primary} stats={weekStats} />
-          <PeriodWidget title="Месяц" iconColor={theme.warning} stats={monthStats} />
+          <SectionHeader 
+            title={`Экскурсии (${todayStats.excursions})`} 
+            onSeeAll={() => navigation.navigate('ExcursionsTab' as never)} 
+          />
+          {todayExcursions.length > 0 ? (
+            todayExcursions.map(exc => (
+              <ExcursionCard
+                key={exc.id}
+                time={exc.time}
+                tourName={getTourName(exc.tourTypeId)}
+                participants={getParticipants(exc)}
+                revenue={getExcursionRevenue(exc)}
+                onPress={() => navigation.navigate('ExcursionsTab' as never, { screen: 'ExcursionDetail', params: { excursionId: exc.id } } as never)}
+              />
+            ))
+          ) : (
+            <ThemedView style={[styles.emptyCard, { backgroundColor: theme.backgroundSecondary }]}>
+              <Icon name="calendar" size={24} color={theme.textSecondary} />
+              <ThemedText style={[styles.emptyText, { color: theme.textSecondary }]}>
+                Нет экскурсий на эту дату
+              </ThemedText>
+            </ThemedView>
+          )}
         </View>
 
         {hasAnyRentalAccess ? (
           <View style={styles.section}>
-            <ThemedText style={styles.sectionTitle}>Аренда</ThemedText>
+            <SectionHeader 
+              title={`Аренда (${rentalStats.active} активных)`} 
+              onSeeAll={() => navigation.navigate('SettingsTab' as never, { screen: 'RentalOrders' } as never)} 
+            />
             
-            <ThemedView style={[styles.rentalActiveCard, { backgroundColor: theme.backgroundSecondary }]}>
-              <View style={styles.rentalActiveHeader}>
-                <Icon name="radio" size={20} color={theme.warning} />
-                <ThemedText style={styles.rentalActiveLabel}>Активные заказы</ThemedText>
-              </View>
-              <ThemedText style={[styles.rentalActiveValue, { color: theme.primary }]}>
-                {todayRental.activeOrders}
-              </ThemedText>
-            </ThemedView>
-            
-            <ThemedView style={[styles.rentalStatsCard, { backgroundColor: theme.backgroundSecondary }]}>
-              <View style={styles.rentalStatsHeader}>
+            <View style={styles.rentalKpiRow}>
+              <ThemedView style={[styles.rentalKpiCard, { backgroundColor: theme.backgroundSecondary }]}>
                 <Icon name="file-text" size={18} color={theme.primary} />
-                <ThemedText style={styles.rentalStatsTitle}>Заказов</ThemedText>
-              </View>
-              <View style={styles.rentalStatsPeriods}>
-                <View style={styles.rentalStatsPeriod}>
-                  <ThemedText style={[styles.rentalStatsPeriodValue, { color: theme.text }]}>{todayRental.orders}</ThemedText>
-                  <ThemedText style={[styles.rentalStatsPeriodLabel, { color: theme.textSecondary }]}>День</ThemedText>
-                </View>
-                <View style={[styles.rentalStatsDivider, { backgroundColor: theme.border }]} />
-                <View style={styles.rentalStatsPeriod}>
-                  <ThemedText style={[styles.rentalStatsPeriodValue, { color: theme.text }]}>{weekRental.orders}</ThemedText>
-                  <ThemedText style={[styles.rentalStatsPeriodLabel, { color: theme.textSecondary }]}>Неделя</ThemedText>
-                </View>
-                <View style={[styles.rentalStatsDivider, { backgroundColor: theme.border }]} />
-                <View style={styles.rentalStatsPeriod}>
-                  <ThemedText style={[styles.rentalStatsPeriodValue, { color: theme.text }]}>{monthRental.orders}</ThemedText>
-                  <ThemedText style={[styles.rentalStatsPeriodLabel, { color: theme.textSecondary }]}>Месяц</ThemedText>
-                </View>
-              </View>
-            </ThemedView>
-            
-            <ThemedView style={[styles.rentalStatsCard, { backgroundColor: theme.backgroundSecondary }]}>
-              <View style={styles.rentalStatsHeader}>
+                <ThemedText style={[styles.rentalKpiValue, { color: theme.text }]}>{rentalStats.todayOrders}</ThemedText>
+                <ThemedText style={[styles.rentalKpiLabel, { color: theme.textSecondary }]}>Сегодня</ThemedText>
+              </ThemedView>
+              <ThemedView style={[styles.rentalKpiCard, { backgroundColor: theme.backgroundSecondary }]}>
                 <Icon name="dollar-sign" size={18} color={theme.success} />
-                <ThemedText style={styles.rentalStatsTitle}>Доход</ThemedText>
-              </View>
-              <View style={styles.rentalStatsPeriods}>
-                <View style={styles.rentalStatsPeriod}>
-                  <ThemedText style={[styles.rentalStatsPeriodValue, { color: theme.success }]}>{formatCurrency(todayRental.revenue)}</ThemedText>
-                  <ThemedText style={[styles.rentalStatsPeriodLabel, { color: theme.textSecondary }]}>День</ThemedText>
-                </View>
-                <View style={[styles.rentalStatsDivider, { backgroundColor: theme.border }]} />
-                <View style={styles.rentalStatsPeriod}>
-                  <ThemedText style={[styles.rentalStatsPeriodValue, { color: theme.success }]}>{formatCurrency(weekRental.revenue)}</ThemedText>
-                  <ThemedText style={[styles.rentalStatsPeriodLabel, { color: theme.textSecondary }]}>Неделя</ThemedText>
-                </View>
-                <View style={[styles.rentalStatsDivider, { backgroundColor: theme.border }]} />
-                <View style={styles.rentalStatsPeriod}>
-                  <ThemedText style={[styles.rentalStatsPeriodValue, { color: theme.success }]}>{formatCurrency(monthRental.revenue)}</ThemedText>
-                  <ThemedText style={[styles.rentalStatsPeriodLabel, { color: theme.textSecondary }]}>Месяц</ThemedText>
-                </View>
-              </View>
-            </ThemedView>
+                <ThemedText style={[styles.rentalKpiValue, { color: theme.success }]}>{formatCurrency(rentalStats.todayRevenue)}</ThemedText>
+                <ThemedText style={[styles.rentalKpiLabel, { color: theme.textSecondary }]}>Доход</ThemedText>
+              </ThemedView>
+            </View>
+            
+            {activeRentalOrders.length > 0 ? (
+              activeRentalOrders.map(order => (
+                <RentalOrderCard
+                  key={order.id}
+                  clientName={getClientName(order.clientId)}
+                  status={order.status}
+                  kits={order.kitCount}
+                  startDate={order.startDate}
+                  endDate={order.endDate}
+                  onPress={() => navigation.navigate('SettingsTab' as never, { screen: 'RentalOrderDetail', params: { orderId: order.id } } as never)}
+                />
+              ))
+            ) : (
+              <ThemedView style={[styles.emptyCard, { backgroundColor: theme.backgroundSecondary }]}>
+                <Icon name="check-circle" size={24} color={theme.success} />
+                <ThemedText style={[styles.emptyText, { color: theme.textSecondary }]}>
+                  Нет активных заказов
+                </ThemedText>
+              </ThemedView>
+            )}
           </View>
         ) : null}
       </View>
@@ -370,172 +662,245 @@ export default function DashboardScreen() {
 
 const styles = StyleSheet.create({
   container: {
-    gap: Spacing["2xl"],
-  },
-  section: {
-    gap: Spacing.md,
-  },
-  sectionTitle: {
-    fontSize: 20,
-    fontWeight: "600",
-  },
-  statsGrid: {
-    flexDirection: "row",
-    gap: Spacing.md,
-  },
-  quickStats: {
-    flexDirection: "row",
-    gap: Spacing.md,
-  },
-  quickStatItem: {
-    flex: 1,
-    flexDirection: "row",
-    alignItems: "center",
-    padding: Spacing.lg,
-    borderWidth: 1,
-    borderRadius: BorderRadius.sm,
-    gap: Spacing.md,
-  },
-  quickStatText: {
-    gap: Spacing.xs,
-  },
-  quickStatValue: {
-    fontSize: 18,
-    fontWeight: "600",
-  },
-  quickStatLabel: {
-    fontSize: 12,
-  },
-  periodWidget: {
-    padding: Spacing.lg,
-    borderRadius: BorderRadius.sm,
-    gap: Spacing.md,
-  },
-  periodHeader: {
-    flexDirection: "row",
-    alignItems: "center",
-    gap: Spacing.sm,
-  },
-  periodIconBg: {
-    width: 28,
-    height: 28,
-    borderRadius: 6,
-    alignItems: "center",
-    justifyContent: "center",
-  },
-  periodTitle: {
-    fontSize: 16,
-    fontWeight: "600",
-  },
-  periodStatsRow: {
-    flexDirection: "row",
-    alignItems: "center",
-  },
-  periodStatMain: {
-    flex: 1,
-    gap: Spacing.xs,
-  },
-  periodStatValue: {
-    fontSize: 24,
-    fontWeight: "700",
-  },
-  periodStatLabel: {
-    fontSize: 12,
-  },
-  periodStatsDivider: {
-    width: 1,
-    height: 40,
-    backgroundColor: "rgba(128,128,128,0.3)",
-    marginHorizontal: Spacing.lg,
-  },
-  periodStatSecondary: {
-    flexDirection: "row",
     gap: Spacing.xl,
-  },
-  periodStatItem: {
-    alignItems: "center",
-    gap: Spacing.xs,
-  },
-  periodStatSmallValue: {
-    fontSize: 18,
-    fontWeight: "600",
-  },
-  periodStatSmallLabel: {
-    fontSize: 11,
-  },
-  rentalActiveCard: {
-    padding: Spacing.lg,
-    borderRadius: BorderRadius.sm,
-    gap: Spacing.sm,
-  },
-  rentalActiveHeader: {
-    flexDirection: "row",
-    alignItems: "center",
-    gap: Spacing.sm,
-  },
-  rentalActiveLabel: {
-    fontSize: 14,
-    fontWeight: "500",
-  },
-  rentalActiveValue: {
-    fontSize: 36,
-    fontWeight: "700",
-  },
-  rentalStatsCard: {
-    padding: Spacing.lg,
-    borderRadius: BorderRadius.sm,
-    gap: Spacing.md,
-  },
-  rentalStatsHeader: {
-    flexDirection: "row",
-    alignItems: "center",
-    gap: Spacing.sm,
-  },
-  rentalStatsTitle: {
-    fontSize: 14,
-    fontWeight: "500",
-  },
-  rentalStatsPeriods: {
-    flexDirection: "row",
-    justifyContent: "space-between",
-    alignItems: "center",
-  },
-  rentalStatsPeriod: {
-    flex: 1,
-    alignItems: "center",
-    gap: Spacing.xs,
-  },
-  rentalStatsPeriodValue: {
-    fontSize: 16,
-    fontWeight: "600",
-  },
-  rentalStatsPeriodLabel: {
-    fontSize: 11,
-  },
-  rentalStatsDivider: {
-    width: 1,
-    height: 30,
   },
   dateRow: {
     flexDirection: "row",
     gap: Spacing.sm,
   },
-  dateFilter: {
+  dateButton: {
+    flex: 1,
     flexDirection: "row",
     alignItems: "center",
     paddingHorizontal: Spacing.lg,
     paddingVertical: Spacing.md,
+    borderRadius: BorderRadius.sm,
     gap: Spacing.sm,
   },
   dateText: {
     flex: 1,
     fontSize: 16,
+    fontWeight: "500",
   },
-  dailyReportButton: {
+  reportButton: {
     width: 48,
     height: 48,
+    borderRadius: BorderRadius.sm,
     alignItems: "center",
     justifyContent: "center",
+  },
+  kpiScroll: {
+    marginHorizontal: -Spacing.lg,
+  },
+  kpiContainer: {
+    paddingHorizontal: Spacing.lg,
+    gap: Spacing.sm,
+  },
+  kpiCard: {
+    width: 140,
+    padding: Spacing.md,
+    borderRadius: BorderRadius.sm,
+    gap: Spacing.xs,
+  },
+  kpiHeader: {
+    flexDirection: "row",
+    alignItems: "center",
+    gap: Spacing.xs,
+  },
+  kpiIconBg: {
+    width: 22,
+    height: 22,
+    borderRadius: 6,
+    alignItems: "center",
+    justifyContent: "center",
+  },
+  kpiLabel: {
+    fontSize: 11,
+    fontWeight: "500",
+  },
+  kpiValue: {
+    fontSize: 18,
+    fontWeight: "700",
+  },
+  kpiDelta: {
+    flexDirection: "row",
+    alignItems: "center",
+    gap: 3,
+  },
+  kpiDeltaText: {
+    fontSize: 11,
+    fontWeight: "500",
+  },
+  kpiDeltaLabel: {
+    fontSize: 10,
+  },
+  periodSummary: {
+    padding: Spacing.lg,
+    borderRadius: BorderRadius.sm,
+  },
+  periodRow: {
+    flexDirection: "row",
+    alignItems: "center",
+  },
+  periodItem: {
+    flex: 1,
+    alignItems: "center",
+    gap: Spacing.xs,
+  },
+  periodDivider: {
+    width: 1,
+    height: 50,
+  },
+  periodLabel: {
+    fontSize: 12,
+    fontWeight: "500",
+  },
+  periodValue: {
+    fontSize: 20,
+    fontWeight: "700",
+  },
+  periodSubtext: {
+    fontSize: 11,
+  },
+  section: {
+    gap: Spacing.sm,
+  },
+  sectionHeader: {
+    flexDirection: "row",
+    justifyContent: "space-between",
+    alignItems: "center",
+    marginBottom: Spacing.xs,
+  },
+  sectionTitle: {
+    fontSize: 17,
+    fontWeight: "600",
+  },
+  seeAllText: {
+    fontSize: 14,
+    fontWeight: "500",
+  },
+  excursionCard: {
+    flexDirection: "row",
+    alignItems: "center",
+    padding: Spacing.md,
+    borderRadius: BorderRadius.sm,
+    gap: Spacing.md,
+  },
+  excursionTimeCol: {
+    width: 50,
+  },
+  excursionTime: {
+    fontSize: 15,
+    fontWeight: "600",
+  },
+  excursionInfo: {
+    flex: 1,
+    gap: Spacing.xs,
+  },
+  excursionTour: {
+    fontSize: 15,
+    fontWeight: "500",
+  },
+  excursionMeta: {
+    flexDirection: "row",
+    gap: Spacing.lg,
+  },
+  excursionMetaItem: {
+    flexDirection: "row",
+    alignItems: "center",
+    gap: 4,
+  },
+  excursionMetaText: {
+    fontSize: 12,
+  },
+  rentalCard: {
+    padding: Spacing.md,
+    borderRadius: BorderRadius.sm,
+    gap: Spacing.sm,
+  },
+  rentalCardHeader: {
+    flexDirection: "row",
+    justifyContent: "space-between",
+    alignItems: "center",
+  },
+  rentalClientName: {
+    flex: 1,
+    fontSize: 15,
+    fontWeight: "500",
+  },
+  rentalStatusBadge: {
+    paddingHorizontal: Spacing.sm,
+    paddingVertical: 3,
+    borderRadius: BorderRadius.xs,
+  },
+  rentalStatusText: {
+    fontSize: 11,
+    fontWeight: "600",
+  },
+  rentalCardMeta: {
+    flexDirection: "row",
+    gap: Spacing.lg,
+  },
+  rentalMetaItem: {
+    flexDirection: "row",
+    alignItems: "center",
+    gap: 4,
+  },
+  rentalMetaText: {
+    fontSize: 12,
+  },
+  rentalKpiRow: {
+    flexDirection: "row",
+    gap: Spacing.sm,
+  },
+  rentalKpiCard: {
+    flex: 1,
+    padding: Spacing.md,
+    borderRadius: BorderRadius.sm,
+    alignItems: "center",
+    gap: Spacing.xs,
+  },
+  rentalKpiValue: {
+    fontSize: 18,
+    fontWeight: "700",
+  },
+  rentalKpiLabel: {
+    fontSize: 11,
+  },
+  alertCard: {
+    flexDirection: "row",
+    alignItems: "center",
+    padding: Spacing.md,
+    borderRadius: BorderRadius.sm,
+    borderWidth: 1,
+    gap: Spacing.md,
+  },
+  alertIconBg: {
+    width: 32,
+    height: 32,
+    borderRadius: 8,
+    alignItems: "center",
+    justifyContent: "center",
+  },
+  alertContent: {
+    flex: 1,
+    gap: 2,
+  },
+  alertTitle: {
+    fontSize: 14,
+    fontWeight: "600",
+  },
+  alertDesc: {
+    fontSize: 12,
+  },
+  emptyCard: {
+    padding: Spacing.xl,
+    borderRadius: BorderRadius.sm,
+    alignItems: "center",
+    gap: Spacing.sm,
+  },
+  emptyText: {
+    fontSize: 14,
   },
   modalOverlay: {
     flex: 1,
