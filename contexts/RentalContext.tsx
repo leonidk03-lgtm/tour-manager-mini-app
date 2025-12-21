@@ -700,11 +700,17 @@ export function RentalProvider({ children }: { children: ReactNode }) {
     await addOrderHistory(id, `Статус изменён на "${statusLabels[status]}"`);
     
     if (status === 'issued') {
-      const order = rentalOrders.find(o => o.id === id);
-      if (order) {
-        const totalReceivers = order.kitCount + order.spareReceiverCount;
-        const client = rentalClients.find(c => c.id === order.clientId);
-        await autoWriteoffOnIssue(totalReceivers, `Автосписание аренда: ${client?.name || 'клиент'}, сумка ${order.bagNumber || '?'}`);
+      const { data: orderData } = await supabase
+        .from('rental_orders')
+        .select('*, client:rental_clients(name)')
+        .eq('id', id)
+        .single();
+      
+      if (orderData) {
+        const totalReceivers = (orderData.kit_count || 0) + (orderData.spare_receiver_count || 0);
+        const clientName = orderData.client?.name || 'клиент';
+        const bagNumber = orderData.bag_number || '?';
+        await autoWriteoffOnIssue(totalReceivers, `Автосписание аренда: ${clientName}, сумка ${bagNumber}`);
       }
     }
     
