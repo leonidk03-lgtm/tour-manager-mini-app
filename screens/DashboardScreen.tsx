@@ -11,6 +11,7 @@ import { useTheme } from "@/hooks/useTheme";
 import { useData } from "@/contexts/DataContext";
 import { useRental } from "@/contexts/RentalContext";
 import { useAuth } from "@/contexts/AuthContext";
+import { DashboardWidgetKey, DEFAULT_DASHBOARD_CONFIG } from "@/lib/supabase";
 import {
   getDateRangeForPeriod,
   filterExcursionsByDateRange,
@@ -222,7 +223,7 @@ export default function DashboardScreen() {
   const navigation = useNavigation<NavigationProp<MainTabParamList>>();
   const { excursions, tourTypes, additionalServices, transactions, radioGuideKits, equipmentItems } = useData();
   const { rentalOrders, rentalClients } = useRental();
-  const { isAdmin, hasPermission } = useAuth();
+  const { isAdmin, hasPermission, profile } = useAuth();
   const [referenceDate, setReferenceDate] = useState(new Date());
   const [refreshing, setRefreshing] = useState(false);
   const [showDatePicker, setShowDatePicker] = useState(false);
@@ -234,6 +235,21 @@ export default function DashboardScreen() {
     hasPermission('rental_payments') || 
     hasPermission('rental_commissions') ||
     hasPermission('rental_calendar');
+
+  const dashboardConfig = useMemo(() => {
+    return profile?.dashboard_config || DEFAULT_DASHBOARD_CONFIG;
+  }, [profile?.dashboard_config]);
+
+  const isWidgetVisible = useCallback((key: DashboardWidgetKey): boolean => {
+    const widget = dashboardConfig.widgets.find(w => w.key === key);
+    if (!widget) return true;
+    if (key === 'rental_section' && !hasAnyRentalAccess) return false;
+    return widget.visible;
+  }, [dashboardConfig.widgets, hasAnyRentalAccess]);
+
+  const sortedWidgets = useMemo(() => {
+    return [...dashboardConfig.widgets].sort((a, b) => a.order - b.order);
+  }, [dashboardConfig.widgets]);
   
   const handleDateChange = (event: any, date?: Date) => {
     if (Platform.OS === "android") {
@@ -517,144 +533,165 @@ export default function DashboardScreen() {
           )
         ) : null}
 
-        <ScrollView horizontal showsHorizontalScrollIndicator={false} style={styles.kpiScroll} contentContainerStyle={styles.kpiContainer}>
-          <KpiCard 
-            label="Прибыль" 
-            value={formatCurrency(todayStats.profit)} 
-            delta={todayStats.profit - yesterdayStats.profit}
-            deltaLabel="vs вчера"
-            color={todayStats.profit >= 0 ? theme.success : theme.error}
-            icon="trending-up"
-          />
-          <KpiCard 
-            label="Доход" 
-            value={formatCurrency(todayStats.revenue)} 
-            delta={todayStats.revenue - yesterdayStats.revenue}
-            color={theme.primary}
-            icon="dollar-sign"
-          />
-          <KpiCard 
-            label="Расходы" 
-            value={formatCurrency(todayStats.expenses)} 
-            delta={todayStats.expenses - yesterdayStats.expenses}
-            color={theme.error}
-            icon="credit-card"
-          />
-          <KpiCard 
-            label="Человек" 
-            value={String(todayStats.participants)} 
-            color={theme.primary}
-            icon="users"
-          />
-        </ScrollView>
+        {sortedWidgets.map(widget => {
+          if (!isWidgetVisible(widget.key)) return null;
 
-        <ThemedView style={[styles.periodSummary, { backgroundColor: theme.backgroundSecondary }]}>
-          <View style={styles.periodRow}>
-            <View style={styles.periodItem}>
-              <ThemedText style={[styles.periodLabel, { color: theme.textSecondary }]}>Неделя</ThemedText>
-              <ThemedText style={[styles.periodValue, { color: weekStats.profit >= 0 ? theme.success : theme.error }]}>
-                {formatCurrency(weekStats.profit)}
-              </ThemedText>
-              <ThemedText style={[styles.periodSubtext, { color: theme.textSecondary }]}>
-                {weekStats.excursions} экс.
-              </ThemedText>
-            </View>
-            <View style={[styles.periodDivider, { backgroundColor: theme.border }]} />
-            <View style={styles.periodItem}>
-              <ThemedText style={[styles.periodLabel, { color: theme.textSecondary }]}>Месяц</ThemedText>
-              <ThemedText style={[styles.periodValue, { color: monthStats.profit >= 0 ? theme.success : theme.error }]}>
-                {formatCurrency(monthStats.profit)}
-              </ThemedText>
-              <ThemedText style={[styles.periodSubtext, { color: theme.textSecondary }]}>
-                {monthStats.excursions} экс.
-              </ThemedText>
-            </View>
-          </View>
-        </ThemedView>
+          switch (widget.key) {
+            case 'kpi_cards':
+              return (
+                <ScrollView key={widget.key} horizontal showsHorizontalScrollIndicator={false} style={styles.kpiScroll} contentContainerStyle={styles.kpiContainer}>
+                  <KpiCard 
+                    label="Прибыль" 
+                    value={formatCurrency(todayStats.profit)} 
+                    delta={todayStats.profit - yesterdayStats.profit}
+                    deltaLabel="vs вчера"
+                    color={todayStats.profit >= 0 ? theme.success : theme.error}
+                    icon="trending-up"
+                  />
+                  <KpiCard 
+                    label="Доход" 
+                    value={formatCurrency(todayStats.revenue)} 
+                    delta={todayStats.revenue - yesterdayStats.revenue}
+                    color={theme.primary}
+                    icon="dollar-sign"
+                  />
+                  <KpiCard 
+                    label="Расходы" 
+                    value={formatCurrency(todayStats.expenses)} 
+                    delta={todayStats.expenses - yesterdayStats.expenses}
+                    color={theme.error}
+                    icon="credit-card"
+                  />
+                  <KpiCard 
+                    label="Человек" 
+                    value={String(todayStats.participants)} 
+                    color={theme.primary}
+                    icon="users"
+                  />
+                </ScrollView>
+              );
 
-        {alerts.length > 0 ? (
-          <View style={styles.section}>
-            <SectionHeader title="Оповещения" />
-            {alerts.map(alert => (
-              <AlertCard 
-                key={alert.key} 
-                icon={alert.icon}
-                title={alert.title}
-                description={alert.description}
-                color={alert.color}
-              />
-            ))}
-          </View>
-        ) : null}
+            case 'period_summary':
+              return (
+                <ThemedView key={widget.key} style={[styles.periodSummary, { backgroundColor: theme.backgroundSecondary }]}>
+                  <View style={styles.periodRow}>
+                    <View style={styles.periodItem}>
+                      <ThemedText style={[styles.periodLabel, { color: theme.textSecondary }]}>Неделя</ThemedText>
+                      <ThemedText style={[styles.periodValue, { color: weekStats.profit >= 0 ? theme.success : theme.error }]}>
+                        {formatCurrency(weekStats.profit)}
+                      </ThemedText>
+                      <ThemedText style={[styles.periodSubtext, { color: theme.textSecondary }]}>
+                        {weekStats.excursions} экс.
+                      </ThemedText>
+                    </View>
+                    <View style={[styles.periodDivider, { backgroundColor: theme.border }]} />
+                    <View style={styles.periodItem}>
+                      <ThemedText style={[styles.periodLabel, { color: theme.textSecondary }]}>Месяц</ThemedText>
+                      <ThemedText style={[styles.periodValue, { color: monthStats.profit >= 0 ? theme.success : theme.error }]}>
+                        {formatCurrency(monthStats.profit)}
+                      </ThemedText>
+                      <ThemedText style={[styles.periodSubtext, { color: theme.textSecondary }]}>
+                        {monthStats.excursions} экс.
+                      </ThemedText>
+                    </View>
+                  </View>
+                </ThemedView>
+              );
 
-        <View style={styles.section}>
-          <SectionHeader 
-            title={`Экскурсии (${todayStats.excursions})`} 
-            onSeeAll={() => navigation.navigate('ExcursionsTab' as never)} 
-          />
-          {todayExcursions.length > 0 ? (
-            todayExcursions.map(exc => (
-              <ExcursionCard
-                key={exc.id}
-                time={exc.time}
-                tourName={getTourName(exc.tourTypeId)}
-                participants={getParticipants(exc)}
-                revenue={getExcursionRevenue(exc)}
-                onPress={() => navigation.navigate('ExcursionsTab' as never, { screen: 'ExcursionDetail', params: { excursionId: exc.id } } as never)}
-              />
-            ))
-          ) : (
-            <ThemedView style={[styles.emptyCard, { backgroundColor: theme.backgroundSecondary }]}>
-              <Icon name="calendar" size={24} color={theme.textSecondary} />
-              <ThemedText style={[styles.emptyText, { color: theme.textSecondary }]}>
-                Нет экскурсий на эту дату
-              </ThemedText>
-            </ThemedView>
-          )}
-        </View>
+            case 'alerts':
+              if (alerts.length === 0) return null;
+              return (
+                <View key={widget.key} style={styles.section}>
+                  <SectionHeader title="Оповещения" />
+                  {alerts.map(alert => (
+                    <AlertCard 
+                      key={alert.key} 
+                      icon={alert.icon}
+                      title={alert.title}
+                      description={alert.description}
+                      color={alert.color}
+                    />
+                  ))}
+                </View>
+              );
 
-        {hasAnyRentalAccess ? (
-          <View style={styles.section}>
-            <SectionHeader 
-              title={`Аренда (${rentalStats.active} активных)`} 
-              onSeeAll={() => navigation.navigate('SettingsTab' as never, { screen: 'RentalOrders' } as never)} 
-            />
-            
-            <View style={styles.rentalKpiRow}>
-              <ThemedView style={[styles.rentalKpiCard, { backgroundColor: theme.backgroundSecondary }]}>
-                <Icon name="file-text" size={18} color={theme.primary} />
-                <ThemedText style={[styles.rentalKpiValue, { color: theme.text }]}>{rentalStats.todayOrders}</ThemedText>
-                <ThemedText style={[styles.rentalKpiLabel, { color: theme.textSecondary }]}>Сегодня</ThemedText>
-              </ThemedView>
-              <ThemedView style={[styles.rentalKpiCard, { backgroundColor: theme.backgroundSecondary }]}>
-                <Icon name="dollar-sign" size={18} color={theme.success} />
-                <ThemedText style={[styles.rentalKpiValue, { color: theme.success }]}>{formatCurrency(rentalStats.todayRevenue)}</ThemedText>
-                <ThemedText style={[styles.rentalKpiLabel, { color: theme.textSecondary }]}>Доход</ThemedText>
-              </ThemedView>
-            </View>
-            
-            {activeRentalOrders.length > 0 ? (
-              activeRentalOrders.map(order => (
-                <RentalOrderCard
-                  key={order.id}
-                  clientName={getClientName(order.clientId)}
-                  status={order.status}
-                  kits={order.kitCount}
-                  startDate={order.startDate}
-                  endDate={order.endDate}
-                  onPress={() => navigation.navigate('SettingsTab' as never, { screen: 'RentalOrderDetail', params: { orderId: order.id } } as never)}
-                />
-              ))
-            ) : (
-              <ThemedView style={[styles.emptyCard, { backgroundColor: theme.backgroundSecondary }]}>
-                <Icon name="check-circle" size={24} color={theme.success} />
-                <ThemedText style={[styles.emptyText, { color: theme.textSecondary }]}>
-                  Нет активных заказов
-                </ThemedText>
-              </ThemedView>
-            )}
-          </View>
-        ) : null}
+            case 'today_excursions':
+              return (
+                <View key={widget.key} style={styles.section}>
+                  <SectionHeader 
+                    title={`Экскурсии (${todayStats.excursions})`} 
+                    onSeeAll={() => navigation.navigate('ExcursionsTab' as never)} 
+                  />
+                  {todayExcursions.length > 0 ? (
+                    todayExcursions.map(exc => (
+                      <ExcursionCard
+                        key={exc.id}
+                        time={exc.time}
+                        tourName={getTourName(exc.tourTypeId)}
+                        participants={getParticipants(exc)}
+                        revenue={getExcursionRevenue(exc)}
+                        onPress={() => navigation.navigate('ExcursionsTab' as never, { screen: 'ExcursionDetail', params: { excursionId: exc.id } } as never)}
+                      />
+                    ))
+                  ) : (
+                    <ThemedView style={[styles.emptyCard, { backgroundColor: theme.backgroundSecondary }]}>
+                      <Icon name="calendar" size={24} color={theme.textSecondary} />
+                      <ThemedText style={[styles.emptyText, { color: theme.textSecondary }]}>
+                        Нет экскурсий на эту дату
+                      </ThemedText>
+                    </ThemedView>
+                  )}
+                </View>
+              );
+
+            case 'rental_section':
+              return (
+                <View key={widget.key} style={styles.section}>
+                  <SectionHeader 
+                    title={`Аренда (${rentalStats.active} активных)`} 
+                    onSeeAll={() => navigation.navigate('SettingsTab' as never, { screen: 'RentalOrders' } as never)} 
+                  />
+                  
+                  <View style={styles.rentalKpiRow}>
+                    <ThemedView style={[styles.rentalKpiCard, { backgroundColor: theme.backgroundSecondary }]}>
+                      <Icon name="file-text" size={18} color={theme.primary} />
+                      <ThemedText style={[styles.rentalKpiValue, { color: theme.text }]}>{rentalStats.todayOrders}</ThemedText>
+                      <ThemedText style={[styles.rentalKpiLabel, { color: theme.textSecondary }]}>Сегодня</ThemedText>
+                    </ThemedView>
+                    <ThemedView style={[styles.rentalKpiCard, { backgroundColor: theme.backgroundSecondary }]}>
+                      <Icon name="dollar-sign" size={18} color={theme.success} />
+                      <ThemedText style={[styles.rentalKpiValue, { color: theme.success }]}>{formatCurrency(rentalStats.todayRevenue)}</ThemedText>
+                      <ThemedText style={[styles.rentalKpiLabel, { color: theme.textSecondary }]}>Доход</ThemedText>
+                    </ThemedView>
+                  </View>
+                  
+                  {activeRentalOrders.length > 0 ? (
+                    activeRentalOrders.map(order => (
+                      <RentalOrderCard
+                        key={order.id}
+                        clientName={getClientName(order.clientId)}
+                        status={order.status}
+                        kits={order.kitCount}
+                        startDate={order.startDate}
+                        endDate={order.endDate}
+                        onPress={() => navigation.navigate('SettingsTab' as never, { screen: 'RentalOrderDetail', params: { orderId: order.id } } as never)}
+                      />
+                    ))
+                  ) : (
+                    <ThemedView style={[styles.emptyCard, { backgroundColor: theme.backgroundSecondary }]}>
+                      <Icon name="check-circle" size={24} color={theme.success} />
+                      <ThemedText style={[styles.emptyText, { color: theme.textSecondary }]}>
+                        Нет активных заказов
+                      </ThemedText>
+                    </ThemedView>
+                  )}
+                </View>
+              );
+
+            default:
+              return null;
+          }
+        })}
       </View>
     </ScreenScrollView>
   );
