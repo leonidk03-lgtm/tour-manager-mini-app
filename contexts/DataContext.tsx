@@ -2722,17 +2722,10 @@ export function DataProvider({ children }: { children: ReactNode }) {
   };
 
   const autoWriteoffOnIssue = async (receiversCount: number, note: string): Promise<void> => {
-    if (!currentUser) {
-      console.log('[AutoWriteoff] No user');
-      return;
-    }
-    if (receiversCount <= 0) {
-      console.log('[AutoWriteoff] receiversCount <= 0');
-      return;
-    }
+    if (!currentUser) return;
+    if (receiversCount <= 0) return;
 
     const headphonesCount = receiversCount + 5;
-    console.log('[AutoWriteoff] Starting. Receivers:', receiversCount, 'Headphones to writeoff:', headphonesCount);
 
     // Fetch categories directly from DB to avoid race conditions on mobile
     const { data: categoriesData } = await supabase
@@ -2745,14 +2738,10 @@ export function DataProvider({ children }: { children: ReactNode }) {
       autoWriteoff: c.auto_writeoff || false,
       autoWriteoffSourceId: c.auto_writeoff_source_id || null,
     }));
-
-    console.log('[AutoWriteoff] Fetched categories:', freshCategories.length);
     
     const autoWriteoffCategories = freshCategories.filter(c => c.autoWriteoff && c.autoWriteoffSourceId);
-    console.log('[AutoWriteoff] Auto-writeoff categories:', autoWriteoffCategories.length, autoWriteoffCategories.map(c => c.name));
 
     if (autoWriteoffCategories.length === 0) {
-      console.log('[AutoWriteoff] No categories with autoWriteoff enabled!');
       await fetchEquipmentItems();
       await fetchEquipmentMovements();
       return;
@@ -2771,21 +2760,13 @@ export function DataProvider({ children }: { children: ReactNode }) {
       writtenOff: i.written_off || 0,
     }));
 
-    console.log('[AutoWriteoff] Fetched items:', freshItems.length);
-
     for (const category of autoWriteoffCategories) {
       const itemsInCategory = freshItems.filter(i => i.categoryId === category.id);
-      console.log('[AutoWriteoff] Category:', category.name, 'Items:', itemsInCategory.length);
       
       for (const item of itemsInCategory) {
-        console.log('[AutoWriteoff] Item:', item.name, 'Quantity:', item.quantity);
-        if (item.quantity <= 0) {
-          console.log('[AutoWriteoff] Skipping - quantity <= 0');
-          continue;
-        }
+        if (item.quantity <= 0) continue;
 
         const quantityToWriteoff = Math.min(headphonesCount, item.quantity);
-        console.log('[AutoWriteoff] Writing off:', quantityToWriteoff);
 
         try {
           const { error } = await supabase.from('equipment_movements').insert({
@@ -2797,13 +2778,9 @@ export function DataProvider({ children }: { children: ReactNode }) {
             manager_name: currentUser.name,
           });
 
-          if (error) {
-            console.error('[AutoWriteoff] Insert error:', error);
-            throw error;
-          }
-          console.log('[AutoWriteoff] Movement inserted successfully');
+          if (error) throw error;
 
-          const { error: updateError } = await supabase
+          await supabase
             .from('equipment_items')
             .update({ 
               quantity: item.quantity - quantityToWriteoff,
@@ -2811,22 +2788,14 @@ export function DataProvider({ children }: { children: ReactNode }) {
               updated_at: new Date().toISOString() 
             })
             .eq('id', item.id);
-          
-          if (updateError) {
-            console.error('[AutoWriteoff] Update error:', updateError);
-          } else {
-            console.log('[AutoWriteoff] Item updated successfully');
-          }
         } catch (err) {
           console.error(`Error auto-writeoff for ${item.name}:`, err);
         }
       }
     }
 
-    console.log('[AutoWriteoff] Fetching updated data...');
     await fetchEquipmentItems();
     await fetchEquipmentMovements();
-    console.log('[AutoWriteoff] Complete');
   };
 
   const processAutoWriteoff = async (date?: Date): Promise<{ processed: number; items: Array<{ name: string; quantity: number }> }> => {

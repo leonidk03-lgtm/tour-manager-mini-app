@@ -39,7 +39,7 @@ export default function RentalOrdersScreen() {
   const { theme } = useTheme();
   const navigation = useNavigation<NavigationProp<SettingsStackParamList>>();
   const insets = useSafeAreaInsets();
-  const { rentalOrders, rentalClients, updateRentalOrder, addRentalPayment, getOrderPayments } = useRental();
+  const { rentalOrders, rentalClients, updateRentalOrder, updateOrderStatus, addRentalPayment, getOrderPayments } = useRental();
   const { managers } = useAuth();
   const { radioGuideKits, equipmentLosses } = useData();
 
@@ -154,7 +154,7 @@ export default function RentalOrdersScreen() {
       setPaymentModalVisible(true);
     } else {
       try {
-        await updateRentalOrder(order.id, { status: newStatus });
+        await updateOrderStatus(order.id, newStatus);
         hapticFeedback.success();
       } catch (error) {
         console.error("Error updating status:", error);
@@ -202,7 +202,7 @@ export default function RentalOrdersScreen() {
       notes: data.notes || null,
     });
     
-    await updateRentalOrder(selectedOrderForPayment.id, { status: "completed" });
+    await updateOrderStatus(selectedOrderForPayment.id, "completed");
     setPaymentModalVisible(false);
     setSelectedOrderForPayment(null);
   };
