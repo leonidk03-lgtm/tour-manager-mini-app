@@ -1,5 +1,5 @@
 import { useState, useEffect, useMemo } from "react";
-import { View, StyleSheet, Pressable, Modal, Platform, ActivityIndicator } from "react-native";
+import { View, StyleSheet, Pressable, Modal, Platform, ActivityIndicator, Alert } from "react-native";
 import DateTimePicker from "@react-native-community/datetimepicker";
 import { Icon } from "@/components/Icon";
 import { ThemedText } from "@/components/ThemedText";
@@ -9,6 +9,7 @@ import { Spacing, BorderRadius } from "@/constants/theme";
 import { useTheme } from "@/hooks/useTheme";
 import { useData, DispatchStats } from "@/contexts/DataContext";
 import { useAuth } from "@/contexts/AuthContext";
+import { hapticFeedback } from "@/utils/haptics";
 
 type Period = "day" | "week" | "month" | "year" | "all" | "custom";
 
@@ -61,13 +62,14 @@ function getDateRangeForPeriod(period: Period, customFrom: Date, customTo: Date)
 export default function DispatchActivityReportScreen() {
   const { theme } = useTheme();
   const { isAdmin } = useAuth();
-  const { getDispatchStats, managers } = useData();
+  const { getDispatchStats, managers, deleteOldDispatchEvents } = useData();
   const [period, setPeriod] = useState<Period>("month");
   const [customFrom, setCustomFrom] = useState<Date>(new Date());
   const [customTo, setCustomTo] = useState<Date>(new Date());
   const [showDatePicker, setShowDatePicker] = useState<"from" | "to" | null>(null);
   const [stats, setStats] = useState<DispatchStats[]>([]);
   const [isLoading, setIsLoading] = useState(true);
+  const [isDeleting, setIsDeleting] = useState(false);
 
   const formatShortDate = (date: Date) => {
     return date.toLocaleDateString("ru-RU", { day: "numeric", month: "short" });
@@ -99,6 +101,38 @@ export default function DispatchActivityReportScreen() {
       { phones: 0, pax: 0 }
     );
   }, [stats]);
+
+  const handleDeleteOldData = () => {
+    Alert.alert(
+      "Очистка данных",
+      "Удалить данные статистики старше 1 года? Это действие нельзя отменить.",
+      [
+        { text: "Отмена", style: "cancel" },
+        {
+          text: "Удалить",
+          style: "destructive",
+          onPress: async () => {
+            setIsDeleting(true);
+            try {
+              const oneYearAgo = new Date();
+              oneYearAgo.setFullYear(oneYearAgo.getFullYear() - 1);
+              const beforeDate = oneYearAgo.toISOString();
+              
+              const deletedCount = await deleteOldDispatchEvents(beforeDate);
+              hapticFeedback.success();
+              Alert.alert("Готово", `Удалено ${deletedCount} записей`);
+              loadStats();
+            } catch (error) {
+              hapticFeedback.error();
+              Alert.alert("Ошибка", "Не удалось удалить данные");
+            } finally {
+              setIsDeleting(false);
+            }
+          },
+        },
+      ]
+    );
+  };
 
   if (!isAdmin) {
     return (
@@ -247,6 +281,23 @@ export default function DispatchActivityReportScreen() {
                 ))}
               </View>
             )}
+
+            <Pressable
+              style={[styles.deleteButton, { backgroundColor: theme.error + "20" }]}
+              onPress={handleDeleteOldData}
+              disabled={isDeleting}
+            >
+              {isDeleting ? (
+                <ActivityIndicator size="small" color={theme.error} />
+              ) : (
+                <>
+                  <Icon name="trash-2" size={18} color={theme.error} />
+                  <ThemedText style={[styles.deleteButtonText, { color: theme.error }]}>
+                    Очистить данные старше года
+                  </ThemedText>
+                </>
+              )}
+            </Pressable>
           </>
         )}
       </View>
@@ -423,5 +474,18 @@ const styles = StyleSheet.create({
     padding: Spacing.md,
     borderRadius: BorderRadius.sm,
     alignItems: "center",
+  },
+  deleteButton: {
+    flexDirection: "row",
+    alignItems: "center",
+    justifyContent: "center",
+    gap: Spacing.sm,
+    padding: Spacing.md,
+    borderRadius: BorderRadius.md,
+    marginTop: Spacing.lg,
+  },
+  deleteButtonText: {
+    fontSize: 14,
+    fontWeight: "600",
   },
 });

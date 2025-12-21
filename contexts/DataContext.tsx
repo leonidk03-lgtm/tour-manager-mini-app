@@ -371,6 +371,7 @@ interface DataContextType {
   dispatchMarkEvents: DispatchMarkEvent[];
   addDispatchMarkEvents: (events: Omit<DispatchMarkEvent, 'id' | 'createdAt' | 'managerId' | 'managerName'>[]) => Promise<void>;
   getDispatchStats: (startDate: string, endDate: string, managerId?: string) => Promise<DispatchStats[]>;
+  deleteOldDispatchEvents: (beforeDate: string) => Promise<number>;
 }
 
 const DataContext = createContext<DataContextType | undefined>(undefined);
@@ -2941,6 +2942,30 @@ export function DataProvider({ children }: { children: ReactNode }) {
     }
   };
 
+  const deleteOldDispatchEvents = async (beforeDate: string): Promise<number> => {
+    if (!isAdmin) {
+      throw new Error('Only admins can delete dispatch events');
+    }
+
+    try {
+      const { data, error } = await supabase
+        .from('dispatch_mark_events')
+        .delete()
+        .lt('created_at', beforeDate)
+        .select('id');
+
+      if (error) {
+        console.error('Error deleting old dispatch events:', error);
+        throw error;
+      }
+
+      return data?.length || 0;
+    } catch (err) {
+      console.error('Error deleting old dispatch events:', err);
+      throw err;
+    }
+  };
+
   return (
     <DataContext.Provider
       value={{
@@ -3025,6 +3050,7 @@ export function DataProvider({ children }: { children: ReactNode }) {
         dispatchMarkEvents,
         addDispatchMarkEvents,
         getDispatchStats,
+        deleteOldDispatchEvents,
       }}
     >
       {children}

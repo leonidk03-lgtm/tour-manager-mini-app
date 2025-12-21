@@ -39,6 +39,12 @@ CREATE POLICY "Admins can view all events" ON dispatch_mark_events
     EXISTS (SELECT 1 FROM profiles WHERE id = auth.uid() AND role = 'admin')
   );
 
+-- Админы могут удалять события (для очистки старых данных)
+CREATE POLICY "Admins can delete events" ON dispatch_mark_events
+  FOR DELETE USING (
+    EXISTS (SELECT 1 FROM profiles WHERE id = auth.uid() AND role = 'admin')
+  );
+
 -- Функция для получения агрегированной статистики
 CREATE OR REPLACE FUNCTION get_dispatch_stats(
   p_start_date DATE,
