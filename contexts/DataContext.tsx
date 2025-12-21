@@ -2722,11 +2722,21 @@ export function DataProvider({ children }: { children: ReactNode }) {
   };
 
   const autoWriteoffOnIssue = async (receiversCount: number, note: string): Promise<void> => {
-    if (!currentUser) return;
-    if (receiversCount <= 0) return;
+    if (!currentUser) {
+      console.log('[autoWriteoff] No currentUser, skipping');
+      return;
+    }
+    if (receiversCount <= 0) {
+      console.log('[autoWriteoff] receiversCount <= 0, skipping');
+      return;
+    }
 
     const headphonesCount = receiversCount + 5;
+    console.log('[autoWriteoff] Processing:', { receiversCount, headphonesCount, note });
+    console.log('[autoWriteoff] equipmentCategories count:', equipmentCategories.length);
+    
     const autoWriteoffCategories = equipmentCategories.filter(c => c.autoWriteoff && c.autoWriteoffSourceId);
+    console.log('[autoWriteoff] Found categories with autoWriteoff:', autoWriteoffCategories.map(c => ({ id: c.id, name: c.name, autoWriteoff: c.autoWriteoff, autoWriteoffSourceId: c.autoWriteoffSourceId })));
 
     for (const category of autoWriteoffCategories) {
       const itemsInCategory = equipmentItems.filter(i => i.categoryId === category.id);
