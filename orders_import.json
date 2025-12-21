@@ -16,7 +16,7 @@
   {
     "orderNumber": 1272,
     "clientName": "Эдик Заказы для групп",
-    "status": "completed",
+    "status": "returned",
     "startDate": "19.12.2025",
     "endDate": "19.12.2025",
     "daysCount": 1,
@@ -352,7 +352,7 @@
   {
     "orderNumber": 1248,
     "clientName": "Ляйсан (Казань 360)",
-    "status": "completed",
+    "status": "returned",
     "startDate": "18.12.2025",
     "endDate": "20.12.2025",
     "daysCount": 3,
@@ -366,7 +366,7 @@
   {
     "orderNumber": 1247,
     "clientName": "Ляйсан (Казань 360)",
-    "status": "completed",
+    "status": "returned",
     "startDate": "17.12.2025",
     "endDate": "19.12.2025",
     "daysCount": 3,
@@ -394,7 +394,7 @@
   {
     "orderNumber": 1245,
     "clientName": "Любовь (ТИЦ)",
-    "status": "completed",
+    "status": "returned",
     "startDate": "12.12.2025",
     "endDate": "12.12.2025",
     "daysCount": 1,
@@ -450,7 +450,7 @@
   {
     "orderNumber": 1241,
     "clientName": "Арсен (Юнион)",
-    "status": "completed",
+    "status": "returned",
     "startDate": "13.12.2025",
     "endDate": "13.12.2025",
     "daysCount": 1,
@@ -478,7 +478,7 @@
   {
     "orderNumber": 1239,
     "clientName": "Ляйсан (Казань 360)",
-    "status": "completed",
+    "status": "returned",
     "startDate": "08.12.2025",
     "endDate": "08.12.2025",
     "daysCount": 1,
@@ -492,7 +492,7 @@
   {
     "orderNumber": 1238,
     "clientName": "Ляйсан (Казань 360)",
-    "status": "completed",
+    "status": "returned",
     "startDate": "08.12.2025",
     "endDate": "09.12.2025",
     "daysCount": 2,
@@ -520,7 +520,7 @@
   {
     "orderNumber": 1236,
     "clientName": "Ляйсан (Казань 360)",
-    "status": "completed",
+    "status": "returned",
     "startDate": "08.12.2025",
     "endDate": "09.12.2025",
     "daysCount": 2,
@@ -534,7 +534,7 @@
   {
     "orderNumber": 1235,
     "clientName": "Ляйсан (Казань 360)",
-    "status": "completed",
+    "status": "returned",
     "startDate": "08.12.2025",
     "endDate": "09.12.2025",
     "daysCount": 2,
@@ -548,7 +548,7 @@
   {
     "orderNumber": 1234,
     "clientName": "Ляйсан (Казань 360)",
-    "status": "completed",
+    "status": "returned",
     "startDate": "08.12.2025",
     "endDate": "09.12.2025",
     "daysCount": 2,
@@ -562,7 +562,7 @@
   {
     "orderNumber": 1233,
     "clientName": "Ляйсан (Казань 360)",
-    "status": "completed",
+    "status": "returned",
     "startDate": "08.12.2025",
     "endDate": "08.12.2025",
     "daysCount": 2,
@@ -576,7 +576,7 @@
   {
     "orderNumber": 1232,
     "clientName": "Эдик Заказы для групп",
-    "status": "completed",
+    "status": "returned",
     "startDate": "05.12.2025",
     "endDate": "05.12.2025",
     "daysCount": 1,
@@ -590,7 +590,7 @@
   {
     "orderNumber": 1231,
     "clientName": "Ляйсан (Казань 360)",
-    "status": "completed",
+    "status": "returned",
     "startDate": "05.12.2025",
     "endDate": "05.12.2025",
     "daysCount": 1,
@@ -604,7 +604,7 @@
   {
     "orderNumber": 1230,
     "clientName": "Ляйсан (Казань 360)",
-    "status": "completed",
+    "status": "returned",
     "startDate": "05.12.2025",
     "endDate": "05.12.2025",
     "daysCount": 1,
@@ -618,7 +618,7 @@
   {
     "orderNumber": 1229,
     "clientName": "Ляйсан (Казань 360)",
-    "status": "completed",
+    "status": "returned",
     "startDate": "05.12.2025",
     "endDate": "05.12.2025",
     "daysCount": 1,
@@ -632,7 +632,7 @@
   {
     "orderNumber": 1228,
     "clientName": "Ляйсан (Казань 360)",
-    "status": "completed",
+    "status": "returned",
     "startDate": "05.12.2025",
     "endDate": "05.12.2025",
     "daysCount": 1,
@@ -646,7 +646,7 @@
   {
     "orderNumber": 1227,
     "clientName": "Ляйсан (Казань 360)",
-    "status": "completed",
+    "status": "returned",
     "startDate": "05.12.2025",
     "endDate": "05.12.2025",
     "daysCount": 1,
@@ -660,7 +660,7 @@
   {
     "orderNumber": 1226,
     "clientName": "Ляйсан (Казань 360)",
-    "status": "completed",
+    "status": "returned",
     "startDate": "05.12.2025",
     "endDate": "05.12.2025",
     "daysCount": 1,
@@ -674,7 +674,7 @@
   {
     "orderNumber": 1225,
     "clientName": "Ляйсан (Казань 360)",
-    "status": "completed",
+    "status": "returned",
     "startDate": "05.12.2025",
     "endDate": "05.12.2025",
     "daysCount": 1,
@@ -800,7 +800,7 @@
   {
     "orderNumber": 1216,
     "clientName": "Татьяна (Гольфстрим)",
-    "status": "new",
+    "status": "completed",
     "startDate": "18.11.2025",
     "endDate": "19.11.2025",
     "daysCount": 2,
@@ -808,7 +808,7 @@
     "totalPrice": 4960.0,
     "manager": "Леонид",
     "notes": "Авиатор. Игорь",
-    "isPaid": false,
+    "isPaid": true,
     "originalStatus": "Выставление счета"
   },
   {
@@ -940,7 +940,7 @@
   {
     "orderNumber": 1205,
     "clientName": "Эдик Заказы для групп",
-    "status": "completed",
+    "status": "returned",
     "startDate": "15.11.2025",
     "endDate": "15.11.2025",
     "daysCount": 1,
@@ -996,7 +996,7 @@
   {
     "orderNumber": 1201,
     "clientName": "Эдик Заказы для групп",
-    "status": "completed",
+    "status": "returned",
     "startDate": "12.11.2025",
     "endDate": "12.11.2025",
     "daysCount": 1,
@@ -1010,7 +1010,7 @@
   {
     "orderNumber": 1200,
     "clientName": "Екатерина",
-    "status": "new",
+    "status": "completed",
     "startDate": "20.11.2025",
     "endDate": "23.11.2025",
     "daysCount": 4,
@@ -1018,13 +1018,13 @@
     "totalPrice": 6000.0,
     "manager": "Леонид",
     "notes": "22.11. Не работают. в отеле Рамада Казань на Чернышевского. Для булата валиуллина и Антона зенкова если что",
-    "isPaid": false,
+    "isPaid": true,
     "originalStatus": "Выставление счета"
   },
   {
     "orderNumber": 1199,
     "clientName": "Эдик Заказы для групп",
-    "status": "completed",
+    "status": "returned",
     "startDate": "11.11.2025",
     "endDate": "15.11.2025",
     "daysCount": 5,
@@ -1094,7 +1094,7 @@
   {
     "orderNumber": 1194,
     "clientName": "Татьяна (Гольфстрим)",
-    "status": "new",
+    "status": "completed",
     "startDate": "07.11.2025",
     "endDate": "07.11.2025",
     "daysCount": 1,
@@ -1102,7 +1102,7 @@
     "totalPrice": 1520.0,
     "manager": "Леонид",
     "notes": ", 7.11 к 9.20 а Дон Кихот радио гиды на19 человек гид Аида. Вернут после 20 в Донецке Кихот. +7 903 344-08-99 Аида",
-    "isPaid": false,
+    "isPaid": true,
     "originalStatus": "Выставление счета"
   },
   {
@@ -1878,7 +1878,7 @@
   {
     "orderNumber": 1138,
     "clientName": "Юлия (Рыжий Слон)",
-    "status": "new",
+    "status": "completed",
     "startDate": "27.10.2025",
     "endDate": "29.10.2025",
     "daysCount": 3,
@@ -1886,7 +1886,7 @@
     "totalPrice": 13200.0,
     "manager": "Леонид",
     "notes": "Гид Диляра Ахмерова +7 950 327-62-72 Поезд прибывает 27 октября 377 в 12:29 . Кристал. ВЕРНУЛИ В ШАЛЯПИН",
-    "isPaid": false,
+    "isPaid": true,
     "originalStatus": "Выставление счета"
   },
   {
@@ -2200,7 +2200,7 @@
   {
     "orderNumber": 1115,
     "clientName": "Мария (ОСР)",
-    "status": "new",
+    "status": "completed",
     "startDate": "06.10.2025",
     "endDate": "09.10.2025",
     "daysCount": 3,
@@ -2208,7 +2208,7 @@
     "totalPrice": 4320.0,
     "manager": "Стас",
     "notes": "Оставить в парк отеле",
-    "isPaid": false,
+    "isPaid": true,
     "originalStatus": "Выставление счета"
   },
   {
@@ -2410,7 +2410,7 @@
   {
     "orderNumber": 1100,
     "clientName": "Екатерина",
-    "status": "new",
+    "status": "completed",
     "startDate": "06.10.2025",
     "endDate": "06.10.2025",
     "daysCount": 1,
@@ -2418,7 +2418,7 @@
     "totalPrice": 2500.0,
     "manager": "Леонид",
     "notes": "6 октября 15:00-18:00 25 радиогдиов на имя гида Татьяна Сулеймманова, отель Мариотт Казань",
-    "isPaid": false,
+    "isPaid": true,
     "originalStatus": "Выставление счета"
   },
   {
@@ -2620,7 +2620,7 @@
   {
     "orderNumber": 1085,
     "clientName": "Сафина Алина (ФРГРТ)",
-    "status": "new",
+    "status": "completed",
     "startDate": "01.10.2025",
     "endDate": "03.10.2025",
     "daysCount": 3,
@@ -2628,7 +2628,7 @@
     "totalPrice": 11840.0,
     "manager": "Леонид",
     "notes": "В пн вернут",
-    "isPaid": false,
+    "isPaid": true,
     "originalStatus": "Выставление счета"
   },
   {
