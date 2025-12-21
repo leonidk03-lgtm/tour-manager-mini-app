@@ -72,6 +72,8 @@ export default function RentalOrdersScreen() {
     } else if (activeFilter === "issued") {
       result = result.filter(o => o.status === "issued");
       result.sort((a, b) => new Date(a.endDate).getTime() - new Date(b.endDate).getTime());
+    } else if (activeFilter === "all") {
+      result.sort((a, b) => b.orderNumber - a.orderNumber);
     } else if (activeFilter !== "all") {
       result = result.filter(o => o.status === activeFilter);
     }
