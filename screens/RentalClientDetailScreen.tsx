@@ -52,6 +52,10 @@ export default function RentalClientDetailScreen() {
   const [editDefaultPrice, setEditDefaultPrice] = useState(client?.defaultPrice?.toString() || "100");
   const [editNotes, setEditNotes] = useState(client?.notes || "");
   const [editType, setEditType] = useState<"individual" | "company">(client?.type || "individual");
+  const [editDirectorName, setEditDirectorName] = useState(client?.directorName || "");
+  const [editLegalAddress, setEditLegalAddress] = useState(client?.legalAddress || "");
+  const [editInn, setEditInn] = useState(client?.inn || "");
+  const [editKpp, setEditKpp] = useState(client?.kpp || "");
 
   const clientOrders = useMemo(() => {
     if (!client) return [];
@@ -102,6 +106,10 @@ export default function RentalClientDetailScreen() {
         defaultPrice: parseFloat(editDefaultPrice) || 100,
         notes: editNotes.trim() || null,
         type: editType,
+        directorName: editDirectorName.trim() || null,
+        legalAddress: editLegalAddress.trim() || null,
+        inn: editInn.trim() || null,
+        kpp: editKpp.trim() || null,
       });
       setShowEditModal(false);
       hapticFeedback.success();
@@ -221,7 +229,19 @@ export default function RentalClientDetailScreen() {
                 {client.type === "company" ? "Компания" : "Физ. лицо"}
               </ThemedText>
             </View>
-            <Pressable onPress={() => setShowEditModal(true)}>
+            <Pressable onPress={() => {
+              setEditName(client.name);
+              setEditPhone(client.phone || "");
+              setEditEmail(client.email || "");
+              setEditDefaultPrice(client.defaultPrice?.toString() || "100");
+              setEditNotes(client.notes || "");
+              setEditType(client.type);
+              setEditDirectorName(client.directorName || "");
+              setEditLegalAddress(client.legalAddress || "");
+              setEditInn(client.inn || "");
+              setEditKpp(client.kpp || "");
+              setShowEditModal(true);
+            }}>
               <Icon name="edit-2" size={20} color={theme.primary} />
             </Pressable>
           </View>
@@ -249,6 +269,35 @@ export default function RentalClientDetailScreen() {
                     {client.email}
                   </ThemedText>
                 </Pressable>
+              ) : null}
+            </View>
+          ) : null}
+
+          {client.type === "company" && (client.directorName || client.legalAddress || client.inn) ? (
+            <View style={[styles.requisitesBox, { backgroundColor: theme.backgroundTertiary }]}>
+              {client.directorName ? (
+                <View style={styles.requisiteRow}>
+                  <ThemedText style={[styles.requisiteLabel, { color: theme.textSecondary }]}>Контактное лицо:</ThemedText>
+                  <ThemedText style={styles.requisiteValue}>{client.directorName}</ThemedText>
+                </View>
+              ) : null}
+              {client.inn ? (
+                <View style={styles.requisiteRow}>
+                  <ThemedText style={[styles.requisiteLabel, { color: theme.textSecondary }]}>ИНН:</ThemedText>
+                  <ThemedText style={styles.requisiteValue}>{client.inn}</ThemedText>
+                  {client.kpp ? (
+                    <>
+                      <ThemedText style={[styles.requisiteLabel, { color: theme.textSecondary, marginLeft: Spacing.md }]}>КПП:</ThemedText>
+                      <ThemedText style={styles.requisiteValue}>{client.kpp}</ThemedText>
+                    </>
+                  ) : null}
+                </View>
+              ) : null}
+              {client.legalAddress ? (
+                <View style={styles.requisiteRow}>
+                  <ThemedText style={[styles.requisiteLabel, { color: theme.textSecondary }]}>Адрес:</ThemedText>
+                  <ThemedText style={[styles.requisiteValue, { flex: 1 }]} numberOfLines={2}>{client.legalAddress}</ThemedText>
+                </View>
               ) : null}
             </View>
           ) : null}
@@ -439,6 +488,55 @@ export default function RentalClientDetailScreen() {
                 keyboardType="email-address"
               />
 
+              {editType === "company" ? (
+                <>
+                  <ThemedText style={[styles.inputLabel, { color: theme.textSecondary, marginTop: Spacing.md }]}>Контактное лицо</ThemedText>
+                  <TextInput
+                    style={[styles.input, { backgroundColor: theme.backgroundSecondary, color: theme.text }]}
+                    value={editDirectorName}
+                    onChangeText={setEditDirectorName}
+                    placeholder="ФИО директора или контактного лица"
+                    placeholderTextColor={theme.textSecondary}
+                  />
+
+                  <ThemedText style={[styles.inputLabel, { color: theme.textSecondary, marginTop: Spacing.md }]}>Юридический адрес</ThemedText>
+                  <TextInput
+                    style={[styles.input, styles.textArea, { backgroundColor: theme.backgroundSecondary, color: theme.text }]}
+                    value={editLegalAddress}
+                    onChangeText={setEditLegalAddress}
+                    placeholder="Юридический адрес компании"
+                    placeholderTextColor={theme.textSecondary}
+                    multiline
+                    numberOfLines={2}
+                  />
+
+                  <View style={styles.rowInputs}>
+                    <View style={{ flex: 1 }}>
+                      <ThemedText style={[styles.inputLabel, { color: theme.textSecondary, marginTop: Spacing.md }]}>ИНН</ThemedText>
+                      <TextInput
+                        style={[styles.input, { backgroundColor: theme.backgroundSecondary, color: theme.text }]}
+                        value={editInn}
+                        onChangeText={setEditInn}
+                        placeholder="ИНН"
+                        placeholderTextColor={theme.textSecondary}
+                        keyboardType="numeric"
+                      />
+                    </View>
+                    <View style={{ flex: 1 }}>
+                      <ThemedText style={[styles.inputLabel, { color: theme.textSecondary, marginTop: Spacing.md }]}>КПП</ThemedText>
+                      <TextInput
+                        style={[styles.input, { backgroundColor: theme.backgroundSecondary, color: theme.text }]}
+                        value={editKpp}
+                        onChangeText={setEditKpp}
+                        placeholder="КПП"
+                        placeholderTextColor={theme.textSecondary}
+                        keyboardType="numeric"
+                      />
+                    </View>
+                  </View>
+                </>
+              ) : null}
+
               <ThemedText style={[styles.inputLabel, { color: theme.textSecondary, marginTop: Spacing.md }]}>Цена по умолчанию</ThemedText>
               <TextInput
                 style={[styles.input, { backgroundColor: theme.backgroundSecondary, color: theme.text }]}
@@ -590,6 +688,25 @@ const styles = StyleSheet.create({
   },
   contactText: {
     fontSize: 13,
+    fontWeight: "500",
+  },
+  requisitesBox: {
+    padding: Spacing.sm,
+    borderRadius: BorderRadius.md,
+    marginTop: Spacing.md,
+    gap: Spacing.xs,
+  },
+  requisiteRow: {
+    flexDirection: "row",
+    alignItems: "flex-start",
+    flexWrap: "wrap",
+  },
+  requisiteLabel: {
+    fontSize: 12,
+    marginRight: Spacing.xs,
+  },
+  requisiteValue: {
+    fontSize: 12,
     fontWeight: "500",
   },
   notesBox: {
@@ -755,6 +872,10 @@ const styles = StyleSheet.create({
     paddingVertical: Spacing.sm,
     borderRadius: BorderRadius.md,
     alignItems: "center",
+  },
+  rowInputs: {
+    flexDirection: "row",
+    gap: Spacing.md,
   },
   inputLabel: {
     fontSize: 13,
