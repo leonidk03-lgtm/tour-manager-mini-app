@@ -1161,7 +1161,7 @@ export default function AddRentalOrderScreen() {
                     style={[styles.servicePickerItem, { backgroundColor: theme.backgroundSecondary }]}
                   >
                     <View style={[styles.servicePickerIcon, { backgroundColor: theme.primary + "20" }]}>
-                      <Icon name="shopping-bag" size={20} color={theme.primary} />
+                      <Icon name="tag" size={20} color={theme.primary} />
                     </View>
                     <View style={styles.servicePickerInfo}>
                       <ThemedText style={styles.servicePickerName}>{item.name}</ThemedText>
@@ -1174,7 +1174,7 @@ export default function AddRentalOrderScreen() {
                 )}
                 ListEmptyComponent={
                   <View style={styles.emptyContainer}>
-                    <Icon name="shopping-bag" size={48} color={theme.textSecondary} style={{ opacity: 0.5, marginBottom: Spacing.md }} />
+                    <Icon name="tag" size={48} color={theme.textSecondary} style={{ opacity: 0.5, marginBottom: Spacing.md }} />
                     <ThemedText style={{ color: theme.textSecondary, textAlign: 'center' }}>
                       {serviceSearchQuery ? "Услуги не найдены" : "Все услуги уже добавлены"}
                     </ThemedText>
