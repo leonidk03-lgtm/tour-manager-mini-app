@@ -289,6 +289,26 @@ export interface DispatchStats {
   netPax: number;
 }
 
+export interface DispatchExcursionStats {
+  excursionName: string;
+  excursionDate: string;
+  totalPhones: number;
+  totalPax: number;
+  managersCount: number;
+}
+
+export interface DispatchSearchResult {
+  id: string;
+  managerId: string;
+  managerName: string;
+  phone: string;
+  paxCount: number;
+  excursionDate: string;
+  excursionName: string | null;
+  action: 'mark' | 'unmark';
+  createdAt: string;
+}
+
 interface DataContextType {
   tourTypes: TourType[];
   addTourType: (tourType: Omit<TourType, 'id'>) => Promise<void>;
@@ -371,6 +391,8 @@ interface DataContextType {
   dispatchMarkEvents: DispatchMarkEvent[];
   addDispatchMarkEvents: (events: Omit<DispatchMarkEvent, 'id' | 'createdAt' | 'managerId' | 'managerName'>[]) => Promise<void>;
   getDispatchStats: (startDate: string, endDate: string, managerId?: string) => Promise<DispatchStats[]>;
+  getDispatchExcursionStats: (startDate: string, endDate: string) => Promise<DispatchExcursionStats[]>;
+  searchDispatchByPhone: (phone: string) => Promise<DispatchSearchResult[]>;
   deleteOldDispatchEvents: (beforeDate: string) => Promise<number>;
 }
 
@@ -2942,6 +2964,54 @@ export function DataProvider({ children }: { children: ReactNode }) {
     }
   };
 
+  const getDispatchExcursionStats = async (startDate: string, endDate: string): Promise<DispatchExcursionStats[]> => {
+    try {
+      const { data, error } = await supabase.rpc('get_dispatch_stats_by_excursion', {
+        p_start_date: startDate,
+        p_end_date: endDate,
+      });
+
+      if (error) {
+        console.error('Error fetching dispatch excursion stats:', error);
+        throw error;
+      }
+
+      return (data || []).map((row: { excursion_name: string; excursion_date: string; total_phones: number; total_pax: number; managers_count: number }) => ({
+        excursionName: row.excursion_name,
+        excursionDate: row.excursion_date,
+        totalPhones: row.total_phones,
+        totalPax: row.total_pax,
+        managersCount: row.managers_count,
+      }));
+    } catch (err) {
+      console.error('Error getting dispatch excursion stats:', err);
+      return [];
+    }
+  };
+
+  const searchDispatchByPhone = async (phone: string): Promise<DispatchSearchResult[]> => {
+    const { data, error } = await supabase.rpc('search_dispatch_by_phone', {
+      p_phone: phone,
+    });
+
+    if (error) {
+      console.error('Error searching dispatch by phone:', error);
+      throw error;
+    }
+
+    return (data || []).map((row: { id: string; manager_id: string; manager_name: string; phone: string; pax_count: number; excursion_date: string; excursion_name: string | null; action: string; created_at: string }) => ({
+      id: row.id,
+      managerId: row.manager_id,
+      managerName: row.manager_name,
+      phone: row.phone,
+      paxCount: row.pax_count,
+      excursionDate: row.excursion_date,
+      excursionName: row.excursion_name,
+      action: row.action as 'mark' | 'unmark',
+      createdAt: row.created_at,
+    }));
+  };
+
   const deleteOldDispatchEvents = async (beforeDate: string): Promise<number> => {
     if (!isAdmin) {
       throw new Error('Only admins can delete dispatch events');
@@ -3050,6 +3120,8 @@ export function DataProvider({ children }: { children: ReactNode }) {
         dispatchMarkEvents,
         addDispatchMarkEvents,
         getDispatchStats,
+        getDispatchExcursionStats,
+        searchDispatchByPhone,
         deleteOldDispatchEvents,
       }}
     >

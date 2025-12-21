@@ -1,17 +1,17 @@
 import { useState, useEffect, useMemo } from "react";
-import { View, StyleSheet, Pressable, Modal, Platform, ActivityIndicator, Alert } from "react-native";
+import { View, StyleSheet, Pressable, Modal, Platform, ActivityIndicator, Alert, TextInput } from "react-native";
 import DateTimePicker from "@react-native-community/datetimepicker";
 import { Icon } from "@/components/Icon";
 import { ThemedText } from "@/components/ThemedText";
-import { ThemedView } from "@/components/ThemedView";
 import { ScreenScrollView } from "@/components/ScreenScrollView";
 import { Spacing, BorderRadius } from "@/constants/theme";
 import { useTheme } from "@/hooks/useTheme";
-import { useData, DispatchStats } from "@/contexts/DataContext";
+import { useData, DispatchStats, DispatchExcursionStats, DispatchSearchResult } from "@/contexts/DataContext";
 import { useAuth } from "@/contexts/AuthContext";
 import { hapticFeedback } from "@/utils/haptics";
 
 type Period = "day" | "week" | "month" | "year" | "all" | "custom";
+type Tab = "managers" | "excursions" | "search";
 
 const periodLabels: Record<Period, string> = {
   day: "День",
@@ -20,6 +20,12 @@ const periodLabels: Record<Period, string> = {
   year: "Год",
   all: "Все время",
   custom: "Период",
+};
+
+const tabLabels: Record<Tab, string> = {
+  managers: "По менеджерам",
+  excursions: "По экскурсиям",
+  search: "Поиск",
 };
 
 function getDateRangeForPeriod(period: Period, customFrom: Date, customTo: Date): { startDate: string; endDate: string } {
@@ -59,16 +65,29 @@ function getDateRangeForPeriod(period: Period, customFrom: Date, customTo: Date)
   };
 }
 
+function formatDate(dateStr: string) {
+  const date = new Date(dateStr);
+  return date.toLocaleDateString("ru-RU", { day: "numeric", month: "short", year: "numeric" });
+}
+
 export default function DispatchActivityReportScreen() {
   const { theme } = useTheme();
   const { isAdmin } = useAuth();
-  const { getDispatchStats, managers, deleteOldDispatchEvents } = useData();
+  const { getDispatchStats, getDispatchExcursionStats, searchDispatchByPhone, deleteOldDispatchEvents } = useData();
+  
+  const [activeTab, setActiveTab] = useState<Tab>("managers");
   const [period, setPeriod] = useState<Period>("month");
   const [customFrom, setCustomFrom] = useState<Date>(new Date());
   const [customTo, setCustomTo] = useState<Date>(new Date());
   const [showDatePicker, setShowDatePicker] = useState<"from" | "to" | null>(null);
-  const [stats, setStats] = useState<DispatchStats[]>([]);
+  
+  const [managerStats, setManagerStats] = useState<DispatchStats[]>([]);
+  const [excursionStats, setExcursionStats] = useState<DispatchExcursionStats[]>([]);
+  const [searchResults, setSearchResults] = useState<DispatchSearchResult[]>([]);
+  const [searchQuery, setSearchQuery] = useState("");
+  
   const [isLoading, setIsLoading] = useState(true);
+  const [isSearching, setIsSearching] = useState(false);
   const [isDeleting, setIsDeleting] = useState(false);
 
   const formatShortDate = (date: Date) => {
@@ -76,15 +95,23 @@ export default function DispatchActivityReportScreen() {
   };
 
   useEffect(() => {
-    loadStats();
-  }, [period, customFrom, customTo]);
+    if (activeTab !== "search") {
+      loadStats();
+    }
+  }, [period, customFrom, customTo, activeTab]);
 
   const loadStats = async () => {
     setIsLoading(true);
     try {
       const { startDate, endDate } = getDateRangeForPeriod(period, customFrom, customTo);
-      const data = await getDispatchStats(startDate, endDate);
-      setStats(data);
+      
+      if (activeTab === "managers") {
+        const data = await getDispatchStats(startDate, endDate);
+        setManagerStats(data);
+      } else if (activeTab === "excursions") {
+        const data = await getDispatchExcursionStats(startDate, endDate);
+        setExcursionStats(data);
+      }
     } catch (error) {
       console.error("Failed to load dispatch stats:", error);
     } finally {
@@ -92,15 +119,41 @@ export default function DispatchActivityReportScreen() {
     }
   };
 
-  const totals = useMemo(() => {
-    return stats.reduce(
+  const handleSearch = async () => {
+    if (!searchQuery.trim()) return;
+    
+    setIsSearching(true);
+    try {
+      const results = await searchDispatchByPhone(searchQuery.trim());
+      setSearchResults(results);
+      hapticFeedback.light();
+    } catch (error) {
+      console.error("Search failed:", error);
+      Alert.alert("Ошибка", "Не удалось выполнить поиск");
+    } finally {
+      setIsSearching(false);
+    }
+  };
+
+  const managerTotals = useMemo(() => {
+    return managerStats.reduce(
       (acc, s) => ({
         phones: acc.phones + (s.netPhones || 0),
         pax: acc.pax + (s.netPax || 0),
       }),
       { phones: 0, pax: 0 }
     );
-  }, [stats]);
+  }, [managerStats]);
+
+  const excursionTotals = useMemo(() => {
+    return excursionStats.reduce(
+      (acc, s) => ({
+        phones: acc.phones + (s.totalPhones || 0),
+        pax: acc.pax + (s.totalPax || 0),
+      }),
+      { phones: 0, pax: 0 }
+    );
+  }, [excursionStats]);
 
   const handleDeleteOldData = () => {
     Alert.alert(
@@ -150,62 +203,125 @@ export default function DispatchActivityReportScreen() {
   return (
     <ScreenScrollView>
       <View style={styles.container}>
-        <View style={styles.periodSelector}>
-          {(Object.keys(periodLabels) as Period[]).map((p) => (
+        <View style={styles.tabContainer}>
+          {(Object.keys(tabLabels) as Tab[]).map((tab) => (
             <Pressable
-              key={p}
+              key={tab}
               style={[
-                styles.periodButton,
+                styles.tab,
                 {
-                  backgroundColor: period === p ? theme.primary : theme.backgroundSecondary,
+                  backgroundColor: activeTab === tab ? theme.primary : theme.backgroundSecondary,
                 },
               ]}
-              onPress={() => setPeriod(p)}
+              onPress={() => {
+                setActiveTab(tab);
+                hapticFeedback.light();
+              }}
             >
               <ThemedText
                 style={[
-                  styles.periodButtonText,
-                  { color: period === p ? theme.buttonText : theme.text },
+                  styles.tabText,
+                  { color: activeTab === tab ? theme.buttonText : theme.text },
                 ]}
               >
-                {periodLabels[p]}
+                {tabLabels[tab]}
               </ThemedText>
             </Pressable>
           ))}
         </View>
 
-        {period === "custom" ? (
-          <View style={styles.customDateRow}>
+        {activeTab !== "search" ? (
+          <>
+            <View style={styles.periodSelector}>
+              {(Object.keys(periodLabels) as Period[]).map((p) => (
+                <Pressable
+                  key={p}
+                  style={[
+                    styles.periodButton,
+                    {
+                      backgroundColor: period === p ? theme.primary : theme.backgroundSecondary,
+                    },
+                  ]}
+                  onPress={() => setPeriod(p)}
+                >
+                  <ThemedText
+                    style={[
+                      styles.periodButtonText,
+                      { color: period === p ? theme.buttonText : theme.text },
+                    ]}
+                  >
+                    {periodLabels[p]}
+                  </ThemedText>
+                </Pressable>
+              ))}
+            </View>
+
+            {period === "custom" ? (
+              <View style={styles.customDateRow}>
+                <Pressable
+                  style={[styles.dateButton, { backgroundColor: theme.backgroundSecondary }]}
+                  onPress={() => setShowDatePicker("from")}
+                >
+                  <Icon name="calendar" size={16} color={theme.textSecondary} />
+                  <ThemedText>{formatShortDate(customFrom)}</ThemedText>
+                </Pressable>
+                <ThemedText style={{ color: theme.textSecondary }}>—</ThemedText>
+                <Pressable
+                  style={[styles.dateButton, { backgroundColor: theme.backgroundSecondary }]}
+                  onPress={() => setShowDatePicker("to")}
+                >
+                  <Icon name="calendar" size={16} color={theme.textSecondary} />
+                  <ThemedText>{formatShortDate(customTo)}</ThemedText>
+                </Pressable>
+              </View>
+            ) : null}
+          </>
+        ) : (
+          <View style={styles.searchContainer}>
+            <View style={[styles.searchInputContainer, { backgroundColor: theme.backgroundSecondary }]}>
+              <Icon name="search" size={20} color={theme.textSecondary} />
+              <TextInput
+                style={[styles.searchInput, { color: theme.text }]}
+                placeholder="Введите номер телефона..."
+                placeholderTextColor={theme.textSecondary}
+                value={searchQuery}
+                onChangeText={setSearchQuery}
+                onSubmitEditing={handleSearch}
+                keyboardType="phone-pad"
+                returnKeyType="search"
+              />
+              {searchQuery ? (
+                <Pressable onPress={() => { setSearchQuery(""); setSearchResults([]); }}>
+                  <Icon name="x" size={20} color={theme.textSecondary} />
+                </Pressable>
+              ) : null}
+            </View>
             <Pressable
-              style={[styles.dateButton, { backgroundColor: theme.backgroundSecondary }]}
-              onPress={() => setShowDatePicker("from")}
+              style={[styles.searchButton, { backgroundColor: theme.primary }]}
+              onPress={handleSearch}
+              disabled={isSearching || !searchQuery.trim()}
             >
-              <Icon name="calendar" size={16} color={theme.textSecondary} />
-              <ThemedText>{formatShortDate(customFrom)}</ThemedText>
-            </Pressable>
-            <ThemedText style={{ color: theme.textSecondary }}>—</ThemedText>
-            <Pressable
-              style={[styles.dateButton, { backgroundColor: theme.backgroundSecondary }]}
-              onPress={() => setShowDatePicker("to")}
-            >
-              <Icon name="calendar" size={16} color={theme.textSecondary} />
-              <ThemedText>{formatShortDate(customTo)}</ThemedText>
+              {isSearching ? (
+                <ActivityIndicator size="small" color={theme.buttonText} />
+              ) : (
+                <ThemedText style={{ color: theme.buttonText, fontWeight: "600" }}>Найти</ThemedText>
+              )}
             </Pressable>
           </View>
-        ) : null}
+        )}
 
-        {isLoading ? (
+        {isLoading && activeTab !== "search" ? (
           <View style={styles.loadingContainer}>
             <ActivityIndicator size="large" color={theme.primary} />
           </View>
-        ) : (
+        ) : activeTab === "managers" ? (
           <>
             <View style={[styles.totalCard, { backgroundColor: theme.backgroundSecondary }]}>
               <ThemedText style={styles.totalTitle}>Итого за период</ThemedText>
               <View style={styles.totalRow}>
                 <View style={styles.totalItem}>
                   <ThemedText style={[styles.totalValue, { color: theme.primary }]}>
-                    {totals.phones}
+                    {managerTotals.phones}
                   </ThemedText>
                   <ThemedText style={[styles.totalLabel, { color: theme.textSecondary }]}>
                     номеров
@@ -213,7 +329,7 @@ export default function DispatchActivityReportScreen() {
                 </View>
                 <View style={styles.totalItem}>
                   <ThemedText style={[styles.totalValue, { color: theme.success }]}>
-                    {totals.pax}
+                    {managerTotals.pax}
                   </ThemedText>
                   <ThemedText style={[styles.totalLabel, { color: theme.textSecondary }]}>
                     человек
@@ -224,7 +340,7 @@ export default function DispatchActivityReportScreen() {
 
             <ThemedText style={styles.sectionTitle}>По менеджерам</ThemedText>
 
-            {stats.length === 0 ? (
+            {managerStats.length === 0 ? (
               <View style={[styles.emptyState, { backgroundColor: theme.backgroundSecondary }]}>
                 <Icon name="users" size={48} color={theme.textSecondary} />
                 <ThemedText style={{ color: theme.textSecondary, marginTop: Spacing.md }}>
@@ -232,26 +348,23 @@ export default function DispatchActivityReportScreen() {
                 </ThemedText>
               </View>
             ) : (
-              <View style={styles.managersList}>
-                {stats.map((stat, index) => (
+              <View style={styles.list}>
+                {managerStats.map((stat, index) => (
                   <View
                     key={stat.managerId}
-                    style={[
-                      styles.managerCard,
-                      { backgroundColor: theme.backgroundSecondary },
-                    ]}
+                    style={[styles.card, { backgroundColor: theme.backgroundSecondary }]}
                   >
-                    <View style={styles.managerHeader}>
+                    <View style={styles.cardHeader}>
                       <View style={[styles.rankBadge, { backgroundColor: theme.primary + "20" }]}>
                         <ThemedText style={[styles.rankText, { color: theme.primary }]}>
                           #{index + 1}
                         </ThemedText>
                       </View>
-                      <ThemedText style={styles.managerName} numberOfLines={1}>
+                      <ThemedText style={styles.cardTitle} numberOfLines={1}>
                         {stat.managerName || "Неизвестный"}
                       </ThemedText>
                     </View>
-                    <View style={styles.managerStats}>
+                    <View style={styles.statsRow}>
                       <View style={styles.statItem}>
                         <ThemedText style={[styles.statValue, { color: theme.primary }]}>
                           {stat.netPhones || 0}
@@ -281,25 +394,173 @@ export default function DispatchActivityReportScreen() {
                 ))}
               </View>
             )}
-
-            <Pressable
-              style={[styles.deleteButton, { backgroundColor: theme.error + "20" }]}
-              onPress={handleDeleteOldData}
-              disabled={isDeleting}
-            >
-              {isDeleting ? (
-                <ActivityIndicator size="small" color={theme.error} />
-              ) : (
-                <>
-                  <Icon name="trash-2" size={18} color={theme.error} />
-                  <ThemedText style={[styles.deleteButtonText, { color: theme.error }]}>
-                    Очистить данные старше года
+          </>
+        ) : activeTab === "excursions" ? (
+          <>
+            <View style={[styles.totalCard, { backgroundColor: theme.backgroundSecondary }]}>
+              <ThemedText style={styles.totalTitle}>Итого за период</ThemedText>
+              <View style={styles.totalRow}>
+                <View style={styles.totalItem}>
+                  <ThemedText style={[styles.totalValue, { color: theme.primary }]}>
+                    {excursionTotals.phones}
                   </ThemedText>
-                </>
-              )}
-            </Pressable>
+                  <ThemedText style={[styles.totalLabel, { color: theme.textSecondary }]}>
+                    номеров
+                  </ThemedText>
+                </View>
+                <View style={styles.totalItem}>
+                  <ThemedText style={[styles.totalValue, { color: theme.success }]}>
+                    {excursionTotals.pax}
+                  </ThemedText>
+                  <ThemedText style={[styles.totalLabel, { color: theme.textSecondary }]}>
+                    человек
+                  </ThemedText>
+                </View>
+                <View style={styles.totalItem}>
+                  <ThemedText style={[styles.totalValue, { color: theme.warning }]}>
+                    {excursionStats.length}
+                  </ThemedText>
+                  <ThemedText style={[styles.totalLabel, { color: theme.textSecondary }]}>
+                    экскурсий
+                  </ThemedText>
+                </View>
+              </View>
+            </View>
+
+            <ThemedText style={styles.sectionTitle}>По экскурсиям</ThemedText>
+
+            {excursionStats.length === 0 ? (
+              <View style={[styles.emptyState, { backgroundColor: theme.backgroundSecondary }]}>
+                <Icon name="map" size={48} color={theme.textSecondary} />
+                <ThemedText style={{ color: theme.textSecondary, marginTop: Spacing.md }}>
+                  Нет данных за выбранный период
+                </ThemedText>
+              </View>
+            ) : (
+              <View style={styles.list}>
+                {excursionStats.map((stat, index) => (
+                  <View
+                    key={`${stat.excursionDate}-${stat.excursionName}-${index}`}
+                    style={[styles.card, { backgroundColor: theme.backgroundSecondary }]}
+                  >
+                    <View style={styles.cardHeader}>
+                      <View style={[styles.dateBadge, { backgroundColor: theme.primary + "20" }]}>
+                        <ThemedText style={[styles.dateText, { color: theme.primary }]}>
+                          {formatDate(stat.excursionDate)}
+                        </ThemedText>
+                      </View>
+                    </View>
+                    <ThemedText style={styles.cardTitle} numberOfLines={2}>
+                      {stat.excursionName || "Без названия"}
+                    </ThemedText>
+                    <View style={styles.statsRow}>
+                      <View style={styles.statItem}>
+                        <ThemedText style={[styles.statValue, { color: theme.primary }]}>
+                          {stat.totalPhones || 0}
+                        </ThemedText>
+                        <ThemedText style={[styles.statLabel, { color: theme.textSecondary }]}>
+                          номеров
+                        </ThemedText>
+                      </View>
+                      <View style={styles.statItem}>
+                        <ThemedText style={[styles.statValue, { color: theme.success }]}>
+                          {stat.totalPax || 0}
+                        </ThemedText>
+                        <ThemedText style={[styles.statLabel, { color: theme.textSecondary }]}>
+                          человек
+                        </ThemedText>
+                      </View>
+                      <View style={styles.statItem}>
+                        <ThemedText style={[styles.statValue, { color: theme.textSecondary }]}>
+                          {stat.managersCount || 0}
+                        </ThemedText>
+                        <ThemedText style={[styles.statLabel, { color: theme.textSecondary }]}>
+                          менеджеров
+                        </ThemedText>
+                      </View>
+                    </View>
+                  </View>
+                ))}
+              </View>
+            )}
+          </>
+        ) : (
+          <>
+            {searchResults.length === 0 && searchQuery ? (
+              <View style={[styles.emptyState, { backgroundColor: theme.backgroundSecondary }]}>
+                <Icon name="search" size={48} color={theme.textSecondary} />
+                <ThemedText style={{ color: theme.textSecondary, marginTop: Spacing.md }}>
+                  Ничего не найдено
+                </ThemedText>
+              </View>
+            ) : searchResults.length === 0 ? (
+              <View style={[styles.emptyState, { backgroundColor: theme.backgroundSecondary }]}>
+                <Icon name="phone" size={48} color={theme.textSecondary} />
+                <ThemedText style={{ color: theme.textSecondary, marginTop: Spacing.md, textAlign: "center" }}>
+                  Введите номер телефона{"\n"}для поиска кто обилетил туриста
+                </ThemedText>
+              </View>
+            ) : (
+              <>
+                <ThemedText style={styles.sectionTitle}>
+                  Найдено: {searchResults.length}
+                </ThemedText>
+                <View style={styles.list}>
+                  {searchResults.map((result) => (
+                    <View
+                      key={result.id}
+                      style={[styles.card, { backgroundColor: theme.backgroundSecondary }]}
+                    >
+                      <View style={styles.cardHeader}>
+                        <View style={[styles.dateBadge, { backgroundColor: result.action === 'mark' ? theme.success + "20" : theme.error + "20" }]}>
+                          <ThemedText style={[styles.dateText, { color: result.action === 'mark' ? theme.success : theme.error }]}>
+                            {result.action === 'mark' ? 'Отмечен' : 'Снят'}
+                          </ThemedText>
+                        </View>
+                        <ThemedText style={[styles.phoneText, { color: theme.primary }]}>
+                          {result.phone}
+                        </ThemedText>
+                      </View>
+                      <ThemedText style={styles.cardSubtitle}>
+                        {result.excursionName || "Без названия"} - {formatDate(result.excursionDate)}
+                      </ThemedText>
+                      <View style={styles.searchResultFooter}>
+                        <View style={styles.managerInfo}>
+                          <Icon name="user" size={14} color={theme.textSecondary} />
+                          <ThemedText style={[styles.managerText, { color: theme.textSecondary }]}>
+                            {result.managerName}
+                          </ThemedText>
+                        </View>
+                        <ThemedText style={[styles.paxText, { color: theme.success }]}>
+                          {result.paxCount} чел.
+                        </ThemedText>
+                      </View>
+                    </View>
+                  ))}
+                </View>
+              </>
+            )}
           </>
         )}
+
+        {activeTab !== "search" ? (
+          <Pressable
+            style={[styles.deleteButton, { backgroundColor: theme.error + "20" }]}
+            onPress={handleDeleteOldData}
+            disabled={isDeleting}
+          >
+            {isDeleting ? (
+              <ActivityIndicator size="small" color={theme.error} />
+            ) : (
+              <>
+                <Icon name="trash-2" size={18} color={theme.error} />
+                <ThemedText style={[styles.deleteButtonText, { color: theme.error }]}>
+                  Очистить данные старше года
+                </ThemedText>
+              </>
+            )}
+          </Pressable>
+        ) : null}
       </View>
 
       {Platform.OS !== "web" && showDatePicker ? (
@@ -345,6 +606,20 @@ const styles = StyleSheet.create({
     padding: Spacing.lg,
     gap: Spacing.lg,
   },
+  tabContainer: {
+    flexDirection: "row",
+    gap: Spacing.xs,
+  },
+  tab: {
+    flex: 1,
+    paddingVertical: Spacing.sm,
+    borderRadius: BorderRadius.sm,
+    alignItems: "center",
+  },
+  tabText: {
+    fontSize: 13,
+    fontWeight: "600",
+  },
   periodSelector: {
     flexDirection: "row",
     flexWrap: "wrap",
@@ -371,6 +646,29 @@ const styles = StyleSheet.create({
     paddingHorizontal: Spacing.md,
     paddingVertical: Spacing.sm,
     borderRadius: BorderRadius.sm,
+  },
+  searchContainer: {
+    flexDirection: "row",
+    gap: Spacing.sm,
+  },
+  searchInputContainer: {
+    flex: 1,
+    flexDirection: "row",
+    alignItems: "center",
+    paddingHorizontal: Spacing.md,
+    borderRadius: BorderRadius.sm,
+    gap: Spacing.sm,
+  },
+  searchInput: {
+    flex: 1,
+    paddingVertical: Spacing.md,
+    fontSize: 16,
+  },
+  searchButton: {
+    paddingHorizontal: Spacing.lg,
+    paddingVertical: Spacing.md,
+    borderRadius: BorderRadius.sm,
+    justifyContent: "center",
   },
   loadingContainer: {
     padding: Spacing["2xl"],
@@ -413,15 +711,15 @@ const styles = StyleSheet.create({
     borderRadius: BorderRadius.md,
     alignItems: "center",
   },
-  managersList: {
+  list: {
     gap: Spacing.md,
   },
-  managerCard: {
+  card: {
     padding: Spacing.md,
     borderRadius: BorderRadius.md,
-    gap: Spacing.md,
+    gap: Spacing.sm,
   },
-  managerHeader: {
+  cardHeader: {
     flexDirection: "row",
     alignItems: "center",
     gap: Spacing.sm,
@@ -437,14 +735,27 @@ const styles = StyleSheet.create({
     fontSize: 12,
     fontWeight: "700",
   },
-  managerName: {
+  dateBadge: {
+    paddingHorizontal: Spacing.sm,
+    paddingVertical: 4,
+    borderRadius: BorderRadius.xs,
+  },
+  dateText: {
+    fontSize: 12,
+    fontWeight: "600",
+  },
+  cardTitle: {
     fontSize: 15,
     fontWeight: "600",
     flex: 1,
   },
-  managerStats: {
+  cardSubtitle: {
+    fontSize: 14,
+  },
+  statsRow: {
     flexDirection: "row",
     justifyContent: "space-around",
+    paddingTop: Spacing.xs,
   },
   statItem: {
     alignItems: "center",
@@ -456,6 +767,28 @@ const styles = StyleSheet.create({
   },
   statLabel: {
     fontSize: 12,
+  },
+  phoneText: {
+    fontSize: 15,
+    fontWeight: "600",
+  },
+  searchResultFooter: {
+    flexDirection: "row",
+    justifyContent: "space-between",
+    alignItems: "center",
+    paddingTop: Spacing.xs,
+  },
+  managerInfo: {
+    flexDirection: "row",
+    alignItems: "center",
+    gap: Spacing.xs,
+  },
+  managerText: {
+    fontSize: 13,
+  },
+  paxText: {
+    fontSize: 14,
+    fontWeight: "600",
   },
   datePickerBackdrop: {
     flex: 1,
