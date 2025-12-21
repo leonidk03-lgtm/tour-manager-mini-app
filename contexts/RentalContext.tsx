@@ -883,8 +883,7 @@ export function RentalProvider({ children }: { children: ReactNode }) {
       .maybeSingle();
     
     const costPerReceiver = (!costError && costSetting) ? Number(costSetting.value) || 17 : 17;
-    const totalReceivers = order.kitCount + order.spareReceiverCount;
-    const totalCost = totalReceivers * costPerReceiver;
+    const totalCost = order.kitCount * costPerReceiver;
     const profit = Math.max(0, totalPrice - totalCost);
 
     const commissionsToInsert: any[] = [];
