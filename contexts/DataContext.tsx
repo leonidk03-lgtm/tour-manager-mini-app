@@ -309,6 +309,28 @@ export interface DispatchSearchResult {
   createdAt: string;
 }
 
+export interface ExcursionManagerBreakdownRow {
+  excursionName: string;
+  excursionDate: string;
+  managerId: string;
+  managerName: string;
+  netPhones: number;
+  netPax: number;
+}
+
+export interface ExcursionWithManagers {
+  excursionName: string;
+  excursionDate: string;
+  totalPhones: number;
+  totalPax: number;
+  managers: {
+    managerId: string;
+    managerName: string;
+    netPhones: number;
+    netPax: number;
+  }[];
+}
+
 interface DataContextType {
   tourTypes: TourType[];
   addTourType: (tourType: Omit<TourType, 'id'>) => Promise<void>;
@@ -392,6 +414,7 @@ interface DataContextType {
   addDispatchMarkEvents: (events: Omit<DispatchMarkEvent, 'id' | 'createdAt' | 'managerId' | 'managerName'>[]) => Promise<void>;
   getDispatchStats: (startDate: string, endDate: string, managerId?: string) => Promise<DispatchStats[]>;
   getDispatchExcursionStats: (startDate: string, endDate: string) => Promise<DispatchExcursionStats[]>;
+  getExcursionManagerBreakdown: (startDate: string, endDate: string) => Promise<ExcursionWithManagers[]>;
   searchDispatchByPhone: (phone: string) => Promise<DispatchSearchResult[]>;
   deleteOldDispatchEvents: (beforeDate: string) => Promise<number>;
 }
@@ -2989,6 +3012,46 @@ export function DataProvider({ children }: { children: ReactNode }) {
     }
   };
 
+  const getExcursionManagerBreakdown = async (startDate: string, endDate: string): Promise<ExcursionWithManagers[]> => {
+    const { data, error } = await supabase.rpc('get_dispatch_excursion_manager_breakdown', {
+      p_start_date: startDate,
+      p_end_date: endDate,
+    });
+
+    if (error) {
+      console.error('Error fetching excursion manager breakdown:', error);
+      throw error;
+    }
+
+    const excursionMap = new Map<string, ExcursionWithManagers>();
+    
+    for (const row of data || []) {
+      const key = `${row.excursion_date}-${row.excursion_name}`;
+      
+      if (!excursionMap.has(key)) {
+        excursionMap.set(key, {
+          excursionName: row.excursion_name,
+          excursionDate: row.excursion_date,
+          totalPhones: 0,
+          totalPax: 0,
+          managers: [],
+        });
+      }
+      
+      const excursion = excursionMap.get(key)!;
+      excursion.totalPhones += row.net_phones || 0;
+      excursion.totalPax += row.net_pax || 0;
+      excursion.managers.push({
+        managerId: row.manager_id,
+        managerName: row.manager_name,
+        netPhones: row.net_phones || 0,
+        netPax: row.net_pax || 0,
+      });
+    }
+
+    return Array.from(excursionMap.values());
+  };
+
   const searchDispatchByPhone = async (phone: string): Promise<DispatchSearchResult[]> => {
     const { data, error } = await supabase.rpc('search_dispatch_by_phone', {
       p_phone: phone,
@@ -3121,6 +3184,7 @@ export function DataProvider({ children }: { children: ReactNode }) {
         addDispatchMarkEvents,
         getDispatchStats,
         getDispatchExcursionStats,
+        getExcursionManagerBreakdown,
         searchDispatchByPhone,
         deleteOldDispatchEvents,
       }}

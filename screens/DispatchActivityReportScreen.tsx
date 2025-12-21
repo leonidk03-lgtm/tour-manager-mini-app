@@ -6,7 +6,7 @@ import { ThemedText } from "@/components/ThemedText";
 import { ScreenScrollView } from "@/components/ScreenScrollView";
 import { Spacing, BorderRadius } from "@/constants/theme";
 import { useTheme } from "@/hooks/useTheme";
-import { useData, DispatchStats, DispatchExcursionStats, DispatchSearchResult } from "@/contexts/DataContext";
+import { useData, DispatchStats, ExcursionWithManagers, DispatchSearchResult } from "@/contexts/DataContext";
 import { useAuth } from "@/contexts/AuthContext";
 import { hapticFeedback } from "@/utils/haptics";
 
@@ -73,7 +73,7 @@ function formatDate(dateStr: string) {
 export default function DispatchActivityReportScreen() {
   const { theme } = useTheme();
   const { isAdmin } = useAuth();
-  const { getDispatchStats, getDispatchExcursionStats, searchDispatchByPhone, deleteOldDispatchEvents } = useData();
+  const { getDispatchStats, getExcursionManagerBreakdown, searchDispatchByPhone, deleteOldDispatchEvents } = useData();
   
   const [activeTab, setActiveTab] = useState<Tab>("managers");
   const [period, setPeriod] = useState<Period>("month");
@@ -82,7 +82,8 @@ export default function DispatchActivityReportScreen() {
   const [showDatePicker, setShowDatePicker] = useState<"from" | "to" | null>(null);
   
   const [managerStats, setManagerStats] = useState<DispatchStats[]>([]);
-  const [excursionStats, setExcursionStats] = useState<DispatchExcursionStats[]>([]);
+  const [excursionData, setExcursionData] = useState<ExcursionWithManagers[]>([]);
+  const [expandedExcursions, setExpandedExcursions] = useState<Set<string>>(new Set());
   const [searchResults, setSearchResults] = useState<DispatchSearchResult[]>([]);
   const [searchQuery, setSearchQuery] = useState("");
   
@@ -109,11 +110,12 @@ export default function DispatchActivityReportScreen() {
         const data = await getDispatchStats(startDate, endDate);
         setManagerStats(data);
       } else if (activeTab === "excursions") {
-        const data = await getDispatchExcursionStats(startDate, endDate);
-        setExcursionStats(data);
+        const data = await getExcursionManagerBreakdown(startDate, endDate);
+        setExcursionData(data);
       }
     } catch (error) {
       console.error("Failed to load dispatch stats:", error);
+      Alert.alert("Ошибка", "Не удалось загрузить статистику");
     } finally {
       setIsLoading(false);
     }
@@ -135,6 +137,19 @@ export default function DispatchActivityReportScreen() {
     }
   };
 
+  const toggleExcursion = (key: string) => {
+    setExpandedExcursions(prev => {
+      const next = new Set(prev);
+      if (next.has(key)) {
+        next.delete(key);
+      } else {
+        next.add(key);
+      }
+      return next;
+    });
+    hapticFeedback.light();
+  };
+
   const managerTotals = useMemo(() => {
     return managerStats.reduce(
       (acc, s) => ({
@@ -146,14 +161,14 @@ export default function DispatchActivityReportScreen() {
   }, [managerStats]);
 
   const excursionTotals = useMemo(() => {
-    return excursionStats.reduce(
+    return excursionData.reduce(
       (acc, s) => ({
         phones: acc.phones + (s.totalPhones || 0),
         pax: acc.pax + (s.totalPax || 0),
       }),
       { phones: 0, pax: 0 }
     );
-  }, [excursionStats]);
+  }, [excursionData]);
 
   const handleDeleteOldData = () => {
     Alert.alert(
@@ -418,7 +433,7 @@ export default function DispatchActivityReportScreen() {
                 </View>
                 <View style={styles.totalItem}>
                   <ThemedText style={[styles.totalValue, { color: theme.warning }]}>
-                    {excursionStats.length}
+                    {excursionData.length}
                   </ThemedText>
                   <ThemedText style={[styles.totalLabel, { color: theme.textSecondary }]}>
                     экскурсий
@@ -429,7 +444,7 @@ export default function DispatchActivityReportScreen() {
 
             <ThemedText style={styles.sectionTitle}>По экскурсиям</ThemedText>
 
-            {excursionStats.length === 0 ? (
+            {excursionData.length === 0 ? (
               <View style={[styles.emptyState, { backgroundColor: theme.backgroundSecondary }]}>
                 <Icon name="map" size={48} color={theme.textSecondary} />
                 <ThemedText style={{ color: theme.textSecondary, marginTop: Spacing.md }}>
@@ -438,49 +453,94 @@ export default function DispatchActivityReportScreen() {
               </View>
             ) : (
               <View style={styles.list}>
-                {excursionStats.map((stat, index) => (
-                  <View
-                    key={`${stat.excursionDate}-${stat.excursionName}-${index}`}
-                    style={[styles.card, { backgroundColor: theme.backgroundSecondary }]}
-                  >
-                    <View style={styles.cardHeader}>
-                      <View style={[styles.dateBadge, { backgroundColor: theme.primary + "20" }]}>
-                        <ThemedText style={[styles.dateText, { color: theme.primary }]}>
-                          {formatDate(stat.excursionDate)}
-                        </ThemedText>
-                      </View>
+                {excursionData.map((excursion) => {
+                  const key = `${excursion.excursionDate}-${excursion.excursionName}`;
+                  const isExpanded = expandedExcursions.has(key);
+                  
+                  return (
+                    <View
+                      key={key}
+                      style={[styles.card, { backgroundColor: theme.backgroundSecondary }]}
+                    >
+                      <Pressable onPress={() => toggleExcursion(key)}>
+                        <View style={styles.excursionHeader}>
+                          <View style={styles.excursionInfo}>
+                            <View style={[styles.dateBadge, { backgroundColor: theme.primary + "20" }]}>
+                              <ThemedText style={[styles.dateText, { color: theme.primary }]}>
+                                {formatDate(excursion.excursionDate)}
+                              </ThemedText>
+                            </View>
+                            <ThemedText style={styles.cardTitle} numberOfLines={2}>
+                              {excursion.excursionName || "Без названия"}
+                            </ThemedText>
+                          </View>
+                          <Icon 
+                            name={isExpanded ? "chevron-up" : "chevron-down"} 
+                            size={20} 
+                            color={theme.textSecondary} 
+                          />
+                        </View>
+                        <View style={styles.statsRow}>
+                          <View style={styles.statItem}>
+                            <ThemedText style={[styles.statValue, { color: theme.primary }]}>
+                              {excursion.totalPhones || 0}
+                            </ThemedText>
+                            <ThemedText style={[styles.statLabel, { color: theme.textSecondary }]}>
+                              номеров
+                            </ThemedText>
+                          </View>
+                          <View style={styles.statItem}>
+                            <ThemedText style={[styles.statValue, { color: theme.success }]}>
+                              {excursion.totalPax || 0}
+                            </ThemedText>
+                            <ThemedText style={[styles.statLabel, { color: theme.textSecondary }]}>
+                              человек
+                            </ThemedText>
+                          </View>
+                          <View style={styles.statItem}>
+                            <ThemedText style={[styles.statValue, { color: theme.textSecondary }]}>
+                              {excursion.managers.length}
+                            </ThemedText>
+                            <ThemedText style={[styles.statLabel, { color: theme.textSecondary }]}>
+                              менеджеров
+                            </ThemedText>
+                          </View>
+                        </View>
+                      </Pressable>
+                      
+                      {isExpanded ? (
+                        <View style={[styles.managersBreakdown, { borderTopColor: theme.border }]}>
+                          {excursion.managers.map((manager, idx) => (
+                            <View key={manager.managerId} style={styles.managerRow}>
+                              <View style={styles.managerRank}>
+                                <ThemedText style={[styles.managerRankText, { color: theme.textSecondary }]}>
+                                  {idx + 1}.
+                                </ThemedText>
+                              </View>
+                              <ThemedText style={styles.managerRowName} numberOfLines={1}>
+                                {manager.managerName}
+                              </ThemedText>
+                              <View style={styles.managerRowStats}>
+                                <ThemedText style={[styles.managerRowValue, { color: theme.primary }]}>
+                                  {manager.netPhones}
+                                </ThemedText>
+                                <ThemedText style={[styles.managerRowLabel, { color: theme.textSecondary }]}>
+                                  ном.
+                                </ThemedText>
+                                <ThemedText style={[styles.managerRowValue, { color: theme.success }]}>
+                                  {manager.netPax}
+                                </ThemedText>
+                                <ThemedText style={[styles.managerRowLabel, { color: theme.textSecondary }]}>
+                                  чел.
+                                </ThemedText>
+                              </View>
+                            </View>
+                          ))}
+                        </View>
+                      ) : null}
                     </View>
-                    <ThemedText style={styles.cardTitle} numberOfLines={2}>
-                      {stat.excursionName || "Без названия"}
-                    </ThemedText>
-                    <View style={styles.statsRow}>
-                      <View style={styles.statItem}>
-                        <ThemedText style={[styles.statValue, { color: theme.primary }]}>
-                          {stat.totalPhones || 0}
-                        </ThemedText>
-                        <ThemedText style={[styles.statLabel, { color: theme.textSecondary }]}>
-                          номеров
-                        </ThemedText>
-                      </View>
-                      <View style={styles.statItem}>
-                        <ThemedText style={[styles.statValue, { color: theme.success }]}>
-                          {stat.totalPax || 0}
-                        </ThemedText>
-                        <ThemedText style={[styles.statLabel, { color: theme.textSecondary }]}>
-                          человек
-                        </ThemedText>
-                      </View>
-                      <View style={styles.statItem}>
-                        <ThemedText style={[styles.statValue, { color: theme.textSecondary }]}>
-                          {stat.managersCount || 0}
-                        </ThemedText>
-                        <ThemedText style={[styles.statLabel, { color: theme.textSecondary }]}>
-                          менеджеров
-                        </ThemedText>
-                      </View>
-                    </View>
-                  </View>
-                ))}
+                  );
+                })}
               </View>
             )}
           </>
@@ -752,6 +812,16 @@ const styles = StyleSheet.create({
   cardSubtitle: {
     fontSize: 14,
   },
+  excursionHeader: {
+    flexDirection: "row",
+    alignItems: "center",
+    justifyContent: "space-between",
+    gap: Spacing.sm,
+  },
+  excursionInfo: {
+    flex: 1,
+    gap: Spacing.xs,
+  },
   statsRow: {
     flexDirection: "row",
     justifyContent: "space-around",
@@ -767,6 +837,41 @@ const styles = StyleSheet.create({
   },
   statLabel: {
     fontSize: 12,
+  },
+  managersBreakdown: {
+    marginTop: Spacing.md,
+    paddingTop: Spacing.md,
+    borderTopWidth: 1,
+    gap: Spacing.sm,
+  },
+  managerRow: {
+    flexDirection: "row",
+    alignItems: "center",
+    gap: Spacing.sm,
+  },
+  managerRank: {
+    width: 24,
+  },
+  managerRankText: {
+    fontSize: 13,
+    fontWeight: "500",
+  },
+  managerRowName: {
+    flex: 1,
+    fontSize: 14,
+  },
+  managerRowStats: {
+    flexDirection: "row",
+    alignItems: "center",
+    gap: 4,
+  },
+  managerRowValue: {
+    fontSize: 14,
+    fontWeight: "600",
+  },
+  managerRowLabel: {
+    fontSize: 12,
+    marginRight: Spacing.sm,
   },
   phoneText: {
     fontSize: 15,
