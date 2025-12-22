@@ -76,6 +76,12 @@ export function CompanySettingsProvider({ children }: { children: ReactNode }) {
 
     try {
       setIsLoading(true);
+      if (!supabase) {
+        setSettings(null);
+        setError(null);
+        return;
+      }
+      
       const { data, error: fetchError } = await supabase
         .from('company_settings')
         .select('*')
@@ -83,7 +89,7 @@ export function CompanySettingsProvider({ children }: { children: ReactNode }) {
         .single();
 
       if (fetchError) {
-        if (fetchError.code === 'PGRST116') {
+        if (fetchError.code === 'PGRST116' || fetchError.code === 'PGRST205') {
           setSettings(null);
         } else {
           throw fetchError;
@@ -94,7 +100,8 @@ export function CompanySettingsProvider({ children }: { children: ReactNode }) {
       setError(null);
     } catch (err) {
       console.error('Error fetching company settings:', err);
-      setError('Ошибка загрузки настроек компании');
+      setSettings(null);
+      setError(null);
     } finally {
       setIsLoading(false);
     }
@@ -130,6 +137,10 @@ export function CompanySettingsProvider({ children }: { children: ReactNode }) {
       
       updateData.updated_at = new Date().toISOString();
 
+      if (!supabase) {
+        return { error: 'Подключение к базе данных недоступно' };
+      }
+      
       if (settings?.id) {
         const { error: updateError } = await supabase
           .from('company_settings')
@@ -170,6 +181,8 @@ export function CompanySettingsProvider({ children }: { children: ReactNode }) {
                          settings.nextWaybillNumber;
 
     try {
+      if (!supabase) return null;
+      
       const { error: updateError } = await supabase
         .from('company_settings')
         .update({ [column]: currentNumber + 1, updated_at: new Date().toISOString() })
