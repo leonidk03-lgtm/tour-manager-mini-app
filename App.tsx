@@ -12,6 +12,7 @@ import { NotificationBanner } from "@/components/NotificationBanner";
 import { DataProvider } from "@/contexts/DataContext";
 import { AuthProvider } from "@/contexts/AuthContext";
 import { RentalProvider } from "@/contexts/RentalContext";
+import { CompanySettingsProvider } from "@/contexts/CompanySettingsContext";
 
 export default function App() {
   return (
@@ -22,10 +23,12 @@ export default function App() {
             <AuthProvider>
               <DataProvider>
                 <RentalProvider>
-                  <NavigationContainer>
-                    <RootNavigator />
-                    <NotificationBanner />
-                  </NavigationContainer>
+                  <CompanySettingsProvider>
+                    <NavigationContainer>
+                      <RootNavigator />
+                      <NotificationBanner />
+                    </NavigationContainer>
+                  </CompanySettingsProvider>
                 </RentalProvider>
               </DataProvider>
             </AuthProvider>

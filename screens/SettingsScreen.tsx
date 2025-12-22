@@ -146,6 +146,7 @@ export default function SettingsScreen() {
               <AppIcon icon="bar-chart-2" label="Отчёты" color="#FF9500" onPress={() => navigation.navigate("Reports")} />
               <AppIcon icon="file-text" label="Цены" color="#34C759" onPress={() => navigation.navigate("TicketPrices")} />
               <AppIcon icon="database" label="База данных" color="#007AFF" onPress={() => navigation.navigate("DatabaseSettings")} />
+              <AppIcon icon="briefcase" label="Реквизиты" color="#FF2D55" onPress={() => navigation.navigate("CompanySettings")} />
               <AppIcon
                 icon="radio"
                 label="Радиогид"

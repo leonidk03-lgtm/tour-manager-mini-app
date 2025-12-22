@@ -21,6 +21,8 @@ import { useTheme } from "@/hooks/useTheme";
 import { useRental, RentalOrderStatus, RentalPaymentType } from "@/contexts/RentalContext";
 import { useAuth } from "@/contexts/AuthContext";
 import { useData, EquipmentItem } from "@/contexts/DataContext";
+import { useCompanySettings } from "@/contexts/CompanySettingsContext";
+import { generateAndShareDocument, DocumentType } from "@/utils/documents";
 import { SettingsStackParamList } from "@/navigation/SettingsStackNavigator";
 import { hapticFeedback } from "@/utils/haptics";
 
@@ -50,6 +52,7 @@ export default function RentalOrderDetailScreen() {
   const { rentalOrders, rentalClients, rentalOrderServices, updateRentalOrder, updateRentalClient, updateOrderStatus, addRentalPayment, getOrderPayments, getOrderHistory, deleteRentalOrder } = useRental();
   const { managers, isAdmin } = useAuth();
   const { equipmentItems, equipmentCategories, addEquipmentMovement, addEquipmentLoss } = useData();
+  const { settings: companySettings, getNextDocumentNumber } = useCompanySettings();
 
   const orderId = route.params?.orderId;
   const order = rentalOrders.find(o => o.id === orderId);
@@ -81,6 +84,9 @@ export default function RentalOrderDetailScreen() {
   
   // Loading state for status change
   const [isChangingStatus, setIsChangingStatus] = useState(false);
+  
+  // Document generation state
+  const [isGeneratingDoc, setIsGeneratingDoc] = useState(false);
 
   // Get equipment items that can be tracked for loss based on order contents
   // For rentals: receivers = kitCount, transmitters = microphoneCount
@@ -289,6 +295,37 @@ export default function RentalOrderDetailScreen() {
     } catch (error) {
       console.error("Error adding loss:", error);
       Alert.alert("Ошибка", "Не удалось зарегистрировать утерю");
+    }
+  };
+
+  const handleGenerateDocument = async (docType: DocumentType) => {
+    if (!order || !client || !companySettings) {
+      Alert.alert("Ошибка", "Заполните настройки компании перед созданием документов");
+      return;
+    }
+    
+    setIsGeneratingDoc(true);
+    hapticFeedback.selection();
+    
+    try {
+      const documentNumber = await getNextDocumentNumber(docType);
+      
+      await generateAndShareDocument({
+        type: docType,
+        order,
+        client,
+        services: orderServices,
+        company: companySettings,
+        documentNumber,
+      });
+      
+      hapticFeedback.success();
+    } catch (error) {
+      console.error("Error generating document:", error);
+      hapticFeedback.error();
+      Alert.alert("Ошибка", "Не удалось создать документ. Проверьте настройки реквизитов компании.");
+    } finally {
+      setIsGeneratingDoc(false);
     }
   };
 
@@ -645,6 +682,46 @@ export default function RentalOrderDetailScreen() {
               История пуста
             </ThemedText>
           )}
+        </View>
+
+        <View style={[styles.card, { backgroundColor: theme.backgroundSecondary }]}>
+          <ThemedText style={[styles.sectionTitle, { color: theme.textSecondary }]}>
+            Документы
+          </ThemedText>
+          <View style={styles.documentsGrid}>
+            <Pressable
+              onPress={() => handleGenerateDocument("invoice")}
+              disabled={isGeneratingDoc}
+              style={[styles.documentBtn, { backgroundColor: theme.primary + "15", opacity: isGeneratingDoc ? 0.5 : 1 }]}
+            >
+              <Icon name="file-text" size={20} color={theme.primary} />
+              <ThemedText style={[styles.documentBtnText, { color: theme.primary }]}>Счёт</ThemedText>
+            </Pressable>
+            <Pressable
+              onPress={() => handleGenerateDocument("act")}
+              disabled={isGeneratingDoc}
+              style={[styles.documentBtn, { backgroundColor: theme.success + "15", opacity: isGeneratingDoc ? 0.5 : 1 }]}
+            >
+              <Icon name="check-square" size={20} color={theme.success} />
+              <ThemedText style={[styles.documentBtnText, { color: theme.success }]}>Акт</ThemedText>
+            </Pressable>
+            <Pressable
+              onPress={() => handleGenerateDocument("contract")}
+              disabled={isGeneratingDoc}
+              style={[styles.documentBtn, { backgroundColor: "#9C27B0" + "15", opacity: isGeneratingDoc ? 0.5 : 1 }]}
+            >
+              <Icon name="file" size={20} color="#9C27B0" />
+              <ThemedText style={[styles.documentBtnText, { color: "#9C27B0" }]}>Договор</ThemedText>
+            </Pressable>
+            <Pressable
+              onPress={() => handleGenerateDocument("waybill")}
+              disabled={isGeneratingDoc}
+              style={[styles.documentBtn, { backgroundColor: theme.warning + "15", opacity: isGeneratingDoc ? 0.5 : 1 }]}
+            >
+              <Icon name="truck" size={20} color={theme.warning} />
+              <ThemedText style={[styles.documentBtnText, { color: theme.warning }]}>Накладная</ThemedText>
+            </Pressable>
+          </View>
         </View>
 
         {(order.status === "issued" || order.status === "returned") && trackableLossItems.length > 0 ? (
@@ -1366,5 +1443,24 @@ const styles = StyleSheet.create({
   equipmentBlockLabel: {
     fontSize: 11,
     marginTop: 2,
+  },
+  documentsGrid: {
+    flexDirection: "row",
+    flexWrap: "wrap",
+    gap: Spacing.sm,
+  },
+  documentBtn: {
+    flexDirection: "row",
+    alignItems: "center",
+    gap: Spacing.xs,
+    paddingHorizontal: Spacing.md,
+    paddingVertical: Spacing.sm,
+    borderRadius: BorderRadius.md,
+    flex: 1,
+    minWidth: 140,
+  },
+  documentBtnText: {
+    fontSize: 14,
+    fontWeight: "500",
   },
 });
