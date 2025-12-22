@@ -1,0 +1,96 @@
+<p class="MsoNormal" align="center">&nbsp;</p>
+<p align="center">&nbsp;</p>
+<table class="TableGrid" style="width: 100%; height: 119px;" border="0" cellspacing="0" cellpadding="0">
+<tbody>
+<tr style="height: 28px;">
+<td style="height: 59px; width: 54.545455%;" colspan="2" rowspan="3" valign="top" width="203">
+<p class="MsoNormal">АО &laquo;ТБанк&raquo;</p>
+<p class="MsoNormal">&nbsp;</p>
+<p>&nbsp;</p>
+<p class="MsoNormal">Банк получателя</p>
+<p class="MsoNormal">&nbsp;</p>
+</td>
+<td style="width: 13.896104%; height: 28px;" valign="top" width="96">
+<p class="MsoNormal">БИК</p>
+</td>
+<td style="height: 43px; width: 31.428571%;" rowspan="3" valign="top" width="232">
+<p class="MsoNormal">044525974</p>
+<p>&nbsp;</p>
+<p>&nbsp;</p>
+<p class="MsoNormal">30101810145250000974</p>
+<p class="MsoNormal">&nbsp;</p>
+</td>
+</tr>
+<tr style="height: 15px;">
+<td style="height: 31px; width: 13.896104%;" rowspan="2" valign="top" width="96">
+<p class="MsoNormal">Сч. №</p>
+<p class="MsoNormal">&nbsp;</p>
+</td>
+</tr>
+<tr style="height: 16px;"></tr>
+<tr style="height: 15px;">
+<td style="width: 27.402597%; height: 15px;" valign="top" width="203">
+<p class="MsoNormal">ИНН&nbsp;&nbsp; 160502321880</p>
+</td>
+<td style="width: 27.142857%; height: 15px;" valign="top" width="209">
+<p class="MsoNormal">&nbsp;</p>
+</td>
+<td style="width: 13.896104%; height: 60px;" rowspan="2" valign="top" width="96">
+<p class="MsoNormal">Сч. №</p>
+</td>
+<td style="width: 31.428571%; height: 60px;" rowspan="2" valign="top" width="232">
+<p class="MsoNormal">40802810700006169125</p>
+</td>
+</tr>
+<tr style="height: 45px;">
+<td style="width: 54.545455%; height: 45px;" colspan="2" valign="top" width="203">
+<p class="MsoNormal">ИП КАЗАКОВ АЛЕКСАНДР&nbsp;ЕВГЕНЬЕВИЧ</p>
+<p>&nbsp;</p>
+<p>Получатель</p>
+</td>
+</tr>
+</tbody>
+</table>
+<p class="MsoNormal" style="text-align: center;"><span style="font-size: 14pt;"><strong>Счет на оплату &nbsp;<var-inline data-var="ORDER_NUMBER">Номер заказа</var-inline> от <var-inline data-var="4b4d3cbe-1fa1-4274-a8e3-2e6cc054f365">Время начала аренды</var-inline></strong></span></p>
+<p class="MsoNormal">&nbsp;</p>
+<p class="MsoNormal">Поставщик: &nbsp;<strong>ИП КАЗАКОВ АЛЕКСАНДР ЕВГЕНЬЕВИЧ, ИНН 160502321880, 422900, РОССИЯ,</strong><strong>РЕСП ТАТАРСТАН, АЛЕКСЕЕВСКИЙ Р-Н, ПГТ АЛЕКСЕЕВСКОЕ, УЛ КАЛИНИНА, Д 6</strong></p>
+<p class="MsoNormal">&nbsp;</p>
+<p><br clear="ALL">Покупатель: <strong><var-inline data-var="57786b26-e5ba-4ce9-b16d-afb33a9c28ea">Название компании</var-inline>, ИНН <var-inline data-var="a1aa09cf-7fd9-43df-aacf-f320f49f93ae">ИНН</var-inline>, КПП <var-inline data-var="bc822f0c-af9d-460b-bf37-d7da084452e5">КПП</var-inline>,<var-inline data-var="c96e1586-397e-4dd6-95bd-ac96bc8aea15">Юридический адрес</var-inline></strong></p>
+<p>&nbsp;</p>
+<table style="width: 99.740933%; height: 113px;" border="1">
+<thead>
+<tr style="height: 10px;">
+<td style="width: 10.403121%; height: 10px;"><strong>№</strong></td>
+<td style="width: 35.760728%; height: 10px;"><strong>Товары (работы, услуги)</strong></td>
+<td style="text-align: right; width: 12.353706%; height: 10px;"><strong>Количество</strong></td>
+<td style="width: 7.152146%; text-align: center;"><strong>Ед.</strong></td>
+<td style="width: 12.611082%; text-align: center;"><strong>НДС</strong></td>
+<td style="width: 11.836252%; text-align: center;"><strong>Цена</strong></td>
+<td style="width: 9.882965%; text-align: center; height: 10px;"><strong>Сумма</strong></td>
+</tr>
+</thead>
+<tbody>
+<tr style="height: 15px;" data-for="ITEMS">
+<td style="width: 10.403121%; height: 15px;"><var-inline data-var="INDEX">Строка</var-inline></td>
+<td style="width: 35.760728%; height: 15px;"><var-inline data-var="ITEM_NAME">Позиция</var-inline></td>
+<td style="text-align: right; width: 12.353706%; height: 15px;"><var-inline data-var="ITEM_QUANTITY">Количество</var-inline></td>
+<td style="width: 7.152146%; text-align: center;">шт.</td>
+<td style="width: 12.611082%; text-align: center;">Без НДС</td>
+<td style="text-align: right; width: 11.836252%;"><var-inline data-var="ITEM_PRICE">Цена</var-inline></td>
+<td style="text-align: right; width: 9.882965%; height: 15px;"><var-inline data-var="ITEM_SUM">Сумма</var-inline></td>
+</tr>
+<tr style="height: 30px;">
+<td style="text-align: right; height: 30px; width: 90.117035%;" colspan="6">
+<p><strong>Итого к оплате:</strong><strong><br></strong></p>
+<p><var-inline data-var="total.grand.words">К оплате (прописью)</var-inline></p>
+</td>
+<td style="text-align: right; width: 9.882965%; height: 30px;"><strong><var-inline data-var="TOTAL_ITEMS">Сумма позиций</var-inline></strong></td>
+</tr>
+</tbody>
+</table>
+<p>&nbsp;</p>
+<p>&nbsp;</p>
+<p>&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;</p>
+<p class="MsoNormal"><strong>Предприниматель ________<span style="text-decoration: underline;"><span style="color: rgb(0, 0, 0); text-decoration: underline;"><img src="../../api/file/0196f254-76d3-7000-b401-b4aa0e4db53d" width="70" height="63" data-file-id="0196f254-76d3-7000-b401-b4aa0e4db53d"></span></span>&nbsp;Казаков А. Е.&nbsp; &nbsp;</strong></p>
+<p class="MsoNormal"><strong>&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; <img src="../../api/file/0196f254-4446-7000-b546-81fc86e973ae" width="124" height="128" data-file-id="0196f254-4446-7000-b546-81fc86e973ae"></strong></p>
+<p>&nbsp;</p>
