@@ -312,8 +312,8 @@ export default function RentalClientDetailScreen() {
       lines.push(`${index + 1}. Заказ #${order.orderNumber}`);
       lines.push(`   ${formatDate(order.startDate)} - ${formatDate(order.endDate)}`);
       
-      if (order.notes && order.notes.trim()) {
-        lines.push(`   Комментарий: ${order.notes.trim()}`);
+      if (order.receiverNotes && order.receiverNotes.trim()) {
+        lines.push(`   Комментарий: ${order.receiverNotes.trim()}`);
       }
       
       const equipment: string[] = [];
