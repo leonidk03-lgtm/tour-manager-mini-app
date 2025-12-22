@@ -22,6 +22,7 @@ import { useRental, RentalOrderStatus, RentalPaymentType } from "@/contexts/Rent
 import { useAuth } from "@/contexts/AuthContext";
 import { useData, EquipmentItem } from "@/contexts/DataContext";
 import { useCompanySettings } from "@/contexts/CompanySettingsContext";
+import { useDocumentTemplates } from "@/contexts/DocumentTemplatesContext";
 import { generateAndShareDocument, DocumentType } from "@/utils/documents";
 import { SettingsStackParamList } from "@/navigation/SettingsStackNavigator";
 import { hapticFeedback } from "@/utils/haptics";
@@ -53,6 +54,7 @@ export default function RentalOrderDetailScreen() {
   const { managers, isAdmin } = useAuth();
   const { equipmentItems, equipmentCategories, addEquipmentMovement, addEquipmentLoss } = useData();
   const { settings: companySettings, getNextDocumentNumber } = useCompanySettings();
+  const { getDefaultTemplate } = useDocumentTemplates();
 
   const orderId = route.params?.orderId;
   const order = rentalOrders.find(o => o.id === orderId);
@@ -309,6 +311,7 @@ export default function RentalOrderDetailScreen() {
     
     try {
       const documentNumber = await getNextDocumentNumber(docType);
+      const defaultTemplate = getDefaultTemplate(docType);
       
       await generateAndShareDocument({
         type: docType,
@@ -317,6 +320,7 @@ export default function RentalOrderDetailScreen() {
         services: orderServices,
         company: companySettings,
         documentNumber,
+        templateHtml: defaultTemplate?.htmlContent,
       });
       
       hapticFeedback.success();

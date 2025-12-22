@@ -10,6 +10,7 @@ import {
   generateWaybillHtml,
   DocumentData 
 } from './templates';
+import { processTemplate, wrapWithDocumentStyles, TemplateData } from './templateProcessor';
 import { formatDate } from './helpers';
 
 export type DocumentType = 'invoice' | 'act' | 'contract' | 'waybill';
@@ -29,19 +30,35 @@ export interface GenerateDocumentParams {
   services?: RentalOrderService[];
   documentNumber: string;
   documentDate?: string;
+  templateHtml?: string;
 }
 
 function getHtmlForDocument(params: GenerateDocumentParams): string {
+  const { templateHtml, type, company, client, order, services, documentNumber, documentDate } = params;
+
+  if (templateHtml) {
+    const templateData: TemplateData = {
+      company,
+      client,
+      order,
+      services,
+      documentNumber,
+      documentDate: documentDate || new Date().toISOString(),
+    };
+    const processedHtml = processTemplate(templateHtml, templateData);
+    return wrapWithDocumentStyles(processedHtml);
+  }
+
   const data: DocumentData = {
-    company: params.company,
-    client: params.client,
-    order: params.order,
-    services: params.services,
-    documentNumber: params.documentNumber,
-    documentDate: params.documentDate || new Date().toISOString(),
+    company,
+    client,
+    order,
+    services,
+    documentNumber,
+    documentDate: documentDate || new Date().toISOString(),
   };
 
-  switch (params.type) {
+  switch (type) {
     case 'invoice':
       return generateInvoiceHtml(data);
     case 'act':
@@ -51,7 +68,7 @@ function getHtmlForDocument(params: GenerateDocumentParams): string {
     case 'waybill':
       return generateWaybillHtml(data, 'issue');
     default:
-      throw new Error(`Unknown document type: ${params.type}`);
+      throw new Error(`Unknown document type: ${type}`);
   }
 }
 

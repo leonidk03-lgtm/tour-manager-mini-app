@@ -13,6 +13,7 @@ import { DataProvider } from "@/contexts/DataContext";
 import { AuthProvider } from "@/contexts/AuthContext";
 import { RentalProvider } from "@/contexts/RentalContext";
 import { CompanySettingsProvider } from "@/contexts/CompanySettingsContext";
+import { DocumentTemplatesProvider } from "@/contexts/DocumentTemplatesContext";
 
 export default function App() {
   return (
@@ -24,10 +25,12 @@ export default function App() {
               <DataProvider>
                 <RentalProvider>
                   <CompanySettingsProvider>
-                    <NavigationContainer>
-                      <RootNavigator />
-                      <NotificationBanner />
-                    </NavigationContainer>
+                    <DocumentTemplatesProvider>
+                      <NavigationContainer>
+                        <RootNavigator />
+                        <NotificationBanner />
+                      </NavigationContainer>
+                    </DocumentTemplatesProvider>
                   </CompanySettingsProvider>
                 </RentalProvider>
               </DataProvider>

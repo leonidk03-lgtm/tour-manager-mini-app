@@ -31,6 +31,8 @@ import RentalPaymentsScreen from "@/screens/RentalPaymentsScreen";
 import RentalCalendarScreen from "@/screens/RentalCalendarScreen";
 import DashboardConfigScreen from "@/screens/DashboardConfigScreen";
 import CompanySettingsScreen from "@/screens/CompanySettingsScreen";
+import DocumentTemplatesScreen from "@/screens/DocumentTemplatesScreen";
+import TemplateEditorScreen from "@/screens/TemplateEditorScreen";
 import { getCommonScreenOptions } from "./screenOptions";
 import { useTheme } from "@/hooks/useTheme";
 import { Profile } from "@/lib/supabase";
@@ -68,6 +70,8 @@ export type SettingsStackParamList = {
   RentalCalendar: undefined;
   DashboardConfig: undefined;
   CompanySettings: undefined;
+  DocumentTemplates: undefined;
+  TemplateEditor: { templateId?: string; type?: 'invoice' | 'act' | 'contract' | 'waybill' };
 };
 
 const Stack = createNativeStackNavigator<SettingsStackParamList>();
@@ -239,6 +243,16 @@ export default function SettingsStackNavigator() {
         name="CompanySettings"
         component={CompanySettingsScreen}
         options={{ title: "Реквизиты компании" }}
+      />
+      <Stack.Screen
+        name="DocumentTemplates"
+        component={DocumentTemplatesScreen}
+        options={{ title: "Шаблоны документов" }}
+      />
+      <Stack.Screen
+        name="TemplateEditor"
+        component={TemplateEditorScreen}
+        options={{ title: "Редактор шаблона", headerShown: false }}
       />
     </Stack.Navigator>
   );
