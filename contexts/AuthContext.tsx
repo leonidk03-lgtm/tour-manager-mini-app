@@ -46,14 +46,27 @@ export function AuthProvider({ children }: { children: ReactNode }) {
 
   useEffect(() => {
     const initAuth = async () => {
-      await initSupabaseFromStorage();
-      
-      const { data: { session } } = await supabase.auth.getSession();
-      setSession(session);
-      setUser(session?.user ?? null);
-      if (session?.user) {
-        fetchProfile(session.user.id);
-      } else {
+      try {
+        await initSupabaseFromStorage();
+        
+        const timeoutPromise = new Promise<never>((_, reject) => 
+          setTimeout(() => reject(new Error('Session timeout')), 10000)
+        );
+        
+        const { data: { session } } = await Promise.race([
+          supabase.auth.getSession(),
+          timeoutPromise
+        ]);
+        
+        setSession(session);
+        setUser(session?.user ?? null);
+        if (session?.user) {
+          fetchProfile(session.user.id);
+        } else {
+          setIsLoading(false);
+        }
+      } catch (err) {
+        console.error('Auth initialization error:', err);
         setIsLoading(false);
       }
     };
@@ -101,12 +114,18 @@ export function AuthProvider({ children }: { children: ReactNode }) {
   }, [user]);
 
   const fetchProfile = async (userId: string) => {
+    const timeoutPromise = new Promise<never>((_, reject) => 
+      setTimeout(() => reject(new Error('Timeout')), 10000)
+    );
+    
     try {
-      const { data, error } = await supabase
+      const fetchPromise = supabase
         .from('profiles')
         .select('*')
         .eq('id', userId)
         .single();
+
+      const { data, error } = await Promise.race([fetchPromise, timeoutPromise]);
 
       if (error) {
         console.error('Error fetching profile:', error.message || 'Unknown error');
@@ -116,7 +135,8 @@ export function AuthProvider({ children }: { children: ReactNode }) {
         refreshManagers();
       }
     } catch (err) {
-      console.error('Error fetching profile:', err);
+      console.error('Error fetching profile (timeout or network):', err);
+      setProfile(null);
     } finally {
       setIsLoading(false);
     }
