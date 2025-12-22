@@ -674,6 +674,7 @@ export default function RadioGuidesScreen() {
     const excInfo = getExcursionInfo(assignment.excursionId);
     const issuedDate = new Date(assignment.issuedAt).toLocaleDateString("ru-RU", { day: "numeric", month: "short" });
     const batteryInfo = getBatteryInfo(kit.batteryLevel);
+    const isDropdownOpen = batteryPickerKit?.id === kit.id;
     
     return (
       <ThemedView
@@ -683,6 +684,7 @@ export default function RadioGuidesScreen() {
             backgroundColor: isOverdue ? theme.error + "10" : theme.backgroundSecondary, 
             borderColor: isOverdue ? theme.error : theme.border 
           },
+          isDropdownOpen && { zIndex: 1000 },
         ]}
       >
         <View style={styles.kitHeader}>
@@ -696,8 +698,53 @@ export default function RadioGuidesScreen() {
               ) : null}
             </View>
           </View>
-          <View style={[styles.batteryIndicatorSmall, { backgroundColor: batteryInfo.color + "20", borderColor: batteryInfo.color }]}>
-            <BatteryIcon level={kit.batteryLevel} color={batteryInfo.color} size={24} />
+          <View>
+            <Pressable
+              style={[
+                styles.batteryIndicator,
+                { 
+                  backgroundColor: batteryInfo.color + "20",
+                  borderColor: batteryInfo.color,
+                },
+              ]}
+              onPress={() => {
+                setBatteryPickerKit(batteryPickerKit?.id === kit.id ? null : kit);
+              }}
+            >
+              <BatteryIcon level={kit.batteryLevel} color={batteryInfo.color} size={28} />
+              <Icon name="chevron-down" size={14} color={batteryInfo.color} />
+            </Pressable>
+            
+            {isDropdownOpen ? (
+              <Pressable 
+                style={[styles.batteryDropdown, { backgroundColor: theme.backgroundDefault, borderColor: theme.border }]}
+                onPress={(e) => e.stopPropagation()}
+              >
+                {(['full', 'half', 'low'] as BatteryLevel[]).map((level) => {
+                  const info = getBatteryInfo(level);
+                  const isSelected = kit.batteryLevel === level;
+                  return (
+                    <Pressable
+                      key={level}
+                      style={[
+                        styles.batteryDropdownItem,
+                        isSelected && { backgroundColor: info.color + "20" },
+                      ]}
+                      onPress={(e) => {
+                        e.stopPropagation();
+                        handleBatteryChange(kit, level);
+                      }}
+                    >
+                      <BatteryIcon level={level} color={info.color} size={24} />
+                      <ThemedText style={[styles.batteryDropdownText, { color: isSelected ? info.color : theme.text }]}>
+                        {info.label}
+                      </ThemedText>
+                      {isSelected ? <Icon name="check" size={16} color={info.color} /> : null}
+                    </Pressable>
+                  );
+                })}
+              </Pressable>
+            ) : null}
           </View>
         </View>
         
@@ -757,6 +804,7 @@ export default function RadioGuidesScreen() {
     const startDate = new Date(order.startDate).toLocaleDateString("ru-RU", { day: "numeric", month: "short" });
     const endDate = new Date(order.endDate).toLocaleDateString("ru-RU", { day: "numeric", month: "short" });
     const batteryInfo = getBatteryInfo(kit.batteryLevel);
+    const isDropdownOpen = batteryPickerKit?.id === kit.id;
     
     return (
       <ThemedView
@@ -767,6 +815,7 @@ export default function RadioGuidesScreen() {
             backgroundColor: theme.primary + "10", 
             borderColor: theme.primary 
           },
+          isDropdownOpen && { zIndex: 1000 },
         ]}
       >
         <View style={styles.kitHeader}>
@@ -778,8 +827,53 @@ export default function RadioGuidesScreen() {
               </View>
             </View>
           </View>
-          <View style={[styles.batteryIndicatorSmall, { backgroundColor: batteryInfo.color + "20", borderColor: batteryInfo.color }]}>
-            <BatteryIcon level={kit.batteryLevel} color={batteryInfo.color} size={24} />
+          <View>
+            <Pressable
+              style={[
+                styles.batteryIndicator,
+                { 
+                  backgroundColor: batteryInfo.color + "20",
+                  borderColor: batteryInfo.color,
+                },
+              ]}
+              onPress={() => {
+                setBatteryPickerKit(batteryPickerKit?.id === kit.id ? null : kit);
+              }}
+            >
+              <BatteryIcon level={kit.batteryLevel} color={batteryInfo.color} size={28} />
+              <Icon name="chevron-down" size={14} color={batteryInfo.color} />
+            </Pressable>
+            
+            {isDropdownOpen ? (
+              <Pressable 
+                style={[styles.batteryDropdown, { backgroundColor: theme.backgroundDefault, borderColor: theme.border }]}
+                onPress={(e) => e.stopPropagation()}
+              >
+                {(['full', 'half', 'low'] as BatteryLevel[]).map((level) => {
+                  const info = getBatteryInfo(level);
+                  const isSelected = kit.batteryLevel === level;
+                  return (
+                    <Pressable
+                      key={level}
+                      style={[
+                        styles.batteryDropdownItem,
+                        isSelected && { backgroundColor: info.color + "20" },
+                      ]}
+                      onPress={(e) => {
+                        e.stopPropagation();
+                        handleBatteryChange(kit, level);
+                      }}
+                    >
+                      <BatteryIcon level={level} color={info.color} size={24} />
+                      <ThemedText style={[styles.batteryDropdownText, { color: isSelected ? info.color : theme.text }]}>
+                        {info.label}
+                      </ThemedText>
+                      {isSelected ? <Icon name="check" size={16} color={info.color} /> : null}
+                    </Pressable>
+                  );
+                })}
+              </Pressable>
+            ) : null}
           </View>
         </View>
         
