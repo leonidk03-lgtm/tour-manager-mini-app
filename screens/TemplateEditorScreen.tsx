@@ -45,7 +45,10 @@ const getQuillHtml = (initialContent: string, isDark: boolean) => `
     }
     .ql-toolbar.ql-snow {
       border: none;
-      padding: 8px;
+      padding: 6px;
+      display: flex;
+      flex-wrap: wrap;
+      gap: 4px;
     }
     .ql-toolbar.ql-snow .ql-picker-label,
     .ql-toolbar.ql-snow button {
@@ -57,9 +60,13 @@ const getQuillHtml = (initialContent: string, isDark: boolean) => `
     .ql-toolbar.ql-snow .ql-fill {
       fill: ${isDark ? '#fff' : '#444'};
     }
+    .ql-toolbar.ql-snow button.ql-active {
+      background: ${isDark ? '#555' : '#ddd'};
+      border-radius: 4px;
+    }
     #editor-container {
       position: absolute;
-      top: 50px;
+      top: 44px;
       bottom: 0;
       left: 0;
       right: 0;
@@ -80,10 +87,16 @@ const getQuillHtml = (initialContent: string, isDark: boolean) => `
     .ql-editor table {
       border-collapse: collapse;
       width: 100%;
+      margin: 10px 0;
     }
     .ql-editor table td, .ql-editor table th {
       border: 1px solid ${isDark ? '#555' : '#000'};
       padding: 5px 8px;
+      min-width: 40px;
+    }
+    .ql-editor table th {
+      background: ${isDark ? '#333' : '#f0f0f0'};
+      font-weight: bold;
     }
     .ql-editor .template-var {
       background: ${isDark ? '#3d5a80' : '#e1f0ff'};
@@ -93,18 +106,89 @@ const getQuillHtml = (initialContent: string, isDark: boolean) => `
       font-family: monospace;
       font-size: 11px;
     }
+    .custom-btn {
+      background: ${isDark ? '#444' : '#e8e8e8'};
+      border: none;
+      border-radius: 4px;
+      padding: 4px 8px;
+      font-size: 11px;
+      color: ${isDark ? '#fff' : '#333'};
+      cursor: pointer;
+      white-space: nowrap;
+    }
+    .custom-btn:active {
+      opacity: 0.7;
+    }
+    .custom-btn.active {
+      background: ${isDark ? '#0088ff' : '#0066cc'};
+      color: #fff;
+    }
+    #source-editor {
+      display: none;
+      position: absolute;
+      top: 44px;
+      bottom: 0;
+      left: 0;
+      right: 0;
+      padding: 12px;
+      font-family: 'Courier New', monospace;
+      font-size: 12px;
+      line-height: 1.5;
+      background: ${isDark ? '#1a1a1a' : '#fff'};
+      color: ${isDark ? '#0f0' : '#333'};
+      border: none;
+      resize: none;
+      outline: none;
+    }
+    .table-dropdown {
+      display: none;
+      position: absolute;
+      top: 100%;
+      left: 0;
+      background: ${isDark ? '#333' : '#fff'};
+      border: 1px solid ${isDark ? '#555' : '#ccc'};
+      border-radius: 6px;
+      padding: 8px;
+      box-shadow: 0 4px 12px rgba(0,0,0,0.2);
+      z-index: 200;
+    }
+    .table-dropdown.show {
+      display: block;
+    }
+    .table-grid {
+      display: grid;
+      grid-template-columns: repeat(5, 24px);
+      gap: 2px;
+    }
+    .table-cell {
+      width: 24px;
+      height: 24px;
+      border: 1px solid ${isDark ? '#555' : '#ccc'};
+      background: ${isDark ? '#222' : '#f9f9f9'};
+      cursor: pointer;
+    }
+    .table-cell:hover, .table-cell.selected {
+      background: ${isDark ? '#0088ff' : '#0066cc'};
+      border-color: ${isDark ? '#0088ff' : '#0066cc'};
+    }
+    .table-size-label {
+      text-align: center;
+      margin-top: 6px;
+      font-size: 11px;
+      color: ${isDark ? '#aaa' : '#666'};
+    }
   </style>
 </head>
 <body>
   <div id="toolbar-container">
     <div id="toolbar">
       <span class="ql-formats">
-        <button class="ql-bold"></button>
-        <button class="ql-italic"></button>
-        <button class="ql-underline"></button>
+        <button class="ql-bold" title="Жирный"></button>
+        <button class="ql-italic" title="Курсив"></button>
+        <button class="ql-underline" title="Подчёркнутый"></button>
       </span>
       <span class="ql-formats">
-        <select class="ql-header">
+        <select class="ql-header" title="Заголовок">
           <option value="1">H1</option>
           <option value="2">H2</option>
           <option value="3">H3</option>
@@ -112,20 +196,31 @@ const getQuillHtml = (initialContent: string, isDark: boolean) => `
         </select>
       </span>
       <span class="ql-formats">
-        <select class="ql-align"></select>
+        <select class="ql-align" title="Выравнивание"></select>
       </span>
       <span class="ql-formats">
-        <button class="ql-list" value="ordered"></button>
-        <button class="ql-list" value="bullet"></button>
+        <button class="ql-list" value="ordered" title="Нумерованный список"></button>
+        <button class="ql-list" value="bullet" title="Маркированный список"></button>
+      </span>
+      <span class="ql-formats" style="position: relative;">
+        <button class="custom-btn" id="table-btn" title="Таблица">Таблица</button>
+        <div class="table-dropdown" id="table-dropdown">
+          <div class="table-grid" id="table-grid"></div>
+          <div class="table-size-label" id="table-size-label">Выберите размер</div>
+        </div>
       </span>
       <span class="ql-formats">
-        <button class="ql-clean"></button>
+        <button class="custom-btn" id="source-btn" title="HTML-код">HTML</button>
+      </span>
+      <span class="ql-formats">
+        <button class="ql-clean" title="Очистить формат"></button>
       </span>
     </div>
   </div>
   <div id="editor-container">
     <div id="editor"></div>
   </div>
+  <textarea id="source-editor" spellcheck="false"></textarea>
   <script>
     var quill = new Quill('#editor', {
       theme: 'snow',
@@ -140,22 +235,160 @@ const getQuillHtml = (initialContent: string, isDark: boolean) => `
       quill.root.innerHTML = initialContent;
     }
 
-    quill.on('text-change', function() {
-      var html = quill.root.innerHTML;
+    var sourceMode = false;
+    var sourceEditor = document.getElementById('source-editor');
+    var editorContainer = document.getElementById('editor-container');
+    var sourceBtn = document.getElementById('source-btn');
+
+    sourceBtn.addEventListener('click', function() {
+      sourceMode = !sourceMode;
+      if (sourceMode) {
+        sourceEditor.value = formatHtml(quill.root.innerHTML);
+        sourceEditor.style.display = 'block';
+        editorContainer.style.display = 'none';
+        sourceBtn.classList.add('active');
+      } else {
+        quill.root.innerHTML = sourceEditor.value;
+        sourceEditor.style.display = 'none';
+        editorContainer.style.display = 'block';
+        sourceBtn.classList.remove('active');
+        notifyContentChange();
+      }
+    });
+
+    sourceEditor.addEventListener('input', function() {
+      window.ReactNativeWebView.postMessage(JSON.stringify({
+        type: 'content-change',
+        html: sourceEditor.value
+      }));
+    });
+
+    function formatHtml(html) {
+      var formatted = '';
+      var indent = 0;
+      var tags = html.split(/(<[^>]+>)/g).filter(Boolean);
+      tags.forEach(function(tag) {
+        if (tag.match(/^<\\/[^>]+>$/)) {
+          indent--;
+        }
+        if (tag.match(/^</)) {
+          formatted += '  '.repeat(Math.max(0, indent)) + tag + '\\n';
+        } else if (tag.trim()) {
+          formatted += '  '.repeat(Math.max(0, indent)) + tag.trim() + '\\n';
+        }
+        if (tag.match(/^<[^/][^>]*[^/]>$/) && !tag.match(/^<(br|hr|img|input|meta|link)/i)) {
+          indent++;
+        }
+      });
+      return formatted.trim();
+    }
+
+    var tableBtn = document.getElementById('table-btn');
+    var tableDropdown = document.getElementById('table-dropdown');
+    var tableGrid = document.getElementById('table-grid');
+    var tableSizeLabel = document.getElementById('table-size-label');
+    var selectedRows = 0, selectedCols = 0;
+
+    for (var r = 0; r < 5; r++) {
+      for (var c = 0; c < 5; c++) {
+        var cell = document.createElement('div');
+        cell.className = 'table-cell';
+        cell.dataset.row = r + 1;
+        cell.dataset.col = c + 1;
+        tableGrid.appendChild(cell);
+      }
+    }
+
+    tableBtn.addEventListener('click', function(e) {
+      e.stopPropagation();
+      tableDropdown.classList.toggle('show');
+    });
+
+    tableGrid.addEventListener('mouseover', function(e) {
+      if (e.target.classList.contains('table-cell')) {
+        selectedRows = parseInt(e.target.dataset.row);
+        selectedCols = parseInt(e.target.dataset.col);
+        tableSizeLabel.textContent = selectedRows + ' x ' + selectedCols;
+        updateGridSelection();
+      }
+    });
+
+    tableGrid.addEventListener('click', function(e) {
+      if (e.target.classList.contains('table-cell')) {
+        insertTable(selectedRows, selectedCols);
+        tableDropdown.classList.remove('show');
+      }
+    });
+
+    document.addEventListener('click', function(e) {
+      if (!tableDropdown.contains(e.target) && e.target !== tableBtn) {
+        tableDropdown.classList.remove('show');
+      }
+    });
+
+    function updateGridSelection() {
+      var cells = tableGrid.querySelectorAll('.table-cell');
+      cells.forEach(function(cell) {
+        var r = parseInt(cell.dataset.row);
+        var c = parseInt(cell.dataset.col);
+        if (r <= selectedRows && c <= selectedCols) {
+          cell.classList.add('selected');
+        } else {
+          cell.classList.remove('selected');
+        }
+      });
+    }
+
+    function insertTable(rows, cols) {
+      var table = '<table><tbody>';
+      for (var r = 0; r < rows; r++) {
+        table += '<tr>';
+        for (var c = 0; c < cols; c++) {
+          if (r === 0) {
+            table += '<th>Заголовок</th>';
+          } else {
+            table += '<td>Ячейка</td>';
+          }
+        }
+        table += '</tr>';
+      }
+      table += '</tbody></table><p><br></p>';
+      
+      var range = quill.getSelection(true);
+      quill.clipboard.dangerouslyPasteHTML(range.index, table);
+      notifyContentChange();
+    }
+
+    function notifyContentChange() {
+      var html = sourceMode ? sourceEditor.value : quill.root.innerHTML;
       window.ReactNativeWebView.postMessage(JSON.stringify({
         type: 'content-change',
         html: html
       }));
+    }
+
+    quill.on('text-change', function() {
+      if (!sourceMode) {
+        notifyContentChange();
+      }
     });
 
     window.insertVariable = function(varKey) {
-      var range = quill.getSelection(true);
-      quill.insertText(range.index, varKey, { 'background': '#e1f0ff', 'color': '#0066cc' });
-      quill.setSelection(range.index + varKey.length);
+      if (sourceMode) {
+        var pos = sourceEditor.selectionStart;
+        var text = sourceEditor.value;
+        sourceEditor.value = text.slice(0, pos) + varKey + text.slice(pos);
+        sourceEditor.selectionStart = sourceEditor.selectionEnd = pos + varKey.length;
+        notifyContentChange();
+      } else {
+        var range = quill.getSelection(true);
+        quill.insertText(range.index, varKey, { 'background': '#e1f0ff', 'color': '#0066cc' });
+        quill.setSelection(range.index + varKey.length);
+      }
     };
 
     window.getContent = function() {
-      return quill.root.innerHTML;
+      return sourceMode ? sourceEditor.value : quill.root.innerHTML;
     };
 
     window.ReactNativeWebView.postMessage(JSON.stringify({ type: 'ready' }));
