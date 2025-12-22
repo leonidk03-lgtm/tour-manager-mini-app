@@ -1,6 +1,5 @@
 import * as Print from 'expo-print';
 import * as Sharing from 'expo-sharing';
-import * as FileSystem from 'expo-file-system';
 import { Platform, Alert } from 'react-native';
 import { CompanySettings } from '@/contexts/CompanySettingsContext';
 import { RentalClient, RentalOrder, RentalOrderService } from '@/contexts/RentalContext';
@@ -65,7 +64,6 @@ function getFileName(type: DocumentType, documentNumber: string, orderNumber: nu
 export async function generateAndShareDocument(params: GenerateDocumentParams): Promise<boolean> {
   try {
     const html = getHtmlForDocument(params);
-    const fileName = getFileName(params.type, params.documentNumber, params.order.orderNumber);
 
     if (Platform.OS === 'web') {
       const printWindow = window.open('', '_blank');
@@ -86,14 +84,12 @@ export async function generateAndShareDocument(params: GenerateDocumentParams): 
     const isAvailable = await Sharing.isAvailableAsync();
     
     if (isAvailable) {
-      const newUri = `${FileSystem.cacheDirectory}${fileName}`;
-      await FileSystem.moveAsync({ from: uri, to: newUri });
-      await Sharing.shareAsync(newUri, {
+      await Sharing.shareAsync(uri, {
         mimeType: 'application/pdf',
         dialogTitle: `Поделиться: ${DOCUMENT_NAMES[params.type]}`,
       });
     } else {
-      Alert.alert('Документ создан', `Файл сохранён: ${fileName}`);
+      Alert.alert('Документ создан', 'PDF файл готов');
     }
 
     return true;
