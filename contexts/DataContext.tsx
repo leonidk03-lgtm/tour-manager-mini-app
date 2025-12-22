@@ -1832,7 +1832,23 @@ export function DataProvider({ children }: { children: ReactNode }) {
             channel.subscribe();
           }, 5000);
         } else if (status === 'SUBSCRIBED') {
-          setIsOffline(false);
+          // Refresh all critical data on reconnect to ensure sync
+          setIsOffline((wasOffline) => {
+            if (wasOffline) {
+              console.log('Supabase Realtime reconnected - refreshing all data');
+              Promise.all([
+                safeFetch(fetchExcursions),
+                safeFetch(fetchTransactions),
+                safeFetch(fetchRadioGuideKits),
+                safeFetch(fetchRadioGuideAssignments),
+                safeFetch(fetchActivities),
+                safeFetch(fetchChatMessages),
+                safeFetch(fetchDispatchingNotes),
+                safeFetch(fetchExcursionNotes),
+              ]).catch(err => console.warn('Error refreshing data on reconnect:', err));
+            }
+            return false;
+          });
         } else if (status === 'TIMED_OUT') {
           console.warn('Supabase Realtime timed out - will retry');
           setIsOffline(true);
