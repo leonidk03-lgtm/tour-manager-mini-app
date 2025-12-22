@@ -312,6 +312,10 @@ export default function RentalClientDetailScreen() {
       lines.push(`${index + 1}. Заказ #${order.orderNumber}`);
       lines.push(`   ${formatDate(order.startDate)} - ${formatDate(order.endDate)}`);
       
+      if (order.notes && order.notes.trim()) {
+        lines.push(`   Комментарий: ${order.notes.trim()}`);
+      }
+      
       const equipment: string[] = [];
       if (order.kitCount > 0) equipment.push(`Комплекты: ${order.kitCount}`);
       if (order.spareReceiverCount > 0) equipment.push(`Зап. приёмники: ${order.spareReceiverCount}`);
