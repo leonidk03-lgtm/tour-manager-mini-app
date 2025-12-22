@@ -22,15 +22,15 @@ ALTER TABLE document_templates ENABLE ROW LEVEL SECURITY;
 CREATE POLICY "Allow read access for authenticated users" ON document_templates
   FOR SELECT USING (auth.role() = 'authenticated');
 
--- Policy: Only admins can insert/update/delete templates (admin check via managers table)
-CREATE POLICY "Allow admin write access" ON document_templates
-  FOR ALL USING (
-    EXISTS (
-      SELECT 1 FROM managers 
-      WHERE managers.user_id = auth.uid() 
-      AND managers.role = 'admin'
-    )
-  );
+-- Policy: All authenticated users can write templates (admin check done in app)
+CREATE POLICY "Allow write access for authenticated users" ON document_templates
+  FOR INSERT WITH CHECK (auth.role() = 'authenticated');
+
+CREATE POLICY "Allow update access for authenticated users" ON document_templates
+  FOR UPDATE USING (auth.role() = 'authenticated');
+
+CREATE POLICY "Allow delete access for authenticated users" ON document_templates
+  FOR DELETE USING (auth.role() = 'authenticated');
 
 -- Available template variables documentation:
 -- 
