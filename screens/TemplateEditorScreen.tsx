@@ -5,6 +5,7 @@ import { useNavigation, useRoute, RouteProp } from '@react-navigation/native';
 import { NativeStackNavigationProp } from '@react-navigation/native-stack';
 import { Feather } from '@expo/vector-icons';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
+import * as ImagePicker from 'expo-image-picker';
 import { ThemedText } from '@/components/ThemedText';
 import { ThemedView } from '@/components/ThemedView';
 import { useDocumentTemplates, DocumentTemplate, TEMPLATE_TYPE_LABELS, TEMPLATE_VARIABLES } from '@/contexts/DocumentTemplatesContext';
@@ -31,7 +32,7 @@ const getQuillHtml = (initialContent: string, isDark: boolean) => `
       margin: 0;
       padding: 0;
       height: 100%;
-      background: ${isDark ? '#1a1a1a' : '#ffffff'};
+      background: #ffffff;
       overflow: hidden;
     }
     #toolbar-container {
@@ -72,6 +73,7 @@ const getQuillHtml = (initialContent: string, isDark: boolean) => `
       right: 0;
       overflow-y: auto;
       -webkit-overflow-scrolling: touch;
+      background: #ffffff;
     }
     .ql-container.ql-snow {
       border: none;
@@ -81,8 +83,8 @@ const getQuillHtml = (initialContent: string, isDark: boolean) => `
     .ql-editor {
       min-height: 100%;
       padding: 16px;
-      background: ${isDark ? '#1a1a1a' : '#ffffff'};
-      color: ${isDark ? '#ffffff' : '#000000'};
+      background: #ffffff;
+      color: #000000;
     }
     .ql-editor table {
       border-collapse: collapse;
@@ -90,17 +92,21 @@ const getQuillHtml = (initialContent: string, isDark: boolean) => `
       margin: 10px 0;
     }
     .ql-editor table td, .ql-editor table th {
-      border: 1px solid ${isDark ? '#555' : '#000'};
+      border: 1px solid #000;
       padding: 5px 8px;
       min-width: 40px;
     }
     .ql-editor table th {
-      background: ${isDark ? '#333' : '#f0f0f0'};
+      background: #f0f0f0;
       font-weight: bold;
     }
+    .ql-editor img {
+      max-width: 150px;
+      height: auto;
+    }
     .ql-editor .template-var {
-      background: ${isDark ? '#3d5a80' : '#e1f0ff'};
-      color: ${isDark ? '#fff' : '#0066cc'};
+      background: #e1f0ff;
+      color: #0066cc;
       padding: 2px 6px;
       border-radius: 4px;
       font-family: monospace;
@@ -134,8 +140,8 @@ const getQuillHtml = (initialContent: string, isDark: boolean) => `
       font-family: 'Courier New', monospace;
       font-size: 12px;
       line-height: 1.5;
-      background: ${isDark ? '#1a1a1a' : '#fff'};
-      color: ${isDark ? '#0f0' : '#333'};
+      background: #ffffff;
+      color: #000000;
       border: none;
       resize: none;
       outline: none;
@@ -208,6 +214,10 @@ const getQuillHtml = (initialContent: string, isDark: boolean) => `
           <div class="table-grid" id="table-grid"></div>
           <div class="table-size-label" id="table-size-label">Выберите размер</div>
         </div>
+      </span>
+      <span class="ql-formats">
+        <button class="custom-btn" id="signature-btn" title="Подпись">Подпись</button>
+        <button class="custom-btn" id="stamp-btn" title="Печать">Печать</button>
       </span>
       <span class="ql-formats">
         <button class="custom-btn" id="source-btn" title="HTML-код">HTML</button>
@@ -373,6 +383,29 @@ const getQuillHtml = (initialContent: string, isDark: boolean) => `
       }
     });
 
+    document.getElementById('signature-btn').addEventListener('click', function() {
+      window.ReactNativeWebView.postMessage(JSON.stringify({ type: 'pick-image', imageType: 'signature' }));
+    });
+
+    document.getElementById('stamp-btn').addEventListener('click', function() {
+      window.ReactNativeWebView.postMessage(JSON.stringify({ type: 'pick-image', imageType: 'stamp' }));
+    });
+
+    window.insertImage = function(base64Data, alt) {
+      var imgHtml = '<img src="' + base64Data + '" alt="' + alt + '" style="max-width: 150px; height: auto;" />';
+      if (sourceMode) {
+        var pos = sourceEditor.selectionStart;
+        var text = sourceEditor.value;
+        sourceEditor.value = text.slice(0, pos) + imgHtml + text.slice(pos);
+        sourceEditor.selectionStart = sourceEditor.selectionEnd = pos + imgHtml.length;
+        notifyContentChange();
+      } else {
+        var range = quill.getSelection(true);
+        quill.clipboard.dangerouslyPasteHTML(range.index, imgHtml);
+        notifyContentChange();
+      }
+    };
+
     window.insertVariable = function(varKey) {
       if (sourceMode) {
         var pos = sourceEditor.selectionStart;
@@ -422,6 +455,37 @@ export default function TemplateEditorScreen() {
     });
   }, [navigation, existingTemplate]);
 
+  const pickImage = async (imageType: 'signature' | 'stamp') => {
+    try {
+      const { status } = await ImagePicker.requestMediaLibraryPermissionsAsync();
+      if (status !== 'granted') {
+        Alert.alert('Ошибка', 'Необходим доступ к галерее для загрузки изображений');
+        return;
+      }
+
+      const result = await ImagePicker.launchImageLibraryAsync({
+        mediaTypes: 'images',
+        allowsEditing: true,
+        aspect: imageType === 'stamp' ? [1, 1] : [3, 1],
+        quality: 0.8,
+        base64: true,
+      });
+
+      if (!result.canceled && result.assets[0].base64) {
+        const base64Data = `data:image/png;base64,${result.assets[0].base64}`;
+        const altText = imageType === 'signature' ? 'Подпись' : 'Печать';
+        
+        if (webViewRef.current && isReady) {
+          const escapedBase64 = base64Data.replace(/'/g, "\\'");
+          webViewRef.current.injectJavaScript(`window.insertImage('${escapedBase64}', '${altText}'); true;`);
+        }
+      }
+    } catch (error) {
+      console.error('Image picker error:', error);
+      Alert.alert('Ошибка', 'Не удалось загрузить изображение');
+    }
+  };
+
   const handleMessage = (event: { nativeEvent: { data: string } }) => {
     try {
       const data = JSON.parse(event.nativeEvent.data);
@@ -429,6 +493,8 @@ export default function TemplateEditorScreen() {
         setHtmlContent(data.html);
       } else if (data.type === 'ready') {
         setIsReady(true);
+      } else if (data.type === 'pick-image') {
+        pickImage(data.imageType);
       }
     } catch (e) {
       console.error('WebView message error:', e);
