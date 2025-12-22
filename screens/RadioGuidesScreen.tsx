@@ -593,10 +593,19 @@ export default function RadioGuidesScreen() {
       // Free the bag
       await updateRadioGuideKit(kit.id, { status: "available" });
       
-      // Update order status to returned
-      await updateRentalOrder(order.id, { status: "returned" });
+      // Remove this bag number from order's bagNumber list
+      const currentBags = order.bagNumber ? order.bagNumber.split(",").map(s => s.trim()).filter(Boolean) : [];
+      const remainingBags = currentBags.filter(bagStr => parseInt(bagStr) !== kit.bagNumber);
       
-      Alert.alert("Успешно", `Оборудование по заказу #${order.orderNumber} принято`);
+      if (remainingBags.length === 0) {
+        // All bags returned - mark order as returned
+        await updateRentalOrder(order.id, { status: "returned", bagNumber: "" });
+        Alert.alert("Успешно", `Все сумки по заказу #${order.orderNumber} приняты. Заказ закрыт.`);
+      } else {
+        // Some bags still out - update bagNumber list only
+        await updateRentalOrder(order.id, { bagNumber: remainingBags.join(", ") });
+        Alert.alert("Успешно", `Сумка #${kit.bagNumber} принята.\nОсталось вернуть: ${remainingBags.length} сумок`);
+      }
     } catch (err) {
       console.error("Error returning rental:", err);
       Alert.alert("Ошибка", "Не удалось принять оборудование");
@@ -649,14 +658,24 @@ export default function RadioGuidesScreen() {
       // Free the bag
       await updateRadioGuideKit(selectedRentalKit.id, { status: "available" });
       
-      // Update order status to returned
-      await updateRentalOrder(selectedRentalOrder.id, { status: "returned" });
+      // Remove this bag number from order's bagNumber list
+      const currentBags = selectedRentalOrder.bagNumber ? selectedRentalOrder.bagNumber.split(",").map(s => s.trim()).filter(Boolean) : [];
+      const remainingBags = currentBags.filter(bagStr => parseInt(bagStr) !== selectedRentalKit.bagNumber);
+      
+      if (remainingBags.length === 0) {
+        // All bags returned - mark order as returned
+        await updateRentalOrder(selectedRentalOrder.id, { status: "returned", bagNumber: "" });
+      } else {
+        // Some bags still out - update bagNumber list only
+        await updateRentalOrder(selectedRentalOrder.id, { bagNumber: remainingBags.join(", ") });
+      }
       
       setRentalReturnModalVisible(false);
       setSelectedRentalKit(null);
       setSelectedRentalOrder(null);
       
-      Alert.alert("Успешно", `Оборудование принято. Зафиксирована утеря: ${lossItem?.name || "оборудование"} - ${missing} шт.`);
+      const remainingMsg = remainingBags.length > 0 ? `\nОсталось вернуть: ${remainingBags.length} сумок` : "\nЗаказ закрыт.";
+      Alert.alert("Успешно", `Сумка #${selectedRentalKit.bagNumber} принята. Зафиксирована утеря: ${lossItem?.name || "оборудование"} - ${missing} шт.${remainingMsg}`);
     } catch (err) {
       console.error("Error returning rental with loss:", err);
       Alert.alert("Ошибка", "Не удалось принять оборудование");
@@ -806,6 +825,10 @@ export default function RadioGuidesScreen() {
     const batteryInfo = getBatteryInfo(kit.batteryLevel);
     const isDropdownOpen = batteryPickerKit?.id === kit.id;
     
+    // Count bags in this order
+    const bagsInOrder = order.bagNumber ? order.bagNumber.split(",").map(s => s.trim()).filter(Boolean) : [];
+    const totalBagsInOrder = bagsInOrder.length;
+    
     return (
       <ThemedView
         key={`rental-${kit.id}`}
@@ -823,7 +846,9 @@ export default function RadioGuidesScreen() {
             <View style={styles.kitTitleRow}>
               <ThemedText style={styles.kitNumber}>Сумка #{kit.bagNumber}</ThemedText>
               <View style={[styles.rentalBadge, { backgroundColor: theme.primary }]}>
-                <ThemedText style={styles.rentalBadgeText}>Аренда</ThemedText>
+                <ThemedText style={styles.rentalBadgeText}>
+                  Аренда{totalBagsInOrder > 1 ? ` (${totalBagsInOrder} сумок)` : ""}
+                </ThemedText>
               </View>
             </View>
           </View>
