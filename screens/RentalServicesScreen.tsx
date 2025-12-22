@@ -68,7 +68,8 @@ export default function RentalServicesScreen() {
   const handleSaveService = async () => {
     const name = serviceName.trim();
     const price = parseInt(servicePrice, 10) || 0;
-    const commissionPercent = parseInt(serviceCommission, 10) || 10;
+    const parsedCommission = parseInt(serviceCommission, 10);
+    const commissionPercent = isNaN(parsedCommission) ? 10 : parsedCommission;
 
     if (!name) {
       Alert.alert("Ошибка", "Введите название услуги");
