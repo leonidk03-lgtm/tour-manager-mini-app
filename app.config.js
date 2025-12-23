@@ -10,7 +10,12 @@ module.exports = {
     newArchEnabled: true,
     ios: {
       supportsTablet: true,
-      bundleIdentifier: "com.tourmanager.app"
+      bundleIdentifier: "com.tourmanager.app",
+      infoPlist: {
+        NSAppTransportSecurity: {
+          NSAllowsArbitraryLoads: true
+        }
+      }
     },
     android: {
       package: "com.tourmanager.app",
