@@ -467,17 +467,20 @@ export default function DashboardScreen() {
   }, [rentalOrders, radioGuideKits, equipmentItems, theme, hasAnyRentalAccess]);
 
   const radioGuidesStats = useMemo(() => {
-    const activeAssignments = radioGuideAssignments.filter(a => !a.returnedAt);
-    const onExcursionsKits = radioGuideKits.filter(kit => {
-      return activeAssignments.some(a => a.kitId === kit.id);
-    }).length;
+    const kitIds = new Set(radioGuideKits.map(k => k.id));
+    const activeAssignments = radioGuideAssignments.filter(a => {
+      if (a.returnedAt) return false;
+      if (!kitIds.has(a.kitId)) return false;
+      return true;
+    });
+    const onExcursions = activeAssignments.reduce((sum, a) => sum + a.receiversIssued, 0);
     
     const activeRentals = rentalOrders.filter(order => order.status === 'issued');
-    const onRentalsKits = radioGuideKits.filter(kit => {
-      return activeRentals.some(order => order.bagNumber === String(kit.bagNumber));
-    }).length;
+    const onRentals = activeRentals.reduce((sum, order) => {
+      return sum + order.kitCount + order.spareReceiverCount;
+    }, 0);
     
-    const totalInUse = onExcursionsKits + onRentalsKits;
+    const totalInUse = onExcursions + onRentals;
     
     const { startDate: todayStart, endDate: todayEnd } = getDateRangeForPeriod("day", new Date());
     const todayLosses = equipmentLosses.filter(loss => {
@@ -486,7 +489,7 @@ export default function DashboardScreen() {
     });
     const lostCount = todayLosses.reduce((sum, loss) => sum + loss.missingCount, 0);
     
-    return { onExcursions: onExcursionsKits, onRentals: onRentalsKits, totalInUse, lostCount };
+    return { onExcursions, onRentals, totalInUse, lostCount };
   }, [radioGuideAssignments, rentalOrders, equipmentLosses, radioGuideKits]);
 
   const getTourName = (tourTypeId: string) => {
