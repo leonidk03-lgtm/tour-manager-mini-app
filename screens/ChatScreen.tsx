@@ -6,9 +6,11 @@ import { Icon } from "@/components/Icon";
 import { ThemedText } from "@/components/ThemedText";
 import { ThemedView } from "@/components/ThemedView";
 import { PermissionGate } from "@/components/PermissionGate";
+import { OnlineIndicator } from "@/components/OnlineIndicator";
 import { useTheme } from "@/hooks/useTheme";
 import { useData, ChatMessage } from "@/contexts/DataContext";
 import { useAuth } from "@/contexts/AuthContext";
+import { usePresence } from "@/contexts/PresenceContext";
 import { Spacing, BorderRadius, Typography } from "@/constants/theme";
 import { hapticFeedback } from "@/utils/haptics";
 
@@ -18,6 +20,7 @@ export default function ChatScreen() {
   const tabBarHeight = useBottomTabBarHeight();
   const { chatMessages, sendChatMessage, clearChatHistory, managers } = useData();
   const { profile, isAdmin, hasPermission } = useAuth();
+  const { isOnline, getLastSeenText } = usePresence();
   const [message, setMessage] = useState("");
   const [isSending, setIsSending] = useState(false);
   const [replyTo, setReplyTo] = useState<ChatMessage | null>(null);
@@ -243,6 +246,7 @@ export default function ChatScreen() {
                 <ThemedText type="small" style={[styles.senderName, { color: getSenderColor(item.senderId) }]}>
                   {getSenderName(item)}
                 </ThemedText>
+                <OnlineIndicator userId={item.senderId} size="small" />
                 {msgType === 'private' ? (
                   <Icon name="lock" size={12} color="#9575CD" />
                 ) : msgType === 'mention' ? (

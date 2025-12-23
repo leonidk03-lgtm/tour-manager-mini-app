@@ -56,7 +56,7 @@ export function OnlineCounter({ style }: OnlineCounterProps) {
     <View style={[styles.counterContainer, style]}>
       <View style={[styles.counterDot, { backgroundColor: theme.success }]} />
       <ThemedText style={[styles.counterText, { color: theme.textSecondary }]}>
-        {onlineCount}/{totalCount}
+        Online: {onlineCount}/{totalCount}
       </ThemedText>
     </View>
   );

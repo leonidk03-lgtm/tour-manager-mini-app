@@ -9,6 +9,8 @@ import { ScreenScrollView } from "@/components/ScreenScrollView";
 import { Spacing, BorderRadius } from "@/constants/theme";
 import { useTheme } from "@/hooks/useTheme";
 import { useAuth } from "@/contexts/AuthContext";
+import { usePresence } from "@/contexts/PresenceContext";
+import { OnlineIndicator, OnlineCounter } from "@/components/OnlineIndicator";
 import { UserRole, Profile } from "@/lib/supabase";
 import { SettingsStackParamList } from "@/navigation/SettingsStackNavigator";
 
@@ -33,6 +35,7 @@ export default function AdminPanelScreen() {
   const { theme } = useTheme();
   const navigation = useNavigation<NavigationProp>();
   const { user, managers, createManager, updateManagerStatus, updateManagerRole, deleteManager, refreshManagers } = useAuth();
+  const { isOnline, getLastSeenText } = usePresence();
   const [showAddModal, setShowAddModal] = useState(false);
   const [newEmail, setNewEmail] = useState("");
   const [newPassword, setNewPassword] = useState("");
@@ -161,7 +164,10 @@ export default function AdminPanelScreen() {
 
         <View style={styles.section}>
           <View style={styles.sectionHeader}>
-            <ThemedText style={styles.sectionTitle}>Сотрудники</ThemedText>
+            <View style={styles.sectionTitleRow}>
+              <ThemedText style={styles.sectionTitle}>Сотрудники</ThemedText>
+              <OnlineCounter style={{ marginLeft: Spacing.sm }} />
+            </View>
             <Pressable
               onPress={() => setShowAddModal(true)}
               style={({ pressed }) => ({ opacity: pressed ? 0.7 : 1 })}
@@ -216,9 +222,12 @@ export default function AdminPanelScreen() {
                       />
                     </View>
                     <View style={styles.managerInfo}>
-                      <ThemedText style={styles.managerName}>{manager.display_name}</ThemedText>
+                      <View style={styles.managerNameRow}>
+                        <ThemedText style={styles.managerName}>{manager.display_name}</ThemedText>
+                        <OnlineIndicator userId={manager.id} size="small" />
+                      </View>
                       <ThemedText style={[styles.managerEmail, { color: theme.textSecondary }]}>
-                        {manager.email}
+                        {isOnline(manager.id) ? 'онлайн' : getLastSeenText(manager.id) || manager.email}
                       </ThemedText>
                       <Pressable onPress={() => handleChangeRole(manager.id, manager.role)}>
                         <View style={[styles.roleBadge, { backgroundColor: manager.role === "radio_dispatcher" ? theme.warning + "30" : theme.primary + "30" }]}>
@@ -482,12 +491,21 @@ const styles = StyleSheet.create({
     flex: 1,
     gap: Spacing.xs,
   },
+  managerNameRow: {
+    flexDirection: "row",
+    alignItems: "center",
+    gap: Spacing.sm,
+  },
   managerName: {
     fontSize: 18,
     fontWeight: "600",
   },
   managerEmail: {
     fontSize: 14,
+  },
+  sectionTitleRow: {
+    flexDirection: "row",
+    alignItems: "center",
   },
   managerActions: {
     gap: Spacing.md,
