@@ -148,9 +148,10 @@ const getQuillHtml = (initialContent: string, isDark: boolean) => `
     }
     .table-dropdown {
       display: none;
-      position: absolute;
-      top: 100%;
-      left: 0;
+      position: fixed;
+      top: 50px;
+      left: 50%;
+      transform: translateX(-50%);
       background: ${isDark ? '#333' : '#fff'};
       border: 1px solid ${isDark ? '#555' : '#ccc'};
       border-radius: 6px;
@@ -244,6 +245,14 @@ const getQuillHtml = (initialContent: string, isDark: boolean) => `
     if (initialContent) {
       quill.root.innerHTML = initialContent;
     }
+
+    document.addEventListener('touchstart', function(e) {
+      var target = e.target;
+      var isInput = target.tagName === 'INPUT' || target.tagName === 'TEXTAREA' || target.isContentEditable || target.closest('.ql-editor');
+      if (!isInput) {
+        document.activeElement.blur();
+      }
+    });
 
     var sourceMode = false;
     var sourceEditor = document.getElementById('source-editor');
