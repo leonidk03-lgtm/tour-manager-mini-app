@@ -101,8 +101,83 @@ const getQuillHtml = (initialContent: string, isDark: boolean) => `
       font-weight: bold;
     }
     .ql-editor img {
-      max-width: 150px;
+      max-width: 200px;
       height: auto;
+      cursor: pointer;
+    }
+    .ql-editor img.selected {
+      outline: 2px solid #0088ff;
+    }
+    .image-resize-dialog {
+      display: none;
+      position: fixed;
+      top: 50%;
+      left: 50%;
+      transform: translate(-50%, -50%);
+      background: ${isDark ? '#333' : '#fff'};
+      border: 1px solid ${isDark ? '#555' : '#ccc'};
+      border-radius: 8px;
+      padding: 16px;
+      box-shadow: 0 4px 20px rgba(0,0,0,0.3);
+      z-index: 300;
+      min-width: 200px;
+    }
+    .image-resize-dialog.show {
+      display: block;
+    }
+    .image-resize-dialog h4 {
+      margin: 0 0 12px 0;
+      font-size: 14px;
+      color: ${isDark ? '#fff' : '#333'};
+    }
+    .image-resize-dialog label {
+      display: block;
+      margin-bottom: 4px;
+      font-size: 12px;
+      color: ${isDark ? '#aaa' : '#666'};
+    }
+    .image-resize-dialog input {
+      width: 100%;
+      padding: 8px;
+      margin-bottom: 12px;
+      border: 1px solid ${isDark ? '#555' : '#ccc'};
+      border-radius: 4px;
+      background: ${isDark ? '#222' : '#fff'};
+      color: ${isDark ? '#fff' : '#000'};
+      font-size: 14px;
+    }
+    .image-resize-dialog .btn-row {
+      display: flex;
+      gap: 8px;
+      justify-content: flex-end;
+    }
+    .image-resize-dialog button {
+      padding: 8px 16px;
+      border: none;
+      border-radius: 4px;
+      font-size: 12px;
+      cursor: pointer;
+    }
+    .image-resize-dialog .btn-cancel {
+      background: ${isDark ? '#555' : '#ddd'};
+      color: ${isDark ? '#fff' : '#333'};
+    }
+    .image-resize-dialog .btn-apply {
+      background: #0088ff;
+      color: #fff;
+    }
+    .dialog-overlay {
+      display: none;
+      position: fixed;
+      top: 0;
+      left: 0;
+      right: 0;
+      bottom: 0;
+      background: rgba(0,0,0,0.5);
+      z-index: 250;
+    }
+    .dialog-overlay.show {
+      display: block;
     }
     .ql-editor .template-var {
       background: #e1f0ff;
@@ -234,6 +309,16 @@ const getQuillHtml = (initialContent: string, isDark: boolean) => `
     <div id="editor"></div>
   </div>
   <textarea id="source-editor" spellcheck="false"></textarea>
+  <div class="dialog-overlay" id="dialog-overlay"></div>
+  <div class="image-resize-dialog" id="image-resize-dialog">
+    <h4>Размер изображения</h4>
+    <label>Ширина (px)</label>
+    <input type="number" id="img-width" min="20" max="500" />
+    <div class="btn-row">
+      <button class="btn-cancel" id="resize-cancel">Отмена</button>
+      <button class="btn-apply" id="resize-apply">Применить</button>
+    </div>
+  </div>
   <script>
     var quill = new Quill('#editor', {
       theme: 'snow',
@@ -255,6 +340,52 @@ const getQuillHtml = (initialContent: string, isDark: boolean) => `
         document.activeElement.blur();
       }
     });
+
+    var selectedImage = null;
+    var resizeDialog = document.getElementById('image-resize-dialog');
+    var dialogOverlay = document.getElementById('dialog-overlay');
+    var imgWidthInput = document.getElementById('img-width');
+
+    quill.root.addEventListener('click', function(e) {
+      if (e.target.tagName === 'IMG') {
+        e.preventDefault();
+        e.stopPropagation();
+        if (selectedImage) selectedImage.classList.remove('selected');
+        selectedImage = e.target;
+        selectedImage.classList.add('selected');
+        imgWidthInput.value = selectedImage.width || 100;
+        resizeDialog.classList.add('show');
+        dialogOverlay.classList.add('show');
+      }
+    });
+
+    dialogOverlay.addEventListener('click', function() {
+      closeResizeDialog();
+    });
+
+    document.getElementById('resize-cancel').addEventListener('click', function() {
+      closeResizeDialog();
+    });
+
+    document.getElementById('resize-apply').addEventListener('click', function() {
+      if (selectedImage) {
+        var newWidth = parseInt(imgWidthInput.value) || 100;
+        selectedImage.style.width = newWidth + 'px';
+        selectedImage.style.maxWidth = newWidth + 'px';
+        selectedImage.style.height = 'auto';
+        notifyContentChange();
+      }
+      closeResizeDialog();
+    });
+
+    function closeResizeDialog() {
+      resizeDialog.classList.remove('show');
+      dialogOverlay.classList.remove('show');
+      if (selectedImage) {
+        selectedImage.classList.remove('selected');
+        selectedImage = null;
+      }
+    }
 
     var sourceMode = false;
     var sourceEditor = document.getElementById('source-editor');
