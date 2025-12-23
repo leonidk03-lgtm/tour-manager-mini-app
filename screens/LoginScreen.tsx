@@ -1,17 +1,16 @@
 import { useState } from 'react';
-import { View, StyleSheet, TextInput, Pressable, ActivityIndicator, ScrollView, KeyboardAvoidingView, Platform } from 'react-native';
+import { View, StyleSheet, TextInput, Pressable, ActivityIndicator } from 'react-native';
 import { ThemedText } from '@/components/ThemedText';
 import { ThemedView } from '@/components/ThemedView';
 import { Spacing, BorderRadius } from '@/constants/theme';
 import { useTheme } from '@/hooks/useTheme';
 import { useAuth } from '@/contexts/AuthContext';
 import { Icon } from '@/components/Icon';
-import { useSafeAreaInsets } from 'react-native-safe-area-context';
+import { ScreenKeyboardAwareScrollView } from '@/components/ScreenKeyboardAwareScrollView';
 
 export default function LoginScreen() {
   const { theme } = useTheme();
   const { signIn } = useAuth();
-  const insets = useSafeAreaInsets();
   
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
@@ -38,14 +37,9 @@ export default function LoginScreen() {
   };
 
   return (
-    <KeyboardAvoidingView 
-      style={[styles.container, { backgroundColor: theme.backgroundRoot }]}
-      behavior={Platform.OS === 'ios' ? 'padding' : 'height'}
+    <ScreenKeyboardAwareScrollView 
+      contentContainerStyle={styles.content}
     >
-      <ScrollView 
-        contentContainerStyle={[styles.content, { paddingTop: insets.top + 60, paddingBottom: insets.bottom + Spacing['3xl'] }]}
-        keyboardShouldPersistTaps="handled"
-      >
         <View style={styles.header}>
           <View style={[styles.logoContainer, { backgroundColor: theme.primary }]}>
             <Icon name="map" size={48} color="#FFFFFF" />
@@ -118,18 +112,13 @@ export default function LoginScreen() {
             )}
           </Pressable>
         </View>
-      </ScrollView>
-    </KeyboardAvoidingView>
+    </ScreenKeyboardAwareScrollView>
   );
 }
 
 const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-  },
   content: {
     flexGrow: 1,
-    paddingHorizontal: Spacing.xl,
     justifyContent: 'center',
   },
   header: {
