@@ -58,7 +58,14 @@ export default function AddRentalOrderScreen() {
 
   const initialClientId = route.params?.clientId;
   const orderId = route.params?.orderId;
-  const initialStartDate = route.params?.startDate ? new Date(route.params.startDate) : null;
+  
+  const parseValidDate = (dateValue: string | Date | null | undefined): Date => {
+    if (!dateValue) return new Date();
+    const parsed = new Date(dateValue);
+    return isNaN(parsed.getTime()) ? new Date() : parsed;
+  };
+  
+  const initialStartDate = route.params?.startDate ? parseValidDate(route.params.startDate) : null;
   const existingOrder = orderId ? rentalOrders.find(o => o.id === orderId) : null;
   const isEditMode = !!existingOrder;
 
@@ -86,8 +93,8 @@ export default function AddRentalOrderScreen() {
   }, [rentalClients]);
   const [clientSearch, setClientSearch] = useState("");
 
-  const [startDate, setStartDate] = useState(existingOrder ? new Date(existingOrder.startDate) : (initialStartDate || new Date()));
-  const [endDate, setEndDate] = useState(existingOrder ? new Date(existingOrder.endDate) : (initialStartDate || new Date()));
+  const [startDate, setStartDate] = useState(existingOrder?.startDate ? parseValidDate(existingOrder.startDate) : (initialStartDate || new Date()));
+  const [endDate, setEndDate] = useState(existingOrder?.endDate ? parseValidDate(existingOrder.endDate) : (initialStartDate || new Date()));
   const [showStartPicker, setShowStartPicker] = useState(false);
   const [showEndPicker, setShowEndPicker] = useState(false);
 

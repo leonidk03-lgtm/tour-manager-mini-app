@@ -42,7 +42,8 @@ export function AddExcursionForm({ excursion, onSave, onCancel }: AddExcursionFo
   );
   const [dateValue, setDateValue] = useState(() => {
     if (excursion?.date) {
-      return new Date(excursion.date);
+      const parsed = new Date(excursion.date);
+      return isNaN(parsed.getTime()) ? new Date() : parsed;
     }
     return new Date();
   });
