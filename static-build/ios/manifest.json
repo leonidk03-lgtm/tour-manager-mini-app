@@ -1,0 +1,128 @@
+{
+  "id": "511d396c-985c-41ae-9bc7-2e83b5693a11",
+  "createdAt": "2025-12-23T19:18:38.965Z",
+  "runtimeVersion": "exposdk:54.0.0",
+  "launchAsset": {
+    "key": "bundle-1766517518965-2929",
+    "contentType": "application/javascript",
+    "url": "https://a41b15df-da31-47ad-945d-18f62927362d-00-3m9q3tqhrla2l.spock.replit.dev/1766517518965-2929/_expo/static/js/ios/bundle.js"
+  },
+  "assets": [],
+  "metadata": {},
+  "extra": {
+    "eas": {
+      "projectId": "e49d79e2-02f4-43f1-a64d-8ae24b0e320d"
+    },
+    "expoClient": {
+      "name": "TourManager",
+      "slug": "tour-manager",
+      "version": "1.0.0",
+      "orientation": "portrait",
+      "icon": "./assets/images/icon.png",
+      "scheme": "tourmanager",
+      "userInterfaceStyle": "automatic",
+      "newArchEnabled": true,
+      "ios": {
+        "supportsTablet": true,
+        "bundleIdentifier": "com.tourmanager.app",
+        "infoPlist": {
+          "NSAppTransportSecurity": {
+            "NSAllowsArbitraryLoads": true
+          }
+        }
+      },
+      "android": {
+        "package": "com.tourmanager.app",
+        "adaptiveIcon": {
+          "backgroundColor": "#2563EB",
+          "foregroundImage": "./assets/images/android-icon-foreground.png",
+          "backgroundImage": "./assets/images/android-icon-background.png",
+          "monochromeImage": "./assets/images/android-icon-monochrome.png",
+          "foregroundImageUrl": "https://a41b15df-da31-47ad-945d-18f62927362d-00-3m9q3tqhrla2l.spock.replit.dev/assets/./assets/images/android-icon-foreground.png",
+          "monochromeImageUrl": "https://a41b15df-da31-47ad-945d-18f62927362d-00-3m9q3tqhrla2l.spock.replit.dev/assets/./assets/images/android-icon-monochrome.png",
+          "backgroundImageUrl": "https://a41b15df-da31-47ad-945d-18f62927362d-00-3m9q3tqhrla2l.spock.replit.dev/assets/./assets/images/android-icon-background.png"
+        },
+        "edgeToEdgeEnabled": true,
+        "predictiveBackGestureEnabled": false,
+        "usesCleartextTraffic": true
+      },
+      "web": {
+        "output": "single",
+        "favicon": "./assets/images/favicon.png"
+      },
+      "plugins": [
+        [
+          "expo-splash-screen",
+          {
+            "image": "./assets/images/splash-icon.png",
+            "imageWidth": 200,
+            "resizeMode": "contain",
+            "backgroundColor": "#ffffff",
+            "dark": {
+              "backgroundColor": "#000000"
+            }
+          }
+        ],
+        "expo-web-browser",
+        [
+          "expo-build-properties",
+          {
+            "android": {
+              "usesCleartextTraffic": true
+            }
+          }
+        ]
+      ],
+      "experiments": {
+        "reactCompiler": true
+      },
+      "extra": {
+        "supabaseUrl": "https://hkrufwoktmkedxajvzsy.supabase.co/",
+        "supabaseAnonKey": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImhrcnVmd29rdG1rZWR4YWp2enN5Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3NjUwMTE5NTEsImV4cCI6MjA4MDU4Nzk1MX0.vFAL7zB7YJO_JXH93Uq-AJ1eT4nrKR9Ab36xQGbTHg8",
+        "eas": {
+          "projectId": "e49d79e2-02f4-43f1-a64d-8ae24b0e320d"
+        }
+      },
+      "_internal": {
+        "isDebug": false,
+        "projectRoot": "/home/runner/workspace",
+        "dynamicConfigPath": "/home/runner/workspace/app.config.js",
+        "staticConfigPath": {},
+        "packageJsonPath": "/home/runner/workspace/package.json",
+        "pluginHistory": {
+          "expo-splash-screen": {
+            "name": "expo-splash-screen",
+            "version": "31.0.12"
+          },
+          "expo-web-browser": {
+            "name": "expo-web-browser",
+            "version": "15.0.10"
+          }
+        }
+      },
+      "sdkVersion": "54.0.0",
+      "platforms": [
+        "ios",
+        "android",
+        "web"
+      ],
+      "androidStatusBar": {
+        "backgroundColor": "#ffffff"
+      },
+      "iconUrl": "https://a41b15df-da31-47ad-945d-18f62927362d-00-3m9q3tqhrla2l.spock.replit.dev/assets/./assets/images/icon.png",
+      "hostUri": "a41b15df-da31-47ad-945d-18f62927362d-00-3m9q3tqhrla2l.spock.replit.dev/ios"
+    },
+    "expoGo": {
+      "debuggerHost": "a41b15df-da31-47ad-945d-18f62927362d-00-3m9q3tqhrla2l.spock.replit.dev/ios",
+      "developer": {
+        "tool": "expo-cli",
+        "projectRoot": "/home/runner/workspace"
+      },
+      "packagerOpts": {
+        "dev": false
+      },
+      "mainModuleName": "index"
+    },
+    "scopeKey": "@anonymous/tour-manager-b94fd3d4-d21e-45d8-8cc2-401fd5b72567"
+  }
+}
