@@ -467,12 +467,17 @@ export default function DashboardScreen() {
   }, [rentalOrders, radioGuideKits, equipmentItems, theme, hasAnyRentalAccess]);
 
   const radioGuidesStats = useMemo(() => {
-    const kitIds = new Set(radioGuideKits.map(k => k.id));
-    const activeAssignments = radioGuideAssignments.filter(a => {
-      if (a.returnedAt) return false;
-      if (!kitIds.has(a.kitId)) return false;
-      return true;
-    });
+    const seenKitIds = new Set<string>();
+    const activeAssignments: typeof radioGuideAssignments = [];
+    const kitIdSet = new Set(radioGuideKits.map(k => k.id));
+    
+    for (const a of radioGuideAssignments) {
+      if (a.returnedAt) continue;
+      if (!kitIdSet.has(a.kitId)) continue;
+      if (seenKitIds.has(a.kitId)) continue;
+      seenKitIds.add(a.kitId);
+      activeAssignments.push(a);
+    }
     const onExcursions = activeAssignments.reduce((sum, a) => sum + a.receiversIssued, 0);
     
     const activeRentals = rentalOrders.filter(order => order.status === 'issued');
