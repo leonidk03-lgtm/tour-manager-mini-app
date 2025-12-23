@@ -281,6 +281,55 @@ const getQuillHtml = (initialContent: string, isDark: boolean) => `
       quill.root.innerHTML = initialContent;
     }
 
+    quill.root.addEventListener('paste', function(e) {
+      var clipboardData = e.clipboardData || window.clipboardData;
+      if (!clipboardData) return;
+      
+      var html = clipboardData.getData('text/html');
+      if (html && (html.includes('<table') || html.includes('<TABLE'))) {
+        e.preventDefault();
+        e.stopPropagation();
+        
+        var parser = new DOMParser();
+        var doc = parser.parseFromString(html, 'text/html');
+        var tables = doc.querySelectorAll('table');
+        
+        tables.forEach(function(table) {
+          table.style.borderCollapse = 'collapse';
+          table.style.width = '100%';
+          table.style.margin = '10px 0';
+          
+          var cells = table.querySelectorAll('td, th');
+          cells.forEach(function(cell) {
+            cell.style.border = '1px solid #000';
+            cell.style.padding = '5px 8px';
+            cell.style.minWidth = '40px';
+          });
+          
+          var headers = table.querySelectorAll('th');
+          headers.forEach(function(th) {
+            th.style.background = '#f0f0f0';
+            th.style.fontWeight = 'bold';
+          });
+        });
+        
+        var cleanHtml = doc.body.innerHTML;
+        cleanHtml = cleanHtml.replace(/<o:p[^>]*>.*?<\\/o:p>/gi, '');
+        cleanHtml = cleanHtml.replace(/class="[^"]*"/gi, '');
+        cleanHtml = cleanHtml.replace(/<!--.*?-->/gs, '');
+        cleanHtml = cleanHtml.replace(/<span[^>]*>\\s*<\\/span>/gi, '');
+        
+        var selection = quill.getSelection();
+        var index = selection ? selection.index : quill.getLength();
+        
+        var tempDiv = document.createElement('div');
+        tempDiv.innerHTML = cleanHtml;
+        quill.clipboard.dangerouslyPasteHTML(index, tempDiv.innerHTML, 'user');
+        
+        notifyContentChange();
+      }
+    });
+
     document.addEventListener('touchstart', function(e) {
       var target = e.target;
       var isInput = target.tagName === 'INPUT' || target.tagName === 'TEXTAREA' || target.isContentEditable || target.closest('.ql-editor');
