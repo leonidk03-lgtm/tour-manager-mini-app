@@ -1,3 +1,5 @@
+const isEASBuild = process.env.EAS_BUILD === 'true';
+
 module.exports = {
   expo: {
     name: "TourManager",
@@ -7,10 +9,10 @@ module.exports = {
     icon: "./assets/images/icon.png",
     scheme: "tourmanager",
     userInterfaceStyle: "automatic",
-    newArchEnabled: true,
+    newArchEnabled: isEASBuild,
     ios: {
       supportsTablet: true,
-      bundleIdentifier: "com.tourmanager.app",
+      ...(isEASBuild && { bundleIdentifier: "com.tourmanager.app" }),
       infoPlist: {
         NSAppTransportSecurity: {
           NSAllowsArbitraryLoads: true
@@ -18,7 +20,7 @@ module.exports = {
       }
     },
     android: {
-      package: "com.tourmanager.app",
+      ...(isEASBuild && { package: "com.tourmanager.app" }),
       adaptiveIcon: {
         backgroundColor: "#2563EB",
         foregroundImage: "./assets/images/android-icon-foreground.png",
@@ -62,9 +64,11 @@ module.exports = {
     extra: {
       supabaseUrl: process.env.EXPO_PUBLIC_SUPABASE_URL,
       supabaseAnonKey: process.env.EXPO_PUBLIC_SUPABASE_ANON_KEY,
-      eas: {
-        projectId: "e49d79e2-02f4-43f1-a64d-8ae24b0e320d"
-      }
+      ...(isEASBuild && {
+        eas: {
+          projectId: "e49d79e2-02f4-43f1-a64d-8ae24b0e320d"
+        }
+      })
     }
   }
 };

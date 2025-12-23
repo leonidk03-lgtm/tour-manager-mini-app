@@ -1,18 +1,16 @@
 {
-  "id": "fa1d6267-ccbf-48de-85bd-4e228e552fa8",
-  "createdAt": "2025-12-23T19:42:28.022Z",
+  "id": "c19ea8e0-97c5-4a59-9770-35b5b224d1c4",
+  "createdAt": "2025-12-23T19:46:45.669Z",
   "runtimeVersion": "exposdk:54.0.0",
   "launchAsset": {
-    "key": "bundle-1766518948022-7675",
+    "key": "bundle-1766519205669-8341",
     "contentType": "application/javascript",
-    "url": "https://a41b15df-da31-47ad-945d-18f62927362d-00-3m9q3tqhrla2l.spock.replit.dev/1766518948022-7675/_expo/static/js/ios/bundle.js"
+    "url": "https://a41b15df-da31-47ad-945d-18f62927362d-00-3m9q3tqhrla2l.spock.replit.dev/1766519205669-8341/_expo/static/js/ios/bundle.js"
   },
   "assets": [],
   "metadata": {},
   "extra": {
-    "eas": {
-      "projectId": "e49d79e2-02f4-43f1-a64d-8ae24b0e320d"
-    },
+    "eas": {},
     "expoClient": {
       "name": "TourManager",
       "slug": "tour-manager",
@@ -21,10 +19,9 @@
       "icon": "./assets/images/icon.png",
       "scheme": "tourmanager",
       "userInterfaceStyle": "automatic",
-      "newArchEnabled": true,
+      "newArchEnabled": false,
       "ios": {
         "supportsTablet": true,
-        "bundleIdentifier": "com.tourmanager.app",
         "infoPlist": {
           "NSAppTransportSecurity": {
             "NSAllowsArbitraryLoads": true
@@ -32,7 +29,6 @@
         }
       },
       "android": {
-        "package": "com.tourmanager.app",
         "adaptiveIcon": {
           "backgroundColor": "#2563EB",
           "foregroundImage": "./assets/images/android-icon-foreground.png",
@@ -78,10 +74,7 @@
       },
       "extra": {
         "supabaseUrl": "https://hkrufwoktmkedxajvzsy.supabase.co/",
-        "supabaseAnonKey": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImhrcnVmd29rdG1rZWR4YWp2enN5Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3NjUwMTE5NTEsImV4cCI6MjA4MDU4Nzk1MX0.vFAL7zB7YJO_JXH93Uq-AJ1eT4nrKR9Ab36xQGbTHg8",
-        "eas": {
-          "projectId": "e49d79e2-02f4-43f1-a64d-8ae24b0e320d"
-        }
+        "supabaseAnonKey": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImhrcnVmd29rdG1rZWR4YWp2enN5Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3NjUwMTE5NTEsImV4cCI6MjA4MDU4Nzk1MX0.vFAL7zB7YJO_JXH93Uq-AJ1eT4nrKR9Ab36xQGbTHg8"
       },
       "_internal": {
         "isDebug": false,
