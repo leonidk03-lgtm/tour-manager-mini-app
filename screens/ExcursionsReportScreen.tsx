@@ -249,6 +249,7 @@ export default function ExcursionsReportScreen() {
                       }
                     }}
                     locale="ru"
+                    themeVariant="light"
                   />
                 </ThemedView>
               </View>
@@ -271,6 +272,7 @@ export default function ExcursionsReportScreen() {
                   setShowDatePicker(null);
                 }
               }}
+              themeVariant="light"
             />
           )
         ) : null}

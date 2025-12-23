@@ -229,6 +229,7 @@ export default function FinancialReportScreen() {
                       }
                     }}
                     locale="ru"
+                    themeVariant="light"
                   />
                 </ThemedView>
               </View>
@@ -251,6 +252,7 @@ export default function FinancialReportScreen() {
                   setShowDatePicker(null);
                 }
               }}
+              themeVariant="light"
             />
           )
         ) : null}

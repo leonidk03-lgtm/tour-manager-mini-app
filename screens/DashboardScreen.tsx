@@ -565,6 +565,7 @@ export default function DashboardScreen() {
                     display="spinner"
                     onChange={handleDateChange}
                     locale="ru"
+                    themeVariant="light"
                   />
                 </ThemedView>
               </View>
@@ -575,6 +576,7 @@ export default function DashboardScreen() {
               mode="date"
               display="default"
               onChange={handleDateChange}
+              themeVariant="light"
             />
           )
         ) : null}
