@@ -939,6 +939,8 @@ const styles = StyleSheet.create({
   header: {
     borderBottomWidth: 1,
     borderBottomColor: 'rgba(128, 128, 128, 0.2)',
+    zIndex: 10,
+    position: 'relative',
   },
   headerRow: {
     flexDirection: 'row',
@@ -948,7 +950,8 @@ const styles = StyleSheet.create({
   },
   backButton: {
     padding: Spacing.xs,
-  },
+    cursor: 'pointer',
+  } as any,
   headerCenter: {
     flex: 1,
     marginHorizontal: Spacing.md,
@@ -959,7 +962,8 @@ const styles = StyleSheet.create({
   },
   saveButton: {
     padding: Spacing.xs,
-  },
+    cursor: 'pointer',
+  } as any,
   saveText: {
     fontSize: 16,
     fontWeight: '600',
@@ -1026,6 +1030,8 @@ const styles = StyleSheet.create({
   },
   editorContainer: {
     flex: 1,
+    zIndex: 1,
+    position: 'relative',
   },
   webView: {
     flex: 1,
