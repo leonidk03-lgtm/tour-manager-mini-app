@@ -268,6 +268,73 @@ const getQuillHtml = (initialContent: string, isDark: boolean) => `
     <div class="resize-handle se" id="handle-se"></div>
   </div>
   <script>
+    var Block = Quill.import('blots/block');
+    var Container = Quill.import('blots/container');
+    var Parchment = Quill.import('parchment');
+    
+    class TableCell extends Block {
+      static create(value) {
+        var node = super.create();
+        node.setAttribute('contenteditable', 'true');
+        return node;
+      }
+      static formats(domNode) {
+        return domNode.tagName === 'TH' ? 'th' : 'td';
+      }
+    }
+    TableCell.blotName = 'tableCell';
+    TableCell.tagName = ['TD', 'TH'];
+    TableCell.className = '';
+    
+    class TableRow extends Container {
+      static create(value) {
+        return super.create();
+      }
+    }
+    TableRow.blotName = 'tableRow';
+    TableRow.tagName = 'TR';
+    TableRow.className = '';
+    TableRow.allowedChildren = [TableCell];
+    
+    class TableBody extends Container {
+      static create(value) {
+        return super.create();
+      }
+    }
+    TableBody.blotName = 'tableBody';
+    TableBody.tagName = 'TBODY';
+    TableBody.className = '';
+    TableBody.allowedChildren = [TableRow];
+    
+    class TableHead extends Container {
+      static create(value) {
+        return super.create();
+      }
+    }
+    TableHead.blotName = 'tableHead';
+    TableHead.tagName = 'THEAD';
+    TableHead.className = '';
+    TableHead.allowedChildren = [TableRow];
+    
+    class Table extends Container {
+      static create(value) {
+        var node = super.create();
+        node.style.borderCollapse = 'collapse';
+        node.style.width = '100%';
+        return node;
+      }
+    }
+    Table.blotName = 'table';
+    Table.tagName = 'TABLE';
+    Table.className = '';
+    Table.allowedChildren = [TableBody, TableHead, TableRow];
+    
+    Quill.register(TableCell);
+    Quill.register(TableRow);
+    Quill.register(TableBody);
+    Quill.register(TableHead);
+    Quill.register(Table);
+    
     var quill = new Quill('#editor', {
       theme: 'snow',
       modules: {
@@ -329,19 +396,10 @@ const getQuillHtml = (initialContent: string, isDark: boolean) => `
         cleanHtml = cleanHtml.replace(/<\\/?font[^>]*>/gi, '');
         cleanHtml = cleanHtml.replace(/<span[^>]*>\\s*<\\/span>/gi, '');
         
-        var currentHtml = quill.root.innerHTML;
         var selection = quill.getSelection(true);
+        var index = selection ? selection.index : quill.getLength();
         
-        if (selection) {
-          var beforeHtml = currentHtml.substring(0, selection.index);
-          var afterHtml = currentHtml.substring(selection.index + selection.length);
-          quill.root.innerHTML = beforeHtml + cleanHtml + afterHtml;
-        } else {
-          quill.root.innerHTML = currentHtml + cleanHtml;
-        }
-        
-        var delta = quill.clipboard.convert(quill.root.innerHTML);
-        quill.setContents(delta, 'silent');
+        quill.clipboard.dangerouslyPasteHTML(index, cleanHtml, 'user');
         
         setTimeout(function() {
           quill.setSelection(quill.getLength(), 0);
