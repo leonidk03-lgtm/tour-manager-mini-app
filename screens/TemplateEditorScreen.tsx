@@ -358,8 +358,8 @@ const getQuillHtml = (initialContent: string, isDark: boolean) => `
         notifyContentChange();
         
         setTimeout(function() {
-          quill.focus();
-        }, 10);
+          window.reinitAfterPaste();
+        }, 50);
         
         return false;
       }
@@ -373,17 +373,35 @@ const getQuillHtml = (initialContent: string, isDark: boolean) => `
       }
     });
 
-    quill.root.addEventListener('keydown', function(e) {
-      e.stopPropagation();
-    });
+    function setupKeyboardHandlers() {
+      quill.root.addEventListener('keydown', function(e) {
+        e.stopPropagation();
+      });
+      
+      quill.root.addEventListener('keyup', function(e) {
+        e.stopPropagation();
+      });
+      
+      quill.root.addEventListener('keypress', function(e) {
+        e.stopPropagation();
+      });
+      
+      var tables = quill.root.querySelectorAll('table');
+      tables.forEach(function(table) {
+        table.setAttribute('contenteditable', 'true');
+        var cells = table.querySelectorAll('td, th');
+        cells.forEach(function(cell) {
+          cell.setAttribute('contenteditable', 'true');
+        });
+      });
+    }
     
-    quill.root.addEventListener('keyup', function(e) {
-      e.stopPropagation();
-    });
+    setupKeyboardHandlers();
     
-    quill.root.addEventListener('keypress', function(e) {
-      e.stopPropagation();
-    });
+    window.reinitAfterPaste = function() {
+      setupKeyboardHandlers();
+      quill.focus();
+    };
 
     var selectedImage = null;
     var overlay = document.getElementById('image-overlay');
