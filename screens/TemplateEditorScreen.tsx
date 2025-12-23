@@ -24,8 +24,8 @@ const getQuillHtml = (initialContent: string, isDark: boolean) => `
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-  <link href="https://cdn.quilljs.com/1.3.7/quill.snow.css" rel="stylesheet">
-  <script src="https://cdn.quilljs.com/1.3.7/quill.min.js"></script>
+  <link href="https://cdn.jsdelivr.net/npm/quill@2.0.3/dist/quill.snow.css" rel="stylesheet">
+  <script src="https://cdn.jsdelivr.net/npm/quill@2.0.3/dist/quill.js"></script>
   <style>
     * { box-sizing: border-box; }
     html, body {
@@ -271,7 +271,8 @@ const getQuillHtml = (initialContent: string, isDark: boolean) => `
     var quill = new Quill('#editor', {
       theme: 'snow',
       modules: {
-        toolbar: '#toolbar'
+        toolbar: '#toolbar',
+        table: true
       },
       placeholder: 'Введите содержимое шаблона...'
     });
@@ -903,25 +904,32 @@ export default function TemplateEditorScreen() {
                 if (ref && !ref.dataset.initialized) {
                   ref.dataset.initialized = 'true';
                   ref.srcdoc = initialHtml;
+                  
+                  const messageHandler = (e: MessageEvent) => {
+                    try {
+                      const data = typeof e.data === 'string' ? JSON.parse(e.data) : e.data;
+                      if (data.type === 'content-change') {
+                        htmlContentRef.current = data.html;
+                        setHtmlContent(data.html);
+                      } else if (data.type === 'ready') {
+                        setIsReady(true);
+                        const win = ref.contentWindow as any;
+                        (webViewRef as any).current = {
+                          injectJavaScript: (js: string) => {
+                            if (win) win.eval(js);
+                          }
+                        };
+                      } else if (data.type === 'pick-image') {
+                        pickImage(data.imageType);
+                      }
+                    } catch (err) {}
+                  };
+                  
+                  window.addEventListener('message', messageHandler);
+                  
                   ref.onload = () => {
                     const win = ref.contentWindow as any;
                     if (win) {
-                      win.addEventListener('message', (e: MessageEvent) => {
-                        try {
-                          const data = JSON.parse(e.data);
-                          if (data.type === 'content-change') {
-                            htmlContentRef.current = data.html;
-                            setHtmlContent(data.html);
-                          } else if (data.type === 'ready') {
-                            setIsReady(true);
-                            (webViewRef as any).current = {
-                              injectJavaScript: (js: string) => {
-                                win.eval(js);
-                              }
-                            };
-                          }
-                        } catch (err) {}
-                      });
                       win.ReactNativeWebView = {
                         postMessage: (msg: string) => {
                           window.postMessage(msg, '*');
