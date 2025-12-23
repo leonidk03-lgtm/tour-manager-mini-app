@@ -14,6 +14,7 @@ import { AuthProvider } from "@/contexts/AuthContext";
 import { RentalProvider } from "@/contexts/RentalContext";
 import { CompanySettingsProvider } from "@/contexts/CompanySettingsContext";
 import { DocumentTemplatesProvider } from "@/contexts/DocumentTemplatesContext";
+import { PresenceProvider } from "@/contexts/PresenceContext";
 
 export default function App() {
   return (
@@ -22,18 +23,20 @@ export default function App() {
         <GestureHandlerRootView style={styles.root}>
           <KeyboardProvider>
             <AuthProvider>
-              <DataProvider>
-                <RentalProvider>
-                  <CompanySettingsProvider>
-                    <DocumentTemplatesProvider>
-                      <NavigationContainer>
-                        <RootNavigator />
-                        <NotificationBanner />
-                      </NavigationContainer>
-                    </DocumentTemplatesProvider>
-                  </CompanySettingsProvider>
-                </RentalProvider>
-              </DataProvider>
+              <PresenceProvider>
+                <DataProvider>
+                  <RentalProvider>
+                    <CompanySettingsProvider>
+                      <DocumentTemplatesProvider>
+                        <NavigationContainer>
+                          <RootNavigator />
+                          <NotificationBanner />
+                        </NavigationContainer>
+                      </DocumentTemplatesProvider>
+                    </CompanySettingsProvider>
+                  </RentalProvider>
+                </DataProvider>
+              </PresenceProvider>
             </AuthProvider>
             <StatusBar style="auto" />
           </KeyboardProvider>
