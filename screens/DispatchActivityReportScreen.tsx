@@ -651,6 +651,7 @@ export default function DispatchActivityReportScreen() {
                 }}
                 textColor={theme.text}
                 themeVariant="light"
+                locale="ru"
               />
               <Pressable
                 style={[styles.datePickerDone, { backgroundColor: theme.primary }]}

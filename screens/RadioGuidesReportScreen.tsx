@@ -274,6 +274,7 @@ export default function RadioGuidesReportScreen() {
                 }
               }}
               themeVariant="light"
+              locale="ru"
             />
           )
         ) : null}

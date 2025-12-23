@@ -273,6 +273,7 @@ export default function ExcursionsReportScreen() {
                 }
               }}
               themeVariant="light"
+              locale="ru"
             />
           )
         ) : null}

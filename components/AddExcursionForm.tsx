@@ -289,6 +289,7 @@ export function AddExcursionForm({ excursion, onSave, onCancel }: AddExcursionFo
               display="default"
               onChange={handleDateChange}
               themeVariant="light"
+              locale="ru"
             />
           )
         ) : null}

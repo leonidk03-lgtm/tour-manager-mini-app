@@ -253,6 +253,7 @@ export default function FinancialReportScreen() {
                 }
               }}
               themeVariant="light"
+              locale="ru"
             />
           )
         ) : null}

@@ -513,6 +513,7 @@ export default function DailyReportScreen() {
               onChange={onDateChange}
               maximumDate={new Date()}
               themeVariant="light"
+              locale="ru"
             />
           </View>
         ) : null}

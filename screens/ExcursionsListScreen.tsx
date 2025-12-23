@@ -532,6 +532,7 @@ export default function ExcursionsListScreen() {
                   display="default"
                   onChange={handleDateChange}
                   themeVariant="light"
+                  locale="ru"
                 />
               )
             ) : null}

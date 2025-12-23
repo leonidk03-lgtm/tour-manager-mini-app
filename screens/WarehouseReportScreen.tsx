@@ -175,6 +175,7 @@ export default function WarehouseReportScreen() {
             display={Platform.OS === "ios" ? "spinner" : "default"}
             onChange={handleDateChange}
             themeVariant="light"
+            locale="ru"
           />
         ) : null}
 

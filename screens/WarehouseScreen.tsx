@@ -1015,6 +1015,7 @@ export default function WarehouseScreen() {
           display={Platform.OS === "ios" ? "spinner" : "default"}
           onChange={handleDateChange}
           themeVariant="light"
+          locale="ru"
         />
       )}
 

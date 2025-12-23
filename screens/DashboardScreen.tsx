@@ -577,6 +577,7 @@ export default function DashboardScreen() {
               display="default"
               onChange={handleDateChange}
               themeVariant="light"
+              locale="ru"
             />
           )
         ) : null}

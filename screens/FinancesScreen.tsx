@@ -198,6 +198,7 @@ export default function FinancesScreen() {
                   display="default"
                   onChange={handleFilterDateChange}
                   themeVariant="light"
+                  locale="ru"
                 />
               )
             ) : null}
@@ -449,6 +450,7 @@ export default function FinancesScreen() {
                       display="default"
                       onChange={handleFormDateChange}
                       themeVariant="light"
+                      locale="ru"
                     />
                   )
                 ) : null}

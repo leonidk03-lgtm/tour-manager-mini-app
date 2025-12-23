@@ -1217,6 +1217,7 @@ export default function RentalClientDetailScreen() {
                     if (date) setReconciliationStartDate(date);
                   }}
                   themeVariant="light"
+                  locale="ru"
                 />
               ) : null}
 
@@ -1230,6 +1231,7 @@ export default function RentalClientDetailScreen() {
                     if (date) setReconciliationEndDate(date);
                   }}
                   themeVariant="light"
+                  locale="ru"
                 />
               ) : null}
 

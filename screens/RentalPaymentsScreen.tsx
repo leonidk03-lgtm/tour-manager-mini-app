@@ -483,6 +483,7 @@ export default function RentalPaymentsScreen() {
                       if (date) setDraftDate(date);
                     }}
                     themeVariant="light"
+                    locale="ru"
                   />
                   <View style={styles.datePickerActions}>
                     <Pressable
@@ -518,6 +519,7 @@ export default function RentalPaymentsScreen() {
                         if (date) setStartDate(date);
                       }}
                       themeVariant="light"
+                      locale="ru"
                     />
                     {startDate ? (
                       <Pressable onPress={() => setStartDate(null)} style={{ marginLeft: Spacing.sm }}>
@@ -535,6 +537,7 @@ export default function RentalPaymentsScreen() {
                         if (date) setEndDate(date);
                       }}
                       themeVariant="light"
+                      locale="ru"
                     />
                     {endDate ? (
                       <Pressable onPress={() => setEndDate(null)} style={{ marginLeft: Spacing.sm }}>
