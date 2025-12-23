@@ -160,6 +160,12 @@ const SVG_ICONS: Record<string, (size: number, color: string) => React.ReactNode
       <Line x1="1" y1="1" x2="23" y2="23" />
     </Svg>
   ),
+  "file": (s, c) => (
+    <Svg width={s} height={s} viewBox="0 0 24 24" fill="none" stroke={c} strokeWidth={2} strokeLinecap="round" strokeLinejoin="round">
+      <Path d="M13 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V9z" />
+      <Polyline points="13 2 13 9 20 9" />
+    </Svg>
+  ),
   "file-text": (s, c) => (
     <Svg width={s} height={s} viewBox="0 0 24 24" fill="none" stroke={c} strokeWidth={2} strokeLinecap="round" strokeLinejoin="round">
       <Path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z" />
@@ -671,11 +677,6 @@ const SVG_ICONS: Record<string, (size: number, color: string) => React.ReactNode
       <Line x1="12" y1="12" x2="12" y2="22" />
       <Line x1="3.27" y1="7" x2="12" y2="12" />
       <Line x1="12" y1="12" x2="20.73" y2="7" />
-    </Svg>
-  ),
-  "tool": (s, c) => (
-    <Svg width={s} height={s} viewBox="0 0 24 24" fill="none" stroke={c} strokeWidth={2} strokeLinecap="round" strokeLinejoin="round">
-      <Path d="M14.7 6.3a1 1 0 0 0 0 1.4l1.6 1.6a1 1 0 0 0 1.4 0l3.77-3.77a6 6 0 0 1-7.94 7.94l-6.91 6.91a2.12 2.12 0 0 1-3-3l6.91-6.91a6 6 0 0 1 7.94-7.94l-3.76 3.76z" />
     </Svg>
   ),
   "zap": (s, c) => (
