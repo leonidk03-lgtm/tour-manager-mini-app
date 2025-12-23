@@ -6,6 +6,7 @@ import { ThemedText } from "@/components/ThemedText";
 import { ThemedView } from "@/components/ThemedView";
 import { ScreenScrollView } from "@/components/ScreenScrollView";
 import { NetworkErrorBanner } from "@/components/NetworkErrorBanner";
+import { OnlineCounter } from "@/components/OnlineIndicator";
 import { Spacing, BorderRadius } from "@/constants/theme";
 import { useTheme } from "@/hooks/useTheme";
 import { useData } from "@/contexts/DataContext";
@@ -534,6 +535,7 @@ export default function DashboardScreen() {
             </ThemedText>
             <Icon name="chevron-down" size={16} color={theme.textSecondary} />
           </Pressable>
+          <OnlineCounter />
           <Pressable
             onPress={() => navigation.navigate('DailyReport' as never)}
             style={[styles.reportButton, { backgroundColor: theme.primary }]}
