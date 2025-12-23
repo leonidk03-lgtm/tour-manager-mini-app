@@ -650,7 +650,7 @@ export default function DispatchActivityReportScreen() {
                   }
                 }}
                 textColor={theme.text}
-                themeVariant="light"
+                themeVariant="dark"
                 locale="ru"
               />
               <Pressable

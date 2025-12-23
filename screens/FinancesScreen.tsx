@@ -186,7 +186,7 @@ export default function FinancesScreen() {
                         display="spinner"
                         onChange={handleFilterDateChange}
                         locale="ru"
-                        themeVariant="light"
+                        themeVariant="dark"
                       />
                     </ThemedView>
                   </View>
@@ -197,7 +197,7 @@ export default function FinancesScreen() {
                   mode="date"
                   display="default"
                   onChange={handleFilterDateChange}
-                  themeVariant="light"
+                  themeVariant="dark"
                   locale="ru"
                 />
               )
@@ -438,7 +438,7 @@ export default function FinancesScreen() {
                             display="spinner"
                             onChange={handleFormDateChange}
                             locale="ru"
-                            themeVariant="light"
+                            themeVariant="dark"
                           />
                         </ThemedView>
                       </View>
@@ -449,7 +449,7 @@ export default function FinancesScreen() {
                       mode="date"
                       display="default"
                       onChange={handleFormDateChange}
-                      themeVariant="light"
+                      themeVariant="dark"
                       locale="ru"
                     />
                   )

@@ -217,7 +217,7 @@ export default function RentalReportScreen() {
             mode="date"
             display={Platform.OS === "ios" ? "spinner" : "default"}
             onChange={handleDateChange}
-            themeVariant="light"
+            themeVariant="dark"
             locale="ru"
           />
         ) : null}

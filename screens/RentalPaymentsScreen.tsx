@@ -482,7 +482,7 @@ export default function RentalPaymentsScreen() {
                     onChange={(event, date) => {
                       if (date) setDraftDate(date);
                     }}
-                    themeVariant="light"
+                    themeVariant="dark"
                     locale="ru"
                   />
                   <View style={styles.datePickerActions}>
@@ -518,7 +518,7 @@ export default function RentalPaymentsScreen() {
                       onChange={(event, date) => {
                         if (date) setStartDate(date);
                       }}
-                      themeVariant="light"
+                      themeVariant="dark"
                       locale="ru"
                     />
                     {startDate ? (
@@ -536,7 +536,7 @@ export default function RentalPaymentsScreen() {
                       onChange={(event, date) => {
                         if (date) setEndDate(date);
                       }}
-                      themeVariant="light"
+                      themeVariant="dark"
                       locale="ru"
                     />
                     {endDate ? (

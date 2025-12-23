@@ -250,7 +250,7 @@ export default function RadioGuidesReportScreen() {
                       }
                     }}
                     locale="ru"
-                    themeVariant="light"
+                    themeVariant="dark"
                   />
                 </ThemedView>
               </View>
@@ -273,7 +273,7 @@ export default function RadioGuidesReportScreen() {
                   setShowDatePicker(null);
                 }
               }}
-              themeVariant="light"
+              themeVariant="dark"
               locale="ru"
             />
           )

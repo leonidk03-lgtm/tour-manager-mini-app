@@ -520,7 +520,7 @@ export default function ExcursionsListScreen() {
                         display="spinner"
                         onChange={handleDateChange}
                         locale="ru"
-                        themeVariant="light"
+                        themeVariant="dark"
                       />
                     </ThemedView>
                   </View>
@@ -531,7 +531,7 @@ export default function ExcursionsListScreen() {
                   mode="date"
                   display="default"
                   onChange={handleDateChange}
-                  themeVariant="light"
+                  themeVariant="dark"
                   locale="ru"
                 />
               )

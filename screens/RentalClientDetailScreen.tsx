@@ -1216,7 +1216,7 @@ export default function RentalClientDetailScreen() {
                     setShowStartDatePicker(false);
                     if (date) setReconciliationStartDate(date);
                   }}
-                  themeVariant="light"
+                  themeVariant="dark"
                   locale="ru"
                 />
               ) : null}
@@ -1230,7 +1230,7 @@ export default function RentalClientDetailScreen() {
                     setShowEndDatePicker(false);
                     if (date) setReconciliationEndDate(date);
                   }}
-                  themeVariant="light"
+                  themeVariant="dark"
                   locale="ru"
                 />
               ) : null}

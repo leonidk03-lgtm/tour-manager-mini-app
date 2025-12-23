@@ -949,7 +949,7 @@ export default function AddRentalOrderScreen() {
                 display="spinner"
                 onChange={handleStartDateChange}
                 locale="ru"
-                themeVariant="light"
+                themeVariant="dark"
               />
             </View>
           </View>
@@ -960,7 +960,7 @@ export default function AddRentalOrderScreen() {
           mode="date"
           display="default"
           onChange={handleStartDateChange}
-          themeVariant="light"
+          themeVariant="dark"
           locale="ru"
         />
       ))}
@@ -982,7 +982,7 @@ export default function AddRentalOrderScreen() {
                 onChange={handleEndDateChange}
                 minimumDate={startDate}
                 locale="ru"
-                themeVariant="light"
+                themeVariant="dark"
               />
             </View>
           </View>
@@ -994,7 +994,7 @@ export default function AddRentalOrderScreen() {
           display="default"
           onChange={handleEndDateChange}
           minimumDate={startDate}
-          themeVariant="light"
+          themeVariant="dark"
           locale="ru"
         />
       ))}

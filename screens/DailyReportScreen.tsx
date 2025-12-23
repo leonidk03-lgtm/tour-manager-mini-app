@@ -512,7 +512,7 @@ export default function DailyReportScreen() {
               display={Platform.OS === "ios" ? "spinner" : "default"}
               onChange={onDateChange}
               maximumDate={new Date()}
-              themeVariant="light"
+              themeVariant="dark"
               locale="ru"
             />
           </View>

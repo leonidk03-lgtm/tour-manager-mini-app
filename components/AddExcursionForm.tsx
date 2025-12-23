@@ -277,7 +277,7 @@ export function AddExcursionForm({ excursion, onSave, onCancel }: AddExcursionFo
                     display="spinner"
                     onChange={handleDateChange}
                     locale="ru"
-                    themeVariant="light"
+                    themeVariant="dark"
                   />
                 </ThemedView>
               </View>
@@ -288,7 +288,7 @@ export function AddExcursionForm({ excursion, onSave, onCancel }: AddExcursionFo
               mode="date"
               display="default"
               onChange={handleDateChange}
-              themeVariant="light"
+              themeVariant="dark"
               locale="ru"
             />
           )
