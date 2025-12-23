@@ -387,7 +387,7 @@ export default function TemplateEditorScreen() {
         <View style={[styles.inputRow, { backgroundColor: colors.backgroundSecondary }]}>
           <ThemedText style={styles.inputLabel}>Тип:</ThemedText>
           <View style={styles.typeButtons}>
-            {(['invoice', 'act', 'contract', 'waybill'] as const).map((t) => (
+            {(['invoice', 'act', 'contract', 'contract_annual', 'waybill'] as const).map((t) => (
               <Pressable
                 key={t}
                 style={[

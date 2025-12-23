@@ -27,6 +27,9 @@ import { useRental, RentalOrder, RentalOrderStatus, RentalPaymentMethod } from "
 import { useAuth } from "@/contexts/AuthContext";
 import { SettingsStackParamList } from "@/navigation/SettingsStackNavigator";
 import { hapticFeedback } from "@/utils/haptics";
+import { useCompanySettings } from "@/contexts/CompanySettingsContext";
+import { useDocumentTemplates, DocumentTemplate } from "@/contexts/DocumentTemplatesContext";
+import { generateAndShareDocument, DocumentType } from "@/utils/documents";
 
 type RouteParams = RouteProp<SettingsStackParamList, "RentalClientDetail">;
 
@@ -61,6 +64,8 @@ export default function RentalClientDetailScreen() {
     bulkPayOrders,
   } = useRental();
   const { managers } = useAuth();
+  const { settings: companySettings, getNextDocumentNumber } = useCompanySettings();
+  const { getTemplatesByType, getDefaultTemplate } = useDocumentTemplates();
 
   const clientId = route.params?.clientId;
   const client = rentalClients.find(c => c.id === clientId);
@@ -91,6 +96,8 @@ export default function RentalClientDetailScreen() {
   const [reconciliationEndDate, setReconciliationEndDate] = useState<Date | null>(null);
   const [showStartDatePicker, setShowStartDatePicker] = useState(false);
   const [showEndDatePicker, setShowEndDatePicker] = useState(false);
+  const [isGeneratingDoc, setIsGeneratingDoc] = useState(false);
+  const [showContractTemplateModal, setShowContractTemplateModal] = useState(false);
 
   const clientOrders = useMemo(() => {
     if (!client) return [];
@@ -283,6 +290,86 @@ export default function RentalClientDetailScreen() {
       Alert.alert("Ошибка", "Не удалось выполнить оплату");
     } finally {
       setIsBulkPaymentProcessing(false);
+    }
+  };
+
+  const annualContractTemplates = useMemo(() => {
+    return getTemplatesByType('contract_annual');
+  }, [getTemplatesByType]);
+
+  const handleContractButtonPress = () => {
+    if (!client || !companySettings) {
+      Alert.alert("Ошибка", "Заполните настройки компании перед созданием документов");
+      return;
+    }
+    
+    if (annualContractTemplates.length > 1) {
+      setShowContractTemplateModal(true);
+    } else {
+      handleGenerateContract(annualContractTemplates[0]?.htmlContent);
+    }
+  };
+
+  const handleGenerateContract = async (templateHtml?: string) => {
+    if (!client || !companySettings) {
+      Alert.alert("Ошибка", "Заполните настройки компании перед созданием документов");
+      return;
+    }
+    
+    setIsGeneratingDoc(true);
+    setShowContractTemplateModal(false);
+    hapticFeedback.selection();
+    
+    try {
+      const documentNumber = await getNextDocumentNumber('contract_annual');
+      
+      const dummyOrder: RentalOrder = {
+        id: 'annual-contract',
+        orderNumber: 0,
+        clientId: client.id,
+        clientName: client.name,
+        clientPhone: client.phone || undefined,
+        status: 'new',
+        startDate: new Date().toISOString(),
+        endDate: new Date(Date.now() + 365 * 24 * 60 * 60 * 1000).toISOString(),
+        daysCount: 365,
+        kitCount: 0,
+        spareReceiverCount: 0,
+        transmitterCount: 0,
+        microphoneCount: 0,
+        bagNumber: null,
+        isCharged: false,
+        pricePerUnit: client.defaultPrice || 100,
+        totalPrice: 0,
+        prepayment: 0,
+        receiverNotes: null,
+        managerId: null,
+        managerName: null,
+        executorId: null,
+        executorName: null,
+        ownerManagerId: null,
+        ownerManagerName: null,
+        equipmentBlocks: null,
+        createdAt: new Date().toISOString(),
+        updatedAt: new Date().toISOString(),
+      };
+      
+      await generateAndShareDocument({
+        type: 'contract_annual',
+        order: dummyOrder as any,
+        client,
+        company: companySettings,
+        documentNumber,
+        templateHtml: templateHtml || getDefaultTemplate('contract_annual')?.htmlContent,
+      });
+      
+      hapticFeedback.success();
+    } catch (error) {
+      console.error("Error generating contract:", error);
+      hapticFeedback.error();
+      Alert.alert("Ошибка", "Не удалось создать договор. Проверьте настройки реквизитов компании.");
+    } finally {
+      setIsGeneratingDoc(false);
     }
   };
 
@@ -619,6 +706,24 @@ export default function RentalClientDetailScreen() {
             </View>
           ) : null}
         </View>
+
+        {client.type === "company" ? (
+          <View style={[styles.card, { backgroundColor: theme.backgroundSecondary }]}>
+            <ThemedText style={[styles.sectionTitle, { color: theme.textSecondary }]}>
+              Документы
+            </ThemedText>
+            <Pressable
+              onPress={handleContractButtonPress}
+              disabled={isGeneratingDoc}
+              style={[styles.contractBtn, { backgroundColor: "#9C27B0" + "15", opacity: isGeneratingDoc ? 0.5 : 1 }]}
+            >
+              <Icon name="file" size={20} color="#9C27B0" />
+              <ThemedText style={{ color: "#9C27B0", fontWeight: "500" }}>
+                Годовой договор
+              </ThemedText>
+            </Pressable>
+          </View>
+        ) : null}
 
         <View style={[styles.card, { backgroundColor: theme.backgroundSecondary }]}>
           <View style={styles.sectionHeader}>
@@ -1247,6 +1352,54 @@ export default function RentalClientDetailScreen() {
           </View>
         </View>
       </Modal>
+
+      <Modal visible={showContractTemplateModal} animationType="fade" transparent>
+        <Pressable 
+          style={styles.modalOverlay} 
+          onPress={() => setShowContractTemplateModal(false)}
+        >
+          <View style={[styles.modalContent, { backgroundColor: theme.backgroundDefault }]}>
+            <View style={styles.modalHeader}>
+              <ThemedText style={styles.modalTitle}>Выберите шаблон</ThemedText>
+              <Pressable onPress={() => setShowContractTemplateModal(false)}>
+                <Icon name="x" size={24} color={theme.text} />
+              </Pressable>
+            </View>
+            <ScrollView style={{ maxHeight: 300 }}>
+              {annualContractTemplates.map(template => (
+                <Pressable
+                  key={template.id}
+                  onPress={() => handleGenerateContract(template.htmlContent)}
+                  style={[
+                    styles.contractBtn,
+                    { 
+                      backgroundColor: template.isDefault ? theme.primary + "15" : theme.backgroundSecondary,
+                      borderWidth: 1,
+                      borderColor: template.isDefault ? theme.primary : theme.border,
+                      marginBottom: Spacing.sm,
+                    },
+                  ]}
+                >
+                  <View style={styles.templateOption}>
+                    <Icon name={template.isDefault ? "star" : "file-text"} size={18} color={template.isDefault ? theme.primary : theme.text} />
+                    <View style={{ flex: 1 }}>
+                      <ThemedText style={{ fontWeight: template.isDefault ? "600" : "400" }}>
+                        {template.name}
+                      </ThemedText>
+                      {template.isDefault ? (
+                        <ThemedText style={{ fontSize: 12, color: theme.textSecondary }}>
+                          По умолчанию
+                        </ThemedText>
+                      ) : null}
+                    </View>
+                    <Icon name="chevron-right" size={18} color={theme.textSecondary} />
+                  </View>
+                </Pressable>
+              ))}
+            </ScrollView>
+          </View>
+        </Pressable>
+      </Modal>
     </ThemedView>
   );
 }
@@ -1322,6 +1475,19 @@ const styles = StyleSheet.create({
     paddingHorizontal: Spacing.sm,
     paddingVertical: Spacing.xs,
     borderRadius: BorderRadius.md,
+  },
+  contractBtn: {
+    flexDirection: "row",
+    alignItems: "center",
+    gap: Spacing.sm,
+    padding: Spacing.md,
+    borderRadius: BorderRadius.md,
+  },
+  templateOption: {
+    flexDirection: "row",
+    alignItems: "center",
+    gap: Spacing.sm,
+    flex: 1,
   },
   contactText: {
     fontSize: 13,

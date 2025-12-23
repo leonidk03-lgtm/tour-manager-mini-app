@@ -512,4 +512,125 @@ INSERT INTO document_templates (type, name, html_content, is_default) VALUES
 </body>
 </html>',
   true
+),
+(
+  'contract_annual',
+  'Годовой договор (стандартный)',
+  '<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="UTF-8">
+  <title>Годовой договор {{DOCUMENT_NUMBER}}</title>
+  <style>
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+    body { font-family: "Times New Roman", Times, serif; font-size: 12pt; line-height: 1.4; color: #000; padding: 15mm; background: #fff; }
+    .document { max-width: 190mm; margin: 0 auto; }
+    .header { text-align: center; margin-bottom: 20px; }
+    .title { font-size: 16pt; font-weight: bold; margin-bottom: 5px; }
+    .subtitle { font-size: 12pt; }
+    .section { margin-bottom: 15px; }
+    .bold { font-weight: bold; }
+    .signatures { margin-top: 30px; display: flex; justify-content: space-between; }
+    .signature-block { width: 45%; }
+    .signature-line { border-bottom: 1px solid #000; height: 30px; margin-top: 10px; }
+    .requisites { font-size: 10pt; line-height: 1.3; }
+    .stamp-area { margin-top: 20px; text-align: center; color: #666; font-size: 10pt; }
+    .contract-text { text-align: justify; }
+    .contract-text p { margin-bottom: 8px; text-indent: 20px; }
+  </style>
+</head>
+<body>
+  <div class="document">
+    <div class="header">
+      <div class="title">ГОДОВОЙ ДОГОВОР АРЕНДЫ ОБОРУДОВАНИЯ</div>
+      <div class="subtitle">№ {{DOCUMENT_NUMBER}} от {{DOCUMENT_DATE_LONG}}</div>
+    </div>
+
+    <div class="section contract-text">
+      <p><strong>{{COMPANY_NAME}}</strong>, в лице {{COMPANY_DIRECTOR_POSITION}} {{COMPANY_DIRECTOR}}, именуемый в дальнейшем «Арендодатель», с одной стороны, и <strong>{{CLIENT_COMPANY}}</strong>, в лице {{CLIENT_DIRECTOR}}, именуемый в дальнейшем «Арендатор», с другой стороны, заключили настоящий договор о нижеследующем:</p>
+    </div>
+
+    <div class="section contract-text">
+      <p class="bold">1. ПРЕДМЕТ ДОГОВОРА</p>
+      <p>1.1. Арендодатель обязуется по заявкам Арендатора предоставлять во временное пользование (аренду) оборудование для синхронного перевода и радиогиды, а Арендатор обязуется принимать и оплачивать аренду указанного оборудования.</p>
+      <p>1.2. Состав и количество оборудования определяется отдельными заявками Арендатора.</p>
+      <p>1.3. Срок действия договора: 1 (один) год с даты подписания с возможностью автоматического продления.</p>
+    </div>
+
+    <div class="section contract-text">
+      <p class="bold">2. СТОИМОСТЬ И ПОРЯДОК РАСЧЁТОВ</p>
+      <p>2.1. Стоимость аренды определяется действующим прайс-листом Арендодателя или индивидуальной договорённостью сторон.</p>
+      <p>2.2. НДС не облагается в связи с применением Арендодателем упрощённой системы налогообложения.</p>
+      <p>2.3. Оплата производится путём перечисления денежных средств на расчётный счёт Арендодателя или наличными денежными средствами в течение 5 (пяти) рабочих дней с даты выставления счёта.</p>
+    </div>
+
+    <div class="section contract-text">
+      <p class="bold">3. ПРАВА И ОБЯЗАННОСТИ СТОРОН</p>
+      <p>3.1. Арендодатель обязуется:</p>
+      <p style="margin-left: 20px;">- предоставить оборудование в исправном состоянии;</p>
+      <p style="margin-left: 20px;">- провести инструктаж по использованию оборудования;</p>
+      <p style="margin-left: 20px;">- обеспечить техническую поддержку в период аренды.</p>
+      <p>3.2. Арендатор обязуется:</p>
+      <p style="margin-left: 20px;">- использовать оборудование по назначению;</p>
+      <p style="margin-left: 20px;">- обеспечить сохранность оборудования;</p>
+      <p style="margin-left: 20px;">- своевременно возвращать оборудование в исправном состоянии;</p>
+      <p style="margin-left: 20px;">- производить оплату в установленные сроки.</p>
+    </div>
+
+    <div class="section contract-text">
+      <p class="bold">4. ОТВЕТСТВЕННОСТЬ СТОРОН</p>
+      <p>4.1. В случае утраты или повреждения оборудования Арендатор возмещает его стоимость в полном объёме.</p>
+      <p>4.2. За просрочку возврата оборудования Арендатор уплачивает стоимость аренды за каждый день просрочки.</p>
+      <p>4.3. За просрочку оплаты Арендатор уплачивает пени в размере 0,1% от неоплаченной суммы за каждый день просрочки.</p>
+    </div>
+
+    <div class="section contract-text">
+      <p class="bold">5. СРОК ДЕЙСТВИЯ И РАСТОРЖЕНИЕ ДОГОВОРА</p>
+      <p>5.1. Договор вступает в силу с момента подписания и действует в течение 1 (одного) года.</p>
+      <p>5.2. Договор автоматически продлевается на следующий год, если ни одна из сторон не уведомила другую о расторжении за 30 дней до окончания срока.</p>
+      <p>5.3. Любая из сторон вправе расторгнуть договор, уведомив другую сторону в письменной форме не менее чем за 30 дней.</p>
+    </div>
+
+    <div class="section contract-text">
+      <p class="bold">6. ЗАКЛЮЧИТЕЛЬНЫЕ ПОЛОЖЕНИЯ</p>
+      <p>6.1. Все споры решаются путём переговоров, а при недостижении согласия — в суде по месту нахождения Арендодателя.</p>
+      <p>6.2. Договор составлен в двух экземплярах, имеющих одинаковую юридическую силу.</p>
+    </div>
+
+    <div class="section contract-text">
+      <p class="bold">7. РЕКВИЗИТЫ И ПОДПИСИ СТОРОН</p>
+    </div>
+
+    <div class="signatures">
+      <div class="signature-block">
+        <p class="bold">АРЕНДОДАТЕЛЬ:</p>
+        <div class="requisites">
+          {{COMPANY_NAME}}<br>
+          ИНН: {{COMPANY_INN}}<br>
+          {{COMPANY_ADDRESS}}<br>
+          Банк: {{COMPANY_BANK}}<br>
+          БИК: {{COMPANY_BIK}}<br>
+          Р/с: {{COMPANY_ACCOUNT}}
+        </div>
+        <div class="signature-line"></div>
+        <p>{{COMPANY_DIRECTOR}}</p>
+        <div class="stamp-area">М.П.</div>
+      </div>
+      <div class="signature-block">
+        <p class="bold">АРЕНДАТОР:</p>
+        <div class="requisites">
+          {{CLIENT_COMPANY}}<br>
+          ИНН: {{CLIENT_INN}}<br>
+          {{CLIENT_ADDRESS}}<br>
+          Тел: {{CLIENT_PHONE}}
+        </div>
+        <div class="signature-line"></div>
+        <p>{{CLIENT_DIRECTOR}}</p>
+        <div class="stamp-area">М.П.</div>
+      </div>
+    </div>
+  </div>
+</body>
+</html>',
+  true
 );

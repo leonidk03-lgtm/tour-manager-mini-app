@@ -42,7 +42,7 @@ export default function DocumentTemplatesScreen() {
     ? templates 
     : templates.filter(t => t.type === selectedType);
 
-  const groupedTemplates = (['invoice', 'act', 'contract', 'waybill'] as const).map(type => ({
+  const groupedTemplates = (['invoice', 'act', 'contract', 'contract_annual', 'waybill'] as const).map(type => ({
     type,
     templates: filteredTemplates.filter(t => t.type === type),
   })).filter(g => g.templates.length > 0 || selectedType === 'all');
@@ -173,7 +173,7 @@ export default function DocumentTemplatesScreen() {
             Все
           </ThemedText>
         </Pressable>
-        {(['invoice', 'act', 'contract', 'waybill'] as const).map((type) => (
+        {(['invoice', 'act', 'contract', 'contract_annual', 'waybill'] as const).map((type) => (
           <Pressable
             key={type}
             style={[

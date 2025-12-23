@@ -54,7 +54,7 @@ export default function RentalOrderDetailScreen() {
   const { managers, isAdmin } = useAuth();
   const { equipmentItems, equipmentCategories, addEquipmentMovement, addEquipmentLoss } = useData();
   const { settings: companySettings, getNextDocumentNumber } = useCompanySettings();
-  const { getDefaultTemplate } = useDocumentTemplates();
+  const { getDefaultTemplate, getTemplatesByType } = useDocumentTemplates();
 
   const orderId = route.params?.orderId;
   const order = rentalOrders.find(o => o.id === orderId);
@@ -89,6 +89,8 @@ export default function RentalOrderDetailScreen() {
   
   // Document generation state
   const [isGeneratingDoc, setIsGeneratingDoc] = useState(false);
+  const [showTemplateModal, setShowTemplateModal] = useState(false);
+  const [pendingDocType, setPendingDocType] = useState<DocumentType | null>(null);
 
   // Get equipment items that can be tracked for loss based on order contents
   // For rentals: receivers = kitCount, transmitters = microphoneCount
@@ -300,18 +302,34 @@ export default function RentalOrderDetailScreen() {
     }
   };
 
-  const handleGenerateDocument = async (docType: DocumentType) => {
+  const handleDocumentButtonPress = (docType: DocumentType) => {
+    if (!order || !client || !companySettings) {
+      Alert.alert("Ошибка", "Заполните настройки компании перед созданием документов");
+      return;
+    }
+    
+    const templates = getTemplatesByType(docType);
+    if (templates.length > 1) {
+      setPendingDocType(docType);
+      setShowTemplateModal(true);
+    } else {
+      handleGenerateDocument(docType, templates[0]?.htmlContent);
+    }
+  };
+
+  const handleGenerateDocument = async (docType: DocumentType, templateHtml?: string) => {
     if (!order || !client || !companySettings) {
       Alert.alert("Ошибка", "Заполните настройки компании перед созданием документов");
       return;
     }
     
     setIsGeneratingDoc(true);
+    setShowTemplateModal(false);
+    setPendingDocType(null);
     hapticFeedback.selection();
     
     try {
       const documentNumber = await getNextDocumentNumber(docType);
-      const defaultTemplate = getDefaultTemplate(docType);
       
       await generateAndShareDocument({
         type: docType,
@@ -320,7 +338,7 @@ export default function RentalOrderDetailScreen() {
         services: orderServices,
         company: companySettings,
         documentNumber,
-        templateHtml: defaultTemplate?.htmlContent,
+        templateHtml: templateHtml || getDefaultTemplate(docType)?.htmlContent,
       });
       
       hapticFeedback.success();
@@ -694,7 +712,7 @@ export default function RentalOrderDetailScreen() {
           </ThemedText>
           <View style={styles.documentsGrid}>
             <Pressable
-              onPress={() => handleGenerateDocument("invoice")}
+              onPress={() => handleDocumentButtonPress("invoice")}
               disabled={isGeneratingDoc}
               style={[styles.documentBtn, { backgroundColor: theme.primary + "15", opacity: isGeneratingDoc ? 0.5 : 1 }]}
             >
@@ -702,7 +720,7 @@ export default function RentalOrderDetailScreen() {
               <ThemedText style={[styles.documentBtnText, { color: theme.primary }]}>Счёт</ThemedText>
             </Pressable>
             <Pressable
-              onPress={() => handleGenerateDocument("act")}
+              onPress={() => handleDocumentButtonPress("act")}
               disabled={isGeneratingDoc}
               style={[styles.documentBtn, { backgroundColor: theme.success + "15", opacity: isGeneratingDoc ? 0.5 : 1 }]}
             >
@@ -710,7 +728,7 @@ export default function RentalOrderDetailScreen() {
               <ThemedText style={[styles.documentBtnText, { color: theme.success }]}>Акт</ThemedText>
             </Pressable>
             <Pressable
-              onPress={() => handleGenerateDocument("contract")}
+              onPress={() => handleDocumentButtonPress("contract")}
               disabled={isGeneratingDoc}
               style={[styles.documentBtn, { backgroundColor: "#9C27B0" + "15", opacity: isGeneratingDoc ? 0.5 : 1 }]}
             >
@@ -718,7 +736,7 @@ export default function RentalOrderDetailScreen() {
               <ThemedText style={[styles.documentBtnText, { color: "#9C27B0" }]}>Договор</ThemedText>
             </Pressable>
             <Pressable
-              onPress={() => handleGenerateDocument("waybill")}
+              onPress={() => handleDocumentButtonPress("waybill")}
               disabled={isGeneratingDoc}
               style={[styles.documentBtn, { backgroundColor: theme.warning + "15", opacity: isGeneratingDoc ? 0.5 : 1 }]}
             >
@@ -1038,6 +1056,50 @@ export default function RentalOrderDetailScreen() {
           </View>
         </KeyboardAvoidingView>
       </Modal>
+
+      <Modal visible={showTemplateModal} animationType="fade" transparent>
+        <Pressable 
+          style={styles.modalOverlay} 
+          onPress={() => {
+            setShowTemplateModal(false);
+            setPendingDocType(null);
+          }}
+        >
+          <View style={[styles.statusModalContent, { backgroundColor: theme.backgroundDefault }]}>
+            <ThemedText style={styles.modalTitle}>Выберите шаблон</ThemedText>
+            <ScrollView style={{ maxHeight: 300 }}>
+              {pendingDocType ? getTemplatesByType(pendingDocType).map(template => (
+                <Pressable
+                  key={template.id}
+                  onPress={() => handleGenerateDocument(pendingDocType, template.htmlContent)}
+                  style={[
+                    styles.statusOption,
+                    { 
+                      backgroundColor: template.isDefault ? theme.primary + "15" : "transparent",
+                      borderColor: template.isDefault ? theme.primary : theme.border 
+                    },
+                  ]}
+                >
+                  <View style={styles.templateOption}>
+                    <Icon name={template.isDefault ? "star" : "file-text"} size={18} color={template.isDefault ? theme.primary : theme.text} />
+                    <View style={{ flex: 1 }}>
+                      <ThemedText style={{ fontWeight: template.isDefault ? "600" : "400" }}>
+                        {template.name}
+                      </ThemedText>
+                      {template.isDefault ? (
+                        <ThemedText style={{ fontSize: 12, color: theme.textSecondary }}>
+                          По умолчанию
+                        </ThemedText>
+                      ) : null}
+                    </View>
+                    <Icon name="chevron-right" size={18} color={theme.textSecondary} />
+                  </View>
+                </Pressable>
+              )) : null}
+            </ScrollView>
+          </View>
+        </Pressable>
+      </Modal>
     </ThemedView>
   );
 }
@@ -1301,6 +1363,12 @@ const styles = StyleSheet.create({
     borderRadius: BorderRadius.md,
     gap: Spacing.sm,
     marginBottom: Spacing.xs,
+  },
+  templateOption: {
+    flexDirection: "row",
+    alignItems: "center",
+    gap: Spacing.sm,
+    flex: 1,
   },
   statusOptionText: {
     flex: 1,
