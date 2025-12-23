@@ -18,14 +18,13 @@ type RootStackParamList = {
 
 type TemplateEditorRouteProp = RouteProp<RootStackParamList, 'TemplateEditor'>;
 
-const getQuillHtml = (initialContent: string, isDark: boolean) => `
+const getEditorHtml = (initialContent: string, isDark: boolean) => `
 <!DOCTYPE html>
 <html>
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-  <link href="https://cdn.jsdelivr.net/npm/quill@2.0.3/dist/quill.snow.css" rel="stylesheet">
-  <script src="https://cdn.jsdelivr.net/npm/quill@2.0.3/dist/quill.js"></script>
+  <script src="https://cdn.tiny.cloud/1/no-api-key/tinymce/6/tinymce.min.js" referrerpolicy="origin"></script>
   <style>
     * { box-sizing: border-box; }
     html, body {
@@ -35,106 +34,28 @@ const getQuillHtml = (initialContent: string, isDark: boolean) => `
       background: #ffffff;
       overflow: hidden;
     }
-    #toolbar-container {
-      position: fixed;
-      top: 0;
-      left: 0;
-      right: 0;
-      z-index: 100;
-      background: ${isDark ? '#2a2a2a' : '#f5f5f5'};
-      border-bottom: 1px solid ${isDark ? '#444' : '#ddd'};
-    }
-    .ql-toolbar.ql-snow {
-      border: none;
-      padding: 6px;
+    #editor-wrapper {
+      height: 100%;
       display: flex;
-      flex-wrap: wrap;
-      gap: 4px;
+      flex-direction: column;
     }
-    .ql-toolbar.ql-snow .ql-picker-label,
-    .ql-toolbar.ql-snow button {
-      color: ${isDark ? '#fff' : '#444'};
+    .tox-tinymce {
+      border: none !important;
+      flex: 1;
     }
-    .ql-toolbar.ql-snow .ql-stroke {
-      stroke: ${isDark ? '#fff' : '#444'};
+    .tox .tox-edit-area__iframe {
+      background: #ffffff !important;
     }
-    .ql-toolbar.ql-snow .ql-fill {
-      fill: ${isDark ? '#fff' : '#444'};
+    .tox .tox-toolbar__primary {
+      background: ${isDark ? '#2a2a2a' : '#f5f5f5'} !important;
     }
-    .ql-toolbar.ql-snow button.ql-active {
-      background: ${isDark ? '#555' : '#ddd'};
-      border-radius: 4px;
+    .tox .tox-tbtn {
+      color: ${isDark ? '#fff' : '#444'} !important;
     }
-    #editor-container {
-      position: absolute;
-      top: 44px;
-      bottom: 0;
-      left: 0;
-      right: 0;
-      overflow-y: auto;
-      -webkit-overflow-scrolling: touch;
-      background: #ffffff;
+    .tox .tox-tbtn svg {
+      fill: ${isDark ? '#fff' : '#444'} !important;
     }
-    .ql-container.ql-snow {
-      border: none;
-      font-family: 'Times New Roman', Times, serif;
-      font-size: 12pt;
-    }
-    .ql-editor {
-      min-height: 100%;
-      padding: 16px;
-      background: #ffffff;
-      color: #000000;
-    }
-    .ql-editor table {
-      border-collapse: collapse;
-      width: 100%;
-      margin: 10px 0;
-    }
-    .ql-editor table td, .ql-editor table th {
-      border: 1px solid #000;
-      padding: 5px 8px;
-      min-width: 40px;
-    }
-    .ql-editor table th {
-      background: #f0f0f0;
-      font-weight: bold;
-    }
-    .ql-editor img {
-      max-width: 300px;
-      height: auto;
-      cursor: pointer;
-    }
-    .image-overlay {
-      position: absolute;
-      border: 2px solid #0088ff;
-      pointer-events: none;
-      display: none;
-    }
-    .image-overlay.active {
-      display: block;
-    }
-    .resize-handle {
-      position: absolute;
-      width: 28px;
-      height: 28px;
-      background: #0088ff;
-      border: 2px solid #fff;
-      border-radius: 4px;
-      pointer-events: auto;
-      touch-action: none;
-    }
-    .resize-handle.se {
-      right: -14px;
-      bottom: -14px;
-      cursor: se-resize;
-    }
-    .resize-handle.sw {
-      left: -14px;
-      bottom: -14px;
-      cursor: sw-resize;
-    }
-    .ql-editor .template-var {
+    .template-var {
       background: #e1f0ff;
       color: #0066cc;
       padding: 2px 6px;
@@ -142,480 +63,16 @@ const getQuillHtml = (initialContent: string, isDark: boolean) => `
       font-family: monospace;
       font-size: 11px;
     }
-    .custom-btn {
-      background: ${isDark ? '#444' : '#e8e8e8'};
-      border: none;
-      border-radius: 4px;
-      padding: 4px 8px;
-      font-size: 11px;
-      color: ${isDark ? '#fff' : '#333'};
-      cursor: pointer;
-      white-space: nowrap;
-    }
-    .custom-btn:active {
-      opacity: 0.7;
-    }
-    .custom-btn.active {
-      background: ${isDark ? '#0088ff' : '#0066cc'};
-      color: #fff;
-    }
-    #source-editor {
-      display: none;
-      position: absolute;
-      top: 44px;
-      bottom: 0;
-      left: 0;
-      right: 0;
-      padding: 12px;
-      font-family: 'Courier New', monospace;
-      font-size: 12px;
-      line-height: 1.5;
-      background: #ffffff;
-      color: #000000;
-      border: none;
-      resize: none;
-      outline: none;
-    }
-    .table-dropdown {
-      display: none;
-      position: fixed;
-      top: 50px;
-      left: 50%;
-      transform: translateX(-50%);
-      background: ${isDark ? '#333' : '#fff'};
-      border: 1px solid ${isDark ? '#555' : '#ccc'};
-      border-radius: 6px;
-      padding: 8px;
-      box-shadow: 0 4px 12px rgba(0,0,0,0.2);
-      z-index: 200;
-    }
-    .table-dropdown.show {
-      display: block;
-    }
-    .table-grid {
-      display: grid;
-      grid-template-columns: repeat(5, 24px);
-      gap: 2px;
-    }
-    .table-cell {
-      width: 24px;
-      height: 24px;
-      border: 1px solid ${isDark ? '#555' : '#ccc'};
-      background: ${isDark ? '#222' : '#f9f9f9'};
-      cursor: pointer;
-    }
-    .table-cell:hover, .table-cell.selected {
-      background: ${isDark ? '#0088ff' : '#0066cc'};
-      border-color: ${isDark ? '#0088ff' : '#0066cc'};
-    }
-    .table-size-label {
-      text-align: center;
-      margin-top: 6px;
-      font-size: 11px;
-      color: ${isDark ? '#aaa' : '#666'};
-    }
   </style>
 </head>
 <body>
-  <div id="toolbar-container">
-    <div id="toolbar">
-      <span class="ql-formats">
-        <button class="ql-bold" title="Жирный"></button>
-        <button class="ql-italic" title="Курсив"></button>
-        <button class="ql-underline" title="Подчёркнутый"></button>
-      </span>
-      <span class="ql-formats">
-        <select class="ql-header" title="Заголовок">
-          <option value="1">H1</option>
-          <option value="2">H2</option>
-          <option value="3">H3</option>
-          <option selected></option>
-        </select>
-      </span>
-      <span class="ql-formats">
-        <select class="ql-align" title="Выравнивание"></select>
-      </span>
-      <span class="ql-formats">
-        <button class="ql-list" value="ordered" title="Нумерованный список"></button>
-        <button class="ql-list" value="bullet" title="Маркированный список"></button>
-      </span>
-      <span class="ql-formats" style="position: relative;">
-        <button class="custom-btn" id="table-btn" title="Таблица">Таблица</button>
-        <div class="table-dropdown" id="table-dropdown">
-          <div class="table-grid" id="table-grid"></div>
-          <div class="table-size-label" id="table-size-label">Выберите размер</div>
-        </div>
-      </span>
-      <span class="ql-formats" style="margin-left: 4px;">
-        <button class="custom-btn" id="signature-btn" title="Подпись" style="margin-right: 4px;">Подпись</button>
-      </span>
-      <span class="ql-formats">
-        <button class="custom-btn" id="stamp-btn" title="Печать" style="margin-right: 4px;">Печать</button>
-      </span>
-      <span class="ql-formats">
-        <button class="custom-btn" id="source-btn" title="HTML-код" style="margin-right: 4px;">HTML</button>
-      </span>
-      <span class="ql-formats">
-        <button class="ql-clean" title="Очистить формат"></button>
-      </span>
-    </div>
-  </div>
-  <div id="editor-container">
-    <div id="editor"></div>
-  </div>
-  <textarea id="source-editor" spellcheck="false"></textarea>
-  <div class="image-overlay" id="image-overlay">
-    <div class="resize-handle se" id="handle-se"></div>
+  <div id="editor-wrapper">
+    <textarea id="editor"></textarea>
   </div>
   <script>
-    var quill = new Quill('#editor', {
-      theme: 'snow',
-      modules: {
-        toolbar: '#toolbar',
-        table: true
-      },
-      placeholder: 'Введите содержимое шаблона...'
-    });
-
+    var editor;
     var initialContent = ${JSON.stringify(initialContent)};
-    if (initialContent) {
-      quill.root.innerHTML = initialContent;
-    }
-
-    document.addEventListener('paste', function(e) {
-      var target = e.target;
-      var isInEditor = target.closest('.ql-editor') || target.closest('#editor');
-      if (!isInEditor && !quill.hasFocus()) return;
-      
-      var clipboardData = e.clipboardData || window.clipboardData;
-      if (!clipboardData) return;
-      
-      var html = clipboardData.getData('text/html');
-      if (html && (html.includes('<table') || html.includes('<TABLE'))) {
-        e.preventDefault();
-        e.stopPropagation();
-        
-        var parser = new DOMParser();
-        var doc = parser.parseFromString(html, 'text/html');
-        var tables = doc.querySelectorAll('table');
-        
-        tables.forEach(function(table) {
-          table.style.borderCollapse = 'collapse';
-          table.style.width = '100%';
-          table.style.margin = '10px 0';
-          table.removeAttribute('class');
-          table.removeAttribute('cellspacing');
-          table.removeAttribute('cellpadding');
-          
-          var cells = table.querySelectorAll('td, th');
-          cells.forEach(function(cell) {
-            cell.style.border = '1px solid #000';
-            cell.style.padding = '5px 8px';
-            cell.style.minWidth = '40px';
-            cell.removeAttribute('class');
-          });
-          
-          var headers = table.querySelectorAll('th');
-          headers.forEach(function(th) {
-            th.style.background = '#f0f0f0';
-            th.style.fontWeight = 'bold';
-          });
-        });
-        
-        var cleanHtml = doc.body.innerHTML;
-        cleanHtml = cleanHtml.replace(/<o:p[^>]*>[\\s\\S]*?<\\/o:p>/gi, '');
-        cleanHtml = cleanHtml.replace(/class="[^"]*"/gi, '');
-        cleanHtml = cleanHtml.replace(/<!--[\\s\\S]*?-->/g, '');
-        cleanHtml = cleanHtml.replace(/<style[^>]*>[\\s\\S]*?<\\/style>/gi, '');
-        cleanHtml = cleanHtml.replace(/<xml[^>]*>[\\s\\S]*?<\\/xml>/gi, '');
-        cleanHtml = cleanHtml.replace(/mso-[^;"]+;?/gi, '');
-        cleanHtml = cleanHtml.replace(/<\\/?font[^>]*>/gi, '');
-        cleanHtml = cleanHtml.replace(/<span[^>]*>\\s*<\\/span>/gi, '');
-        
-        quill.focus();
-        document.execCommand('insertHTML', false, cleanHtml);
-        notifyContentChange();
-        
-        return false;
-      }
-    }, true);
-
-    document.addEventListener('touchstart', function(e) {
-      var target = e.target;
-      var isInput = target.tagName === 'INPUT' || target.tagName === 'TEXTAREA' || target.isContentEditable || target.closest('.ql-editor');
-      if (!isInput) {
-        document.activeElement.blur();
-      }
-    });
-
-    function setupKeyboardHandlers() {
-      quill.root.addEventListener('keydown', function(e) {
-        e.stopPropagation();
-      });
-      
-      quill.root.addEventListener('keyup', function(e) {
-        e.stopPropagation();
-      });
-      
-      quill.root.addEventListener('keypress', function(e) {
-        e.stopPropagation();
-      });
-      
-      var tables = quill.root.querySelectorAll('table');
-      tables.forEach(function(table) {
-        table.setAttribute('contenteditable', 'true');
-        var cells = table.querySelectorAll('td, th');
-        cells.forEach(function(cell) {
-          cell.setAttribute('contenteditable', 'true');
-        });
-      });
-    }
     
-    setupKeyboardHandlers();
-    
-    window.reinitAfterPaste = function() {
-      setupKeyboardHandlers();
-      quill.focus();
-    };
-
-    var selectedImage = null;
-    var overlay = document.getElementById('image-overlay');
-    var handleSE = document.getElementById('handle-se');
-    var isResizing = false;
-    var startX, startY, startWidth;
-
-    function positionOverlay() {
-      if (!selectedImage) return;
-      var rect = selectedImage.getBoundingClientRect();
-      var containerRect = document.getElementById('editor-container').getBoundingClientRect();
-      overlay.style.left = (rect.left - containerRect.left + document.getElementById('editor-container').scrollLeft) + 'px';
-      overlay.style.top = (rect.top - containerRect.top + document.getElementById('editor-container').scrollTop) + 'px';
-      overlay.style.width = rect.width + 'px';
-      overlay.style.height = rect.height + 'px';
-    }
-
-    function selectImage(img) {
-      if (selectedImage) selectedImage.style.outline = '';
-      selectedImage = img;
-      selectedImage.style.outline = '2px solid #0088ff';
-      overlay.classList.add('active');
-      positionOverlay();
-    }
-
-    function deselectImage() {
-      if (selectedImage) {
-        selectedImage.style.outline = '';
-        selectedImage = null;
-      }
-      overlay.classList.remove('active');
-    }
-
-    quill.root.addEventListener('click', function(e) {
-      if (e.target.tagName === 'IMG') {
-        e.preventDefault();
-        e.stopPropagation();
-        selectImage(e.target);
-      } else {
-        deselectImage();
-      }
-    });
-
-    document.addEventListener('click', function(e) {
-      if (!e.target.closest('.ql-editor') && !e.target.closest('.image-overlay')) {
-        deselectImage();
-      }
-    });
-
-    function getEventPos(e) {
-      if (e.touches && e.touches.length) {
-        return { x: e.touches[0].clientX, y: e.touches[0].clientY };
-      }
-      return { x: e.clientX, y: e.clientY };
-    }
-
-    function startResize(e) {
-      if (!selectedImage) return;
-      e.preventDefault();
-      e.stopPropagation();
-      isResizing = true;
-      var pos = getEventPos(e);
-      startX = pos.x;
-      startY = pos.y;
-      startWidth = selectedImage.offsetWidth;
-    }
-
-    function doResize(e) {
-      if (!isResizing || !selectedImage) return;
-      e.preventDefault();
-      var pos = getEventPos(e);
-      var deltaX = pos.x - startX;
-      var newWidth = Math.max(30, Math.min(300, startWidth + deltaX));
-      selectedImage.style.width = newWidth + 'px';
-      selectedImage.style.maxWidth = newWidth + 'px';
-      selectedImage.style.height = 'auto';
-      positionOverlay();
-    }
-
-    function endResize(e) {
-      if (isResizing) {
-        isResizing = false;
-        notifyContentChange();
-      }
-    }
-
-    handleSE.addEventListener('mousedown', startResize);
-    handleSE.addEventListener('touchstart', startResize, { passive: false });
-    document.addEventListener('mousemove', doResize);
-    document.addEventListener('touchmove', doResize, { passive: false });
-    document.addEventListener('mouseup', endResize);
-    document.addEventListener('touchend', endResize);
-
-    document.getElementById('editor-container').addEventListener('scroll', function() {
-      if (selectedImage) positionOverlay();
-    });
-
-    var sourceMode = false;
-    var sourceEditor = document.getElementById('source-editor');
-    var editorContainer = document.getElementById('editor-container');
-    var sourceBtn = document.getElementById('source-btn');
-
-    sourceBtn.addEventListener('click', function() {
-      sourceMode = !sourceMode;
-      if (sourceMode) {
-        sourceEditor.value = formatHtml(quill.root.innerHTML);
-        sourceEditor.style.display = 'block';
-        editorContainer.style.display = 'none';
-        sourceBtn.classList.add('active');
-      } else {
-        quill.root.innerHTML = sourceEditor.value;
-        sourceEditor.style.display = 'none';
-        editorContainer.style.display = 'block';
-        sourceBtn.classList.remove('active');
-        notifyContentChange();
-      }
-    });
-
-    sourceEditor.addEventListener('input', function() {
-      notifyContentChange();
-    });
-
-    function formatHtml(html) {
-      var formatted = '';
-      var indent = 0;
-      var tags = html.split(/(<[^>]+>)/g).filter(Boolean);
-      tags.forEach(function(tag) {
-        if (tag.match(/^<\\/[^>]+>$/)) {
-          indent--;
-        }
-        if (tag.match(/^</)) {
-          formatted += '  '.repeat(Math.max(0, indent)) + tag + '\\n';
-        } else if (tag.trim()) {
-          formatted += '  '.repeat(Math.max(0, indent)) + tag.trim() + '\\n';
-        }
-        if (tag.match(/^<[^/][^>]*[^/]>$/) && !tag.match(/^<(br|hr|img|input|meta|link)/i)) {
-          indent++;
-        }
-      });
-      return formatted.trim();
-    }
-
-    var tableBtn = document.getElementById('table-btn');
-    var tableDropdown = document.getElementById('table-dropdown');
-    var tableGrid = document.getElementById('table-grid');
-    var tableSizeLabel = document.getElementById('table-size-label');
-    var selectedRows = 0, selectedCols = 0;
-
-    for (var r = 0; r < 5; r++) {
-      for (var c = 0; c < 5; c++) {
-        var cell = document.createElement('div');
-        cell.className = 'table-cell';
-        cell.dataset.row = r + 1;
-        cell.dataset.col = c + 1;
-        tableGrid.appendChild(cell);
-      }
-    }
-
-    tableBtn.addEventListener('click', function(e) {
-      e.stopPropagation();
-      tableDropdown.classList.toggle('show');
-    });
-
-    tableGrid.addEventListener('mouseover', function(e) {
-      if (e.target.classList.contains('table-cell')) {
-        selectedRows = parseInt(e.target.dataset.row);
-        selectedCols = parseInt(e.target.dataset.col);
-        tableSizeLabel.textContent = selectedRows + ' x ' + selectedCols;
-        updateGridSelection();
-      }
-    });
-
-    tableGrid.addEventListener('click', function(e) {
-      if (e.target.classList.contains('table-cell')) {
-        insertTable(selectedRows, selectedCols);
-        tableDropdown.classList.remove('show');
-      }
-    });
-
-    document.addEventListener('click', function(e) {
-      if (!tableDropdown.contains(e.target) && e.target !== tableBtn) {
-        tableDropdown.classList.remove('show');
-      }
-    });
-
-    function updateGridSelection() {
-      var cells = tableGrid.querySelectorAll('.table-cell');
-      cells.forEach(function(cell) {
-        var r = parseInt(cell.dataset.row);
-        var c = parseInt(cell.dataset.col);
-        if (r <= selectedRows && c <= selectedCols) {
-          cell.classList.add('selected');
-        } else {
-          cell.classList.remove('selected');
-        }
-      });
-    }
-
-    function insertTable(rows, cols) {
-      var table = '<table><tbody>';
-      for (var r = 0; r < rows; r++) {
-        table += '<tr>';
-        for (var c = 0; c < cols; c++) {
-          if (r === 0) {
-            table += '<th>Заголовок</th>';
-          } else {
-            table += '<td>Ячейка</td>';
-          }
-        }
-        table += '</tr>';
-      }
-      table += '</tbody></table><p><br></p>';
-      
-      var range = quill.getSelection(true);
-      quill.clipboard.dangerouslyPasteHTML(range.index, table);
-      notifyContentChange();
-    }
-
-    function notifyContentChange() {
-      var html = sourceMode ? sourceEditor.value : quill.root.innerHTML;
-      if (window.ReactNativeWebView) {
-        window.ReactNativeWebView.postMessage(JSON.stringify({
-          type: 'content-change',
-          html: html
-        }));
-      } else if (window.parent && window.parent !== window) {
-        window.parent.postMessage(JSON.stringify({
-          type: 'content-change',
-          html: html
-        }), '*');
-      }
-    }
-
-    quill.on('text-change', function() {
-      if (!sourceMode) {
-        notifyContentChange();
-      }
-    });
-
     function sendMessage(data) {
       if (window.ReactNativeWebView) {
         window.ReactNativeWebView.postMessage(JSON.stringify(data));
@@ -623,49 +80,109 @@ const getQuillHtml = (initialContent: string, isDark: boolean) => `
         window.parent.postMessage(JSON.stringify(data), '*');
       }
     }
-
-    document.getElementById('signature-btn').addEventListener('click', function() {
-      sendMessage({ type: 'pick-image', imageType: 'signature' });
+    
+    tinymce.init({
+      selector: '#editor',
+      height: '100%',
+      menubar: false,
+      statusbar: false,
+      branding: false,
+      promotion: false,
+      plugins: 'table lists code image',
+      toolbar: 'bold italic underline | blocks | alignleft aligncenter alignright | bullist numlist | table | signatureBtn stampBtn | code',
+      content_style: \`
+        body { 
+          font-family: 'Times New Roman', Times, serif; 
+          font-size: 12pt; 
+          background: #ffffff; 
+          color: #000000;
+          padding: 16px;
+        }
+        table { 
+          border-collapse: collapse; 
+          width: 100%; 
+          margin: 10px 0; 
+        }
+        table td, table th { 
+          border: 1px solid #000; 
+          padding: 5px 8px; 
+          min-width: 40px; 
+        }
+        table th { 
+          background: #f0f0f0; 
+          font-weight: bold; 
+        }
+        img { 
+          max-width: 300px; 
+          height: auto; 
+        }
+        .template-var {
+          background: #e1f0ff;
+          color: #0066cc;
+          padding: 2px 6px;
+          border-radius: 4px;
+          font-family: monospace;
+          font-size: 11px;
+        }
+      \`,
+      paste_data_images: true,
+      paste_retain_style_properties: 'all',
+      paste_word_valid_elements: 'table,tr,td,th,tbody,thead,tfoot,colgroup,col,p,br,b,strong,i,em,u,span,div,h1,h2,h3,h4,h5,h6,ul,ol,li,img,a',
+      table_default_styles: {
+        'border-collapse': 'collapse',
+        'width': '100%'
+      },
+      table_cell_class_list: [],
+      table_row_class_list: [],
+      table_class_list: [],
+      setup: function(ed) {
+        editor = ed;
+        
+        ed.ui.registry.addButton('signatureBtn', {
+          text: 'Подпись',
+          onAction: function() {
+            sendMessage({ type: 'pick-image', imageType: 'signature' });
+          }
+        });
+        
+        ed.ui.registry.addButton('stampBtn', {
+          text: 'Печать',
+          onAction: function() {
+            sendMessage({ type: 'pick-image', imageType: 'stamp' });
+          }
+        });
+        
+        ed.on('init', function() {
+          if (initialContent) {
+            ed.setContent(initialContent);
+          }
+          sendMessage({ type: 'ready' });
+        });
+        
+        ed.on('change keyup paste', function() {
+          sendMessage({
+            type: 'content-change',
+            html: ed.getContent()
+          });
+        });
+      }
     });
-
-    document.getElementById('stamp-btn').addEventListener('click', function() {
-      sendMessage({ type: 'pick-image', imageType: 'stamp' });
-    });
-
+    
     window.insertImage = function(base64Data, alt) {
-      var imgHtml = '<img src="' + base64Data + '" alt="' + alt + '" style="max-width: 150px; height: auto;" />';
-      if (sourceMode) {
-        var pos = sourceEditor.selectionStart;
-        var text = sourceEditor.value;
-        sourceEditor.value = text.slice(0, pos) + imgHtml + text.slice(pos);
-        sourceEditor.selectionStart = sourceEditor.selectionEnd = pos + imgHtml.length;
-        notifyContentChange();
-      } else {
-        var range = quill.getSelection(true);
-        quill.clipboard.dangerouslyPasteHTML(range.index, imgHtml);
-        notifyContentChange();
+      if (editor) {
+        editor.insertContent('<img src="' + base64Data + '" alt="' + alt + '" style="max-width: 150px; height: auto;" />');
       }
     };
-
+    
     window.insertVariable = function(varKey) {
-      if (sourceMode) {
-        var pos = sourceEditor.selectionStart;
-        var text = sourceEditor.value;
-        sourceEditor.value = text.slice(0, pos) + varKey + text.slice(pos);
-        sourceEditor.selectionStart = sourceEditor.selectionEnd = pos + varKey.length;
-        notifyContentChange();
-      } else {
-        var range = quill.getSelection(true);
-        quill.insertText(range.index, varKey, { 'background': '#e1f0ff', 'color': '#0066cc' });
-        quill.setSelection(range.index + varKey.length);
+      if (editor) {
+        editor.insertContent('<span class="template-var">{{' + varKey + '}}</span>&nbsp;');
       }
     };
-
+    
     window.getContent = function() {
-      return sourceMode ? sourceEditor.value : quill.root.innerHTML;
+      return editor ? editor.getContent() : '';
     };
-
-    sendMessage({ type: 'ready' });
   </script>
 </body>
 </html>
@@ -692,7 +209,7 @@ export default function TemplateEditorScreen() {
   const htmlContentRef = useRef(htmlContent);
   
   const initialHtml = useMemo(() => {
-    return getQuillHtml(existingTemplate?.htmlContent || '', isDark);
+    return getEditorHtml(existingTemplate?.htmlContent || '', isDark);
   }, [existingTemplate?.htmlContent, isDark]);
 
   useEffect(() => {
@@ -721,7 +238,12 @@ export default function TemplateEditorScreen() {
         const base64Data = `data:image/png;base64,${result.assets[0].base64}`;
         const altText = imageType === 'signature' ? 'Подпись' : 'Печать';
         
-        if (webViewRef.current && isReady) {
+        if (Platform.OS === 'web') {
+          const iframe = document.querySelector('iframe');
+          if (iframe && iframe.contentWindow) {
+            (iframe.contentWindow as any).insertImage(base64Data, altText);
+          }
+        } else if (webViewRef.current && isReady) {
           const escapedBase64 = base64Data.replace(/'/g, "\\'");
           webViewRef.current.injectJavaScript(`window.insertImage('${escapedBase64}', '${altText}'); true;`);
         }
@@ -749,7 +271,12 @@ export default function TemplateEditorScreen() {
   };
 
   const insertVariable = (varKey: string) => {
-    if (webViewRef.current && isReady) {
+    if (Platform.OS === 'web') {
+      const iframe = document.querySelector('iframe');
+      if (iframe && iframe.contentWindow) {
+        (iframe.contentWindow as any).insertVariable(varKey);
+      }
+    } else if (webViewRef.current && isReady) {
       webViewRef.current.injectJavaScript(`window.insertVariable('${varKey}'); true;`);
     }
     setShowVariables(false);
@@ -913,12 +440,6 @@ export default function TemplateEditorScreen() {
                         setHtmlContent(data.html);
                       } else if (data.type === 'ready') {
                         setIsReady(true);
-                        const win = ref.contentWindow as any;
-                        (webViewRef as any).current = {
-                          injectJavaScript: (js: string) => {
-                            if (win) win.eval(js);
-                          }
-                        };
                       } else if (data.type === 'pick-image') {
                         pickImage(data.imageType);
                       }
@@ -1019,12 +540,8 @@ const styles = StyleSheet.create({
     borderRadius: 6,
   },
   nameInput: {
-    flex: 1,
     fontSize: 14,
     padding: 0,
-  },
-  placeholder: {
-    opacity: 0.5,
   },
   typeButtons: {
     flex: 1,
@@ -1037,7 +554,7 @@ const styles = StyleSheet.create({
     borderRadius: 6,
   },
   typeButtonText: {
-    fontSize: 13,
+    fontSize: 12,
     fontWeight: '500',
   },
   toolbarRow: {
@@ -1058,15 +575,6 @@ const styles = StyleSheet.create({
     fontSize: 14,
     fontWeight: '500',
   },
-  editorContainer: {
-    flex: 1,
-    zIndex: 1,
-    position: 'relative',
-  },
-  webView: {
-    flex: 1,
-    backgroundColor: 'transparent',
-  },
   variablesPanel: {
     flex: 1,
     padding: Spacing.md,
@@ -1075,44 +583,37 @@ const styles = StyleSheet.create({
     marginBottom: Spacing.lg,
   },
   categoryTitle: {
-    fontSize: 14,
+    fontSize: 16,
     fontWeight: '600',
     marginBottom: Spacing.sm,
-    opacity: 0.7,
   },
   variablesList: {
+    flexDirection: 'row',
+    flexWrap: 'wrap',
     gap: Spacing.xs,
   },
   variableItem: {
+    paddingHorizontal: Spacing.sm,
+    paddingVertical: Spacing.xs,
+    borderRadius: 6,
     flexDirection: 'row',
     alignItems: 'center',
-    padding: Spacing.sm,
-    borderRadius: 8,
-    gap: Spacing.sm,
+    gap: Spacing.xs,
   },
   variableKey: {
     fontSize: 12,
-    fontFamily: Platform.select({ ios: 'Menlo', android: 'monospace', default: 'monospace' }),
-    fontWeight: '500',
+    fontWeight: '600',
+    fontFamily: 'monospace',
   },
   variableLabel: {
-    fontSize: 13,
-    flex: 1,
-  },
-  webFallback: {
-    flex: 1,
-    justifyContent: 'center',
-    alignItems: 'center',
-    padding: Spacing.xl,
-  },
-  webFallbackText: {
-    fontSize: 16,
-    textAlign: 'center',
-    marginBottom: Spacing.md,
-  },
-  webFallbackHint: {
-    fontSize: 14,
+    fontSize: 12,
     opacity: 0.7,
-    textAlign: 'center',
+  },
+  editorContainer: {
+    flex: 1,
+  },
+  webView: {
+    flex: 1,
+    backgroundColor: '#ffffff',
   },
 });
