@@ -1,5 +1,5 @@
 import { useState } from 'react';
-import { View, StyleSheet, TextInput, Pressable, ActivityIndicator, KeyboardAvoidingView, Platform } from 'react-native';
+import { View, StyleSheet, TextInput, Pressable, ActivityIndicator, ScrollView, KeyboardAvoidingView, Platform } from 'react-native';
 import { ThemedText } from '@/components/ThemedText';
 import { ThemedView } from '@/components/ThemedView';
 import { Spacing, BorderRadius } from '@/constants/theme';
@@ -42,7 +42,10 @@ export default function LoginScreen() {
       style={[styles.container, { backgroundColor: theme.backgroundRoot }]}
       behavior={Platform.OS === 'ios' ? 'padding' : 'height'}
     >
-      <View style={[styles.content, { paddingTop: insets.top + Spacing['3xl'], paddingBottom: insets.bottom + Spacing['3xl'] }]}>
+      <ScrollView 
+        contentContainerStyle={[styles.content, { paddingTop: insets.top + Spacing['3xl'], paddingBottom: insets.bottom + Spacing['3xl'] }]}
+        keyboardShouldPersistTaps="handled"
+      >
         <View style={styles.header}>
           <View style={[styles.logoContainer, { backgroundColor: theme.primary }]}>
             <Icon name="map" size={48} color="#FFFFFF" />
@@ -115,7 +118,7 @@ export default function LoginScreen() {
             )}
           </Pressable>
         </View>
-      </View>
+      </ScrollView>
     </KeyboardAvoidingView>
   );
 }
@@ -125,7 +128,7 @@ const styles = StyleSheet.create({
     flex: 1,
   },
   content: {
-    flex: 1,
+    flexGrow: 1,
     paddingHorizontal: Spacing.xl,
     justifyContent: 'center',
   },
