@@ -216,12 +216,14 @@ const getQuillHtml = (initialContent: string, isDark: boolean) => `
           <div class="table-size-label" id="table-size-label">Выберите размер</div>
         </div>
       </span>
-      <span class="ql-formats">
-        <button class="custom-btn" id="signature-btn" title="Подпись">Подпись</button>
-        <button class="custom-btn" id="stamp-btn" title="Печать">Печать</button>
+      <span class="ql-formats" style="margin-left: 4px;">
+        <button class="custom-btn" id="signature-btn" title="Подпись" style="margin-right: 4px;">Подпись</button>
       </span>
       <span class="ql-formats">
-        <button class="custom-btn" id="source-btn" title="HTML-код">HTML</button>
+        <button class="custom-btn" id="stamp-btn" title="Печать" style="margin-right: 4px;">Печать</button>
+      </span>
+      <span class="ql-formats">
+        <button class="custom-btn" id="source-btn" title="HTML-код" style="margin-right: 4px;">HTML</button>
       </span>
       <span class="ql-formats">
         <button class="ql-clean" title="Очистить формат"></button>
