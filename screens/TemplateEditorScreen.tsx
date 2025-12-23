@@ -282,12 +282,16 @@ const getQuillHtml = (initialContent: string, isDark: boolean) => `
     }
 
     document.addEventListener('paste', function(e) {
-      if (!quill.hasFocus()) return;
+      var target = e.target;
+      var isInEditor = target.closest('.ql-editor') || target.closest('#editor');
+      if (!isInEditor && !quill.hasFocus()) return;
       
       var clipboardData = e.clipboardData || window.clipboardData;
       if (!clipboardData) return;
       
       var html = clipboardData.getData('text/html');
+      console.log('Paste event, has table:', html && (html.includes('<table') || html.includes('<TABLE')));
+      
       if (html && (html.includes('<table') || html.includes('<TABLE'))) {
         e.preventDefault();
         e.stopPropagation();
@@ -329,7 +333,11 @@ const getQuillHtml = (initialContent: string, isDark: boolean) => `
         cleanHtml = cleanHtml.replace(/<\\/?font[^>]*>/gi, '');
         cleanHtml = cleanHtml.replace(/<span[^>]*>\\s*<\\/span>/gi, '');
         
+        console.log('Cleaned HTML:', cleanHtml.substring(0, 200));
+        
         var sel = window.getSelection();
+        console.log('Selection rangeCount:', sel.rangeCount);
+        
         if (sel.rangeCount > 0) {
           var range = sel.getRangeAt(0);
           range.deleteContents();
