@@ -329,37 +329,15 @@ const getQuillHtml = (initialContent: string, isDark: boolean) => `
         cleanHtml = cleanHtml.replace(/<\\/?font[^>]*>/gi, '');
         cleanHtml = cleanHtml.replace(/<span[^>]*>\\s*<\\/span>/gi, '');
         
-        var sel = window.getSelection();
-        if (sel.rangeCount > 0) {
-          var range = sel.getRangeAt(0);
-          range.deleteContents();
-          
-          var tempDiv = document.createElement('div');
-          tempDiv.innerHTML = cleanHtml;
-          
-          var frag = document.createDocumentFragment();
-          var node, lastNode;
-          while ((node = tempDiv.firstChild)) {
-            lastNode = frag.appendChild(node);
-          }
-          range.insertNode(frag);
-          
-          if (lastNode) {
-            range = range.cloneRange();
-            range.setStartAfter(lastNode);
-            range.collapse(true);
-            sel.removeAllRanges();
-            sel.addRange(range);
-          }
-        } else {
-          quill.root.innerHTML += cleanHtml;
-        }
+        var selection = quill.getSelection(true);
+        var index = selection ? selection.index : quill.getLength();
         
-        notifyContentChange();
+        quill.clipboard.dangerouslyPasteHTML(index, cleanHtml, 'user');
         
         setTimeout(function() {
-          window.reinitAfterPaste();
-        }, 50);
+          quill.focus();
+          notifyContentChange();
+        }, 10);
         
         return false;
       }
