@@ -24,7 +24,8 @@ const getEditorHtml = (initialContent: string, isDark: boolean) => `
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-  <script src="https://cdn.tiny.cloud/1/no-api-key/tinymce/6/tinymce.min.js" referrerpolicy="origin"></script>
+  <script src="https://cdn.jsdelivr.net/npm/tinymce@6.8.2/tinymce.min.js"></script>
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/tinymce@6.8.2/skins/ui/oxide/skin.min.css">
   <style>
     * { box-sizing: border-box; }
     html, body {
@@ -88,6 +89,10 @@ const getEditorHtml = (initialContent: string, isDark: boolean) => `
       statusbar: false,
       branding: false,
       promotion: false,
+      base_url: 'https://cdn.jsdelivr.net/npm/tinymce@6.8.2',
+      suffix: '.min',
+      skin_url: 'https://cdn.jsdelivr.net/npm/tinymce@6.8.2/skins/ui/oxide',
+      content_css: 'https://cdn.jsdelivr.net/npm/tinymce@6.8.2/skins/content/default/content.min.css',
       plugins: 'table lists code image',
       toolbar: 'bold italic underline | blocks | alignleft aligncenter alignright | bullist numlist | table | signatureBtn stampBtn | code',
       content_style: \`
