@@ -154,6 +154,8 @@ const styles = StyleSheet.create({
     fontSize: 32,
     fontWeight: '700',
     marginBottom: Spacing.sm,
+    lineHeight: 42,
+    marginTop: Spacing.md,
   },
   subtitle: {
     fontSize: 16,
