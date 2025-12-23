@@ -329,12 +329,22 @@ const getQuillHtml = (initialContent: string, isDark: boolean) => `
         cleanHtml = cleanHtml.replace(/<\\/?font[^>]*>/gi, '');
         cleanHtml = cleanHtml.replace(/<span[^>]*>\\s*<\\/span>/gi, '');
         
+        var currentHtml = quill.root.innerHTML;
         var selection = quill.getSelection(true);
-        var index = selection ? selection.index : quill.getLength();
         
-        quill.clipboard.dangerouslyPasteHTML(index, cleanHtml, 'user');
+        if (selection) {
+          var beforeHtml = currentHtml.substring(0, selection.index);
+          var afterHtml = currentHtml.substring(selection.index + selection.length);
+          quill.root.innerHTML = beforeHtml + cleanHtml + afterHtml;
+        } else {
+          quill.root.innerHTML = currentHtml + cleanHtml;
+        }
+        
+        var delta = quill.clipboard.convert(quill.root.innerHTML);
+        quill.setContents(delta, 'silent');
         
         setTimeout(function() {
+          quill.setSelection(quill.getLength(), 0);
           quill.focus();
           notifyContentChange();
         }, 10);
