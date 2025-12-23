@@ -281,7 +281,9 @@ const getQuillHtml = (initialContent: string, isDark: boolean) => `
       quill.root.innerHTML = initialContent;
     }
 
-    quill.root.addEventListener('paste', function(e) {
+    document.addEventListener('paste', function(e) {
+      if (!quill.hasFocus()) return;
+      
       var clipboardData = e.clipboardData || window.clipboardData;
       if (!clipboardData) return;
       
@@ -298,12 +300,16 @@ const getQuillHtml = (initialContent: string, isDark: boolean) => `
           table.style.borderCollapse = 'collapse';
           table.style.width = '100%';
           table.style.margin = '10px 0';
+          table.removeAttribute('class');
+          table.removeAttribute('cellspacing');
+          table.removeAttribute('cellpadding');
           
           var cells = table.querySelectorAll('td, th');
           cells.forEach(function(cell) {
             cell.style.border = '1px solid #000';
             cell.style.padding = '5px 8px';
             cell.style.minWidth = '40px';
+            cell.removeAttribute('class');
           });
           
           var headers = table.querySelectorAll('th');
@@ -314,21 +320,45 @@ const getQuillHtml = (initialContent: string, isDark: boolean) => `
         });
         
         var cleanHtml = doc.body.innerHTML;
-        cleanHtml = cleanHtml.replace(/<o:p[^>]*>.*?<\\/o:p>/gi, '');
+        cleanHtml = cleanHtml.replace(/<o:p[^>]*>[\\s\\S]*?<\\/o:p>/gi, '');
         cleanHtml = cleanHtml.replace(/class="[^"]*"/gi, '');
-        cleanHtml = cleanHtml.replace(/<!--.*?-->/gs, '');
+        cleanHtml = cleanHtml.replace(/<!--[\\s\\S]*?-->/g, '');
+        cleanHtml = cleanHtml.replace(/<style[^>]*>[\\s\\S]*?<\\/style>/gi, '');
+        cleanHtml = cleanHtml.replace(/<xml[^>]*>[\\s\\S]*?<\\/xml>/gi, '');
+        cleanHtml = cleanHtml.replace(/mso-[^;"]+;?/gi, '');
+        cleanHtml = cleanHtml.replace(/<\\/?font[^>]*>/gi, '');
         cleanHtml = cleanHtml.replace(/<span[^>]*>\\s*<\\/span>/gi, '');
         
-        var selection = quill.getSelection();
-        var index = selection ? selection.index : quill.getLength();
-        
-        var tempDiv = document.createElement('div');
-        tempDiv.innerHTML = cleanHtml;
-        quill.clipboard.dangerouslyPasteHTML(index, tempDiv.innerHTML, 'user');
+        var sel = window.getSelection();
+        if (sel.rangeCount > 0) {
+          var range = sel.getRangeAt(0);
+          range.deleteContents();
+          
+          var tempDiv = document.createElement('div');
+          tempDiv.innerHTML = cleanHtml;
+          
+          var frag = document.createDocumentFragment();
+          var node, lastNode;
+          while ((node = tempDiv.firstChild)) {
+            lastNode = frag.appendChild(node);
+          }
+          range.insertNode(frag);
+          
+          if (lastNode) {
+            range = range.cloneRange();
+            range.setStartAfter(lastNode);
+            range.collapse(true);
+            sel.removeAllRanges();
+            sel.addRange(range);
+          }
+        } else {
+          quill.root.innerHTML += cleanHtml;
+        }
         
         notifyContentChange();
+        return false;
       }
-    });
+    }, true);
 
     document.addEventListener('touchstart', function(e) {
       var target = e.target;
