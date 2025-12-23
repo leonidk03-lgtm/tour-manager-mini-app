@@ -356,6 +356,11 @@ const getQuillHtml = (initialContent: string, isDark: boolean) => `
         }
         
         notifyContentChange();
+        
+        setTimeout(function() {
+          quill.focus();
+        }, 10);
+        
         return false;
       }
     }, true);
