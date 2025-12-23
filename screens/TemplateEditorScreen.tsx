@@ -800,14 +800,41 @@ export default function TemplateEditorScreen() {
       ) : (
         <View style={styles.editorContainer}>
           {Platform.OS === 'web' ? (
-            <View style={styles.webFallback}>
-              <ThemedText style={styles.webFallbackText}>
-                Редактор доступен только в мобильном приложении.
-              </ThemedText>
-              <ThemedText style={styles.webFallbackHint}>
-                Откройте приложение в Expo Go для редактирования шаблонов.
-              </ThemedText>
-            </View>
+            <iframe
+              ref={(ref) => {
+                if (ref && !ref.dataset.initialized) {
+                  ref.dataset.initialized = 'true';
+                  ref.srcdoc = getQuillHtml(htmlContent, isDark);
+                  ref.onload = () => {
+                    const win = ref.contentWindow as any;
+                    if (win) {
+                      win.addEventListener('message', (e: MessageEvent) => {
+                        try {
+                          const data = JSON.parse(e.data);
+                          if (data.type === 'content-change') {
+                            setHtmlContent(data.html);
+                          } else if (data.type === 'ready') {
+                            setIsReady(true);
+                            (webViewRef as any).current = {
+                              injectJavaScript: (js: string) => {
+                                win.eval(js);
+                              }
+                            };
+                          }
+                        } catch (err) {}
+                      });
+                      const origPost = win.ReactNativeWebView?.postMessage;
+                      win.ReactNativeWebView = {
+                        postMessage: (msg: string) => {
+                          window.postMessage(msg, '*');
+                        }
+                      };
+                    }
+                  };
+                }
+              }}
+              style={{ flex: 1, border: 'none', width: '100%', height: '100%' } as any}
+            />
           ) : (
             <WebView
               ref={webViewRef}
