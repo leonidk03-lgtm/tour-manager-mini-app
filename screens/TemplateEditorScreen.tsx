@@ -1,5 +1,5 @@
-import { useState, useRef, useEffect } from 'react';
-import { View, StyleSheet, Alert, Pressable, ScrollView, ActivityIndicator, Platform } from 'react-native';
+import { useState, useRef, useEffect, useMemo } from 'react';
+import { View, StyleSheet, Alert, Pressable, ScrollView, ActivityIndicator, Platform, TextInput } from 'react-native';
 import { WebView } from 'react-native-webview';
 import { useNavigation, useRoute, RouteProp } from '@react-navigation/native';
 import { NativeStackNavigationProp } from '@react-navigation/native-stack';
@@ -667,6 +667,11 @@ export default function TemplateEditorScreen() {
   const [isReady, setIsReady] = useState(false);
   
   const webViewRef = useRef<WebView>(null);
+  const htmlContentRef = useRef(htmlContent);
+  
+  const initialHtml = useMemo(() => {
+    return getQuillHtml(existingTemplate?.htmlContent || '', isDark);
+  }, [existingTemplate?.htmlContent, isDark]);
 
   useEffect(() => {
     navigation.setOptions({
@@ -709,6 +714,7 @@ export default function TemplateEditorScreen() {
     try {
       const data = JSON.parse(event.nativeEvent.data);
       if (data.type === 'content-change') {
+        htmlContentRef.current = data.html;
         setHtmlContent(data.html);
       } else if (data.type === 'ready') {
         setIsReady(true);
@@ -798,21 +804,13 @@ export default function TemplateEditorScreen() {
         <View style={[styles.inputRow, { backgroundColor: colors.backgroundSecondary }]}>
           <ThemedText style={styles.inputLabel}>Название:</ThemedText>
           <View style={[styles.textInput, { backgroundColor: colors.backgroundDefault }]}>
-            <Pressable
-              onPress={() => {
-                Alert.prompt(
-                  'Название шаблона',
-                  'Введите название шаблона',
-                  (text) => setName(text || ''),
-                  'plain-text',
-                  name
-                );
-              }}
-            >
-              <ThemedText style={name ? undefined : styles.placeholder}>
-                {name || 'Введите название...'}
-              </ThemedText>
-            </Pressable>
+            <TextInput
+              value={name}
+              onChangeText={setName}
+              placeholder="Введите название..."
+              placeholderTextColor={colors.textSecondary}
+              style={[styles.nameInput, { color: colors.text }]}
+            />
           </View>
         </View>
 
@@ -883,7 +881,7 @@ export default function TemplateEditorScreen() {
               ref={(ref) => {
                 if (ref && !ref.dataset.initialized) {
                   ref.dataset.initialized = 'true';
-                  ref.srcdoc = getQuillHtml(htmlContent, isDark);
+                  ref.srcdoc = initialHtml;
                   ref.onload = () => {
                     const win = ref.contentWindow as any;
                     if (win) {
@@ -891,6 +889,7 @@ export default function TemplateEditorScreen() {
                         try {
                           const data = JSON.parse(e.data);
                           if (data.type === 'content-change') {
+                            htmlContentRef.current = data.html;
                             setHtmlContent(data.html);
                           } else if (data.type === 'ready') {
                             setIsReady(true);
@@ -902,7 +901,6 @@ export default function TemplateEditorScreen() {
                           }
                         } catch (err) {}
                       });
-                      const origPost = win.ReactNativeWebView?.postMessage;
                       win.ReactNativeWebView = {
                         postMessage: (msg: string) => {
                           window.postMessage(msg, '*');
@@ -918,7 +916,7 @@ export default function TemplateEditorScreen() {
             <WebView
               ref={webViewRef}
               originWhitelist={['*']}
-              source={{ html: getQuillHtml(htmlContent, isDark) }}
+              source={{ html: initialHtml }}
               onMessage={handleMessage}
               javaScriptEnabled
               domStorageEnabled
@@ -985,6 +983,11 @@ const styles = StyleSheet.create({
     paddingHorizontal: Spacing.sm,
     paddingVertical: Spacing.xs,
     borderRadius: 6,
+  },
+  nameInput: {
+    flex: 1,
+    fontSize: 14,
+    padding: 0,
   },
   placeholder: {
     opacity: 0.5,
