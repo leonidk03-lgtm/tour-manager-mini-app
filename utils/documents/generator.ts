@@ -13,12 +13,13 @@ import {
 import { processTemplate, wrapWithDocumentStyles, TemplateData } from './templateProcessor';
 import { formatDate } from './helpers';
 
-export type DocumentType = 'invoice' | 'act' | 'contract' | 'waybill';
+export type DocumentType = 'invoice' | 'act' | 'contract' | 'contract_annual' | 'waybill';
 
 const DOCUMENT_NAMES: Record<DocumentType, string> = {
   invoice: 'Счёт',
   act: 'Акт',
   contract: 'Договор',
+  contract_annual: 'Годовой договор',
   waybill: 'Накладная',
 };
 
@@ -64,6 +65,7 @@ function getHtmlForDocument(params: GenerateDocumentParams): string {
     case 'act':
       return generateActHtml(data);
     case 'contract':
+    case 'contract_annual':
       return generateContractHtml(data);
     case 'waybill':
       return generateWaybillHtml(data, 'issue');

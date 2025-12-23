@@ -31,7 +31,7 @@ interface CompanySettingsContextType {
   error: string | null;
   refreshSettings: () => Promise<void>;
   updateSettings: (data: Partial<CompanySettings>) => Promise<{ error: string | null }>;
-  getNextDocumentNumber: (type: 'invoice' | 'act' | 'contract' | 'waybill') => Promise<{ number: number; prefix: string } | null>;
+  getNextDocumentNumber: (type: 'invoice' | 'act' | 'contract' | 'contract_annual' | 'waybill') => Promise<string>;
 }
 
 const CompanySettingsContext = createContext<CompanySettingsContextType | undefined>(undefined);
@@ -164,9 +164,10 @@ export function CompanySettingsProvider({ children }: { children: ReactNode }) {
     }
   };
 
-  const getNextDocumentNumber = async (type: 'invoice' | 'act' | 'contract' | 'waybill'): Promise<{ number: number; prefix: string } | null> => {
-    if (!settings?.id) return null;
+  const getNextDocumentNumber = async (type: 'invoice' | 'act' | 'contract' | 'contract_annual' | 'waybill'): Promise<string> => {
+    if (!settings?.id) return `${Date.now()}`;
 
+    const effectiveType = type === 'contract_annual' ? 'contract' : type;
     const columnMap = {
       invoice: 'next_invoice_number',
       act: 'next_act_number',
@@ -174,14 +175,14 @@ export function CompanySettingsProvider({ children }: { children: ReactNode }) {
       waybill: 'next_waybill_number',
     };
 
-    const column = columnMap[type];
-    const currentNumber = type === 'invoice' ? settings.nextInvoiceNumber :
-                         type === 'act' ? settings.nextActNumber :
-                         type === 'contract' ? settings.nextContractNumber :
+    const column = columnMap[effectiveType];
+    const currentNumber = effectiveType === 'invoice' ? settings.nextInvoiceNumber :
+                         effectiveType === 'act' ? settings.nextActNumber :
+                         effectiveType === 'contract' ? settings.nextContractNumber :
                          settings.nextWaybillNumber;
 
     try {
-      if (!supabase) return null;
+      if (!supabase) return `${settings.documentPrefix}${currentNumber}`;
       
       const { error: updateError } = await supabase
         .from('company_settings')
@@ -192,10 +193,10 @@ export function CompanySettingsProvider({ children }: { children: ReactNode }) {
 
       await fetchSettings();
       
-      return { number: currentNumber, prefix: settings.documentPrefix };
+      return `${settings.documentPrefix}${currentNumber}`;
     } catch (err) {
       console.error('Error getting next document number:', err);
-      return null;
+      return `${settings.documentPrefix || ''}${currentNumber}`;
     }
   };
 

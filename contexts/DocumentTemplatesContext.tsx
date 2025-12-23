@@ -2,9 +2,11 @@ import { createContext, useContext, useState, useEffect, ReactNode, useCallback 
 import { supabase } from '@/lib/supabase';
 import { useAuth } from './AuthContext';
 
+export type DocumentTemplateType = 'invoice' | 'act' | 'contract' | 'contract_annual' | 'waybill';
+
 export interface DocumentTemplate {
   id: string;
-  type: 'invoice' | 'act' | 'contract' | 'waybill';
+  type: DocumentTemplateType;
   name: string;
   htmlContent: string;
   isDefault: boolean;
@@ -17,12 +19,12 @@ interface DocumentTemplatesContextType {
   isLoading: boolean;
   error: string | null;
   refreshTemplates: () => Promise<void>;
-  getTemplatesByType: (type: DocumentTemplate['type']) => DocumentTemplate[];
-  getDefaultTemplate: (type: DocumentTemplate['type']) => DocumentTemplate | undefined;
+  getTemplatesByType: (type: DocumentTemplateType) => DocumentTemplate[];
+  getDefaultTemplate: (type: DocumentTemplateType) => DocumentTemplate | undefined;
   createTemplate: (data: Omit<DocumentTemplate, 'id' | 'createdAt' | 'updatedAt'>) => Promise<{ error: string | null; template?: DocumentTemplate }>;
   updateTemplate: (id: string, data: Partial<Omit<DocumentTemplate, 'id' | 'createdAt' | 'updatedAt'>>) => Promise<{ error: string | null }>;
   deleteTemplate: (id: string) => Promise<{ error: string | null }>;
-  setAsDefault: (id: string, type: DocumentTemplate['type']) => Promise<{ error: string | null }>;
+  setAsDefault: (id: string, type: DocumentTemplateType) => Promise<{ error: string | null }>;
 }
 
 const DocumentTemplatesContext = createContext<DocumentTemplatesContextType | undefined>(undefined);
@@ -90,11 +92,11 @@ export function DocumentTemplatesProvider({ children }: { children: ReactNode })
     fetchTemplates();
   }, [fetchTemplates]);
 
-  const getTemplatesByType = useCallback((type: DocumentTemplate['type']) => {
+  const getTemplatesByType = useCallback((type: DocumentTemplateType) => {
     return templates.filter(t => t.type === type);
   }, [templates]);
 
-  const getDefaultTemplate = useCallback((type: DocumentTemplate['type']) => {
+  const getDefaultTemplate = useCallback((type: DocumentTemplateType) => {
     return templates.find(t => t.type === type && t.isDefault) || templates.find(t => t.type === type);
   }, [templates]);
 
@@ -192,7 +194,7 @@ export function DocumentTemplatesProvider({ children }: { children: ReactNode })
     }
   };
 
-  const setAsDefault = async (id: string, type: DocumentTemplate['type']): Promise<{ error: string | null }> => {
+  const setAsDefault = async (id: string, type: DocumentTemplateType): Promise<{ error: string | null }> => {
     if (!isAdmin) {
       return { error: 'Только администратор может изменять шаблоны' };
     }
@@ -250,10 +252,11 @@ export function useDocumentTemplates() {
   return context;
 }
 
-export const TEMPLATE_TYPE_LABELS: Record<DocumentTemplate['type'], string> = {
+export const TEMPLATE_TYPE_LABELS: Record<DocumentTemplateType, string> = {
   invoice: 'Счёт',
   act: 'Акт',
   contract: 'Договор',
+  contract_annual: 'Годовой договор',
   waybill: 'Накладная',
 };
 
