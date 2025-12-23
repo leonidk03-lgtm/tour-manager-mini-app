@@ -48,13 +48,29 @@ const getEditorHtml = (initialContent: string, isDark: boolean) => `
       background: #ffffff !important;
     }
     .tox .tox-toolbar__primary {
-      background: ${isDark ? '#2a2a2a' : '#f5f5f5'} !important;
+      background: #333 !important;
+      border-bottom: 1px solid #444 !important;
     }
     .tox .tox-tbtn {
-      color: ${isDark ? '#fff' : '#444'} !important;
+      color: #fff !important;
     }
     .tox .tox-tbtn svg {
-      fill: ${isDark ? '#fff' : '#444'} !important;
+      fill: #fff !important;
+    }
+    .tox .tox-tbtn:hover {
+      background: #555 !important;
+    }
+    .tox .tox-tbtn--enabled {
+      background: #555 !important;
+    }
+    .tox .tox-toolbar__group {
+      border-color: #555 !important;
+    }
+    .tox .tox-editor-header {
+      background: #333 !important;
+    }
+    .tox .tox-menubar {
+      background: #333 !important;
     }
     .template-var {
       background: #e1f0ff;
