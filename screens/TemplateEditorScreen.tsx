@@ -101,83 +101,38 @@ const getQuillHtml = (initialContent: string, isDark: boolean) => `
       font-weight: bold;
     }
     .ql-editor img {
-      max-width: 200px;
+      max-width: 300px;
       height: auto;
       cursor: pointer;
     }
-    .ql-editor img.selected {
-      outline: 2px solid #0088ff;
-    }
-    .image-resize-dialog {
+    .image-overlay {
+      position: absolute;
+      border: 2px solid #0088ff;
+      pointer-events: none;
       display: none;
-      position: fixed;
-      top: 50%;
-      left: 50%;
-      transform: translate(-50%, -50%);
-      background: ${isDark ? '#333' : '#fff'};
-      border: 1px solid ${isDark ? '#555' : '#ccc'};
-      border-radius: 8px;
-      padding: 16px;
-      box-shadow: 0 4px 20px rgba(0,0,0,0.3);
-      z-index: 300;
-      min-width: 200px;
     }
-    .image-resize-dialog.show {
+    .image-overlay.active {
       display: block;
     }
-    .image-resize-dialog h4 {
-      margin: 0 0 12px 0;
-      font-size: 14px;
-      color: ${isDark ? '#fff' : '#333'};
-    }
-    .image-resize-dialog label {
-      display: block;
-      margin-bottom: 4px;
-      font-size: 12px;
-      color: ${isDark ? '#aaa' : '#666'};
-    }
-    .image-resize-dialog input {
-      width: 100%;
-      padding: 8px;
-      margin-bottom: 12px;
-      border: 1px solid ${isDark ? '#555' : '#ccc'};
-      border-radius: 4px;
-      background: ${isDark ? '#222' : '#fff'};
-      color: ${isDark ? '#fff' : '#000'};
-      font-size: 14px;
-    }
-    .image-resize-dialog .btn-row {
-      display: flex;
-      gap: 8px;
-      justify-content: flex-end;
-    }
-    .image-resize-dialog button {
-      padding: 8px 16px;
-      border: none;
-      border-radius: 4px;
-      font-size: 12px;
-      cursor: pointer;
-    }
-    .image-resize-dialog .btn-cancel {
-      background: ${isDark ? '#555' : '#ddd'};
-      color: ${isDark ? '#fff' : '#333'};
-    }
-    .image-resize-dialog .btn-apply {
+    .resize-handle {
+      position: absolute;
+      width: 28px;
+      height: 28px;
       background: #0088ff;
-      color: #fff;
+      border: 2px solid #fff;
+      border-radius: 4px;
+      pointer-events: auto;
+      touch-action: none;
     }
-    .dialog-overlay {
-      display: none;
-      position: fixed;
-      top: 0;
-      left: 0;
-      right: 0;
-      bottom: 0;
-      background: rgba(0,0,0,0.5);
-      z-index: 250;
+    .resize-handle.se {
+      right: -14px;
+      bottom: -14px;
+      cursor: se-resize;
     }
-    .dialog-overlay.show {
-      display: block;
+    .resize-handle.sw {
+      left: -14px;
+      bottom: -14px;
+      cursor: sw-resize;
     }
     .ql-editor .template-var {
       background: #e1f0ff;
@@ -309,15 +264,8 @@ const getQuillHtml = (initialContent: string, isDark: boolean) => `
     <div id="editor"></div>
   </div>
   <textarea id="source-editor" spellcheck="false"></textarea>
-  <div class="dialog-overlay" id="dialog-overlay"></div>
-  <div class="image-resize-dialog" id="image-resize-dialog">
-    <h4>Размер изображения</h4>
-    <label>Ширина (px)</label>
-    <input type="number" id="img-width" min="20" max="500" />
-    <div class="btn-row">
-      <button class="btn-cancel" id="resize-cancel">Отмена</button>
-      <button class="btn-apply" id="resize-apply">Применить</button>
-    </div>
+  <div class="image-overlay" id="image-overlay">
+    <div class="resize-handle se" id="handle-se"></div>
   </div>
   <script>
     var quill = new Quill('#editor', {
@@ -342,50 +290,100 @@ const getQuillHtml = (initialContent: string, isDark: boolean) => `
     });
 
     var selectedImage = null;
-    var resizeDialog = document.getElementById('image-resize-dialog');
-    var dialogOverlay = document.getElementById('dialog-overlay');
-    var imgWidthInput = document.getElementById('img-width');
+    var overlay = document.getElementById('image-overlay');
+    var handleSE = document.getElementById('handle-se');
+    var isResizing = false;
+    var startX, startY, startWidth;
+
+    function positionOverlay() {
+      if (!selectedImage) return;
+      var rect = selectedImage.getBoundingClientRect();
+      var containerRect = document.getElementById('editor-container').getBoundingClientRect();
+      overlay.style.left = (rect.left - containerRect.left + document.getElementById('editor-container').scrollLeft) + 'px';
+      overlay.style.top = (rect.top - containerRect.top + document.getElementById('editor-container').scrollTop) + 'px';
+      overlay.style.width = rect.width + 'px';
+      overlay.style.height = rect.height + 'px';
+    }
+
+    function selectImage(img) {
+      if (selectedImage) selectedImage.style.outline = '';
+      selectedImage = img;
+      selectedImage.style.outline = '2px solid #0088ff';
+      overlay.classList.add('active');
+      positionOverlay();
+    }
+
+    function deselectImage() {
+      if (selectedImage) {
+        selectedImage.style.outline = '';
+        selectedImage = null;
+      }
+      overlay.classList.remove('active');
+    }
 
     quill.root.addEventListener('click', function(e) {
       if (e.target.tagName === 'IMG') {
         e.preventDefault();
         e.stopPropagation();
-        if (selectedImage) selectedImage.classList.remove('selected');
-        selectedImage = e.target;
-        selectedImage.classList.add('selected');
-        imgWidthInput.value = selectedImage.width || 100;
-        resizeDialog.classList.add('show');
-        dialogOverlay.classList.add('show');
+        selectImage(e.target);
+      } else {
+        deselectImage();
       }
     });
 
-    dialogOverlay.addEventListener('click', function() {
-      closeResizeDialog();
+    document.addEventListener('click', function(e) {
+      if (!e.target.closest('.ql-editor') && !e.target.closest('.image-overlay')) {
+        deselectImage();
+      }
     });
 
-    document.getElementById('resize-cancel').addEventListener('click', function() {
-      closeResizeDialog();
-    });
+    function getEventPos(e) {
+      if (e.touches && e.touches.length) {
+        return { x: e.touches[0].clientX, y: e.touches[0].clientY };
+      }
+      return { x: e.clientX, y: e.clientY };
+    }
 
-    document.getElementById('resize-apply').addEventListener('click', function() {
-      if (selectedImage) {
-        var newWidth = parseInt(imgWidthInput.value) || 100;
-        selectedImage.style.width = newWidth + 'px';
-        selectedImage.style.maxWidth = newWidth + 'px';
-        selectedImage.style.height = 'auto';
+    function startResize(e) {
+      if (!selectedImage) return;
+      e.preventDefault();
+      e.stopPropagation();
+      isResizing = true;
+      var pos = getEventPos(e);
+      startX = pos.x;
+      startY = pos.y;
+      startWidth = selectedImage.offsetWidth;
+    }
+
+    function doResize(e) {
+      if (!isResizing || !selectedImage) return;
+      e.preventDefault();
+      var pos = getEventPos(e);
+      var deltaX = pos.x - startX;
+      var newWidth = Math.max(30, Math.min(300, startWidth + deltaX));
+      selectedImage.style.width = newWidth + 'px';
+      selectedImage.style.maxWidth = newWidth + 'px';
+      selectedImage.style.height = 'auto';
+      positionOverlay();
+    }
+
+    function endResize(e) {
+      if (isResizing) {
+        isResizing = false;
         notifyContentChange();
       }
-      closeResizeDialog();
-    });
-
-    function closeResizeDialog() {
-      resizeDialog.classList.remove('show');
-      dialogOverlay.classList.remove('show');
-      if (selectedImage) {
-        selectedImage.classList.remove('selected');
-        selectedImage = null;
-      }
     }
+
+    handleSE.addEventListener('mousedown', startResize);
+    handleSE.addEventListener('touchstart', startResize, { passive: false });
+    document.addEventListener('mousemove', doResize);
+    document.addEventListener('touchmove', doResize, { passive: false });
+    document.addEventListener('mouseup', endResize);
+    document.addEventListener('touchend', endResize);
+
+    document.getElementById('editor-container').addEventListener('scroll', function() {
+      if (selectedImage) positionOverlay();
+    });
 
     var sourceMode = false;
     var sourceEditor = document.getElementById('source-editor');
