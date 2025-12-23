@@ -290,8 +290,6 @@ const getQuillHtml = (initialContent: string, isDark: boolean) => `
       if (!clipboardData) return;
       
       var html = clipboardData.getData('text/html');
-      console.log('Paste event, has table:', html && (html.includes('<table') || html.includes('<TABLE')));
-      
       if (html && (html.includes('<table') || html.includes('<TABLE'))) {
         e.preventDefault();
         e.stopPropagation();
@@ -333,55 +331,9 @@ const getQuillHtml = (initialContent: string, isDark: boolean) => `
         cleanHtml = cleanHtml.replace(/<\\/?font[^>]*>/gi, '');
         cleanHtml = cleanHtml.replace(/<span[^>]*>\\s*<\\/span>/gi, '');
         
-        console.log('Cleaned HTML:', cleanHtml.substring(0, 200));
-        
-        var sel = window.getSelection();
-        console.log('Selection rangeCount:', sel.rangeCount);
-        
-        if (sel.rangeCount > 0) {
-          var range = sel.getRangeAt(0);
-          range.deleteContents();
-          
-          var tempDiv = document.createElement('div');
-          tempDiv.innerHTML = cleanHtml;
-          
-          var frag = document.createDocumentFragment();
-          var node, lastNode;
-          while ((node = tempDiv.firstChild)) {
-            lastNode = frag.appendChild(node);
-          }
-          range.insertNode(frag);
-          
-          if (lastNode) {
-            range = range.cloneRange();
-            range.setStartAfter(lastNode);
-            range.collapse(true);
-            sel.removeAllRanges();
-            sel.addRange(range);
-          }
-        } else {
-          quill.root.innerHTML += cleanHtml;
-        }
-        
-        var allTables = quill.root.querySelectorAll('table');
-        allTables.forEach(function(table) {
-          table.setAttribute('contenteditable', 'true');
-          var cells = table.querySelectorAll('td, th');
-          cells.forEach(function(cell) {
-            cell.setAttribute('contenteditable', 'true');
-            cell.addEventListener('keydown', function(e) {
-              if (e.key === 'Backspace' || e.key === 'Delete') {
-                e.stopPropagation();
-              }
-            });
-          });
-        });
-        
+        quill.focus();
+        document.execCommand('insertHTML', false, cleanHtml);
         notifyContentChange();
-        
-        setTimeout(function() {
-          quill.focus();
-        }, 10);
         
         return false;
       }
@@ -543,10 +495,7 @@ const getQuillHtml = (initialContent: string, isDark: boolean) => `
     });
 
     sourceEditor.addEventListener('input', function() {
-      window.ReactNativeWebView.postMessage(JSON.stringify({
-        type: 'content-change',
-        html: sourceEditor.value
-      }));
+      notifyContentChange();
     });
 
     function formatHtml(html) {
@@ -647,10 +596,17 @@ const getQuillHtml = (initialContent: string, isDark: boolean) => `
 
     function notifyContentChange() {
       var html = sourceMode ? sourceEditor.value : quill.root.innerHTML;
-      window.ReactNativeWebView.postMessage(JSON.stringify({
-        type: 'content-change',
-        html: html
-      }));
+      if (window.ReactNativeWebView) {
+        window.ReactNativeWebView.postMessage(JSON.stringify({
+          type: 'content-change',
+          html: html
+        }));
+      } else if (window.parent && window.parent !== window) {
+        window.parent.postMessage(JSON.stringify({
+          type: 'content-change',
+          html: html
+        }), '*');
+      }
     }
 
     quill.on('text-change', function() {
@@ -659,12 +615,20 @@ const getQuillHtml = (initialContent: string, isDark: boolean) => `
       }
     });
 
+    function sendMessage(data) {
+      if (window.ReactNativeWebView) {
+        window.ReactNativeWebView.postMessage(JSON.stringify(data));
+      } else if (window.parent && window.parent !== window) {
+        window.parent.postMessage(JSON.stringify(data), '*');
+      }
+    }
+
     document.getElementById('signature-btn').addEventListener('click', function() {
-      window.ReactNativeWebView.postMessage(JSON.stringify({ type: 'pick-image', imageType: 'signature' }));
+      sendMessage({ type: 'pick-image', imageType: 'signature' });
     });
 
     document.getElementById('stamp-btn').addEventListener('click', function() {
-      window.ReactNativeWebView.postMessage(JSON.stringify({ type: 'pick-image', imageType: 'stamp' }));
+      sendMessage({ type: 'pick-image', imageType: 'stamp' });
     });
 
     window.insertImage = function(base64Data, alt) {
@@ -700,7 +664,7 @@ const getQuillHtml = (initialContent: string, isDark: boolean) => `
       return sourceMode ? sourceEditor.value : quill.root.innerHTML;
     };
 
-    window.ReactNativeWebView.postMessage(JSON.stringify({ type: 'ready' }));
+    sendMessage({ type: 'ready' });
   </script>
 </body>
 </html>
