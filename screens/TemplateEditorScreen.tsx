@@ -368,6 +368,18 @@ const getQuillHtml = (initialContent: string, isDark: boolean) => `
       }
     });
 
+    quill.root.addEventListener('keydown', function(e) {
+      e.stopPropagation();
+    });
+    
+    quill.root.addEventListener('keyup', function(e) {
+      e.stopPropagation();
+    });
+    
+    quill.root.addEventListener('keypress', function(e) {
+      e.stopPropagation();
+    });
+
     var selectedImage = null;
     var overlay = document.getElementById('image-overlay');
     var handleSE = document.getElementById('handle-se');
@@ -911,6 +923,7 @@ export default function TemplateEditorScreen() {
                 }
               }}
               style={{ flex: 1, border: 'none', width: '100%', height: '100%' } as any}
+              tabIndex={0}
             />
           ) : (
             <WebView
