@@ -142,7 +142,7 @@ const styles = StyleSheet.create({
     borderRadius: 24,
     justifyContent: 'center',
     alignItems: 'center',
-    marginBottom: Spacing.xl,
+    marginBottom: Spacing['2xl'],
   },
   title: {
     fontSize: 32,
