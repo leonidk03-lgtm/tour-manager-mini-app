@@ -889,7 +889,16 @@ export default function RadioGuidesScreen() {
     const { kit, order } = item;
     const client = rentalClients.find(c => c.id === order.clientId);
     const clientName = order.clientName || client?.name || "Клиент";
-    const totalReceivers = (order.kitCount || 0) + (order.spareReceiverCount || 0);
+    
+    // Find the equipment block for this specific bag
+    const equipmentBlock = order.equipmentBlocks?.find(block => 
+      block.bagNumber === String(kit.bagNumber)
+    );
+    // Get receivers from the equipment block (kitCount + spareReceiverCount), fallback to order level
+    const totalReceivers = equipmentBlock 
+      ? (equipmentBlock.kitCount || 0) + (equipmentBlock.spareReceiverCount || 0)
+      : (order.kitCount || 0) + (order.spareReceiverCount || 0);
+    
     const startDate = new Date(order.startDate).toLocaleDateString("ru-RU", { day: "numeric", month: "short" });
     const endDate = new Date(order.endDate).toLocaleDateString("ru-RU", { day: "numeric", month: "short" });
     const batteryInfo = getBatteryInfo(kit.batteryLevel);
