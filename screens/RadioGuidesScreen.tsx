@@ -1009,7 +1009,7 @@ export default function RadioGuidesScreen() {
         
         <View style={[styles.assignmentInfo, { backgroundColor: theme.backgroundTertiary }]}>
           <ThemedText style={[styles.assignmentLabel, { color: theme.textSecondary }]}>
-            Заказчик:
+            Клиент:
           </ThemedText>
           <ThemedText style={[styles.assignmentValue, { color: theme.primary }]}>
             {clientName}
@@ -1030,6 +1030,30 @@ export default function RadioGuidesScreen() {
           <ThemedText style={styles.assignmentValue}>
             {startDate} — {endDate}
           </ThemedText>
+          {equipmentBlock?.guideName ? (
+            <>
+              <ThemedText style={[styles.assignmentLabel, { color: theme.textSecondary }]}>
+                Гид:
+              </ThemedText>
+              <ThemedText style={styles.assignmentValue}>{equipmentBlock.guideName}</ThemedText>
+            </>
+          ) : null}
+          {equipmentBlock?.guidePhone ? (
+            <>
+              <ThemedText style={[styles.assignmentLabel, { color: theme.textSecondary }]}>
+                Телефон гида:
+              </ThemedText>
+              <ThemedText style={styles.assignmentValue}>{equipmentBlock.guidePhone}</ThemedText>
+            </>
+          ) : null}
+          {equipmentBlock?.deliveryLocation ? (
+            <>
+              <ThemedText style={[styles.assignmentLabel, { color: theme.textSecondary }]}>
+                Место доставки:
+              </ThemedText>
+              <ThemedText style={styles.assignmentValue}>{equipmentBlock.deliveryLocation}</ThemedText>
+            </>
+          ) : null}
         </View>
         
         <View style={styles.kitActions}>
