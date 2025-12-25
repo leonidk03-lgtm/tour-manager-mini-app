@@ -489,8 +489,12 @@ export default function DashboardScreen() {
     // Count receivers on excursions (non-rental assignments only)
     const onExcursions = excursionAssignments.reduce((sum, a) => sum + a.receiversIssued, 0);
     
-    // Count receivers on rentals from assignments
-    const onRentals = rentalAssignments.reduce((sum, a) => sum + a.receiversIssued, 0);
+    // Count receivers on rentals from issued orders (equipment blocks + spare receivers)
+    const activeRentals = rentalOrders.filter(order => order.status === 'issued');
+    const onRentals = activeRentals.reduce((sum, order) => {
+      const blockReceivers = (order.equipmentBlocks || []).reduce((blockSum, block) => blockSum + block.receiverCount, 0);
+      return sum + blockReceivers + order.spareReceiverCount;
+    }, 0);
     
     const totalInUse = onExcursions + onRentals;
     
@@ -502,7 +506,7 @@ export default function DashboardScreen() {
     const lostCount = todayLosses.reduce((sum, loss) => sum + loss.missingCount, 0);
     
     return { onExcursions, onRentals, totalInUse, lostCount };
-  }, [radioGuideAssignments, equipmentLosses, radioGuideKits]);
+  }, [radioGuideAssignments, equipmentLosses, radioGuideKits, rentalOrders]);
 
   const getTourName = (tourTypeId: string) => {
     const tour = tourTypes.find(t => t.id === tourTypeId);
