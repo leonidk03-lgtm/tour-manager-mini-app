@@ -489,20 +489,32 @@ export default function DashboardScreen() {
     // Count receivers on excursions (non-rental assignments only)
     const onExcursions = excursionAssignments.reduce((sum, a) => sum + a.receiversIssued, 0);
     
-    // Count receivers on rentals from rental assignments (same data source as RadioGuidesScreen)
-    const onRentals = rentalAssignments.reduce((sum, a) => sum + a.receiversIssued, 0);
+    // Count receivers on rentals from equipment blocks (same logic as RadioGuidesScreen)
+    const activeRentals = rentalOrders.filter(order => order.status === 'issued');
+    let onRentals = 0;
+    rentalAssignments.forEach(assignment => {
+      if (!assignment.rentalOrderId) return;
+      const order = activeRentals.find(o => o.id === assignment.rentalOrderId);
+      if (!order || !order.equipmentBlocks) return;
+      
+      // Find the equipment block for this assignment
+      const kit = radioGuideKits.find(k => k.id === assignment.kitId);
+      if (!kit) return;
+      
+      const block = order.equipmentBlocks.find(b => b.bagNumber === String(kit.bagNumber));
+      if (block && block.isIssued && !block.isReturned) {
+        onRentals += (block.kitCount || 0) + (block.spareReceiverCount || 0);
+      }
+    });
     
     const totalInUse = onExcursions + onRentals;
     
-    const { startDate: todayStart, endDate: todayEnd } = getDateRangeForPeriod("day", new Date());
-    const todayLosses = equipmentLosses.filter(loss => {
-      const lossDate = loss.createdAt.split('T')[0];
-      return lossDate >= todayStart && lossDate <= todayEnd;
-    });
-    const lostCount = todayLosses.reduce((sum, loss) => sum + loss.missingCount, 0);
+    // Count only losses with status 'lost' (not 'found')
+    const activeLosses = equipmentLosses.filter(loss => loss.status === 'lost');
+    const lostCount = activeLosses.reduce((sum, loss) => sum + loss.missingCount, 0);
     
     return { onExcursions, onRentals, totalInUse, lostCount };
-  }, [radioGuideAssignments, equipmentLosses, radioGuideKits]);
+  }, [radioGuideAssignments, equipmentLosses, radioGuideKits, rentalOrders]);
 
   const getTourName = (tourTypeId: string) => {
     const tour = tourTypes.find(t => t.id === tourTypeId);
