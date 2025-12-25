@@ -613,17 +613,32 @@ export default function RadioGuidesScreen() {
       // Free the bag
       await updateRadioGuideKit(kit.id, { status: "available" });
       
-      // Remove this bag number from order's bagNumber list
+      // Find and update the equipment block for this bag
+      const blockIndex = order.equipmentBlocks?.findIndex(
+        block => block.bagNumber === String(kit.bagNumber)
+      );
+      
+      if (blockIndex !== undefined && blockIndex >= 0) {
+        await returnEquipmentBlock(order.id, blockIndex);
+      } else {
+        // Fallback: just remove bag from order's bagNumber list
+        const currentBags = order.bagNumber ? order.bagNumber.split(",").map(s => s.trim()).filter(Boolean) : [];
+        const remainingBags = currentBags.filter(bagStr => parseInt(bagStr) !== kit.bagNumber);
+        
+        if (remainingBags.length === 0) {
+          await updateRentalOrder(order.id, { status: "returned", bagNumber: "" });
+        } else {
+          await updateRentalOrder(order.id, { bagNumber: remainingBags.join(", ") });
+        }
+      }
+      
+      // Check remaining bags
       const currentBags = order.bagNumber ? order.bagNumber.split(",").map(s => s.trim()).filter(Boolean) : [];
       const remainingBags = currentBags.filter(bagStr => parseInt(bagStr) !== kit.bagNumber);
       
       if (remainingBags.length === 0) {
-        // All bags returned - mark order as returned
-        await updateRentalOrder(order.id, { status: "returned", bagNumber: "" });
         Alert.alert("Успешно", `Все сумки по заказу #${order.orderNumber} приняты. Заказ закрыт.`);
       } else {
-        // Some bags still out - update bagNumber list only
-        await updateRentalOrder(order.id, { bagNumber: remainingBags.join(", ") });
         Alert.alert("Успешно", `Сумка #${kit.bagNumber} принята.\nОсталось вернуть: ${remainingBags.length} сумок`);
       }
     } catch (err) {
@@ -678,17 +693,28 @@ export default function RadioGuidesScreen() {
       // Free the bag
       await updateRadioGuideKit(selectedRentalKit.id, { status: "available" });
       
-      // Remove this bag number from order's bagNumber list
+      // Find and update the equipment block for this bag
+      const blockIndex = selectedRentalOrder.equipmentBlocks?.findIndex(
+        block => block.bagNumber === String(selectedRentalKit.bagNumber)
+      );
+      
+      if (blockIndex !== undefined && blockIndex >= 0) {
+        await returnEquipmentBlock(selectedRentalOrder.id, blockIndex);
+      } else {
+        // Fallback: just remove bag from order's bagNumber list
+        const currentBags = selectedRentalOrder.bagNumber ? selectedRentalOrder.bagNumber.split(",").map(s => s.trim()).filter(Boolean) : [];
+        const remainingBags = currentBags.filter(bagStr => parseInt(bagStr) !== selectedRentalKit.bagNumber);
+        
+        if (remainingBags.length === 0) {
+          await updateRentalOrder(selectedRentalOrder.id, { status: "returned", bagNumber: "" });
+        } else {
+          await updateRentalOrder(selectedRentalOrder.id, { bagNumber: remainingBags.join(", ") });
+        }
+      }
+      
+      // Calculate remaining bags for message
       const currentBags = selectedRentalOrder.bagNumber ? selectedRentalOrder.bagNumber.split(",").map(s => s.trim()).filter(Boolean) : [];
       const remainingBags = currentBags.filter(bagStr => parseInt(bagStr) !== selectedRentalKit.bagNumber);
-      
-      if (remainingBags.length === 0) {
-        // All bags returned - mark order as returned
-        await updateRentalOrder(selectedRentalOrder.id, { status: "returned", bagNumber: "" });
-      } else {
-        // Some bags still out - update bagNumber list only
-        await updateRentalOrder(selectedRentalOrder.id, { bagNumber: remainingBags.join(", ") });
-      }
       
       setRentalReturnModalVisible(false);
       setSelectedRentalKit(null);
