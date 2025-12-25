@@ -35,17 +35,32 @@ The architecture emphasizes modularity, reusability, and scalability. The choice
 ### Telegram Notifications System
 The application includes a Telegram notification system for sending alerts to clients and guides. **Important security note**: The Telegram bot token must NEVER be exposed in frontend code. The system uses a Supabase Edge Function to securely handle Telegram API calls.
 
-**Required Tables** (created via SQL in Supabase):
+**Required Tables** (created via SQL in Supabase - TABLES ARE NOW CREATED):
 - `telegram_contacts`: Stores phone-to-Telegram chat ID mappings
-- `notification_logs`: Logs all sent notifications with status
+- `notification_logs`: Logs all sent notifications with status  
 - `notification_settings`: Stores bot token and global settings
+
+**Notification Types Supported**:
+- `order_issued` - Order issued to client
+- `order_returned` - Equipment returned
+- `bag_issued` - Equipment block issued to guide
+- `reminder` - Reminder before rental date
+- `order_cancelled` - Order cancelled
+- `status_change` - Order status changed
+- `equipment_issued` - Equipment issued
+
+**Admin Settings** (in NotificationsScreen):
+- Toggle Telegram notifications on/off
+- Set Bot Token (stored securely in notification_settings table)
+- View connected Telegram contacts count
+- Configure reminder days before rental
 
 **Supabase Edge Function Deployment**:
 1. Install Supabase CLI: `npm install -g supabase`
 2. Login: `supabase login`
 3. Link project: `supabase link --project-ref YOUR_PROJECT_REF`
 4. Deploy function: `supabase functions deploy send-telegram-message`
-5. Set the `telegram_bot_token` in `notification_settings` table via Supabase dashboard
+5. Set the `telegram_bot_token` via app settings or directly in notification_settings table
 
 The Edge Function code is located at `supabase/functions/send-telegram-message/index.ts`.
 
