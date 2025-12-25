@@ -211,7 +211,7 @@ export default function TourGuidesScreen() {
         <Pressable
           style={[
             styles.fab,
-            { backgroundColor: theme.primary, bottom: insets.bottom + 16 },
+            { backgroundColor: theme.primary, bottom: insets.bottom + Spacing.tabBarHeight + 24 },
           ]}
           onPress={() => handleOpenModal()}
         >
