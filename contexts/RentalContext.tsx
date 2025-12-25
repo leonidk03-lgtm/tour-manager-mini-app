@@ -176,7 +176,7 @@ interface RentalContextType {
   updateRentalService: (id: string, service: Partial<RentalService>) => Promise<void>;
   deleteRentalService: (id: string) => Promise<void>;
   issueEquipmentBlock: (orderId: string, blockIndex: number) => Promise<{ allIssued: boolean; radioGuideAssignmentError?: string | null }>;
-  returnEquipmentBlock: (orderId: string, blockIndex: number) => Promise<{ allReturned: boolean }>;
+  returnEquipmentBlock: (orderId: string, blockIndex: number) => Promise<{ allReturned: boolean; radioGuideReturnError?: string | null }>;
   refreshData: () => Promise<void>;
 }
 
@@ -190,6 +190,7 @@ export function RentalProvider({ children }: { children: ReactNode }) {
     autoReturnForService,
     radioGuideKits,
     issueRadioGuideForRental,
+    returnRadioGuideForRental,
     getActiveAssignmentByRentalBlock,
   } = useData();
   
@@ -1250,7 +1251,7 @@ export function RentalProvider({ children }: { children: ReactNode }) {
     await fetchRentalServices();
   };
 
-  const issueEquipmentBlock = async (orderId: string, blockIndex: number): Promise<{ allIssued: boolean }> => {
+  const issueEquipmentBlock = async (orderId: string, blockIndex: number): Promise<{ allIssued: boolean; radioGuideAssignmentError?: string | null }> => {
     const order = rentalOrders.find(o => o.id === orderId);
     if (!order || !order.equipmentBlocks || !order.equipmentBlocks[blockIndex]) {
       throw new Error('Order or block not found');
@@ -1286,9 +1287,12 @@ export function RentalProvider({ children }: { children: ReactNode }) {
 
     if (error) throw error;
 
-    // Create radio guide assignment if kit exists
     let radioGuideAssignmentError: string | null = null;
-    if (kit) {
+    
+    if (bagNumber && !kit) {
+      radioGuideAssignmentError = `Сумка #${bagNumber} не найдена в системе радиогидов`;
+      console.warn(`Radio guide kit with bagNumber ${bagNumber} not found`);
+    } else if (kit) {
       try {
         await issueRadioGuideForRental({
           kitId: kit.id,
@@ -1320,7 +1324,7 @@ export function RentalProvider({ children }: { children: ReactNode }) {
     return rentalOrderServices.filter(os => os.orderId === orderId);
   };
 
-  const returnEquipmentBlock = async (orderId: string, blockIndex: number): Promise<{ allReturned: boolean }> => {
+  const returnEquipmentBlock = async (orderId: string, blockIndex: number): Promise<{ allReturned: boolean; radioGuideReturnError?: string | null }> => {
     const order = rentalOrders.find(o => o.id === orderId);
     if (!order || !order.equipmentBlocks || !order.equipmentBlocks[blockIndex]) {
       throw new Error('Order or block not found');
@@ -1346,20 +1350,30 @@ export function RentalProvider({ children }: { children: ReactNode }) {
 
     if (error) throw error;
 
+    let radioGuideReturnError: string | null = null;
+    const existingAssignment = getActiveAssignmentByRentalBlock(orderId, blockIndex);
+    if (existingAssignment) {
+      try {
+        await returnRadioGuideForRental(existingAssignment.id, block.kitCount);
+      } catch (err) {
+        console.error('Error returning radio guide for rental:', err);
+        radioGuideReturnError = err instanceof Error ? err.message : 'Ошибка возврата радиогида';
+      }
+    }
+
     const bagLabel = block.bagNumber ? `Сумка ${block.bagNumber}` : `Блок ${blockIndex + 1}`;
     const guideLabel = block.tourGuideName ? ` от ${block.tourGuideName}` : '';
-    await addOrderHistory(orderId, `Возвращено: ${bagLabel}${guideLabel}`);
+    await addOrderHistory(orderId, `Возвращено: ${bagLabel}${guideLabel}${radioGuideReturnError ? ' (ошибка возврата радиогида)' : ''}`);
 
     const allReturned = updatedBlocks.filter(b => b.isIssued).every(b => b.isReturned);
     
-    // If all issued blocks are returned, update order status
     if (allReturned && order.status === 'issued') {
       await updateRentalOrder(orderId, { status: 'returned' });
     }
 
     await fetchRentalOrders();
 
-    return { allReturned };
+    return { allReturned, radioGuideReturnError };
   };
 
   return (
