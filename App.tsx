@@ -15,6 +15,7 @@ import { RentalProvider } from "@/contexts/RentalContext";
 import { CompanySettingsProvider } from "@/contexts/CompanySettingsContext";
 import { DocumentTemplatesProvider } from "@/contexts/DocumentTemplatesContext";
 import { PresenceProvider } from "@/contexts/PresenceContext";
+import { NotificationProvider } from "@/contexts/NotificationContext";
 
 export default function App() {
   return (
@@ -26,14 +27,16 @@ export default function App() {
               <PresenceProvider>
                 <DataProvider>
                   <RentalProvider>
-                    <CompanySettingsProvider>
-                      <DocumentTemplatesProvider>
-                        <NavigationContainer>
-                          <RootNavigator />
-                          <NotificationBanner />
-                        </NavigationContainer>
-                      </DocumentTemplatesProvider>
-                    </CompanySettingsProvider>
+                    <NotificationProvider>
+                      <CompanySettingsProvider>
+                        <DocumentTemplatesProvider>
+                          <NavigationContainer>
+                            <RootNavigator />
+                            <NotificationBanner />
+                          </NavigationContainer>
+                        </DocumentTemplatesProvider>
+                      </CompanySettingsProvider>
+                    </NotificationProvider>
                   </RentalProvider>
                 </DataProvider>
               </PresenceProvider>

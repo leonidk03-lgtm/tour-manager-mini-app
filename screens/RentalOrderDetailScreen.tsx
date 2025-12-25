@@ -72,6 +72,9 @@ export default function RentalOrderDetailScreen() {
   const [showStatusModal, setShowStatusModal] = useState(false);
   const [showPaymentModal, setShowPaymentModal] = useState(false);
   const [showManagerModal, setShowManagerModal] = useState(false);
+  const [showNotificationModal, setShowNotificationModal] = useState(false);
+  const [pendingStatusChange, setPendingStatusChange] = useState<RentalOrderStatus | null>(null);
+  const [notificationType, setNotificationType] = useState<"all" | "client" | "guide" | "none">("none");
   const [managerSelectType, setManagerSelectType] = useState<ManagerSelectType>("owner");
   const [paymentType, setPaymentType] = useState<RentalPaymentType>("prepayment");
   const [paymentMethod, setPaymentMethod] = useState<"cash" | "card" | "transfer">("cash");
@@ -137,14 +140,36 @@ export default function RentalOrderDetailScreen() {
     return date.toLocaleDateString("ru-RU", { day: "2-digit", month: "2-digit", year: "numeric", hour: "2-digit", minute: "2-digit" });
   };
 
-  const handleStatusChange = async (status: RentalOrderStatus) => {
+  const handleStatusChange = (status: RentalOrderStatus) => {
+    if (!order || isChangingStatus) return;
+    
+    // For status changes that may require notifications, show modal
+    if (status === 'issued' || status === 'returned') {
+      setPendingStatusChange(status);
+      setNotificationType("none");
+      setShowStatusModal(false);
+      setShowNotificationModal(true);
+    } else {
+      // For other statuses, change directly
+      executeStatusChange(status, "none");
+    }
+  };
+  
+  const executeStatusChange = async (status: RentalOrderStatus, notification: "all" | "client" | "guide" | "none") => {
     if (!order || isChangingStatus) return;
     setIsChangingStatus(true);
     hapticFeedback.selection();
     try {
       await updateOrderStatus(order.id, status);
       setShowStatusModal(false);
+      setShowNotificationModal(false);
+      setPendingStatusChange(null);
       hapticFeedback.success();
+      
+      // TODO: Send notifications based on type
+      if (notification !== "none") {
+        console.log(`[Notifications] Would send ${notification} notification for order ${order.orderNumber}`);
+      }
     } catch (error) {
       Alert.alert("Ошибка", "Не удалось изменить статус");
     } finally {
@@ -315,16 +340,33 @@ export default function RentalOrderDetailScreen() {
       const result = await issueEquipmentBlock(order.id, blockIndex);
       hapticFeedback.success();
       
+      // Show warning if radio guide assignment failed
+      if (result.radioGuideAssignmentError) {
+        Alert.alert(
+          "Внимание",
+          `Оборудование выдано, но возникла ошибка привязки к радиогидам: ${result.radioGuideAssignmentError}`,
+          [{ text: "OK" }]
+        );
+      }
+      
       if (result.allIssued && order.status === 'new') {
         Alert.alert(
           "Все сумки выданы",
-          "Перевести заказ в статус 'Выдан'?",
+          "Перевести заказ в статус 'Выдан' и отправить уведомление?",
           [
             { text: "Позже", style: "cancel" },
             {
-              text: "Перевести",
+              text: "Выбрать уведомление",
+              onPress: () => {
+                setPendingStatusChange('issued');
+                setNotificationType("client");
+                setShowNotificationModal(true);
+              },
+            },
+            {
+              text: "Без уведомления",
               onPress: async () => {
-                await updateOrderStatus(order.id, 'issued');
+                await executeStatusChange('issued', 'none');
               },
             },
           ]
@@ -894,6 +936,87 @@ export default function RentalOrderDetailScreen() {
                 </Pressable>
               );
             })}
+          </View>
+        </Pressable>
+      </Modal>
+
+      <Modal visible={showNotificationModal} animationType="fade" transparent>
+        <Pressable style={styles.modalOverlay} onPress={() => setShowNotificationModal(false)}>
+          <View style={[styles.statusModalContent, { backgroundColor: theme.backgroundDefault }]}>
+            <ThemedText style={styles.modalTitle}>
+              {pendingStatusChange === 'issued' ? 'Уведомить о выдаче' : 'Уведомить о возврате'}
+            </ThemedText>
+            <ThemedText style={{ color: theme.textSecondary, marginBottom: Spacing.md, textAlign: "center" }}>
+              Выберите кому отправить уведомление
+            </ThemedText>
+            
+            <Pressable
+              onPress={() => pendingStatusChange && executeStatusChange(pendingStatusChange, "all")}
+              disabled={isChangingStatus}
+              style={[
+                styles.statusOption,
+                { 
+                  backgroundColor: notificationType === "all" ? theme.primary + "20" : "transparent",
+                  opacity: isChangingStatus ? 0.5 : 1,
+                },
+              ]}
+            >
+              <Icon name="users" size={20} color={theme.primary} />
+              <ThemedText style={[styles.statusOptionText, { color: theme.primary }]}>
+                Всем (клиент + гиды)
+              </ThemedText>
+            </Pressable>
+            
+            <Pressable
+              onPress={() => pendingStatusChange && executeStatusChange(pendingStatusChange, "client")}
+              disabled={isChangingStatus}
+              style={[
+                styles.statusOption,
+                { 
+                  backgroundColor: notificationType === "client" ? theme.success + "20" : "transparent",
+                  opacity: isChangingStatus ? 0.5 : 1,
+                },
+              ]}
+            >
+              <Icon name="user" size={20} color={theme.success} />
+              <ThemedText style={[styles.statusOptionText, { color: theme.success }]}>
+                Только клиенту
+              </ThemedText>
+            </Pressable>
+            
+            <Pressable
+              onPress={() => pendingStatusChange && executeStatusChange(pendingStatusChange, "guide")}
+              disabled={isChangingStatus}
+              style={[
+                styles.statusOption,
+                { 
+                  backgroundColor: notificationType === "guide" ? theme.warning + "20" : "transparent",
+                  opacity: isChangingStatus ? 0.5 : 1,
+                },
+              ]}
+            >
+              <Icon name="headphones" size={20} color={theme.warning} />
+              <ThemedText style={[styles.statusOptionText, { color: theme.warning }]}>
+                Только гидам
+              </ThemedText>
+            </Pressable>
+            
+            <Pressable
+              onPress={() => pendingStatusChange && executeStatusChange(pendingStatusChange, "none")}
+              disabled={isChangingStatus}
+              style={[
+                styles.statusOption,
+                { 
+                  backgroundColor: "transparent",
+                  opacity: isChangingStatus ? 0.5 : 1,
+                },
+              ]}
+            >
+              <Icon name="bell-off" size={20} color={theme.textSecondary} />
+              <ThemedText style={[styles.statusOptionText, { color: theme.textSecondary }]}>
+                Без уведомлений
+              </ThemedText>
+            </Pressable>
           </View>
         </Pressable>
       </Modal>

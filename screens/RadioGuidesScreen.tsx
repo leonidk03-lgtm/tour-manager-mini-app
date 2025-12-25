@@ -79,7 +79,7 @@ export default function RadioGuidesScreen() {
     equipmentItems,
     addEquipmentMovement,
   } = useData();
-  const { rentalOrders, rentalClients, updateRentalOrder } = useRental();
+  const { rentalOrders, rentalClients, updateRentalOrder, returnEquipmentBlock } = useRental();
 
   const trackableLossItems = useMemo(() => {
     return equipmentItems.filter(item => item.trackLoss);
@@ -469,6 +469,16 @@ export default function RadioGuidesScreen() {
 
     try {
       await returnRadioGuide(selectedAssignment.id, selectedAssignment.receiversIssued);
+      
+      // If this is a rental assignment, also update the equipment block
+      if (selectedAssignment.rentalOrderId && selectedAssignment.rentalBlockIndex !== null && selectedAssignment.rentalBlockIndex !== undefined) {
+        try {
+          await returnEquipmentBlock(selectedAssignment.rentalOrderId, selectedAssignment.rentalBlockIndex);
+        } catch (blockErr) {
+          console.error("Error returning equipment block:", blockErr);
+        }
+      }
+      
       setModalMode(null);
       resetForm();
     } catch (err) {
@@ -524,6 +534,15 @@ export default function RadioGuidesScreen() {
     try {
       await returnRadioGuide(selectedAssignment.id, returned, lossReason.trim());
       
+      // If this is a rental assignment, also update the equipment block
+      if (selectedAssignment.rentalOrderId && selectedAssignment.rentalBlockIndex !== null && selectedAssignment.rentalBlockIndex !== undefined) {
+        try {
+          await returnEquipmentBlock(selectedAssignment.rentalOrderId, selectedAssignment.rentalBlockIndex);
+        } catch (blockErr) {
+          console.error("Error returning equipment block:", blockErr);
+        }
+      }
+      
       // Create loss movement on warehouse
       try {
         await addEquipmentMovement({
@@ -541,6 +560,7 @@ export default function RadioGuidesScreen() {
           missingCount: missing,
           reason: lossReason.trim(),
           equipmentItemId: selectedLossItemId,
+          rentalOrderId: selectedAssignment.rentalOrderId || undefined,
         });
       } catch (lossErr) {
         console.error("Could not record equipment loss:", lossErr);
@@ -694,14 +714,21 @@ export default function RadioGuidesScreen() {
     const issuedDate = new Date(assignment.issuedAt).toLocaleDateString("ru-RU", { day: "numeric", month: "short" });
     const batteryInfo = getBatteryInfo(kit.batteryLevel);
     const isDropdownOpen = batteryPickerKit?.id === kit.id;
+    const isRentalAssignment = !!assignment.rentalOrderId;
+    const rentalOrder = isRentalAssignment ? rentalOrders.find(o => o.id === assignment.rentalOrderId) : null;
+    const rentalClient = rentalOrder ? rentalClients.find(c => c.id === rentalOrder.clientId) : null;
     
     return (
       <ThemedView
         style={[
           styles.kitCard,
           { 
-            backgroundColor: isOverdue ? theme.error + "10" : theme.backgroundSecondary, 
-            borderColor: isOverdue ? theme.error : theme.border 
+            backgroundColor: isRentalAssignment 
+              ? theme.primary + "10" 
+              : (isOverdue ? theme.error + "10" : theme.backgroundSecondary), 
+            borderColor: isRentalAssignment 
+              ? theme.primary 
+              : (isOverdue ? theme.error : theme.border)
           },
           isDropdownOpen && { zIndex: 1000 },
         ]}
@@ -710,7 +737,11 @@ export default function RadioGuidesScreen() {
           <View style={styles.kitInfo}>
             <View style={styles.kitTitleRow}>
               <ThemedText style={styles.kitNumber}>Сумка #{kit.bagNumber}</ThemedText>
-              {isOverdue ? (
+              {isRentalAssignment ? (
+                <View style={[styles.rentalBadge, { backgroundColor: theme.primary }]}>
+                  <ThemedText style={styles.rentalBadgeText}>Аренда</ThemedText>
+                </View>
+              ) : isOverdue ? (
                 <View style={[styles.overdueBadge, { backgroundColor: theme.error }]}>
                   <ThemedText style={styles.overdueBadgeText}>Просрочена</ThemedText>
                 </View>
@@ -768,30 +799,69 @@ export default function RadioGuidesScreen() {
         </View>
         
         <View style={[styles.assignmentInfo, { backgroundColor: theme.backgroundTertiary }]}>
-          <ThemedText style={[styles.assignmentLabel, { color: theme.textSecondary }]}>
-            Экскурсия:
-          </ThemedText>
-          {excInfo ? (
-            <ThemedText style={[styles.assignmentValue, { color: theme.primary }]}>
-              {excInfo.name} ({excInfo.dateTime})
-            </ThemedText>
-          ) : (
-            <ThemedText style={[styles.assignmentValue, { color: theme.textSecondary, fontStyle: "italic" }]}>
-              Не указана
-            </ThemedText>
-          )}
-          <ThemedText style={[styles.assignmentLabel, { color: theme.textSecondary }]}>
-            Экскурсовод:
-          </ThemedText>
-          <ThemedText style={styles.assignmentValue}>{assignment.guideName}</ThemedText>
-          {assignment.busNumber ? (
+          {isRentalAssignment && rentalOrder ? (
             <>
               <ThemedText style={[styles.assignmentLabel, { color: theme.textSecondary }]}>
-                Автобус:
+                Клиент:
               </ThemedText>
-              <ThemedText style={styles.assignmentValue}>{assignment.busNumber}</ThemedText>
+              <ThemedText style={[styles.assignmentValue, { color: theme.primary }]}>
+                {rentalOrder.clientName || rentalClient?.name || "Клиент аренды"}
+              </ThemedText>
+              <ThemedText style={[styles.assignmentLabel, { color: theme.textSecondary }]}>
+                Период аренды:
+              </ThemedText>
+              <ThemedText style={styles.assignmentValue}>
+                {new Date(rentalOrder.startDate).toLocaleDateString("ru-RU", { day: "numeric", month: "short" })} - {new Date(rentalOrder.endDate).toLocaleDateString("ru-RU", { day: "numeric", month: "short" })}
+              </ThemedText>
+              <ThemedText style={[styles.assignmentLabel, { color: theme.textSecondary }]}>
+                Гид:
+              </ThemedText>
+              <ThemedText style={styles.assignmentValue}>{assignment.guideName}</ThemedText>
+              {assignment.tourGuidePhone ? (
+                <>
+                  <ThemedText style={[styles.assignmentLabel, { color: theme.textSecondary }]}>
+                    Телефон гида:
+                  </ThemedText>
+                  <ThemedText style={styles.assignmentValue}>{assignment.tourGuidePhone}</ThemedText>
+                </>
+              ) : null}
+              {assignment.deliveryLocation ? (
+                <>
+                  <ThemedText style={[styles.assignmentLabel, { color: theme.textSecondary }]}>
+                    Место доставки:
+                  </ThemedText>
+                  <ThemedText style={styles.assignmentValue}>{assignment.deliveryLocation}</ThemedText>
+                </>
+              ) : null}
             </>
-          ) : null}
+          ) : (
+            <>
+              <ThemedText style={[styles.assignmentLabel, { color: theme.textSecondary }]}>
+                Экскурсия:
+              </ThemedText>
+              {excInfo ? (
+                <ThemedText style={[styles.assignmentValue, { color: theme.primary }]}>
+                  {excInfo.name} ({excInfo.dateTime})
+                </ThemedText>
+              ) : (
+                <ThemedText style={[styles.assignmentValue, { color: theme.textSecondary, fontStyle: "italic" }]}>
+                  Не указана
+                </ThemedText>
+              )}
+              <ThemedText style={[styles.assignmentLabel, { color: theme.textSecondary }]}>
+                Экскурсовод:
+              </ThemedText>
+              <ThemedText style={styles.assignmentValue}>{assignment.guideName}</ThemedText>
+              {assignment.busNumber ? (
+                <>
+                  <ThemedText style={[styles.assignmentLabel, { color: theme.textSecondary }]}>
+                    Автобус:
+                  </ThemedText>
+                  <ThemedText style={styles.assignmentValue}>{assignment.busNumber}</ThemedText>
+                </>
+              ) : null}
+            </>
+          )}
           <ThemedText style={[styles.assignmentLabel, { color: theme.textSecondary }]}>
             Выдано:
           </ThemedText>

@@ -122,6 +122,10 @@ export interface RadioGuideAssignment {
   returnNotes: string | null;
   managerId: string;
   managerName: string;
+  rentalOrderId: string | null;
+  rentalBlockIndex: number | null;
+  tourGuidePhone: string | null;
+  deliveryLocation: string | null;
 }
 
 export type EquipmentLossStatus = 'lost' | 'found';
@@ -360,8 +364,11 @@ interface DataContextType {
   updateRadioGuideKit: (id: string, kit: Partial<RadioGuideKit>) => Promise<void>;
   deleteRadioGuideKit: (id: string) => Promise<void>;
   issueRadioGuide: (data: { kitId: string; excursionId?: string; guideName: string; busNumber?: string; receiversIssued: number }) => Promise<void>;
+  issueRadioGuideForRental: (data: { kitId: string; rentalOrderId: string; blockIndex: number; guideName: string; tourGuidePhone?: string; deliveryLocation?: string; receiversIssued: number }) => Promise<void>;
+  returnRadioGuideForRental: (assignmentId: string, receiversReturned: number, notes?: string) => Promise<void>;
   returnRadioGuide: (assignmentId: string, receiversReturned: number, notes?: string) => Promise<void>;
   getActiveAssignment: (kitId: string) => RadioGuideAssignment | undefined;
+  getActiveAssignmentByRentalBlock: (rentalOrderId: string, blockIndex: number) => RadioGuideAssignment | undefined;
   equipmentLosses: EquipmentLoss[];
   addEquipmentLoss: (loss: Omit<EquipmentLoss, 'id' | 'createdAt' | 'foundAt' | 'foundNotes' | 'status' | 'managerId' | 'managerName'>) => Promise<void>;
   updateEquipmentLoss: (id: string, data: { reason?: string; missingCount?: number }) => Promise<void>;
@@ -741,6 +748,10 @@ export function DataProvider({ children }: { children: ReactNode }) {
       returnNotes: a.return_notes,
       managerId: a.manager_id,
       managerName: a.manager_name,
+      rentalOrderId: a.rental_order_id || null,
+      rentalBlockIndex: a.rental_block_index ?? null,
+      tourGuidePhone: a.tour_guide_phone || null,
+      deliveryLocation: a.delivery_location || null,
     })));
   }, []);
 
@@ -2469,6 +2480,119 @@ export function DataProvider({ children }: { children: ReactNode }) {
     return radioGuideAssignments.find(a => a.kitId === kitId && !a.returnedAt);
   };
 
+  const getActiveAssignmentByRentalBlock = (rentalOrderId: string, blockIndex: number): RadioGuideAssignment | undefined => {
+    return radioGuideAssignments.find(a => 
+      a.rentalOrderId === rentalOrderId && 
+      a.rentalBlockIndex === blockIndex && 
+      !a.returnedAt
+    );
+  };
+
+  const issueRadioGuideForRental = async (data: { 
+    kitId: string; 
+    rentalOrderId: string; 
+    blockIndex: number;
+    guideName: string; 
+    tourGuidePhone?: string;
+    deliveryLocation?: string;
+    receiversIssued: number 
+  }) => {
+    if (!user || !profile) throw new Error('User not authenticated');
+
+    try {
+      const { error: assignmentError } = await supabase
+        .from('radio_guide_assignments')
+        .insert({
+          kit_id: data.kitId,
+          excursion_id: null,
+          rental_order_id: data.rentalOrderId,
+          rental_block_index: data.blockIndex,
+          guide_name: data.guideName,
+          tour_guide_phone: data.tourGuidePhone || null,
+          delivery_location: data.deliveryLocation || null,
+          bus_number: null,
+          receivers_issued: data.receiversIssued,
+          issued_at: new Date().toISOString(),
+          manager_id: user.id,
+          manager_name: profile.display_name,
+        });
+
+      if (assignmentError) throw assignmentError;
+
+      const { error: kitError } = await supabase
+        .from('radio_guide_kits')
+        .update({ status: 'issued' })
+        .eq('id', data.kitId);
+
+      if (kitError) throw kitError;
+
+      const kit = radioGuideKits.find(k => k.id === data.kitId);
+      const { error: activityError } = await supabase.from('activities').insert({
+        manager_id: user.id,
+        manager_name: profile.display_name,
+        type: 'rental_order_issued',
+        description: `выдал радиогид (сумка ${kit?.bagNumber || '?'}) для аренды, гид: ${data.guideName}`,
+        target_id: data.rentalOrderId,
+        timestamp: new Date().toISOString(),
+      });
+      if (activityError) {
+        console.error('Error creating rental_order_issued activity:', activityError);
+      }
+
+      await autoWriteoffOnIssue(data.receiversIssued, `Автосписание: аренда, сумка ${kit?.bagNumber || '?'}, гид ${data.guideName}`);
+
+      await Promise.all([fetchRadioGuideKits(), fetchRadioGuideAssignments(), fetchActivities()]);
+    } catch (err) {
+      console.error('Error issuing radio guide for rental:', err);
+      throw err;
+    }
+  };
+
+  const returnRadioGuideForRental = async (assignmentId: string, receiversReturned: number, notes?: string) => {
+    try {
+      const assignment = radioGuideAssignments.find(a => a.id === assignmentId);
+      if (!assignment) throw new Error('Assignment not found');
+
+      const { error: assignmentError } = await supabase
+        .from('radio_guide_assignments')
+        .update({
+          receivers_returned: receiversReturned,
+          returned_at: new Date().toISOString(),
+          return_notes: notes || null,
+        })
+        .eq('id', assignmentId);
+
+      if (assignmentError) throw assignmentError;
+
+      const { error: kitError } = await supabase
+        .from('radio_guide_kits')
+        .update({ status: 'available' })
+        .eq('id', assignment.kitId);
+
+      if (kitError) throw kitError;
+
+      const kit = radioGuideKits.find(k => k.id === assignment.kitId);
+      if (user && profile) {
+        const { error: activityError } = await supabase.from('activities').insert({
+          manager_id: user.id,
+          manager_name: profile.display_name,
+          type: 'rental_order_returned',
+          description: `принял радиогид (сумка ${kit?.bagNumber || '?'}) из аренды от ${assignment.guideName}`,
+          target_id: assignment.rentalOrderId,
+          timestamp: new Date().toISOString(),
+        });
+        if (activityError) {
+          console.error('Error creating rental_order_returned activity:', activityError);
+        }
+      }
+
+      await Promise.all([fetchRadioGuideKits(), fetchRadioGuideAssignments(), fetchActivities()]);
+    } catch (err) {
+      console.error('Error returning radio guide for rental:', err);
+      throw err;
+    }
+  };
+
   const addEquipmentLoss = async (loss: Omit<EquipmentLoss, 'id' | 'createdAt' | 'foundAt' | 'foundNotes' | 'status' | 'managerId' | 'managerName' | 'bagNumber'>) => {
     if (!currentUser) throw new Error('No user');
 
@@ -3254,8 +3378,11 @@ export function DataProvider({ children }: { children: ReactNode }) {
         updateRadioGuideKit,
         deleteRadioGuideKit,
         issueRadioGuide,
+        issueRadioGuideForRental,
         returnRadioGuide,
+        returnRadioGuideForRental,
         getActiveAssignment,
+        getActiveAssignmentByRentalBlock,
         equipmentLosses,
         addEquipmentLoss,
         updateEquipmentLoss,

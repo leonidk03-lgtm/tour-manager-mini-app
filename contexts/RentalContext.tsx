@@ -39,6 +39,8 @@ export interface EquipmentBlock {
   deliveryLocation: string | null;
   isIssued: boolean;
   issuedAt: string | null;
+  isReturned?: boolean;
+  returnedAt?: string | null;
 }
 
 export interface RentalOrder {
@@ -173,7 +175,8 @@ interface RentalContextType {
   addRentalService: (service: Omit<RentalService, 'id' | 'createdAt' | 'updatedAt'>) => Promise<string>;
   updateRentalService: (id: string, service: Partial<RentalService>) => Promise<void>;
   deleteRentalService: (id: string) => Promise<void>;
-  issueEquipmentBlock: (orderId: string, blockIndex: number) => Promise<{ allIssued: boolean }>;
+  issueEquipmentBlock: (orderId: string, blockIndex: number) => Promise<{ allIssued: boolean; radioGuideAssignmentError?: string | null }>;
+  returnEquipmentBlock: (orderId: string, blockIndex: number) => Promise<{ allReturned: boolean }>;
   refreshData: () => Promise<void>;
 }
 
@@ -181,7 +184,14 @@ const RentalContext = createContext<RentalContextType | undefined>(undefined);
 
 export function RentalProvider({ children }: { children: ReactNode }) {
   const { user, profile } = useAuth();
-  const { autoWriteoffOnIssue, autoWriteoffForService, autoReturnForService } = useData();
+  const { 
+    autoWriteoffOnIssue, 
+    autoWriteoffForService, 
+    autoReturnForService,
+    radioGuideKits,
+    issueRadioGuideForRental,
+    getActiveAssignmentByRentalBlock,
+  } = useData();
   
   const [rentalClients, setRentalClients] = useState<RentalClient[]>([]);
   const [rentalOrders, setRentalOrders] = useState<RentalOrder[]>([]);
@@ -1253,6 +1263,16 @@ export function RentalProvider({ children }: { children: ReactNode }) {
       throw new Error('Block already issued');
     }
 
+    // Find the radio guide kit by bag number
+    const bagNumber = block.bagNumber ? parseInt(block.bagNumber, 10) : null;
+    const kit = bagNumber ? radioGuideKits.find(k => k.bagNumber === bagNumber) : null;
+
+    // Check if assignment already exists
+    const existingAssignment = getActiveAssignmentByRentalBlock(orderId, blockIndex);
+    if (existingAssignment) {
+      throw new Error('Assignment already exists for this block');
+    }
+
     updatedBlocks[blockIndex] = {
       ...block,
       isIssued: true,
@@ -1266,19 +1286,80 @@ export function RentalProvider({ children }: { children: ReactNode }) {
 
     if (error) throw error;
 
+    // Create radio guide assignment if kit exists
+    let radioGuideAssignmentError: string | null = null;
+    if (kit) {
+      try {
+        await issueRadioGuideForRental({
+          kitId: kit.id,
+          rentalOrderId: orderId,
+          blockIndex,
+          guideName: block.tourGuideName || order.clientName || 'Клиент аренды',
+          tourGuidePhone: block.tourGuidePhone || undefined,
+          deliveryLocation: block.deliveryLocation || undefined,
+          receiversIssued: block.kitCount,
+        });
+      } catch (err) {
+        console.error('Error creating radio guide assignment for rental:', err);
+        radioGuideAssignmentError = err instanceof Error ? err.message : 'Ошибка назначения радиогида';
+      }
+    }
+
     const bagLabel = block.bagNumber ? `Сумка ${block.bagNumber}` : `Блок ${blockIndex + 1}`;
     const guideLabel = block.tourGuideName ? ` для ${block.tourGuideName}` : '';
-    await addOrderHistory(orderId, `Выдано: ${bagLabel}${guideLabel}`);
+    await addOrderHistory(orderId, `Выдано: ${bagLabel}${guideLabel}${radioGuideAssignmentError ? ' (ошибка привязки к радиогидам)' : ''}`);
 
     const allIssued = updatedBlocks.every(b => b.isIssued);
 
     await fetchRentalOrders();
 
-    return { allIssued };
+    return { allIssued, radioGuideAssignmentError };
   };
 
   const getOrderServices = (orderId: string): RentalOrderService[] => {
     return rentalOrderServices.filter(os => os.orderId === orderId);
+  };
+
+  const returnEquipmentBlock = async (orderId: string, blockIndex: number): Promise<{ allReturned: boolean }> => {
+    const order = rentalOrders.find(o => o.id === orderId);
+    if (!order || !order.equipmentBlocks || !order.equipmentBlocks[blockIndex]) {
+      throw new Error('Order or block not found');
+    }
+
+    const updatedBlocks = [...order.equipmentBlocks];
+    const block = updatedBlocks[blockIndex];
+    
+    if (!block.isIssued) {
+      throw new Error('Block was not issued');
+    }
+
+    updatedBlocks[blockIndex] = {
+      ...block,
+      isReturned: true,
+      returnedAt: new Date().toISOString(),
+    };
+
+    const { error } = await supabase
+      .from('rental_orders')
+      .update({ equipment_blocks: updatedBlocks })
+      .eq('id', orderId);
+
+    if (error) throw error;
+
+    const bagLabel = block.bagNumber ? `Сумка ${block.bagNumber}` : `Блок ${blockIndex + 1}`;
+    const guideLabel = block.tourGuideName ? ` от ${block.tourGuideName}` : '';
+    await addOrderHistory(orderId, `Возвращено: ${bagLabel}${guideLabel}`);
+
+    const allReturned = updatedBlocks.filter(b => b.isIssued).every(b => b.isReturned);
+    
+    // If all issued blocks are returned, update order status
+    if (allReturned && order.status === 'issued') {
+      await updateRentalOrder(orderId, { status: 'returned' });
+    }
+
+    await fetchRentalOrders();
+
+    return { allReturned };
   };
 
   return (
@@ -1316,6 +1397,7 @@ export function RentalProvider({ children }: { children: ReactNode }) {
         updateRentalService,
         deleteRentalService,
         issueEquipmentBlock,
+        returnEquipmentBlock,
         refreshData,
       }}
     >
