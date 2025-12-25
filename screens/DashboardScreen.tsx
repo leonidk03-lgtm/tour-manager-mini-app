@@ -469,7 +469,8 @@ export default function DashboardScreen() {
 
   const radioGuidesStats = useMemo(() => {
     const seenKitIds = new Set<string>();
-    const activeAssignments: typeof radioGuideAssignments = [];
+    const excursionAssignments: typeof radioGuideAssignments = [];
+    const rentalAssignments: typeof radioGuideAssignments = [];
     const kitIdSet = new Set(radioGuideKits.map(k => k.id));
     
     for (const a of radioGuideAssignments) {
@@ -477,14 +478,19 @@ export default function DashboardScreen() {
       if (!kitIdSet.has(a.kitId)) continue;
       if (seenKitIds.has(a.kitId)) continue;
       seenKitIds.add(a.kitId);
-      activeAssignments.push(a);
+      
+      if (a.rentalOrderId) {
+        rentalAssignments.push(a);
+      } else {
+        excursionAssignments.push(a);
+      }
     }
-    const onExcursions = activeAssignments.reduce((sum, a) => sum + a.receiversIssued, 0);
     
-    const activeRentals = rentalOrders.filter(order => order.status === 'issued');
-    const onRentals = activeRentals.reduce((sum, order) => {
-      return sum + order.kitCount + order.spareReceiverCount;
-    }, 0);
+    // Count receivers on excursions (non-rental assignments only)
+    const onExcursions = excursionAssignments.reduce((sum, a) => sum + a.receiversIssued, 0);
+    
+    // Count receivers on rentals from assignments
+    const onRentals = rentalAssignments.reduce((sum, a) => sum + a.receiversIssued, 0);
     
     const totalInUse = onExcursions + onRentals;
     
@@ -496,7 +502,7 @@ export default function DashboardScreen() {
     const lostCount = todayLosses.reduce((sum, loss) => sum + loss.missingCount, 0);
     
     return { onExcursions, onRentals, totalInUse, lostCount };
-  }, [radioGuideAssignments, rentalOrders, equipmentLosses, radioGuideKits]);
+  }, [radioGuideAssignments, equipmentLosses, radioGuideKits]);
 
   const getTourName = (tourTypeId: string) => {
     const tour = tourTypes.find(t => t.id === tourTypeId);
