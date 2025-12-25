@@ -33,6 +33,7 @@ import DashboardConfigScreen from "@/screens/DashboardConfigScreen";
 import CompanySettingsScreen from "@/screens/CompanySettingsScreen";
 import DocumentTemplatesScreen from "@/screens/DocumentTemplatesScreen";
 import TemplateEditorScreen from "@/screens/TemplateEditorScreen";
+import TourGuidesScreen from "@/screens/TourGuidesScreen";
 import { getCommonScreenOptions } from "./screenOptions";
 import { useTheme } from "@/hooks/useTheme";
 import { Profile } from "@/lib/supabase";
@@ -72,6 +73,7 @@ export type SettingsStackParamList = {
   CompanySettings: undefined;
   DocumentTemplates: undefined;
   TemplateEditor: { templateId?: string; type?: 'invoice' | 'act' | 'contract' | 'waybill' };
+  TourGuides: undefined;
 };
 
 const Stack = createNativeStackNavigator<SettingsStackParamList>();
@@ -253,6 +255,11 @@ export default function SettingsStackNavigator() {
         name="TemplateEditor"
         component={TemplateEditorScreen}
         options={{ title: "Редактор шаблона", headerShown: false }}
+      />
+      <Stack.Screen
+        name="TourGuides"
+        component={TourGuidesScreen}
+        options={{ title: "Экскурсоводы" }}
       />
     </Stack.Navigator>
   );

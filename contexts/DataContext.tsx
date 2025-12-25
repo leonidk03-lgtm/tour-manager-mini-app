@@ -128,6 +128,16 @@ export interface RadioGuideAssignment {
   deliveryLocation: string | null;
 }
 
+export interface TourGuide {
+  id: string;
+  name: string;
+  phone: string | null;
+  email: string | null;
+  notes: string | null;
+  createdAt: string;
+  isActive: boolean;
+}
+
 export type EquipmentLossStatus = 'lost' | 'found';
 
 export interface DispatchingNote {
@@ -364,7 +374,7 @@ interface DataContextType {
   updateRadioGuideKit: (id: string, kit: Partial<RadioGuideKit>) => Promise<void>;
   deleteRadioGuideKit: (id: string) => Promise<void>;
   issueRadioGuide: (data: { kitId: string; excursionId?: string; guideName: string; busNumber?: string; receiversIssued: number }) => Promise<void>;
-  issueRadioGuideForRental: (data: { kitId: string; rentalOrderId: string; blockIndex: number; guideName: string; tourGuidePhone?: string; deliveryLocation?: string; receiversIssued: number }) => Promise<void>;
+  issueRadioGuideForRental: (data: { kitId: string; rentalOrderId: string; blockIndex: number; guideName: string; receiversIssued: number }) => Promise<void>;
   returnRadioGuideForRental: (assignmentId: string, receiversReturned: number, notes?: string) => Promise<void>;
   returnRadioGuide: (assignmentId: string, receiversReturned: number, notes?: string) => Promise<void>;
   getActiveAssignment: (kitId: string) => RadioGuideAssignment | undefined;
@@ -426,6 +436,11 @@ interface DataContextType {
   getExcursionManagerBreakdown: (startDate: string, endDate: string) => Promise<ExcursionWithManagers[]>;
   searchDispatchByPhone: (phone: string) => Promise<DispatchSearchResult[]>;
   deleteOldDispatchEvents: (beforeDate: string) => Promise<number>;
+  tourGuides: TourGuide[];
+  addTourGuide: (guide: Omit<TourGuide, 'id' | 'createdAt'>) => Promise<void>;
+  updateTourGuide: (id: string, guide: Partial<TourGuide>) => Promise<void>;
+  deleteTourGuide: (id: string) => Promise<void>;
+  searchTourGuides: (query: string) => TourGuide[];
 }
 
 const DataContext = createContext<DataContextType | undefined>(undefined);
@@ -457,6 +472,7 @@ export function DataProvider({ children }: { children: ReactNode }) {
   const [equipmentItems, setEquipmentItems] = useState<EquipmentItem[]>([]);
   const [equipmentMovements, setEquipmentMovements] = useState<EquipmentMovement[]>([]);
   const [dispatchMarkEvents, setDispatchMarkEvents] = useState<DispatchMarkEvent[]>([]);
+  const [tourGuides, setTourGuides] = useState<TourGuide[]>([]);
   const [isLoading, setIsLoading] = useState(true);
   const [networkError, setNetworkError] = useState<string | null>(null);
   const [isOffline, setIsOffline] = useState(false);
@@ -863,6 +879,30 @@ export function DataProvider({ children }: { children: ReactNode }) {
       managerId: m.manager_id,
       managerName: m.manager_name,
       createdAt: m.created_at,
+    })));
+  }, []);
+
+  const fetchTourGuides = useCallback(async (): Promise<void> => {
+    const { data, error } = await supabase
+      .from('tour_guides')
+      .select('*')
+      .order('name', { ascending: true });
+
+    if (error) {
+      if (error.code === 'PGRST205' || error.code === '42P01') {
+        return;
+      }
+      throw error;
+    }
+
+    setTourGuides((data || []).map(g => ({
+      id: g.id,
+      name: g.name,
+      phone: g.phone,
+      email: g.email,
+      notes: g.notes,
+      createdAt: g.created_at,
+      isActive: g.is_active ?? true,
     })));
   }, []);
 
@@ -1570,6 +1610,7 @@ export function DataProvider({ children }: { children: ReactNode }) {
         fetchEquipmentCategories(),
         fetchEquipmentItems(),
         fetchEquipmentMovements(),
+        fetchTourGuides(),
       ]);
       
       const hasErrors = results.some(r => r.status === 'rejected');
@@ -1594,7 +1635,7 @@ export function DataProvider({ children }: { children: ReactNode }) {
     } finally {
       setIsLoading(false);
     }
-  }, [fetchTourTypes, fetchAdditionalServices, fetchExcursions, fetchTransactions, fetchActivities, fetchDeletedItems, fetchRadioGuideKits, fetchRadioGuideAssignments, fetchEquipmentLosses, fetchEquipmentCategories, fetchEquipmentItems, fetchEquipmentMovements]);
+  }, [fetchTourTypes, fetchAdditionalServices, fetchExcursions, fetchTransactions, fetchActivities, fetchDeletedItems, fetchRadioGuideKits, fetchRadioGuideAssignments, fetchEquipmentLosses, fetchEquipmentCategories, fetchEquipmentItems, fetchEquipmentMovements, fetchTourGuides]);
 
   // Load shared data (price list, radio kits, settings) when user is authenticated
   useEffect(() => {
@@ -1610,6 +1651,7 @@ export function DataProvider({ children }: { children: ReactNode }) {
         fetchEquipmentCategories(),
         fetchEquipmentItems(),
         fetchEquipmentMovements(),
+        fetchTourGuides(),
       ]).then(() => {
         setIsOffline(false);
         setNetworkError(null);
@@ -1617,7 +1659,7 @@ export function DataProvider({ children }: { children: ReactNode }) {
         setIsOffline(true);
       });
     }
-  }, [user, fetchTourTypes, fetchAdditionalServices, fetchRadioGuideKits, fetchRadioGuideAssignments, fetchEquipmentLosses, fetchSettings, fetchRentalCostPerReceiver, fetchEquipmentCategories, fetchEquipmentItems, fetchEquipmentMovements]);
+  }, [user, fetchTourTypes, fetchAdditionalServices, fetchRadioGuideKits, fetchRadioGuideAssignments, fetchEquipmentLosses, fetchSettings, fetchRentalCostPerReceiver, fetchEquipmentCategories, fetchEquipmentItems, fetchEquipmentMovements, fetchTourGuides]);
 
   // Load user-specific data when profile is available
   useEffect(() => {
@@ -2867,6 +2909,72 @@ export function DataProvider({ children }: { children: ReactNode }) {
     }
   };
 
+  const addTourGuide = async (guide: Omit<TourGuide, 'id' | 'createdAt'>) => {
+    try {
+      const { error } = await supabase.from('tour_guides').insert({
+        name: guide.name,
+        phone: guide.phone,
+        email: guide.email,
+        notes: guide.notes,
+        is_active: guide.isActive,
+      });
+
+      if (error) throw error;
+      await fetchTourGuides();
+    } catch (err) {
+      console.error('Error adding tour guide:', err);
+      throw err;
+    }
+  };
+
+  const updateTourGuide = async (id: string, guide: Partial<TourGuide>) => {
+    try {
+      const updateData: Record<string, unknown> = {};
+      if (guide.name !== undefined) updateData.name = guide.name;
+      if (guide.phone !== undefined) updateData.phone = guide.phone;
+      if (guide.email !== undefined) updateData.email = guide.email;
+      if (guide.notes !== undefined) updateData.notes = guide.notes;
+      if (guide.isActive !== undefined) updateData.is_active = guide.isActive;
+
+      const { error } = await supabase
+        .from('tour_guides')
+        .update(updateData)
+        .eq('id', id);
+
+      if (error) throw error;
+      await fetchTourGuides();
+    } catch (err) {
+      console.error('Error updating tour guide:', err);
+      throw err;
+    }
+  };
+
+  const deleteTourGuide = async (id: string) => {
+    try {
+      const { error } = await supabase
+        .from('tour_guides')
+        .delete()
+        .eq('id', id);
+
+      if (error) throw error;
+      await fetchTourGuides();
+    } catch (err) {
+      console.error('Error deleting tour guide:', err);
+      throw err;
+    }
+  };
+
+  const searchTourGuides = (query: string): TourGuide[] => {
+    if (!query.trim()) return tourGuides.filter(g => g.isActive);
+    const lowerQuery = query.toLowerCase().trim();
+    return tourGuides.filter(g => 
+      g.isActive && (
+        g.name.toLowerCase().includes(lowerQuery) ||
+        (g.phone && g.phone.includes(lowerQuery))
+      )
+    );
+  };
+
   const addEquipmentMovement = async (movement: Omit<EquipmentMovement, 'id' | 'createdAt' | 'managerId' | 'managerName'>) => {
     if (!currentUser) throw new Error('No user');
 
@@ -3436,6 +3544,11 @@ export function DataProvider({ children }: { children: ReactNode }) {
         getExcursionManagerBreakdown,
         searchDispatchByPhone,
         deleteOldDispatchEvents,
+        tourGuides,
+        addTourGuide,
+        updateTourGuide,
+        deleteTourGuide,
+        searchTourGuides,
       }}
     >
       {children}

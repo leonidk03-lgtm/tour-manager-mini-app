@@ -170,6 +170,7 @@ export default function SettingsScreen() {
           <SectionTitle title="Оборудование" />
           <View style={styles.iconGrid}>
             <AppIcon icon="radio" label="Радиогиды" color="#FF9500" onPress={() => navigation.navigate("RadioGuides")} />
+            <AppIcon icon="user" label="Гиды" color="#007AFF" onPress={() => navigation.navigate("TourGuides")} />
             <AppIcon icon="alert-triangle" label="Утери" color="#FF3B30" onPress={() => navigation.navigate("EquipmentLosses")} />
             {canAccessWarehouse ? (
               <AppIcon icon="package" label="Склад" color="#8E8E93" onPress={() => navigation.navigate("Warehouse")} />
