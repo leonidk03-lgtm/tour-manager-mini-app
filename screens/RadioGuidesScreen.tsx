@@ -619,26 +619,26 @@ export default function RadioGuidesScreen() {
       );
       
       if (blockIndex !== undefined && blockIndex >= 0) {
-        await returnEquipmentBlock(order.id, blockIndex);
-      } else {
-        // Fallback: just remove bag from order's bagNumber list
-        const currentBags = order.bagNumber ? order.bagNumber.split(",").map(s => s.trim()).filter(Boolean) : [];
-        const remainingBags = currentBags.filter(bagStr => parseInt(bagStr) !== kit.bagNumber);
-        
-        if (remainingBags.length === 0) {
-          await updateRentalOrder(order.id, { status: "returned", bagNumber: "" });
-        } else {
-          await updateRentalOrder(order.id, { bagNumber: remainingBags.join(", ") });
+        const block = order.equipmentBlocks?.[blockIndex];
+        // Only call returnEquipmentBlock if the block was formally issued
+        if (block?.isIssued) {
+          try {
+            await returnEquipmentBlock(order.id, blockIndex);
+          } catch (returnErr) {
+            console.log("Block return error (non-critical):", returnErr);
+          }
         }
       }
       
-      // Check remaining bags
+      // Update bag number list
       const currentBags = order.bagNumber ? order.bagNumber.split(",").map(s => s.trim()).filter(Boolean) : [];
       const remainingBags = currentBags.filter(bagStr => parseInt(bagStr) !== kit.bagNumber);
       
       if (remainingBags.length === 0) {
+        await updateRentalOrder(order.id, { status: "returned", bagNumber: "" });
         Alert.alert("Успешно", `Все сумки по заказу #${order.orderNumber} приняты. Заказ закрыт.`);
       } else {
+        await updateRentalOrder(order.id, { bagNumber: remainingBags.join(", ") });
         Alert.alert("Успешно", `Сумка #${kit.bagNumber} принята.\nОсталось вернуть: ${remainingBags.length} сумок`);
       }
     } catch (err) {
@@ -1030,20 +1030,20 @@ export default function RadioGuidesScreen() {
           <ThemedText style={styles.assignmentValue}>
             {startDate} — {endDate}
           </ThemedText>
-          {equipmentBlock?.guideName ? (
+          {equipmentBlock?.tourGuideName ? (
             <>
               <ThemedText style={[styles.assignmentLabel, { color: theme.textSecondary }]}>
                 Гид:
               </ThemedText>
-              <ThemedText style={styles.assignmentValue}>{equipmentBlock.guideName}</ThemedText>
+              <ThemedText style={styles.assignmentValue}>{equipmentBlock.tourGuideName}</ThemedText>
             </>
           ) : null}
-          {equipmentBlock?.guidePhone ? (
+          {equipmentBlock?.tourGuidePhone ? (
             <>
               <ThemedText style={[styles.assignmentLabel, { color: theme.textSecondary }]}>
                 Телефон гида:
               </ThemedText>
-              <ThemedText style={styles.assignmentValue}>{equipmentBlock.guidePhone}</ThemedText>
+              <ThemedText style={styles.assignmentValue}>{equipmentBlock.tourGuidePhone}</ThemedText>
             </>
           ) : null}
           {equipmentBlock?.deliveryLocation ? (
