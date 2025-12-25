@@ -34,6 +34,11 @@ export interface EquipmentBlock {
   spareReceiverCount: number;
   transmitterCount: number;
   microphoneCount: number;
+  tourGuideName: string | null;
+  tourGuidePhone: string | null;
+  deliveryLocation: string | null;
+  isIssued: boolean;
+  issuedAt: string | null;
 }
 
 export interface RentalOrder {
@@ -168,6 +173,7 @@ interface RentalContextType {
   addRentalService: (service: Omit<RentalService, 'id' | 'createdAt' | 'updatedAt'>) => Promise<string>;
   updateRentalService: (id: string, service: Partial<RentalService>) => Promise<void>;
   deleteRentalService: (id: string) => Promise<void>;
+  issueEquipmentBlock: (orderId: string, blockIndex: number) => Promise<{ allIssued: boolean }>;
   refreshData: () => Promise<void>;
 }
 
@@ -1234,6 +1240,43 @@ export function RentalProvider({ children }: { children: ReactNode }) {
     await fetchRentalServices();
   };
 
+  const issueEquipmentBlock = async (orderId: string, blockIndex: number): Promise<{ allIssued: boolean }> => {
+    const order = rentalOrders.find(o => o.id === orderId);
+    if (!order || !order.equipmentBlocks || !order.equipmentBlocks[blockIndex]) {
+      throw new Error('Order or block not found');
+    }
+
+    const updatedBlocks = [...order.equipmentBlocks];
+    const block = updatedBlocks[blockIndex];
+    
+    if (block.isIssued) {
+      throw new Error('Block already issued');
+    }
+
+    updatedBlocks[blockIndex] = {
+      ...block,
+      isIssued: true,
+      issuedAt: new Date().toISOString(),
+    };
+
+    const { error } = await supabase
+      .from('rental_orders')
+      .update({ equipment_blocks: updatedBlocks })
+      .eq('id', orderId);
+
+    if (error) throw error;
+
+    const bagLabel = block.bagNumber ? `Сумка ${block.bagNumber}` : `Блок ${blockIndex + 1}`;
+    const guideLabel = block.tourGuideName ? ` для ${block.tourGuideName}` : '';
+    await addOrderHistory(orderId, `Выдано: ${bagLabel}${guideLabel}`);
+
+    const allIssued = updatedBlocks.every(b => b.isIssued);
+
+    await fetchRentalOrders();
+
+    return { allIssued };
+  };
+
   const getOrderServices = (orderId: string): RentalOrderService[] => {
     return rentalOrderServices.filter(os => os.orderId === orderId);
   };
@@ -1272,6 +1315,7 @@ export function RentalProvider({ children }: { children: ReactNode }) {
         addRentalService,
         updateRentalService,
         deleteRentalService,
+        issueEquipmentBlock,
         refreshData,
       }}
     >

@@ -18,7 +18,7 @@ import { ThemedView } from "@/components/ThemedView";
 import { ScreenScrollView } from "@/components/ScreenScrollView";
 import { Spacing, BorderRadius } from "@/constants/theme";
 import { useTheme } from "@/hooks/useTheme";
-import { useRental, RentalOrderStatus, RentalPaymentType } from "@/contexts/RentalContext";
+import { useRental, RentalOrderStatus, RentalPaymentType, EquipmentBlock } from "@/contexts/RentalContext";
 import { useAuth } from "@/contexts/AuthContext";
 import { useData, EquipmentItem } from "@/contexts/DataContext";
 import { useCompanySettings } from "@/contexts/CompanySettingsContext";
@@ -50,7 +50,7 @@ export default function RentalOrderDetailScreen() {
   const navigation = useNavigation();
   const route = useRoute<RouteParams>();
   const insets = useSafeAreaInsets();
-  const { rentalOrders, rentalClients, rentalOrderServices, updateRentalOrder, updateRentalClient, updateOrderStatus, addRentalPayment, getOrderPayments, getOrderHistory, deleteRentalOrder } = useRental();
+  const { rentalOrders, rentalClients, rentalOrderServices, updateRentalOrder, updateRentalClient, updateOrderStatus, addRentalPayment, getOrderPayments, getOrderHistory, deleteRentalOrder, issueEquipmentBlock } = useRental();
   const { managers, isAdmin } = useAuth();
   const { equipmentItems, equipmentCategories, addEquipmentMovement, addEquipmentLoss } = useData();
   const { settings: companySettings, getNextDocumentNumber } = useCompanySettings();
@@ -91,6 +91,9 @@ export default function RentalOrderDetailScreen() {
   const [isGeneratingDoc, setIsGeneratingDoc] = useState(false);
   const [showTemplateModal, setShowTemplateModal] = useState(false);
   const [pendingDocType, setPendingDocType] = useState<DocumentType | null>(null);
+  
+  // Block issuance state
+  const [issuingBlockIndex, setIssuingBlockIndex] = useState<number | null>(null);
 
   // Get equipment items that can be tracked for loss based on order contents
   // For rentals: receivers = kitCount, transmitters = microphoneCount
@@ -299,6 +302,40 @@ export default function RentalOrderDetailScreen() {
     } catch (error) {
       console.error("Error adding loss:", error);
       Alert.alert("Ошибка", "Не удалось зарегистрировать утерю");
+    }
+  };
+
+  const handleIssueBlock = async (blockIndex: number) => {
+    if (!order || issuingBlockIndex !== null) return;
+    
+    setIssuingBlockIndex(blockIndex);
+    hapticFeedback.selection();
+    
+    try {
+      const result = await issueEquipmentBlock(order.id, blockIndex);
+      hapticFeedback.success();
+      
+      if (result.allIssued && order.status === 'new') {
+        Alert.alert(
+          "Все сумки выданы",
+          "Перевести заказ в статус 'Выдан'?",
+          [
+            { text: "Позже", style: "cancel" },
+            {
+              text: "Перевести",
+              onPress: async () => {
+                await updateOrderStatus(order.id, 'issued');
+              },
+            },
+          ]
+        );
+      }
+    } catch (error) {
+      console.error("Error issuing block:", error);
+      hapticFeedback.error();
+      Alert.alert("Ошибка", "Не удалось выдать оборудование");
+    } finally {
+      setIssuingBlockIndex(null);
     }
   };
 
@@ -515,7 +552,7 @@ export default function RentalOrderDetailScreen() {
           ) : null}
         </View>
 
-        {order.equipmentBlocks && order.equipmentBlocks.length > 1 ? (
+        {order.equipmentBlocks && order.equipmentBlocks.length > 0 ? (
           <View style={[styles.card, { backgroundColor: theme.backgroundSecondary }]}>
             <ThemedText style={[styles.sectionTitle, { color: theme.textSecondary }]}>
               Разбивка по сумкам
@@ -527,15 +564,21 @@ export default function RentalOrderDetailScreen() {
                   styles.equipmentBlockCard, 
                   { 
                     backgroundColor: theme.backgroundTertiary,
-                    borderLeftColor: theme.primary,
+                    borderLeftColor: block.isIssued ? theme.success : theme.primary,
                   }
                 ]}
               >
                 <View style={styles.equipmentBlockHeader}>
-                  <Icon name="briefcase" size={16} color={theme.primary} />
+                  <Icon name="briefcase" size={16} color={block.isIssued ? theme.success : theme.primary} />
                   <ThemedText style={[styles.equipmentBlockTitle, { color: theme.text }]}>
                     {block.bagNumber ? `Сумка ${block.bagNumber}` : `Блок ${index + 1}`}
                   </ThemedText>
+                  {block.isIssued ? (
+                    <View style={[styles.issuedBadge, { backgroundColor: theme.success + "20" }]}>
+                      <Icon name="check" size={12} color={theme.success} />
+                      <ThemedText style={{ color: theme.success, fontSize: 11 }}>Выдано</ThemedText>
+                    </View>
+                  ) : null}
                 </View>
                 <View style={styles.equipmentBlockGrid}>
                   <View style={styles.equipmentBlockItem}>
@@ -573,6 +616,51 @@ export default function RentalOrderDetailScreen() {
                     </ThemedText>
                   </View>
                 </View>
+                
+                {block.tourGuideName || block.deliveryLocation ? (
+                  <View style={[styles.tourGuideInfo, { borderTopColor: theme.border }]}>
+                    {block.tourGuideName ? (
+                      <View style={styles.tourGuideRow}>
+                        <Icon name="user" size={14} color={theme.primary} />
+                        <ThemedText style={{ color: theme.text, fontSize: 13 }}>
+                          {block.tourGuideName}
+                          {block.tourGuidePhone ? ` (${block.tourGuidePhone})` : ''}
+                        </ThemedText>
+                      </View>
+                    ) : null}
+                    {block.deliveryLocation ? (
+                      <View style={styles.tourGuideRow}>
+                        <Icon name="map-pin" size={14} color={theme.textSecondary} />
+                        <ThemedText style={{ color: theme.textSecondary, fontSize: 13 }}>
+                          {block.deliveryLocation}
+                        </ThemedText>
+                      </View>
+                    ) : null}
+                  </View>
+                ) : null}
+                
+                {!block.isIssued && order.status === 'new' ? (
+                  <Pressable
+                    onPress={() => handleIssueBlock(index)}
+                    disabled={issuingBlockIndex !== null}
+                    style={[
+                      styles.issueBlockButton, 
+                      { 
+                        backgroundColor: theme.success + "20",
+                        opacity: issuingBlockIndex !== null ? 0.5 : 1,
+                      }
+                    ]}
+                  >
+                    {issuingBlockIndex === index ? (
+                      <ThemedText style={{ color: theme.success, fontWeight: "500" }}>Выдаём...</ThemedText>
+                    ) : (
+                      <>
+                        <Icon name="check-circle" size={16} color={theme.success} />
+                        <ThemedText style={{ color: theme.success, fontWeight: "500" }}>Выдать</ThemedText>
+                      </>
+                    )}
+                  </Pressable>
+                ) : null}
               </View>
             ))}
           </View>
@@ -1515,6 +1603,35 @@ const styles = StyleSheet.create({
   equipmentBlockLabel: {
     fontSize: 11,
     marginTop: 2,
+  },
+  issuedBadge: {
+    flexDirection: "row",
+    alignItems: "center",
+    gap: 4,
+    paddingHorizontal: Spacing.sm,
+    paddingVertical: 2,
+    borderRadius: BorderRadius.sm,
+    marginLeft: "auto",
+  },
+  tourGuideInfo: {
+    marginTop: Spacing.sm,
+    paddingTop: Spacing.sm,
+    borderTopWidth: StyleSheet.hairlineWidth,
+    gap: Spacing.xs,
+  },
+  tourGuideRow: {
+    flexDirection: "row",
+    alignItems: "center",
+    gap: Spacing.xs,
+  },
+  issueBlockButton: {
+    flexDirection: "row",
+    alignItems: "center",
+    justifyContent: "center",
+    gap: Spacing.sm,
+    padding: Spacing.sm,
+    borderRadius: BorderRadius.md,
+    marginTop: Spacing.sm,
   },
   documentsGrid: {
     flexDirection: "row",

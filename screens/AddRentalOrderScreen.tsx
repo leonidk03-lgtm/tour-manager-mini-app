@@ -35,6 +35,9 @@ interface EquipmentBlock {
   microphoneCount: string;
   selectedBag: RadioGuideKit | null;
   unmatchedBagNumber: number | null;
+  tourGuideName: string;
+  tourGuidePhone: string;
+  deliveryLocation: string;
 }
 
 const createEmptyBlock = (): EquipmentBlock => ({
@@ -45,6 +48,9 @@ const createEmptyBlock = (): EquipmentBlock => ({
   microphoneCount: "1",
   selectedBag: null,
   unmatchedBagNumber: null,
+  tourGuideName: "",
+  tourGuidePhone: "",
+  deliveryLocation: "",
 });
 
 export default function AddRentalOrderScreen() {
@@ -124,6 +130,9 @@ export default function AddRentalOrderScreen() {
             microphoneCount: dbBlock.microphoneCount?.toString() || "1",
             selectedBag: foundBag || null,
             unmatchedBagNumber: foundBag ? null : (!isNaN(bagNum) ? bagNum : null),
+            tourGuideName: dbBlock.tourGuideName || "",
+            tourGuidePhone: dbBlock.tourGuidePhone || "",
+            deliveryLocation: dbBlock.deliveryLocation || "",
           };
         });
         setEquipmentBlocks(blocks.length > 0 ? blocks : [createEmptyBlock()]);
@@ -144,6 +153,9 @@ export default function AddRentalOrderScreen() {
               microphoneCount: isFirstBlock ? (existingOrder.microphoneCount?.toString() || "1") : "1",
               selectedBag: foundBag || null,
               unmatchedBagNumber: foundBag ? null : bagNum,
+              tourGuideName: "",
+              tourGuidePhone: "",
+              deliveryLocation: "",
             };
           });
           setEquipmentBlocks(blocks.length > 0 ? blocks : [createEmptyBlock()]);
@@ -453,6 +465,11 @@ export default function AddRentalOrderScreen() {
       spareReceiverCount: parseInt(block.spareReceiverCount) || 0,
       transmitterCount: parseInt(block.transmitterCount) || 0,
       microphoneCount: parseInt(block.microphoneCount) || 0,
+      tourGuideName: block.tourGuideName.trim() || null,
+      tourGuidePhone: block.tourGuidePhone.trim() || null,
+      deliveryLocation: block.deliveryLocation.trim() || null,
+      isIssued: false,
+      issuedAt: null,
     }));
 
     try {
@@ -715,6 +732,52 @@ export default function AddRentalOrderScreen() {
                   <ThemedText style={{ color: theme.textSecondary }}>Выбрать сумку</ThemedText>
                 </Pressable>
               )}
+            </View>
+
+            <View style={[styles.tourGuideSection, { borderTopColor: theme.border }]}>
+              <View style={styles.tourGuideTitleRow}>
+                <Icon name="user" size={16} color={theme.primary} />
+                <ThemedText style={[styles.tourGuideTitle, { color: theme.textSecondary }]}>
+                  Экскурсовод
+                </ThemedText>
+              </View>
+              <View style={styles.inputRow}>
+                <View style={styles.inputColumn}>
+                  <ThemedText style={[styles.inputLabel, { color: theme.textSecondary }]}>
+                    Имя
+                  </ThemedText>
+                  <TextInput
+                    style={[styles.input, { backgroundColor: theme.backgroundSecondary, color: theme.text }]}
+                    value={block.tourGuideName}
+                    onChangeText={(value) => updateBlock(block.id, { tourGuideName: value })}
+                    placeholder="Имя экскурсовода"
+                    placeholderTextColor={theme.textSecondary}
+                  />
+                </View>
+                <View style={styles.inputColumn}>
+                  <ThemedText style={[styles.inputLabel, { color: theme.textSecondary }]}>
+                    Телефон
+                  </ThemedText>
+                  <TextInput
+                    style={[styles.input, { backgroundColor: theme.backgroundSecondary, color: theme.text }]}
+                    value={block.tourGuidePhone}
+                    onChangeText={(value) => updateBlock(block.id, { tourGuidePhone: value })}
+                    placeholder="+7..."
+                    placeholderTextColor={theme.textSecondary}
+                    keyboardType="phone-pad"
+                  />
+                </View>
+              </View>
+              <ThemedText style={[styles.inputLabel, { color: theme.textSecondary, marginTop: Spacing.xs }]}>
+                Место доставки
+              </ThemedText>
+              <TextInput
+                style={[styles.input, { backgroundColor: theme.backgroundSecondary, color: theme.text }]}
+                value={block.deliveryLocation}
+                onChangeText={(value) => updateBlock(block.id, { deliveryLocation: value })}
+                placeholder="Ресепшен отеля, адрес..."
+                placeholderTextColor={theme.textSecondary}
+              />
             </View>
           </View>
         ))}
@@ -1690,5 +1753,20 @@ const styles = StyleSheet.create({
   servicePickerPrice: {
     fontSize: 14,
     marginTop: 2,
+  },
+  tourGuideSection: {
+    marginTop: Spacing.md,
+    paddingTop: Spacing.md,
+    borderTopWidth: StyleSheet.hairlineWidth,
+  },
+  tourGuideTitleRow: {
+    flexDirection: "row",
+    alignItems: "center",
+    gap: Spacing.xs,
+    marginBottom: Spacing.sm,
+  },
+  tourGuideTitle: {
+    fontSize: 14,
+    fontWeight: "500",
   },
 });
