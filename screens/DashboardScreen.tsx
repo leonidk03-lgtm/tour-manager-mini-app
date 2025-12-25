@@ -489,11 +489,13 @@ export default function DashboardScreen() {
     // Count receivers on excursions (non-rental assignments only)
     const onExcursions = excursionAssignments.reduce((sum, a) => sum + a.receiversIssued, 0);
     
-    // Count receivers on rentals from issued orders (equipment blocks + spare receivers)
+    // Count receivers on rentals from issued orders (equipment blocks kitCount + spare receivers)
     const activeRentals = rentalOrders.filter(order => order.status === 'issued');
     const onRentals = activeRentals.reduce((sum, order) => {
-      const blockReceivers = (order.equipmentBlocks || []).reduce((blockSum, block) => blockSum + (block.receiverCount || 0), 0);
-      return sum + blockReceivers + (order.spareReceiverCount || 0);
+      const blocks = order.equipmentBlocks || [];
+      const blockReceivers = blocks.reduce((blockSum, block) => blockSum + (block.kitCount || 0), 0);
+      const blockSpares = blocks.reduce((blockSum, block) => blockSum + (block.spareReceiverCount || 0), 0);
+      return sum + blockReceivers + blockSpares + (order.spareReceiverCount || 0);
     }, 0);
     
     const totalInUse = onExcursions + onRentals;
