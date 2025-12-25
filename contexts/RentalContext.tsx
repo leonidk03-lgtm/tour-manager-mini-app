@@ -763,13 +763,33 @@ export function RentalProvider({ children }: { children: ReactNode }) {
   };
 
   const deleteRentalOrder = async (id: string) => {
+    // First delete related records to avoid foreign key constraints
+    
+    // Delete order services
+    await supabase.from('rental_order_services').delete().eq('order_id', id);
+    
+    // Delete payments
+    await supabase.from('rental_payments').delete().eq('order_id', id);
+    
+    // Delete history
+    await supabase.from('rental_order_history').delete().eq('order_id', id);
+    
+    // Delete commissions
+    await supabase.from('rental_commissions').delete().eq('order_id', id);
+    
+    // Now delete the order
     const { error } = await supabase
       .from('rental_orders')
       .delete()
       .eq('id', id);
 
     if (error) throw error;
+    
     await fetchRentalOrders();
+    await fetchRentalPayments();
+    await fetchRentalOrderHistory();
+    await fetchRentalCommissions();
+    await fetchRentalOrderServices();
   };
 
   const updateOrderStatus = async (id: string, status: RentalOrderStatus) => {
