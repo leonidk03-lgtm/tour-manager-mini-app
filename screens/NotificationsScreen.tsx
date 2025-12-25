@@ -348,6 +348,41 @@ export default function NotificationsScreen() {
                   <View style={[styles.divider, { backgroundColor: theme.border }]} />
                   <View style={styles.settingItem}>
                     <View style={styles.settingLeft}>
+                      <Icon name="clock" size={20} color={theme.textSecondary} />
+                      <ThemedText style={styles.settingText}>
+                        Время: {telegramSettings?.reminderTime ?? '12:00'}
+                      </ThemedText>
+                    </View>
+                    <View style={styles.timePickerRow}>
+                      {['09:00', '10:00', '12:00', '14:00', '18:00'].map((time) => (
+                        <Pressable
+                          key={time}
+                          style={[
+                            styles.timeChip,
+                            { 
+                              backgroundColor: (telegramSettings?.reminderTime ?? '12:00') === time ? theme.primary : theme.backgroundSecondary,
+                              borderColor: (telegramSettings?.reminderTime ?? '12:00') === time ? theme.primary : theme.border,
+                            },
+                          ]}
+                          onPress={async () => {
+                            hapticFeedback.selection();
+                            try {
+                              await updateTelegramSettings({ reminderTime: time });
+                            } catch (error) {
+                              Alert.alert("Ошибка", "Не удалось обновить время");
+                            }
+                          }}
+                        >
+                          <ThemedText style={{ color: (telegramSettings?.reminderTime ?? '12:00') === time ? "#FFFFFF" : theme.text, fontSize: 12 }}>
+                            {time}
+                          </ThemedText>
+                        </Pressable>
+                      ))}
+                    </View>
+                  </View>
+                  <View style={[styles.divider, { backgroundColor: theme.border }]} />
+                  <View style={styles.settingItem}>
+                    <View style={styles.settingLeft}>
                       <Icon name="users" size={20} color={theme.textSecondary} />
                       <ThemedText style={styles.settingText}>
                         Telegram-контактов: {telegramContacts.length}
@@ -467,8 +502,31 @@ export default function NotificationsScreen() {
                 </Pressable>
               </View>
               <ThemedText style={[styles.placeholderHint, { color: theme.textSecondary }]}>
-                Доступные переменные: {'{orderNumber}'}, {'{startDate}'}, {'{endDate}'}, {'{equipmentSummary}'}, {'{guideName}'}, {'{blockIndex}'}, {'{newStatus}'}
+                Нажмите на переменную, чтобы вставить:
               </ThemedText>
+              <View style={styles.variablesRow}>
+                {[
+                  { key: '{orderNumber}', label: 'Номер заказа' },
+                  { key: '{startDate}', label: 'Дата начала' },
+                  { key: '{endDate}', label: 'Дата конца' },
+                  { key: '{equipmentSummary}', label: 'Оборудование' },
+                  { key: '{guideName}', label: 'Имя гида' },
+                  { key: '{bagNumber}', label: 'Номер сумки' },
+                  { key: '{blockIndex}', label: 'Номер блока' },
+                  { key: '{newStatus}', label: 'Новый статус' },
+                ].map((variable) => (
+                  <Pressable
+                    key={variable.key}
+                    style={[styles.variableChip, { backgroundColor: theme.primary + '20', borderColor: theme.primary }]}
+                    onPress={() => {
+                      hapticFeedback.selection();
+                      setTemplateText(prev => prev + ' ' + variable.key);
+                    }}
+                  >
+                    <ThemedText style={{ color: theme.primary, fontSize: 12 }}>{variable.label}</ThemedText>
+                  </Pressable>
+                ))}
+              </View>
               <TextInput
                 style={[
                   styles.templateInput,
@@ -825,5 +883,28 @@ const styles = StyleSheet.create({
     padding: Spacing.md,
     borderRadius: BorderRadius.sm,
     alignItems: "center",
+  },
+  timePickerRow: {
+    flexDirection: "row",
+    gap: Spacing.xs,
+    flexWrap: "wrap",
+  },
+  timeChip: {
+    paddingHorizontal: Spacing.sm,
+    paddingVertical: Spacing.xs,
+    borderRadius: BorderRadius.sm,
+    borderWidth: 1,
+  },
+  variablesRow: {
+    flexDirection: "row",
+    flexWrap: "wrap",
+    gap: Spacing.xs,
+    marginBottom: Spacing.md,
+  },
+  variableChip: {
+    paddingHorizontal: Spacing.sm,
+    paddingVertical: Spacing.xs,
+    borderRadius: BorderRadius.sm,
+    borderWidth: 1,
   },
 });

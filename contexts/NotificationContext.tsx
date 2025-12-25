@@ -96,6 +96,7 @@ export interface NotificationSettings {
   telegramBotToken: string | null;
   defaultMessageTemplates: Record<string, string>;
   reminderDaysBefore: number;
+  reminderTime: string;
   notificationsEnabled: boolean;
   preferences: NotificationPreferences;
 }
@@ -170,6 +171,7 @@ const transformSettingsFromDB = (row: any): NotificationSettings => ({
   telegramBotToken: row.telegram_bot_token,
   defaultMessageTemplates: row.default_message_templates || {},
   reminderDaysBefore: row.reminder_days_before || 2,
+  reminderTime: row.reminder_time || '12:00',
   notificationsEnabled: row.notifications_enabled !== false,
   preferences: row.preferences || DEFAULT_NOTIFICATION_PREFERENCES,
 });
@@ -422,6 +424,7 @@ export function NotificationProvider({ children }: { children: React.ReactNode }
     if (settings.telegramBotToken !== undefined) dbUpdates.telegram_bot_token = settings.telegramBotToken;
     if (settings.defaultMessageTemplates !== undefined) dbUpdates.default_message_templates = settings.defaultMessageTemplates;
     if (settings.reminderDaysBefore !== undefined) dbUpdates.reminder_days_before = settings.reminderDaysBefore;
+    if (settings.reminderTime !== undefined) dbUpdates.reminder_time = settings.reminderTime;
     if (settings.notificationsEnabled !== undefined) dbUpdates.notifications_enabled = settings.notificationsEnabled;
     if (settings.preferences !== undefined) dbUpdates.preferences = settings.preferences;
     dbUpdates.updated_at = new Date().toISOString();
