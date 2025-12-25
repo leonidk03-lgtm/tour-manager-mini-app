@@ -17,7 +17,7 @@ The application is built with React Native (v0.81.5), React (v19.1.0), and Expo 
 
 ### Feature Specifications
 *   **Core Modules**: Dashboard, Excursions, Finances, Settings, Admin Panel, Reports, Radio Guides, Chat, Notifications, and Warehouse management.
-*   **Data Model**: Interconnected entities such as `TourType`, `Excursion`, `AdditionalService`, `Transaction`, `Manager`, `RadioGuideKit`, `RentalOrder`, `EquipmentItem`, and `ChatMessage` facilitate comprehensive data tracking.
+*   **Data Model**: Interconnected entities such as `TourType`, `Excursion`, `AdditionalService`, `Transaction`, `Manager`, `RadioGuideKit`, `RentalOrder`, `EquipmentItem`, `TourGuide`, and `ChatMessage` facilitate comprehensive data tracking.
 *   **Authentication & Authorization**: Supabase handles username/password authentication with `Manager` and `Admin` roles. Row Level Security (RLS) enforces data access based on roles, with `AuthContext` managing the authentication state.
 *   **Rental CRM Module**: Manages clients, orders, commissions, and equipment. Supports multi-block equipment orders, automatic commission calculation based on profit, and an auto-writeoff system for consumables.
 *   **Advanced Features**:
@@ -28,6 +28,7 @@ The application is built with React Native (v0.81.5), React (v19.1.0), and Expo 
     *   **Granular Rental Permissions**: Fine-grained access control for different sections of the rental module.
     *   **Equipment Loss Tracking**: System for registering, tracking, and recovering lost equipment from both excursions and rental orders, integrating with inventory.
     *   **Dispatch Marking Activity Tracking**: Monitors and reports manager activity in the dispatching system, including marked phones and tourists, with an admin report for performance analysis.
+    *   **Tour Guides Directory**: Справочник экскурсоводов с CRUD операциями и поиском по имени и номеру телефона. Доступ через Настройки -> Оборудование -> Гиды.
 
 ### System Design Choices
 The architecture emphasizes modularity, reusability, and scalability. The choice of Expo facilitates cross-platform deployment, while Supabase provides a robust backend with real-time capabilities. The New Architecture of React Native is leveraged for enhanced performance. Data integrity is maintained through a well-defined relational data model and Supabase RLS.
