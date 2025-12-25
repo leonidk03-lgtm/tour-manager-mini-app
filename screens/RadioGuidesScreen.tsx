@@ -276,10 +276,24 @@ export default function RadioGuidesScreen() {
         const issuedDate = activeAssignment.issuedAt.split("T")[0];
         const isOverdue = issuedDate < today;
         
-        if (isOverdue) {
-          overdue.push({ kit, assignment: activeAssignment });
+        // If this is a rental assignment, put it in rentalIssued instead
+        if (activeAssignment.rentalOrderId) {
+          const order = rentalOrders.find(o => o.id === activeAssignment.rentalOrderId);
+          if (order) {
+            rentalIssued.push({ kit, order });
+          } else {
+            // Fallback to issued if order not found
+            if (isOverdue) {
+              overdue.push({ kit, assignment: activeAssignment });
+            }
+            issued.push({ kit, assignment: activeAssignment, isOverdue });
+          }
+        } else {
+          if (isOverdue) {
+            overdue.push({ kit, assignment: activeAssignment });
+          }
+          issued.push({ kit, assignment: activeAssignment, isOverdue });
         }
-        issued.push({ kit, assignment: activeAssignment, isOverdue });
       } else if (rentalOrder) {
         rentalIssued.push({ kit, order: rentalOrder });
       } else if (kit.status === "available") {
@@ -312,7 +326,7 @@ export default function RadioGuidesScreen() {
       availableKits: available.filter(a => filterBySearch(a.bagNumber)),
       rentalIssuedKits: rentalIssued.filter(r => filterBySearch(r.kit.bagNumber))
     };
-  }, [radioGuideKits, getActiveAssignment, today, sortByBattery, searchQuery, rentalBagMap]);
+  }, [radioGuideKits, getActiveAssignment, today, sortByBattery, searchQuery, rentalBagMap, rentalOrders]);
   
   const formatDate = (dateStr: string) => {
     const date = new Date(dateStr);
@@ -1182,7 +1196,7 @@ export default function RadioGuidesScreen() {
     );
   };
 
-  const todayIssuedKits = issuedKits.filter(k => !k.isOverdue);
+  const todayIssuedKits = issuedKits.filter(k => !k.isOverdue && !k.assignment.rentalOrderId);
 
   return (
     <PermissionGate permission="radio_guides">
