@@ -678,16 +678,21 @@ export default function RentalOrderDetailScreen() {
                   styles.equipmentBlockCard, 
                   { 
                     backgroundColor: theme.backgroundTertiary,
-                    borderLeftColor: block.isIssued ? theme.success : theme.primary,
+                    borderLeftColor: block.isReturned ? theme.primary : (block.isIssued ? theme.success : theme.primary),
                   }
                 ]}
               >
                 <View style={styles.equipmentBlockHeader}>
-                  <Icon name="briefcase" size={16} color={block.isIssued ? theme.success : theme.primary} />
+                  <Icon name="briefcase" size={16} color={block.isReturned ? theme.primary : (block.isIssued ? theme.success : theme.primary)} />
                   <ThemedText style={[styles.equipmentBlockTitle, { color: theme.text }]}>
                     {block.bagNumber ? `Сумка ${block.bagNumber}` : `Блок ${index + 1}`}
                   </ThemedText>
-                  {block.isIssued ? (
+                  {block.isReturned ? (
+                    <View style={[styles.issuedBadge, { backgroundColor: theme.primary + "20" }]}>
+                      <Icon name="check-circle" size={12} color={theme.primary} />
+                      <ThemedText style={{ color: theme.primary, fontSize: 11 }}>Возвращено</ThemedText>
+                    </View>
+                  ) : block.isIssued ? (
                     <View style={[styles.issuedBadge, { backgroundColor: theme.success + "20" }]}>
                       <Icon name="check" size={12} color={theme.success} />
                       <ThemedText style={{ color: theme.success, fontSize: 11 }}>Выдано</ThemedText>
