@@ -509,9 +509,14 @@ export default function DashboardScreen() {
     
     const totalInUse = onExcursions + onRentals;
     
-    // Count only losses with status 'lost' (not 'found')
-    const activeLosses = equipmentLosses.filter(loss => loss.status === 'lost');
-    const lostCount = activeLosses.reduce((sum, loss) => sum + loss.missingCount, 0);
+    // Count only losses with status 'lost' (not 'found') for today only
+    const { startDate: todayStart, endDate: todayEnd } = getDateRangeForPeriod("day", new Date());
+    const todayLosses = equipmentLosses.filter(loss => {
+      if (loss.status !== 'lost') return false;
+      const lossDate = loss.createdAt.split('T')[0];
+      return lossDate >= todayStart && lossDate <= todayEnd;
+    });
+    const lostCount = todayLosses.reduce((sum, loss) => sum + loss.missingCount, 0);
     
     return { onExcursions, onRentals, totalInUse, lostCount };
   }, [radioGuideAssignments, equipmentLosses, radioGuideKits, rentalOrders]);
