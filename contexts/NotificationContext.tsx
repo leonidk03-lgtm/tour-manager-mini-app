@@ -41,7 +41,7 @@ export interface NotificationSettings {
 export interface SendNotificationParams {
   recipientPhone?: string;
   telegramChatId?: number;
-  notificationType: 'order_issued' | 'order_returned' | 'bag_issued' | 'reminder' | 'order_cancelled';
+  notificationType: 'order_issued' | 'order_returned' | 'bag_issued' | 'reminder' | 'order_cancelled' | 'status_change' | 'equipment_issued';
   recipientType: 'client' | 'guide' | 'manager';
   rentalOrderId?: string;
   equipmentBlockIndex?: number;
@@ -258,15 +258,53 @@ export function NotificationProvider({ children }: { children: React.ReactNode }
     return telegramContacts.find(c => c.phone.replace(/\D/g, '') === normalized);
   };
 
+  const sendTelegramMessage = async (chatId: string, message: string): Promise<{ success: boolean; messageId?: number; error?: string }> => {
+    if (!supabase) {
+      return { success: false, error: 'Supabase not initialized' };
+    }
+
+    try {
+      const { data, error } = await supabase.functions.invoke('send-telegram-message', {
+        body: { chatId, message },
+      });
+
+      if (error) {
+        console.error('[Telegram] Edge Function error:', error);
+        return { success: false, error: error.message || 'Edge Function error' };
+      }
+
+      if (data?.ok) {
+        return { success: true, messageId: data.messageId };
+      } else {
+        return { success: false, error: data?.error || 'Unknown error from Edge Function' };
+      }
+    } catch (error) {
+      console.error('[Telegram] API error:', error);
+      return { success: false, error: error instanceof Error ? error.message : 'Network error' };
+    }
+  };
+
   const sendNotification = async (params: SendNotificationParams): Promise<boolean> => {
     if (!notificationSettings?.notificationsEnabled) {
       console.log('[Notifications] Notifications are disabled');
       return false;
     }
 
+    // Find chat ID from phone if not provided
+    let chatId = params.telegramChatId;
+    if (!chatId && params.recipientPhone) {
+      const contact = getContactByPhone(params.recipientPhone);
+      chatId = contact?.telegramChatId;
+    }
+
+    if (!chatId) {
+      console.log('[Notifications] No Telegram chat ID found for recipient');
+      return false;
+    }
+
     const logEntry = {
       recipient_phone: params.recipientPhone || null,
-      telegram_chat_id: params.telegramChatId || null,
+      telegram_chat_id: chatId,
       notification_type: params.notificationType,
       recipient_type: params.recipientType,
       rental_order_id: params.rentalOrderId || null,
@@ -284,27 +322,30 @@ export function NotificationProvider({ children }: { children: React.ReactNode }
 
     if (logError) {
       console.error('Error creating notification log:', logError);
-      return false;
+      // Continue trying to send even if log fails
     }
 
-    // TODO: Call Supabase Edge Function to send Telegram message
-    console.log('[Notifications] Would send notification:', params.messageText);
+    // Send via Telegram Bot API
+    const telegramResult = await sendTelegramMessage(chatId, params.messageText);
     
-    // For now, just mark as sent (simulation)
-    const { error: updateError } = await supabase
-      .from('notification_logs')
-      .update({ 
-        status: 'sent',
-        sent_at: new Date().toISOString()
-      })
-      .eq('id', logData.id);
+    if (logData) {
+      const { error: updateError } = await supabase
+        .from('notification_logs')
+        .update({ 
+          status: telegramResult.success ? 'sent' : 'failed',
+          sent_at: telegramResult.success ? new Date().toISOString() : null,
+          telegram_message_id: telegramResult.messageId || null,
+          error_message: telegramResult.error || null,
+        })
+        .eq('id', logData.id);
 
-    if (updateError) {
-      console.error('Error updating notification log:', updateError);
+      if (updateError) {
+        console.error('Error updating notification log:', updateError);
+      }
     }
 
     await fetchNotificationLogs();
-    return true;
+    return telegramResult.success;
   };
 
   const updateNotificationSettings = async (settings: Partial<NotificationSettings>): Promise<void> => {

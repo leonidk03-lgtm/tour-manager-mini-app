@@ -1,5 +1,5 @@
 import { useState, useCallback } from "react";
-import { View, StyleSheet, Pressable, Switch, RefreshControl } from "react-native";
+import { View, StyleSheet, Pressable, Switch, RefreshControl, Alert, TextInput } from "react-native";
 import { ScreenScrollView } from "@/components/ScreenScrollView";
 import { ThemedText } from "@/components/ThemedText";
 import { ThemedView } from "@/components/ThemedView";
@@ -7,6 +7,7 @@ import { Icon } from "@/components/Icon";
 import { useTheme } from "@/hooks/useTheme";
 import { useData, AppNotification } from "@/contexts/DataContext";
 import { useAuth } from "@/contexts/AuthContext";
+import { useNotifications } from "@/contexts/NotificationContext";
 import { Spacing, BorderRadius } from "@/constants/theme";
 import { hapticFeedback } from "@/utils/haptics";
 
@@ -21,8 +22,18 @@ export default function NotificationsScreen() {
     markAllNotificationsAsRead,
     updateNotificationSettings,
   } = useData();
+  const {
+    notificationSettings: telegramSettings,
+    tablesAvailable: telegramTablesAvailable,
+    initError: telegramInitError,
+    telegramContacts,
+    updateNotificationSettings: updateTelegramSettings,
+    refreshData: refreshTelegramData,
+  } = useNotifications();
 
   const [refreshing, setRefreshing] = useState(false);
+  const [showTelegramTokenInput, setShowTelegramTokenInput] = useState(false);
+  const [telegramBotToken, setTelegramBotToken] = useState("");
 
   const onRefresh = useCallback(async () => {
     setRefreshing(true);
@@ -137,6 +148,120 @@ export default function NotificationsScreen() {
             ) : null}
           </ThemedView>
         </View>
+
+        {isAdmin ? (
+          <View style={styles.section}>
+            <ThemedText style={styles.sectionTitle}>Telegram-уведомления</ThemedText>
+            {!telegramTablesAvailable ? (
+              <ThemedView
+                style={[
+                  styles.warningCard,
+                  { borderColor: "#FF9800", backgroundColor: "rgba(255,152,0,0.1)", borderRadius: BorderRadius.sm },
+                ]}
+              >
+                <Icon name="alert-triangle" size={20} color="#FF9800" />
+                <ThemedText style={[styles.warningText, { color: "#FF9800" }]}>
+                  {telegramInitError || "Таблицы уведомлений недоступны. Проверьте настройки Supabase."}
+                </ThemedText>
+              </ThemedView>
+            ) : (
+              <ThemedView
+                style={[
+                  styles.settingsGroup,
+                  { borderColor: theme.border, borderRadius: BorderRadius.sm },
+                ]}
+              >
+                <View style={styles.settingItem}>
+                  <View style={styles.settingLeft}>
+                    <Icon name="send" size={20} color={theme.textSecondary} />
+                    <ThemedText style={styles.settingText}>Telegram-уведомления</ThemedText>
+                  </View>
+                  <Switch
+                    value={telegramSettings?.notificationsEnabled ?? false}
+                    onValueChange={async (value) => {
+                      hapticFeedback.selection();
+                      try {
+                        await updateTelegramSettings({ notificationsEnabled: value });
+                      } catch (error) {
+                        Alert.alert("Ошибка", "Не удалось обновить настройки");
+                      }
+                    }}
+                    trackColor={{ false: theme.border, true: theme.primary }}
+                    thumbColor="#FFFFFF"
+                  />
+                </View>
+                <View style={[styles.divider, { backgroundColor: theme.border }]} />
+                <View style={styles.settingItem}>
+                  <View style={styles.settingLeft}>
+                    <Icon name="clock" size={20} color={theme.textSecondary} />
+                    <ThemedText style={styles.settingText}>
+                      Напоминание за {telegramSettings?.reminderDaysBefore ?? 2} дн.
+                    </ThemedText>
+                  </View>
+                </View>
+                <View style={[styles.divider, { backgroundColor: theme.border }]} />
+                <View style={styles.settingItem}>
+                  <View style={styles.settingLeft}>
+                    <Icon name="users" size={20} color={theme.textSecondary} />
+                    <ThemedText style={styles.settingText}>
+                      Telegram-контактов: {telegramContacts.length}
+                    </ThemedText>
+                  </View>
+                </View>
+                <View style={[styles.divider, { backgroundColor: theme.border }]} />
+                <View style={styles.settingItem}>
+                  <View style={styles.settingLeft}>
+                    <Icon name="key" size={20} color={theme.textSecondary} />
+                    <ThemedText style={styles.settingText}>
+                      Bot Token: {telegramSettings?.telegramBotToken ? "Настроен" : "Не настроен"}
+                    </ThemedText>
+                  </View>
+                  <Pressable
+                    onPress={() => setShowTelegramTokenInput(!showTelegramTokenInput)}
+                    style={({ pressed }) => [pressed && { opacity: 0.7 }]}
+                  >
+                    <Icon name={showTelegramTokenInput ? "chevron-up" : "chevron-down"} size={20} color={theme.textSecondary} />
+                  </Pressable>
+                </View>
+                {showTelegramTokenInput ? (
+                  <View style={styles.tokenInputContainer}>
+                    <TextInput
+                      style={[
+                        styles.tokenInput,
+                        { color: theme.text, borderColor: theme.border, backgroundColor: theme.backgroundSecondary },
+                      ]}
+                      placeholder="Введите Telegram Bot Token"
+                      placeholderTextColor={theme.textSecondary}
+                      value={telegramBotToken}
+                      onChangeText={setTelegramBotToken}
+                      secureTextEntry
+                    />
+                    <Pressable
+                      style={[styles.saveTokenButton, { backgroundColor: theme.primary }]}
+                      onPress={async () => {
+                        if (!telegramBotToken.trim()) {
+                          Alert.alert("Ошибка", "Введите токен");
+                          return;
+                        }
+                        hapticFeedback.selection();
+                        try {
+                          await updateTelegramSettings({ telegramBotToken: telegramBotToken.trim() });
+                          setTelegramBotToken("");
+                          setShowTelegramTokenInput(false);
+                          Alert.alert("Успех", "Токен сохранён");
+                        } catch (error) {
+                          Alert.alert("Ошибка", "Не удалось сохранить токен");
+                        }
+                      }}
+                    >
+                      <ThemedText style={{ color: "#FFFFFF" }}>Сохранить</ThemedText>
+                    </Pressable>
+                  </View>
+                ) : null}
+              </ThemedView>
+            )}
+          </View>
+        ) : null}
 
         <View style={styles.section}>
           <View style={styles.sectionHeader}>
@@ -319,5 +444,31 @@ const styles = StyleSheet.create({
     height: 8,
     borderRadius: BorderRadius.full,
     marginLeft: Spacing.sm,
+  },
+  warningCard: {
+    flexDirection: "row",
+    alignItems: "center",
+    padding: Spacing.md,
+    borderWidth: 1,
+    gap: Spacing.sm,
+  },
+  warningText: {
+    fontSize: 13,
+    flex: 1,
+  },
+  tokenInputContainer: {
+    padding: Spacing.md,
+    gap: Spacing.sm,
+  },
+  tokenInput: {
+    borderWidth: 1,
+    borderRadius: BorderRadius.sm,
+    padding: Spacing.md,
+    fontSize: 14,
+  },
+  saveTokenButton: {
+    padding: Spacing.md,
+    borderRadius: BorderRadius.sm,
+    alignItems: "center",
   },
 });

@@ -23,6 +23,7 @@ import { useAuth } from "@/contexts/AuthContext";
 import { useData, EquipmentItem } from "@/contexts/DataContext";
 import { useCompanySettings } from "@/contexts/CompanySettingsContext";
 import { useDocumentTemplates } from "@/contexts/DocumentTemplatesContext";
+import { useNotifications } from "@/contexts/NotificationContext";
 import { generateAndShareDocument, DocumentType } from "@/utils/documents";
 import { SettingsStackParamList } from "@/navigation/SettingsStackNavigator";
 import { hapticFeedback } from "@/utils/haptics";
@@ -55,6 +56,7 @@ export default function RentalOrderDetailScreen() {
   const { equipmentItems, equipmentCategories, addEquipmentMovement, addEquipmentLoss } = useData();
   const { settings: companySettings, getNextDocumentNumber } = useCompanySettings();
   const { getDefaultTemplate, getTemplatesByType } = useDocumentTemplates();
+  const { sendNotification, getContactByPhone } = useNotifications();
 
   const orderId = route.params?.orderId;
   const order = rentalOrders.find(o => o.id === orderId);
@@ -166,9 +168,56 @@ export default function RentalOrderDetailScreen() {
       setPendingStatusChange(null);
       hapticFeedback.success();
       
-      // TODO: Send notifications based on type
+      // Send notifications based on type
       if (notification !== "none") {
-        console.log(`[Notifications] Would send ${notification} notification for order ${order.orderNumber}`);
+        const statusLabel = STATUS_CONFIG[status]?.label || status;
+        const dateRange = `${new Date(order.startDate).toLocaleDateString('ru-RU')} - ${new Date(order.endDate).toLocaleDateString('ru-RU')}`;
+        
+        // Send to client
+        if (notification === "all" || notification === "client") {
+          const clientPhone = order.clientPhone || client?.phone;
+          if (clientPhone) {
+            const clientContact = getContactByPhone(clientPhone);
+            if (clientContact?.telegramChatId) {
+              const clientMessage = `Статус заказа #${order.orderNumber} изменён\n\nНовый статус: ${statusLabel}\nПериод: ${dateRange}\n\nСпасибо, что выбрали нас!`;
+              
+              await sendNotification({
+                recipientPhone: clientPhone,
+                telegramChatId: clientContact.telegramChatId,
+                notificationType: 'status_change',
+                recipientType: 'client',
+                rentalOrderId: order.id,
+                messageText: clientMessage,
+              });
+            }
+          }
+        }
+        
+        // Send to guides
+        if (notification === "all" || notification === "guide") {
+          if (order.equipmentBlocks && order.equipmentBlocks.length > 0) {
+            for (let i = 0; i < order.equipmentBlocks.length; i++) {
+              const block = order.equipmentBlocks[i];
+              if (block.tourGuidePhone) {
+                const guideContact = getContactByPhone(block.tourGuidePhone);
+                if (guideContact?.telegramChatId) {
+                  const bagLabel = block.bagNumber ? `Сумка ${block.bagNumber}` : `Комплект ${i + 1}`;
+                  const guideMessage = `Статус заказа изменён\n\n${bagLabel}\nНовый статус: ${statusLabel}\nКлиент: ${order.clientName || client?.name || 'Не указан'}\nПериод: ${dateRange}`;
+                  
+                  await sendNotification({
+                    recipientPhone: block.tourGuidePhone,
+                    telegramChatId: guideContact.telegramChatId,
+                    notificationType: 'status_change',
+                    recipientType: 'guide',
+                    rentalOrderId: order.id,
+                    equipmentBlockIndex: i,
+                    messageText: guideMessage,
+                  });
+                }
+              }
+            }
+          }
+        }
       }
     } catch (error) {
       Alert.alert("Ошибка", "Не удалось изменить статус");
@@ -337,8 +386,31 @@ export default function RentalOrderDetailScreen() {
     hapticFeedback.selection();
     
     try {
+      const block = order.equipmentBlocks?.[blockIndex];
       const result = await issueEquipmentBlock(order.id, blockIndex);
       hapticFeedback.success();
+      
+      // Send notification to guide if phone is configured
+      if (block?.tourGuidePhone) {
+        const guideContact = getContactByPhone(block.tourGuidePhone);
+        if (guideContact?.telegramChatId) {
+          const bagLabel = block.bagNumber ? `Сумка ${block.bagNumber}` : `Комплект ${blockIndex + 1}`;
+          const dateRange = `${new Date(order.startDate).toLocaleDateString('ru-RU')} - ${new Date(order.endDate).toLocaleDateString('ru-RU')}`;
+          const locationInfo = block.deliveryLocation ? `\nМесто: ${block.deliveryLocation}` : '';
+          
+          const message = `Вам назначено оборудование для аренды\n\n${bagLabel}\nКлиент: ${order.clientName || client?.name || 'Не указан'}\nПериод: ${dateRange}${locationInfo}\n\nКомплектация:\n- Приёмников: ${block.kitCount}\n- Передатчиков: ${block.transmitterCount}`;
+          
+          await sendNotification({
+            recipientPhone: block.tourGuidePhone,
+            telegramChatId: guideContact.telegramChatId,
+            notificationType: 'equipment_issued',
+            recipientType: 'guide',
+            rentalOrderId: order.id,
+            equipmentBlockIndex: blockIndex,
+            messageText: message,
+          });
+        }
+      }
       
       // Show warning if radio guide assignment failed
       if (result.radioGuideAssignmentError) {

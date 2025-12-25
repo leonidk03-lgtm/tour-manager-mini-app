@@ -32,6 +32,23 @@ The application is built with React Native (v0.81.5), React (v19.1.0), and Expo 
 ### System Design Choices
 The architecture emphasizes modularity, reusability, and scalability. The choice of Expo facilitates cross-platform deployment, while Supabase provides a robust backend with real-time capabilities. The New Architecture of React Native is leveraged for enhanced performance. Data integrity is maintained through a well-defined relational data model and Supabase RLS.
 
+### Telegram Notifications System
+The application includes a Telegram notification system for sending alerts to clients and guides. **Important security note**: The Telegram bot token must NEVER be exposed in frontend code. The system uses a Supabase Edge Function to securely handle Telegram API calls.
+
+**Required Tables** (created via SQL in Supabase):
+- `telegram_contacts`: Stores phone-to-Telegram chat ID mappings
+- `notification_logs`: Logs all sent notifications with status
+- `notification_settings`: Stores bot token and global settings
+
+**Supabase Edge Function Deployment**:
+1. Install Supabase CLI: `npm install -g supabase`
+2. Login: `supabase login`
+3. Link project: `supabase link --project-ref YOUR_PROJECT_REF`
+4. Deploy function: `supabase functions deploy send-telegram-message`
+5. Set the `telegram_bot_token` in `notification_settings` table via Supabase dashboard
+
+The Edge Function code is located at `supabase/functions/send-telegram-message/index.ts`.
+
 ## External Dependencies
 
 *   **Expo Ecosystem**: `expo` (core framework), `expo-splash-screen`, `expo-status-bar`, `expo-constants`, `expo-font`, `expo-linking`, `expo-web-browser`, `expo-haptics`, `expo-system-ui`, `expo-image`, `expo-symbols`, `expo-blur`, `expo-linear-gradient`, `expo-glass-effect`.
