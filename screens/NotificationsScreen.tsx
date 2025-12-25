@@ -198,6 +198,40 @@ export default function NotificationsScreen() {
                       Напоминание за {telegramSettings?.reminderDaysBefore ?? 2} дн.
                     </ThemedText>
                   </View>
+                  <View style={styles.stepperContainer}>
+                    <Pressable
+                      style={[styles.stepperButton, { backgroundColor: theme.backgroundSecondary }]}
+                      onPress={async () => {
+                        const current = telegramSettings?.reminderDaysBefore ?? 2;
+                        if (current > 1) {
+                          hapticFeedback.selection();
+                          try {
+                            await updateTelegramSettings({ reminderDaysBefore: current - 1 });
+                          } catch (error) {
+                            Alert.alert("Ошибка", "Не удалось обновить");
+                          }
+                        }
+                      }}
+                    >
+                      <Icon name="minus" size={16} color={theme.text} />
+                    </Pressable>
+                    <Pressable
+                      style={[styles.stepperButton, { backgroundColor: theme.backgroundSecondary }]}
+                      onPress={async () => {
+                        const current = telegramSettings?.reminderDaysBefore ?? 2;
+                        if (current < 14) {
+                          hapticFeedback.selection();
+                          try {
+                            await updateTelegramSettings({ reminderDaysBefore: current + 1 });
+                          } catch (error) {
+                            Alert.alert("Ошибка", "Не удалось обновить");
+                          }
+                        }
+                      }}
+                    >
+                      <Icon name="plus" size={16} color={theme.text} />
+                    </Pressable>
+                  </View>
                 </View>
                 <View style={[styles.divider, { backgroundColor: theme.border }]} />
                 <View style={styles.settingItem}>
@@ -469,6 +503,17 @@ const styles = StyleSheet.create({
   saveTokenButton: {
     padding: Spacing.md,
     borderRadius: BorderRadius.sm,
+    alignItems: "center",
+  },
+  stepperContainer: {
+    flexDirection: "row",
+    gap: Spacing.xs,
+  },
+  stepperButton: {
+    width: 32,
+    height: 32,
+    borderRadius: BorderRadius.sm,
+    justifyContent: "center",
     alignItems: "center",
   },
 });
