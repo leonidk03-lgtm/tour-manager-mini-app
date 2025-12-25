@@ -30,12 +30,74 @@ export interface NotificationLog {
   createdAt: string;
 }
 
+export type NotificationType = 'order_issued' | 'order_returned' | 'bag_issued' | 'reminder' | 'order_cancelled' | 'status_change' | 'equipment_issued';
+export type RecipientType = 'client' | 'guide' | 'manager';
+
+export interface NotificationTypePreference {
+  enabled: boolean;
+  recipients: {
+    client: boolean;
+    guide: boolean;
+    manager: boolean;
+  };
+  template: string;
+}
+
+export interface NotificationPreferences {
+  order_issued: NotificationTypePreference;
+  order_returned: NotificationTypePreference;
+  bag_issued: NotificationTypePreference;
+  reminder: NotificationTypePreference;
+  order_cancelled: NotificationTypePreference;
+  status_change: NotificationTypePreference;
+  equipment_issued: NotificationTypePreference;
+}
+
+export const DEFAULT_NOTIFICATION_PREFERENCES: NotificationPreferences = {
+  order_issued: {
+    enabled: true,
+    recipients: { client: true, guide: false, manager: true },
+    template: 'Заказ #{orderNumber} выдан. Период: {startDate} - {endDate}. Оборудование: {equipmentSummary}',
+  },
+  order_returned: {
+    enabled: true,
+    recipients: { client: true, guide: false, manager: true },
+    template: 'Заказ #{orderNumber} возвращён. Спасибо за аренду!',
+  },
+  bag_issued: {
+    enabled: true,
+    recipients: { client: false, guide: true, manager: false },
+    template: 'Блок {blockIndex} выдан. Гид: {guideName}. Оборудование: {equipmentSummary}. Период: {startDate} - {endDate}',
+  },
+  reminder: {
+    enabled: true,
+    recipients: { client: true, guide: true, manager: false },
+    template: 'Напоминание: аренда #{orderNumber} начинается {startDate}. Оборудование: {equipmentSummary}',
+  },
+  order_cancelled: {
+    enabled: true,
+    recipients: { client: true, guide: true, manager: true },
+    template: 'Заказ #{orderNumber} отменён.',
+  },
+  status_change: {
+    enabled: true,
+    recipients: { client: true, guide: true, manager: false },
+    template: 'Статус заказа #{orderNumber} изменён на: {newStatus}',
+  },
+  equipment_issued: {
+    enabled: true,
+    recipients: { client: false, guide: true, manager: false },
+    template: 'Оборудование по заказу #{orderNumber} выдано. {equipmentSummary}',
+  },
+};
+
 export interface NotificationSettings {
   id: string;
   telegramBotToken: string | null;
   defaultMessageTemplates: Record<string, string>;
   reminderDaysBefore: number;
   notificationsEnabled: boolean;
+  preferences: NotificationPreferences;
 }
 
 export interface SendNotificationParams {
@@ -109,6 +171,7 @@ const transformSettingsFromDB = (row: any): NotificationSettings => ({
   defaultMessageTemplates: row.default_message_templates || {},
   reminderDaysBefore: row.reminder_days_before || 2,
   notificationsEnabled: row.notifications_enabled !== false,
+  preferences: row.preferences || DEFAULT_NOTIFICATION_PREFERENCES,
 });
 
 export function NotificationProvider({ children }: { children: React.ReactNode }) {
@@ -360,6 +423,7 @@ export function NotificationProvider({ children }: { children: React.ReactNode }
     if (settings.defaultMessageTemplates !== undefined) dbUpdates.default_message_templates = settings.defaultMessageTemplates;
     if (settings.reminderDaysBefore !== undefined) dbUpdates.reminder_days_before = settings.reminderDaysBefore;
     if (settings.notificationsEnabled !== undefined) dbUpdates.notifications_enabled = settings.notificationsEnabled;
+    if (settings.preferences !== undefined) dbUpdates.preferences = settings.preferences;
     dbUpdates.updated_at = new Date().toISOString();
 
     const settingsId = notificationSettings?.id || '00000000-0000-0000-0000-000000000001';

@@ -1,5 +1,5 @@
 import { useState, useCallback } from "react";
-import { View, StyleSheet, Pressable, Switch, RefreshControl, Alert, TextInput } from "react-native";
+import { View, StyleSheet, Pressable, Switch, RefreshControl, Alert, TextInput, Modal } from "react-native";
 import { ScreenScrollView } from "@/components/ScreenScrollView";
 import { ThemedText } from "@/components/ThemedText";
 import { ThemedView } from "@/components/ThemedView";
@@ -7,9 +7,25 @@ import { Icon } from "@/components/Icon";
 import { useTheme } from "@/hooks/useTheme";
 import { useData, AppNotification } from "@/contexts/DataContext";
 import { useAuth } from "@/contexts/AuthContext";
-import { useNotifications } from "@/contexts/NotificationContext";
+import { useNotifications, NotificationType, NotificationTypePreference, DEFAULT_NOTIFICATION_PREFERENCES } from "@/contexts/NotificationContext";
 import { Spacing, BorderRadius } from "@/constants/theme";
 import { hapticFeedback } from "@/utils/haptics";
+
+const NOTIFICATION_TYPE_LABELS: Record<NotificationType, { title: string; description: string; icon: string }> = {
+  order_issued: { title: "Заказ выдан", description: "При выдаче заказа клиенту", icon: "package" },
+  order_returned: { title: "Заказ возвращён", description: "При возврате оборудования", icon: "check-circle" },
+  bag_issued: { title: "Блок выдан гиду", description: "При выдаче сумки/блока гиду", icon: "briefcase" },
+  reminder: { title: "Напоминание", description: "За N дней до начала аренды", icon: "clock" },
+  order_cancelled: { title: "Заказ отменён", description: "При отмене заказа", icon: "x-circle" },
+  status_change: { title: "Смена статуса", description: "При изменении статуса заказа", icon: "refresh-cw" },
+  equipment_issued: { title: "Оборудование выдано", description: "При выдаче оборудования", icon: "tool" },
+};
+
+const RECIPIENT_LABELS: Record<string, string> = {
+  client: "Клиент",
+  guide: "Гид",
+  manager: "Менеджер",
+};
 
 export default function NotificationsScreen() {
   const { theme } = useTheme();
@@ -34,6 +50,51 @@ export default function NotificationsScreen() {
   const [refreshing, setRefreshing] = useState(false);
   const [showTelegramTokenInput, setShowTelegramTokenInput] = useState(false);
   const [telegramBotToken, setTelegramBotToken] = useState("");
+  const [expandedTypes, setExpandedTypes] = useState<Set<NotificationType>>(new Set());
+  const [editingTemplate, setEditingTemplate] = useState<NotificationType | null>(null);
+  const [templateText, setTemplateText] = useState("");
+
+  const toggleExpanded = (type: NotificationType) => {
+    setExpandedTypes(prev => {
+      const next = new Set(prev);
+      if (next.has(type)) {
+        next.delete(type);
+      } else {
+        next.add(type);
+      }
+      return next;
+    });
+  };
+
+  const getPreference = (type: NotificationType): NotificationTypePreference => {
+    return telegramSettings?.preferences?.[type] || DEFAULT_NOTIFICATION_PREFERENCES[type];
+  };
+
+  const updateTypePreference = async (type: NotificationType, updates: Partial<NotificationTypePreference>) => {
+    const currentPrefs = telegramSettings?.preferences || DEFAULT_NOTIFICATION_PREFERENCES;
+    const currentTypePref = currentPrefs[type];
+    const newTypePref = { ...currentTypePref, ...updates };
+    const newPrefs = { ...currentPrefs, [type]: newTypePref };
+    
+    try {
+      await updateTelegramSettings({ preferences: newPrefs });
+    } catch (error) {
+      Alert.alert("Ошибка", "Не удалось сохранить настройки");
+    }
+  };
+
+  const updateRecipient = async (type: NotificationType, recipient: 'client' | 'guide' | 'manager', enabled: boolean) => {
+    const currentPref = getPreference(type);
+    const newRecipients = { ...currentPref.recipients, [recipient]: enabled };
+    await updateTypePreference(type, { recipients: newRecipients });
+  };
+
+  const saveTemplate = async () => {
+    if (!editingTemplate) return;
+    hapticFeedback.selection();
+    await updateTypePreference(editingTemplate, { template: templateText });
+    setEditingTemplate(null);
+  };
 
   const onRefresh = useCallback(async () => {
     setRefreshing(true);
@@ -165,137 +226,278 @@ export default function NotificationsScreen() {
                 </ThemedText>
               </ThemedView>
             ) : (
-              <ThemedView
-                style={[
-                  styles.settingsGroup,
-                  { borderColor: theme.border, borderRadius: BorderRadius.sm },
-                ]}
-              >
-                <View style={styles.settingItem}>
-                  <View style={styles.settingLeft}>
-                    <Icon name="send" size={20} color={theme.textSecondary} />
-                    <ThemedText style={styles.settingText}>Telegram-уведомления</ThemedText>
-                  </View>
-                  <Switch
-                    value={telegramSettings?.notificationsEnabled ?? false}
-                    onValueChange={async (value) => {
-                      hapticFeedback.selection();
-                      try {
-                        await updateTelegramSettings({ notificationsEnabled: value });
-                      } catch (error) {
-                        Alert.alert("Ошибка", "Не удалось обновить настройки");
-                      }
-                    }}
-                    trackColor={{ false: theme.border, true: theme.primary }}
-                    thumbColor="#FFFFFF"
-                  />
-                </View>
-                <View style={[styles.divider, { backgroundColor: theme.border }]} />
-                <View style={styles.settingItem}>
-                  <View style={styles.settingLeft}>
-                    <Icon name="clock" size={20} color={theme.textSecondary} />
-                    <ThemedText style={styles.settingText}>
-                      Напоминание за {telegramSettings?.reminderDaysBefore ?? 2} дн.
-                    </ThemedText>
-                  </View>
-                  <View style={styles.stepperContainer}>
-                    <Pressable
-                      style={[styles.stepperButton, { backgroundColor: theme.backgroundSecondary }]}
-                      onPress={async () => {
-                        const current = telegramSettings?.reminderDaysBefore ?? 2;
-                        if (current > 1) {
-                          hapticFeedback.selection();
-                          try {
-                            await updateTelegramSettings({ reminderDaysBefore: current - 1 });
-                          } catch (error) {
-                            Alert.alert("Ошибка", "Не удалось обновить");
-                          }
-                        }
-                      }}
-                    >
-                      <Icon name="minus" size={16} color={theme.text} />
-                    </Pressable>
-                    <Pressable
-                      style={[styles.stepperButton, { backgroundColor: theme.backgroundSecondary }]}
-                      onPress={async () => {
-                        const current = telegramSettings?.reminderDaysBefore ?? 2;
-                        if (current < 14) {
-                          hapticFeedback.selection();
-                          try {
-                            await updateTelegramSettings({ reminderDaysBefore: current + 1 });
-                          } catch (error) {
-                            Alert.alert("Ошибка", "Не удалось обновить");
-                          }
-                        }
-                      }}
-                    >
-                      <Icon name="plus" size={16} color={theme.text} />
-                    </Pressable>
-                  </View>
-                </View>
-                <View style={[styles.divider, { backgroundColor: theme.border }]} />
-                <View style={styles.settingItem}>
-                  <View style={styles.settingLeft}>
-                    <Icon name="users" size={20} color={theme.textSecondary} />
-                    <ThemedText style={styles.settingText}>
-                      Telegram-контактов: {telegramContacts.length}
-                    </ThemedText>
-                  </View>
-                </View>
-                <View style={[styles.divider, { backgroundColor: theme.border }]} />
-                <View style={styles.settingItem}>
-                  <View style={styles.settingLeft}>
-                    <Icon name="key" size={20} color={theme.textSecondary} />
-                    <ThemedText style={styles.settingText}>
-                      Bot Token: {telegramSettings?.telegramBotToken ? "Настроен" : "Не настроен"}
-                    </ThemedText>
-                  </View>
-                  <Pressable
-                    onPress={() => setShowTelegramTokenInput(!showTelegramTokenInput)}
-                    style={({ pressed }) => [pressed && { opacity: 0.7 }]}
-                  >
-                    <Icon name={showTelegramTokenInput ? "chevron-up" : "chevron-down"} size={20} color={theme.textSecondary} />
-                  </Pressable>
-                </View>
-                {showTelegramTokenInput ? (
-                  <View style={styles.tokenInputContainer}>
-                    <TextInput
-                      style={[
-                        styles.tokenInput,
-                        { color: theme.text, borderColor: theme.border, backgroundColor: theme.backgroundSecondary },
-                      ]}
-                      placeholder="Введите Telegram Bot Token"
-                      placeholderTextColor={theme.textSecondary}
-                      value={telegramBotToken}
-                      onChangeText={setTelegramBotToken}
-                      secureTextEntry
-                    />
-                    <Pressable
-                      style={[styles.saveTokenButton, { backgroundColor: theme.primary }]}
-                      onPress={async () => {
-                        if (!telegramBotToken.trim()) {
-                          Alert.alert("Ошибка", "Введите токен");
-                          return;
-                        }
+              <>
+                <ThemedView
+                  style={[
+                    styles.settingsGroup,
+                    { borderColor: theme.border, borderRadius: BorderRadius.sm, marginBottom: Spacing.md },
+                  ]}
+                >
+                  <View style={styles.settingItem}>
+                    <View style={styles.settingLeft}>
+                      <Icon name="send" size={20} color={theme.textSecondary} />
+                      <ThemedText style={styles.settingText}>Telegram включён</ThemedText>
+                    </View>
+                    <Switch
+                      value={telegramSettings?.notificationsEnabled ?? false}
+                      onValueChange={async (value) => {
                         hapticFeedback.selection();
                         try {
-                          await updateTelegramSettings({ telegramBotToken: telegramBotToken.trim() });
-                          setTelegramBotToken("");
-                          setShowTelegramTokenInput(false);
-                          Alert.alert("Успех", "Токен сохранён");
+                          await updateTelegramSettings({ notificationsEnabled: value });
                         } catch (error) {
-                          Alert.alert("Ошибка", "Не удалось сохранить токен");
+                          Alert.alert("Ошибка", "Не удалось обновить настройки");
                         }
                       }}
+                      trackColor={{ false: theme.border, true: theme.primary }}
+                      thumbColor="#FFFFFF"
+                    />
+                  </View>
+                  <View style={[styles.divider, { backgroundColor: theme.border }]} />
+                  <View style={styles.settingItem}>
+                    <View style={styles.settingLeft}>
+                      <Icon name="key" size={20} color={theme.textSecondary} />
+                      <ThemedText style={styles.settingText}>
+                        Bot Token: {telegramSettings?.telegramBotToken ? "Настроен" : "Не настроен"}
+                      </ThemedText>
+                    </View>
+                    <Pressable
+                      onPress={() => setShowTelegramTokenInput(!showTelegramTokenInput)}
+                      style={({ pressed }) => [pressed && { opacity: 0.7 }]}
                     >
-                      <ThemedText style={{ color: "#FFFFFF" }}>Сохранить</ThemedText>
+                      <Icon name={showTelegramTokenInput ? "chevron-up" : "chevron-down"} size={20} color={theme.textSecondary} />
                     </Pressable>
                   </View>
-                ) : null}
-              </ThemedView>
+                  {showTelegramTokenInput ? (
+                    <View style={styles.tokenInputContainer}>
+                      <TextInput
+                        style={[
+                          styles.tokenInput,
+                          { color: theme.text, borderColor: theme.border, backgroundColor: theme.backgroundSecondary },
+                        ]}
+                        placeholder="Введите Telegram Bot Token"
+                        placeholderTextColor={theme.textSecondary}
+                        value={telegramBotToken}
+                        onChangeText={setTelegramBotToken}
+                        secureTextEntry
+                      />
+                      <Pressable
+                        style={[styles.saveTokenButton, { backgroundColor: theme.primary }]}
+                        onPress={async () => {
+                          if (!telegramBotToken.trim()) {
+                            Alert.alert("Ошибка", "Введите токен");
+                            return;
+                          }
+                          hapticFeedback.selection();
+                          try {
+                            await updateTelegramSettings({ telegramBotToken: telegramBotToken.trim() });
+                            setTelegramBotToken("");
+                            setShowTelegramTokenInput(false);
+                            Alert.alert("Успех", "Токен сохранён");
+                          } catch (error) {
+                            Alert.alert("Ошибка", "Не удалось сохранить токен");
+                          }
+                        }}
+                      >
+                        <ThemedText style={{ color: "#FFFFFF" }}>Сохранить</ThemedText>
+                      </Pressable>
+                    </View>
+                  ) : null}
+                  <View style={[styles.divider, { backgroundColor: theme.border }]} />
+                  <View style={styles.settingItem}>
+                    <View style={styles.settingLeft}>
+                      <Icon name="clock" size={20} color={theme.textSecondary} />
+                      <ThemedText style={styles.settingText}>
+                        Напоминание за {telegramSettings?.reminderDaysBefore ?? 2} дн.
+                      </ThemedText>
+                    </View>
+                    <View style={styles.stepperContainer}>
+                      <Pressable
+                        style={[styles.stepperButton, { backgroundColor: theme.backgroundSecondary }]}
+                        onPress={async () => {
+                          const current = telegramSettings?.reminderDaysBefore ?? 2;
+                          if (current > 1) {
+                            hapticFeedback.selection();
+                            try {
+                              await updateTelegramSettings({ reminderDaysBefore: current - 1 });
+                            } catch (error) {
+                              Alert.alert("Ошибка", "Не удалось обновить");
+                            }
+                          }
+                        }}
+                      >
+                        <Icon name="minus" size={16} color={theme.text} />
+                      </Pressable>
+                      <Pressable
+                        style={[styles.stepperButton, { backgroundColor: theme.backgroundSecondary }]}
+                        onPress={async () => {
+                          const current = telegramSettings?.reminderDaysBefore ?? 2;
+                          if (current < 14) {
+                            hapticFeedback.selection();
+                            try {
+                              await updateTelegramSettings({ reminderDaysBefore: current + 1 });
+                            } catch (error) {
+                              Alert.alert("Ошибка", "Не удалось обновить");
+                            }
+                          }
+                        }}
+                      >
+                        <Icon name="plus" size={16} color={theme.text} />
+                      </Pressable>
+                    </View>
+                  </View>
+                  <View style={[styles.divider, { backgroundColor: theme.border }]} />
+                  <View style={styles.settingItem}>
+                    <View style={styles.settingLeft}>
+                      <Icon name="users" size={20} color={theme.textSecondary} />
+                      <ThemedText style={styles.settingText}>
+                        Telegram-контактов: {telegramContacts.length}
+                      </ThemedText>
+                    </View>
+                  </View>
+                </ThemedView>
+
+                <ThemedText style={[styles.sectionTitle, { marginTop: Spacing.md }]}>Типы уведомлений</ThemedText>
+                {(Object.keys(NOTIFICATION_TYPE_LABELS) as NotificationType[]).map((type) => {
+                  const label = NOTIFICATION_TYPE_LABELS[type];
+                  const pref = getPreference(type);
+                  const isExpanded = expandedTypes.has(type);
+                  
+                  return (
+                    <ThemedView
+                      key={type}
+                      style={[
+                        styles.notificationTypeCard,
+                        { borderColor: theme.border, borderRadius: BorderRadius.sm },
+                      ]}
+                    >
+                      <Pressable
+                        style={styles.notificationTypeHeader}
+                        onPress={() => {
+                          hapticFeedback.selection();
+                          toggleExpanded(type);
+                        }}
+                      >
+                        <View style={styles.notificationTypeLeft}>
+                          <View style={[styles.typeIconContainer, { backgroundColor: pref.enabled ? theme.primary : theme.border }]}>
+                            <Icon name={label.icon as any} size={16} color={pref.enabled ? "#FFFFFF" : theme.textSecondary} />
+                          </View>
+                          <View>
+                            <ThemedText style={styles.notificationTypeTitle}>{label.title}</ThemedText>
+                            <ThemedText style={[styles.notificationTypeDesc, { color: theme.textSecondary }]}>{label.description}</ThemedText>
+                          </View>
+                        </View>
+                        <View style={styles.notificationTypeRight}>
+                          <Switch
+                            value={pref.enabled}
+                            onValueChange={async (value) => {
+                              hapticFeedback.selection();
+                              await updateTypePreference(type, { enabled: value });
+                            }}
+                            trackColor={{ false: theme.border, true: theme.primary }}
+                            thumbColor="#FFFFFF"
+                          />
+                          <Icon name={isExpanded ? "chevron-up" : "chevron-down"} size={20} color={theme.textSecondary} />
+                        </View>
+                      </Pressable>
+                      
+                      {isExpanded ? (
+                        <View style={styles.notificationTypeExpanded}>
+                          <View style={[styles.divider, { backgroundColor: theme.border }]} />
+                          <ThemedText style={[styles.recipientsLabel, { color: theme.textSecondary }]}>Получатели:</ThemedText>
+                          <View style={styles.recipientsRow}>
+                            {(['client', 'guide', 'manager'] as const).map((recipient) => (
+                              <Pressable
+                                key={recipient}
+                                style={[
+                                  styles.recipientChip,
+                                  { 
+                                    backgroundColor: pref.recipients[recipient] ? theme.primary : theme.backgroundSecondary,
+                                    borderColor: pref.recipients[recipient] ? theme.primary : theme.border,
+                                  },
+                                ]}
+                                onPress={async () => {
+                                  hapticFeedback.selection();
+                                  await updateRecipient(type, recipient, !pref.recipients[recipient]);
+                                }}
+                              >
+                                <ThemedText style={{ color: pref.recipients[recipient] ? "#FFFFFF" : theme.text, fontSize: 13 }}>
+                                  {RECIPIENT_LABELS[recipient]}
+                                </ThemedText>
+                              </Pressable>
+                            ))}
+                          </View>
+                          <View style={[styles.divider, { backgroundColor: theme.border, marginTop: Spacing.sm }]} />
+                          <Pressable
+                            style={styles.templateButton}
+                            onPress={() => {
+                              setTemplateText(pref.template);
+                              setEditingTemplate(type);
+                            }}
+                          >
+                            <Icon name="edit-2" size={16} color={theme.primary} />
+                            <ThemedText style={{ color: theme.primary, marginLeft: Spacing.xs }}>Редактировать шаблон</ThemedText>
+                          </Pressable>
+                          <ThemedText style={[styles.templatePreview, { color: theme.textSecondary }]} numberOfLines={2}>
+                            {pref.template}
+                          </ThemedText>
+                        </View>
+                      ) : null}
+                    </ThemedView>
+                  );
+                })}
+              </>
             )}
           </View>
         ) : null}
+
+        <Modal
+          visible={editingTemplate !== null}
+          animationType="slide"
+          transparent
+          onRequestClose={() => setEditingTemplate(null)}
+        >
+          <View style={styles.modalOverlay}>
+            <ThemedView style={[styles.modalContent, { borderRadius: BorderRadius.md }]}>
+              <View style={styles.modalHeader}>
+                <ThemedText style={styles.modalTitle}>
+                  Шаблон: {editingTemplate ? NOTIFICATION_TYPE_LABELS[editingTemplate].title : ""}
+                </ThemedText>
+                <Pressable onPress={() => setEditingTemplate(null)}>
+                  <Icon name="x" size={24} color={theme.text} />
+                </Pressable>
+              </View>
+              <ThemedText style={[styles.placeholderHint, { color: theme.textSecondary }]}>
+                Доступные переменные: {'{orderNumber}'}, {'{startDate}'}, {'{endDate}'}, {'{equipmentSummary}'}, {'{guideName}'}, {'{blockIndex}'}, {'{newStatus}'}
+              </ThemedText>
+              <TextInput
+                style={[
+                  styles.templateInput,
+                  { color: theme.text, borderColor: theme.border, backgroundColor: theme.backgroundSecondary },
+                ]}
+                placeholder="Введите шаблон сообщения"
+                placeholderTextColor={theme.textSecondary}
+                value={templateText}
+                onChangeText={setTemplateText}
+                multiline
+                numberOfLines={4}
+              />
+              <View style={styles.modalButtons}>
+                <Pressable
+                  style={[styles.modalButton, { backgroundColor: theme.backgroundSecondary }]}
+                  onPress={() => setEditingTemplate(null)}
+                >
+                  <ThemedText>Отмена</ThemedText>
+                </Pressable>
+                <Pressable
+                  style={[styles.modalButton, { backgroundColor: theme.primary }]}
+                  onPress={saveTemplate}
+                >
+                  <ThemedText style={{ color: "#FFFFFF" }}>Сохранить</ThemedText>
+                </Pressable>
+              </View>
+            </ThemedView>
+          </View>
+        </Modal>
 
         <View style={styles.section}>
           <View style={styles.sectionHeader}>
@@ -514,6 +716,114 @@ const styles = StyleSheet.create({
     height: 32,
     borderRadius: BorderRadius.sm,
     justifyContent: "center",
+    alignItems: "center",
+  },
+  notificationTypeCard: {
+    borderWidth: 1,
+    marginBottom: Spacing.sm,
+    overflow: "hidden",
+  },
+  notificationTypeHeader: {
+    flexDirection: "row",
+    alignItems: "center",
+    justifyContent: "space-between",
+    padding: Spacing.md,
+  },
+  notificationTypeLeft: {
+    flexDirection: "row",
+    alignItems: "center",
+    flex: 1,
+    gap: Spacing.sm,
+  },
+  typeIconContainer: {
+    width: 32,
+    height: 32,
+    borderRadius: BorderRadius.full,
+    justifyContent: "center",
+    alignItems: "center",
+  },
+  notificationTypeTitle: {
+    fontSize: 14,
+    fontWeight: "600",
+  },
+  notificationTypeDesc: {
+    fontSize: 12,
+    marginTop: 2,
+  },
+  notificationTypeRight: {
+    flexDirection: "row",
+    alignItems: "center",
+    gap: Spacing.sm,
+  },
+  notificationTypeExpanded: {
+    paddingHorizontal: Spacing.md,
+    paddingBottom: Spacing.md,
+  },
+  recipientsLabel: {
+    fontSize: 12,
+    marginTop: Spacing.sm,
+    marginBottom: Spacing.xs,
+  },
+  recipientsRow: {
+    flexDirection: "row",
+    gap: Spacing.xs,
+  },
+  recipientChip: {
+    paddingHorizontal: Spacing.md,
+    paddingVertical: Spacing.xs,
+    borderRadius: BorderRadius.full,
+    borderWidth: 1,
+  },
+  templateButton: {
+    flexDirection: "row",
+    alignItems: "center",
+    marginTop: Spacing.sm,
+  },
+  templatePreview: {
+    fontSize: 12,
+    marginTop: Spacing.xs,
+    fontStyle: "italic",
+  },
+  modalOverlay: {
+    flex: 1,
+    backgroundColor: "rgba(0,0,0,0.5)",
+    justifyContent: "center",
+    padding: Spacing.lg,
+  },
+  modalContent: {
+    padding: Spacing.lg,
+  },
+  modalHeader: {
+    flexDirection: "row",
+    justifyContent: "space-between",
+    alignItems: "center",
+    marginBottom: Spacing.md,
+  },
+  modalTitle: {
+    fontSize: 18,
+    fontWeight: "600",
+  },
+  placeholderHint: {
+    fontSize: 11,
+    marginBottom: Spacing.sm,
+  },
+  templateInput: {
+    borderWidth: 1,
+    borderRadius: BorderRadius.sm,
+    padding: Spacing.md,
+    fontSize: 14,
+    minHeight: 100,
+    textAlignVertical: "top",
+  },
+  modalButtons: {
+    flexDirection: "row",
+    gap: Spacing.sm,
+    marginTop: Spacing.md,
+  },
+  modalButton: {
+    flex: 1,
+    padding: Spacing.md,
+    borderRadius: BorderRadius.sm,
     alignItems: "center",
   },
 });
