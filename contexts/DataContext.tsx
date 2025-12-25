@@ -2493,8 +2493,6 @@ export function DataProvider({ children }: { children: ReactNode }) {
     rentalOrderId: string; 
     blockIndex: number;
     guideName: string; 
-    tourGuidePhone?: string;
-    deliveryLocation?: string;
     receiversIssued: number 
   }) => {
     if (!user || !profile) throw new Error('User not authenticated');
@@ -2508,8 +2506,6 @@ export function DataProvider({ children }: { children: ReactNode }) {
           rental_order_id: data.rentalOrderId,
           rental_block_index: data.blockIndex,
           guide_name: data.guideName,
-          tour_guide_phone: data.tourGuidePhone || null,
-          delivery_location: data.deliveryLocation || null,
           bus_number: null,
           receivers_issued: data.receiversIssued,
           issued_at: new Date().toISOString(),

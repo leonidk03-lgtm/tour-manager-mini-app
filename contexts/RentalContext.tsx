@@ -1299,8 +1299,6 @@ export function RentalProvider({ children }: { children: ReactNode }) {
           rentalOrderId: orderId,
           blockIndex,
           guideName: block.tourGuideName || order.clientName || 'Клиент аренды',
-          tourGuidePhone: block.tourGuidePhone || undefined,
-          deliveryLocation: block.deliveryLocation || undefined,
           receiversIssued: block.kitCount,
         });
       } catch (err) {
