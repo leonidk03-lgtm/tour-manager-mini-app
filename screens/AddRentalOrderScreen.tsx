@@ -21,7 +21,7 @@ import { Spacing, BorderRadius } from "@/constants/theme";
 import { useTheme } from "@/hooks/useTheme";
 import { useRental, RentalClient, RentalService, EquipmentBlock as DbEquipmentBlock } from "@/contexts/RentalContext";
 import { useAuth } from "@/contexts/AuthContext";
-import { useData, RadioGuideKit } from "@/contexts/DataContext";
+import { useData, RadioGuideKit, TourGuide } from "@/contexts/DataContext";
 import { SettingsStackParamList } from "@/navigation/SettingsStackNavigator";
 import { hapticFeedback } from "@/utils/haptics";
 
@@ -60,7 +60,7 @@ export default function AddRentalOrderScreen() {
   const insets = useSafeAreaInsets();
   const { rentalClients, rentalOrders, rentalServices, getOrderServices, addRentalOrder, updateRentalOrder, isLoading: isRentalLoading } = useRental();
   const { profile, managers } = useAuth();
-  const { radioGuideKits, radioGuideAssignments, isLoading: isDataLoading } = useData();
+  const { radioGuideKits, radioGuideAssignments, tourGuides, searchTourGuides, addTourGuide, isLoading: isDataLoading } = useData();
 
   const initialClientId = route.params?.clientId;
   const orderId = route.params?.orderId;
@@ -110,6 +110,8 @@ export default function AddRentalOrderScreen() {
   const [bagSearchQuery, setBagSearchQuery] = useState("");
   const [blocksInitialized, setBlocksInitialized] = useState(false);
   const [spareAutoSetEnabled, setSpareAutoSetEnabled] = useState(!isEditMode);
+  const [guideAutocompleteBlockId, setGuideAutocompleteBlockId] = useState<string | null>(null);
+  const [guideSearchQuery, setGuideSearchQuery] = useState("");
 
   useEffect(() => {
     if (blocksInitialized) return;
@@ -309,6 +311,58 @@ export default function AddRentalOrderScreen() {
       }
       return { ...prev, [serviceId]: qty };
     });
+  };
+
+  // Tour guide autocomplete
+  const filteredGuides = useMemo(() => {
+    if (!guideSearchQuery.trim()) return [];
+    return searchTourGuides(guideSearchQuery).slice(0, 5);
+  }, [guideSearchQuery, searchTourGuides]);
+
+  const handleGuideNameChange = (blockId: string, value: string) => {
+    updateBlock(blockId, { tourGuideName: value });
+    setGuideSearchQuery(value);
+    setGuideAutocompleteBlockId(blockId);
+  };
+
+  const handleGuidePhoneChange = (blockId: string, value: string) => {
+    updateBlock(blockId, { tourGuidePhone: value });
+    setGuideSearchQuery(value);
+    setGuideAutocompleteBlockId(blockId);
+  };
+
+  const handleSelectGuide = (blockId: string, guide: TourGuide) => {
+    updateBlock(blockId, { 
+      tourGuideName: guide.name, 
+      tourGuidePhone: guide.phone || "" 
+    });
+    setGuideAutocompleteBlockId(null);
+    setGuideSearchQuery("");
+    hapticFeedback.selection();
+  };
+
+  const handleCreateNewGuide = async (blockId: string) => {
+    const block = equipmentBlocks.find(b => b.id === blockId);
+    if (!block) return;
+    
+    const name = block.tourGuideName.trim();
+    const phone = block.tourGuidePhone.trim();
+    
+    if (!name) {
+      Alert.alert("Ошибка", "Введите имя гида");
+      return;
+    }
+    
+    try {
+      await addTourGuide({ name, phone: phone || null, email: null, notes: null, isActive: true });
+      hapticFeedback.success();
+      Alert.alert("Готово", `Гид "${name}" добавлен в справочник`);
+    } catch (err) {
+      console.error("Error creating tour guide:", err);
+      Alert.alert("Ошибка", "Не удалось создать гида");
+    }
+    setGuideAutocompleteBlockId(null);
+    setGuideSearchQuery("");
   };
 
   const daysCount = useMemo(() => {
@@ -742,32 +796,74 @@ export default function AddRentalOrderScreen() {
                 </ThemedText>
               </View>
               <View style={styles.inputRow}>
-                <View style={styles.inputColumn}>
+                <View style={[styles.inputColumn, { zIndex: 2 }]}>
                   <ThemedText style={[styles.inputLabel, { color: theme.textSecondary }]}>
                     Имя
                   </ThemedText>
                   <TextInput
                     style={[styles.input, { backgroundColor: theme.backgroundSecondary, color: theme.text }]}
                     value={block.tourGuideName}
-                    onChangeText={(value) => updateBlock(block.id, { tourGuideName: value })}
+                    onChangeText={(value) => handleGuideNameChange(block.id, value)}
+                    onFocus={() => {
+                      setGuideAutocompleteBlockId(block.id);
+                      setGuideSearchQuery(block.tourGuideName);
+                    }}
+                    onBlur={() => setTimeout(() => setGuideAutocompleteBlockId(null), 200)}
                     placeholder="Имя экскурсовода"
                     placeholderTextColor={theme.textSecondary}
                   />
                 </View>
-                <View style={styles.inputColumn}>
+                <View style={[styles.inputColumn, { zIndex: 1 }]}>
                   <ThemedText style={[styles.inputLabel, { color: theme.textSecondary }]}>
                     Телефон
                   </ThemedText>
                   <TextInput
                     style={[styles.input, { backgroundColor: theme.backgroundSecondary, color: theme.text }]}
                     value={block.tourGuidePhone}
-                    onChangeText={(value) => updateBlock(block.id, { tourGuidePhone: value })}
+                    onChangeText={(value) => handleGuidePhoneChange(block.id, value)}
+                    onFocus={() => {
+                      setGuideAutocompleteBlockId(block.id);
+                      setGuideSearchQuery(block.tourGuidePhone);
+                    }}
+                    onBlur={() => setTimeout(() => setGuideAutocompleteBlockId(null), 200)}
                     placeholder="+7..."
                     placeholderTextColor={theme.textSecondary}
                     keyboardType="phone-pad"
                   />
                 </View>
               </View>
+              
+              {guideAutocompleteBlockId === block.id && (filteredGuides.length > 0 || (block.tourGuideName.trim() && !tourGuides.find(g => g.name.toLowerCase() === block.tourGuideName.toLowerCase()))) ? (
+                <View style={[styles.autocompleteDropdown, { backgroundColor: theme.backgroundTertiary, borderColor: theme.border }]}>
+                  {filteredGuides.map(guide => (
+                    <Pressable
+                      key={guide.id}
+                      style={[styles.autocompleteItem, { borderBottomColor: theme.border }]}
+                      onPress={() => handleSelectGuide(block.id, guide)}
+                    >
+                      <Icon name="user" size={14} color={theme.primary} />
+                      <View style={styles.autocompleteItemText}>
+                        <ThemedText style={{ fontWeight: "500" }}>{guide.name}</ThemedText>
+                        {guide.phone ? (
+                          <ThemedText style={{ color: theme.textSecondary, fontSize: 12 }}>{guide.phone}</ThemedText>
+                        ) : null}
+                      </View>
+                    </Pressable>
+                  ))}
+                  {block.tourGuideName.trim() && !tourGuides.find(g => g.name.toLowerCase() === block.tourGuideName.toLowerCase()) ? (
+                    <Pressable
+                      style={[styles.autocompleteItem, { backgroundColor: theme.primary + "15" }]}
+                      onPress={() => handleCreateNewGuide(block.id)}
+                    >
+                      <Icon name="plus" size={14} color={theme.primary} />
+                      <ThemedText style={{ color: theme.primary, fontWeight: "500" }}>
+                        Добавить "{block.tourGuideName}" в справочник
+                      </ThemedText>
+                    </Pressable>
+                  ) : null}
+                </View>
+              ) : null}
+
               <ThemedText style={[styles.inputLabel, { color: theme.textSecondary, marginTop: Spacing.xs }]}>
                 Место доставки
               </ThemedText>
@@ -1768,5 +1864,21 @@ const styles = StyleSheet.create({
   tourGuideTitle: {
     fontSize: 14,
     fontWeight: "500",
+  },
+  autocompleteDropdown: {
+    marginTop: Spacing.xs,
+    borderRadius: BorderRadius.md,
+    borderWidth: 1,
+    overflow: "hidden",
+  },
+  autocompleteItem: {
+    flexDirection: "row",
+    alignItems: "center",
+    padding: Spacing.sm,
+    gap: Spacing.sm,
+    borderBottomWidth: StyleSheet.hairlineWidth,
+  },
+  autocompleteItemText: {
+    flex: 1,
   },
 });
