@@ -765,6 +765,9 @@ export function RentalProvider({ children }: { children: ReactNode }) {
   const deleteRentalOrder = async (id: string) => {
     // First delete related records to avoid foreign key constraints
     
+    // Delete radio guide assignments linked to this order
+    await supabase.from('radio_guide_assignments').delete().eq('rental_order_id', id);
+    
     // Delete order services
     await supabase.from('rental_order_services').delete().eq('order_id', id);
     
@@ -776,6 +779,9 @@ export function RentalProvider({ children }: { children: ReactNode }) {
     
     // Delete commissions
     await supabase.from('rental_commissions').delete().eq('order_id', id);
+    
+    // Delete equipment losses linked to this order
+    await supabase.from('equipment_losses').delete().eq('rental_order_id', id);
     
     // Now delete the order
     const { error } = await supabase
