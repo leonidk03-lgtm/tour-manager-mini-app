@@ -492,8 +492,8 @@ export default function DashboardScreen() {
     // Count receivers on rentals from issued orders (equipment blocks + spare receivers)
     const activeRentals = rentalOrders.filter(order => order.status === 'issued');
     const onRentals = activeRentals.reduce((sum, order) => {
-      const blockReceivers = (order.equipmentBlocks || []).reduce((blockSum, block) => blockSum + block.receiverCount, 0);
-      return sum + blockReceivers + order.spareReceiverCount;
+      const blockReceivers = (order.equipmentBlocks || []).reduce((blockSum, block) => blockSum + (block.receiverCount || 0), 0);
+      return sum + blockReceivers + (order.spareReceiverCount || 0);
     }, 0);
     
     const totalInUse = onExcursions + onRentals;
