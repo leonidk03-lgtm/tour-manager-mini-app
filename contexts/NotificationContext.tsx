@@ -127,11 +127,11 @@ export function NotificationProvider({ children }: { children: React.ReactNode }
       .order('created_at', { ascending: false });
 
     if (error) {
-      console.error('Error fetching telegram contacts:', error);
-      if (error.code === 'PGRST205') {
-        return false; // Table not in schema cache
+      if (error.code === 'PGRST205' || error.code === '42P01') {
+        return false; // Table not found - expected if not created yet
       }
-      return true; // Other error, table might exist
+      console.warn('Error fetching telegram contacts:', error.message);
+      return true;
     }
 
     setTelegramContacts((data || []).map(transformContactFromDB));
@@ -147,10 +147,10 @@ export function NotificationProvider({ children }: { children: React.ReactNode }
       .limit(100);
 
     if (error) {
-      console.error('Error fetching notification logs:', error);
-      if (error.code === 'PGRST205') {
-        return false;
+      if (error.code === 'PGRST205' || error.code === '42P01') {
+        return false; // Table not found - expected if not created yet
       }
+      console.warn('Error fetching notification logs:', error.message);
       return true;
     }
 
@@ -158,39 +158,44 @@ export function NotificationProvider({ children }: { children: React.ReactNode }
     return true;
   }, []);
 
-  const fetchNotificationSettings = useCallback(async () => {
-    if (!supabase) return;
+  const fetchNotificationSettings = useCallback(async (): Promise<boolean> => {
+    if (!supabase) return false;
     const { data, error } = await supabase
       .from('notification_settings')
       .select('*')
       .single();
 
-    if (error && error.code !== 'PGRST116') {
-      console.error('Error fetching notification settings:', error);
-      return;
+    if (error) {
+      if (error.code === 'PGRST205' || error.code === '42P01') {
+        return false; // Table not found
+      }
+      if (error.code !== 'PGRST116') { // PGRST116 = no rows returned
+        console.warn('Error fetching notification settings:', error.message);
+      }
+      return true;
     }
 
     if (data) {
       setNotificationSettings(transformSettingsFromDB(data));
     }
+    return true;
   }, []);
 
   const refreshData = useCallback(async () => {
     setIsLoading(true);
     setInitError(null);
     
-    const [contactsAvailable, logsAvailable] = await Promise.all([
+    const [contactsAvailable, logsAvailable, settingsAvailable] = await Promise.all([
       fetchTelegramContacts(),
       fetchNotificationLogs(),
       fetchNotificationSettings(),
     ]);
     
-    const available = contactsAvailable !== false && logsAvailable !== false;
+    const available = contactsAvailable !== false && logsAvailable !== false && settingsAvailable !== false;
     setTablesAvailable(available);
     
     if (!available) {
-      setInitError('Таблицы уведомлений недоступны. Выполните обновление схемы Supabase.');
-      console.warn('Notification tables not available in Supabase schema cache. Run schema refresh.');
+      setInitError('Таблицы Telegram-уведомлений не созданы. Создайте таблицы в Supabase для активации функции.');
     }
     
     setIsLoading(false);
@@ -291,10 +296,10 @@ export function NotificationProvider({ children }: { children: React.ReactNode }
     }
 
     // Find chat ID from phone if not provided
-    let chatId = params.telegramChatId;
+    let chatId: number | undefined = params.telegramChatId;
     if (!chatId && params.recipientPhone) {
       const contact = getContactByPhone(params.recipientPhone);
-      chatId = contact?.telegramChatId;
+      chatId = contact?.telegramChatId ?? undefined;
     }
 
     if (!chatId) {
@@ -326,7 +331,7 @@ export function NotificationProvider({ children }: { children: React.ReactNode }
     }
 
     // Send via Telegram Bot API
-    const telegramResult = await sendTelegramMessage(chatId, params.messageText);
+    const telegramResult = await sendTelegramMessage(String(chatId), params.messageText);
     
     if (logData) {
       const { error: updateError } = await supabase
