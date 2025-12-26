@@ -2967,10 +2967,11 @@ export function DataProvider({ children }: { children: ReactNode }) {
   const searchTourGuides = (query: string): TourGuide[] => {
     if (!query.trim()) return tourGuides.filter(g => g.isActive);
     const lowerQuery = query.toLowerCase().trim();
+    const strippedQuery = lowerQuery.replace(/[\s()\-+]/g, '');
     return tourGuides.filter(g => 
       g.isActive && (
         g.name.toLowerCase().includes(lowerQuery) ||
-        (g.phone && g.phone.includes(lowerQuery))
+        (g.phone && g.phone.replace(/[\s()\-+]/g, '').includes(strippedQuery))
       )
     );
   };

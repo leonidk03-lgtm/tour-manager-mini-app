@@ -20,7 +20,7 @@ import { useTheme } from "@/hooks/useTheme";
 import { useData, TourGuide } from "@/contexts/DataContext";
 import { useAuth } from "@/contexts/AuthContext";
 import { hapticFeedback } from "@/utils/haptics";
-import { normalizePhoneNumber } from "@/utils/calculations";
+import { normalizePhoneNumber, phoneMatchesQuery } from "@/utils/calculations";
 
 export default function TourGuidesScreen() {
   const { theme } = useTheme();
@@ -52,7 +52,7 @@ export default function TourGuidesScreen() {
       const query = searchQuery.toLowerCase().trim();
       result = result.filter(g =>
         g.name.toLowerCase().includes(query) ||
-        (g.phone && g.phone.includes(query))
+        phoneMatchesQuery(g.phone, searchQuery)
       );
     }
 

@@ -22,7 +22,7 @@ import { useRental, RentalClient, RentalClientType } from "@/contexts/RentalCont
 import { useAuth } from "@/contexts/AuthContext";
 import { SettingsStackParamList } from "@/navigation/SettingsStackNavigator";
 import { hapticFeedback } from "@/utils/haptics";
-import { normalizePhoneNumber } from "@/utils/calculations";
+import { normalizePhoneNumber, phoneMatchesQuery } from "@/utils/calculations";
 
 type FilterType = "all" | "individual" | "company" | "inactive";
 
@@ -85,7 +85,7 @@ export default function RentalClientsScreen() {
       result = result.filter(c =>
         c.name.toLowerCase().includes(query) ||
         c.directorName?.toLowerCase().includes(query) ||
-        c.phone?.toLowerCase().includes(query) ||
+        phoneMatchesQuery(c.phone, searchQuery) ||
         c.email?.toLowerCase().includes(query) ||
         c.inn?.toLowerCase().includes(query)
       );

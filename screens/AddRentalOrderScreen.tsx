@@ -24,7 +24,7 @@ import { useAuth } from "@/contexts/AuthContext";
 import { useData, RadioGuideKit, TourGuide } from "@/contexts/DataContext";
 import { SettingsStackParamList } from "@/navigation/SettingsStackNavigator";
 import { hapticFeedback } from "@/utils/haptics";
-import { normalizePhoneNumber } from "@/utils/calculations";
+import { normalizePhoneNumber, phoneMatchesQuery } from "@/utils/calculations";
 
 type RouteParams = RouteProp<SettingsStackParamList, "AddRentalOrder">;
 
@@ -460,7 +460,7 @@ export default function AddRentalOrderScreen() {
       c.isActive && (
         c.name.toLowerCase().includes(query) ||
         c.directorName?.toLowerCase().includes(query) ||
-        c.phone?.toLowerCase().includes(query) ||
+        phoneMatchesQuery(c.phone, clientSearch) ||
         c.email?.toLowerCase().includes(query) ||
         c.inn?.toLowerCase().includes(query)
       )

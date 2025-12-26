@@ -114,3 +114,14 @@ export function normalizePhoneNumber(phone: string): string {
   }
   return phone;
 }
+
+export function stripPhoneFormatting(phone: string | null | undefined): string {
+  if (!phone) return '';
+  return phone.replace(/[\s()\-+]/g, '');
+}
+
+export function phoneMatchesQuery(phone: string | null | undefined, query: string): boolean {
+  const strippedPhone = stripPhoneFormatting(phone);
+  const strippedQuery = stripPhoneFormatting(query);
+  return strippedPhone.includes(strippedQuery);
+}

@@ -24,6 +24,7 @@ import { useAuth } from "@/contexts/AuthContext";
 import { useData } from "@/contexts/DataContext";
 import { SettingsStackParamList } from "@/navigation/SettingsStackNavigator";
 import { hapticFeedback } from "@/utils/haptics";
+import { phoneMatchesQuery } from "@/utils/calculations";
 
 type FilterType = "all" | "срок" | "new" | "issued" | "returned" | "completed" | "cancelled";
 
@@ -85,7 +86,7 @@ export default function RentalOrdersScreen() {
         return (
           o.orderNumber.toString().includes(query) ||
           client?.name.toLowerCase().includes(query) ||
-          client?.phone?.toLowerCase().includes(query) ||
+          phoneMatchesQuery(client?.phone, searchQuery) ||
           o.receiverNotes?.toLowerCase().includes(query)
         );
       });
