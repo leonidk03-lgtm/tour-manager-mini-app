@@ -55,6 +55,13 @@ The application includes a Telegram notification system for sending alerts to cl
 - Set Bot Token (stored securely in notification_settings table)
 - View connected Telegram contacts count
 - Configure reminder days before rental
+- Configure reminder time (09:00, 10:00, 12:00, 14:00, 18:00)
+
+**Required SQL Migration** (execute in Supabase Dashboard → SQL Editor):
+```sql
+ALTER TABLE notification_settings 
+ADD COLUMN IF NOT EXISTS reminder_time TEXT DEFAULT '12:00';
+```
 
 **Supabase Edge Function Deployment**:
 1. Install Supabase CLI: `npm install -g supabase`
