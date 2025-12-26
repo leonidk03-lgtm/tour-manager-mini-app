@@ -9,6 +9,7 @@ import { useTheme } from "@/hooks/useTheme";
 import { useData, DispatchStats, ExcursionWithManagers, DispatchSearchResult } from "@/contexts/DataContext";
 import { useAuth } from "@/contexts/AuthContext";
 import { hapticFeedback } from "@/utils/haptics";
+import { normalizePhoneNumber } from "@/utils/calculations";
 
 type Period = "day" | "week" | "month" | "year" | "all" | "custom";
 type Tab = "managers" | "excursions" | "search";
@@ -300,7 +301,7 @@ export default function DispatchActivityReportScreen() {
                 placeholder="Введите номер телефона..."
                 placeholderTextColor={theme.textSecondary}
                 value={searchQuery}
-                onChangeText={setSearchQuery}
+                onChangeText={(v) => setSearchQuery(normalizePhoneNumber(v))}
                 onSubmitEditing={handleSearch}
                 keyboardType="phone-pad"
                 returnKeyType="search"

@@ -24,6 +24,7 @@ import { useAuth } from "@/contexts/AuthContext";
 import { useData, RadioGuideKit, TourGuide } from "@/contexts/DataContext";
 import { SettingsStackParamList } from "@/navigation/SettingsStackNavigator";
 import { hapticFeedback } from "@/utils/haptics";
+import { normalizePhoneNumber } from "@/utils/calculations";
 
 type RouteParams = RouteProp<SettingsStackParamList, "AddRentalOrder">;
 
@@ -326,8 +327,9 @@ export default function AddRentalOrderScreen() {
   };
 
   const handleGuidePhoneChange = (blockId: string, value: string) => {
-    updateBlock(blockId, { tourGuidePhone: value });
-    setGuideSearchQuery(value);
+    const normalizedPhone = normalizePhoneNumber(value);
+    updateBlock(blockId, { tourGuidePhone: normalizedPhone });
+    setGuideSearchQuery(normalizedPhone);
     setGuideAutocompleteBlockId(blockId);
   };
 

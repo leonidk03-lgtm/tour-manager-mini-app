@@ -107,3 +107,10 @@ export function calculateAdditionalTransactionsTotal(
     .filter((t) => t.type === type)
     .reduce((sum, t) => sum + t.amount, 0);
 }
+
+export function normalizePhoneNumber(phone: string): string {
+  if (phone.startsWith('8') && phone.length >= 1) {
+    return '+7' + phone.slice(1);
+  }
+  return phone;
+}

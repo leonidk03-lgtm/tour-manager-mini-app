@@ -20,6 +20,7 @@ import { useTheme } from "@/hooks/useTheme";
 import { useData, TourGuide } from "@/contexts/DataContext";
 import { useAuth } from "@/contexts/AuthContext";
 import { hapticFeedback } from "@/utils/haptics";
+import { normalizePhoneNumber } from "@/utils/calculations";
 
 export default function TourGuidesScreen() {
   const { theme } = useTheme();
@@ -263,7 +264,7 @@ export default function TourGuidesScreen() {
                   { backgroundColor: theme.backgroundSecondary, color: theme.text },
                 ]}
                 value={formPhone}
-                onChangeText={setFormPhone}
+                onChangeText={(v) => setFormPhone(normalizePhoneNumber(v))}
                 placeholder="+7 (999) 123-45-67"
                 placeholderTextColor={theme.textSecondary}
                 keyboardType="phone-pad"

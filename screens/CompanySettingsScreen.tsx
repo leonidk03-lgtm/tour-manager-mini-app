@@ -7,6 +7,7 @@ import { Spacing, BorderRadius } from "@/constants/theme";
 import { useTheme } from "@/hooks/useTheme";
 import { useCompanySettings, CompanySettings } from "@/contexts/CompanySettingsContext";
 import { hapticFeedback } from "@/utils/haptics";
+import { normalizePhoneNumber } from "@/utils/calculations";
 
 function SectionTitle({ title }: { title: string }) {
   const { theme } = useTheme();
@@ -234,7 +235,7 @@ export default function CompanySettingsScreen() {
           <FieldRow
             label="Телефон"
             value={formData.phone || ""}
-            onChangeText={(v) => updateField("phone", v)}
+            onChangeText={(v) => updateField("phone", normalizePhoneNumber(v))}
             placeholder="+7 (999) 123-45-67"
             keyboardType="phone-pad"
           />

@@ -22,6 +22,7 @@ import { useRental, RentalClient, RentalClientType } from "@/contexts/RentalCont
 import { useAuth } from "@/contexts/AuthContext";
 import { SettingsStackParamList } from "@/navigation/SettingsStackNavigator";
 import { hapticFeedback } from "@/utils/haptics";
+import { normalizePhoneNumber } from "@/utils/calculations";
 
 type FilterType = "all" | "individual" | "company" | "inactive";
 
@@ -462,7 +463,7 @@ export default function RentalClientsScreen() {
               <TextInput
                 style={[styles.input, { backgroundColor: theme.backgroundSecondary, color: theme.text }]}
                 value={formPhone}
-                onChangeText={setFormPhone}
+                onChangeText={(v) => setFormPhone(normalizePhoneNumber(v))}
                 placeholder="+7 999 123 45 67"
                 placeholderTextColor={theme.textSecondary}
                 keyboardType="phone-pad"

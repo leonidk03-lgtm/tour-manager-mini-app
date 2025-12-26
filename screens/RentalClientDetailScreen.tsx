@@ -27,6 +27,7 @@ import { useRental, RentalOrder, RentalOrderStatus, RentalPaymentMethod } from "
 import { useAuth } from "@/contexts/AuthContext";
 import { SettingsStackParamList } from "@/navigation/SettingsStackNavigator";
 import { hapticFeedback } from "@/utils/haptics";
+import { normalizePhoneNumber } from "@/utils/calculations";
 import { useCompanySettings } from "@/contexts/CompanySettingsContext";
 import { useDocumentTemplates, DocumentTemplate } from "@/contexts/DocumentTemplatesContext";
 import { generateAndShareDocument, DocumentType } from "@/utils/documents";
@@ -838,7 +839,7 @@ export default function RentalClientDetailScreen() {
               <TextInput
                 style={[styles.input, { backgroundColor: theme.backgroundSecondary, color: theme.text }]}
                 value={editPhone}
-                onChangeText={setEditPhone}
+                onChangeText={(v) => setEditPhone(normalizePhoneNumber(v))}
                 placeholder="+7 (999) 123-45-67"
                 placeholderTextColor={theme.textSecondary}
                 keyboardType="phone-pad"
