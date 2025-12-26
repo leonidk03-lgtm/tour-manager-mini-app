@@ -152,12 +152,19 @@ function App() {
     const sb = createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
     setSupabase(sb);
 
-    const userId = tg?.initDataUnsafe?.user?.id;
-    console.log('Telegram initDataUnsafe:', JSON.stringify(tg?.initDataUnsafe));
+    // Try to get user ID from Telegram initData first, then from URL query param
+    let userId: string | undefined = tg?.initDataUnsafe?.user?.id?.toString();
+    
+    // Fallback: get chatId from URL query parameter
+    if (!userId) {
+      const urlParams = new URLSearchParams(window.location.search);
+      userId = urlParams.get('chatId') || undefined;
+    }
+    
     console.log('User ID:', userId);
     
     if (!userId) {
-      setErrorMessage(`No user ID. initData: ${JSON.stringify(tg?.initDataUnsafe || 'no tg object')}`);
+      setErrorMessage(`No user ID found`);
       setScreen('not_connected');
       return;
     }
@@ -166,7 +173,7 @@ function App() {
       const { data: clientData, error } = await sb
         .from('rental_clients')
         .select('id, name, phone')
-        .eq('telegram_chat_id', userId.toString())
+        .eq('telegram_chat_id', userId)
         .maybeSingle();
 
       if (error) throw error;

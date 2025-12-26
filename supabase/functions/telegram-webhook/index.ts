@@ -616,8 +616,10 @@ async function sendNewOrderInfo(supabaseClient: any, chatId: string) {
   // Add Mini App button if URL is configured
   if (settings?.mini_app_url) {
     message += "Нажмите кнопку ниже для создания заказа:";
+    // Pass chatId as query parameter for fallback identification
+    const miniAppUrlWithChatId = `${settings.mini_app_url}?chatId=${chatId}`;
     keyboard.inline_keyboard.push([
-      { text: "📝 Создать заказ", web_app: { url: settings.mini_app_url } }
+      { text: "📝 Создать заказ", web_app: { url: miniAppUrlWithChatId } }
     ]);
   } else {
     message += "Для создания заказа свяжитесь с менеджером.";
