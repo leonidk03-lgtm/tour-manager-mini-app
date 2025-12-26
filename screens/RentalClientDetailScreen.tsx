@@ -27,8 +27,9 @@ import { useRental, RentalOrder, RentalOrderStatus, RentalPaymentMethod } from "
 import { useAuth } from "@/contexts/AuthContext";
 import { SettingsStackParamList } from "@/navigation/SettingsStackNavigator";
 import { hapticFeedback } from "@/utils/haptics";
-import { normalizePhoneNumber } from "@/utils/calculations";
+import { normalizePhoneNumber, generateTelegramInviteCode, getTelegramInviteLink } from "@/utils/calculations";
 import { useCompanySettings } from "@/contexts/CompanySettingsContext";
+import { useNotifications } from "@/contexts/NotificationContext";
 import { useDocumentTemplates, DocumentTemplate } from "@/contexts/DocumentTemplatesContext";
 import { generateAndShareDocument, DocumentType } from "@/utils/documents";
 
@@ -67,6 +68,7 @@ export default function RentalClientDetailScreen() {
   const { managers } = useAuth();
   const { settings: companySettings, getNextDocumentNumber } = useCompanySettings();
   const { getTemplatesByType, getDefaultTemplate } = useDocumentTemplates();
+  const { notificationSettings } = useNotifications();
 
   const clientId = route.params?.clientId;
   const client = rentalClients.find(c => c.id === clientId);
@@ -99,6 +101,7 @@ export default function RentalClientDetailScreen() {
   const [showEndDatePicker, setShowEndDatePicker] = useState(false);
   const [isGeneratingDoc, setIsGeneratingDoc] = useState(false);
   const [showContractTemplateModal, setShowContractTemplateModal] = useState(false);
+  const [isGeneratingInvite, setIsGeneratingInvite] = useState(false);
 
   const clientOrders = useMemo(() => {
     if (!client) return [];
@@ -227,6 +230,37 @@ export default function RentalClientDetailScreen() {
     } catch (error) {
       Alert.alert("Ошибка", "Не удалось обновить статус клиента");
     }
+  };
+
+  const handleGenerateTelegramInvite = async () => {
+    if (!client) return;
+    setIsGeneratingInvite(true);
+    hapticFeedback.selection();
+    try {
+      const inviteCode = generateTelegramInviteCode();
+      const expiresAt = new Date();
+      expiresAt.setDate(expiresAt.getDate() + 7);
+      
+      await updateRentalClient(client.id, {
+        telegramInviteCode: inviteCode,
+        inviteCodeUsed: false,
+        inviteCodeExpiresAt: expiresAt.toISOString(),
+        telegramChatId: null,
+      });
+      hapticFeedback.success();
+    } catch (error) {
+      Alert.alert("Ошибка", "Не удалось создать ссылку");
+    } finally {
+      setIsGeneratingInvite(false);
+    }
+  };
+
+  const handleCopyTelegramLink = async () => {
+    if (!client?.telegramInviteCode || !notificationSettings?.telegramBotUsername) return;
+    const link = getTelegramInviteLink(notificationSettings.telegramBotUsername, client.telegramInviteCode);
+    await Clipboard.setStringAsync(link);
+    hapticFeedback.success();
+    Alert.alert("Скопировано", "Ссылка скопирована в буфер обмена");
   };
 
   const handleSelectManager = async (managerId: string | null) => {
@@ -637,6 +671,65 @@ export default function RentalClientDetailScreen() {
             </View>
             <Icon name="chevron-right" size={18} color={theme.textSecondary} />
           </Pressable>
+
+          <View style={[styles.telegramBlock, { backgroundColor: theme.backgroundTertiary }]}>
+            <View style={styles.telegramHeader}>
+              <Icon name="send" size={16} color="#0088cc" />
+              <ThemedText style={{ fontWeight: "600" }}>Telegram</ThemedText>
+              {client.telegramChatId ? (
+                <View style={[styles.telegramBadge, { backgroundColor: theme.success + "20" }]}>
+                  <Icon name="check" size={12} color={theme.success} />
+                  <ThemedText style={{ color: theme.success, fontSize: 12 }}>Подключен</ThemedText>
+                </View>
+              ) : (
+                <View style={[styles.telegramBadge, { backgroundColor: theme.textSecondary + "20" }]}>
+                  <ThemedText style={{ color: theme.textSecondary, fontSize: 12 }}>Не подключен</ThemedText>
+                </View>
+              )}
+            </View>
+
+            {!notificationSettings?.telegramBotUsername ? (
+              <ThemedText style={{ color: theme.textSecondary, fontSize: 13, marginTop: Spacing.sm }}>
+                Настройте имя бота в разделе Уведомления
+              </ThemedText>
+            ) : client.telegramChatId ? (
+              <View style={styles.telegramConnected}>
+                <ThemedText style={{ color: theme.textSecondary, fontSize: 13 }}>
+                  Клиент получает уведомления в Telegram
+                </ThemedText>
+              </View>
+            ) : client.telegramInviteCode && !client.inviteCodeUsed ? (
+              <View style={styles.telegramInviteRow}>
+                <Pressable
+                  onPress={handleCopyTelegramLink}
+                  style={[styles.telegramCopyBtn, { backgroundColor: "#0088cc" + "15" }]}
+                >
+                  <Icon name="copy" size={16} color="#0088cc" />
+                  <ThemedText style={{ color: "#0088cc", fontSize: 13, flex: 1 }} numberOfLines={1}>
+                    Скопировать ссылку
+                  </ThemedText>
+                </Pressable>
+                <Pressable
+                  onPress={handleGenerateTelegramInvite}
+                  style={[styles.telegramRefreshBtn, { backgroundColor: theme.backgroundSecondary }]}
+                  disabled={isGeneratingInvite}
+                >
+                  <Icon name="refresh-cw" size={16} color={theme.textSecondary} />
+                </Pressable>
+              </View>
+            ) : (
+              <Pressable
+                onPress={handleGenerateTelegramInvite}
+                style={[styles.telegramGenerateBtn, { backgroundColor: "#0088cc" + "15" }]}
+                disabled={isGeneratingInvite}
+              >
+                <Icon name="link" size={16} color="#0088cc" />
+                <ThemedText style={{ color: "#0088cc", fontSize: 13 }}>
+                  {isGeneratingInvite ? "Создание..." : "Создать ссылку-приглашение"}
+                </ThemedText>
+              </Pressable>
+            )}
+          </View>
         </View>
 
         <View style={[styles.statsCard, { backgroundColor: theme.backgroundSecondary }]}>
@@ -1935,5 +2028,56 @@ const styles = StyleSheet.create({
     gap: Spacing.sm,
     paddingVertical: Spacing.md,
     borderRadius: BorderRadius.md,
+  },
+  telegramBlock: {
+    padding: Spacing.sm,
+    borderRadius: BorderRadius.md,
+    marginTop: Spacing.md,
+  },
+  telegramHeader: {
+    flexDirection: "row",
+    alignItems: "center",
+    gap: Spacing.sm,
+  },
+  telegramBadge: {
+    flexDirection: "row",
+    alignItems: "center",
+    gap: 4,
+    paddingHorizontal: Spacing.sm,
+    paddingVertical: 2,
+    borderRadius: BorderRadius.sm,
+    marginLeft: "auto",
+  },
+  telegramConnected: {
+    marginTop: Spacing.sm,
+  },
+  telegramInviteRow: {
+    flexDirection: "row",
+    alignItems: "center",
+    gap: Spacing.sm,
+    marginTop: Spacing.sm,
+  },
+  telegramCopyBtn: {
+    flex: 1,
+    flexDirection: "row",
+    alignItems: "center",
+    gap: Spacing.sm,
+    paddingHorizontal: Spacing.md,
+    paddingVertical: Spacing.sm,
+    borderRadius: BorderRadius.md,
+  },
+  telegramRefreshBtn: {
+    padding: Spacing.sm,
+    borderRadius: BorderRadius.md,
+  },
+  telegramGenerateBtn: {
+    flexDirection: "row",
+    alignItems: "center",
+    justifyContent: "center",
+    gap: Spacing.sm,
+    paddingHorizontal: Spacing.md,
+    paddingVertical: Spacing.sm,
+    borderRadius: BorderRadius.md,
+    marginTop: Spacing.sm,
   },
 });

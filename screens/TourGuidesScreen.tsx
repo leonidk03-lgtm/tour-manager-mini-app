@@ -20,13 +20,16 @@ import { useTheme } from "@/hooks/useTheme";
 import { useData, TourGuide } from "@/contexts/DataContext";
 import { useAuth } from "@/contexts/AuthContext";
 import { hapticFeedback } from "@/utils/haptics";
-import { normalizePhoneNumber, phoneMatchesQuery } from "@/utils/calculations";
+import { normalizePhoneNumber, phoneMatchesQuery, generateTelegramInviteCode, getTelegramInviteLink } from "@/utils/calculations";
+import { useNotifications } from "@/contexts/NotificationContext";
+import * as Clipboard from "expo-clipboard";
 
 export default function TourGuidesScreen() {
   const { theme } = useTheme();
   const insets = useSafeAreaInsets();
   const { isAdmin } = useAuth();
   const { tourGuides, addTourGuide, updateTourGuide, deleteTourGuide } = useData();
+  const { notificationSettings } = useNotifications();
 
   const [searchQuery, setSearchQuery] = useState("");
   const [showModal, setShowModal] = useState(false);
@@ -36,6 +39,7 @@ export default function TourGuidesScreen() {
   const [formPhone, setFormPhone] = useState("");
   const [formEmail, setFormEmail] = useState("");
   const [formNotes, setFormNotes] = useState("");
+  const [isGeneratingInvite, setIsGeneratingInvite] = useState(false);
 
   const resetForm = () => {
     setFormName("");
@@ -131,6 +135,43 @@ export default function TourGuidesScreen() {
     Linking.openURL(phoneUrl).catch(() => {
       Alert.alert("Ошибка", "Не удалось открыть телефон");
     });
+  };
+
+  const handleGenerateTelegramInvite = async (guide: TourGuide) => {
+    setIsGeneratingInvite(true);
+    hapticFeedback.selection();
+    try {
+      const inviteCode = generateTelegramInviteCode();
+      const expiresAt = new Date();
+      expiresAt.setDate(expiresAt.getDate() + 7);
+      
+      await updateTourGuide(guide.id, {
+        telegramInviteCode: inviteCode,
+        inviteCodeUsed: false,
+        inviteCodeExpiresAt: expiresAt.toISOString(),
+        telegramChatId: null,
+      });
+      setEditingGuide(prev => prev ? {
+        ...prev,
+        telegramInviteCode: inviteCode,
+        inviteCodeUsed: false,
+        inviteCodeExpiresAt: expiresAt.toISOString(),
+        telegramChatId: null,
+      } : null);
+      hapticFeedback.success();
+    } catch (error) {
+      Alert.alert("Ошибка", "Не удалось создать ссылку");
+    } finally {
+      setIsGeneratingInvite(false);
+    }
+  };
+
+  const handleCopyTelegramLink = async (guide: TourGuide) => {
+    if (!guide.telegramInviteCode || !notificationSettings?.telegramBotUsername) return;
+    const link = getTelegramInviteLink(notificationSettings.telegramBotUsername, guide.telegramInviteCode);
+    await Clipboard.setStringAsync(link);
+    hapticFeedback.success();
+    Alert.alert("Скопировано", "Ссылка скопирована в буфер обмена");
   };
 
   const renderGuideItem = ({ item }: { item: TourGuide }) => (
@@ -303,6 +344,67 @@ export default function TourGuidesScreen() {
                 numberOfLines={4}
               />
             </View>
+
+            {editingGuide ? (
+              <View style={[styles.telegramBlock, { backgroundColor: theme.backgroundSecondary }]}>
+                <View style={styles.telegramHeader}>
+                  <Icon name="send" size={16} color="#0088cc" />
+                  <ThemedText style={{ fontWeight: "600" }}>Telegram</ThemedText>
+                  {editingGuide.telegramChatId ? (
+                    <View style={[styles.telegramBadge, { backgroundColor: theme.success + "20" }]}>
+                      <Icon name="check" size={12} color={theme.success} />
+                      <ThemedText style={{ color: theme.success, fontSize: 12 }}>Подключен</ThemedText>
+                    </View>
+                  ) : (
+                    <View style={[styles.telegramBadge, { backgroundColor: theme.textSecondary + "20" }]}>
+                      <ThemedText style={{ color: theme.textSecondary, fontSize: 12 }}>Не подключен</ThemedText>
+                    </View>
+                  )}
+                </View>
+
+                {!notificationSettings?.telegramBotUsername ? (
+                  <ThemedText style={{ color: theme.textSecondary, fontSize: 13, marginTop: Spacing.sm }}>
+                    Настройте имя бота в разделе Уведомления
+                  </ThemedText>
+                ) : editingGuide.telegramChatId ? (
+                  <View style={styles.telegramConnected}>
+                    <ThemedText style={{ color: theme.textSecondary, fontSize: 13 }}>
+                      Гид получает уведомления в Telegram
+                    </ThemedText>
+                  </View>
+                ) : editingGuide.telegramInviteCode && !editingGuide.inviteCodeUsed ? (
+                  <View style={styles.telegramInviteRow}>
+                    <Pressable
+                      onPress={() => handleCopyTelegramLink(editingGuide)}
+                      style={[styles.telegramCopyBtn, { backgroundColor: "#0088cc" + "15" }]}
+                    >
+                      <Icon name="copy" size={16} color="#0088cc" />
+                      <ThemedText style={{ color: "#0088cc", fontSize: 13, flex: 1 }} numberOfLines={1}>
+                        Скопировать ссылку
+                      </ThemedText>
+                    </Pressable>
+                    <Pressable
+                      onPress={() => handleGenerateTelegramInvite(editingGuide)}
+                      style={[styles.telegramRefreshBtn, { backgroundColor: theme.backgroundTertiary }]}
+                      disabled={isGeneratingInvite}
+                    >
+                      <Icon name="refresh-cw" size={16} color={theme.textSecondary} />
+                    </Pressable>
+                  </View>
+                ) : (
+                  <Pressable
+                    onPress={() => handleGenerateTelegramInvite(editingGuide)}
+                    style={[styles.telegramGenerateBtn, { backgroundColor: "#0088cc" + "15" }]}
+                    disabled={isGeneratingInvite}
+                  >
+                    <Icon name="link" size={16} color="#0088cc" />
+                    <ThemedText style={{ color: "#0088cc", fontSize: 13 }}>
+                      {isGeneratingInvite ? "Создание..." : "Создать ссылку-приглашение"}
+                    </ThemedText>
+                  </Pressable>
+                )}
+              </View>
+            ) : null}
           </ScreenKeyboardAwareScrollView>
         </ThemedView>
       </Modal>
@@ -429,5 +531,56 @@ const styles = StyleSheet.create({
   textArea: {
     minHeight: 100,
     textAlignVertical: "top",
+  },
+  telegramBlock: {
+    padding: Spacing.md,
+    borderRadius: BorderRadius.md,
+    marginTop: Spacing.md,
+  },
+  telegramHeader: {
+    flexDirection: "row",
+    alignItems: "center",
+    gap: Spacing.sm,
+  },
+  telegramBadge: {
+    flexDirection: "row",
+    alignItems: "center",
+    gap: 4,
+    paddingHorizontal: Spacing.sm,
+    paddingVertical: 2,
+    borderRadius: BorderRadius.sm,
+    marginLeft: "auto",
+  },
+  telegramConnected: {
+    marginTop: Spacing.sm,
+  },
+  telegramInviteRow: {
+    flexDirection: "row",
+    alignItems: "center",
+    gap: Spacing.sm,
+    marginTop: Spacing.sm,
+  },
+  telegramCopyBtn: {
+    flex: 1,
+    flexDirection: "row",
+    alignItems: "center",
+    gap: Spacing.sm,
+    paddingHorizontal: Spacing.md,
+    paddingVertical: Spacing.sm,
+    borderRadius: BorderRadius.md,
+  },
+  telegramRefreshBtn: {
+    padding: Spacing.sm,
+    borderRadius: BorderRadius.md,
+  },
+  telegramGenerateBtn: {
+    flexDirection: "row",
+    alignItems: "center",
+    justifyContent: "center",
+    gap: Spacing.sm,
+    paddingHorizontal: Spacing.md,
+    paddingVertical: Spacing.sm,
+    borderRadius: BorderRadius.md,
+    marginTop: Spacing.sm,
   },
 });

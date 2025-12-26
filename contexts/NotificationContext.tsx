@@ -94,6 +94,7 @@ export const DEFAULT_NOTIFICATION_PREFERENCES: NotificationPreferences = {
 export interface NotificationSettings {
   id: string;
   telegramBotToken: string | null;
+  telegramBotUsername: string | null;
   defaultMessageTemplates: Record<string, string>;
   reminderDaysBefore: number;
   reminderTime: string;
@@ -169,6 +170,7 @@ const transformLogFromDB = (row: any): NotificationLog => ({
 const transformSettingsFromDB = (row: any): NotificationSettings => ({
   id: row.id,
   telegramBotToken: row.telegram_bot_token,
+  telegramBotUsername: row.telegram_bot_username,
   defaultMessageTemplates: row.default_message_templates || {},
   reminderDaysBefore: row.reminder_days_before || 2,
   reminderTime: row.reminder_time || '12:00',
@@ -422,6 +424,7 @@ export function NotificationProvider({ children }: { children: React.ReactNode }
     if (!supabase) throw new Error('Supabase not initialized');
     const dbUpdates: any = {};
     if (settings.telegramBotToken !== undefined) dbUpdates.telegram_bot_token = settings.telegramBotToken;
+    if (settings.telegramBotUsername !== undefined) dbUpdates.telegram_bot_username = settings.telegramBotUsername;
     if (settings.defaultMessageTemplates !== undefined) dbUpdates.default_message_templates = settings.defaultMessageTemplates;
     if (settings.reminderDaysBefore !== undefined) dbUpdates.reminder_days_before = settings.reminderDaysBefore;
     if (settings.reminderTime !== undefined) dbUpdates.reminder_time = settings.reminderTime;

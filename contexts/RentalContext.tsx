@@ -22,6 +22,10 @@ export interface RentalClient {
   assignedManagerName?: string;
   notes: string | null;
   isActive: boolean;
+  telegramInviteCode: string | null;
+  telegramChatId: string | null;
+  inviteCodeUsed: boolean;
+  inviteCodeExpiresAt: string | null;
   createdAt: string;
   updatedAt: string;
 }
@@ -229,6 +233,10 @@ export function RentalProvider({ children }: { children: ReactNode }) {
         assignedManagerId: c.assigned_manager_id,
         notes: c.notes,
         isActive: c.is_active,
+        telegramInviteCode: c.telegram_invite_code,
+        telegramChatId: c.telegram_chat_id,
+        inviteCodeUsed: c.invite_code_used ?? false,
+        inviteCodeExpiresAt: c.invite_code_expires_at,
         createdAt: c.created_at,
         updatedAt: c.updated_at,
       })));
@@ -524,6 +532,10 @@ export function RentalProvider({ children }: { children: ReactNode }) {
     if (client.assignedManagerId !== undefined) updateData.assigned_manager_id = client.assignedManagerId;
     if (client.notes !== undefined) updateData.notes = client.notes;
     if (client.isActive !== undefined) updateData.is_active = client.isActive;
+    if (client.telegramInviteCode !== undefined) updateData.telegram_invite_code = client.telegramInviteCode;
+    if (client.telegramChatId !== undefined) updateData.telegram_chat_id = client.telegramChatId;
+    if (client.inviteCodeUsed !== undefined) updateData.invite_code_used = client.inviteCodeUsed;
+    if (client.inviteCodeExpiresAt !== undefined) updateData.invite_code_expires_at = client.inviteCodeExpiresAt;
 
     const { error } = await supabase
       .from('rental_clients')

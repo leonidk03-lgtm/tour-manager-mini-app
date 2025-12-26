@@ -53,6 +53,8 @@ export default function NotificationsScreen() {
   const [expandedTypes, setExpandedTypes] = useState<Set<NotificationType>>(new Set());
   const [editingTemplate, setEditingTemplate] = useState<NotificationType | null>(null);
   const [templateText, setTemplateText] = useState("");
+  const [showBotUsernameInput, setShowBotUsernameInput] = useState(false);
+  const [botUsernameInput, setBotUsernameInput] = useState("");
 
   const toggleExpanded = (type: NotificationType) => {
     setExpandedTypes(prev => {
@@ -295,6 +297,60 @@ export default function NotificationsScreen() {
                             Alert.alert("Успех", "Токен сохранён");
                           } catch (error) {
                             Alert.alert("Ошибка", "Не удалось сохранить токен");
+                          }
+                        }}
+                      >
+                        <ThemedText style={{ color: "#FFFFFF" }}>Сохранить</ThemedText>
+                      </Pressable>
+                    </View>
+                  ) : null}
+                  <View style={[styles.divider, { backgroundColor: theme.border }]} />
+                  <View style={styles.settingItem}>
+                    <View style={styles.settingLeft}>
+                      <Icon name="at-sign" size={20} color={theme.textSecondary} />
+                      <ThemedText style={styles.settingText}>
+                        Имя бота: {telegramSettings?.telegramBotUsername ? `@${telegramSettings.telegramBotUsername}` : "Не настроено"}
+                      </ThemedText>
+                    </View>
+                    <Pressable
+                      onPress={() => {
+                        setBotUsernameInput(telegramSettings?.telegramBotUsername || "");
+                        setShowBotUsernameInput(true);
+                      }}
+                      style={({ pressed }) => [pressed && { opacity: 0.7 }]}
+                    >
+                      <Icon name="edit-2" size={18} color={theme.primary} />
+                    </Pressable>
+                  </View>
+                  {showBotUsernameInput ? (
+                    <View style={styles.tokenInputContainer}>
+                      <TextInput
+                        style={[
+                          styles.tokenInput,
+                          { color: theme.text, borderColor: theme.border, backgroundColor: theme.backgroundSecondary },
+                        ]}
+                        placeholder="Введите имя бота без @"
+                        placeholderTextColor={theme.textSecondary}
+                        value={botUsernameInput}
+                        onChangeText={(text) => setBotUsernameInput(text.replace("@", ""))}
+                        autoCapitalize="none"
+                        autoCorrect={false}
+                      />
+                      <Pressable
+                        style={[styles.saveTokenButton, { backgroundColor: theme.primary }]}
+                        onPress={async () => {
+                          if (!botUsernameInput.trim()) {
+                            Alert.alert("Ошибка", "Введите имя бота");
+                            return;
+                          }
+                          hapticFeedback.selection();
+                          try {
+                            await updateTelegramSettings({ telegramBotUsername: botUsernameInput.trim() });
+                            setBotUsernameInput("");
+                            setShowBotUsernameInput(false);
+                            Alert.alert("Успех", "Имя бота сохранено");
+                          } catch (error) {
+                            Alert.alert("Ошибка", "Не удалось сохранить");
                           }
                         }}
                       >

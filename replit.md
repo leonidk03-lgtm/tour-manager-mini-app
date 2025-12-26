@@ -53,12 +53,46 @@ The application includes a Telegram notification system for sending alerts to cl
 **Admin Settings** (in NotificationsScreen):
 - Toggle Telegram notifications on/off
 - Set Bot Token (stored securely in notification_settings table)
+- Set Bot Username (required for invite links)
 - View connected Telegram contacts count
 - Configure reminder days before rental
 - Configure reminder time (09:00, 10:00, 12:00, 14:00, 18:00)
 
-**Required SQL Migration** (execute in Supabase Dashboard → SQL Editor):
+### Telegram One-Time Invite Links
+Система одноразовых приглашений для привязки клиентов и гидов к Telegram:
+- Ссылки формата `https://t.me/{botname}?start={code}`
+- Код генерируется автоматически (16 hex символов)
+- Срок действия: 7 дней
+- После активации ссылка становится недействительной (inviteCodeUsed = true)
+- UI-блок в карточках клиентов и гидов для генерации/копирования ссылок
+
+**Поля в таблицах rental_clients и tour_guides**:
+- `telegram_invite_code` - уникальный код приглашения
+- `telegram_chat_id` - ID чата после привязки
+- `invite_code_used` - флаг использования кода
+- `invite_code_expires_at` - срок действия кода
+
+**Required SQL Migrations** (execute in Supabase Dashboard → SQL Editor):
 ```sql
+-- Добавить поля для приглашений в rental_clients
+ALTER TABLE rental_clients 
+ADD COLUMN IF NOT EXISTS telegram_invite_code TEXT,
+ADD COLUMN IF NOT EXISTS telegram_chat_id TEXT,
+ADD COLUMN IF NOT EXISTS invite_code_used BOOLEAN DEFAULT FALSE,
+ADD COLUMN IF NOT EXISTS invite_code_expires_at TIMESTAMPTZ;
+
+-- Добавить поля для приглашений в tour_guides
+ALTER TABLE tour_guides 
+ADD COLUMN IF NOT EXISTS telegram_invite_code TEXT,
+ADD COLUMN IF NOT EXISTS telegram_chat_id TEXT,
+ADD COLUMN IF NOT EXISTS invite_code_used BOOLEAN DEFAULT FALSE,
+ADD COLUMN IF NOT EXISTS invite_code_expires_at TIMESTAMPTZ;
+
+-- Добавить поле для имени бота
+ALTER TABLE notification_settings 
+ADD COLUMN IF NOT EXISTS telegram_bot_username TEXT;
+
+-- Добавить поле для времени напоминания
 ALTER TABLE notification_settings 
 ADD COLUMN IF NOT EXISTS reminder_time TEXT DEFAULT '12:00';
 ```

@@ -134,6 +134,10 @@ export interface TourGuide {
   phone: string | null;
   email: string | null;
   notes: string | null;
+  telegramInviteCode: string | null;
+  telegramChatId: string | null;
+  inviteCodeUsed: boolean;
+  inviteCodeExpiresAt: string | null;
   createdAt: string;
   isActive: boolean;
 }
@@ -901,6 +905,10 @@ export function DataProvider({ children }: { children: ReactNode }) {
       phone: g.phone,
       email: g.email,
       notes: g.notes,
+      telegramInviteCode: g.telegram_invite_code,
+      telegramChatId: g.telegram_chat_id,
+      inviteCodeUsed: g.invite_code_used ?? false,
+      inviteCodeExpiresAt: g.invite_code_expires_at,
       createdAt: g.created_at,
       isActive: g.is_active ?? true,
     })));
@@ -2935,6 +2943,10 @@ export function DataProvider({ children }: { children: ReactNode }) {
       if (guide.email !== undefined) updateData.email = guide.email;
       if (guide.notes !== undefined) updateData.notes = guide.notes;
       if (guide.isActive !== undefined) updateData.is_active = guide.isActive;
+      if (guide.telegramInviteCode !== undefined) updateData.telegram_invite_code = guide.telegramInviteCode;
+      if (guide.telegramChatId !== undefined) updateData.telegram_chat_id = guide.telegramChatId;
+      if (guide.inviteCodeUsed !== undefined) updateData.invite_code_used = guide.inviteCodeUsed;
+      if (guide.inviteCodeExpiresAt !== undefined) updateData.invite_code_expires_at = guide.inviteCodeExpiresAt;
 
       const { error } = await supabase
         .from('tour_guides')
