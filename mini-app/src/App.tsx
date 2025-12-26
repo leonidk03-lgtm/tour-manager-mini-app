@@ -170,15 +170,25 @@ function App() {
     }
 
     try {
+      console.log('Querying rental_clients with telegram_chat_id:', userId);
+      console.log('Supabase URL:', SUPABASE_URL);
+      
       const { data: clientData, error } = await sb
         .from('rental_clients')
         .select('id, name, phone')
         .eq('telegram_chat_id', userId)
         .maybeSingle();
 
-      if (error) throw error;
+      console.log('Query result - data:', clientData, 'error:', error);
+
+      if (error) {
+        setErrorMessage(`DB Error: ${error.message} (code: ${error.code})`);
+        setScreen('error');
+        return;
+      }
 
       if (!clientData) {
+        setErrorMessage(`No client found for chatId: ${userId}`);
         setScreen('not_connected');
         return;
       }
