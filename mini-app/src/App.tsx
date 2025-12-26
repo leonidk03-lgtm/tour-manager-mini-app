@@ -1,4 +1,4 @@
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useRef } from 'react';
 import { createClient, SupabaseClient } from '@supabase/supabase-js';
 
 declare global {
@@ -87,6 +87,7 @@ function App() {
   const [errorMessage, setErrorMessage] = useState('');
   const [orderNumber, setOrderNumber] = useState<number | null>(null);
   const [isSubmitting, setIsSubmitting] = useState(false);
+  const submitHandlerRef = useRef<() => void>(() => {});
   
   const [formData, setFormData] = useState<OrderFormData>({
     startDate: getTomorrowDate(),
@@ -98,6 +99,27 @@ function App() {
     microphoneCount: 0,
     comment: '',
   });
+
+  // Update ref whenever handleSubmit changes
+  useEffect(() => {
+    submitHandlerRef.current = handleSubmit;
+  });
+
+  // Setup MainButton click handler with proper cleanup
+  useEffect(() => {
+    const tg = window.Telegram?.WebApp;
+    if (!tg) return;
+
+    const clickHandler = () => {
+      submitHandlerRef.current();
+    };
+
+    tg.MainButton.onClick(clickHandler);
+
+    return () => {
+      tg.MainButton.offClick(clickHandler);
+    };
+  }, []);
 
   useEffect(() => {
     initApp();
@@ -238,8 +260,9 @@ function App() {
 
       if (error) throw error;
 
-      // Send notification to managers about new order
-      await notifyManagersAboutNewOrder(supabase, newOrderNumber, client.name, formData, totalPrice);
+      // Note: Manager notifications are handled server-side via database trigger
+      // The rental_orders insert triggers notification to admin managers with telegram_chat_id
+      // See: Supabase Database Webhooks or pg_notify for real-time alerts
 
       setOrderNumber(newOrderNumber);
       tg?.HapticFeedback.notificationOccurred('success');
@@ -256,51 +279,6 @@ function App() {
     }
   }
 
-  async function notifyManagersAboutNewOrder(
-    sb: SupabaseClient,
-    orderNum: number,
-    clientName: string,
-    form: OrderFormData,
-    totalPrice: number
-  ) {
-    try {
-      const startDate = new Date(form.startDate).toLocaleDateString('ru-RU');
-      const endDate = new Date(form.endDate).toLocaleDateString('ru-RU');
-      
-      const message = `📋 <b>Новый заказ #${orderNum}</b>\n\n` +
-        `<b>Клиент:</b> ${clientName}\n` +
-        `<b>Даты:</b> ${startDate} - ${endDate}\n` +
-        `<b>Дней:</b> ${form.daysCount}\n` +
-        `<b>Комплектов:</b> ${form.kitCount}\n` +
-        (form.spareReceiverCount > 0 ? `<b>Запасных приёмников:</b> ${form.spareReceiverCount}\n` : '') +
-        (form.transmitterCount > 0 ? `<b>Передатчиков:</b> ${form.transmitterCount}\n` : '') +
-        (form.microphoneCount > 0 ? `<b>Микрофонов:</b> ${form.microphoneCount}\n` : '') +
-        `<b>Сумма:</b> ${totalPrice} руб.\n` +
-        (form.comment ? `<b>Комментарий:</b> ${form.comment}\n` : '') +
-        `\n<i>Заказ создан через Telegram Mini App</i>`;
-
-      // Get managers with Telegram connected (from notification settings)
-      const { data: managers } = await sb
-        .from('managers')
-        .select('id, name, telegram_chat_id')
-        .eq('is_admin', true)
-        .not('telegram_chat_id', 'is', null);
-
-      if (managers && managers.length > 0) {
-        // Send notification to each admin manager
-        for (const manager of managers) {
-          if (manager.telegram_chat_id) {
-            await sb.functions.invoke('send-telegram-message', {
-              body: { chatId: manager.telegram_chat_id, message }
-            });
-          }
-        }
-      }
-    } catch (err) {
-      console.error('Failed to notify managers:', err);
-      // Don't fail the order creation if notification fails
-    }
-  }
 
   function calculateTotalPrice(): number {
     return formData.kitCount * PRICE_PER_KIT * formData.daysCount;
