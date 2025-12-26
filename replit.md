@@ -101,10 +101,20 @@ ADD COLUMN IF NOT EXISTS reminder_time TEXT DEFAULT '12:00';
 1. Install Supabase CLI: `npm install -g supabase`
 2. Login: `supabase login`
 3. Link project: `supabase link --project-ref YOUR_PROJECT_REF`
-4. Deploy function: `supabase functions deploy send-telegram-message`
+4. Deploy functions:
+   - `supabase functions deploy send-telegram-message`
+   - `supabase functions deploy telegram-webhook`
 5. Set the `telegram_bot_token` via app settings or directly in notification_settings table
+6. **Set up Telegram Webhook**:
+   - Get your function URL: `https://<project-ref>.supabase.co/functions/v1/telegram-webhook`
+   - Set webhook via Telegram API:
+   ```
+   https://api.telegram.org/bot<YOUR_BOT_TOKEN>/setWebhook?url=https://<project-ref>.supabase.co/functions/v1/telegram-webhook
+   ```
 
-The Edge Function code is located at `supabase/functions/send-telegram-message/index.ts`.
+**Edge Function Files**:
+- `supabase/functions/send-telegram-message/index.ts` - отправка сообщений
+- `supabase/functions/telegram-webhook/index.ts` - обработка входящих сообщений (/start с кодом приглашения)
 
 ## External Dependencies
 
