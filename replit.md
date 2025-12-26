@@ -1,100 +1,164 @@
-# TourManager - Tour Excursion Reporting App
+# TourManager - Приложение для отчётности по экскурсиям
 
-## Overview
-TourManager is a React Native mobile application for the Russian market, designed to assist tour managers and administrators in tracking excursions, managing finances, configuring pricing, and overseeing manager accounts. Built with Expo, it supports cross-platform deployment (iOS, Android, Web) and features a Telegram-inspired UI, comprehensive data management, and real-time synchronization. The application's purpose is to optimize tour operations and financial reporting for tourism businesses, offering an all-in-one solution for streamlining logistics and financial aspects of tour management.
+## Обзор
+TourManager - мобильное приложение на React Native для российского рынка, предназначенное для помощи тур-менеджерам и администраторам в отслеживании экскурсий, управлении финансами, настройке ценообразования и контроле аккаунтов менеджеров. Построено на Expo, поддерживает кроссплатформенный деплой (iOS, Android, Web) с интерфейсом в стиле Telegram.
 
-## User Preferences
-Preferred communication style: Simple, everyday language.
-Design style: Telegram-inspired dark theme with flat design.
+## Предпочтения пользователя
+Стиль общения: Простой, повседневный язык.
+Стиль дизайна: Тёмная тема в стиле Telegram с плоским дизайном.
 
-## System Architecture
+## Архитектура системы
 
-### UI/UX Decisions
-The application features a Telegram-inspired flat design with a dark-first theme, utilizing semantic color tokens and Telegram blue as the primary accent. It incorporates reusable, themed components, specialized screen wrappers for consistent styling, and platform-specific UI adjustments for iOS and Android.
+### UI/UX решения
+Приложение использует плоский дизайн в стиле Telegram с тёмной темой, синий Telegram как основной акцент. Включает переиспользуемые компоненты с темизацией и адаптацию под iOS и Android.
 
-### Technical Implementations
-The application is built with React Native (v0.81.5), React (v19.1.0), and Expo SDK (v54), leveraging TypeScript and the New Architecture for performance. Navigation uses React Navigation v7 with a bottom tab bar. State management is primarily handled via React Context API, with data persistence and real-time synchronization provided by Supabase PostgreSQL.
+### Технические реализации
+Приложение построено на React Native (v0.81.5), React (v19.1.0) и Expo SDK (v54) с TypeScript. Навигация через React Navigation v7 с нижней панелью вкладок. Управление состоянием через React Context API, хранение данных в Supabase PostgreSQL.
 
-### Feature Specifications
-*   **Core Modules**: Dashboard, Excursions, Finances, Settings, Admin Panel, Reports, Radio Guides, Chat, Notifications, and Warehouse management.
-*   **Data Model**: Interconnected entities like `TourType`, `Excursion`, `Transaction`, `Manager`, `RadioGuideKit`, `RentalOrder`, `EquipmentItem`, and `ChatMessage`.
-*   **Authentication & Authorization**: Supabase manages username/password authentication for `Manager` and `Admin` roles, with Row Level Security (RLS) enforcing data access.
-*   **Rental CRM Module**: Manages clients, orders, commissions, and equipment, supporting multi-block equipment orders, profit-based commission calculation, and an auto-writeoff system for consumables.
-*   **Advanced Features**: Customizable Dashboard, Commission System, Auto-Writeoff System, Bulk Payment & Reconciliation, Granular Rental Permissions, Equipment Loss Tracking, Dispatch Marking Activity Tracking, and a Tour Guides Directory.
+### Основные модули
+- Dashboard, Экскурсии, Финансы, Настройки, Админ-панель, Отчёты, Радиогиды, Чат, Уведомления, Склад
 
-### System Design Choices
-The architecture emphasizes modularity, reusability, and scalability. Expo enables cross-platform deployment, while Supabase provides a robust backend with real-time capabilities. The React Native New Architecture is used for enhanced performance.
+### Модель данных
+- TourType, Excursion, Transaction, Manager, RadioGuideKit, RentalOrder, EquipmentItem, ChatMessage
 
-### Telegram Notifications System
-A Telegram notification system sends alerts to clients and guides, securely handled by a Supabase Edge Function to prevent bot token exposure.
-*   **Key Tables**: `telegram_contacts`, `notification_logs`, `notification_settings`.
-*   **Supported Notification Types**: `order_issued`, `order_returned`, `bag_issued`, `reminder`, `order_cancelled`, `status_change`, `equipment_issued`.
-*   **Admin Settings**: Toggle notifications, set Bot Token, Bot Username, connected contacts count, reminder days, and reminder time.
+### Аутентификация
+Supabase управляет аутентификацией по логину/паролю для ролей Manager и Admin с Row Level Security (RLS).
 
-### Telegram One-Time Invite Links
-The system generates one-time invite links (`https://t.me/{botname}?start={code}`) for connecting clients and guides to Telegram.
-*   **Database Fields**: `telegram_invite_code`, `telegram_chat_id`, `invite_code_used`, `invite_code_expires_at` in `rental_clients` and `tour_guides` tables.
+### CRM модуль аренды
+Управление клиентами, заказами, комиссиями и оборудованием. Поддержка мульти-блочных заказов, расчёт комиссии от прибыли, авто-списание расходников.
 
-### Telegram Bot Features (v2.0)
-An expanded bot with an interactive interface for clients.
-*   **Commands**: `/start`, `/start {code}`, `/menu`, `/orders`, `/help`.
-*   **Inline Menu Buttons**: Active orders, History, New order, Help.
-*   **Callback Handling**: Menu navigation, order listing with pagination, specific order details, and new order creation.
+---
 
-### Telegram Mini App
-A dedicated React + Vite web application (`/mini-app/`) for creating orders directly within Telegram.
-*   **Functionality**: Order creation form (dates, quantity, comments), equipment selection, automatic cost calculation, Telegram WebApp API integration, and client identification via `telegram_chat_id`.
-*   **Setup**: Requires separate build, hosting on a public HTTPS URL, and configuration in BotFather and `notification_settings` table.
-*   **Security**: Uses Supabase anon key for the client-side and validates Telegram initData for client identification.
-*   **Manager Notifications**: New orders trigger server-side notifications via Supabase Database Webhook (rental_orders INSERT → notify-new-order Edge Function).
+## Система Telegram-уведомлений
 
-### Server-Side Order Notifications
-To notify admin managers when new orders are created via Mini App:
+### Основные таблицы
+- `telegram_contacts` - связанные контакты Telegram
+- `notification_logs` - логи уведомлений
+- `notification_settings` - настройки бота и уведомлений
 
-**Step 1: Deploy Edge Functions**
+### Типы уведомлений
+`order_issued`, `order_returned`, `bag_issued`, `reminder`, `order_cancelled`, `status_change`, `equipment_issued`
+
+### Одноразовые ссылки-приглашения
+Система генерирует ссылки `https://t.me/{botname}?start={code}` для подключения клиентов и гидов.
+Поля БД: `telegram_invite_code`, `telegram_chat_id`, `invite_code_used`, `invite_code_expires_at`
+
+---
+
+## Telegram-бот v2.0
+
+### Команды
+- `/start` - начало работы с ботом
+- `/start {code}` - подключение по коду приглашения
+- `/menu` - главное меню
+- `/orders` - список заказов
+- `/help` - справка
+
+### Inline-кнопки меню
+- Активные заказы
+- История заказов
+- Новый заказ (открывает Mini App)
+- Помощь
+
+### Обработка callback-запросов
+Навигация по меню, список заказов с пагинацией, детали заказа, создание нового заказа.
+
+---
+
+## Telegram Mini App
+
+Отдельное веб-приложение React + Vite в папке `/mini-app/` для создания заказов прямо в Telegram.
+
+### Функциональность
+- Форма заказа: даты аренды, количество дней, комплекты, доп. оборудование, комментарий
+- Автоматический расчёт стоимости
+- Интеграция с Telegram WebApp API (HapticFeedback, MainButton)
+- Определение клиента по telegram_chat_id
+
+### Валидация формы
+- Дата начала не может быть в прошлом
+- Дата окончания >= дата начала
+- Минимум 1 комплект
+- Минимум 1 день аренды
+
+### Безопасность
+- Mini App использует anon key (публичный) - безопасно для клиентского кода
+- Edge Functions используют service_role key через переменные окружения Supabase
+- Telegram initData валидируется для определения клиента
+
+---
+
+## Инструкция по настройке
+
+### Шаг 1: Задеплоить Edge Functions
 ```bash
-supabase functions deploy send-telegram-message --project-ref YOUR_PROJECT_REF
-supabase functions deploy telegram-webhook --project-ref YOUR_PROJECT_REF
-supabase functions deploy notify-new-order --project-ref YOUR_PROJECT_REF
+supabase functions deploy send-telegram-message --project-ref ВАШ_PROJECT_REF
+supabase functions deploy telegram-webhook --project-ref ВАШ_PROJECT_REF
+supabase functions deploy notify-new-order --project-ref ВАШ_PROJECT_REF
 ```
 
-**Step 2: Run SQL Migrations**
+### Шаг 2: Выполнить SQL миграции
 ```sql
+-- Добавить поле для telegram_chat_id менеджеров
 ALTER TABLE managers ADD COLUMN IF NOT EXISTS telegram_chat_id TEXT;
+
+-- Добавить поле для URL Mini App
 ALTER TABLE notification_settings ADD COLUMN IF NOT EXISTS mini_app_url TEXT;
-UPDATE managers SET telegram_chat_id = 'YOUR_CHAT_ID' WHERE is_admin = true;
+
+-- Установить telegram_chat_id для админов (получите через @userinfobot)
+UPDATE managers SET telegram_chat_id = 'ВАШ_CHAT_ID' WHERE is_admin = true;
+
+-- Установить URL Mini App после деплоя
 UPDATE notification_settings SET mini_app_url = 'https://your-mini-app-url.com';
 ```
 
-**Step 3: Configure Database Webhook** (Supabase Dashboard → Database → Hooks)
-1. Go to: https://supabase.com/dashboard/project/YOUR_PROJECT_REF/database/hooks
-2. Create new hook:
-   - Name: `notify_new_order`
-   - Table: `rental_orders`
-   - Events: `INSERT`
-   - Hook type: HTTP Request
-   - Method: POST
-   - URL: `https://YOUR_PROJECT_REF.supabase.co/functions/v1/notify-new-order`
-3. Add Headers:
-   - `Authorization`: `Bearer YOUR_SERVICE_ROLE_KEY`
+### Шаг 3: Настроить Database Webhook
+1. Перейдите: https://supabase.com/dashboard/project/ВАШ_PROJECT_REF/database/hooks
+2. Создайте новый hook:
+   - Имя: `notify_new_order`
+   - Таблица: `rental_orders`
+   - События: `INSERT`
+   - Тип: HTTP Request
+   - Метод: POST
+   - URL: `https://ВАШ_PROJECT_REF.supabase.co/functions/v1/notify-new-order`
+3. Добавьте заголовки:
+   - `Authorization`: `Bearer ВАШ_SERVICE_ROLE_KEY`
    - `Content-Type`: `application/json`
 
-**Step 4: Set Telegram Webhook**
+### Шаг 4: Настроить Telegram Webhook
+Откройте в браузере:
 ```
-https://api.telegram.org/botYOUR_BOT_TOKEN/setWebhook?url=https://YOUR_PROJECT_REF.supabase.co/functions/v1/telegram-webhook
+https://api.telegram.org/botВАШ_BOT_TOKEN/setWebhook?url=https://ВАШ_PROJECT_REF.supabase.co/functions/v1/telegram-webhook
 ```
 
-**Step 5: Testing**
-1. Create order via Mini App
-2. Verify admin managers with `telegram_chat_id` receive Telegram notification
-3. Check Supabase Edge Function logs for errors
+### Шаг 5: Задеплоить Mini App
+1. `cd mini-app && npm install`
+2. Создать `.env`:
+   ```
+   VITE_SUPABASE_URL=ваш_supabase_url
+   VITE_SUPABASE_ANON_KEY=ваш_anon_key
+   ```
+3. `npm run build`
+4. Захостить папку `dist/` на публичном HTTPS (Vercel, Netlify, Cloudflare Pages)
+5. Настроить Mini App в BotFather: `/newapp`
+6. Обновить `mini_app_url` в notification_settings
 
-**Helper Script**: See `supabase/scripts/setup-webhook.sh` for step-by-step guide.
+### Шаг 6: Тестирование
+1. Напишите боту `/start` - должно появиться главное меню
+2. Нажмите "Новый заказ" - откроется Mini App
+3. Создайте заказ - админы получат уведомление в Telegram
+4. Проверьте логи Edge Functions в Supabase Dashboard
 
-## External Dependencies
+---
 
-*   **Expo Ecosystem**: Core framework and various modules for splash screens, status bar, constants, fonts, linking, web browser, haptics, system UI, images, symbols, blur, linear gradient, and glass effect.
-*   **Navigation**: `@react-navigation/native`, `@react-navigation/bottom-tabs`, `@react-navigation/native-stack`, `@react-navigation/elements`, `react-native-screens`, `react-native-safe-area-context`.
-*   **Animation & Gestures**: `react-native-reanimated`, `react-native-gesture-handler`, `react-native-worklets`, `react-native-keyboard-controller`.
-*   **UI Components**: `@expo/vector-icons`.
-*   **Backend & Database**: `@supabase/supabase-js` (Supabase client), Supabase PostgreSQL (database with RLS and Realtime capabilities).
+## Внешние зависимости
+
+**Expo**: expo, expo-splash-screen, expo-status-bar, expo-constants, expo-font, expo-linking, expo-web-browser, expo-haptics, expo-system-ui, expo-image, expo-symbols, expo-blur, expo-linear-gradient, expo-glass-effect
+
+**Навигация**: @react-navigation/native, @react-navigation/bottom-tabs, @react-navigation/native-stack, @react-navigation/elements, react-native-screens, react-native-safe-area-context
+
+**Анимации**: react-native-reanimated, react-native-gesture-handler, react-native-worklets, react-native-keyboard-controller
+
+**UI**: @expo/vector-icons
+
+**Backend**: @supabase/supabase-js, Supabase PostgreSQL
