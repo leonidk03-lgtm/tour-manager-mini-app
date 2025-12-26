@@ -702,71 +702,89 @@ function App() {
         <h1>Новый заказ</h1>
       </div>
 
-      <div className="form-group">
-        <label>Даты аренды</label>
-        <div className="form-row">
-          <input
-            type="date"
-            value={formData.startDate}
-            onChange={(e) => updateFormField('startDate', e.target.value)}
-            min={getTodayDate()}
-          />
-          <input
-            type="date"
-            value={formData.endDate}
-            onChange={(e) => updateFormField('endDate', e.target.value)}
-            min={formData.startDate}
-          />
+      <div className="form-section">
+        <h3 className="section-title">Даты аренды</h3>
+        <div className="date-row">
+          <div className="date-field">
+            <label>Начало</label>
+            <input
+              type="date"
+              value={formData.startDate}
+              onChange={(e) => updateFormField('startDate', e.target.value)}
+              min={getTodayDate()}
+            />
+          </div>
+          <div className="date-field">
+            <label>Окончание</label>
+            <input
+              type="date"
+              value={formData.endDate}
+              onChange={(e) => updateFormField('endDate', e.target.value)}
+              min={formData.startDate}
+            />
+          </div>
+        </div>
+        <div className="days-info">
+          {formData.daysCount} {getDaysLabel(formData.daysCount)}
         </div>
       </div>
 
-      <div className="info-card">
-        <h3>Количество дней</h3>
-        <p>{formData.daysCount} {getDaysLabel(formData.daysCount)}</p>
-      </div>
-
-      <div className="form-group">
-        <label>Комплектов радиогидов</label>
-        <div className="counter">
-          <button onClick={() => decrementCount('kitCount')} disabled={formData.kitCount <= 1}>-</button>
-          <span>{formData.kitCount}</span>
-          <button onClick={() => incrementCount('kitCount')}>+</button>
+      <div className="form-section">
+        <h3 className="section-title">Оборудование</h3>
+        <div className="equipment-grid">
+          <div className="equipment-field">
+            <label>Компл. *</label>
+            <input
+              type="number"
+              inputMode="numeric"
+              value={formData.kitCount || ''}
+              onChange={(e) => updateFormField('kitCount', Math.max(1, parseInt(e.target.value) || 1))}
+              placeholder="0"
+              min="1"
+            />
+          </div>
+          <div className="equipment-field">
+            <label>Запасные</label>
+            <input
+              type="number"
+              inputMode="numeric"
+              value={formData.spareReceiverCount || ''}
+              onChange={(e) => updateFormField('spareReceiverCount', Math.max(0, parseInt(e.target.value) || 0))}
+              placeholder="0"
+              min="0"
+            />
+          </div>
+          <div className="equipment-field">
+            <label>Передат.</label>
+            <input
+              type="number"
+              inputMode="numeric"
+              value={formData.transmitterCount || ''}
+              onChange={(e) => updateFormField('transmitterCount', Math.max(0, parseInt(e.target.value) || 0))}
+              placeholder="0"
+              min="0"
+            />
+          </div>
+          <div className="equipment-field">
+            <label>Микроф.</label>
+            <input
+              type="number"
+              inputMode="numeric"
+              value={formData.microphoneCount || ''}
+              onChange={(e) => updateFormField('microphoneCount', Math.max(0, parseInt(e.target.value) || 0))}
+              placeholder="0"
+              min="0"
+            />
+          </div>
         </div>
       </div>
 
       <div className="form-group">
-        <label>Запасных приёмников</label>
-        <div className="counter">
-          <button onClick={() => decrementCount('spareReceiverCount')} disabled={formData.spareReceiverCount <= 0}>-</button>
-          <span>{formData.spareReceiverCount}</span>
-          <button onClick={() => incrementCount('spareReceiverCount')}>+</button>
-        </div>
-      </div>
-
-      <div className="form-group">
-        <label>Передатчиков</label>
-        <div className="counter">
-          <button onClick={() => decrementCount('transmitterCount')} disabled={formData.transmitterCount <= 0}>-</button>
-          <span>{formData.transmitterCount}</span>
-          <button onClick={() => incrementCount('transmitterCount')}>+</button>
-        </div>
-      </div>
-
-      <div className="form-group">
-        <label>Микрофонов</label>
-        <div className="counter">
-          <button onClick={() => decrementCount('microphoneCount')} disabled={formData.microphoneCount <= 0}>-</button>
-          <span>{formData.microphoneCount}</span>
-          <button onClick={() => incrementCount('microphoneCount')}>+</button>
-        </div>
-      </div>
-
-      <div className="form-group">
-        <label>Комментарий к заказу</label>
+        <label>Комментарий</label>
         <textarea
           value={formData.comment}
           onChange={(e) => updateFormField('comment', e.target.value)}
-          placeholder="Особые пожелания, адрес доставки и т.д."
+          placeholder="Адрес доставки, пожелания..."
         />
       </div>
 
