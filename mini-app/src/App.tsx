@@ -153,7 +153,11 @@ function App() {
     setSupabase(sb);
 
     const userId = tg?.initDataUnsafe?.user?.id;
+    console.log('Telegram initDataUnsafe:', JSON.stringify(tg?.initDataUnsafe));
+    console.log('User ID:', userId);
+    
     if (!userId) {
+      setErrorMessage(`No user ID. initData: ${JSON.stringify(tg?.initDataUnsafe || 'no tg object')}`);
       setScreen('not_connected');
       return;
     }
@@ -325,6 +329,11 @@ function App() {
           <p style={{ color: 'var(--text-secondary)' }}>
             Для создания заказов подключитесь через ссылку-приглашение от менеджера
           </p>
+          {errorMessage && (
+            <p style={{ color: 'var(--text-secondary)', fontSize: 12, marginTop: 16, wordBreak: 'break-all' }}>
+              Debug: {errorMessage}
+            </p>
+          )}
         </div>
       </div>
     );
