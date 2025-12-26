@@ -20,6 +20,7 @@ declare global {
           disable: () => void;
           isVisible: boolean;
           isActive: boolean;
+          setText: (text: string) => void;
         };
         BackButton: {
           show: () => void;
@@ -74,11 +75,47 @@ interface ClientData {
   phone: string;
 }
 
-type Screen = 'loading' | 'not_connected' | 'form' | 'submitting' | 'success' | 'error';
+interface Order {
+  id: string;
+  order_number: number;
+  status: string;
+  start_date: string;
+  end_date: string;
+  days_count: number;
+  kit_count: number;
+  spare_receiver_count: number;
+  transmitter_count: number;
+  microphone_count: number;
+  total_price: number;
+  prepayment: number;
+  is_charged: boolean;
+  receiver_notes: string | null;
+  created_at: string;
+}
+
+type Screen = 'loading' | 'not_connected' | 'menu' | 'orders' | 'history' | 'balance' | 'new_order' | 'order_details' | 'submitting' | 'success' | 'error';
 
 const SUPABASE_URL = import.meta.env.VITE_SUPABASE_URL || '';
 const SUPABASE_ANON_KEY = import.meta.env.VITE_SUPABASE_ANON_KEY || '';
 const PRICE_PER_KIT = 500;
+
+const STATUS_LABELS: Record<string, string> = {
+  new: 'Новый',
+  confirmed: 'Подтверждён',
+  issued: 'Выдан',
+  returned: 'Возвращён',
+  completed: 'Завершён',
+  cancelled: 'Отменён',
+};
+
+const STATUS_COLORS: Record<string, string> = {
+  new: '#3b82f6',
+  confirmed: '#8b5cf6',
+  issued: '#f59e0b',
+  returned: '#10b981',
+  completed: '#6b7280',
+  cancelled: '#ef4444',
+};
 
 function App() {
   const [screen, setScreen] = useState<Screen>('loading');
@@ -87,6 +124,9 @@ function App() {
   const [errorMessage, setErrorMessage] = useState('');
   const [orderNumber, setOrderNumber] = useState<number | null>(null);
   const [isSubmitting, setIsSubmitting] = useState(false);
+  const [orders, setOrders] = useState<Order[]>([]);
+  const [selectedOrder, setSelectedOrder] = useState<Order | null>(null);
+  const [stats, setStats] = useState({ activeOrders: 0, totalDebt: 0 });
   const submitHandlerRef = useRef<() => void>(() => {});
   
   const [formData, setFormData] = useState<OrderFormData>({
@@ -100,12 +140,10 @@ function App() {
     comment: '',
   });
 
-  // Update ref whenever handleSubmit changes
   useEffect(() => {
     submitHandlerRef.current = handleSubmit;
   });
 
-  // Setup MainButton click handler with proper cleanup
   useEffect(() => {
     const tg = window.Telegram?.WebApp;
     if (!tg) return;
@@ -136,6 +174,44 @@ function App() {
     }
   }, [formData.startDate, formData.endDate]);
 
+  useEffect(() => {
+    const tg = window.Telegram?.WebApp;
+    if (!tg) return;
+
+    if (screen === 'menu') {
+      tg.BackButton.hide();
+      tg.MainButton.hide();
+    } else if (screen === 'new_order') {
+      tg.BackButton.show();
+      tg.MainButton.setText('Создать заказ');
+      tg.MainButton.show();
+    } else if (['orders', 'history', 'balance', 'order_details'].includes(screen)) {
+      tg.BackButton.show();
+      tg.MainButton.hide();
+    } else {
+      tg.BackButton.hide();
+      tg.MainButton.hide();
+    }
+  }, [screen]);
+
+  useEffect(() => {
+    const tg = window.Telegram?.WebApp;
+    if (!tg) return;
+
+    const backHandler = () => {
+      if (screen === 'order_details') {
+        setScreen('orders');
+      } else {
+        setScreen('menu');
+      }
+    };
+
+    tg.BackButton.onClick(backHandler);
+    return () => {
+      tg.BackButton.offClick(backHandler);
+    };
+  }, [screen]);
+
   async function initApp() {
     const tg = window.Telegram?.WebApp;
     if (tg) {
@@ -152,37 +228,28 @@ function App() {
     const sb = createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
     setSupabase(sb);
 
-    // Try to get user ID from Telegram initData first, then from URL query param
     let userId: string | undefined = tg?.initDataUnsafe?.user?.id?.toString();
     
-    // Fallback: get chatId from URL query parameter
     if (!userId) {
       const urlParams = new URLSearchParams(window.location.search);
       userId = urlParams.get('chatId') || undefined;
     }
     
-    console.log('User ID:', userId);
-    
     if (!userId) {
-      setErrorMessage(`No user ID found`);
+      setErrorMessage('No user ID found');
       setScreen('not_connected');
       return;
     }
 
     try {
-      console.log('Querying rental_clients with telegram_chat_id:', userId);
-      console.log('Supabase URL:', SUPABASE_URL);
-      
       const { data: clientData, error } = await sb
         .from('rental_clients')
         .select('id, name, phone')
         .eq('telegram_chat_id', userId)
         .maybeSingle();
 
-      console.log('Query result - data:', clientData, 'error:', error);
-
       if (error) {
-        setErrorMessage(`DB Error: ${error.message} (code: ${error.code})`);
+        setErrorMessage(`DB Error: ${error.message}`);
         setScreen('error');
         return;
       }
@@ -194,11 +261,45 @@ function App() {
       }
 
       setClient(clientData);
-      setScreen('form');
+      await loadStats(sb, clientData.id);
+      setScreen('menu');
     } catch (err: any) {
-      console.error('Init error:', err);
       setErrorMessage(err.message || 'Failed to load data');
       setScreen('error');
+    }
+  }
+
+  async function loadStats(sb: SupabaseClient, clientId: string) {
+    const { data: ordersData } = await sb
+      .from('rental_orders')
+      .select('status, total_price, prepayment, is_charged')
+      .eq('client_id', clientId);
+
+    if (ordersData) {
+      const activeOrders = ordersData.filter(o => ['new', 'confirmed', 'issued'].includes(o.status)).length;
+      const totalDebt = ordersData
+        .filter(o => !o.is_charged && o.status !== 'cancelled')
+        .reduce((sum, o) => sum + (Number(o.total_price) - Number(o.prepayment || 0)), 0);
+      setStats({ activeOrders, totalDebt });
+    }
+  }
+
+  async function loadOrders(statusFilter: 'active' | 'history') {
+    if (!supabase || !client) return;
+
+    const statuses = statusFilter === 'active' 
+      ? ['new', 'confirmed', 'issued'] 
+      : ['returned', 'completed', 'cancelled'];
+
+    const { data, error } = await supabase
+      .from('rental_orders')
+      .select('*')
+      .eq('client_id', client.id)
+      .in('status', statuses)
+      .order('created_at', { ascending: false });
+
+    if (!error && data) {
+      setOrders(data);
     }
   }
 
@@ -209,28 +310,17 @@ function App() {
     const startDate = new Date(formData.startDate);
     const endDate = new Date(formData.endDate);
     
-    if (startDate < today) {
-      return 'Дата начала не может быть в прошлом';
-    }
-    
-    if (endDate < startDate) {
-      return 'Дата окончания не может быть раньше даты начала';
-    }
-    
-    if (formData.kitCount < 1) {
-      return 'Укажите хотя бы один комплект';
-    }
-    
-    if (formData.daysCount < 1) {
-      return 'Минимальный срок аренды - 1 день';
-    }
+    if (startDate < today) return 'Дата начала не может быть в прошлом';
+    if (endDate < startDate) return 'Дата окончания не может быть раньше даты начала';
+    if (formData.kitCount < 1) return 'Укажите хотя бы один комплект';
+    if (formData.daysCount < 1) return 'Минимальный срок аренды - 1 день';
     
     return null;
   }
 
   async function handleSubmit() {
     if (!supabase || !client) return;
-    if (isSubmitting) return; // Prevent double-submit
+    if (isSubmitting) return;
 
     const validationError = validateForm();
     if (validationError) {
@@ -257,7 +347,7 @@ function App() {
 
       const newOrderNumber = (lastOrder?.order_number || 0) + 1;
 
-      const { data: insertedOrder, error } = await supabase
+      const { error } = await supabase
         .from('rental_orders')
         .insert({
           order_number: newOrderNumber,
@@ -281,15 +371,23 @@ function App() {
 
       if (error) throw error;
 
-      // Note: Manager notifications are handled server-side via database trigger
-      // The rental_orders insert triggers notification to admin managers with telegram_chat_id
-      // See: Supabase Database Webhooks or pg_notify for real-time alerts
-
       setOrderNumber(newOrderNumber);
       tg?.HapticFeedback.notificationOccurred('success');
       setScreen('success');
+      
+      setFormData({
+        startDate: getTomorrowDate(),
+        endDate: getDayAfterTomorrow(),
+        daysCount: 1,
+        kitCount: 1,
+        spareReceiverCount: 0,
+        transmitterCount: 0,
+        microphoneCount: 0,
+        comment: '',
+      });
+      
+      await loadStats(supabase, client.id);
     } catch (err: any) {
-      console.error('Submit error:', err);
       tg?.HapticFeedback.notificationOccurred('error');
       setErrorMessage(err.message || 'Failed to create order');
       setScreen('error');
@@ -299,7 +397,6 @@ function App() {
       setIsSubmitting(false);
     }
   }
-
 
   function calculateTotalPrice(): number {
     return formData.kitCount * PRICE_PER_KIT * formData.daysCount;
@@ -320,8 +417,28 @@ function App() {
     window.Telegram?.WebApp.HapticFeedback.selectionChanged();
   }
 
-  function handleClose() {
-    window.Telegram?.WebApp.close();
+  function navigateTo(newScreen: Screen) {
+    window.Telegram?.WebApp.HapticFeedback.selectionChanged();
+    if (newScreen === 'orders') {
+      loadOrders('active');
+    } else if (newScreen === 'history') {
+      loadOrders('history');
+    }
+    setScreen(newScreen);
+  }
+
+  function openOrderDetails(order: Order) {
+    setSelectedOrder(order);
+    setScreen('order_details');
+  }
+
+  function formatDate(dateString: string): string {
+    const date = new Date(dateString);
+    return date.toLocaleDateString('ru-RU', { day: 'numeric', month: 'short' });
+  }
+
+  function formatPrice(price: number): string {
+    return new Intl.NumberFormat('ru-RU').format(price) + ' руб.';
   }
 
   if (screen === 'loading') {
@@ -338,20 +455,201 @@ function App() {
   if (screen === 'not_connected') {
     return (
       <div className="container">
-        <div className="success-screen">
-          <div className="success-icon" style={{ backgroundColor: 'var(--warning)' }}>
-            !
-          </div>
+        <div className="center-screen">
+          <div className="icon-circle warning">!</div>
           <h2>Не подключено</h2>
-          <p style={{ color: 'var(--text-secondary)' }}>
+          <p className="text-secondary">
             Для создания заказов подключитесь через ссылку-приглашение от менеджера
           </p>
-          {errorMessage && (
-            <p style={{ color: 'var(--text-secondary)', fontSize: 12, marginTop: 16, wordBreak: 'break-all' }}>
-              Debug: {errorMessage}
-            </p>
+        </div>
+      </div>
+    );
+  }
+
+  if (screen === 'menu') {
+    return (
+      <div className="container">
+        <div className="header">
+          <h1>TourManager</h1>
+          {client && <p className="text-secondary">{client.name}</p>}
+        </div>
+
+        <div className="menu-grid">
+          <div className="menu-card" onClick={() => navigateTo('new_order')}>
+            <div className="menu-icon primary">+</div>
+            <div className="menu-text">
+              <h3>Новый заказ</h3>
+              <p>Создать заявку на аренду</p>
+            </div>
+          </div>
+
+          <div className="menu-card" onClick={() => navigateTo('orders')}>
+            <div className="menu-icon blue">
+              <span className="menu-badge">{stats.activeOrders}</span>
+            </div>
+            <div className="menu-text">
+              <h3>Мои заказы</h3>
+              <p>Активные заявки</p>
+            </div>
+          </div>
+
+          <div className="menu-card" onClick={() => navigateTo('history')}>
+            <div className="menu-icon gray">H</div>
+            <div className="menu-text">
+              <h3>История</h3>
+              <p>Завершённые заказы</p>
+            </div>
+          </div>
+
+          <div className="menu-card" onClick={() => navigateTo('balance')}>
+            <div className="menu-icon" style={{ backgroundColor: stats.totalDebt > 0 ? '#ef4444' : '#10b981' }}>
+              $
+            </div>
+            <div className="menu-text">
+              <h3>Баланс</h3>
+              <p>{stats.totalDebt > 0 ? `Задолженность: ${formatPrice(stats.totalDebt)}` : 'Нет задолженности'}</p>
+            </div>
+          </div>
+        </div>
+      </div>
+    );
+  }
+
+  if (screen === 'orders' || screen === 'history') {
+    const title = screen === 'orders' ? 'Мои заказы' : 'История';
+    const emptyText = screen === 'orders' ? 'Нет активных заказов' : 'История пуста';
+
+    return (
+      <div className="container">
+        <div className="header">
+          <h1>{title}</h1>
+        </div>
+
+        {orders.length === 0 ? (
+          <div className="empty-state">
+            <p className="text-secondary">{emptyText}</p>
+            {screen === 'orders' && (
+              <button className="btn btn-primary" onClick={() => navigateTo('new_order')}>
+                Создать заказ
+              </button>
+            )}
+          </div>
+        ) : (
+          <div className="orders-list">
+            {orders.map(order => (
+              <div key={order.id} className="order-card" onClick={() => openOrderDetails(order)}>
+                <div className="order-header">
+                  <span className="order-number">#{order.order_number}</span>
+                  <span className="order-status" style={{ backgroundColor: STATUS_COLORS[order.status] || '#6b7280' }}>
+                    {STATUS_LABELS[order.status] || order.status}
+                  </span>
+                </div>
+                <div className="order-dates">
+                  {formatDate(order.start_date)} - {formatDate(order.end_date)}
+                </div>
+                <div className="order-info">
+                  <span>{order.kit_count} комплект(ов)</span>
+                  <span className="order-price">{formatPrice(order.total_price)}</span>
+                </div>
+              </div>
+            ))}
+          </div>
+        )}
+      </div>
+    );
+  }
+
+  if (screen === 'balance') {
+    return (
+      <div className="container">
+        <div className="header">
+          <h1>Баланс</h1>
+        </div>
+
+        <div className="balance-card">
+          <div className="balance-amount" style={{ color: stats.totalDebt > 0 ? '#ef4444' : '#10b981' }}>
+            {stats.totalDebt > 0 ? formatPrice(stats.totalDebt) : 'Нет задолженности'}
+          </div>
+          <p className="text-secondary">
+            {stats.totalDebt > 0 ? 'К оплате' : 'Все заказы оплачены'}
+          </p>
+        </div>
+
+        <div className="info-text">
+          <p>Для оплаты свяжитесь с менеджером или переведите на карту.</p>
+        </div>
+      </div>
+    );
+  }
+
+  if (screen === 'order_details' && selectedOrder) {
+    const debt = Number(selectedOrder.total_price) - Number(selectedOrder.prepayment || 0);
+    
+    return (
+      <div className="container">
+        <div className="header">
+          <h1>Заказ #{selectedOrder.order_number}</h1>
+          <span className="order-status large" style={{ backgroundColor: STATUS_COLORS[selectedOrder.status] }}>
+            {STATUS_LABELS[selectedOrder.status]}
+          </span>
+        </div>
+
+        <div className="details-section">
+          <h3>Даты аренды</h3>
+          <p>{formatDate(selectedOrder.start_date)} - {formatDate(selectedOrder.end_date)}</p>
+          <p className="text-secondary">{selectedOrder.days_count} {getDaysLabel(selectedOrder.days_count)}</p>
+        </div>
+
+        <div className="details-section">
+          <h3>Оборудование</h3>
+          <div className="details-row">
+            <span>Комплектов</span>
+            <span>{selectedOrder.kit_count}</span>
+          </div>
+          {selectedOrder.spare_receiver_count > 0 && (
+            <div className="details-row">
+              <span>Запасных приёмников</span>
+              <span>{selectedOrder.spare_receiver_count}</span>
+            </div>
+          )}
+          {selectedOrder.transmitter_count > 0 && (
+            <div className="details-row">
+              <span>Передатчиков</span>
+              <span>{selectedOrder.transmitter_count}</span>
+            </div>
+          )}
+          {selectedOrder.microphone_count > 0 && (
+            <div className="details-row">
+              <span>Микрофонов</span>
+              <span>{selectedOrder.microphone_count}</span>
+            </div>
           )}
         </div>
+
+        <div className="details-section">
+          <h3>Оплата</h3>
+          <div className="details-row">
+            <span>Сумма заказа</span>
+            <span>{formatPrice(selectedOrder.total_price)}</span>
+          </div>
+          <div className="details-row">
+            <span>Предоплата</span>
+            <span>{formatPrice(selectedOrder.prepayment || 0)}</span>
+          </div>
+          <div className="details-row total">
+            <span>К оплате</span>
+            <span style={{ color: debt > 0 ? '#ef4444' : '#10b981' }}>
+              {debt > 0 ? formatPrice(debt) : 'Оплачено'}
+            </span>
+          </div>
+        </div>
+
+        {selectedOrder.receiver_notes && (
+          <div className="details-section">
+            <h3>Комментарий</h3>
+            <p className="text-secondary">{selectedOrder.receiver_notes}</p>
+          </div>
+        )}
       </div>
     );
   }
@@ -359,17 +657,13 @@ function App() {
   if (screen === 'success') {
     return (
       <div className="container">
-        <div className="success-screen">
-          <div className="success-icon">✓</div>
+        <div className="center-screen">
+          <div className="icon-circle success">OK</div>
           <h2>Заказ создан!</h2>
-          <p style={{ color: 'var(--text-secondary)' }}>
-            Номер заказа: #{orderNumber}
-          </p>
-          <p style={{ color: 'var(--text-secondary)', marginTop: 8 }}>
-            Менеджер свяжется с вами для подтверждения
-          </p>
-          <button className="btn btn-primary" onClick={handleClose} style={{ marginTop: 24 }}>
-            Закрыть
+          <p className="text-secondary">Номер заказа: #{orderNumber}</p>
+          <p className="text-secondary">Менеджер свяжется с вами для подтверждения</p>
+          <button className="btn btn-primary" onClick={() => navigateTo('menu')}>
+            В меню
           </button>
         </div>
       </div>
@@ -379,14 +673,12 @@ function App() {
   if (screen === 'error') {
     return (
       <div className="container">
-        <div className="success-screen">
-          <div className="success-icon" style={{ backgroundColor: 'var(--error)' }}>
-            ✕
-          </div>
+        <div className="center-screen">
+          <div className="icon-circle error">X</div>
           <h2>Ошибка</h2>
-          <p style={{ color: 'var(--text-secondary)' }}>{errorMessage}</p>
-          <button className="btn btn-secondary" onClick={() => setScreen('form')} style={{ marginTop: 24 }}>
-            Попробовать снова
+          <p className="text-secondary">{errorMessage}</p>
+          <button className="btn btn-secondary" onClick={() => navigateTo('menu')}>
+            В меню
           </button>
         </div>
       </div>
@@ -408,7 +700,6 @@ function App() {
     <div className="container">
       <div className="header">
         <h1>Новый заказ</h1>
-        {client && <p>{client.name}</p>}
       </div>
 
       <div className="form-group">
@@ -437,9 +728,7 @@ function App() {
       <div className="form-group">
         <label>Комплектов радиогидов</label>
         <div className="counter">
-          <button onClick={() => decrementCount('kitCount')} disabled={formData.kitCount <= 1}>
-            −
-          </button>
+          <button onClick={() => decrementCount('kitCount')} disabled={formData.kitCount <= 1}>-</button>
           <span>{formData.kitCount}</span>
           <button onClick={() => incrementCount('kitCount')}>+</button>
         </div>
@@ -448,9 +737,7 @@ function App() {
       <div className="form-group">
         <label>Запасных приёмников</label>
         <div className="counter">
-          <button onClick={() => decrementCount('spareReceiverCount')} disabled={formData.spareReceiverCount <= 0}>
-            −
-          </button>
+          <button onClick={() => decrementCount('spareReceiverCount')} disabled={formData.spareReceiverCount <= 0}>-</button>
           <span>{formData.spareReceiverCount}</span>
           <button onClick={() => incrementCount('spareReceiverCount')}>+</button>
         </div>
@@ -459,9 +746,7 @@ function App() {
       <div className="form-group">
         <label>Передатчиков</label>
         <div className="counter">
-          <button onClick={() => decrementCount('transmitterCount')} disabled={formData.transmitterCount <= 0}>
-            −
-          </button>
+          <button onClick={() => decrementCount('transmitterCount')} disabled={formData.transmitterCount <= 0}>-</button>
           <span>{formData.transmitterCount}</span>
           <button onClick={() => incrementCount('transmitterCount')}>+</button>
         </div>
@@ -470,9 +755,7 @@ function App() {
       <div className="form-group">
         <label>Микрофонов</label>
         <div className="counter">
-          <button onClick={() => decrementCount('microphoneCount')} disabled={formData.microphoneCount <= 0}>
-            −
-          </button>
+          <button onClick={() => decrementCount('microphoneCount')} disabled={formData.microphoneCount <= 0}>-</button>
           <span>{formData.microphoneCount}</span>
           <button onClick={() => incrementCount('microphoneCount')}>+</button>
         </div>
@@ -489,16 +772,16 @@ function App() {
 
       <div className="price-summary">
         <div className="price-row">
-          <span className="price-label">Комплектов</span>
-          <span className="price-value">{formData.kitCount} x {PRICE_PER_KIT} руб.</span>
+          <span>Комплектов</span>
+          <span>{formData.kitCount} x {PRICE_PER_KIT} руб.</span>
         </div>
         <div className="price-row">
-          <span className="price-label">Дней</span>
-          <span className="price-value">{formData.daysCount}</span>
+          <span>Дней</span>
+          <span>{formData.daysCount}</span>
         </div>
         <div className="price-row total">
           <span>Итого</span>
-          <span>{calculateTotalPrice()} руб.</span>
+          <span>{formatPrice(calculateTotalPrice())}</span>
         </div>
       </div>
 

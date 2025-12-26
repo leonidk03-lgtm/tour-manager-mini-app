@@ -306,3 +306,253 @@ body {
   background-color: var(--accent);
   color: var(--accent-text);
 }
+
+/* Menu Grid */
+.menu-grid {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+.menu-card {
+  display: flex;
+  align-items: center;
+  gap: 16px;
+  background-color: var(--bg-secondary);
+  border-radius: 16px;
+  padding: 16px;
+  cursor: pointer;
+  transition: transform 0.1s, opacity 0.2s;
+}
+
+.menu-card:active {
+  transform: scale(0.98);
+  opacity: 0.9;
+}
+
+.menu-icon {
+  width: 50px;
+  height: 50px;
+  border-radius: 12px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 24px;
+  font-weight: 600;
+  color: white;
+  position: relative;
+}
+
+.menu-icon.primary {
+  background: linear-gradient(135deg, #3b82f6, #2563eb);
+}
+
+.menu-icon.blue {
+  background: linear-gradient(135deg, #6366f1, #4f46e5);
+}
+
+.menu-icon.gray {
+  background: linear-gradient(135deg, #6b7280, #4b5563);
+}
+
+.menu-badge {
+  font-size: 18px;
+  font-weight: 700;
+}
+
+.menu-text h3 {
+  font-size: 16px;
+  font-weight: 600;
+  margin-bottom: 4px;
+}
+
+.menu-text p {
+  font-size: 13px;
+  color: var(--text-secondary);
+}
+
+/* Center Screen */
+.center-screen {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  min-height: 60vh;
+  text-align: center;
+  gap: 12px;
+  padding: 24px;
+}
+
+.icon-circle {
+  width: 80px;
+  height: 80px;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 32px;
+  font-weight: 700;
+  color: white;
+  margin-bottom: 8px;
+}
+
+.icon-circle.success {
+  background: linear-gradient(135deg, #10b981, #059669);
+}
+
+.icon-circle.error {
+  background: linear-gradient(135deg, #ef4444, #dc2626);
+}
+
+.icon-circle.warning {
+  background: linear-gradient(135deg, #f59e0b, #d97706);
+}
+
+.text-secondary {
+  color: var(--text-secondary);
+  font-size: 14px;
+}
+
+/* Orders List */
+.orders-list {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+.order-card {
+  background-color: var(--bg-secondary);
+  border-radius: 16px;
+  padding: 16px;
+  cursor: pointer;
+  transition: transform 0.1s;
+}
+
+.order-card:active {
+  transform: scale(0.98);
+}
+
+.order-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 8px;
+}
+
+.order-number {
+  font-size: 18px;
+  font-weight: 700;
+}
+
+.order-status {
+  padding: 4px 10px;
+  border-radius: 20px;
+  font-size: 12px;
+  font-weight: 600;
+  color: white;
+}
+
+.order-status.large {
+  padding: 6px 14px;
+  font-size: 14px;
+  margin-top: 8px;
+}
+
+.order-dates {
+  color: var(--text-secondary);
+  font-size: 14px;
+  margin-bottom: 8px;
+}
+
+.order-info {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  font-size: 14px;
+}
+
+.order-price {
+  font-weight: 600;
+  color: var(--accent);
+}
+
+/* Empty State */
+.empty-state {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  min-height: 200px;
+  gap: 16px;
+  text-align: center;
+}
+
+/* Balance */
+.balance-card {
+  background: linear-gradient(135deg, var(--bg-secondary), rgba(45, 45, 45, 0.8));
+  border-radius: 20px;
+  padding: 32px;
+  text-align: center;
+  margin-bottom: 24px;
+}
+
+.balance-amount {
+  font-size: 32px;
+  font-weight: 700;
+  margin-bottom: 8px;
+}
+
+.info-text {
+  background-color: var(--bg-secondary);
+  border-radius: 12px;
+  padding: 16px;
+}
+
+.info-text p {
+  color: var(--text-secondary);
+  font-size: 14px;
+  line-height: 1.5;
+}
+
+/* Details Section */
+.details-section {
+  background-color: var(--bg-secondary);
+  border-radius: 16px;
+  padding: 16px;
+  margin-bottom: 16px;
+}
+
+.details-section h3 {
+  font-size: 14px;
+  font-weight: 600;
+  color: var(--text-secondary);
+  margin-bottom: 12px;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+}
+
+.details-section > p {
+  font-size: 16px;
+  font-weight: 500;
+}
+
+.details-row {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 10px 0;
+  border-bottom: 1px solid var(--border);
+}
+
+.details-row:last-child {
+  border-bottom: none;
+}
+
+.details-row.total {
+  font-weight: 600;
+  font-size: 16px;
+  padding-top: 12px;
+  margin-top: 4px;
+  border-top: 1px solid var(--border);
+  border-bottom: none;
+}
